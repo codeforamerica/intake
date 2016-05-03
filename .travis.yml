@@ -8,9 +8,7 @@ script: make test
 addons:
   postgresql: "9.4"
 env:
-  - DATABASE_USER='postgres'
-  - DATABASE_PASSWORD=''
-  - DJANGO_SETTINGS_MODULE='project.settings.dev'
+  - DATABASE_USER='postgres' DATABASE_PASSWORD='' DJANGO_SETTINGS_MODULE='project.settings.dev'
 after_success:
   - coveralls
 notifications:
