@@ -17,3 +17,4 @@ ratings:
 exclude_paths:
 - "tests/**/*"
 - "migrations/**/*"
+- "project/settings/*.py"
