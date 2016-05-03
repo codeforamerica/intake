@@ -1,6 +1,6 @@
 # dependencies for development and testing
 
--r prod.txt
+-r ci.txt
 
 selenium==2.53.2
 autopep8==1.2.1

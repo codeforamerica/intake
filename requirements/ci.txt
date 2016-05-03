@@ -1,4 +1,4 @@
-# dependencies for automated testing
+# dependencies for automated testing via Travis CI
 -r prod.txt
 coverage==4.0.3
 python-coveralls==2.7.0
