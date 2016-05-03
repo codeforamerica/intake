@@ -3,10 +3,11 @@ install:
 	pip install -r requirements/dev.txt
 
 serve:
-	python ./manage.py runserver
+	./manage.py runserver
 
 test:
-	python ./manage.py test tests.integration
+	coverage run --source='./project/','./intake/' ./manage.py test tests.integration
+	coverage report
 
 test.functional:
 	python ./manage.py test tests.functional

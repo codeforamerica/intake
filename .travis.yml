@@ -1,0 +1,17 @@
+# Config file for automatic testing at travis-ci.org
+language: python
+python:
+  - "3.4"
+  - "3.5"
+install: pip install -r requirements/prod.txt
+script: make test
+addons:
+  postgresql: "9.4"
+env:
+  - DATABASE_USER='postgres'
+  - DATABASE_PASSWORD=''
+  - DJANGO_SETTINGS_MODULE='project.settings.dev'
+after_success:
+  - coveralls
+notifications:
+    slack: cfa:CYBv6gMC0oGtY1wwI6ZTfldS

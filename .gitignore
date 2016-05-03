@@ -13,9 +13,9 @@ share
 pyvenv.cfg
 pip-selfcheck.json
 
-# functional tests
+# test outputs to ignore
 tests/screenshots
-
+.coverage
 
 .env
 db.sqlite3
