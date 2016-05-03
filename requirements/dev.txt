@@ -1,3 +1,7 @@
+# dependencies for development and testing
+
+-r prod.txt
+
 autopep8==1.2.1
 pep8==1.6.2
 ipdb==0.8.1

@@ -1,3 +1,0 @@
-Django==1.9
-django-localflavor==1.2
-psycopg2==2.6.1
