@@ -1,9 +1,13 @@
 import os
 
+REPO_DIR = os.path.dirname(
+                os.path.dirname(
+                    os.path.dirname(
+                        os.path.abspath(__file__)
+                        )
+                    )
+                )
 
-REPO_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SECRET_KEY = os.environ.get('SECRET_KEY')
-DEBUG = True
 ALLOWED_HOSTS = []
 
 
@@ -34,7 +38,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
         'DIRS': [
-            os.path.join(REPO_DIR, 'templates')
+            os.path.join(REPO_DIR, 'templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -44,15 +48,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'project.wsgi.application'
-
-
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(REPO_DIR, 'db.sqlite3'),
-    }
-}
 
 
 # Password validation
@@ -77,11 +72,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'US/Pacific'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
