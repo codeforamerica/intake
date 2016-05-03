@@ -1,0 +1,19 @@
+engines:
+  radon: 
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - python
+  fixme:
+    enabled: true
+  pep8:
+    enabled: true
+ratings:
+  paths:
+  - "project/**.py"
+  - "intake/**.py"
+exclude_paths:
+- "tests/**/*"
+- "migrations/**/*"

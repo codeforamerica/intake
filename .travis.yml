@@ -9,6 +9,6 @@ addons:
 env:
   - DJANGO_SETTINGS_MODULE='project.settings.dev'
 after_success:
-  - coveralls
+  - codeclimate-test-reporter
 notifications:
     slack: cfa:CYBv6gMC0oGtY1wwI6ZTfldS
