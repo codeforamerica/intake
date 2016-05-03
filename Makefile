@@ -6,7 +6,10 @@ serve:
 	./manage.py runserver
 
 test:
-	coverage run --source='./project/','./intake/' ./manage.py test tests.integration
+	coverage run \
+		--source='./project/','./intake/' \
+		--omit='./project/settings/prod.py','./project/wsgi.py' \
+		./manage.py test tests.integration
 	coverage report
 
 test.functional:
