@@ -1,7 +1,5 @@
 # dependencies for development and testing
-
 -r ci.txt
-
 selenium==2.53.2
 autopep8==1.2.1
 pep8==1.6.2
