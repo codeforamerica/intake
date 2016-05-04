@@ -1,0 +1,71 @@
+
+section.content.application_form {
+	background-color: #fff;
+}
+
+.field-wrapping_label, .field-display_text, .field-help_text {
+	display: block;
+}
+.field-display_text { font-weight: 700; }
+.field-optional { color: #888; }
+.field-help_text {
+	font-size: 0.9em;
+	color: #666;
+	font-weight: 400; }
+
+.note {
+	p {
+		font-size: 1em;
+		font-weight: 400;
+	}
+	ol { padding-left: 1.5em; }
+}
+.field {
+	input {
+		font-weight: 400; }
+	input[type="text"] { 
+		display: block; width: 100%;
+		font-size: 1.25em;
+		padding: .25em .5em; }
+	input[type="number"] {
+		display: block;
+		font-size: 1.25em;
+		padding: .25em .5em; }
+	legend { 
+		font-weight: 700;
+		font-size: 1em;
+		border: 0; margin: 0; }
+	ul { padding: 0; }
+}
+.field + .field { margin-top: 1.5em; }
+.field + .note { margin-top: 1.5em; }
+span + .subfield { margin-top: .5em; }
+.options_list {
+	margin: .25em -.25em;
+	li {
+		background-color: #fff;
+		line-height: 1em;
+		display: inline-block; 
+		padding: .35em .75em;
+		border: 1px solid #ddd;
+		border-radius: .25em;
+		margin: 0.5em 0.25em; }
+	label { font-weight: 400; } }
+button {
+		line-height: 1em;
+		display: inline-block; 
+		padding: .35em .75em;
+		border: 1px solid #ddd;
+		border-radius: .25em;
+		margin: 0.5em 0.25em;
+		background-color: inherit; }
+button[type="submit"] { .btn-primary; .btn-lg; }
+
+.subfield-row > .subfield { display: inline-block; }
+.address_city { width: 18em; }
+.address_state { width: 3.5em; }
+.address_zip { width: 8em; }
+.drivers_license_number input[name="drivers_license_number"] { width: 8em; }
+.ssn input[name="ssn"] { width: 8em; }
+.phone_number input[name="phone_number"] { width: 9em; }
+

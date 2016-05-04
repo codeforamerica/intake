@@ -19,3 +19,4 @@ tests/screenshots
 
 .env
 db.sqlite3
+node_modules

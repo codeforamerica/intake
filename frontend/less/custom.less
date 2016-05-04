@@ -1,0 +1,277 @@
+
+
+header { padding: 1em 0;}
+.top_bar a { color: inherit; text-decoration: none; }
+p, ul { font-size: 18px; font-weight: 400; }
+h1 { font-size: 40px; font-weight: 700; }
+h1.main_headline { margin-bottom: 4px; }
+section.content > .container:first-child { padding-top: 2em; }
+
+
+h2 {
+  font-size: 26px;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+h3 { font-size:22px; }
+h3.subheadline { margin-top:0; margin-bottom:40px; }
+
+h2.time_expectation{
+  font-weight: 700;
+  text-align: center;
+  color: @brand-note;
+}
+
+p.step_headline{
+  font-weight: 600;
+}
+
+.call_to_action_time{
+  margin-bottom: 26px;
+}
+
+.main_headline{
+  margin-top: 1em;
+}
+
+.call_to_action_button {
+  width: 100%;
+  max-width: 20em;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.credibility_note {
+  padding-top: 2em;
+  padding-bottom: 20px;
+}
+.credibility_note a {
+  color: @brand-note;
+  font-weight: bold;
+}
+
+.new_section{
+  padding-top:24px;
+}
+
+.container {
+  margin: 0 auto;
+  padding-bottom: 20px;
+}
+
+// for all above the fold sections
+.above_the_fold {
+  background-color: @brand-note;
+  color: #ffffff;
+}
+.splash.above_the_fold {
+    background-color: @splash-background;
+}
+
+
+.about_the_service, section.content {
+  background-color: @light-background;
+  p, h2 {
+    text-align: left;
+    max-width: 72rem;
+  }
+}
+
+.apply_backup {
+  background-color: @brand-note;
+  color: #fff;
+}
+
+.privacy_description{
+  padding-top:40px;
+  padding-bottom:40px;
+}
+
+.privacy_description li{
+  padding-bottom: 20px;
+}
+
+.privacy_description ul{
+  list-style-type: circle;
+}
+
+
+span.glyphicon{
+  padding-right:10px;
+}
+
+.time_expectation h2{
+  text-align: center;
+  max-width: none;
+  color:#004A6C;
+  margin-bottom:40px;
+  padding-top: 40px;
+}
+
+
+
+
+.footer {
+  background-color: @footer-background;
+  color: #fff;
+}
+.footer a {
+  color: @brand-note;
+}
+.footer a:hover, .footer a:visited {
+  color: @brand-note;
+}
+
+.footer_info{
+  margin-top:20px;
+}
+
+.cfa-logo {
+  width: 12em;
+  opacity: 0.3;
+}
+.footer_logo {
+  padding: 3em 0 5em 0;
+  margin-top:30px;
+}
+
+.footer_logo p{
+  color:grey;
+}
+
+.btn-lg{
+  margin-bottom:12px;
+}
+
+.splash.above_the_fold .btn {
+  margin-bottom:20px;
+}
+
+.journey_headline{
+  text-align: center;
+}
+
+
+.gov_service_name,
+.gov_service_description,
+.apply_backup,
+.backup_apply_headline,
+.footer_logo,
+{
+  text-align: center;
+}
+
+.col_centered {
+  float: none;
+  margin: 0 auto;
+}
+.splash ul, .footer ul {
+  padding: 0;
+  line-height: 1.8em;
+}
+
+ul.opportunities {
+  padding-top: 12px;
+  text-align: left;
+}
+
+.opportunity {
+  padding-bottom: 20px;
+}
+.opportunity:before {
+  content: "\2713";
+  padding-right: 0.75em
+}
+
+section.footer.container.new_section{
+  padding-top: 80px;
+  padding-bottom: 50px;
+  color: #fff;
+}
+
+
+// breadcrumbs
+.breadcrumb .current { color: @text-color; }
+
+
+.btn .glyphicon {
+  margin-right: .5em;
+}
+
+.loading .glyphicon-refresh {
+   -webkit-animation: fa-spin 2s infinite linear;
+  animation: fa-spin 2s infinite linear;
+}
+
+
+@-webkit-keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+@keyframes fa-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+
+@media (min-width: @screen-sm-min) {
+
+  .splash.above_the_fold h1 {
+    font-size: 54px;
+    padding-top: 1.75em;
+  }
+
+  .main_headline{
+    margin-top:0px;
+  }
+
+  .new_section {
+    padding-top: 40px;
+  }
+
+  .journey_headline, h3.time_expectation {
+    text-align: left;
+  }
+
+  .opportunity, section.footer.container.new_section {
+    text-align: center;
+    padding-bottom: 10px;
+  }
+
+  .splash.above_the_fold {
+    background-size: cover;
+    min-height: 30em;
+  }
+
+}
+
+@media (min-width: @screen-md-min) {
+
+  header { padding: 1.5em 0;}
+  .splash.above_the_fold {
+    min-height: 40em;
+  }
+}
+
+.privacy ul {
+  list-style-type: disc;
+}
+
+.typeform_wrapper {
+  height: 100%;
+}
+html, body {
+  height: 100%;
+}
