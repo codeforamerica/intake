@@ -11,3 +11,9 @@ DATABASES = {
         'PASSWORD': os.environ.get('DATABASE_PASSWORD', ''),
     }
 }
+
+STATIC_ROOT = os.environ.get('STATIC_ROOT', 
+    os.path.join(REPO_DIR, 'project', 'static'))
+
+MEDIA_ROOT = os.environ.get('MEDIA_ROOT', 
+    os.path.join(REPO_DIR, 'project', 'media'))

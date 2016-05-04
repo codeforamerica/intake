@@ -4,9 +4,9 @@ You have received a new application from Code for America's online referral form
 
 View and download the new application here:
 
-    {{ url_for(
-            'form_filler.get_filled_pdf', submission_uuid=submission.uuid, _external=True
-        )}}
+    {{ request.build_absolute_uri(url(
+            'intake-filled_pdf', kwargs=dict(submission_uuid=submission.uuid)
+        ))}}
 
 This client prefers to be contacted through:
 {%- for medium in submission.get_contact_preferences() %}
@@ -17,7 +17,7 @@ To protect client privacy, you must login to view the application. You should ha
 
 You can view Code for America's online referral form here:
 
-    {{ url_for('form_filler.index', _external=True) }}
+    {{ request.build_absolute_uri(url('intake-home')) }}
 
 If you have any questions or concerns, email us at clearmyrecord@codeforamerica.org and Jazmyn or Ben will get back to you right away.
 

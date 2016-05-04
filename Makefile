@@ -3,7 +3,7 @@ install:
 	pip install -r requirements/dev.txt
 
 serve:
-	heroku local web
+	gulp
 
 test:
 	coverage run \

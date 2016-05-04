@@ -1,7 +1,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="csrf-token" content="{{ csrf_token() }}">
+<meta name="csrf-token" content="{{ csrf_token }}">
 
 {# Description and basic stuff #}
 <meta name="description" content="{{ content.metadata_description }}">
@@ -10,7 +10,7 @@
 {# Schema.org markup for Google+ #}
 <meta itemprop="name" content="{{ content.metadata_title }}" />
 <meta itemprop="description" content="{{ content.metadata_description }}">
-<meta itemprop="image" content="{{ static_url }}img/CMR_social_thumbnail.png">
+<meta itemprop="image" content="{{ static('img/CMR_social_thumbnail.png') }}">
 
 {# Twitter card data #}
 <meta name="twitter:card" content="summary_large_image">
@@ -19,13 +19,13 @@
 <meta name="twitter:title" content="{{ content.metadata_title }}">
 <meta name="twitter:description" content="{{ content.metadata_description }}">
 <meta name="twitter:creator" content="@codeforamerica">
-<meta name="twitter:image:src" content="{{ static_url }}img/CMR_social_thumbnail.png">
+<meta name="twitter:image:src" content="{{ static('img/CMR_social_thumbnail.png') }}">
 
 {# Open Graph data #}
 <meta property="og:title" content="{{ content.metadata_title }}">
 <meta property="og:type" content="article">
 <meta property="og:url" content="{{ request.url }}">
-<meta property="og:image" content="{{ static_url }}img/CMR_social_thumbnail.png">
+<meta property="og:image" content="{{ static('img/CMR_social_thumbnail.png') }}">
 <meta property="og:description" content="{{ content.metadata_description }}">
 <meta property="og:site_name" content="{{ content.metadata_author }}">
 
