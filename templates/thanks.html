@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block body %}
+<section class="thanks above_the_fold">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12 col-sm-8 col-md-6 col_centered">
+				{% include "includes/splash_header.html" %}
+				<h1>
+					Thank you
+				</h1>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="thanks content">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12 col-sm-8 col-md-6 col_centered">
+				<p>
+					We will send your information to the San Francisco Public Defender's Clean Slate program right away. You should get a text or email from us to confirm.
+				</p>
+				<p>
+					You will receive a letter from the Public Defender explaining your next steps within 2-4 weeks.
+				</p>
+
+				<p>
+					Please let us know if your contact information changes.
+				</p>
+
+				<p>
+					If you have any questions or concerns, please email us at
+					<a href="mailto:clearmyrecord@codeforamerica.org">clearmyrecord@codeforamerica.org</a> 
+					or text us at
+					<a href="tel:14156259633">(415) 625-9633</a>.
+				</p>
+			</div>
+		</div>
+	</div>
+	
+</section>
+
+
+{% include "includes/footer.html" %}
+
+{% endblock body %}

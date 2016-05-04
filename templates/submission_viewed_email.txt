@@ -1,0 +1,4 @@
+At {{ current_local_time("%-m/%-d/%Y %-I:%M %p %Z") }},
+{{ user.email }} viewed {{ url_for(
+            'form_filler.get_filled_pdf', submission_uuid=submission.uuid, _external=True
+        )}}

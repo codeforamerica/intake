@@ -1,0 +1,37 @@
+Hello,
+
+You have received a new application from Code for America's online referral form for the San Francisco Public Defender's Clean Slate Program.
+
+View and download the new application here:
+
+    {{ url_for(
+            'form_filler.get_filled_pdf', submission_uuid=submission.uuid, _external=True
+        )}}
+
+This client prefers to be contacted through:
+{%- for medium in submission.get_contact_preferences() %}
+    - {{ medium }}
+{%- endfor %}
+
+To protect client privacy, you must login to view the application. You should have already received an invitation to create a login, but if you do not yet have a login or have any trouble, please let us know and we will create one right away. You can reset your password at any time.
+
+You can view Code for America's online referral form here:
+
+    {{ url_for('form_filler.index', _external=True) }}
+
+If you have any questions or concerns, email us at clearmyrecord@codeforamerica.org and Jazmyn or Ben will get back to you right away.
+
+
+Best,
+
+Ben Golder
+831-420-7603
+bgolder@codeforamerica.org
+
+Jazmyn Latimer
+805-201-8509
+jazmyn@codeforamerica.org
+
+Tiffany Andrews
+tandrews@codeforamerica.org
+

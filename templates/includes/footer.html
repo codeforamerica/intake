@@ -1,0 +1,42 @@
+<section class="footer new_section">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4 footer_info">
+        <h4>Contact info:</h4>
+        <ul>
+          <li>Email: {{ linkify(content.contact_email) }}</li>
+          <li>Phone: {{ linkify(content.contact_phone) }}</li>
+        </ul>
+      </div>
+
+      <div class="col-sm-4">
+      </div>
+
+      <div class="col-sm-4 footer_info">
+        <h4>
+          Resources:
+        </h4>
+        <ul>
+          <li>
+            <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_legal) }}
+          </li>
+          <li>
+            <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_website_description) }}
+          </li>
+          <li>
+            <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_cleanslate) }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="footer_logo">
+          <p class="small">Clear my record is a service delivered by</p>
+          <img class="cfa-logo" src="{{ static_url }}img/CfA_logo.png" alt="Code for America Logo">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

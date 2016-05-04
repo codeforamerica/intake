@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block body %}
+<section class="thanks above_the_fold">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12 col-sm-8 col-md-6 col_centered">
+				{% include "includes/splash_header.html" %}
+				<h1>
+					Apply to Clear My Record
+				</h1>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="application_form content">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12 col-sm-8 col-md-6 col_centered">
+				{% include "forms/sanfrancisco.html" %}
+			</div>
+		</div>
+	</div>
+</section>
+
+
+{% include "includes/footer.html" %}
+
+{% endblock body %}
