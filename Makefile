@@ -3,7 +3,7 @@ install:
 	pip install -r requirements/dev.txt
 
 serve:
-	./manage.py runserver
+	heroku local web
 
 test:
 	coverage run \

@@ -19,7 +19,7 @@ make install
 
 ## Run the local server
 
-The following command will spin up a local server at [http://localhost:8000/](http://localhost:8000/)
+The following command will spin up a local server at [http://localhost:5000/](http://localhost:5000/)
 
 ```
 make serve
