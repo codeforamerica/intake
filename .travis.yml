@@ -7,7 +7,7 @@ env:
   - DJANGO_SETTINGS_MODULE='project.settings.dev'
 addons:
   postgresql: "9.4"
-before_script: python ./manage.py collecstatic --noinput
+before_script: python ./manage.py collectstatic --noinput
 script: make test
 after_success:
   - codeclimate-test-reporter
