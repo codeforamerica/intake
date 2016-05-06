@@ -81,3 +81,4 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(REPO_DIR, 'frontend', 'build'),
 ]
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'

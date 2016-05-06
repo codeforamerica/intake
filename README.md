@@ -50,3 +50,8 @@ make test.functional
 ```
 
 This will create a series of screenshots in `tests/screenshots`.
+
+### Deployment
+
+These instructions assume that the app is being deployed on Heroku with static assets hosted on AWS S3.
+
