@@ -9,16 +9,15 @@ test:
 	coverage run \
 		--source='./project/','./intake/' \
 		--omit='./project/settings/prod.py','./project/wsgi.py' \
-		./manage.py test tests.integration
+		./manage.py test tests.integration \
+		--verbosity 2
 	coverage report
 
 test.functional:
 	python ./manage.py test tests.functional
 
 deploy.demo:
-	gulp build
 	git push demo master
 
 deploy.prod:
-	gulp build
 	git push prod master

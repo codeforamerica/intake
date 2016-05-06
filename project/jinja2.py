@@ -24,22 +24,11 @@ class Linkifier:
                 output = content.replace(str_lookup, link)
         return Markup(output)
 
-# http://stackoverflow.com/a/5891598/399726
-def suffix(d):
-    return 'th' if 11<=d<=13 else {1:'st',2:'nd',3:'rd'}.get(d%10, 'th')
-
-def custom_strftime(format, t):
-    return t.strftime(format).replace('{S}', str(t.day) + suffix(t.day))
 
 def current_local_time(fmt):
     utc_now = timezone('GMT').localize(datetime.utcnow())
     return utc_now.astimezone(timezone('US/Pacific')).strftime(fmt)
 
-
-def add_custom_strftime():
-    return dict(
-        custom_strftime=custom_strftime
-        )
 
 def add_content_constants():
     from project import content_constants
@@ -64,5 +53,4 @@ def environment(**options):
         'url': reverse,
     })
     env.globals.update(add_content_constants())
-    env.globals.update(add_custom_strftime())
     return env
