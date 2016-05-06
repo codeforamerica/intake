@@ -25,19 +25,7 @@ gulp.task('less_dev', function(){
     .pipe(gulp.dest('./frontend/build/css/'));
 });
 
-jsfiles = [
-  './node_modules/jquery/dist/jquery.js',
-  './frontend/js/main.js',
-];
-
-gulp.task('js_dev', function(){
-  return gulp.src(jsfiles)
-    .pipe(concat('main.js'))
-    .pipe(gulp.dest('./frontend/build/js/'));
-})
-
 gulp.task('watch', function(){
-  gulp.watch('./frontend/js/**/*.js', ['js_dev']);
   gulp.watch('./frontend/less/**/*.less', ['less_dev']);
 })
 
@@ -49,5 +37,5 @@ gulp.task('django', function(){
 });
 
 
-gulp.task('build', ['fonts', 'img', 'voicemail', 'less_dev', 'js_dev'])
+gulp.task('build', ['fonts', 'img', 'voicemail', 'less_dev'])
 gulp.task('default', ['django', 'build', 'watch'])
