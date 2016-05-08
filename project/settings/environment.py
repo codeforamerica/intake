@@ -14,3 +14,8 @@ STATIC_ROOT = os.environ.get('STATIC_ROOT',
 
 MEDIA_ROOT = os.environ.get('MEDIA_ROOT', 
     os.path.join(REPO_DIR, 'project', 'media'))
+
+EMAIL_BACKEND = "sgbackend.SendGridBackend"
+SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
+MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER")
+DEFAULT_NOTIFICATION_EMAIL = os.environ.get("DEFAULT_NOTIFICATION_EMAIL")

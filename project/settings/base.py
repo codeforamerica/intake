@@ -42,7 +42,7 @@ TEMPLATES = [
         ],
         'APP_DIRS': True,
         'OPTIONS': {
-            'environment': 'project.jinja2.environment',
+            'environment': 'project.jinja2.jinja_config',
         },
     },
 ]

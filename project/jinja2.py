@@ -45,12 +45,20 @@ def add_content_constants():
         current_local_time=current_local_time
         )
 
+class JinjaConfig:
 
-def environment(**options):
-    env = Environment(**options)
-    env.globals.update({
-        'static': staticfiles_storage.url,
-        'url': reverse,
-    })
-    env.globals.update(add_content_constants())
-    return env
+    def __init__(self):
+        self.env = None
+
+    def __call__(self, **options):
+        env = Environment(**options)
+        env.globals.update({
+            'static': staticfiles_storage.url,
+            'url': reverse,
+        })
+        env.globals.update(add_content_constants())
+        self.env = env
+        return env
+
+jinja_config = JinjaConfig()
+    

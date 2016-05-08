@@ -5,13 +5,17 @@ You have received a new application from Code for America's online referral form
 View and download the new application here:
 
     {{ request.build_absolute_uri(url(
-            'intake-filled_pdf', kwargs=dict(submission_uuid=submission.uuid)
+            'intake-filled_pdf', kwargs=dict(submission_id=submission.id)
         ))}}
 
+{% if submission.get_contact_preferences() %}
 This client prefers to be contacted through:
 {%- for medium in submission.get_contact_preferences() %}
     - {{ medium }}
 {%- endfor %}
+{% else %}
+This client did give a preferred contact method. 
+{% endif %}
 
 To protect client privacy, you must login to view the application. You should have already received an invitation to create a login, but if you do not yet have a login or have any trouble, please let us know and we will create one right away. You can reset your password at any time.
 
