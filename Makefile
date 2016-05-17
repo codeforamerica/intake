@@ -5,12 +5,12 @@ install:
 serve:
 	gulp
 
-SCOPE=tests
+SCOPE=tests.integration
 test:
 	./manage.py test $(SCOPE) \
 		--verbosity 2
 
-test.default:
+test.coverage:
 	coverage run \
 		--source='./project/','./intake/' \
 		--omit='./project/settings/prod.py','./project/wsgi.py' \
