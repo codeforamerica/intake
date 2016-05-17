@@ -29,10 +29,11 @@ class EmailNotification:
 
 new_submission_email = EmailNotification(
     '''New application to {{ request.build_absolute_uri(url('intake-apply')) }} received {{ 
-        submission.get_local_date_received().strftime("%-m/%-d/%Y %-I:%M %p %Z") 
+        submission.get_local_date_received("%-m/%-d/%Y %-I:%M %p %Z") 
         }}''',
     "notification_email.txt"
     )
+
 submission_viewed_email = EmailNotification(
     'Application {{ submission.id }} viewed by {{ user.email }}',
     "submission_viewed_email.txt"

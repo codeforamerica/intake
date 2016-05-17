@@ -21,3 +21,4 @@ tests/screenshots
 db.sqlite3
 node_modules
 project/static
+project/media

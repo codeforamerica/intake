@@ -6,3 +6,5 @@ Jinja2==2.8
 gunicorn==19.4.5
 pytz==2016.4
 whitenoise==3.0
+boto==2.40.0
+django-storages==1.4.1

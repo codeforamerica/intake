@@ -9,5 +9,5 @@ urlpatterns = [
 
 urlpatterns += [
     url(r'^', include('intake.urls')),
+    url(r'^accounts/', include('allauth.urls')),
 ]
-

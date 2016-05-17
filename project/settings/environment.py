@@ -9,12 +9,19 @@ DATABASES = {
         default='postgresql://postgres@localhost:5432/intake')
 }
 
-STATIC_ROOT = os.environ.get('STATIC_ROOT', 
-    os.path.join(REPO_DIR, 'project', 'static'))
-
+# settings for file uploads
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', '')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', '')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', '')
 MEDIA_ROOT = os.environ.get('MEDIA_ROOT', 
     os.path.join(REPO_DIR, 'project', 'media'))
 
+# static files location
+STATIC_ROOT = os.environ.get('STATIC_ROOT', 
+    os.path.join(REPO_DIR, 'project', 'static'))
+
+
+# Email settings
 EMAIL_BACKEND = "sgbackend.SendGridBackend"
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", "admin@localhost")
