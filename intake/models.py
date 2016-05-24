@@ -15,6 +15,13 @@ nice_contact_choices = {
     'snailmail': 'Paper mail'
 }
 
+
+def get_parser():
+    parser = PDFParser()
+    parser.PDFPARSER_PATH = getattr(settings, 'PDFPARSER_PATH',
+        'intake/pdfparser.jar')
+
+
 class FormSubmission(models.Model):
     date_received = models.DateTimeField(auto_now_add=True)
     answers = JSONField()
@@ -41,9 +48,7 @@ class FillablePDF(models.Model):
         return self.pdf
 
     def fill(self, *args, **kwargs):
-        parser = PDFParser()
-        parser.PDFPARSER_PATH = getattr(settings, 'PDFPARSER_PATH',
-            'intake/pdfparser.jar')
+        parser = get_parser()
         import_path_parts = self.translator.split('.')
         callable_name = import_path_parts.pop()
         module_path = '.'.join(import_path_parts)
@@ -52,6 +57,6 @@ class FillablePDF(models.Model):
         return parser.fill_pdf(self.get_pdf(), translator(*args, **kwargs))
 
     def get_pdf_fields(self):
-        parser = PDFParser()
+        parser = get_parser()
         data = parser.get_field_data(self.get_pdf())
         return data['fields']
