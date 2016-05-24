@@ -1,11 +1,13 @@
 from unittest import skipIf
 from django.test import TestCase
+from django.core import mail
 from django.core.urlresolvers import reverse
 
 from tests.clients import CsrfClient
 
+from user_accounts.models import Organization
 
-class TestAuthFlows(TestCase):
+class TestAuth(TestCase):
 
     client_class = CsrfClient
 
@@ -20,6 +22,7 @@ class TestAuthFlows(TestCase):
     set_password_view = 'account_set_password'
     email_verification_sent_view = 'account_email_verification_sent'
     confirm_email_view = 'account_confirm_email'
+    send_invite_view = 'invitations:send-invite'
 
     superuser = dict(
             username="super",
@@ -29,20 +32,29 @@ class TestAuthFlows(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        super(TestAuthFlows, cls).setUpClass()
+        super().setUpClass()
         # make a super user
         from django.contrib.auth.models import User
         User.objects.create_superuser(**cls.superuser)
 
+    def have_some_orgs(self):
+        if not getattr(self, 'orgs', None):
+            self.orgs = [
+                Organization(name=n)
+                for n in ["Org A", "Org B"]
+                ]
+            for org in self.orgs:
+                org.save()
 
     def fill_form(self, url, **data):
+        follow = data.pop('follow', False)
         response = self.client.get(url)
         # if csrf protected, get the token
         csrf_token = None
         if self.__class__.client_class == CsrfClient:
             csrf_token = response.cookies['csrftoken'].value
         data.update(csrfmiddlewaretoken=csrf_token)
-        return self.client.post(url, data)
+        return self.client.post(url, data, follow=follow)
 
     def follow_redirect(self, response):
         return self.client.get(response.url)
@@ -75,16 +87,18 @@ class TestAuthFlows(TestCase):
         result = self.follow_redirect(response)
         self.assertContains(result, 'East Bay Community Law Center')
 
-
-    @skipIf(True, "not yet implemented")
     def test_superuser_can_invite_people(self):
-        # https://github.com/bee-keeper/django-invitations
-        # be a superuser
-        # go to a page
-        # enter an email address and select an organization
-        # get a confirmation that email was sent
-        # make sure email is sent
-        pass
+        self.be_superuser()
+        self.have_some_orgs()
+        response = self.fill_form(
+            reverse(self.send_invite_view),
+            email="Andrew.Strawberry@legalaid.org",
+            organization=self.orgs[0].id,
+            follow=True,
+            )
+        last_email = mail.outbox[-1]
+        self.assertEqual("Andrew.Strawberry@legalaid.org", last_email.to[0])
+        self.assertIn("invited to join", last_email.body)
 
     @skipIf(True, "not yet implemented")
     def test_invited_person_can_signup(self):
