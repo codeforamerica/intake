@@ -1,8 +1,9 @@
 import os
 from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 
-class FunctionalTestCase(LiveServerTestCase):
+class FunctionalTestCase(StaticLiveServerTestCase):
 
     def setUp(self):
         LiveServerTestCase.setUp(self)
@@ -60,6 +61,13 @@ class FunctionalTestCase(LiveServerTestCase):
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_experimental_option("mobileEmulation", mobile_emulation)
         self.browser = webdriver.Chrome(chrome_options=chrome_options)
+
+    def click_on(self, text):
+        xpath = "//E[contains(text(),'{}')]".format(text)
+        self.browser.find_element_by_xpath(xpath).click()
+
+    def type(self, text):
+        pass
 
     def tearDown(self):
         self.browser.quit()
