@@ -2,8 +2,12 @@ from unittest import skipIf
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
+from tests.clients import CsrfClient
+
 
 class TestAuthFlows(TestCase):
+
+    client_class = CsrfClient
 
     signup_view = 'account_signup'
     login_view = 'account_login'
@@ -31,6 +35,18 @@ class TestAuthFlows(TestCase):
         User.objects.create_superuser(**cls.superuser)
 
 
+    def fill_form(self, url, **data):
+        response = self.client.get(url)
+        # if csrf protected, get the token
+        csrf_token = None
+        if self.__class__.client_class == CsrfClient:
+            csrf_token = response.cookies['csrftoken'].value
+        data.update(csrfmiddlewaretoken=csrf_token)
+        return self.client.post(url, data)
+
+    def follow_redirect(self, response):
+        return self.client.get(response.url)
+
     def be_superuser(self):
         self.client.login(**self.superuser)
 
@@ -50,8 +66,15 @@ class TestAuthFlows(TestCase):
     def test_superuser_can_add_organization(self):
         self.be_superuser()
         # add an organization
-        response = self.client.get('/admin/organization/add')
-        # click on organization name
+        response = self.fill_form(
+            reverse('admin:user_accounts_organization_add'),
+            name='East Bay Community Law Center'
+            )
+        self.assertRedirects(response,
+            reverse('admin:user_accounts_organization_changelist'))
+        result = self.follow_redirect(response)
+        self.assertContains(result, 'East Bay Community Law Center')
+
 
     @skipIf(True, "not yet implemented")
     def test_superuser_can_invite_people(self):
