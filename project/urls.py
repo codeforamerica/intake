@@ -9,5 +9,9 @@ urlpatterns = [
 
 urlpatterns += [
     url(r'^', include('intake.urls')),
+    #overrides for user account views
+    url(r'^accounts/', include('user_accounts.urls')),
+    # user accounts
     url(r'^accounts/', include('allauth.urls')),
+    url(r'^invitations/', include('invitations.urls', namespace='invitations')),
 ]

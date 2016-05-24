@@ -22,8 +22,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'invitations',
     'storages',
     'intake',
+    'user_accounts'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -71,7 +73,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
-
+# django-allauth and django-invitations
+ACCOUNT_ADAPTER = 'invitations.models.InvitationsAdapter'
+INVITATIONS_INVITATION_EXPIRY = 14
+INVITATIONS_INVITATION_ONLY = True
+INVITATIONS_SIGNUP_REDIRECT = 'account_signup'
+INVITATIONS_ADAPTER = ACCOUNT_ADAPTER
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
@@ -88,6 +95,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
 ]
+
 SITE_ID = 1
 
 
