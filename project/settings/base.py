@@ -114,3 +114,6 @@ STATICFILES_DIRS = [
 ]
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+PDFPARSER_PATH = os.path.join(REPO_DIR, 'intake', 'pdfparser.jar')
+

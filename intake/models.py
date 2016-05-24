@@ -1,4 +1,5 @@
 import importlib
+from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser
@@ -41,6 +42,8 @@ class FillablePDF(models.Model):
 
     def fill(self, *args, **kwargs):
         parser = PDFParser()
+        parser.PDFPARSER_PATH = getattr(settings, 'PDFPARSER_PATH',
+            'intake/pdfparser.jar')
         import_path_parts = self.translator.split('.')
         callable_name = import_path_parts.pop()
         module_path = '.'.join(import_path_parts)
