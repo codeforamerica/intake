@@ -20,6 +20,7 @@ def get_parser():
     parser = PDFParser()
     parser.PDFPARSER_PATH = getattr(settings, 'PDFPARSER_PATH',
         'intake/pdfparser.jar')
+    return parser
 
 
 class FormSubmission(models.Model):
