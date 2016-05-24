@@ -1,4 +1,5 @@
 from django.db import models
+from invitations.models import Invitation as BaseInvitation
 
 
 class Organization(models.Model):
@@ -8,3 +9,10 @@ class Organization(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Invitation(BaseInvitation):
+    organization = models.ForeignKey(
+        'Organization',
+        on_delete=models.CASCADE
+        )
