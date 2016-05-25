@@ -79,6 +79,12 @@ INVITATIONS_INVITATION_EXPIRY = 14
 INVITATIONS_INVITATION_ONLY = True
 INVITATIONS_SIGNUP_REDIRECT = 'account_signup'
 INVITATIONS_ADAPTER = ACCOUNT_ADAPTER
+ACCOUNT_EMAIL_VERIFICATION = "none"  # invitation only, so email confirmation is redundant
+ACCOUNT_SIGNUP_PASSWORD_VERIFICATION = False  # they can always reset the password
+ACCOUNT_EMAIL_REQUIRED = True  # ensure that people have emails
+ACCOUNT_USERNAME_REQUIRED = False  # we don't need usernames
+ACCOUNT_AUTHENTICATION_METHOD = "email"  # login using email
+ACCOUNT_USER_MODEL_USERNAME_FIELD = "email"  # use email as the primary username
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',

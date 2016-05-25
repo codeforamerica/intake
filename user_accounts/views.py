@@ -6,6 +6,7 @@ from . import forms
 
 
 class CustomSignupView(SignupView):
+    template_name = "user_accounts/signup.html"
 
     def closed(self):
         return redirect('intake-home')

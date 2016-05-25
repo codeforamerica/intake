@@ -1,7 +1,10 @@
+
+import re
 from unittest import skipIf
 from django.test import TestCase
 from django.core import mail
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 
 from tests.clients import CsrfClient
 
@@ -30,6 +33,11 @@ class TestAuth(TestCase):
             password="en9op4gI4jil0"
         )
 
+    example_user = dict(
+        email="Andrew.Strawberry@legalaid.org",
+        password="5up3r S3cr3tZ!"
+        )
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -56,14 +64,8 @@ class TestAuth(TestCase):
         data.update(csrfmiddlewaretoken=csrf_token)
         return self.client.post(url, data, follow=follow)
 
-    def follow_redirect(self, response):
-        return self.client.get(response.url)
-
     def be_superuser(self):
         self.client.login(**self.superuser)
-
-    def be_staff_user(self):
-        pass
 
     def test_uninvited_signups_are_redirected_to_home(self):
         # be anonymous
@@ -84,7 +86,7 @@ class TestAuth(TestCase):
             )
         self.assertRedirects(response,
             reverse('admin:user_accounts_organization_changelist'))
-        result = self.follow_redirect(response)
+        result = self.client.get(response.url)
         self.assertContains(result, 'East Bay Community Law Center')
 
     def test_superuser_can_invite_people(self):
@@ -92,21 +94,46 @@ class TestAuth(TestCase):
         self.have_some_orgs()
         response = self.fill_form(
             reverse(self.send_invite_view),
-            email="Andrew.Strawberry@legalaid.org",
+            email=self.example_user['email'],
             organization=self.orgs[0].id,
             follow=True,
             )
         last_email = mail.outbox[-1]
-        self.assertEqual("Andrew.Strawberry@legalaid.org", last_email.to[0])
+        self.assertEqual(self.example_user['email'], last_email.to[0])
         self.assertIn("invited to join", last_email.body)
 
-    @skipIf(True, "not yet implemented")
     def test_invited_person_can_signup(self):
-        # get an email invite
+        self.be_superuser()
+        self.have_some_orgs()
+        response = self.fill_form(
+            reverse(self.send_invite_view),
+            email=self.example_user['email'],
+            organization=self.orgs[0].id,
+            follow=True,
+            )
+        # be anonymous
+        self.client.logout()
+        last_email = mail.outbox[-1]
         # click on link
-        # enter password, hit enter
-        # be staff user
-        pass
+        # https://regex101.com/r/kP0qH7/1
+        link = re.search(
+            r'http://testserver(?P<link>.*)',
+            last_email.body).group('link')
+        self.assertTrue(link)
+        response = self.client.get(link)
+        # should go to /accounts/signup/
+        self.assertRedirects(response, reverse(self.signup_view))
+        response = self.fill_form(response.url,
+            email=self.example_user['email'],
+            password1=self.example_user['password']
+            )
+        self.assertRedirects(response, "/accounts/profile/",
+            target_status_code=404)
+        # make sure the user exists and that they are authenticated
+        users = User.objects.filter(email=self.example_user['email'])
+        self.assertEqual(len(users), 1)
+        self.assertTrue(users[0].is_authenticated)
+
 
     @skipIf(True, "not yet implemented")
     def test_user_can_add_info(self):
