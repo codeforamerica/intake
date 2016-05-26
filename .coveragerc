@@ -1,0 +1,11 @@
+[run]
+source =
+	project
+	intake
+	user_accounts
+omit = 
+	*/tests/*
+	project/settings/prod.py
+	project/wsgi.py
+	intake/translators/clean_slate.py
+	*/migrations/*

@@ -1,4 +1,3 @@
-
 import re
 from unittest import skipIf
 from django.test import TestCase
@@ -6,14 +5,18 @@ from django.core import mail
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 
-from tests.clients import CsrfClient
+from user_accounts.forms import InviteForm
+from user_accounts.models import (
+    Organization, Invitation, UserProfile,
+    get_user_display
+    )
 
-from user_accounts.models import Organization
+from user_accounts.tests import mock, clients
 
-class TestAuth(TestCase):
 
-    client_class = CsrfClient
+class TestUserAccounts(TestCase):
 
+    client_class = clients.CsrfClient
     signup_view = 'account_signup'
     login_view = 'account_login'
     logout_view = 'account_logout'
@@ -27,7 +30,7 @@ class TestAuth(TestCase):
     confirm_email_view = 'account_confirm_email'
     send_invite_view = 'invitations:send-invite'
 
-    superuser = dict(
+    example_superuser = dict(
             username="super",
             email="super@codeforamerica.org",
             password="en9op4gI4jil0"
@@ -35,41 +38,95 @@ class TestAuth(TestCase):
 
     example_user = dict(
         email="Andrew.Strawberry@legalaid.org",
-        password="5up3r S3cr3tZ!"
+        password="5up3r S3cr3tZ!",
+        name="Andrew Strawberry"
         )
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        # make a super user
-        from django.contrib.auth.models import User
-        User.objects.create_superuser(**cls.superuser)
+        cls.have_an_invited_user_from_each_organization()
 
-    def have_some_orgs(self):
-        if not getattr(self, 'orgs', None):
-            self.orgs = [
-                Organization(name=n)
-                for n in ["Org A", "Org B"]
-                ]
-            for org in self.orgs:
-                org.save()
+    @classmethod
+    def have_two_orgs(cls):
+        organizations = getattr(cls, 'organizations', None)
+        if organizations: return organizations
+        cls.orgs = [
+            mock.OrganizationFactory.create()
+            for i in range(2)
+        ]
+        return cls.orgs
 
-    def fill_form(self, url, **data):
-        follow = data.pop('follow', False)
-        response = self.client.get(url)
-        # if csrf protected, get the token
-        csrf_token = None
-        if self.__class__.client_class == CsrfClient:
-            csrf_token = response.cookies['csrftoken'].value
-        data.update(csrfmiddlewaretoken=csrf_token)
-        return self.client.post(url, data, follow=follow)
+    @classmethod
+    def have_a_superuser(cls):
+        superuser = getattr(cls, 'superuser', None)
+        if superuser: return superuser
+        cls.superuser = mock.fake_superuser(
+            **cls.example_superuser
+            )
+        return cls.superuser
+
+    @classmethod
+    def have_an_invite_for_each_organization(cls):
+        invitations = getattr(cls, 'invitations', None)
+        if invitations: return invitations
+        orgs = cls.have_two_orgs()
+        superuser = cls.have_a_superuser()
+        cls.invitations = [
+            mock.fake_invitation(org, inviter=superuser)
+            for org in orgs
+        ]
+        return cls.invitations
+
+    @classmethod
+    def have_an_invited_user_from_each_organization(cls):
+        users = getattr(cls, 'users', None)
+        if users: return users
+        invites = cls.have_an_invite_for_each_organization()
+        cls.users = []
+        for invite in invites:
+            user = invite.create_user_from_invite(
+                password=mock.fake_password,
+                name=mock.fake.name()
+                )
+            cls.users.append(user)
+        return cls.users
 
     def be_superuser(self):
-        self.client.login(**self.superuser)
+        self.client.login(**self.example_superuser)
+
+    def be_regular_user(self):
+        user = self.users[0]
+        self.client.login(
+            email=user.email,
+            password=mock.fake_password)
+
+    def be_anonymous(self):
+        self.client.logout()
+
+    def test_invite_form_has_the_right_fields(self):
+        form = InviteForm()
+        email_field = form.fields['email']
+        org_field = form.fields['organization']
+        form_html = form.as_p()
+        for org in self.orgs:
+            self.assertIn(org.name, form_html)
+
+    def test_invite_form_saves_correctly(self):
+        form = InviteForm(dict(
+            email="someone@example.com",
+            organization=self.orgs[0].id
+            ))
+        self.assertTrue(form.is_valid())
+        invite = form.save()
+        qset = Invitation.objects.filter(
+            email="someone@example.com",
+            organization=self.orgs[0]
+            )
+        self.assertEqual(qset.first(), invite)
 
     def test_uninvited_signups_are_redirected_to_home(self):
-        # be anonymous
-        self.client.logout()
+        self.be_anonymous()
         # try to go to signup page
         response = self.client.get(
             reverse(self.signup_view)
@@ -80,7 +137,7 @@ class TestAuth(TestCase):
     def test_superuser_can_add_organization(self):
         self.be_superuser()
         # add an organization
-        response = self.fill_form(
+        response = self.client.fill_form(
             reverse('admin:user_accounts_organization_add'),
             name='East Bay Community Law Center'
             )
@@ -91,8 +148,7 @@ class TestAuth(TestCase):
 
     def test_superuser_can_invite_people(self):
         self.be_superuser()
-        self.have_some_orgs()
-        response = self.fill_form(
+        response = self.client.fill_form(
             reverse(self.send_invite_view),
             email=self.example_user['email'],
             organization=self.orgs[0].id,
@@ -104,15 +160,14 @@ class TestAuth(TestCase):
 
     def test_invited_person_can_signup(self):
         self.be_superuser()
-        self.have_some_orgs()
-        response = self.fill_form(
+        response = self.client.fill_form(
             reverse(self.send_invite_view),
             email=self.example_user['email'],
             organization=self.orgs[0].id,
             follow=True,
             )
         # be anonymous
-        self.client.logout()
+        self.be_anonymous()
         last_email = mail.outbox[-1]
         # click on link
         # https://regex101.com/r/kP0qH7/1
@@ -123,24 +178,30 @@ class TestAuth(TestCase):
         response = self.client.get(link)
         # should go to /accounts/signup/
         self.assertRedirects(response, reverse(self.signup_view))
-        response = self.fill_form(response.url,
+        response = self.client.fill_form(response.url,
             email=self.example_user['email'],
             password1=self.example_user['password']
             )
-        self.assertRedirects(response, "/accounts/profile/",
-            target_status_code=404)
+        self.assertRedirects(response, reverse("user_accounts-profile"))
         # make sure the user exists and that they are authenticated
         users = User.objects.filter(email=self.example_user['email'])
         self.assertEqual(len(users), 1)
         self.assertTrue(users[0].is_authenticated)
+        self.assertEqual(get_user_display(users[0]), self.example_user['email'])
 
-
-    @skipIf(True, "not yet implemented")
-    def test_user_can_add_info(self):
-        # be logged in staff user
+    def test_user_can_add_info_in_profile_view(self):
+        self.be_regular_user()
         # find link to profile
-        # edit name
-        pass
+        response = self.client.get(reverse("user_accounts-profile"))
+        self.assertContains(response, self.users[0].profile.name)
+        result = self.client.fill_form(
+            reverse("user_accounts-profile"),
+            name=self.example_user['name'],
+            follow=True
+            )
+        self.assertContains(result, self.example_user['name'])
+        users = User.objects.filter(profile__name=self.example_user['name'])
+        self.assertEqual(len(users), 1)
 
     @skipIf(True, "not yet implemented")
     def test_user_can_reset_password(self):
@@ -172,4 +233,3 @@ class TestAuth(TestCase):
         # follow link in email
         # reset password
         pass
-
