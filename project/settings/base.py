@@ -76,8 +76,7 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 # django-allauth and django-invitations
 ACCOUNT_FORMS = {
-    'login': 'user_accounts.forms.LoginForm',
-    'signup': 'user_accounts.forms.CustomSignUpForm',
+    'login': 'user_accounts.forms.LoginForm'
 }
 ACCOUNT_ADAPTER = 'invitations.models.InvitationsAdapter'
 INVITATIONS_INVITATION_EXPIRY = 14

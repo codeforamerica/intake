@@ -24,6 +24,9 @@ class CustomLoginView(LoginView):
 class CustomSignupView(SignupView):
     template_name = "user_accounts/signup.html"
 
+    def get_form_class(self):
+        return forms.CustomSignUpForm
+
     def closed(self):
         return redirect('intake-home')
 

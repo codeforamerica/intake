@@ -34,12 +34,13 @@ class UserProfileForm(forms.ModelForm):
         fields = ['name']
 
 
-class CustomSignUpForm(forms.Form):
+class CustomSignUpForm(allauth_forms.SignupForm):
     name = forms.CharField(max_length=200, label='Name',
                            required=False)
 
-    def signup(self, request, user):
-        user = models.UserProfile.create_from_invited_user(
+    def custom_signup(self, request, user):
+        super().custom_signup(request, user)
+        models.UserProfile.create_from_invited_user(
             user=user,
             name=self.cleaned_data['name']
         )
