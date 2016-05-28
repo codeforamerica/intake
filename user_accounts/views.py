@@ -1,10 +1,24 @@
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic.edit import FormView, UpdateView
-from allauth.account.views import SignupView
+from allauth.account.views import SignupView, LoginView
 from invitations.views import SendInvite
 
 from . import forms, models
+
+
+class CustomLoginView(LoginView):
+
+    def get_form_class(self):
+        return forms.LoginForm
+
+    def form_invalid(self, *args):
+        # get the email entered, if it exists
+        login_email = self.request.POST.get('login', '')
+        # save it in the session, in case the go to password reset
+        if login_email:
+            self.request.session['login'] = login_email
+        return super().form_invalid(*args)
 
 
 class CustomSignupView(SignupView):

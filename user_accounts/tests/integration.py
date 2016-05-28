@@ -203,8 +203,37 @@ class TestUserAccounts(TestCase):
         users = User.objects.filter(profile__name=self.example_user['name'])
         self.assertEqual(len(users), 1)
 
+    def test_failed_login_gets_reasonable_error_message(self):
+        self.be_anonymous()
+        expected_error_message = "Sorry, that email and password do not work together"
+        response = self.client.fill_form(
+            reverse(self.login_view),
+            login=self.users[0].email,
+            password='incorrect'
+            )
+        # should be storing the login email for the reset page
+        session = response.wsgi_request.session
+        self.assertEqual(session['login'], self.users[0].email)
+        form = response.context['form']
+        self.assertTemplateUsed(response, 'account/login.html')
+        self.assertIn(expected_error_message,
+            form.errors['__all__'])
+        # we got here
+        self.assertContains(
+            response,
+            reverse(self.reset_password_view)
+            )
+
     @skipIf(True, "not yet implemented")
-    def test_user_can_reset_password(self):
+    def test_user_can_easily_reset_password_while_logged_in(self):
+        self.be_regular_user()
+        response = self.client.fill_form(
+            reverse(self.reset_password_view),
+            email=self.users[0],
+            password='incorrect',
+            follow=True
+            )
+        import ipdb; ipdb.set_trace()
         # be logged in user
         # find link to profile
         # click to reset password
@@ -215,21 +244,32 @@ class TestUserAccounts(TestCase):
         pass
 
     @skipIf(True, "not yet implemented")
-    def test_failed_login_gets_error_message(self):
-        # be anonymous
-        # go to login page
-        # enter wrong password
-        # be able to understand error message
-        pass
-
-    @skipIf(True, "not yet implemented")
     def test_can_reset_password_from_login_page(self):
-        # be anonymous
-        # go to login page
+        self.be_anonymous()
+        # forget password
+        response = self.client.fill_form(
+            reverse(self.login_view),
+            login=self.users[0].email,
+            password='forgot'
+            )
         # hit "reset password"
+        reset = self.client.get(
+            reverse(self.reset_password_view)
+            )
+        self.assertContains(
+            reset,
+            self.users[0].email
+            )
+        # enter email to request password reset
+        reset_sent = self.client.fill_form(
+            reverse(self.reset_password_view),
+            email=self.users[0].email,
+            )
+        reset_email = mail.outbox[-1]
+        import ipdb; ipdb.set_trace()
         # enter email
         # get a confirmation that email was sent
         # get an email
         # follow link in email
         # reset password
-        pass
+        raise Exception

@@ -73,13 +73,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
+
 # django-allauth and django-invitations
+ACCOUNT_FORMS = {
+    'login': 'user_accounts.forms.LoginForm',
+    'signup': 'user_accounts.forms.CustomSignUpForm',
+}
 ACCOUNT_ADAPTER = 'invitations.models.InvitationsAdapter'
 INVITATIONS_INVITATION_EXPIRY = 14
 INVITATIONS_INVITATION_ONLY = True
 INVITATIONS_SIGNUP_REDIRECT = 'account_signup'
 INVITATIONS_ADAPTER = ACCOUNT_ADAPTER
-ACCOUNT_SIGNUP_FORM_CLASS = 'user_accounts.forms.CustomSignUpForm'
 ACCOUNT_EMAIL_VERIFICATION = "none"  # invitation only, so email confirmation is redundant
 ACCOUNT_SIGNUP_PASSWORD_VERIFICATION = False  # they can always reset the password
 ACCOUNT_EMAIL_REQUIRED = True  # ensure that people have emails
@@ -90,6 +94,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 )
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {

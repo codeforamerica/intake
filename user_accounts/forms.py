@@ -1,6 +1,15 @@
 from django import forms
 from invitations.forms import InviteForm as BaseInviteForm
+from allauth.account import forms as allauth_forms
 from . import models, exceptions
+
+
+class LoginForm(allauth_forms.LoginForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        error_message = "Sorry, that email and password do not work together"
+        self.error_messages['email_password_mismatch'] = error_message
 
 
 class InviteForm(BaseInviteForm):
@@ -17,7 +26,9 @@ class InviteForm(BaseInviteForm):
             organization=self.cleaned_data['organization'],
             inviter=inviter)
 
+
 class UserProfileForm(forms.ModelForm):
+
     class Meta:
         model = models.UserProfile
         fields = ['name']
@@ -25,10 +36,10 @@ class UserProfileForm(forms.ModelForm):
 
 class CustomSignUpForm(forms.Form):
     name = forms.CharField(max_length=200, label='Name',
-        required=False)
+                           required=False)
 
     def signup(self, request, user):
         user = models.UserProfile.create_from_invited_user(
             user=user,
             name=self.cleaned_data['name']
-            )
+        )
