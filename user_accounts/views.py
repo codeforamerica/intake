@@ -1,13 +1,13 @@
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic.edit import FormView, UpdateView
-from allauth.account.views import SignupView, LoginView
+from allauth.account import views as allauth_views
 from invitations.views import SendInvite
 
 from . import forms, models
 
 
-class CustomLoginView(LoginView):
+class CustomLoginView(allauth_views.LoginView):
 
     def get_form_class(self):
         return forms.LoginForm
@@ -17,11 +17,11 @@ class CustomLoginView(LoginView):
         login_email = self.request.POST.get('login', '')
         # save it in the session, in case the go to password reset
         if login_email:
-            self.request.session['login'] = login_email
+            self.request.session['failed_login_email'] = login_email
         return super().form_invalid(*args)
 
 
-class CustomSignupView(SignupView):
+class CustomSignupView(allauth_views.SignupView):
     template_name = "user_accounts/signup.html"
 
     def get_form_class(self):
@@ -76,6 +76,23 @@ class UserProfileView(FormView):
         profile.save()
         return super().form_valid(form)
 
+
+class PasswordResetView(allauth_views.PasswordResetView):
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # if there is an login email in the session
+        login_email = self.request.session.get('failed_login_email', '')
+        initial_email = context['form'].initial.get('email', '')
+        if not initial_email:
+            context['form'].initial['email'] = login_email
+        return context
+
+
+class PasswordResetFromKeyView(allauth_views.PasswordResetFromKeyView):
+ 
+    def get_form_class(self):
+        return forms.SetPasswordForm
 
 
 

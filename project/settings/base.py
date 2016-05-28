@@ -89,6 +89,7 @@ ACCOUNT_EMAIL_REQUIRED = True  # ensure that people have emails
 ACCOUNT_USERNAME_REQUIRED = False  # we don't need usernames
 ACCOUNT_AUTHENTICATION_METHOD = "email"  # login using email
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',

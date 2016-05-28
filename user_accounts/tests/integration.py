@@ -3,6 +3,8 @@ from unittest import skipIf
 from django.test import TestCase
 from django.core import mail
 from django.core.urlresolvers import reverse
+from django.utils import html as html_utils
+from django.contrib import auth
 from django.contrib.auth.models import User
 
 from user_accounts.forms import InviteForm
@@ -104,13 +106,28 @@ class TestUserAccounts(TestCase):
     def be_anonymous(self):
         self.client.logout()
 
+    def assertLoggedInAs(self, user):
+        client_user = auth.get_user(self.client)
+        self.assertEqual(client_user, user)
+        assert client_user.is_authenticated()
+
+    def get_link_from_email(self, email):
+        # https://regex101.com/r/kP0qH7/1
+        link = re.search(
+            r'http://testserver(?P<link>.*)',
+            email.body).group('link')
+        self.assertTrue(link)
+        return link
+
     def test_invite_form_has_the_right_fields(self):
         form = InviteForm()
         email_field = form.fields['email']
         org_field = form.fields['organization']
         form_html = form.as_p()
         for org in self.orgs:
-            self.assertIn(org.name, form_html)
+            self.assertIn(
+                html_utils.escape(org.name),
+                form_html)
 
     def test_invite_form_saves_correctly(self):
         form = InviteForm(dict(
@@ -170,11 +187,7 @@ class TestUserAccounts(TestCase):
         self.be_anonymous()
         last_email = mail.outbox[-1]
         # click on link
-        # https://regex101.com/r/kP0qH7/1
-        link = re.search(
-            r'http://testserver(?P<link>.*)',
-            last_email.body).group('link')
-        self.assertTrue(link)
+        link = self.get_link_from_email(last_email)
         response = self.client.get(link)
         # should go to /accounts/signup/
         self.assertRedirects(response, reverse(self.signup_view))
@@ -213,19 +226,65 @@ class TestUserAccounts(TestCase):
             )
         # should be storing the login email for the reset page
         session = response.wsgi_request.session
-        self.assertEqual(session['login'], self.users[0].email)
+        self.assertEqual(
+            session['failed_login_email'],
+            self.users[0].email)
         form = response.context['form']
         self.assertTemplateUsed(response, 'account/login.html')
         self.assertIn(expected_error_message,
             form.errors['__all__'])
-        # we got here
         self.assertContains(
             response,
             reverse(self.reset_password_view)
             )
 
+    def test_can_reset_password_from_login_page(self):
+        self.be_anonymous()
+        # forget password
+        wrong_password = self.client.fill_form(
+            reverse(self.login_view),
+            login=self.users[0].email,
+            password='forgot'
+            )
+        # find a link to reset password
+        self.assertContains(wrong_password,
+            reverse(self.reset_password_view))
+        # hit "reset password"
+        reset = self.client.get(
+            reverse(self.reset_password_view))
+        self.assertContains(reset, self.users[0].email)
+        # enter email to request password reset
+        reset_sent = self.client.fill_form(
+            reverse(self.reset_password_view),
+            email=self.users[0].email,
+            )
+        # get an email to reset password
+        reset_email = mail.outbox[-1]
+        self.assertIn(
+            'Password Reset E-mail',
+            reset_email.subject
+            )
+        # follow the link in the email
+        reset_link = self.get_link_from_email(reset_email)
+        # follow the link and enter a new password
+        new_password = "FR35H H0T s3cr3tZ!1"
+        reset_done = self.client.fill_form(
+                reset_link, password=new_password)
+        # we should be redirected to the profile
+        self.assertRedirects(reset_done,
+            reverse("user_accounts-profile"))
+        # make sure we are logged in
+        self.assertLoggedInAs(self.users[0])
+        # make sure we can login with the new password
+        self.client.logout()
+        self.client.login(
+            email=self.users[0].email,
+            password=new_password
+            )
+        self.assertLoggedInAs(self.users[0])
+
     @skipIf(True, "not yet implemented")
-    def test_user_can_easily_reset_password_while_logged_in(self):
+    def test_can_reset_password_while_logged_in(self):
         self.be_regular_user()
         response = self.client.fill_form(
             reverse(self.reset_password_view),
@@ -242,34 +301,3 @@ class TestUserAccounts(TestCase):
         # logout
         # login with new password
         pass
-
-    @skipIf(True, "not yet implemented")
-    def test_can_reset_password_from_login_page(self):
-        self.be_anonymous()
-        # forget password
-        response = self.client.fill_form(
-            reverse(self.login_view),
-            login=self.users[0].email,
-            password='forgot'
-            )
-        # hit "reset password"
-        reset = self.client.get(
-            reverse(self.reset_password_view)
-            )
-        self.assertContains(
-            reset,
-            self.users[0].email
-            )
-        # enter email to request password reset
-        reset_sent = self.client.fill_form(
-            reverse(self.reset_password_view),
-            email=self.users[0].email,
-            )
-        reset_email = mail.outbox[-1]
-        import ipdb; ipdb.set_trace()
-        # enter email
-        # get a confirmation that email was sent
-        # get an email
-        # follow link in email
-        # reset password
-        raise Exception

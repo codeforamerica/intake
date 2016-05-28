@@ -44,3 +44,24 @@ class CustomSignUpForm(allauth_forms.SignupForm):
             user=user,
             name=self.cleaned_data['name']
         )
+
+
+class SetPasswordForm(forms.Form):
+
+    password = allauth_forms.SetPasswordField(
+        label="New Password")
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user", None)
+        self.temp_key = kwargs.pop("temp_key", None)
+        super().__init__(*args, **kwargs)
+
+    def save(self):
+        allauth_forms.get_adapter().set_password(
+            self.user, self.cleaned_data['password']
+            )
+
+
+
+
+
