@@ -22,8 +22,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'invitations',
     'storages',
     'intake',
+    'user_accounts'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -72,10 +74,27 @@ TEMPLATES = [
 WSGI_APPLICATION = 'project.wsgi.application'
 
 
+# django-allauth and django-invitations
+ACCOUNT_FORMS = {
+    'login': 'user_accounts.forms.LoginForm'
+}
+ACCOUNT_ADAPTER = 'invitations.models.InvitationsAdapter'
+INVITATIONS_INVITATION_EXPIRY = 14
+INVITATIONS_INVITATION_ONLY = True
+INVITATIONS_SIGNUP_REDIRECT = 'account_signup'
+INVITATIONS_ADAPTER = ACCOUNT_ADAPTER
+ACCOUNT_EMAIL_VERIFICATION = "none"  # invitation only, so email confirmation is redundant
+ACCOUNT_SIGNUP_PASSWORD_VERIFICATION = False  # they can always reset the password
+ACCOUNT_EMAIL_REQUIRED = True  # ensure that people have emails
+ACCOUNT_USERNAME_REQUIRED = False  # we don't need usernames
+ACCOUNT_AUTHENTICATION_METHOD = "email"  # login using email
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 )
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -88,6 +107,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
 ]
+
 SITE_ID = 1
 
 
@@ -106,3 +126,6 @@ STATICFILES_DIRS = [
 ]
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
+PDFPARSER_PATH = os.path.join(REPO_DIR, 'intake', 'pdfparser.jar')
+
