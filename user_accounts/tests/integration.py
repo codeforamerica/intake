@@ -15,8 +15,11 @@ from user_accounts.models import (
 
 from user_accounts.tests import mock, clients
 
-
-class TestUserAccounts(TestCase):
+class AuthTestBase(TestCase):
+    """
+    A class for integration tests that depend on
+    authentication and user accounts
+    """
 
     client_class = clients.CsrfClient
     signup_view = 'account_signup'
@@ -118,6 +121,9 @@ class TestUserAccounts(TestCase):
             email.body).group('link')
         self.assertTrue(link)
         return link
+
+
+class TestUserAccounts(AuthTestBase):
 
     def test_invite_form_has_the_right_fields(self):
         form = InviteForm()
