@@ -266,10 +266,15 @@ class TestUserAccounts(TestCase):
             )
         # follow the link in the email
         reset_link = self.get_link_from_email(reset_email)
-        # follow the link and enter a new password
+        reset_page = self.client.get(reset_link)
+        # make sure it shows who it thinks we are
+        self.assertContains(reset_page, self.users[0].email)
+        # enter a new password
+        csrf = self.client.get_csrf_token(reset_page)
         new_password = "FR35H H0T s3cr3tZ!1"
         reset_done = self.client.fill_form(
-                reset_link, password=new_password)
+                reset_link, csrf_token=csrf,
+                password=new_password)
         # we should be redirected to the profile
         self.assertRedirects(reset_done,
             reverse("user_accounts-profile"))
@@ -283,21 +288,38 @@ class TestUserAccounts(TestCase):
             )
         self.assertLoggedInAs(self.users[0])
 
-    @skipIf(True, "not yet implemented")
     def test_can_reset_password_while_logged_in(self):
         self.be_regular_user()
-        response = self.client.fill_form(
-            reverse(self.reset_password_view),
-            email=self.users[0],
-            password='incorrect',
-            follow=True
+        # go to profile
+        profile = self.client.get(
+            reverse("user_accounts-profile"))
+        # make sure there's a link to change password
+        self.assertContains(profile,
+            reverse(self.change_password_view))
+        change_password = self.client.get(
+            reverse(self.change_password_view))
+        # make sure the change password page
+        # knows who we are
+        self.assertContains(change_password,
+            self.users[0].email)
+        # set a new password
+        new_password = "FR35H H0T s3cr3tZ!1"
+        reset_done = self.client.fill_form(
+            reverse(self.change_password_view),
+            password=new_password
             )
-        import ipdb; ipdb.set_trace()
-        # be logged in user
-        # find link to profile
-        # click to reset password
-        # enter new password, hit return
-        # get confirmation
-        # logout
-        # login with new password
-        pass
+        try:
+            self.assertRedirects(reset_done,
+                reverse("user_accounts-profile"))
+        except AssertionError as error:
+            import ipdb; ipdb.set_trace()
+            raise error
+        # make sure we are logged in
+        self.assertLoggedInAs(self.users[0])
+        # make sure we can login with the new password
+        self.client.logout()
+        self.client.login(
+            email=self.users[0].email,
+            password=new_password
+            )
+        self.assertLoggedInAs(self.users[0])

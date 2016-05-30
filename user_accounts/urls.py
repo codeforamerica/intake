@@ -15,6 +15,10 @@ urlpatterns = [
         views.PasswordResetFromKeyView.as_view(),
         name="user_accounts-reset_password_from_key"),
 
+    url(r"^accounts/password/change/$",
+        login_required(views.PasswordChangeView.as_view()),
+        name="user_accounts-change_password"),
+
     url(r'^accounts/profile/$',
         login_required(views.UserProfileView.as_view()),
         name='user_accounts-profile'),

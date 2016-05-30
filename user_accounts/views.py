@@ -90,9 +90,21 @@ class PasswordResetView(allauth_views.PasswordResetView):
 
 
 class PasswordResetFromKeyView(allauth_views.PasswordResetFromKeyView):
+    template_name = 'user_accounts/change_password.html'
  
     def get_form_class(self):
         return forms.SetPasswordForm
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['reset_user'] = getattr(self, 'reset_user', None)
+        return context
+
+class PasswordChangeView(allauth_views.PasswordChangeView):
+    template_name = 'user_accounts/change_password.html'
+    success_url = reverse_lazy("user_accounts-profile")
+
+    def get_form_class(self):
+        return forms.SetPasswordForm
 
 
