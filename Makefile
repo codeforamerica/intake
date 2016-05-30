@@ -16,8 +16,8 @@ test.coverage:
 		--verbosity 2
 	coverage report
 
-test.functional:
-	python ./manage.py test tests.functional
+test.acceptance:
+	python ./manage.py test tests.acceptance
 
 deploy.demo:
 	git push demo master
