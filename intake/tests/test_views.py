@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 
 from intake.tests import mock
 
-from intake.views import add_ids_as_params
+from project.jinja2 import url_with_ids
 
 class TestViews(AuthIntegrationTestCase):
 
@@ -84,16 +84,15 @@ class TestViews(AuthIntegrationTestCase):
     def test_authenticated_user_can_see_pdf_bundle(self):
         self.be_regular_user()
         ids = [s.id for s in self.submissions]
-        url = add_ids_as_params(
-            reverse('intake-pdf_bundle'), ids)
+        url = url_with_ids('intake-pdf_bundle', ids)
         bundle = self.client.get(url)
         self.assertEqual(bundle.status_code, 200)
 
-    @skipIf(True, "not yet implemented")
     def test_authenticated_user_can_see_app_bundle(self):
         self.be_regular_user()
-        bundle = self.client.get(
-            reverse('intake-app_bundle'))
+        ids = [s.id for s in self.submissions]
+        url = url_with_ids('intake-app_bundle', ids)
+        bundle = self.client.get(url)
         self.assertEqual(bundle.status_code, 200)
 
     @skipIf(True, "not yet implemented")

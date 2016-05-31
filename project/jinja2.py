@@ -6,12 +6,22 @@ from datetime import datetime
 from pytz import timezone
 from jinja2 import Markup
 
+
 def namify(s=''):
     words = s.split()
     if not words:
         return s
-    first_word = words[0].capitalize()
-    return ' '.join([first_word] + words[1:])
+    first = words[0]
+    # only capitalize if they use all caps or all lowercase
+    if first == first.lower() or first == first.upper():
+        first = first.capitalize()
+    return ' '.join([first] + words[1:])
+
+def url_with_ids(view_name, ids):
+    url = reverse(view_name)
+    params = '?ids=' + ','.join([str(i) for i in ids])
+    return url + params
+
 
 class Linkifier:
     def __init__(self, links):
@@ -49,7 +59,8 @@ def add_content_constants():
         content=content_constants,
         linkify=Linkifier(linkify_links),
         current_local_time=current_local_time,
-        namify=namify
+        namify=namify,
+        url_with_ids=url_with_ids,
         )
 
 class JinjaConfig:

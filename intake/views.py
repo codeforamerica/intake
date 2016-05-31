@@ -69,8 +69,11 @@ class ApplicationBundle(View):
             pk__in=submission_ids)
         return render(
             request,
-            "app_bundle.html",
-            {'submissions': submissions})
+            "app_bundle.html", {
+                'submissions': submissions,
+                'count': len(submissions),
+                'app_ids': submission_ids,
+             })
 
     def get_ids_from_params(self, request):
         id_set = request.GET.get('ids')
@@ -87,11 +90,6 @@ class FilledPDFBundle(ApplicationBundle):
         return HttpResponse(pdf,
             content_type="application/pdf")
 
-
-def add_ids_as_params(url, ids):
-        appender = '&' if '?' in url else '?'
-        params = 'ids=' + ','.join([str(i) for i in ids])
-        return url + appender + params
 
 home = Home.as_view()
 apply_form = Apply.as_view()
