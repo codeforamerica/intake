@@ -96,14 +96,14 @@ class TestViews(AuthIntegrationTestCase):
         self.assertEqual(bundle.status_code, 200)
 
     @skipIf(True, "not yet implemented")
-    def test_authenticated_user_cannot_see_apps_to_other_org(self):
-        pass
-
-    @skipIf(True, "not yet implemented")
     def test_authenticated_user_can_delete_apps(self):
         pass
 
     @skipIf(True, "not yet implemented")
     def test_old_urls_permanently_redirect_to_new_urls(self):
+        pass
+
+    @skipIf(True, "not yet implemented")
+    def test_authenticated_user_cannot_see_apps_to_other_org(self):
         pass
 
