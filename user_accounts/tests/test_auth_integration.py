@@ -15,7 +15,7 @@ from user_accounts.models import (
 
 from user_accounts.tests import mock, clients
 
-class AuthTestBase(TestCase):
+class AuthIntegrationTestCase(TestCase):
     """
     A class for integration tests that depend on
     authentication and user accounts
@@ -123,7 +123,7 @@ class AuthTestBase(TestCase):
         return link
 
 
-class TestUserAccounts(AuthTestBase):
+class TestUserAccounts(AuthIntegrationTestCase):
 
     def test_invite_form_has_the_right_fields(self):
         form = InviteForm()
@@ -313,13 +313,9 @@ class TestUserAccounts(AuthTestBase):
         reset_done = self.client.fill_form(
             reverse(self.change_password_view),
             password=new_password
-            )
-        try:
-            self.assertRedirects(reset_done,
-                reverse("user_accounts-profile"))
-        except AssertionError as error:
-            import ipdb; ipdb.set_trace()
-            raise error
+        )
+        self.assertRedirects(reset_done,
+            reverse("user_accounts-profile"))
         # make sure we are logged in
         self.assertLoggedInAs(self.users[0])
         # make sure we can login with the new password
