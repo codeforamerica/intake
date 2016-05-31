@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 
 from intake.tests import mock
 
-
+from intake.views import add_ids_as_params
 
 class TestViews(AuthIntegrationTestCase):
 
@@ -59,37 +59,41 @@ class TestViews(AuthIntegrationTestCase):
         for submission in self.submissions:
             self.assertContains(index, submission.answers['last_name'])
 
-    @skipIf(True, "not yet implemented")
     def test_anonymous_user_cannot_see_filled_pdfs(self):
         self.be_anonymous()
         pdf = self.client.get(reverse('intake-filled_pdf',
             kwargs=dict(
                 submission_id=self.submissions[0].id
                 )))
-        self.assertRedirects(pdf, reverse('user_accounts-login'))
+        self.assertRedirects(pdf, 
+            "{}?next={}".format(
+            reverse('user_accounts-login'),
+            reverse('intake-filled_pdf', kwargs={
+                'submission_id': self.submissions[0].id})))
 
-    @skipIf(True, "not yet implemented")
     def test_anonymous_user_cannot_see_submitted_apps(self):
         self.be_anonymous()
         index = self.client.get(reverse('intake-app_index'))
-        self.assertRedirects(index, reverse('user_accounts-login'))
+        self.assertRedirects(index,
+            "{}?next={}".format(
+            reverse('user_accounts-login'),
+            reverse('intake-app_index')
+                )
+            )
 
-    @skipIf(True, "not yet implemented")
     def test_authenticated_user_can_see_pdf_bundle(self):
         self.be_regular_user()
-        bundle = self.client.get(reverse('intake-pdf_bundle',
-            kwargs=dict(
-                submission_ids='|'.join([
-                    s.id for s in self.submissions[:2]]))))
+        ids = [s.id for s in self.submissions]
+        url = add_ids_as_params(
+            reverse('intake-pdf_bundle'), ids)
+        bundle = self.client.get(url)
         self.assertEqual(bundle.status_code, 200)
 
     @skipIf(True, "not yet implemented")
     def test_authenticated_user_can_see_app_bundle(self):
         self.be_regular_user()
-        bundle = self.client.get(reverse('intake-app_bundle',
-            kwargs=dict(
-                submission_ids='|'.join([
-                    s.id for s in self.submissions[:2]]))))
+        bundle = self.client.get(
+            reverse('intake-app_bundle'))
         self.assertEqual(bundle.status_code, 200)
 
     @skipIf(True, "not yet implemented")

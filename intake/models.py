@@ -48,16 +48,27 @@ class FillablePDF(models.Model):
         self.pdf.seek(0)
         return self.pdf
 
-    def fill(self, *args, **kwargs):
-        parser = get_parser()
+    def get_translator(self):
         import_path_parts = self.translator.split('.')
         callable_name = import_path_parts.pop()
         module_path = '.'.join(import_path_parts)
         module = importlib.import_module(module_path)
-        translator = getattr(module, callable_name)
-        return parser.fill_pdf(self.get_pdf(), translator(*args, **kwargs))
+        return getattr(module, callable_name)
 
     def get_pdf_fields(self):
         parser = get_parser()
         data = parser.get_field_data(self.get_pdf())
         return data['fields']
+
+    def fill(self, *args, **kwargs):
+        parser = get_parser()
+        translator = self.get_translator()
+        return parser.fill_pdf(self.get_pdf(), translator(*args, **kwargs))
+
+    def fill_many(self, data_set, *args, **kwargs):
+        parser = get_parser()
+        translator = self.get_translator()
+        return parser.fill_many_pdfs(self.get_pdf(), [
+            translator(d, *args, **kwargs)
+            for d in data_set
+            ])
