@@ -212,7 +212,8 @@ class TestUserAccounts(AuthIntegrationTestCase):
         self.be_regular_user()
         # find link to profile
         response = self.client.get(reverse("user_accounts-profile"))
-        self.assertContains(response, self.users[0].profile.name)
+        self.assertContains(response, 
+            html_utils.escape(self.users[0].profile.name))
         result = self.client.fill_form(
             reverse("user_accounts-profile"),
             name=self.example_user['name'],
