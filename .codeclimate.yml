@@ -14,7 +14,9 @@ ratings:
   paths:
   - "project/**.py"
   - "intake/**.py"
+  - "user_accounts/**.py"
 exclude_paths:
 - "tests/**/*"
+- "**/tests/**/*.py"
 - "migrations/**/*"
 - "project/settings/*.py"

@@ -1,12 +1,12 @@
 # Core dependencies for production
-Django==1.9
-dj-database-url==0.4.1
-psycopg2==2.6.1
-Jinja2==2.8
-gunicorn==19.4.5
-pytz==2016.4
-whitenoise==3.0
-boto==2.40.0
-django-storages==1.4.1
-django-allauth==0.25.2
-django-invitations==1.7
+Django==1.9.*
+dj-database-url==0.*
+psycopg2==2.*
+Jinja2==2.*
+gunicorn==19.*
+pytz==2016.*
+whitenoise==3.*
+boto==2.*
+django-storages==1.*
+django-allauth==0.*
+django-invitations==1.*

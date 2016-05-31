@@ -1,11 +1,11 @@
-        {% if current_user.is_authenticated %}
+        {% if request.user.is_authenticated %}
         <div class="auth-notice authenticated">
           <span class="message">Signed in as</span>
-          <span class="username">{{ current_user.email }}</span>
-          <a href="{{ url('auth:logout') }}" class="logout_link">Sign out</a>
+          <span class="username">{{ request.user.profile.get_display_name() }}</span>
+          <a href="{{ url('account_logout') }}" class="logout_link">Sign out</a>
         </div>
         {% else %}
         <div class="auth-notice not-authenticated">
-          <a href="{{ url('auth:login') }}" class="login_link">Sign in</a>
+          <a href="{{ url('account_login') }}" class="login_link">Sign in</a>
         </div>
         {% endif %}

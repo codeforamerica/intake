@@ -5,7 +5,7 @@ from django.core import mail
 from django.conf import settings
 
 
-from tests.factories import FormSubmissionFactory
+from intake.tests.mock import FormSubmissionFactory
 
 class TestNotifications(TestCase):
 
@@ -35,7 +35,7 @@ class TestNotifications(TestCase):
 
     def test_new_application_email(self):
         from intake.notifications import new_submission_email
-        submission = FormSubmissionFactory()
+        submission = FormSubmissionFactory.create()
         new_submission_email.send(
             request=Mock(),
             submission=submission

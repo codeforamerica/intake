@@ -1,13 +1,13 @@
 from django.test import TestCase
 from datetime import datetime
 
-from tests.factories import FormSubmissionFactory
+from intake.tests.mock import FormSubmissionFactory
 from intake.models import FormSubmission, FillablePDF
 
 class TestModels(TestCase):
 
     def test_submission(self):
-        submission = FormSubmissionFactory()
+        submission = FormSubmissionFactory.create()
         self.assertEqual(int, type(submission.id))
         self.assertEqual(datetime, type(submission.date_received))
         self.assertEqual(dict, type(submission.answers))
@@ -24,6 +24,6 @@ class TestModels(TestCase):
             )
         fields = pdf.get_pdf_fields()
         self.assertEqual(type(fields), list)
-        filled_pdf = pdf.fill({'Given Name Text Box': 'Ben'})
+        filled_pdf = pdf.fill({'first_name': 'Ben'})
         self.assertEqual(type(filled_pdf), bytes)
     

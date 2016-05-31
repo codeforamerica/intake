@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+{% include "includes/header.html" %}
+
+<div class="container">
+	<div class="row">
+		<h1>All Clean Slate Applications</h1>
+	</div>
+	<div class="row">
+		<table class="table applications_list">
+		<tr>
+			<th>Date</th>
+			<th>Last Name</th>
+			<th>First Name</th>
+			<th>Intake PDF</th>
+{# 			<th>Opened by Aleem</th>
+			<th>Added to DB</th>
+			<th>Delete?</th> #}
+		</tr>
+		{% for app in submissions %}
+		<tr>
+			<td>{{ app.get_local_date_received('%-m/%-d/%y') }}</td>
+			<td>{{ namify(app.answers.get("last_name", "")) }}</td>
+			<td>{{ namify(app.answers.get("first_name", "")) }}</td>
+			<td>
+				<a href="{{ 
+					url('intake-filled_pdf',
+						kwargs=dict(submission_id=app.id)
+						) }}">
+						<span class="glyphicon glyphicon-file"></span>
+						PDF
+						</a>
+			</td> 
+			{# <td>
+			{%- set opened = app.submission.was_opened(app.logs) %}
+			{% if opened %}
+			{{ human(opened, precision=1) }}
+			{%- else -%}------------{% endif %}
+			</td>
+			<td>
+				{%- set added = app.submission.was_added(app.logs) %}
+				{% if added %}
+				<span class="glyphicon glyphicon-ok-sign"></span>
+				Added {{ human(added, precision=1) }}
+				{%- else -%}
+				<a class="btn btn-default" href="{{
+					url_for(
+						'form_filler.mark_as_added',
+						submission_uuid=app.submission.uuid
+							) }}">
+				<span class="glyphicon glyphicon-plus"></span>
+				Mark as added
+				</a>
+				{% endif %}
+			</td>
+			<td>
+				<a class="btn btn-default btn-sm delete" href="{{ url_for('form_filler.delete_page',
+						submission_uuid=app.submission.uuid) }}">
+					<span class="glyphicon glyphicon-remove"></span>
+					Delete
+				</a>
+			</td> #}
+		</tr>
+		{% endfor %}
+			
+		</table>
+	</div>
+</div>
+{% endblock body %}
