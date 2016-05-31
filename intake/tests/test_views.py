@@ -44,7 +44,6 @@ class TestViews(AuthIntegrationTestCase):
         thanks_page = self.client.get(result.url)
         self.assertContains(thanks_page, "Thank")
 
-
     def test_authenticated_user_can_see_filled_pdf(self):
         self.be_regular_user()
         pdf = self.client.get(reverse('intake-filled_pdf',
@@ -54,7 +53,6 @@ class TestViews(AuthIntegrationTestCase):
         self.assertTrue(len(pdf.content) > 69000)
         self.assertEqual(type(pdf.content), bytes)
 
-    @skipIf(True, "not yet implemented")
     def test_authenticated_user_can_see_list_of_submitted_apps(self):
         self.be_regular_user()
         index = self.client.get(reverse('intake-app_index'))

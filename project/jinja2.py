@@ -6,6 +6,12 @@ from datetime import datetime
 from pytz import timezone
 from jinja2 import Markup
 
+def namify(s=''):
+    words = s.split()
+    if not words:
+        return s
+    first_word = words[0].capitalize()
+    return ' '.join([first_word] + words[1:])
 
 class Linkifier:
     def __init__(self, links):
@@ -42,7 +48,8 @@ def add_content_constants():
     return dict(
         content=content_constants,
         linkify=Linkifier(linkify_links),
-        current_local_time=current_local_time
+        current_local_time=current_local_time,
+        namify=namify
         )
 
 class JinjaConfig:

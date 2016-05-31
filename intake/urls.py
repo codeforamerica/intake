@@ -8,4 +8,7 @@ urlpatterns = [
     url(r'^thanks/$', views.Thanks.as_view(), name='intake-thanks'),
     url(r'^application/(?P<submission_id>[0-9]+)/$', 
         login_required(views.FilledPDF.as_view()), name='intake-filled_pdf'),
+    url(r'^applications/$', 
+        login_required(views.ApplicationIndex.as_view()),
+        name='intake-app_index'),
 ]

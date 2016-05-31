@@ -50,4 +50,12 @@ class FilledPDF(View):
         return HttpResponse(pdf,
             content_type="application/pdf")
 
+class ApplicationIndex(TemplateView):
+
+    template_name = "app_index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['submissions'] = models.FormSubmission.objects.all()
+        return context
 
