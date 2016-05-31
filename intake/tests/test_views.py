@@ -2,6 +2,7 @@ from unittest import skipIf
 from django.test import TestCase
 from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase
 from django.core.urlresolvers import reverse
+from django.utils import html as html_utils
 
 from intake.tests import mock
 
@@ -31,7 +32,8 @@ class TestViews(AuthIntegrationTestCase):
     def test_apply_view(self):
         response = self.client.get(reverse('intake-apply'))
         self.assertEqual(response.status_code, 200)
-        self.assertIn('Apply to Clear My Record', response.content.decode('utf-8'))
+        self.assertIn('Apply to Clear My Record',
+            response.content.decode('utf-8'))
 
     def test_anonymous_user_can_fill_out_app_and_reach_thanks_page(self):
         self.be_anonymous()
@@ -57,7 +59,8 @@ class TestViews(AuthIntegrationTestCase):
         self.be_regular_user()
         index = self.client.get(reverse('intake-app_index'))
         for submission in self.submissions:
-            self.assertContains(index, submission.answers['last_name'])
+            self.assertContains(index,
+                html_utils.escape(submission.answers['last_name']))
 
     def test_anonymous_user_cannot_see_filled_pdfs(self):
         self.be_anonymous()
@@ -95,9 +98,20 @@ class TestViews(AuthIntegrationTestCase):
         bundle = self.client.get(url)
         self.assertEqual(bundle.status_code, 200)
 
-    @skipIf(True, "not yet implemented")
     def test_authenticated_user_can_delete_apps(self):
-        pass
+        self.be_regular_user()
+        submission = self.submissions[-1]
+        pdf_link = reverse('intake-filled_pdf',
+            kwargs={'submission_id':submission.id})
+        url = reverse('intake-delete_page',
+            kwargs={'submission_id':submission.id})
+        delete_page = self.client.get(url)
+        self.assertEqual(delete_page.status_code, 200)
+        after_delete = self.client.fill_form(url)
+        self.assertRedirects(after_delete, reverse('intake-app_index'))
+        index = self.client.get(after_delete.url)
+        self.assertNotContains(index, pdf_link)
+
 
     @skipIf(True, "not yet implemented")
     def test_old_urls_permanently_redirect_to_new_urls(self):
