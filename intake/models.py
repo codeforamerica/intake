@@ -9,10 +9,10 @@ from pytz import timezone
 from .pdfparser import PDFParser
 
 nice_contact_choices = {
-    'voicemail': 'Voicemail',
-    'sms': 'Text Message',
-    'email': 'Email',
-    'snailmail': 'Paper mail'
+    'voicemail': 'voicemail',
+    'sms': 'text message',
+    'email': 'email',
+    'snailmail': 'paper mail'
 }
 
 
@@ -37,6 +37,12 @@ class FormSubmission(models.Model):
             if "prefers" in k:
                 preferences.append(k[8:])
         return [nice_contact_choices[m] for m in preferences]
+
+    def get_anonymous_display(self):
+        return str(self.id)
+
+    def __str__(self):
+        return self.get_anonymous_display()
 
 
 class FillablePDF(models.Model):

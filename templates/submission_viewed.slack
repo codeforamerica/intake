@@ -1,0 +1,1 @@
+{{ user.email }} looked at {{ submission.get_anonymous_display() }}'s application

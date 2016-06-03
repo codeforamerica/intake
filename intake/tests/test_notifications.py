@@ -1,11 +1,16 @@
+from unittest import TestCase as BaseTestCase
 from unittest.mock import Mock, patch, MagicMock
 from django.test import TestCase
 
 from django.core import mail
+from django.utils.http import urlencode
 from django.conf import settings
+from urllib import parse
+import json
 
 
 from intake.tests.mock import FormSubmissionFactory
+from intake import notifications
 
 class TestNotifications(TestCase):
 
@@ -33,13 +38,75 @@ class TestNotifications(TestCase):
         email = mail.outbox[0]
         self.assertEqual(email.subject, "Hello Ben")
 
-    def test_new_application_email(self):
-        from intake.notifications import new_submission_email
-        submission = FormSubmissionFactory.create()
-        new_submission_email.send(
-            request=Mock(),
-            submission=submission
+
+class TestSlack(BaseTestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        class MockSub:
+            id = 2
+            def get_anonymous_display(self):
+                return "Shining Koala"
+            def __str__(self):
+                return self.get_anonymous_display()
+            def get_contact_preferences(self):
+                return ["text message", "email"]
+        cls.sub = MockSub()
+        cls.user = Mock(email='staff@org.org')
+        cls.request = Mock()
+        cls.request.build_absolute_uri.return_value = "http://filled_pdf/"
+        cls.submission_count = 101
+
+    def test_render_new_submission(self):
+        expected_new_submission_text = str(
+"""New submission #101!
+<http://filled_pdf/|Review it here>
+They want to be contacted via text message and email
+""")
+        new_submission = notifications.slack_new_submission.render(
+            submission=self.sub,
+            submission_count=self.submission_count,
+            request=self.request
+            ).message
+
+    def test_render_submission_viewed(self):
+        expected_submission_viewed_text = str(
+"""staff@org.org looked at Shining Koala's application""")
+        submission_viewed = notifications.slack_submission_viewed.render(
+            submission=self.sub, user=self.user
+            ).message
+        self.assertEqual(submission_viewed, expected_submission_viewed_text)
+        
+    def test_bundle_viewed(self):
+        expected_bundle_viewed_text = str(
+"""staff@org.org opened apps from Shining Koala, Shining Koala, and Shining Koala""")
+        bundle_viewed = notifications.slack_bundle_viewed.render(
+            user=self.user,
+            submissions=[self.sub for i in range(3)]
+            ).message
+        self.assertEqual(bundle_viewed, expected_bundle_viewed_text)
+
+    @patch('intake.notifications.requests.post')
+    def test_slack_send(self, mock_post):
+        mock_post.return_value = "HTTP response"
+        expected_json = '{"text": "New submission #101!\\n&lt;http://filled_pdf/|Review it here&gt;\\nThey want to be contacted via text message and email\\n"}'
+        expected_headers = {'Content-type': 'application/json'}
+        response = notifications.slack_new_submission.send(
+            submission=self.sub,
+            submission_count=self.submission_count,
+            request=self.request
             )
+        called_args, called_kwargs = mock_post.call_args
+        self.assertEqual(
+            called_kwargs['data'], expected_json)
+        self.assertDictEqual(
+            called_kwargs['headers'], expected_headers)
+
+
+
+
+
+
 
 
 

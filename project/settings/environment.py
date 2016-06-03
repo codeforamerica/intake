@@ -26,3 +26,6 @@ EMAIL_BACKEND = "sgbackend.SendGridBackend"
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", "admin@localhost")
 DEFAULT_NOTIFICATION_EMAIL = os.environ.get("DEFAULT_NOTIFICATION_EMAIL", "user@localhost")
+
+# Slack Web hook
+SLACK_WEBHOOK_URL=os.environ.get("SLACK_WEBHOOK_URL")

@@ -10,11 +10,15 @@ test:
 	./manage.py test $(SCOPE) \
 		--verbosity 2
 
+test.unit:
+	python -m unittest $(SCOPE) \
+		-v
+
 test.coverage:
 	coverage run \
 		./manage.py test $(SCOPE) \
 		--verbosity 2
-	coverage report
+	coverage report -m
 
 test.acceptance:
 	python ./manage.py test tests.acceptance

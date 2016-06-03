@@ -1,0 +1,2 @@
+{{ user.email }} opened apps from {{
+oxford_comma(submissions) }}

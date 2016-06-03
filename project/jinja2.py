@@ -22,6 +22,13 @@ def url_with_ids(view_name, ids):
     params = '?ids=' + ','.join([str(i) for i in ids])
     return url + params
 
+def oxford_comma(things):
+    things = list(things)
+    if len(things) == 1:
+        return str(things[0])
+    elif len(things) == 2:
+        return " and ".join(map(str, things))
+    return ", ".join(list(map(str, things[:-1])) + ["and "+str(things[-1])])
 
 class Linkifier:
     def __init__(self, links):
@@ -61,6 +68,7 @@ def add_content_constants():
         current_local_time=current_local_time,
         namify=namify,
         url_with_ids=url_with_ids,
+        oxford_comma=oxford_comma,
         )
 
 class JinjaConfig:

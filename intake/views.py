@@ -10,8 +10,7 @@ from django.views.generic.base import TemplateView
 
 from django.core import mail
 
-from intake import models
-from intake.notifications import new_submission_email
+from intake import models, notifications
 
 
 
@@ -27,7 +26,8 @@ class Apply(View):
     def post(self, request):
         submission = models.FormSubmission(answers=dict(request.POST))
         submission.save()
-        new_submission_email.send(submission=submission, request=request)
+        notifications.slack_new_submission.send(
+            submission=submission, request=request)
         return redirect(reverse_lazy('intake-thanks'))
 
 
@@ -46,6 +46,8 @@ class FilledPDF(View):
         # response['Content-Disposition'] = 'attachment; filename="%s"' % os.path.basename(filename)
         # response['Content-Length'] = os.path.getsize(filename)
         # return response
+        notifications.slack_submission_viewed.send(
+            submission=submission, user=request.user)
         return HttpResponse(pdf,
             content_type="application/pdf")
 
@@ -62,8 +64,10 @@ class ApplicationIndex(TemplateView):
 class ApplicationBundle(View):
     def get(self, request):
         submission_ids = self.get_ids_from_params(request)
-        submissions = models.FormSubmission.objects.filter(
-            pk__in=submission_ids)
+        submissions = list(models.FormSubmission.objects.filter(
+            pk__in=submission_ids))
+        notifications.slack_bundle_viewed.send(
+            submissions=submissions, user=request.user)
         return render(
             request,
             "app_bundle.html", {
