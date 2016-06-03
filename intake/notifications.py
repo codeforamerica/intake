@@ -129,3 +129,7 @@ slack_submission_viewed = SlackNotification(
 slack_bundle_viewed = SlackNotification(
     message_template_path="bundle_viewed.slack")
 
+# submission, user
+slack_submission_deleted = SlackNotification(
+    message_template_path="submission_deleted.slack")
+

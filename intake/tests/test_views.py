@@ -129,7 +129,8 @@ class TestViews(AuthIntegrationTestCase):
             submissions='list',
             user='User')
 
-    def test_authenticated_user_can_delete_apps(self):
+    @patch('intake.views.notifications.slack_submission_deleted.send')
+    def test_authenticated_user_can_delete_apps(self, slack):
         self.be_regular_user()
         submission = self.submissions[-1]
         pdf_link = reverse('intake-filled_pdf',
@@ -142,6 +143,10 @@ class TestViews(AuthIntegrationTestCase):
         self.assertRedirects(after_delete, reverse('intake-app_index'))
         index = self.client.get(after_delete.url)
         self.assertNotContains(index, pdf_link)
+        self.assert_called_once_with_types(
+            slack,
+            submission='FormSubmission',
+            user='User')
 
 
     @skipIf(True, "not yet implemented")

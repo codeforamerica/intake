@@ -77,7 +77,7 @@ They want to be contacted via text message and email
             ).message
         self.assertEqual(submission_viewed, expected_submission_viewed_text)
         
-    def test_bundle_viewed(self):
+    def test_render_bundle_viewed(self):
         expected_bundle_viewed_text = str(
 """staff@org.org opened apps from Shining Koala, Shining Koala, and Shining Koala""")
         bundle_viewed = notifications.slack_bundle_viewed.render(
@@ -85,6 +85,15 @@ They want to be contacted via text message and email
             submissions=[self.sub for i in range(3)]
             ).message
         self.assertEqual(bundle_viewed, expected_bundle_viewed_text)
+    
+    def test_render_submission_deleted(self):
+        expected_submission_deleted_text = str(
+"""staff@org.org deleted Shining Koala's application""")
+        deleted = notifications.slack_submission_deleted.render(
+            user=self.user,
+            submission=self.sub
+            ).message
+        self.assertEqual(deleted, expected_submission_deleted_text)
 
     @patch('intake.notifications.requests.post')
     def test_slack_send(self, mock_post):

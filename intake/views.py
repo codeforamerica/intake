@@ -106,6 +106,9 @@ class Delete(View):
 
     def post(self, request, submission_id):
         submission = models.FormSubmission.objects.get(id=int(submission_id))
+        notifications.slack_submission_deleted.send(
+            submission=submission,
+            user=request.user)
         submission.delete()
         # add a message saying it's been deleted
         return redirect(reverse_lazy('intake-app_index'))
