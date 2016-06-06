@@ -11,9 +11,6 @@ fake_first_names = [
     "Chartreuse",
     "Teal",
     "Turqoise",
-    "Brown",
-    "White",
-    "Black",
     "Indigo",
     "Lavender",
     "Violet",
@@ -40,6 +37,10 @@ fake_first_names = [
     "Friendly",
     "Inquisitive",
     "Adventurous",
+    "Colossal",
+    "Stupendous",
+    "Determined",
+    "Amazing",
 ]
 
 fake_last_names = [
@@ -83,7 +84,7 @@ fake_last_names = [
     "Narwhal",
     "Walrus",
     "Flounder",
-    "Tuna",
+    "Dolphin",
     "Bat",
     "Moth",
     "Butterfly",
@@ -104,12 +105,17 @@ fake_last_names = [
     "Sequoia",
     "Volcano",
     "Cloud",
+    "Thunder",
     "Fog",
     "Adventurer",
     "Starfish",
+    "Sturgeon",
     "Cyborg",
     "Tulip",
     "Lotus",
+    "Star",
+    "Moon",
+    "Sun",
 ]
 
 

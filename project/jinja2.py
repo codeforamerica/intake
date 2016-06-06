@@ -17,10 +17,12 @@ def namify(s=''):
         first = first.capitalize()
     return ' '.join([first] + words[1:])
 
+
 def url_with_ids(view_name, ids):
     url = reverse(view_name)
     params = '?ids=' + ','.join([str(i) for i in ids])
     return url + params
+
 
 def oxford_comma(things):
     things = list(things)
@@ -29,6 +31,7 @@ def oxford_comma(things):
     elif len(things) == 2:
         return " and ".join(map(str, things))
     return ", ".join(list(map(str, things[:-1])) + ["and "+str(things[-1])])
+
 
 class Linkifier:
     def __init__(self, links):

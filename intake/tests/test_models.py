@@ -2,23 +2,59 @@ from django.test import TestCase
 from datetime import datetime
 
 from intake.tests import mock
-from intake.models import FormSubmission, FillablePDF
+from user_accounts.tests.mock import create_fake_auth_models
+from intake import models, anonymous_names
+
 
 class TestModels(TestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        for key, models in create_fake_auth_models().items():
+            setattr(cls, key, models)
 
     def test_submission(self):
         submission = mock.FormSubmissionFactory.create()
         self.assertEqual(int, type(submission.id))
-        self.assertEqual(datetime, type(submission.date_received))
         self.assertEqual(dict, type(submission.answers))
+        self.assertEqual(datetime, type(submission.date_received))
+        self.assertEqual(submission.old_uuid, '')
+        anon = submission.get_anonymous_display()
+        self.validate_anonymous_name(anon)
+        for field_name in ('reviewed_by_staff',
+            'confirmation_sent',
+            'submitted_to_agency', 'opened_by_agency', 'processed_by_agency',
+            'due_for_followup', 'followup_sent', 'followup_answered',
+            'told_eligible', 'told_ineligible'):
+            self.assertIsNone(
+                getattr(submission, field_name))
         self.assertEqual(
-            FormSubmission.objects.get(id=submission.id), submission)
+            models.FormSubmission.objects.get(id=submission.id), submission)
+
+    def test_applicationlogentry(self):
+        submission = mock.FormSubmissionFactory.create()
+        log = models.ApplicationLogEntry.objects.create(
+            submission=submission,
+            user=self.users[0],
+            action_type=models.ApplicationLogEntry.UPDATED,
+            updated_field='reviewed_by_staff'
+            )
+        self.assertEqual(
+            models.ApplicationLogEntry.objects.get(id=log.id), log)
+
+    def validate_anonymous_name(self, name):
+        first_name, *last_names = name.split(' ')
+        self.assertIn(first_name,
+            anonymous_names.fake_first_names)
+        self.assertIn(' '.join(last_names), 
+            anonymous_names.fake_last_names)
+
 
     def test_fillablepdf(self):
         from django.core.files import File
         sample_pdf_path = 'tests/sample_pdfs/sample_form.pdf'
-        pdf = FillablePDF(
+        pdf = models.FillablePDF(
             name="Sample_pdf",
             pdf=File(open(sample_pdf_path, 'rb')),
             translator='tests.sample_translator.translate'
@@ -29,13 +65,8 @@ class TestModels(TestCase):
         self.assertEqual(type(filled_pdf), bytes)
 
     def test_anonymous_names(self):
-        from intake import anonymous_names
         fake_name = anonymous_names.generate()
-        first_name, *last_names = fake_name.split(' ')
-        self.assertIn(first_name,
-            anonymous_names.fake_first_names)
-        self.assertIn(' '.join(last_names), 
-            anonymous_names.fake_last_names)
+        self.validate_anonymous_name(fake_name)
 
     def test_get_contact_preferences(self):
         base_answers = mock.fake.sf_county_form_answers()

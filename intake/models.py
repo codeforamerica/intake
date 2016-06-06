@@ -2,11 +2,12 @@ import importlib
 from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 from pytz import timezone
 
-from .pdfparser import PDFParser
+from . import pdfparser, anonymous_names
+
 
 nice_contact_choices = {
     'voicemail': 'voicemail',
@@ -17,15 +18,31 @@ nice_contact_choices = {
 
 
 def get_parser():
-    parser = PDFParser()
+    parser = pdfparser.PDFParser()
     parser.PDFPARSER_PATH = getattr(settings, 'PDFPARSER_PATH',
         'intake/pdfparser.jar')
     return parser
 
 
 class FormSubmission(models.Model):
-    date_received = models.DateTimeField(auto_now_add=True)
+    '''This is 
+    '''
     answers = JSONField()
+    # old_uuid is only used for porting legacy applications
+    old_uuid = models.CharField(max_length=34, blank=True)
+    anonymous_name = models.CharField(max_length=60,
+        default=anonymous_names.generate)
+    date_received = models.DateTimeField(auto_now_add=True)
+    reviewed_by_staff = models.DateTimeField(null=True)
+    confirmation_sent = models.DateTimeField(null=True)
+    submitted_to_agency = models.DateTimeField(null=True)
+    opened_by_agency = models.DateTimeField(null=True)
+    processed_by_agency = models.DateTimeField(null=True)
+    due_for_followup = models.DateTimeField(null=True)
+    followup_sent = models.DateTimeField(null=True)
+    followup_answered = models.DateTimeField(null=True)
+    told_eligible = models.DateTimeField(null=True)
+    told_ineligible = models.DateTimeField(null=True)
 
     def get_local_date_received(self, fmt, timezone_name='US/Pacific'):
         local_tz = timezone(timezone_name)
@@ -39,10 +56,38 @@ class FormSubmission(models.Model):
         return [nice_contact_choices[m] for m in preferences]
 
     def get_anonymous_display(self):
-        return str(self.id)
+        return self.anonymous_name
 
     def __str__(self):
         return self.get_anonymous_display()
+
+
+
+class ApplicationLogEntry(models.Model):
+    '''
+    '''
+    CREATED = 1
+    READ = 2
+    UPDATED = 3
+    DELETED = 4
+
+    ACTION_TYPES = (
+        (CREATED, "created"),
+        (READ,    "read"   ),
+        (UPDATED, "updated"),
+        (DELETED, "deleted"), 
+        )
+
+    time = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User,
+        on_delete=models.SET_NULL, null=True)
+    submission = models.ForeignKey(FormSubmission,
+        on_delete=models.SET_NULL, null=True)
+    action_type = models.PositiveSmallIntegerField(
+        choices=ACTION_TYPES)
+    updated_field = models.CharField(max_length=50,
+        blank=True)
+
 
 
 class FillablePDF(models.Model):
