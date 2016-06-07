@@ -71,27 +71,28 @@ They want to be contacted via text message and email
 
     def test_render_submission_viewed(self):
         expected_submission_viewed_text = str(
-"""staff@org.org looked at Shining Koala's application""")
-        submission_viewed = notifications.slack_submission_viewed.render(
-            submission=self.sub, user=self.user
+"""staff@org.org opened Shining Koala's application""")
+        submission_viewed = notifications.slack_submissions_viewed.render(
+            user=self.user,
+            submissions=[self.sub]
             ).message
         self.assertEqual(submission_viewed, expected_submission_viewed_text)
-        
-    def test_render_bundle_viewed(self):
-        expected_bundle_viewed_text = str(
+    
+    def test_render_submissions_viewed(self):
+        expected_submissions_viewed_text = str(
 """staff@org.org opened apps from Shining Koala, Shining Koala, and Shining Koala""")
-        bundle_viewed = notifications.slack_bundle_viewed.render(
+        submissions_viewed = notifications.slack_submissions_viewed.render(
             user=self.user,
             submissions=[self.sub for i in range(3)]
             ).message
-        self.assertEqual(bundle_viewed, expected_bundle_viewed_text)
-    
+        self.assertEqual(submissions_viewed, expected_submissions_viewed_text)
+
     def test_render_submission_deleted(self):
         expected_submission_deleted_text = str(
 """staff@org.org deleted Shining Koala's application""")
-        deleted = notifications.slack_submission_deleted.render(
+        deleted = notifications.slack_submissions_deleted.render(
             user=self.user,
-            submission=self.sub
+            submissions=[self.sub]
             ).message
         self.assertEqual(deleted, expected_submission_deleted_text)
 

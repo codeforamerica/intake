@@ -28,4 +28,9 @@ urlpatterns = [
     url(r'^application/(?P<submission_id>[0-9]+)/delete/$',
         login_required(views.delete_page),
         name='intake-delete_page'),
+    
+    url(r'^applications/mark/processed/$',
+        login_required(views.mark_processed),
+        name='intake-mark_processed'),
+
 ]

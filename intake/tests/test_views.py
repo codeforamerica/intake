@@ -31,7 +31,7 @@ class TestViews(AuthIntegrationTestCase):
         arguments, keyword_arguments = mock_obj.call_args
         argument_classes = [getattr(
                 arg, '__qualname__', arg.__class__.__qualname__
-                ) for arg in arguments]
+                ) for arg in arguments] 
         self.assertListEqual(argument_classes, list(arg_types))
         keyword_argument_classes = {}    
         for keyword, arg in keyword_arguments.items():
@@ -65,9 +65,10 @@ class TestViews(AuthIntegrationTestCase):
         self.assert_called_once_with_types(
             slack,
             submission='FormSubmission',
-            request='WSGIRequest')
+            request='WSGIRequest',
+            submission_count='int')
 
-    @patch('intake.views.notifications.slack_submission_viewed.send')
+    @patch('intake.views.notifications.slack_submissions_viewed.send')
     def test_authenticated_user_can_see_filled_pdf(self, slack):
         self.be_regular_user()
         pdf = self.client.get(reverse('intake-filled_pdf',
@@ -78,7 +79,7 @@ class TestViews(AuthIntegrationTestCase):
         self.assertEqual(type(pdf.content), bytes)
         self.assert_called_once_with_types(
             slack,
-            submission='FormSubmission',
+            submissions='list',
             user='User')
 
     def test_authenticated_user_can_see_list_of_submitted_apps(self):
@@ -117,7 +118,7 @@ class TestViews(AuthIntegrationTestCase):
         bundle = self.client.get(url)
         self.assertEqual(bundle.status_code, 200)
 
-    @patch('intake.views.notifications.slack_bundle_viewed.send')
+    @patch('intake.views.notifications.slack_submissions_viewed.send')
     def test_authenticated_user_can_see_app_bundle(self, slack):
         self.be_regular_user()
         ids = [s.id for s in self.submissions]
@@ -129,7 +130,7 @@ class TestViews(AuthIntegrationTestCase):
             submissions='list',
             user='User')
 
-    @patch('intake.views.notifications.slack_submission_deleted.send')
+    @patch('intake.views.notifications.slack_submissions_deleted.send')
     def test_authenticated_user_can_delete_apps(self, slack):
         self.be_regular_user()
         submission = self.submissions[-1]
@@ -145,8 +146,13 @@ class TestViews(AuthIntegrationTestCase):
         self.assertNotContains(index, pdf_link)
         self.assert_called_once_with_types(
             slack,
-            submission='FormSubmission',
+            submissions='list',
             user='User')
+
+    @patch('intake.views.notifications.slack_submissions_processed.send')
+    def test_authenticated_user_can_mark_apps_as_processed(self, slack):
+        self.be_regular_user()
+        submissions = self.submissions[:2]
 
 
     @skipIf(True, "not yet implemented")

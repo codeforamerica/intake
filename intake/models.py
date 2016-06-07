@@ -1,12 +1,13 @@
 import importlib
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 from pytz import timezone
 
-from . import pdfparser, anonymous_names
+from . import pdfparser, anonymous_names, notifications
 
 
 nice_contact_choices = {
@@ -25,8 +26,15 @@ def get_parser():
 
 
 class FormSubmission(models.Model):
-    '''This is 
-    '''
+
+    STEP_FIELDS = [
+        'reviewed_by_staff', 'confirmation_sent',
+        'submitted_to_agency', 'opened_by_agency',
+        'processed_by_agency', 'due_for_followup',
+        'followup_sent', 'followup_answered',
+        'told_eligible', 'told_ineligible'
+    ]
+
     answers = JSONField()
     # old_uuid is only used for porting legacy applications
     old_uuid = models.CharField(max_length=34, blank=True)
@@ -43,6 +51,30 @@ class FormSubmission(models.Model):
     followup_answered = models.DateTimeField(null=True)
     told_eligible = models.DateTimeField(null=True)
     told_ineligible = models.DateTimeField(null=True)
+
+    @classmethod
+    def mark_step(cls, ids, step, user=None, time=None):
+        if step not in cls.STEP_FIELDS:
+            raise KeyError(
+                "'{}' is not an attribute of {}".format(
+                    step, cls.__name__))
+        if not time:
+            time = timezone.now()
+        submissions = cls.objects.filter(pk__in=ids)
+        submissions.update(**{step:time})
+        logs = []
+        for submission in submissions:
+            log = ApplicationLogEntry(
+                time=time,
+                user=user,
+                submission=submission,
+                action_type=ApplicationLogEntry.UPDATED,
+                updated_field=step
+                )
+            logs.append(log)
+        ApplicationLogEntry.objects.bulk_create(logs)
+        return submissions, logs
+
 
     def get_local_date_received(self, fmt, timezone_name='US/Pacific'):
         local_tz = timezone(timezone_name)

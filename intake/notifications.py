@@ -21,13 +21,14 @@ class DuplicateTemplateError(Exception):
 
 class BaseNotification:
 
-    def __init__(self, **template_and_path_args):
+    def __init__(self, default_context=None, **template_and_path_args):
         '''Feed this init function a set of templates of the form:
             any_name_at_all_template_path --> loads a template from template dirs
             any_name_at_all_template --> loads a template from a string
         '''
         self.template_and_path_args = template_and_path_args
         self.templates = {}
+        self.default_context = default_context or {}
         self._content_base = None
 
     def set_template(self, key, string='', from_string=False):
@@ -41,10 +42,15 @@ class BaseNotification:
         else:
             self.templates[key] = get_template(string)
 
+    def get_context(self, context_dict):
+        context = self.default_context
+        context.update(context_dict)
+        return context
+
     def _render_template(self, template, context_dict):
         if not hasattr(template, 'render'):
             return template
-        return template.render(context_dict)
+        return template.render(self.get_context(context_dict))
 
     def init_templates(self):
         if not jinja.env:
@@ -98,11 +104,13 @@ class EmailNotification(BaseNotification):
 
 class SlackNotification(BaseNotification):
 
-    def __init__(self, message_template_path='', webhook_url=None):
-        super().__init__(message_template_path=message_template_path)
+    def __init__(self, default_context=None, message_template_path='', webhook_url=None):
+        super().__init__(
+            default_context=default_context,
+            message_template_path=message_template_path)
         self.webhook_url = webhook_url or settings.SLACK_WEBHOOK_URL
 
-    def escape(self, text): 
+    def escape(self, text):
         return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 
     def send(self, webhook_url=None, **context_args):
@@ -121,15 +129,18 @@ class SlackNotification(BaseNotification):
 slack_new_submission = SlackNotification(
     message_template_path="new_submission.slack")
 
-# submission, user
-slack_submission_viewed = SlackNotification(
-    message_template_path="submission_viewed.slack")
+# submissions, user
+slack_submissions_viewed = SlackNotification(
+    {'action': 'opened'},
+    message_template_path="bundle_action.slack")
 
 # submissions, user
-slack_bundle_viewed = SlackNotification(
-    message_template_path="bundle_viewed.slack")
+slack_submissions_processed = SlackNotification(
+    {'action': 'processed'},
+    message_template_path="bundle_action.slack")
 
-# submission, user
-slack_submission_deleted = SlackNotification(
-    message_template_path="submission_deleted.slack")
+# submissions, user
+slack_submissions_deleted = SlackNotification(
+    {'action': 'deleted'},
+    message_template_path="bundle_action.slack")
 
