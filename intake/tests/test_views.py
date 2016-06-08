@@ -149,10 +149,22 @@ class TestViews(AuthIntegrationTestCase):
             submissions='list',
             user='User')
 
-    @patch('intake.views.notifications.slack_submissions_processed.send')
+    @patch('intake.views.MarkProcessed.notification_function')
     def test_authenticated_user_can_mark_apps_as_processed(self, slack):
         self.be_regular_user()
         submissions = self.submissions[:2]
+        ids = [s.id for s in submissions]
+        mark_link = url_with_ids('intake-mark_processed', ids)
+        marked = self.client.get(mark_link)
+        self.assert_called_once_with_types(
+            slack,
+            submissions='list',
+            user='User')
+        self.assertRedirects(marked, reverse('intake-app_index'))
+        args, kwargs = slack.call_args
+        for sub in kwargs['submissions']:
+            self.assertTrue(sub.processed_by_agency)
+            self.assertIn(sub.id, ids)
 
 
     @skipIf(True, "not yet implemented")

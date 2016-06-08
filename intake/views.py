@@ -129,7 +129,7 @@ class MarkSubmissionStepView(View, MultiSubmissionMixin):
             user=request.user)
         if hasattr(self, 'notification_function'):
             self.notification_function(
-                submissions=submissions, user=user)
+                submissions=list(submissions), user=request.user)
         return redirect(next_param)
 
 

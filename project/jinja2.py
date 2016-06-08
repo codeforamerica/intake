@@ -1,10 +1,12 @@
 from django.contrib.staticfiles.storage import staticfiles_storage
+from django.contrib.humanize.templatetags import humanize
 from django.core.urlresolvers import reverse
 
 from jinja2 import Environment
 from datetime import datetime
 from pytz import timezone
 from jinja2 import Markup
+
 
 
 def namify(s=''):
@@ -72,6 +74,7 @@ def add_content_constants():
         namify=namify,
         url_with_ids=url_with_ids,
         oxford_comma=oxford_comma,
+        humanize=humanize,
         )
 
 class JinjaConfig:

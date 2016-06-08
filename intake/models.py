@@ -1,11 +1,11 @@
 import importlib
 from django.conf import settings
 from django.db import models
-from django.utils import timezone
+from pytz import timezone
+from django.utils import timezone as timezone_utils
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
-from pytz import timezone
 
 from . import pdfparser, anonymous_names, notifications
 
@@ -59,7 +59,7 @@ class FormSubmission(models.Model):
                 "'{}' is not an attribute of {}".format(
                     step, cls.__name__))
         if not time:
-            time = timezone.now()
+            time = timezone_utils.now()
         submissions = cls.objects.filter(pk__in=ids)
         submissions.update(**{step:time})
         logs = []
