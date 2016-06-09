@@ -206,6 +206,7 @@ slack_submissions_deleted = SlackNotification(
     {'action': 'deleted'},
     message_template_path="bundle_action.slack")
 
+# count, request, submission_ids
 front_email_daily_app_bundle = FrontEmailNotification(
     subject_template="{{current_local_time('%a %b %-d, %Y')}}: Online applications to Clean Slate",
     body_template_path='app_bundle_email.txt')

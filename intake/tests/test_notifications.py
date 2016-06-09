@@ -190,10 +190,24 @@ They want to be contacted via text message and email
         self.assertDictEqual(
             called_kwargs['headers'], expected_headers)
 
-    @patch('intake.notifications.requests.post')
-    def test_front_email_daily_app_bundle(self, mock_post):
-        mock_post.return_value = mock.FrontSendMessageResponse.success()
-        
+    def test_render_front_email_daily_app_bundle(self):
+        expected_subject = "current time: Online applications to Clean Slate"
+        expected_body = """As of current time, you have one unopened application to Clean Slate.
+
+You can review and print them at this link:
+    /applications/bundle/?ids=1,2,3"""
+        request = Mock()
+        request.build_absolute_uri.side_effect = lambda url: url
+        current_time = Mock(return_value='current time')
+        content = notifications.front_email_daily_app_bundle.render(
+            count=1,
+            request=request,
+            current_local_time= current_time,
+            submission_ids=[1,2,3]
+            )
+        self.assertIn(expected_body, content.body)
+        self.assertEqual(expected_subject, content.subject)
+
 
 
 
