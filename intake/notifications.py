@@ -10,12 +10,15 @@ from project.jinja2 import jinja_config as jinja
 from django.template import Context
 
 
-
 class JinjaNotInitializedError(Exception):
     pass
 
 
 class DuplicateTemplateError(Exception):
+    pass
+
+
+class FrontAPIError(Exception):
     pass
 
 
@@ -101,6 +104,65 @@ class EmailNotification(BaseNotification):
             recipient_list=to
             )
 
+class FrontNotification(BaseNotification): 
+
+    def __init__(self, default_context=None, subject_template='', body_template_path=''):
+        super().__init__(
+            default_context=default_context,
+            subject_template=subject_template,
+            body_template_path=body_template_path
+            )
+
+    def build_headers(self):
+        return {
+            'Authorization': 'Bearer {}'.format(
+                settings.FRONT_API_TOKEN),
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+
+    def build_api_url_endpoint(self):
+        root_url = 'https://api2.frontapp.com/channels/{}/messages'
+        return root_url.format(self.channel_id)
+
+    def raise_post_errors(self, response):
+        if response.status_code != 202:
+            raise FrontAPIError(
+"""
+STATUS {status}
+Error: {title}
+{detail}
+""".format(**response.json()['errors'][0]))
+
+    def send(self, to, **context_args):
+        content = self.render(**context_args)
+        data = {
+            'body': content.body,
+            'to': to,
+            'options': {
+                'archive': False
+                }
+            }
+        if hasattr(content, 'subject') and content.subject:
+            data['subject'] = content.subject
+        payload = json.dumps(data)
+        result = requests.post(
+            url=self.build_api_url_endpoint(),
+            data=payload,
+            headers=self.build_headers()
+            )
+        self.raise_post_errors(result)
+        return result
+
+
+
+class FrontEmailNotification(FrontNotification):
+    channel_id = settings.FRONT_EMAIL_CHANNEL_ID
+
+
+class FrontSMSNotification(FrontNotification):
+    channel_id = settings.FRONT_PHONE_CHANNEL_ID
+
 
 class SlackNotification(BaseNotification):
 
@@ -144,3 +206,6 @@ slack_submissions_deleted = SlackNotification(
     {'action': 'deleted'},
     message_template_path="bundle_action.slack")
 
+front_email_daily_app_bundle = FrontEmailNotification(
+    subject_template="{{current_local_time('%a %b %-d, %Y')}}: Online applications to Clean Slate",
+    body_template_path='app_bundle_email.txt')
