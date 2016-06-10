@@ -52,6 +52,7 @@ class FormSubmission(models.Model):
     told_eligible = models.DateTimeField(null=True)
     told_ineligible = models.DateTimeField(null=True)
 
+
     @classmethod
     def mark_step(cls, ids, step, user=None, time=None):
         if step not in cls.STEP_FIELDS:
@@ -75,6 +76,19 @@ class FormSubmission(models.Model):
         ApplicationLogEntry.objects.bulk_create(logs)
         return submissions, logs
 
+    @classmethod
+    def mark_opened_by_agency(cls, submissions, user):
+        return cls.mark_step(
+            [s.id for s in submissions],
+            'opened_by_agency',
+            user=user,
+            )
+
+    @classmethod
+    def get_unopened_apps(cls):
+        return cls.objects.filter(
+            opened_by_agency=None
+            )
 
     def get_local_date_received(self, fmt, timezone_name='US/Pacific'):
         local_tz = timezone(timezone_name)

@@ -84,5 +84,15 @@ class TestModels(TestCase):
         submission = mock.FormSubmissionFactory.build(answers=prefers_nothing)
         self.assertListEqual([], submission.get_contact_preferences())
 
+    def test_get_unopened_submissions(self):
+        submissions = mock.FormSubmissionFactory.create_batch(4)
+        group_a, group_b = submissions[:2], submissions[2:]
+        models.FormSubmission.mark_opened_by_agency(group_a, self.users[0])
+        unopened = models.FormSubmission.get_unopened_apps()
+        for sub in group_b:
+            self.assertIn(sub, unopened)
+        for sub in group_a:
+            self.assertNotIn(sub, unopened)
+
 
     
