@@ -208,6 +208,32 @@ You can review and print them at this link:
         self.assertIn(expected_body, content.body)
         self.assertEqual(expected_subject, content.subject)
 
+    @patch('intake.management.commands.send_unopened_apps_notification.notifications')
+    @patch('intake.management.commands.send_unopened_apps_notification.models')
+    @patch('intake.management.commands.send_unopened_apps_notification.settings')
+    def test_send_unopened_apps_notification(self, settings, models, notifications):
+        models.FormSubmission.get_unopened_apps.return_value = [
+            Mock(id=1), Mock(id=2)
+            ]
+        settings.DEFAULT_NOTIFICATION_EMAIL = "someone@agency.org"
+        send = Mock()
+
+        notifications.front_email_daily_app_bundle.send = send
+        
+        from intake.management.commands.send_unopened_apps_notification import Command
+        command = Command()
+        command.style = Mock()
+        command.stdout = Mock()
+
+        command.handle()
+        send.assert_called_once_with(
+            to="someone@agency.org",
+            count=2,
+            submission_ids=[1,2])
+
+
+
+
 
 
 
