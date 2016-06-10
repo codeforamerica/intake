@@ -12,7 +12,6 @@ class Command(BaseCommand):
         self.stdout.write(
             self.style.SUCCESS(message)
             )
-        notifications.slack_simple.send(message)
 
     def handle(self, *args, **options):
         email = settings.DEFAULT_NOTIFICATION_EMAIL
@@ -24,10 +23,10 @@ class Command(BaseCommand):
                 count=count,
                 submission_ids=[s.id for s in unopened_submissions]
                 )
-            self.report_success(
-                "Emailed {} with a link to {} unopened applications".format(
-                        email, count))
+            success_message = "Emailed {} with a link to {} unopened applications".format(
+                        email, count)
         else:
-            self.report_success(
-                "No unopened applications. Didn't email {}".format(
-                    email))
+            success_message = "No unopened applications. Didn't email {}".format(
+                    email)
+        self.report_success(success_message)
+        notifications.slack_simple.send(success_message)

@@ -9,7 +9,7 @@ class TestCommands(TestCase):
     @patch('intake.management.commands.send_unopened_apps_notification.notifications')
     @patch('intake.management.commands.send_unopened_apps_notification.models')
     @patch('intake.management.commands.send_unopened_apps_notification.settings')
-    def test_send_unopened_apps_notification_with_no_apps(self, settings, models, notifications):
+    def test_send_unopened_apps_notification_(self, settings, models, notifications):
         settings.DEFAULT_NOTIFICATION_EMAIL = "someone@agency.org"
 
         command = commands.send_unopened_apps_notification.Command()
@@ -41,10 +41,8 @@ class TestCommands(TestCase):
         command.report_success.assert_called_once_with(expected_message)
         notifications.slack_simple.send.assert_called_once_with(expected_message)
 
-
-    @patch('intake.management.commands.send_unopened_apps_notification.notifications')
     @patch('intake.management.commands.send_unopened_apps_notification.settings')
-    def test_report_success(self, settings, notifications):
+    def test_report_success(self, settings):
         command = commands.send_unopened_apps_notification.Command()
 
         command.stdout = Mock()
@@ -54,6 +52,5 @@ class TestCommands(TestCase):
         command.style.SUCCESS.assert_called_once_with("Hello")
         command.stdout.write.assert_called_once_with(
             command.style.SUCCESS.return_value)
-        notifications.slack_simple.send.assert_called_once_with(expected_message)
 
 
