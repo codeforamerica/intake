@@ -87,7 +87,7 @@ class FormSubmission(models.Model):
     @classmethod
     def get_unopened_apps(cls):
         return cls.objects.filter(
-            opened_by_agency=None
+            opened_by_agency__isnull=True
             )
 
     def get_local_date_received(self, fmt, timezone_name='US/Pacific'):

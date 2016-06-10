@@ -94,6 +94,13 @@ class TestModels(TestCase):
         for sub in group_a:
             self.assertNotIn(sub, unopened)
 
+        # make sure we get falsey values if all have been opened
+        models.FormSubmission.mark_opened_by_agency(group_b, self.users[0])
+        unopened = models.FormSubmission.get_unopened_apps()
+        self.assertFalse(unopened)
+
+
+
 
 
 
