@@ -12,6 +12,7 @@ class Command(BaseCommand):
         self.stdout.write(
             self.style.SUCCESS(message)
             )
+        notifications.slack_simple.send(message)
 
     def handle(self, *args, **options):
         email = settings.DEFAULT_NOTIFICATION_EMAIL

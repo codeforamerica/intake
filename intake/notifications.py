@@ -22,7 +22,7 @@ class FrontAPIError(Exception):
     pass
 
 
-class BaseNotification:
+class TemplateNotification:
 
     def __init__(self, default_context=None, **template_and_path_args):
         '''Feed this init function a set of templates of the form:
@@ -80,7 +80,7 @@ class BaseNotification:
 
 
 
-class EmailNotification(BaseNotification):
+class EmailNotification(TemplateNotification):
     
     default_from_email = settings.MAIL_DEFAULT_SENDER
     default_recipients = [settings.DEFAULT_NOTIFICATION_EMAIL]
@@ -95,8 +95,6 @@ class EmailNotification(BaseNotification):
         content = self.render(**context_args)
         from_email = from_email or self.default_from_email
         to = to or self.default_recipients
-        if isinstance(to, str):
-            to = [to]
         return mail.send_mail(
             subject=content.subject,
             message=content.body,
@@ -104,7 +102,7 @@ class EmailNotification(BaseNotification):
             recipient_list=to
             )
 
-class FrontNotification(BaseNotification): 
+class FrontNotification(TemplateNotification): 
 
     def __init__(self, default_context=None, subject_template='', body_template_path=''):
         super().__init__(
@@ -164,45 +162,59 @@ class FrontSMSNotification(FrontNotification):
     channel_id = settings.FRONT_PHONE_CHANNEL_ID
 
 
-class SlackNotification(BaseNotification):
 
-    def __init__(self, default_context=None, message_template_path='', webhook_url=None):
-        super().__init__(
-            default_context=default_context,
-            message_template_path=message_template_path)
+class BasicSlackNotification:
+
+    headers = {'Content-type': 'application/json'}
+
+    def __init__(self, webhook_url=None):
         self.webhook_url = webhook_url or settings.SLACK_WEBHOOK_URL
 
     def escape(self, text):
         return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 
-    def send(self, webhook_url=None, **context_args):
-        content = self.render(**context_args)
+    def send(self, message_text):
         payload = json.dumps({
-            'text': self.escape(content.message)
-        })
-        headers = {'Content-type': 'application/json'}
+            'text': self.escape(message_text)
+            })
         return requests.post(
-            webhook_url,
+            url=self.webhook_url,
             data=payload,
-            headers=headers)
+            headers=self.headers)
 
+
+class SlackTemplateNotification(BasicSlackNotification, TemplateNotification):
+
+    def __init__(self, default_context=None, message_template_path='', webhook_url=None):
+        BasicSlackNotification.__init__(self, webhook_url)
+        TemplateNotification.__init__(self,
+            default_context=default_context,
+            message_template_path=message_template_path)
+
+    def send(self, **context_args):
+        content = self.render(**context_args)
+        super().send(message_text=content.message)
+
+
+
+slack_simple = BasicSlackNotification()
 
 # submission, submission_count, request
-slack_new_submission = SlackNotification(
+slack_new_submission = SlackTemplateNotification(
     message_template_path="new_submission.slack")
 
 # submissions, user
-slack_submissions_viewed = SlackNotification(
+slack_submissions_viewed = SlackTemplateNotification(
     {'action': 'opened'},
     message_template_path="bundle_action.slack")
 
 # submissions, user
-slack_submissions_processed = SlackNotification(
+slack_submissions_processed = SlackTemplateNotification(
     {'action': 'processed'},
     message_template_path="bundle_action.slack")
 
 # submissions, user
-slack_submissions_deleted = SlackNotification(
+slack_submissions_deleted = SlackTemplateNotification(
     {'action': 'deleted'},
     message_template_path="bundle_action.slack")
 

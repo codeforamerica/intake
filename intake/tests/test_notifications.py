@@ -173,6 +173,18 @@ They want to be contacted via text message and email
         self.assertEqual(deleted, expected_submission_deleted_text)
 
     @patch('intake.notifications.requests.post')
+    def test_slack_simple(self, mock_post):
+        mock_post.return_value = "HTTP response"
+        expected_json = '{"text": "Hello slack &lt;&amp;&gt;"}'
+        expected_headers = {'Content-type': 'application/json'}
+        notifications.slack_simple.send("Hello slack <&>")
+        called_args, called_kwargs = mock_post.call_args
+        self.assertEqual(
+            called_kwargs['data'], expected_json)
+        self.assertDictEqual(
+            called_kwargs['headers'], expected_headers)
+
+    @patch('intake.notifications.requests.post')
     def test_slack_send(self, mock_post):
         mock_post.return_value = "HTTP response"
         expected_json = '{"text": "New submission #101!\\n&lt;http://filled_pdf/|Review it here&gt;\\nThey want to be contacted via text message and email\\n"}'
