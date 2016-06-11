@@ -166,6 +166,55 @@ class TestViews(AuthIntegrationTestCase):
             self.assertTrue(sub.processed_by_agency)
             self.assertIn(sub.id, ids)
 
+    def test_old_urls_return_permanent_redirect(self):
+        # I don't think I need to redirect the auth views
+        redirects = {
+            '/sanfrancisco/': reverse('intake-apply'),
+            '/sanfrancisco/applications/': reverse('intake-app_index'),
+            '/thanks/': reverse('intake-thanks'),
+            '/stats/': reverse('intake-stats'),
+        }
+
+        old_uuids = [
+            '0efd75e8721c4308a8f3247a8c63305d',
+            'b873c4ceb1cd4939b1d4c890997ef29c',
+            '6cb3887be35543c4b13f27bf83219f4f',
+        ]
+        ported_models = []
+
+        key_params = '?keys=0efd75e8721c4308a8f3247a8c63305d|b873c4ceb1cd4939b1d4c890997ef29c|6cb3887be35543c4b13f27bf83219f4f'
+
+        id_redirects = {
+            '/sanfrancisco/{}/': 'intake-filled_pdf',
+        }
+
+        multi_id_redirects = {
+            '/sanfrancisco/bundle/' + key_params: 'intake-app_bundle',
+            '/sanfrancisco/pdfs/' + key_params: 'intake-pdf_bundle',
+        }
+
+        for uuid in old_uuids:
+            instance = mock.FormSubmissionFactory.create(
+                old_uuid=uuid)
+            ported_models.append(instance)
+
+        for old, new in redirects.items():
+            response = self.client.get(old)
+            self.assertRedirects(response, new, status_code=301)
+
+        uuid = old_uuids[2]
+        ported_model = ported_models[2]
+        for old_template, new_view in id_redirects.items():
+            old = old_template.format(uuid)
+            response = self.client.get(old)
+            new = reverse(new_view, kwargs=dict(submission_id=ported_model.id))
+            self.assertRedirects(response, new, status_code=301)
+
+        for old, new_view in multi_id_redirects.items():
+            response = self.client.get(old)
+            new = url_with_ids(new_view, [s.id for s in ported_models])
+            self.assertRedirects(response, new, status_code=301)
+
 
     @skipIf(True, "not yet implemented")
     def test_old_urls_permanently_redirect_to_new_urls(self):
