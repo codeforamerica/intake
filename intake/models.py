@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 
-from . import pdfparser, anonymous_names, notifications
+from intake import pdfparser, anonymous_names, notifications
 
 
 nice_contact_choices = {
@@ -63,17 +63,9 @@ class FormSubmission(models.Model):
             time = timezone_utils.now()
         submissions = cls.objects.filter(pk__in=ids)
         submissions.update(**{step:time})
-        logs = []
-        for submission in submissions:
-            log = ApplicationLogEntry(
-                time=time,
-                user=user,
-                submission=submission,
-                action_type=ApplicationLogEntry.UPDATED,
-                updated_field=step
-                )
-            logs.append(log)
-        ApplicationLogEntry.objects.bulk_create(logs)
+        logs = ApplicationLogEntry.log_updated(
+            submissions, user, time, step
+            )
         return submissions, logs
 
     @classmethod
@@ -83,6 +75,17 @@ class FormSubmission(models.Model):
             'opened_by_agency',
             user=user,
             )
+
+    @classmethod
+    def mark_viewed(cls, submissions, user):
+        if user.email in settings.DEFAULT_AGENCY_USER_EMAILS:
+            submissions, logs = cls.mark_opened_by_agency(submissions, user)
+        else:
+            logs = ApplicationLogEntry.log_read(submissions, user)
+        # send a slack notification
+        notifications.slack_submissions_viewed.send(
+            submissions=submissions, user=user)
+        return submissions, logs
 
     @classmethod
     def get_unopened_apps(cls):
@@ -126,13 +129,45 @@ class ApplicationLogEntry(models.Model):
 
     time = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User,
-        on_delete=models.SET_NULL, null=True)
+        on_delete=models.SET_NULL, null=True,
+        related_name='application_logs')
     submission = models.ForeignKey(FormSubmission,
-        on_delete=models.SET_NULL, null=True)
+        on_delete=models.SET_NULL, null=True,
+        related_name='logs')
     action_type = models.PositiveSmallIntegerField(
         choices=ACTION_TYPES)
     updated_field = models.CharField(max_length=50,
         blank=True)
+
+    class Meta:
+        ordering = ['-time']
+
+    @classmethod
+    def log_multiple(cls, action_type, submissions, user, time=None, field=''):
+        if not time:
+            time = timezone_utils.now()
+        logs = []
+        for submission in submissions:
+            log = cls(
+                time=time,
+                user=user,
+                submission=submission,
+                action_type=action_type,
+                updated_field=field
+                )
+            logs.append(log)
+        ApplicationLogEntry.objects.bulk_create(logs)
+        return logs
+
+    @classmethod
+    def log_read(cls, submissions, user, time=None):
+        return cls.log_multiple(cls.READ, submissions, user, time)
+
+    @classmethod
+    def log_updated(cls, submissions, user, time=None, field=''):
+        return cls.log_multiple(cls.UPDATED, submissions, user, time, field)
+
+
 
 
 

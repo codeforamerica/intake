@@ -47,8 +47,7 @@ class FilledPDF(View):
         # response['Content-Disposition'] = 'attachment; filename="%s"' % os.path.basename(filename)
         # response['Content-Length'] = os.path.getsize(filename)
         # return response
-        notifications.slack_submissions_viewed.send(
-            submissions=[submission], user=request.user)
+        models.FormSubmission.mark_viewed([submission], request.user)
         return HttpResponse(pdf,
             content_type="application/pdf")
 
@@ -74,8 +73,7 @@ class ApplicationBundle(View, MultiSubmissionMixin):
         submission_ids = self.get_ids_from_params(request)
         submissions = list(models.FormSubmission.objects.filter(
             pk__in=submission_ids))
-        notifications.slack_submissions_viewed.send(
-            submissions=submissions, user=request.user)
+        models.FormSubmission.mark_viewed(submissions, request.user)
         return render(
             request,
             "app_bundle.html", {

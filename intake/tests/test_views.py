@@ -68,7 +68,7 @@ class TestViews(AuthIntegrationTestCase):
             request='WSGIRequest',
             submission_count='int')
 
-    @patch('intake.views.notifications.slack_submissions_viewed.send')
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
     def test_authenticated_user_can_see_filled_pdf(self, slack):
         self.be_regular_user()
         pdf = self.client.get(reverse('intake-filled_pdf',
@@ -118,7 +118,7 @@ class TestViews(AuthIntegrationTestCase):
         bundle = self.client.get(url)
         self.assertEqual(bundle.status_code, 200)
 
-    @patch('intake.views.notifications.slack_submissions_viewed.send')
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
     def test_authenticated_user_can_see_app_bundle(self, slack):
         self.be_regular_user()
         ids = [s.id for s in self.submissions]

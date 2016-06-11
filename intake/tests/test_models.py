@@ -1,6 +1,8 @@
 from django.test import TestCase
 from datetime import datetime
 
+from unittest.mock import patch, Mock
+
 from intake.tests import mock
 from user_accounts.tests.mock import create_fake_auth_models
 from intake import models, anonymous_names
@@ -50,7 +52,6 @@ class TestModels(TestCase):
         self.assertIn(' '.join(last_names), 
             anonymous_names.fake_last_names)
 
-
     def test_fillablepdf(self):
         from django.core.files import File
         sample_pdf_path = 'tests/sample_pdfs/sample_form.pdf'
@@ -98,6 +99,55 @@ class TestModels(TestCase):
         models.FormSubmission.mark_opened_by_agency(group_b, self.users[0])
         unopened = models.FormSubmission.get_unopened_apps()
         self.assertFalse(unopened)
+
+    @patch('intake.models.notifications')
+    @patch('intake.models.settings')
+    def test_mark_viewed(self, settings, notifications):
+        submission = mock.FormSubmissionFactory.create()
+        submissions = [submission]
+        agency_user = self.users[0]
+        non_agency_user = self.users[1]
+        settings.DEFAULT_AGENCY_USER_EMAILS = [agency_user.email]
+
+        # case: viewed by non agency user
+        models.FormSubmission.mark_viewed(submissions, non_agency_user)
+        instance = models.FormSubmission.objects.get(pk=submission.id)
+        self.assertIsNone(instance.opened_by_agency)
+        logs = instance.logs.all()
+        self.assertEqual(len(logs), 1)
+        log = logs[0]
+        self.assertEqual(log.user, non_agency_user)
+        self.assertEqual(log.submission, submission)
+        self.assertEqual(log.action_type, models.ApplicationLogEntry.READ)
+        self.assertEqual(log.updated_field, '')
+        notifications.slack_submissions_viewed.send.assert_called_once_with(
+            submissions=submissions,
+            user=non_agency_user
+            )
+
+        # case: viewed by agency user
+        notifications.reset_mock()
+        submissions, logs = models.FormSubmission.mark_viewed(submissions, agency_user)
+        instance = models.FormSubmission.objects.get(pk=submission.id)
+        self.assertTrue(instance.opened_by_agency)
+        logs = instance.logs.all()
+        self.assertEqual(len(logs), 2)
+        log = logs[0]
+        self.assertEqual(log.user, agency_user)
+        self.assertEqual(log.submission, submission)
+        self.assertEqual(log.action_type, models.ApplicationLogEntry.UPDATED)
+        self.assertEqual(log.updated_field, 'opened_by_agency')
+        notifications.slack_submissions_viewed.send.assert_called_once_with(
+            submissions=submissions,
+            user=agency_user
+            )
+
+
+
+
+
+
+
 
 
 
