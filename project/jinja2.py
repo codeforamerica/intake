@@ -1,10 +1,12 @@
 from django.contrib.staticfiles.storage import staticfiles_storage
+from django.contrib.humanize.templatetags import humanize
 from django.core.urlresolvers import reverse
 
 from jinja2 import Environment
 from datetime import datetime
 from pytz import timezone
 from jinja2 import Markup
+
 
 
 def namify(s=''):
@@ -17,10 +19,20 @@ def namify(s=''):
         first = first.capitalize()
     return ' '.join([first] + words[1:])
 
+
 def url_with_ids(view_name, ids):
     url = reverse(view_name)
     params = '?ids=' + ','.join([str(i) for i in ids])
     return url + params
+
+
+def oxford_comma(things):
+    things = list(things)
+    if len(things) == 1:
+        return str(things[0])
+    elif len(things) == 2:
+        return " and ".join(map(str, things))
+    return ", ".join(list(map(str, things[:-1])) + ["and "+str(things[-1])])
 
 
 class Linkifier:
@@ -61,6 +73,8 @@ def add_content_constants():
         current_local_time=current_local_time,
         namify=namify,
         url_with_ids=url_with_ids,
+        oxford_comma=oxford_comma,
+        humanize=humanize,
         )
 
 class JinjaConfig:

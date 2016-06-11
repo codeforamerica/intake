@@ -1,0 +1,1 @@
+{{ user.email }} deleted {{ submission.get_anonymous_display() }}'s application

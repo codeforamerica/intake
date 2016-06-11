@@ -1,4 +1,6 @@
 from unittest import skipIf
+from unittest.mock import patch, Mock
+import inspect
 from django.test import TestCase
 from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase
 from django.core.urlresolvers import reverse
@@ -24,6 +26,20 @@ class TestViews(AuthIntegrationTestCase):
     def have_a_fillable_pdf(cls):
         cls.fillable = mock.fillable_pdf()
 
+    def assert_called_once_with_types(self, mock_obj, *arg_types, **kwarg_types):
+        self.assertEqual(mock_obj.call_count, 1)
+        arguments, keyword_arguments = mock_obj.call_args
+        argument_classes = [getattr(
+                arg, '__qualname__', arg.__class__.__qualname__
+                ) for arg in arguments] 
+        self.assertListEqual(argument_classes, list(arg_types))
+        keyword_argument_classes = {}    
+        for keyword, arg in keyword_arguments.items():
+            keyword_argument_classes[keyword] = getattr(
+                arg, '__qualname__', arg.__class__.__qualname__
+                )
+        self.assertDictEqual(keyword_argument_classes, dict(kwarg_types))
+
     def test_home_view(self):
         response = self.client.get(reverse('intake-home'))
         self.assertEqual(response.status_code, 200)
@@ -35,7 +51,8 @@ class TestViews(AuthIntegrationTestCase):
         self.assertIn('Apply to Clear My Record',
             response.content.decode('utf-8'))
 
-    def test_anonymous_user_can_fill_out_app_and_reach_thanks_page(self):
+    @patch('intake.views.notifications.slack_new_submission.send')
+    def test_anonymous_user_can_fill_out_app_and_reach_thanks_page(self, slack):
         self.be_anonymous()
         result = self.client.fill_form(
             reverse('intake-apply'),
@@ -45,8 +62,14 @@ class TestViews(AuthIntegrationTestCase):
             reverse('intake-thanks'))
         thanks_page = self.client.get(result.url)
         self.assertContains(thanks_page, "Thank")
+        self.assert_called_once_with_types(
+            slack,
+            submission='FormSubmission',
+            request='WSGIRequest',
+            submission_count='int')
 
-    def test_authenticated_user_can_see_filled_pdf(self):
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_authenticated_user_can_see_filled_pdf(self, slack):
         self.be_regular_user()
         pdf = self.client.get(reverse('intake-filled_pdf',
             kwargs=dict(
@@ -54,6 +77,10 @@ class TestViews(AuthIntegrationTestCase):
                 )))
         self.assertTrue(len(pdf.content) > 69000)
         self.assertEqual(type(pdf.content), bytes)
+        self.assert_called_once_with_types(
+            slack,
+            submissions='list',
+            user='User')
 
     def test_authenticated_user_can_see_list_of_submitted_apps(self):
         self.be_regular_user()
@@ -91,14 +118,20 @@ class TestViews(AuthIntegrationTestCase):
         bundle = self.client.get(url)
         self.assertEqual(bundle.status_code, 200)
 
-    def test_authenticated_user_can_see_app_bundle(self):
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_authenticated_user_can_see_app_bundle(self, slack):
         self.be_regular_user()
         ids = [s.id for s in self.submissions]
         url = url_with_ids('intake-app_bundle', ids)
         bundle = self.client.get(url)
         self.assertEqual(bundle.status_code, 200)
+        self.assert_called_once_with_types(
+            slack,
+            submissions='list',
+            user='User')
 
-    def test_authenticated_user_can_delete_apps(self):
+    @patch('intake.views.notifications.slack_submissions_deleted.send')
+    def test_authenticated_user_can_delete_apps(self, slack):
         self.be_regular_user()
         submission = self.submissions[-1]
         pdf_link = reverse('intake-filled_pdf',
@@ -111,6 +144,27 @@ class TestViews(AuthIntegrationTestCase):
         self.assertRedirects(after_delete, reverse('intake-app_index'))
         index = self.client.get(after_delete.url)
         self.assertNotContains(index, pdf_link)
+        self.assert_called_once_with_types(
+            slack,
+            submissions='list',
+            user='User')
+
+    @patch('intake.views.MarkProcessed.notification_function')
+    def test_authenticated_user_can_mark_apps_as_processed(self, slack):
+        self.be_regular_user()
+        submissions = self.submissions[:2]
+        ids = [s.id for s in submissions]
+        mark_link = url_with_ids('intake-mark_processed', ids)
+        marked = self.client.get(mark_link)
+        self.assert_called_once_with_types(
+            slack,
+            submissions='list',
+            user='User')
+        self.assertRedirects(marked, reverse('intake-app_index'))
+        args, kwargs = slack.call_args
+        for sub in kwargs['submissions']:
+            self.assertTrue(sub.processed_by_agency)
+            self.assertIn(sub.id, ids)
 
 
     @skipIf(True, "not yet implemented")

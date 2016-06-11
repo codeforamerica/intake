@@ -1,0 +1,2 @@
+{{ user.email }} {{ action }}{% if submissions|length > 1 %} apps from {{
+oxford_comma(submissions) }}{% else %} {{ submissions[0] }}'s application{% endif %}

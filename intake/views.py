@@ -10,8 +10,7 @@ from django.views.generic.base import TemplateView
 
 from django.core import mail
 
-from intake import models
-from intake.notifications import new_submission_email
+from intake import models, notifications
 
 
 
@@ -27,7 +26,9 @@ class Apply(View):
     def post(self, request):
         submission = models.FormSubmission(answers=dict(request.POST))
         submission.save()
-        new_submission_email.send(submission=submission, request=request)
+        number = models.FormSubmission.objects.count()
+        notifications.slack_new_submission.send(
+            submission=submission, request=request, submission_count=number)
         return redirect(reverse_lazy('intake-thanks'))
 
 
@@ -46,6 +47,7 @@ class FilledPDF(View):
         # response['Content-Disposition'] = 'attachment; filename="%s"' % os.path.basename(filename)
         # response['Content-Length'] = os.path.getsize(filename)
         # return response
+        models.FormSubmission.mark_viewed([submission], request.user)
         return HttpResponse(pdf,
             content_type="application/pdf")
 
@@ -59,11 +61,19 @@ class ApplicationIndex(TemplateView):
         return context
 
 
-class ApplicationBundle(View):
+class MultiSubmissionMixin:
+
+    def get_ids_from_params(self, request):
+        id_set = request.GET.get('ids')
+        return [int(i) for i in id_set.split(',')]
+
+
+class ApplicationBundle(View, MultiSubmissionMixin):
     def get(self, request):
         submission_ids = self.get_ids_from_params(request)
-        submissions = models.FormSubmission.objects.filter(
-            pk__in=submission_ids)
+        submissions = list(models.FormSubmission.objects.filter(
+            pk__in=submission_ids))
+        models.FormSubmission.mark_viewed(submissions, request.user)
         return render(
             request,
             "app_bundle.html", {
@@ -73,12 +83,9 @@ class ApplicationBundle(View):
                 'body_class': 'admin',
              })
 
-    def get_ids_from_params(self, request):
-        id_set = request.GET.get('ids')
-        return [int(i) for i in id_set.split(',')]
 
 
-class FilledPDFBundle(ApplicationBundle):
+class FilledPDFBundle(View, MultiSubmissionMixin):
     def get(self, request):
         submission_ids = self.get_ids_from_params(request)
         submissions = models.FormSubmission.objects.filter(
@@ -103,8 +110,30 @@ class Delete(View):
     def post(self, request, submission_id):
         submission = models.FormSubmission.objects.get(id=int(submission_id))
         submission.delete()
-        # add a message saying it's been deleted
+        notifications.slack_submissions_deleted.send(
+            submissions=[submission],
+            user=request.user)
         return redirect(reverse_lazy('intake-app_index'))
+
+
+class MarkSubmissionStepView(View, MultiSubmissionMixin):
+
+    def get(self, request):
+        submission_ids = self.get_ids_from_params(request)
+        next_param = request.GET.get('next',
+            reverse_lazy('intake-app_index'))
+        submissions, logs = models.FormSubmission.mark_step(
+            submission_ids, self.process_step,
+            user=request.user)
+        if hasattr(self, 'notification_function'):
+            self.notification_function(
+                submissions=list(submissions), user=request.user)
+        return redirect(next_param)
+
+
+class MarkProcessed(MarkSubmissionStepView):
+    process_step = 'processed_by_agency'
+    notification_function = notifications.slack_submissions_processed.send
 
 
 
@@ -115,6 +144,7 @@ filled_pdf = FilledPDF.as_view()
 pdf_bundle = FilledPDFBundle.as_view()
 app_index = ApplicationIndex.as_view()
 app_bundle = ApplicationBundle.as_view()
+mark_processed = MarkProcessed.as_view()
 delete_page = Delete.as_view()
 
 

@@ -26,3 +26,15 @@ EMAIL_BACKEND = "sgbackend.SendGridBackend"
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", "admin@localhost")
 DEFAULT_NOTIFICATION_EMAIL = os.environ.get("DEFAULT_NOTIFICATION_EMAIL", "user@localhost")
+
+# Slack Web hook
+SLACK_WEBHOOK_URL=os.environ.get("SLACK_WEBHOOK_URL")
+
+# Front API
+FRONT_API_TOKEN=os.environ.get("FRONT_API_TOKEN")
+FRONT_EMAIL_CHANNEL_ID=os.environ.get("FRONT_EMAIL_CHANNEL_ID")
+FRONT_PHONE_CHANNEL_ID=os.environ.get("FRONT_PHONE_CHANNEL_ID")
+
+# Temporary defaults for agencies
+DEFAULT_AGENCY_USER_EMAILS = os.environ.get('DEFAULT_AGENCY_USER_EMAILS',
+    ['clearmyrecord@codeforamerica.org'])

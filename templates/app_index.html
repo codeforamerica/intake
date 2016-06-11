@@ -15,9 +15,9 @@
 			<th>Last Name</th>
 			<th>First Name</th>
 			<th>Intake PDF</th>
-{# 			<th>Opened by Aleem</th>
+ 			<th>Opened by Aleem</th>
 			<th>Added to DB</th>
-			<th>Delete?</th> #}
+			<th>Delete?</th>
 		</tr>
 		{% for app in submissions %}
 		<tr>
@@ -33,35 +33,33 @@
 						PDF
 						</a>
 			</td> 
-			{# <td>
-			{%- set opened = app.submission.was_opened(app.logs) %}
-			{% if opened %}
-			{{ human(opened, precision=1) }}
+			<td>
+			{% if app.opened_by_agency %}
+			{{ humanize.naturaltime(app.opened_by_agency) }}
 			{%- else -%}------------{% endif %}
 			</td>
 			<td>
-				{%- set added = app.submission.was_added(app.logs) %}
-				{% if added %}
+			{% if app.processed_by_agency %}
 				<span class="glyphicon glyphicon-ok-sign"></span>
-				Added {{ human(added, precision=1) }}
+				Added {{ humanize.naturaltime(app.processed_by_agency) }}
 				{%- else -%}
 				<a class="btn btn-default" href="{{
-					url_for(
-						'form_filler.mark_as_added',
-						submission_uuid=app.submission.uuid
-							) }}">
+					url_with_ids('intake-mark_processed',
+					ids=[app.id]) + '&next=' + url('intake-app_index')
+						 }}">
 				<span class="glyphicon glyphicon-plus"></span>
 				Mark as added
 				</a>
 				{% endif %}
 			</td>
 			<td>
-				<a class="btn btn-default btn-sm delete" href="{{ url_for('form_filler.delete_page',
-						submission_uuid=app.submission.uuid) }}">
+				<a class="btn btn-default btn-sm delete" href="{{ url('intake-delete_page',
+					kwargs=dict(submission_id=app.id)
+						) }}">
 					<span class="glyphicon glyphicon-remove"></span>
 					Delete
 				</a>
-			</td> #}
+			</td>
 		</tr>
 		{% endfor %}
 			
