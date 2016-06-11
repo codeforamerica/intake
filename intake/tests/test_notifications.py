@@ -175,7 +175,7 @@ They want to be contacted via text message and email
     @patch('intake.notifications.requests.post')
     def test_slack_simple(self, mock_post):
         mock_post.return_value = "HTTP response"
-        expected_json = '{"text": "Hello slack &lt;&amp;&gt;"}'
+        expected_json = '{"text": "Hello slack <&>"}'
         expected_headers = {'Content-type': 'application/json'}
         notifications.slack_simple.send("Hello slack <&>")
         called_args, called_kwargs = mock_post.call_args
@@ -187,7 +187,7 @@ They want to be contacted via text message and email
     @patch('intake.notifications.requests.post')
     def test_slack_send(self, mock_post):
         mock_post.return_value = "HTTP response"
-        expected_json = '{"text": "New submission #101!\\n&lt;http://filled_pdf/|Review it here&gt;\\nThey want to be contacted via text message and email\\n"}'
+        expected_json = '{"text": "New submission #101!\\n<http://filled_pdf/|Review it here>\\nThey want to be contacted via text message and email\\n"}'
         expected_headers = {'Content-type': 'application/json'}
         response = notifications.slack_new_submission.send(
             submission=self.sub,

@@ -170,12 +170,9 @@ class BasicSlackNotification:
     def __init__(self, webhook_url=None):
         self.webhook_url = webhook_url or settings.SLACK_WEBHOOK_URL
 
-    def escape(self, text):
-        return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-
     def send(self, message_text):
         payload = json.dumps({
-            'text': self.escape(message_text)
+            'text': message_text
             })
         return requests.post(
             url=self.webhook_url,
