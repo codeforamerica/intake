@@ -3,6 +3,7 @@ from unittest.mock import patch, Mock
 import inspect
 from django.test import TestCase
 from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase
+from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
 
@@ -167,53 +168,50 @@ class TestViews(AuthIntegrationTestCase):
             self.assertIn(sub.id, ids)
 
     def test_old_urls_return_permanent_redirect(self):
-        # I don't think I need to redirect the auth views
+        # redirecting the auth views does not seem necessary
         redirects = {
             '/sanfrancisco/': reverse('intake-apply'),
             '/sanfrancisco/applications/': reverse('intake-app_index'),
-            '/thanks/': reverse('intake-thanks'),
-            '/stats/': reverse('intake-stats'),
+            # '/stats/': reverse('intake-stats'), # this just needs to exist
         }
 
+        # redirecting the action views (delete, add) does not seem necessary
+        id_redirects = {'/sanfrancisco/{}/': 'intake-filled_pdf'}
+        multi_id_redirects = {
+            '/sanfrancisco/bundle/{}': 'intake-app_bundle',
+            '/sanfrancisco/pdfs/{}': 'intake-pdf_bundle'}
+        
+        # make some old apps with ids
         old_uuids = [
             '0efd75e8721c4308a8f3247a8c63305d',
             'b873c4ceb1cd4939b1d4c890997ef29c',
-            '6cb3887be35543c4b13f27bf83219f4f',
-        ]
+            '6cb3887be35543c4b13f27bf83219f4f']
+        key_params = '?keys=' + '|'.join(old_uuids)
         ported_models = []
-
-        key_params = '?keys=0efd75e8721c4308a8f3247a8c63305d|b873c4ceb1cd4939b1d4c890997ef29c|6cb3887be35543c4b13f27bf83219f4f'
-
-        id_redirects = {
-            '/sanfrancisco/{}/': 'intake-filled_pdf',
-        }
-
-        multi_id_redirects = {
-            '/sanfrancisco/bundle/' + key_params: 'intake-app_bundle',
-            '/sanfrancisco/pdfs/' + key_params: 'intake-pdf_bundle',
-        }
-
         for uuid in old_uuids:
             instance = mock.FormSubmissionFactory.create(
                 old_uuid=uuid)
             ported_models.append(instance)
 
+
         for old, new in redirects.items():
             response = self.client.get(old)
-            self.assertRedirects(response, new, status_code=301)
+            self.assertRedirects(response, new,
+                status_code=301, fetch_redirect_response=False)
 
-        uuid = old_uuids[2]
-        ported_model = ported_models[2]
         for old_template, new_view in id_redirects.items():
-            old = old_template.format(uuid)
+            old = old_template.format(old_uuids[2])
             response = self.client.get(old)
-            new = reverse(new_view, kwargs=dict(submission_id=ported_model.id))
-            self.assertRedirects(response, new, status_code=301)
+            new = reverse(new_view, kwargs=dict(submission_id=ported_models[2].id))
+            self.assertRedirects(response, new,
+                status_code=301, fetch_redirect_response=False)
 
-        for old, new_view in multi_id_redirects.items():
+        for old_template, new_view in multi_id_redirects.items():
+            old = old_template.format(key_params)
             response = self.client.get(old)
             new = url_with_ids(new_view, [s.id for s in ported_models])
-            self.assertRedirects(response, new, status_code=301)
+            self.assertRedirects(response, new,
+                status_code=301, fetch_redirect_response=False)
 
 
     @skipIf(True, "not yet implemented")

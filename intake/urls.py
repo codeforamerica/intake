@@ -32,5 +32,25 @@ urlpatterns = [
     url(r'^applications/mark/processed/$',
         login_required(views.mark_processed),
         name='intake-mark_processed'),
-
 ]
+
+redirects = [
+    url(r'^sanfrancisco/$', 
+        views.PermanentRedirectView.as_view(
+            redirect_view_name='intake-apply')),
+    url(r'^sanfrancisco/applications/$',
+        views.PermanentRedirectView.as_view(
+            redirect_view_name='intake-app_index')),
+    # https://regex101.com/r/wO1pD3/1
+    url(r'^sanfrancisco/(?P<submission_id>[0-9a-f]{32})/$',
+        views.SingleIdPermanentRedirect.as_view(
+            redirect_view_name='intake-filled_pdf')),
+    url(r'^sanfrancisco/bundle/$',
+        views.MultiIdPermanentRedirect.as_view(
+            redirect_view_name='intake-app_bundle')),
+    url(r'^sanfrancisco/pdfs/$',
+        views.MultiIdPermanentRedirect.as_view(
+            redirect_view_name='intake-pdf_bundle')),
+]
+
+urlpatterns += redirects
