@@ -3,11 +3,11 @@ from unittest.mock import patch, Mock
 import inspect
 from django.test import TestCase
 from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase
-from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
 
 from intake.tests import mock
+from intake import models
 
 from project.jinja2 import url_with_ids
 
@@ -51,6 +51,12 @@ class TestViews(AuthIntegrationTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('Apply to Clear My Record',
             response.content.decode('utf-8'))
+
+    def test_stats_view(self):
+        total = models.FormSubmission.objects.count()
+        response = self.client.get(reverse('intake-stats'))
+        self.assertContains(response, total)
+
 
     @patch('intake.views.notifications.slack_new_submission.send')
     def test_anonymous_user_can_fill_out_app_and_reach_thanks_page(self, slack):
@@ -172,7 +178,6 @@ class TestViews(AuthIntegrationTestCase):
         redirects = {
             '/sanfrancisco/': reverse('intake-apply'),
             '/sanfrancisco/applications/': reverse('intake-app_index'),
-            # '/stats/': reverse('intake-stats'), # this just needs to exist
         }
 
         # redirecting the action views (delete, add) does not seem necessary

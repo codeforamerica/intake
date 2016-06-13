@@ -62,6 +62,18 @@ class ApplicationIndex(TemplateView):
         return context
 
 
+class Stats(TemplateView):
+    template_name = "stats.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['stats'] = {
+            'recieved': models.FormSubmission.objects.count(),
+            'opened': models.FormSubmission.objects.filter(opened_by_agency__isnull=False)
+        }
+        return context
+
+
+
 class MultiSubmissionMixin:
 
     def get_ids_from_params(self, request):
@@ -186,6 +198,7 @@ class MultiIdPermanentRedirect(PermanentRedirectView):
 home = Home.as_view()
 apply_form = Apply.as_view()
 thanks = Thanks.as_view()
+stats = Stats.as_view()
 filled_pdf = FilledPDF.as_view()
 pdf_bundle = FilledPDFBundle.as_view()
 app_index = ApplicationIndex.as_view()

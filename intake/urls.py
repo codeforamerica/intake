@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^$', views.home, name='intake-home'),
     url(r'^apply/$', views.apply_form, name='intake-apply'),
     url(r'^thanks/$', views.thanks, name='intake-thanks'),
+    url(r'^stats/$', views.stats, name='intake-stats'),
 
     # protected views
     url(r'^application/(?P<submission_id>[0-9]+)/$', 
