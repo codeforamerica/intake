@@ -9,7 +9,7 @@ urlpatterns = [
 
     url(r'^accounts/password/reset/$',
         views.PasswordResetView.as_view(),
-        name='user_accounts-send_invite'),
+        name='user_accounts-send_password_reset'),
 
     url(r"^accounts/password/reset/key/(?P<uidb36>[0-9A-Za-z]+)-(?P<key>.+)/$",
         views.PasswordResetFromKeyView.as_view(),

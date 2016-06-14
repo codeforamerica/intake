@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
 
 from intake.tests import mock
+from intake import models
 
 from project.jinja2 import url_with_ids
 
@@ -50,6 +51,12 @@ class TestViews(AuthIntegrationTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('Apply to Clear My Record',
             response.content.decode('utf-8'))
+
+    def test_stats_view(self):
+        total = models.FormSubmission.objects.count()
+        response = self.client.get(reverse('intake-stats'))
+        self.assertContains(response, total)
+
 
     @patch('intake.views.notifications.slack_new_submission.send')
     def test_anonymous_user_can_fill_out_app_and_reach_thanks_page(self, slack):
@@ -165,6 +172,51 @@ class TestViews(AuthIntegrationTestCase):
         for sub in kwargs['submissions']:
             self.assertTrue(sub.processed_by_agency)
             self.assertIn(sub.id, ids)
+
+    def test_old_urls_return_permanent_redirect(self):
+        # redirecting the auth views does not seem necessary
+        redirects = {
+            '/sanfrancisco/': reverse('intake-apply'),
+            '/sanfrancisco/applications/': reverse('intake-app_index'),
+        }
+
+        # redirecting the action views (delete, add) does not seem necessary
+        id_redirects = {'/sanfrancisco/{}/': 'intake-filled_pdf'}
+        multi_id_redirects = {
+            '/sanfrancisco/bundle/{}': 'intake-app_bundle',
+            '/sanfrancisco/pdfs/{}': 'intake-pdf_bundle'}
+        
+        # make some old apps with ids
+        old_uuids = [
+            '0efd75e8721c4308a8f3247a8c63305d',
+            'b873c4ceb1cd4939b1d4c890997ef29c',
+            '6cb3887be35543c4b13f27bf83219f4f']
+        key_params = '?keys=' + '|'.join(old_uuids)
+        ported_models = []
+        for uuid in old_uuids:
+            instance = mock.FormSubmissionFactory.create(
+                old_uuid=uuid)
+            ported_models.append(instance)
+
+
+        for old, new in redirects.items():
+            response = self.client.get(old)
+            self.assertRedirects(response, new,
+                status_code=301, fetch_redirect_response=False)
+
+        for old_template, new_view in id_redirects.items():
+            old = old_template.format(old_uuids[2])
+            response = self.client.get(old)
+            new = reverse(new_view, kwargs=dict(submission_id=ported_models[2].id))
+            self.assertRedirects(response, new,
+                status_code=301, fetch_redirect_response=False)
+
+        for old_template, new_view in multi_id_redirects.items():
+            old = old_template.format(key_params)
+            response = self.client.get(old)
+            new = url_with_ids(new_view, [s.id for s in ported_models])
+            self.assertRedirects(response, new,
+                status_code=301, fetch_redirect_response=False)
 
 
     @skipIf(True, "not yet implemented")
