@@ -52,6 +52,15 @@ class FormSubmission(models.Model):
     told_eligible = models.DateTimeField(null=True)
     told_ineligible = models.DateTimeField(null=True)
 
+    @classmethod
+    def create_from_answers(cls, post_data):
+        cleaned = {}
+        for key, value in post_data.items():
+            cleaned[key] = value[0]
+        instance = cls(answers=cleaned)
+        instance.save()
+        return instance
+
 
     @classmethod
     def mark_step(cls, ids, step, user=None, time=None):
@@ -176,6 +185,10 @@ class FillablePDF(models.Model):
     pdf = models.FileField(upload_to='pdfs/')
     translator = models.TextField()
 
+    @classmethod
+    def get_default_instance(cls):
+        return cls.objects.first()
+
     def get_pdf(self):
         self.pdf.seek(0)
         return self.pdf
@@ -191,6 +204,9 @@ class FillablePDF(models.Model):
         parser = get_parser()
         data = parser.get_field_data(self.get_pdf())
         return data['fields']
+
+    def __str__(self):
+        return self.name
 
     def fill(self, *args, **kwargs):
         parser = get_parser()

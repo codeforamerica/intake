@@ -9,6 +9,29 @@ from unittest.mock import Mock
 fake = FakerFactory.create('en_US', includes=['intake.tests.mock_county_forms'])
 Pacific = timezone('US/Pacific')
 
+RAW_FORM_DATA = {
+    'address_city': [''],
+    'address_state': ['CA'],
+    'address_street': [''],
+    'address_zip': [''],
+    'dob_day': [''],
+    'dob_month': [''],
+    'dob_year': [''],
+    'drivers_license_number': [''],
+    'email': [''],
+    'first_name': [''],
+    'how_did_you_hear': [''],
+    'last_name': [''],
+    'middle_name': [''],
+    'monthly_expenses': [''],
+    'monthly_income': [''],
+    'phone_number': [''],
+    'ssn': [''],
+    'when_probation_or_parole': [''],
+    'when_where_outside_sf': [''],
+    'where_probation_or_parole': ['']
+}
+
 
 def local(datetime):
     return Pacific.localize(datetime)

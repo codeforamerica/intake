@@ -53,6 +53,7 @@ class TestModels(TestCase):
             anonymous_names.fake_last_names)
 
     def test_fillablepdf(self):
+        submission = mock.FormSubmissionFactory.create()
         from django.core.files import File
         sample_pdf_path = 'tests/sample_pdfs/sample_form.pdf'
         pdf = models.FillablePDF(
@@ -62,8 +63,12 @@ class TestModels(TestCase):
             )
         fields = pdf.get_pdf_fields()
         self.assertEqual(type(fields), list)
-        filled_pdf = pdf.fill({'first_name': 'Ben'})
+        filled_pdf = pdf.fill(submission)
         self.assertEqual(type(filled_pdf), bytes)
+
+
+    def test_fill_clean_slate_pdf(self):
+        pass
 
     def test_anonymous_names(self):
         fake_name = anonymous_names.generate()

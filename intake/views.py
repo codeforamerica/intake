@@ -24,8 +24,7 @@ class Apply(View):
         return render(request, "application_form.html")
 
     def post(self, request):
-        submission = models.FormSubmission(answers=dict(request.POST))
-        submission.save()
+        submission = models.FormSubmission.create_from_answers(dict(request.POST))
         number = models.FormSubmission.objects.count()
         notifications.slack_new_submission.send(
             submission=submission, request=request, submission_count=number)
@@ -40,8 +39,8 @@ class FilledPDF(View):
 
     def get(self, request, submission_id):
         submission = models.FormSubmission.objects.get(id=int(submission_id))
-        fillable = models.FillablePDF.objects.get(id=1)
-        pdf = fillable.fill(submission.answers)
+        fillable = models.FillablePDF.get_default_instance()
+        pdf = fillable.fill(submission)
         # wrapper = FileWrapper(file(filename))
         # response = HttpResponse(wrapper, content_type='text/plain')
         # response['Content-Disposition'] = 'attachment; filename="%s"' % os.path.basename(filename)
@@ -90,8 +89,8 @@ class FilledPDFBundle(View, MultiSubmissionMixin):
         submission_ids = self.get_ids_from_params(request)
         submissions = models.FormSubmission.objects.filter(
             pk__in=submission_ids)
-        fillable = models.FillablePDF.objects.get(id=1)
-        pdf = fillable.fill_many([s.answers for s in submissions])
+        fillable = models.FillablePDF.get_default_instance()
+        pdf = fillable.fill_many(submissions)
         return HttpResponse(pdf,
             content_type="application/pdf")
 

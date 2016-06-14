@@ -1,3 +1,6 @@
+from intake.translators.base import AttributeTranslatorBase
+
+from project.jinja2 import namify
 
 def yesno(s, key=None):
     if not key:
@@ -23,8 +26,7 @@ def fmt_ssn(s, prefix='SS# '):
     return ''
 
 
-def translator(s):
-    return {
+translator = AttributeTranslatorBase({
             'Address City': 'address_city',
             'Address State': 'address_state',
             'Address Street': 'address_street',
@@ -38,13 +40,13 @@ def translator(s):
             'Drivers License': 'drivers_license_number',
             'Email Address': 'email',
             'Employed': lambda s: yesno(s, 'currently_employed'),
-            'First Name': 'first_name',
+            'First Name': lambda s: namify(s.answers['first_name']),
             'Home phone number': '',
             'How did you hear about the Clean Slate Program': 'how_did_you_hear',
             'If probation where and when?': lambda s: '{} {}'.format(
                 s.answers.get('where_probation_or_parole'),
                 s.answers.get('when_probation_or_parole')),
-            'Last Name': 'last_name',
+            'Last Name': lambda s: namify(s.answers['last_name']),
             'MI': lambda s: s.answers.get('middle_name', '')[:1],
             'May we leave voicemail': lambda s: yesno(s),
             'May we send mail here': lambda s: yesno(s),
@@ -58,6 +60,6 @@ def translator(s):
             'Work phone number': '',
             'DOB': get_formatted_dob,
             'SSN': fmt_ssn,
-            'FirstName': 'first_name',
-            'LastName': 'last_name'
-        }
+            'FirstName': lambda s: namify(s.answers['first_name']),
+            'LastName': lambda s: namify(s.answers['last_name'])
+            }, att_object_extractor='answers')
