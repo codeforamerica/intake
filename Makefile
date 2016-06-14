@@ -24,7 +24,7 @@ test.acceptance:
 	python ./manage.py test tests.acceptance
 
 deploy.demo:
-	git push demo master
+	git push -f demo HEAD:master
 
 deploy.prod:
 	git push prod master
