@@ -56,7 +56,7 @@ class ApplicationIndex(TemplateView):
     template_name = "app_index.html"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['submissions'] = models.FormSubmission.objects.all()
+        context['submissions'] = models.FormSubmission.objects.all().prefetch_related('logs__user')
         context['body_class'] = 'admin'
         return context
 
@@ -67,7 +67,7 @@ class Stats(TemplateView):
         context = super().get_context_data(**kwargs)
         context['stats'] = {
             'recieved': models.FormSubmission.objects.count(),
-            'opened': models.FormSubmission.objects.filter(opened_by_agency__isnull=False)
+            'opened': models.FormSubmission.get_opened_apps().count()
         }
         return context
 
@@ -94,7 +94,6 @@ class ApplicationBundle(View, MultiSubmissionMixin):
                 'app_ids': submission_ids,
                 'body_class': 'admin',
              })
-
 
 
 class FilledPDFBundle(View, MultiSubmissionMixin):
@@ -134,9 +133,9 @@ class MarkSubmissionStepView(View, MultiSubmissionMixin):
         submission_ids = self.get_ids_from_params(request)
         next_param = request.GET.get('next',
             reverse_lazy('intake-app_index'))
-        submissions, logs = models.FormSubmission.mark_step(
-            submission_ids, self.process_step,
-            user=request.user)
+        models.ApplicationLogEntry.log_multiple(
+            self.process_step, submission_ids, request.user)
+        submissions = models.FormSubmission.objects.filter(pk__in=submission_ids)
         if hasattr(self, 'notification_function'):
             self.notification_function(
                 submissions=list(submissions), user=request.user)
@@ -144,7 +143,7 @@ class MarkSubmissionStepView(View, MultiSubmissionMixin):
 
 
 class MarkProcessed(MarkSubmissionStepView):
-    process_step = 'processed_by_agency'
+    process_step = models.ApplicationLogEntry.PROCESSED
     notification_function = notifications.slack_submissions_processed.send
 
 

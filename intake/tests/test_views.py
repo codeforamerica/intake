@@ -197,6 +197,7 @@ class TestViews(AuthIntegrationTestCase):
             instance = mock.FormSubmissionFactory.create(
                 old_uuid=uuid)
             ported_models.append(instance)
+        ported_models_query = models.FormSubmission.objects.filter(old_uuid__in=old_uuids)
 
 
         for old, new in redirects.items():
@@ -214,7 +215,7 @@ class TestViews(AuthIntegrationTestCase):
         for old_template, new_view in multi_id_redirects.items():
             old = old_template.format(key_params)
             response = self.client.get(old)
-            new = url_with_ids(new_view, [s.id for s in ported_models])
+            new = url_with_ids(new_view, [s.id for s in ported_models_query])
             self.assertRedirects(response, new,
                 status_code=301, fetch_redirect_response=False)
 

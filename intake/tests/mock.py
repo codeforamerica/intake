@@ -1,3 +1,4 @@
+import uuid
 import factory
 from faker import Factory as FakerFactory
 from django.core.files import File
@@ -35,6 +36,16 @@ RAW_FORM_DATA = {
 
 def local(datetime):
     return Pacific.localize(datetime)
+
+def uuids(count):
+    return [uuid.uuid4().hex for i in range(count)]
+
+def fake_typeseam_submission_dicts(uuids):
+    return [{
+        'uuid': uuid,
+        'date_received': fake.date_time_between('-2w', 'now'),
+        'answers': fake.sf_county_form_answers()
+        } for uuid in uuids]
 
 
 class FormSubmissionFactory(factory.DjangoModelFactory):

@@ -34,14 +34,14 @@
 						</a>
 			</td> 
 			<td>
-			{% if app.opened_by_agency %}
-			{{ humanize.naturaltime(app.opened_by_agency) }}
+			{% if app.opened_by_agency() %}
+			{{ humanize.naturaltime(app.opened_by_agency()) }}
 			{%- else -%}------------{% endif %}
 			</td>
 			<td>
-			{% if app.processed_by_agency %}
+			{% if app.processed_by_agency() %}
 				<span class="glyphicon glyphicon-ok-sign"></span>
-				Added {{ humanize.naturaltime(app.processed_by_agency) }}
+				Added {{ humanize.naturaltime(app.processed_by_agency()) }}
 				{%- else -%}
 				<a class="btn btn-default" href="{{
 					url_with_ids('intake-mark_processed',

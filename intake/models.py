@@ -2,6 +2,7 @@ import importlib
 from django.conf import settings
 from django.db import models
 from pytz import timezone
+import uuid
 from django.utils import timezone as timezone_utils
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
@@ -17,6 +18,8 @@ nice_contact_choices = {
     'snailmail': 'paper mail'
 }
 
+def gen_uuid():
+    return uuid.uuid4().hex
 
 def get_parser():
     parser = pdfparser.PDFParser()
@@ -27,30 +30,16 @@ def get_parser():
 
 class FormSubmission(models.Model):
 
-    STEP_FIELDS = [
-        'reviewed_by_staff', 'confirmation_sent',
-        'submitted_to_agency', 'opened_by_agency',
-        'processed_by_agency', 'due_for_followup',
-        'followup_sent', 'followup_answered',
-        'told_eligible', 'told_ineligible'
-    ]
-
     answers = JSONField()
     # old_uuid is only used for porting legacy applications
-    old_uuid = models.CharField(max_length=34, blank=True)
+    old_uuid = models.CharField(max_length=34, unique=True,
+        default=gen_uuid)
     anonymous_name = models.CharField(max_length=60,
         default=anonymous_names.generate)
-    date_received = models.DateTimeField(auto_now_add=True)
-    reviewed_by_staff = models.DateTimeField(null=True)
-    confirmation_sent = models.DateTimeField(null=True)
-    submitted_to_agency = models.DateTimeField(null=True)
-    opened_by_agency = models.DateTimeField(null=True)
-    processed_by_agency = models.DateTimeField(null=True)
-    due_for_followup = models.DateTimeField(null=True)
-    followup_sent = models.DateTimeField(null=True)
-    followup_answered = models.DateTimeField(null=True)
-    told_eligible = models.DateTimeField(null=True)
-    told_ineligible = models.DateTimeField(null=True)
+    date_received = models.DateTimeField(default=timezone_utils.now)
+
+    class Meta:
+        ordering = ['-date_received']
 
     @classmethod
     def create_from_answers(cls, post_data):
@@ -61,46 +50,65 @@ class FormSubmission(models.Model):
         instance.save()
         return instance
 
-
-    @classmethod
-    def mark_step(cls, ids, step, user=None, time=None):
-        if step not in cls.STEP_FIELDS:
-            raise KeyError(
-                "'{}' is not an attribute of {}".format(
-                    step, cls.__name__))
-        if not time:
-            time = timezone_utils.now()
-        submissions = cls.objects.filter(pk__in=ids)
-        submissions.update(**{step:time})
-        logs = ApplicationLogEntry.log_updated(
-            submissions, user, time, step
-            )
-        return submissions, logs
-
-    @classmethod
-    def mark_opened_by_agency(cls, submissions, user):
-        return cls.mark_step(
-            [s.id for s in submissions],
-            'opened_by_agency',
-            user=user,
-            )
-
     @classmethod
     def mark_viewed(cls, submissions, user):
-        if user.email in settings.DEFAULT_AGENCY_USER_EMAILS:
-            submissions, logs = cls.mark_opened_by_agency(submissions, user)
-        else:
-            logs = ApplicationLogEntry.log_read(submissions, user)
+        logs = ApplicationLogEntry.log_opened(
+            [s.id for s in submissions], user)
         # send a slack notification
         notifications.slack_submissions_viewed.send(
             submissions=submissions, user=user)
         return submissions, logs
 
     @classmethod
+    def refer_unopened_apps(cls):
+        email = settings.DEFAULT_NOTIFICATION_EMAIL
+        submission_ids=[s.id for s in cls.get_unopened_apps()]
+        if submission_ids:
+            count = len(submission_ids)
+            notifications.front_email_daily_app_bundle.send(
+                to=email,
+                count=count,
+                submission_ids=submission_ids
+                )
+            ApplicationLogEntry.log_referred(submission_ids, user=None)
+            result_message = "Emailed {} with a link to {} unopened applications".format(
+                        email, count)
+        else:
+            result_message = "No unopened applications. Didn't email {}".format(
+                    email)
+        notifications.slack_simple.send(result_message)
+        return result_message
+
+    @classmethod
     def get_unopened_apps(cls):
-        return cls.objects.filter(
-            opened_by_agency__isnull=True
+        return cls.objects.exclude(
+            logs__user__email=settings.DEFAULT_AGENCY_USER_EMAIL
             )
+
+    @classmethod
+    def get_opened_apps(cls):
+        return cls.objects.filter(
+            logs__user__email=settings.DEFAULT_AGENCY_USER_EMAIL
+            )
+
+    @classmethod
+    def all_plus_logs(cls):
+        return cls.objects.all().prefetch_related('logs__user')
+
+    def agency_event_logs(self, event_type):
+        '''assumes that self.logs and self.logs.user are prefetched'''
+        for log in self.logs.all():
+            if (log.user.email == settings.DEFAULT_AGENCY_USER_EMAIL
+                    and log.event_type == event_type):
+                yield log
+
+    def opened_by_agency(self):
+        return max((log.time for log in self.agency_event_logs(
+            ApplicationLogEntry.OPENED)), default=None)
+
+    def processed_by_agency(self):
+        return max((log.time for log in self.agency_event_logs(
+            ApplicationLogEntry.PROCESSED)), default=None)
 
     def get_local_date_received(self, fmt, timezone_name='US/Pacific'):
         local_tz = timezone(timezone_name)
@@ -122,61 +130,59 @@ class FormSubmission(models.Model):
 
 
 class ApplicationLogEntry(models.Model):
-    '''
-    '''
-    CREATED = 1
-    READ = 2
-    UPDATED = 3
+    OPENED = 1
+    REFERRED = 2
+    PROCESSED = 3
     DELETED = 4
 
-    ACTION_TYPES = (
-        (CREATED, "created"),
-        (READ,    "read"   ),
-        (UPDATED, "updated"),
-        (DELETED, "deleted"), 
+    EVENT_TYPES = (
+        (OPENED,    "opened"),
+        (REFERRED,  "referred"),
+        (PROCESSED, "processed"),
+        (DELETED,   "deleted"),
         )
 
-    time = models.DateTimeField(auto_now_add=True)
+    time = models.DateTimeField(default=timezone_utils.now)
     user = models.ForeignKey(User,
         on_delete=models.SET_NULL, null=True,
         related_name='application_logs')
     submission = models.ForeignKey(FormSubmission,
         on_delete=models.SET_NULL, null=True,
         related_name='logs')
-    action_type = models.PositiveSmallIntegerField(
-        choices=ACTION_TYPES)
-    updated_field = models.CharField(max_length=50,
-        blank=True)
+    event_type = models.PositiveSmallIntegerField(
+        choices=EVENT_TYPES)
 
     class Meta:
         ordering = ['-time']
 
+
     @classmethod
-    def log_multiple(cls, action_type, submissions, user, time=None, field=''):
+    def log_multiple(cls, event_type, submission_ids, user, time=None):
         if not time:
             time = timezone_utils.now()
         logs = []
-        for submission in submissions:
+        for submission_id in submission_ids:
             log = cls(
                 time=time,
                 user=user,
-                submission=submission,
-                action_type=action_type,
-                updated_field=field
+                submission_id=submission_id,
+                event_type=event_type
                 )
             logs.append(log)
         ApplicationLogEntry.objects.bulk_create(logs)
         return logs
 
     @classmethod
-    def log_read(cls, submissions, user, time=None):
-        return cls.log_multiple(cls.READ, submissions, user, time)
+    def log_opened(cls, submission_ids, user, time=None):
+        return cls.log_multiple(cls.OPENED, submission_ids, user, time)
 
     @classmethod
-    def log_updated(cls, submissions, user, time=None, field=''):
-        return cls.log_multiple(cls.UPDATED, submissions, user, time, field)
+    def log_referred(cls, submission_ids, user, time=None):
+        return cls.log_multiple(cls.REFERRED, submission_ids, user, time)
 
-
+    @classmethod
+    def log_processed(cls, submission_ids, user, time=None):
+        return cls.log_multiple(cls.PROCESSED, submission_ids, user, time)
 
 
 

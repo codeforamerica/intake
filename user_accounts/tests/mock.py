@@ -42,7 +42,7 @@ def create_user(**attributes):
         username + '@' + fake.free_email_domain())
     password = fake_password
     return auth_models.User.objects.create_user(
-        username=name,
+        username=username,
         email=email,
         password=password
         )
@@ -55,7 +55,6 @@ def create_user_with_profile(organization, **attributes):
         user=user,
         organization=organization
         )
-
 
 def create_fake_auth_models(num_orgs=2, num_users_per_org=2):
     orgs = [
@@ -72,7 +71,6 @@ def create_fake_auth_models(num_orgs=2, num_users_per_org=2):
             'users': [p.user for p in profiles],
             'profiles': profiles
         }
-
 
 def fake_invitation(organization, inviter, **kwargs):
     data = dict(

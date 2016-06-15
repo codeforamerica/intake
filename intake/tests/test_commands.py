@@ -1,3 +1,4 @@
+import random
 from unittest.mock import Mock, patch, MagicMock
 from intake.tests import mock
 from django.test import TestCase
@@ -6,51 +7,99 @@ from intake.management import commands
 
 class TestCommands(TestCase):
 
-    @patch('intake.management.commands.send_unopened_apps_notification.notifications')
     @patch('intake.management.commands.send_unopened_apps_notification.models')
-    @patch('intake.management.commands.send_unopened_apps_notification.settings')
-    def test_send_unopened_apps_notification_(self, settings, models, notifications):
-        settings.DEFAULT_NOTIFICATION_EMAIL = "someone@agency.org"
+    def test_send_unopened_apps_notification(self, models):
+        command = Mock()
+        commands.send_unopened_apps_notification.Command.handle(command)
+        models.FormSubmission.refer_unopened_apps.assert_called_once_with()
+        command.style.SUCCESS.assert_called_once_with(
+            models.FormSubmission.refer_unopened_apps.return_value)
 
-        command = commands.send_unopened_apps_notification.Command()
-        command.report_success = Mock()
-        
-        # case: no unopened apps
-        models.FormSubmission.get_unopened_apps.return_value = []
-        expected_message = "No unopened applications. Didn't email someone@agency.org"
 
-        command.handle()
-        notifications.front_email_daily_app_bundle.send.assert_not_called()
-        command.report_success.assert_called_once_with(expected_message)
-        notifications.slack_simple.send.assert_called_once_with(expected_message)
-
-        # case: some unopened apps
-        command.report_success.reset_mock()
-        notifications.slack_simple.send.reset_mock()
-        models.FormSubmission.get_unopened_apps.return_value = [
-            Mock(id=1), Mock(id=2)
-            ]
-        expected_message = "Emailed someone@agency.org with a link to 2 unopened applications"
-
-        
-        command.handle()
-        notifications.front_email_daily_app_bundle.send.assert_called_once_with(
-            to="someone@agency.org",
-            count=2,
-            submission_ids=[1,2])
-        command.report_success.assert_called_once_with(expected_message)
-        notifications.slack_simple.send.assert_called_once_with(expected_message)
-
-    @patch('intake.management.commands.send_unopened_apps_notification.settings')
-    def test_report_success(self, settings):
-        command = commands.send_unopened_apps_notification.Command()
-
+    @patch('intake.management.commands.pull_data_from_typeseam.DataImporter')
+    @patch('intake.management.commands.pull_data_from_typeseam.notifications')
+    @patch('intake.management.commands.pull_data_from_typeseam.os')
+    def test_pull_data_from_typeseam(self, mock_os, notifications, DataImporter):
+        command = commands.pull_data_from_typeseam.Command()
         command.stdout = Mock()
-        command.style = Mock()
-
-        command.report_success("Hello")
-        command.style.SUCCESS.assert_called_once_with("Hello")
+        mock_os.environ = {'IMPORT_DATABASE_URL': 'postgres://fake_user:F4k3p455w0rd@dbhost:5432/fake_db_name'}
+        command.handle()
+        DataImporter.assert_called_once_with(
+            import_from=mock_os.environ['IMPORT_DATABASE_URL'],
+            ssl=True)
+        DataImporter.return_value.import_records.assert_called_once_with(
+            delete_existing=True)
         command.stdout.write.assert_called_once_with(
-            command.style.SUCCESS.return_value)
+            DataImporter.return_value.report.return_value)
+        notifications.slack_simple.send.assert_called_once_with(
+            DataImporter.return_value.report.return_value)
 
 
+    @patch('intake.management.data_import.psycopg2')
+    def test_data_importer(self, pg):
+        from user_accounts.tests.mock import create_user
+        create_user(
+            name="Ben Golder",
+            email='bgolder@codeforamerica.org',
+            username='bengolder')
+
+        from intake.management.data_import import (
+            DataImporter,
+            USERS_SQL,
+            SUBMISSIONS_SQL,
+            LOGS_SQL
+            )
+
+        importer = DataImporter(
+            import_from='postgres://fake_user:F4k3p455w0rd@dbhost:5432/fake_db_name',
+            ssl=True
+            )
+
+        uuids = mock.uuids(3)
+
+        mock_logs = [
+                {'user': 'bgolder'},
+                {'user': 'jazmyn'},
+                {'user': 'bgolder@codeforamerica.org'},
+                {'user': 'jazmyn@codeforamerica.org'},
+                {'user': 'someone@agency.org'}]
+        for mock_log in mock_logs:
+            mock_log.update(
+                datetime=mock.fake.date_time_between('-1w', 'now'),
+                submission_key=random.choice(uuids),
+                event_type=random.choice(['added','referred','opened']))
+
+        mock_db_results = {
+            USERS_SQL: [
+                {'email': 'bgolder@codeforamerica.org'},
+                {'email': 'jazmyn@codeforamerica.org'},
+                {'email': 'someone@agency.org'}],
+            SUBMISSIONS_SQL: mock.fake_typeseam_submission_dicts(uuids),
+            LOGS_SQL: mock_logs
+        }
+        cursor = MagicMock()
+        
+        def set_fake_results(sql):
+            data = mock_db_results[sql]
+            cursor.__iter__.return_value = data
+
+        cursor.execute.side_effect = set_fake_results
+
+        importer._cursor = cursor
+        importer.import_records(delete_existing=True)
+
+        expected_report = '''Beginning data import  from `fake_db_name` on `dbhost`
+--------
+Successfully imported 3 users:
+\tfound bgolder@codeforamerica.org
+\tcreated jazmyn@codeforamerica.org
+\tcreated someone@agency.org
+--------
+No FormSubmission instances exist. Not deleting anything.
+--------
+Successfully imported 3 form submissions from `fake_db_name` on `dbhost`
+--------
+No ApplicationLogEntry instances exist. Not deleting anything.
+--------
+Successfully imported 5 event logs from `fake_db_name` on `dbhost`'''
+        self.assertEqual(importer.report(), expected_report)
