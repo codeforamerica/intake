@@ -12,6 +12,9 @@ SUBMISSIONS_SQL = '''
 select * from form_filler_submission;
 '''
 
+
+from pytz import timezone
+
 LOGS_SQL = '''
 select * from form_filler_logentry where event_type != 'received';
 '''
@@ -26,6 +29,8 @@ event_type_map = {
     'opened': models.ApplicationLogEntry.OPENED,
     'referred': models.ApplicationLogEntry.REFERRED
 }
+
+gmt = timezone('GMT')
 
 class DataImporter:
 
@@ -104,7 +109,7 @@ class DataImporter:
     def parse_submission(self, record):
         return models.FormSubmission(
             old_uuid=record['uuid'],
-            date_received=record['date_received'],
+            date_received=gmt.localize(record['date_received']),
             answers=record['answers']
             )
 
@@ -124,7 +129,7 @@ class DataImporter:
         else:
             email = record['user']
         return models.ApplicationLogEntry(
-            time=record['datetime'],
+            time=gmt.localize(record['datetime']),
             user_id=self._email_pk_map.get(email, None),
             submission_id=self._uuid_pk_map.get(record['submission_key'], None),
             event_type=event_type_map[record['event_type']]

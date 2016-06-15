@@ -36,7 +36,10 @@ class FormSubmission(models.Model):
         default=gen_uuid)
     anonymous_name = models.CharField(max_length=60,
         default=anonymous_names.generate)
-    date_received = models.DateTimeField(auto_now_add=True)
+    date_received = models.DateTimeField(default=timezone_utils.now)
+
+    class Meta:
+        ordering = ['-date_received']
 
     @classmethod
     def create_from_answers(cls, post_data):
@@ -139,7 +142,7 @@ class ApplicationLogEntry(models.Model):
         (DELETED,   "deleted"),
         )
 
-    time = models.DateTimeField(auto_now_add=True)
+    time = models.DateTimeField(default=timezone_utils.now)
     user = models.ForeignKey(User,
         on_delete=models.SET_NULL, null=True,
         related_name='application_logs')

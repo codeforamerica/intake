@@ -12,7 +12,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         importer = DataImporter(
-            import_from=os.environ.get('IMPORT_DATABASE_URL', '')
+            import_from=os.environ.get('IMPORT_DATABASE_URL', ''),
+            ssl=True
             )
         importer.import_records(delete_existing=True)
         results = importer.report()
