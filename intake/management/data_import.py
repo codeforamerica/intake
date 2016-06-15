@@ -1,7 +1,6 @@
-import logging
 import dj_database_url
 import psycopg2
-from intake import models, notifications
+from intake import models
 from django.contrib.auth.models import User
 
 
@@ -22,10 +21,15 @@ user_map = {
     'jazmyn': 'jazmyn@codeforamerica.org'
 }
 
+event_type_map = {
+    'added': models.ApplicationLogEntry.PROCESSED,
+    'opened': models.ApplicationLogEntry.OPENED,
+    'referred': models.ApplicationLogEntry.REFERRED
+}
+
 class DataImporter:
 
     def __init__(self, import_from='', ssl=False):
-        self._log = logging.getLogger(__name__)
         config = dj_database_url.parse(import_from)
         self.config = dict(
             database=config.get('NAME', 'typeseam'),
@@ -37,17 +41,20 @@ class DataImporter:
         if ssl:
             self.config['sslmode'] = 'require'
         self._connection = psycopg2.connect(**self.config)
-        self._log.info(
-            'DataImporter instance connected to {} on {}'.format(
-                self.config['database'],
-                self.config['host']
-                ))
         self._cursor = self._connection.cursor(
             cursor_factory=psycopg2.extras.DictCursor)
         self._uuid_pk_map = {}
         self._email_pk_map = {}
+        self.messages = []
+
+    def report(self):
+        return '\n--------\n'.join(self.messages)
+
+    def from_string(self):
+        return ' from `{}` on `{}`'.format(self.config['database'], self.config['host'])
 
     def import_records(self, delete_existing=False):
+        self.messages.append("Beginning data import {}".format(self.from_string()))
         self.import_users()
         self.import_submissions(delete_existing)
         self.import_logs(delete_existing)
@@ -60,8 +67,7 @@ class DataImporter:
             else:
                 model.objects.all().delete()
                 delete_message = "Deleted {} existing {} instances".format(count, model.__name__)
-            self._log.warning(delete_message)
-            notifications.slack_simple.send(delete_message)
+            self.messages.append(delete_message)
 
     def parse_user(self, record):
         email = record['email']
@@ -80,8 +86,7 @@ class DataImporter:
         for created, user in user_imports:
             self._email_pk_map[user.email] = user.id
             success_message += '\n\t{} {}'.format(created, user.email)
-        self._log(success_message)
-        notifications.slack_simple.send(success_message)
+        self.messages.append(success_message)
 
     def import_submissions(self, delete_existing=False):
         self.delete_existing(models.FormSubmission, delete_existing)
@@ -89,13 +94,12 @@ class DataImporter:
         result = models.FormSubmission.objects.bulk_create(
             self.parse_submission(r) for r in self._cursor
         )
-        success_message = "Successfully imported {} form submissions from `{}` on `{}`".format(
-                len(result), self.config['database'], self.config['host'])
+        success_message = "Successfully imported {} form submissions{}".format(
+                len(result), self.from_string())
         saved_submissions = models.FormSubmission.objects.all()
         for sub in saved_submissions:
             self._uuid_pk_map[sub.old_uuid] = sub.id
-        self._log(success_message)
-        notifications.slack_simple.send(success_message)
+        self.messages.append(success_message)
 
     def parse_submission(self, record):
         return models.FormSubmission(
@@ -107,25 +111,23 @@ class DataImporter:
     def import_logs(self, delete_existing=False):
         self.delete_existing(models.ApplicationLogEntry, delete_existing)
         self._cursor.execute(LOGS_SQL)
-        logs = [self.parse_log(r) for r in self._cursor]
+        result = models.ApplicationLogEntry.objects.bulk_create(
+            self.parse_log(r) for r in self._cursor
+            )
+        success_message = "Successfully imported {} event logs{}".format(
+                len(result), self.from_string())
+        self.messages.append(success_message)
 
     def parse_log(self, record):
-        cols = [
-            'datetime',
-            'user',
-            'submission_key',
-            'event_type',
-            'source'
-        ]
-        action_types = ('added', 'referred', 'opened')
         if record['user'] in user_map:
             email = user_map[record['user']]
         else:
             email = record['user']
         return models.ApplicationLogEntry(
             time=record['datetime'],
-            user_id=self._email_pk_map[email],
+            user_id=self._email_pk_map.get(email, None),
             submission_id=self._uuid_pk_map.get(record['submission_key'], None),
+            event_type=event_type_map[record['event_type']]
             )
 
         

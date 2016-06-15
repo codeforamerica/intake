@@ -54,22 +54,15 @@ class TestCommands(TestCase):
         command.stdout.write.assert_called_once_with(
             command.style.SUCCESS.return_value)
 
-    @patch('intake.management.data_import.logging')
-    @patch('intake.management.data_import.notifications')
-    def test_data_importer(self, notifications, logging):
+    def test_data_importer(self):
         from user_accounts.tests.mock import create_user
         create_user(
             name="Ben Golder",
             email='bgolder@codeforamerica.org',
             username='bengolder')
-        from intake.management.commands.pull_data_from_typeseam import Command
-        mock_self = Mock()
-        submissions = mock.FormSubmissionFactory.create_batch(4)
-        Command.handle(mock_self)
-        logger = logging.getLogger.return_value
-        logger.info.assert_any_call(
-            'DataImporter instance connected to typeseam on localhost')
-        print('\n\nSLACK NOTIFICATIONS:\n-------')
-        for name, args, kwargs in notifications.mock_calls:
-            print('{}\n-------'.format(args[0]))
-
+        from intake.management.data_import import DataImporter
+        importer = DataImporter(
+            import_from=os.environ.get('IMPORT_DATABASE_URL', '')
+            )
+        importer.import_records(delete_existing=True)
+        print('\n\n' + importer.report())
