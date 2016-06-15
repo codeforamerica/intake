@@ -24,13 +24,8 @@ class TestModels(TestCase):
         self.assertTrue(submission.old_uuid) # just have a truthy result
         anon = submission.get_anonymous_display()
         self.validate_anonymous_name(anon)
-        for field_name in ('reviewed_by_staff',
-            'confirmation_sent',
-            'submitted_to_agency', 'opened_by_agency', 'processed_by_agency',
-            'due_for_followup', 'followup_sent', 'followup_answered',
-            'told_eligible', 'told_ineligible'):
-            self.assertIsNone(
-                getattr(submission, field_name))
+        self.assertIsNone(submission.opened_by_agency())
+        self.assertIsNone(submission.processed_by_agency())
         self.assertEqual(
             models.FormSubmission.objects.get(id=submission.id), submission)
 
@@ -39,8 +34,7 @@ class TestModels(TestCase):
         log = models.ApplicationLogEntry.objects.create(
             submission=submission,
             user=self.users[0],
-            action_type=models.ApplicationLogEntry.UPDATED,
-            updated_field='reviewed_by_staff'
+            event_type=models.ApplicationLogEntry.PROCESSED
             )
         self.assertEqual(
             models.ApplicationLogEntry.objects.get(id=log.id), log)
@@ -67,9 +61,6 @@ class TestModels(TestCase):
         self.assertEqual(type(filled_pdf), bytes)
 
 
-    def test_fill_clean_slate_pdf(self):
-        pass
-
     def test_anonymous_names(self):
         fake_name = anonymous_names.generate()
         self.validate_anonymous_name(fake_name)
@@ -90,10 +81,13 @@ class TestModels(TestCase):
         submission = mock.FormSubmissionFactory.build(answers=prefers_nothing)
         self.assertListEqual([], submission.get_contact_preferences())
 
-    def test_get_unopened_submissions(self):
+    @patch('intake.models.notifications')
+    @patch('intake.models.settings')
+    def test_get_unopened_submissions(self, settings, notifications):
+        settings.DEFAULT_AGENCY_USER_EMAIL = self.users[0].email
         submissions = mock.FormSubmissionFactory.create_batch(4)
         group_a, group_b = submissions[:2], submissions[2:]
-        models.FormSubmission.mark_opened_by_agency(group_a, self.users[0])
+        models.FormSubmission.mark_viewed(group_a, self.users[0])
         unopened = models.FormSubmission.get_unopened_apps()
         for sub in group_b:
             self.assertIn(sub, unopened)
@@ -101,7 +95,7 @@ class TestModels(TestCase):
             self.assertNotIn(sub, unopened)
 
         # make sure we get falsey values if all have been opened
-        models.FormSubmission.mark_opened_by_agency(group_b, self.users[0])
+        models.FormSubmission.mark_viewed(group_b, self.users[0])
         unopened = models.FormSubmission.get_unopened_apps()
         self.assertFalse(unopened)
 
@@ -112,19 +106,18 @@ class TestModels(TestCase):
         submissions = [submission]
         agency_user = self.users[0]
         non_agency_user = self.users[1]
-        settings.DEFAULT_AGENCY_USER_EMAILS = [agency_user.email]
+        settings.DEFAULT_AGENCY_USER_EMAIL = agency_user.email
 
         # case: viewed by non agency user
         models.FormSubmission.mark_viewed(submissions, non_agency_user)
         instance = models.FormSubmission.objects.get(pk=submission.id)
-        self.assertIsNone(instance.opened_by_agency)
+        self.assertIsNone(instance.opened_by_agency())
         logs = instance.logs.all()
         self.assertEqual(len(logs), 1)
         log = logs[0]
         self.assertEqual(log.user, non_agency_user)
         self.assertEqual(log.submission, submission)
-        self.assertEqual(log.action_type, models.ApplicationLogEntry.READ)
-        self.assertEqual(log.updated_field, '')
+        self.assertEqual(log.event_type, models.ApplicationLogEntry.OPENED)
         notifications.slack_submissions_viewed.send.assert_called_once_with(
             submissions=submissions,
             user=non_agency_user
@@ -134,14 +127,13 @@ class TestModels(TestCase):
         notifications.reset_mock()
         submissions, logs = models.FormSubmission.mark_viewed(submissions, agency_user)
         instance = models.FormSubmission.objects.get(pk=submission.id)
-        self.assertTrue(instance.opened_by_agency)
+        self.assertTrue(instance.opened_by_agency())
         logs = instance.logs.all()
         self.assertEqual(len(logs), 2)
         log = logs[0]
         self.assertEqual(log.user, agency_user)
         self.assertEqual(log.submission, submission)
-        self.assertEqual(log.action_type, models.ApplicationLogEntry.UPDATED)
-        self.assertEqual(log.updated_field, 'opened_by_agency')
+        self.assertEqual(log.event_type, models.ApplicationLogEntry.OPENED)
         notifications.slack_submissions_viewed.send.assert_called_once_with(
             submissions=submissions,
             user=agency_user

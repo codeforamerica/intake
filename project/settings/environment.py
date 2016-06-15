@@ -42,5 +42,5 @@ FRONT_EMAIL_CHANNEL_ID=os.environ.get("FRONT_EMAIL_CHANNEL_ID")
 FRONT_PHONE_CHANNEL_ID=os.environ.get("FRONT_PHONE_CHANNEL_ID")
 
 # Temporary defaults for agencies
-DEFAULT_AGENCY_USER_EMAILS = os.environ.get('DEFAULT_AGENCY_USER_EMAILS',
-    ['clearmyrecord@codeforamerica.org'])
+DEFAULT_AGENCY_USER_EMAIL = os.environ.get('DEFAULT_AGENCY_USER_EMAIL',
+    'clearmyrecord@codeforamerica.org')
