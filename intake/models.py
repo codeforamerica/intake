@@ -2,6 +2,7 @@ import importlib
 from django.conf import settings
 from django.db import models
 from pytz import timezone
+import uuid
 from django.utils import timezone as timezone_utils
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
@@ -17,6 +18,8 @@ nice_contact_choices = {
     'snailmail': 'paper mail'
 }
 
+def gen_uuid():
+    return uuid.uuid4().hex
 
 def get_parser():
     parser = pdfparser.PDFParser()
@@ -37,7 +40,8 @@ class FormSubmission(models.Model):
 
     answers = JSONField()
     # old_uuid is only used for porting legacy applications
-    old_uuid = models.CharField(max_length=34, blank=True)
+    old_uuid = models.CharField(max_length=34, unique=True,
+        default=gen_uuid)
     anonymous_name = models.CharField(max_length=60,
         default=anonymous_names.generate)
     date_received = models.DateTimeField(auto_now_add=True)
@@ -175,8 +179,6 @@ class ApplicationLogEntry(models.Model):
     @classmethod
     def log_updated(cls, submissions, user, time=None, field=''):
         return cls.log_multiple(cls.UPDATED, submissions, user, time, field)
-
-
 
 
 

@@ -21,7 +21,7 @@ class TestModels(TestCase):
         self.assertEqual(int, type(submission.id))
         self.assertEqual(dict, type(submission.answers))
         self.assertEqual(datetime, type(submission.date_received))
-        self.assertEqual(submission.old_uuid, '')
+        self.assertTrue(submission.old_uuid) # just have a truthy result
         anon = submission.get_anonymous_display()
         self.validate_anonymous_name(anon)
         for field_name in ('reviewed_by_staff',
