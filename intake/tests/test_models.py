@@ -139,6 +139,43 @@ class TestModels(TestCase):
             user=agency_user
             )
 
+    @patch('intake.models.ApplicationLogEntry')
+    @patch('intake.models.FormSubmission.get_unopened_apps')
+    @patch('intake.models.notifications')
+    @patch('intake.models.settings')
+    def test_refer_unopened_apps(self, settings, notifications, get_unopened_apps, ApplicationLogEntry):
+        settings.DEFAULT_NOTIFICATION_EMAIL = 'someone@agency.org'
+
+        # case: some unopened apps
+        get_unopened_apps.return_value = (Mock(id=i+1) for i in range(3))
+        output = models.FormSubmission.refer_unopened_apps()
+
+        expected_message = "Emailed someone@agency.org with a link to 3 unopened applications"
+        notifications.front_email_daily_app_bundle.send.assert_called_once_with(
+            to='someone@agency.org',
+            count=3,
+            submission_ids=[1,2,3]
+            )
+        notifications.slack_simple.send.assert_called_once_with(expected_message)
+        ApplicationLogEntry.log_referred.assert_called_once_with([1,2,3], user=None)
+        self.assertEqual(output, expected_message)
+
+        # case: no unopened apps
+        get_unopened_apps.return_value = []
+        notifications.reset_mock()
+        ApplicationLogEntry.reset_mock()
+        output = models.FormSubmission.refer_unopened_apps()
+
+        expected_message = "No unopened applications. Didn't email someone@agency.org"
+        notifications.front_email_daily_app_bundle.send.assert_not_called()
+        ApplicationLogEntry.log_referred.assert_not_called()
+        self.assertEqual(output, expected_message)
+
+
+
+
+
+
 
 
 

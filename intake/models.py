@@ -57,6 +57,26 @@ class FormSubmission(models.Model):
         return submissions, logs
 
     @classmethod
+    def refer_unopened_apps(cls):
+        email = settings.DEFAULT_NOTIFICATION_EMAIL
+        submission_ids=[s.id for s in cls.get_unopened_apps()]
+        if submission_ids:
+            count = len(submission_ids)
+            notifications.front_email_daily_app_bundle.send(
+                to=email,
+                count=count,
+                submission_ids=submission_ids
+                )
+            ApplicationLogEntry.log_referred(submission_ids, user=None)
+            result_message = "Emailed {} with a link to {} unopened applications".format(
+                        email, count)
+        else:
+            result_message = "No unopened applications. Didn't email {}".format(
+                    email)
+        notifications.slack_simple.send(result_message)
+        return result_message
+
+    @classmethod
     def get_unopened_apps(cls):
         return cls.objects.exclude(
             logs__user__email=settings.DEFAULT_AGENCY_USER_EMAIL
