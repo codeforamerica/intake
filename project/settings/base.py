@@ -90,11 +90,14 @@ ACCOUNT_USERNAME_REQUIRED = False  # we don't need usernames
 ACCOUNT_AUTHENTICATION_METHOD = "email"  # login using email
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
+ACCOUNT_LOGOUT_ON_GET = True
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 )
-
+ADMINS = [
+    ('Ben', 'bgolder@codeforamerica.org'),
+]
 
 AUTH_PASSWORD_VALIDATORS = [
     {

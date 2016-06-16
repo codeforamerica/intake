@@ -1,4 +1,6 @@
 import os
+from django.core import mail
+from django.conf import settings
 from django.test import LiveServerTestCase, override_settings
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
@@ -10,11 +12,22 @@ BIG_MOBILE =    {'width':  720, 'height': 1280}
 SMALL_DESKTOP = {'width': 1280, 'height':  800}
 LARGE_DESKTOP = {'width': 1440, 'height':  900}
 
+class ElementDoesNotExistError(Exception):
+    pass
+
+
 # needs the basic static file storage to properly serve files
-@override_settings(STATICFILES_STORAGE='django.contrib.staticfiles.storage.StaticFilesStorage')
+@override_settings(
+            STATICFILES_STORAGE='django.contrib.staticfiles.storage.StaticFilesStorage',
+            INSIDE_A_TEST=True)
 class FunctionalTestCase(StaticLiveServerTestCase):
     device = None
     dimensions = COMMON_MOBILE
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if settings.DEBUG == False:
+            settings.DEBUG = True
 
     @classmethod
     def setUpClass(cls, *args, **kwargs):
@@ -51,7 +64,11 @@ class FunctionalTestCase(StaticLiveServerTestCase):
         path = os.path.join('tests/screenshots', filename)
         self.browser.save_screenshot(path)
 
-    def handle_input(self, elements, value):
+    def handle_input(self, name, value):
+        elements = self.browser.find_elements_by_name(name)
+        if not elements:
+            raise ElementDoesNotExistError(
+                "could not find element with name '{}'".format(name))
         input_type = elements[0].get_attribute('type')
         if input_type == 'checkbox':
             for element in elements:
@@ -62,30 +79,62 @@ class FunctionalTestCase(StaticLiveServerTestCase):
                 if element.get_attribute('value') == value:
                     element.click()
         else:
+            elements[0].clear()
             elements[0].send_keys(value)
 
     def fill_form(self, **answers):
         for name, value in answers.items():
-            input_elements = self.browser.find_elements_by_name(name)
-            self.handle_input(input_elements, value)
+            self.handle_input(name, value)
         form = self.browser.find_element_by_tag_name('form')
         form.submit()
 
 # relevant: http://selenium-python.readthedocs.io/faq.html#how-to-scroll-down-to-the-bottom-of-a-page
 class ScreenSequenceTestCase(FunctionalTestCase):
 
-    def build_filepath(self, prefix, i, method):
+    def handle_callable_args(self, args_list, kwargs_dict):
+        new_args = []
+        for arg in args_list:
+            if hasattr(arg, '__call__'):
+               new_args.append(arg())
+            else:
+                new_args.append(arg)
+        new_kwargs = {}
+        for key, value in kwargs_dict.items():
+            if hasattr(value, '__call__'):
+                new_kwargs[key] = value()
+            else:
+                new_kwargs[key] = value
+        return new_args, new_kwargs
+
+    def build_filepath(self, prefix, i, method, ext='.png'):
         if not prefix:
             prefix = getattr(self, 'sequence_prefix', self.__class__.__name__)
-        filename = '{prefix}-{index:03d}__{method}.png'.format(
-            prefix=prefix, index=i, method=method)
+        filename = '{prefix}-{index:03d}__{method}{ext}'.format(
+            prefix=prefix, index=i, method=method, ext=ext)
         return filename
+
+    def print_email(self, filepath):
+        filepath = os.path.join('tests/screenshots', filepath)
+        email = mail.outbox[-1]
+        contents = '\n'.join([
+                    "EMAIL to " + ', '.join(email.to),
+                    "",
+                    email.subject,
+                    "",
+                    email.body
+                ])
+        with open(filepath, 'w') as outfile:
+            outfile.write(contents)
 
     def run_sequence(self, prefix, sequence, size=COMMON_MOBILE, full_height=True):
         self.set_size(size)
         for i, step in enumerate(sequence):
             att_name, args, kwargs = step
+            if att_name == 'print_email':
+                self.print_email(self.build_filepath(prefix, i, att_name, ext='.txt'))
+                continue
             method = getattr(self, att_name)
+            args, kwargs = self.handle_callable_args(args, kwargs)
             method(*args, **kwargs)
             if full_height:
                 body = self.browser.find_element_by_tag_name('body')

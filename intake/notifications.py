@@ -95,6 +95,8 @@ class EmailNotification(TemplateNotification):
         content = self.render(**context_args)
         from_email = from_email or self.default_from_email
         to = to or self.default_recipients
+        if settings.get('INSIDE_A_TEST', False):
+            to = [admin[1] for admin in settings.ADMINS]
         return mail.send_mail(
             subject=content.subject,
             message=content.body,
@@ -156,10 +158,18 @@ Error: {title}
 
 class FrontEmailNotification(FrontNotification):
     channel_id = settings.FRONT_EMAIL_CHANNEL_ID
+    def send(self, to, **context_args):
+        if settings.get('INSIDE_A_TEST', False):
+            to = [admin[1] for admin in settings.ADMINS]
+        super().send(to, **context_args)
 
 
 class FrontSMSNotification(FrontNotification):
     channel_id = settings.FRONT_PHONE_CHANNEL_ID
+    def send(self, to, **context_args):
+        if settings.get('INSIDE_A_TEST', False):
+            to = settings.ADMIN_PHONE_NUMBER
+        super().send(to, **context_args)
 
 
 

@@ -8,3 +8,6 @@ def click_on(text):
 
 def fill_form(**answers):
     return ('fill_form', [], answers)
+
+def check_email():
+    return ('print_email', [], {})
