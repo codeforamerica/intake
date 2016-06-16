@@ -95,8 +95,6 @@ class EmailNotification(TemplateNotification):
         content = self.render(**context_args)
         from_email = from_email or self.default_from_email
         to = to or self.default_recipients
-        if settings.get('INSIDE_A_TEST', False):
-            to = [admin[1] for admin in settings.ADMINS]
         return mail.send_mail(
             subject=content.subject,
             message=content.body,

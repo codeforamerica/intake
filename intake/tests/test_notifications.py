@@ -1,6 +1,6 @@
 from unittest import TestCase as BaseTestCase
 from unittest.mock import Mock, patch, MagicMock
-from django.test import TestCase
+from django.test import TestCase, override_settings
 
 from django.core import mail
 from django.conf import settings
@@ -38,12 +38,11 @@ class TestNotifications(TestCase):
         email = mail.outbox[0]
         self.assertEqual(email.subject, "Hello Ben")
 
+    @override_settings(FRONT_API_TOKEN='mytoken', INSIDE_A_TEST=True, ADMIN_PHONE_NUMBER='+19993336666')
     @patch('intake.notifications.requests.post')
     @patch('intake.notifications.get_template')
-    @patch('intake.notifications.settings')
-    def test_front_notifications(self, settings, get_template, mock_post):
+    def test_front_notifications(self, get_template, mock_post):
         # check all the basics using an SMS example
-        settings.FRONT_API_TOKEN = 'mytoken'
         mock_post.return_value = mock.FrontSendMessageResponse.success()
 
         from project.jinja2 import jinja_config as jinja
