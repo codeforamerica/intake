@@ -219,11 +219,6 @@ class TestViews(AuthIntegrationTestCase):
             self.assertRedirects(response, new,
                 status_code=301, fetch_redirect_response=False)
 
-
-    @skipIf(True, "not yet implemented")
-    def test_old_urls_permanently_redirect_to_new_urls(self):
-        pass
-
     @skipIf(True, "not yet implemented")
     def test_authenticated_user_cannot_see_apps_to_other_org(self):
         pass
