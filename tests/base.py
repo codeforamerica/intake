@@ -4,11 +4,11 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 
 # device sizes
-SMALL_MOBILE  = {'width':  320, 'height':  570, 'ratio': 1.0}
-COMMON_MOBILE = {'width':  360, 'height':  640, 'ratio': 1.0}
-BIG_MOBILE =    {'width':  720, 'height': 1280, 'ratio': 1.0}
-SMALL_DESKTOP = {'width': 1280, 'height':  800, 'ratio': 1.0}
-LARGE_DESKTOP = {'width': 1440, 'height':  900, 'ratio': 1.0}
+SMALL_MOBILE  = {'width':  320, 'height':  570}
+COMMON_MOBILE = {'width':  360, 'height':  640}
+BIG_MOBILE =    {'width':  720, 'height': 1280}
+SMALL_DESKTOP = {'width': 1280, 'height':  800}
+LARGE_DESKTOP = {'width': 1440, 'height':  900}
 
 # needs the basic static file storage to properly serve files
 @override_settings(STATICFILES_STORAGE='django.contrib.staticfiles.storage.StaticFilesStorage')
@@ -20,8 +20,15 @@ class FunctionalTestCase(StaticLiveServerTestCase):
     def setUpClass(cls, *args, **kwargs):
         super().setUpClass(*args, **kwargs)
         from selenium import webdriver
-        cls.browser = webdriver.Chrome()
+        cls.browser = webdriver.Firefox()
         cls.browser.set_window_size(cls.dimensions['width'], cls.dimensions['height'])
+
+    def build_url(self, url):
+        return self.host + url
+
+    def get(self, url, host=None):
+        full_url = self.build_url(url)
+        self.browser.get(full_url)
 
     def set_size(self, size_config):
         self.browser.set_window_size(
@@ -33,8 +40,7 @@ class FunctionalTestCase(StaticLiveServerTestCase):
         self.host = os.environ.get('ACCEPTANCE_TEST_HOST', self.live_server_url)
 
     def click_on(self, text):
-        xpath = "//E[contains(text(),'{}')]".format(text)
-        self.browser.find_element_by_xpath(xpath).click()
+        self.browser.find_element_by_link_text(text).click()
 
     @classmethod
     def tearDownClass(cls, *args, **kwargs):
@@ -45,28 +51,47 @@ class FunctionalTestCase(StaticLiveServerTestCase):
         path = os.path.join('tests/screenshots', filename)
         self.browser.save_screenshot(path)
 
+    def handle_input(self, elements, value):
+        input_type = elements[0].get_attribute('type')
+        if input_type == 'checkbox':
+            for element in elements:
+                if element.get_attribute('value') == value:
+                    element.click()
+        elif input_type == 'radio':
+            for element in elements:
+                if element.get_attribute('value') == value:
+                    element.click()
+        else:
+            elements[0].send_keys(value)
 
+    def fill_form(self, **answers):
+        for name, value in answers.items():
+            input_elements = self.browser.find_elements_by_name(name)
+            self.handle_input(input_elements, value)
+        form = self.browser.find_element_by_tag_name('form')
+        form.submit()
+
+# relevant: http://selenium-python.readthedocs.io/faq.html#how-to-scroll-down-to-the-bottom-of-a-page
 class ScreenSequenceTestCase(FunctionalTestCase):
 
-    def build_filepath(self, prefix, i, url):
+    def build_filepath(self, prefix, i, method):
         if not prefix:
             prefix = getattr(self, 'sequence_prefix', self.__class__.__name__)
-        filename = '{prefix}-{index:03d}{path}.png'.format(
-            prefix=prefix,
-            index=i, path=url.replace('/', '__'))
+        filename = '{prefix}-{index:03d}__{method}.png'.format(
+            prefix=prefix, index=i, method=method)
         return filename
 
-    def build_url(self, url):
-        return self.host + url
-
-    def run_sequence(self, sequence, prefix='', size=COMMON_MOBILE):
+    def run_sequence(self, prefix, sequence, size=COMMON_MOBILE, full_height=True):
         self.set_size(size)
-        for i, url in enumerate(sequence):
-            full_url = self.build_url(url)
-            self.browser.get(full_url)
-            self.screenshot(self.build_filepath(prefix, i, url))
-
-
+        for i, step in enumerate(sequence):
+            att_name, args, kwargs = step
+            method = getattr(self, att_name)
+            method(*args, **kwargs)
+            if full_height:
+                body = self.browser.find_element_by_tag_name('body')
+                height = max(size['height'], int(body.get_attribute('scrollHeight')))
+                self.set_size(dict(width=size['width'], height=height))
+            self.screenshot(self.build_filepath(prefix, i, att_name))
 
 
 class DEVICES:
