@@ -1,13 +1,13 @@
 
 
-def get(url):
-    return ('get', [url], {})
+def get(sequence_step_name, url):
+    return (sequence_step_name, 'get', [url], {})
 
-def click_on(text):
-    return ('click_on', [text], {})
+def click_on(sequence_step_name, text):
+    return (sequence_step_name, 'click_on', [text], {})
 
-def fill_form(**answers):
-    return ('fill_form', [], answers)
+def fill_form(sequence_step_name, **answers):
+    return (sequence_step_name, 'fill_form', [], answers)
 
-def check_email():
-    return ('print_email', [], {})
+def check_email(sequence_step_name):
+    return (sequence_step_name, 'print_email', [], {})

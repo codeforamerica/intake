@@ -33,8 +33,13 @@ class FunctionalTestCase(StaticLiveServerTestCase):
     def setUpClass(cls, *args, **kwargs):
         super().setUpClass(*args, **kwargs)
         from selenium import webdriver
+        cls.driver = webdriver
         cls.browser = webdriver.Firefox()
         cls.browser.set_window_size(cls.dimensions['width'], cls.dimensions['height'])
+
+    def setUp(self, *args, **kwargs):
+        super().setUp(*args, **kwargs)
+        self.browser.delete_all_cookies()
 
     def build_url(self, url):
         return self.host + url
@@ -78,6 +83,9 @@ class FunctionalTestCase(StaticLiveServerTestCase):
             for element in elements:
                 if element.get_attribute('value') == value:
                     element.click()
+        elif elements[0].tag_name == 'select':
+            select = self.driver.support.ui.Select(elements[0])
+            select.select_by_value(value)
         else:
             elements[0].clear()
             elements[0].send_keys(value)
@@ -118,9 +126,9 @@ class ScreenSequenceTestCase(FunctionalTestCase):
         email = mail.outbox[-1]
         contents = '\n'.join([
                     "EMAIL to " + ', '.join(email.to),
-                    "",
+                    "\n----------------------------\n",
                     email.subject,
-                    "",
+                    "\n----------------------------\n",
                     email.body
                 ])
         with open(filepath, 'w') as outfile:
@@ -129,9 +137,9 @@ class ScreenSequenceTestCase(FunctionalTestCase):
     def run_sequence(self, prefix, sequence, size=COMMON_MOBILE, full_height=True):
         self.set_size(size)
         for i, step in enumerate(sequence):
-            att_name, args, kwargs = step
+            step_name, att_name, args, kwargs = step
             if att_name == 'print_email':
-                self.print_email(self.build_filepath(prefix, i, att_name, ext='.txt'))
+                self.print_email(self.build_filepath(prefix, i, step_name, ext='.txt'))
                 continue
             method = getattr(self, att_name)
             args, kwargs = self.handle_callable_args(args, kwargs)
@@ -140,7 +148,7 @@ class ScreenSequenceTestCase(FunctionalTestCase):
                 body = self.browser.find_element_by_tag_name('body')
                 height = max(size['height'], int(body.get_attribute('scrollHeight')))
                 self.set_size(dict(width=size['width'], height=height))
-            self.screenshot(self.build_filepath(prefix, i, att_name))
+            self.screenshot(self.build_filepath(prefix, i, step_name))
 
 
 class DEVICES:

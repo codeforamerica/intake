@@ -1,7 +1,7 @@
-{% extends "base.html" %}
+{% extends "base.jinja" %}
 
 {% block body %}
-{% include "includes/header.html" %}
+{% include "includes/header.jinja" %}
 
 
 <section class="delete">
@@ -14,7 +14,7 @@
 	</div>
 	<div class="row">
 		<form class="delete" action="{{ 
-			url('intake-delete_page', kwargs={'submission_id': submission.id})
+			url('intake-delete_page', submission_id=submission.id)
 			}}" method="POST" accept-charset="utf-8">
 			
 		<a href="{{ url('intake-app_index') }}" class="btn btn-default btn-lg">No, I'm not sure</a>
@@ -25,7 +25,7 @@
 	<div class="row">
 		<div class="iframe_container">
 			<iframe class="pdf_inset" src="{{ 
-				url('intake-filled_pdf', kwargs={'submission_id': submission.id})
+				url('intake-filled_pdf', submission_id=submission.id)
 				}}" frameborder="0" width="800" height="600"></iframe>
 		</div>
 	</div>

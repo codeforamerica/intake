@@ -5,10 +5,9 @@ import requests
 from django.core import mail
 from django.conf import settings
 
-from django.template.loader import get_template
-from project.jinja2 import jinja_config as jinja
-from django.template import Context
+from django.template import loader, Context
 
+jinja = loader.engines['jinja']
 
 class JinjaNotInitializedError(Exception):
     pass
@@ -43,7 +42,7 @@ class TemplateNotification:
         if from_string:
             self.templates[key] = jinja.env.from_string(string)
         else:
-            self.templates[key] = get_template(string)
+            self.templates[key] = loader.get_template(string)
 
     def get_context(self, context_dict):
         context = self.default_context
@@ -157,7 +156,7 @@ Error: {title}
 class FrontEmailNotification(FrontNotification):
     channel_id = settings.FRONT_EMAIL_CHANNEL_ID
     def send(self, to, **context_args):
-        if settings.get('INSIDE_A_TEST', False):
+        if getattr(settings, 'INSIDE_A_TEST', False):
             to = [admin[1] for admin in settings.ADMINS]
         super().send(to, **context_args)
 
@@ -165,7 +164,7 @@ class FrontEmailNotification(FrontNotification):
 class FrontSMSNotification(FrontNotification):
     channel_id = settings.FRONT_PHONE_CHANNEL_ID
     def send(self, to, **context_args):
-        if settings.get('INSIDE_A_TEST', False):
+        if getattr(settings, 'INSIDE_A_TEST', False):
             to = settings.ADMIN_PHONE_NUMBER
         super().send(to, **context_args)
 
@@ -206,24 +205,24 @@ slack_simple = BasicSlackNotification()
 
 # submission, submission_count, request
 slack_new_submission = SlackTemplateNotification(
-    message_template_path="new_submission.slack")
+    message_template_path="slack/new_submission.jinja")
 
 # submissions, user
 slack_submissions_viewed = SlackTemplateNotification(
     {'action': 'opened'},
-    message_template_path="bundle_action.slack")
+    message_template_path="slack/bundle_action.jinja")
 
 # submissions, user
 slack_submissions_processed = SlackTemplateNotification(
     {'action': 'processed'},
-    message_template_path="bundle_action.slack")
+    message_template_path="slack/bundle_action.jinja")
 
 # submissions, user
 slack_submissions_deleted = SlackTemplateNotification(
     {'action': 'deleted'},
-    message_template_path="bundle_action.slack")
+    message_template_path="slack/bundle_action.jinja")
 
 # count, request, submission_ids
 front_email_daily_app_bundle = FrontEmailNotification(
     subject_template="{{current_local_time('%a %b %-d, %Y')}}: Online applications to Clean Slate",
-    body_template_path='app_bundle_email.txt')
+    body_template_path='email/app_bundle_email.jinja')

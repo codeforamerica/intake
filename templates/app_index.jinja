@@ -1,8 +1,8 @@
-{% extends "base.html" %}
+{% extends "base.jinja" %}
 
 {% block body %}
 
-{% include "includes/header.html" %}
+{% include "includes/header.jinja" %}
 
 <div class="container">
 	<div class="row">
@@ -27,7 +27,7 @@
 			<td>
 				<a href="{{ 
 					url('intake-filled_pdf',
-						kwargs=dict(submission_id=app.id)
+						submission_id=app.id
 						) }}">
 						<span class="glyphicon glyphicon-file"></span>
 						PDF
@@ -54,7 +54,7 @@
 			</td>
 			<td>
 				<a class="btn btn-default btn-sm delete" href="{{ url('intake-delete_page',
-					kwargs=dict(submission_id=app.id)
+					submission_id=app.id
 						) }}">
 					<span class="glyphicon glyphicon-remove"></span>
 					Delete

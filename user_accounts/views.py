@@ -1,4 +1,5 @@
 from django.shortcuts import redirect
+from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic.edit import FormView, UpdateView
 from allauth.account import views as allauth_views
@@ -22,7 +23,7 @@ class CustomLoginView(allauth_views.LoginView):
 
 
 class CustomSignupView(allauth_views.SignupView):
-    template_name = "user_accounts/signup.html"
+    template_name = "user_accounts/signup.jinja"
 
     def get_form_class(self):
         return forms.CustomSignUpForm
@@ -34,13 +35,14 @@ class CustomSignupView(allauth_views.SignupView):
 class CustomSendInvite(SendInvite):
     template_name = "user_accounts/invite_form.html"
     form_class = forms.InviteForm
+    success_url = reverse_lazy("user_accounts-profile")
 
     def form_valid(self, form):
         invite = form.save(inviter=self.request.user)
         invite.send_invitation(self.request)
-        return self.render_to_response(
-            self.get_context_data(
-                success_message='%s has been invited' % invite.email))
+        messages.success(self.request,
+            'An email invite was sent to {}'.format(invite.email))
+        return redirect(self.success_url)
 
 
 class UserProfileView(FormView):

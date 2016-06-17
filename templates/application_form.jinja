@@ -1,11 +1,11 @@
-{% extends "base.html" %}
+{% extends "base.jinja" %}
 
 {% block body %}
 <section class="thanks above_the_fold">
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-12 col-sm-8 col-md-6 col_centered">
-				{% include "includes/splash_header.html" %}
+				{% include "includes/splash_header.jinja" %}
 				<h1>
 					Apply to Clear My Record
 				</h1>
@@ -20,7 +20,7 @@
 			<div class="col-xs-12 col-sm-8 col-md-6 col_centered">
 <form class="sanfrancisco" action="{{ url('intake-apply') }}" method="POST" accept-charset="utf-8">
 	
-	{% include "includes/csrf_field.html" %}
+	{% include "includes/csrf_field.jinja" %}
 	<div class="field field-checkbox_options">	    
 	<legend>
     How would you like us to contact you?
@@ -440,6 +440,6 @@
 </section>
 
 
-{% include "includes/footer.html" %}
+{% include "includes/footer.jinja" %}
 
 {% endblock body %}

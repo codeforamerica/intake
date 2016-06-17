@@ -1,11 +1,11 @@
-{% extends "base.html" %}
+{% extends "base.jinja" %}
 
 {% block body %}
 
 <section class="splash above_the_fold">
   <div class="container">
 
-  {% include "includes/splash_header.html" %}
+  {% include "includes/splash_header.jinja" %}
 
       {% block main %}
       <div class="row">
@@ -126,7 +126,7 @@
   </div>
 </section>
 
-{% include "includes/footer.html" %}
+{% include "includes/footer.jinja" %}
 
 {% endblock body %}
 

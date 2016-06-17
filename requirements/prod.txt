@@ -11,3 +11,4 @@ django-storages~=1.4
 django-allauth~=0.25
 django-invitations~=1.7
 sendgrid-django~=2.0
+django-jinja~=2.1

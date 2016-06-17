@@ -1,11 +1,11 @@
-{% extends "base.html" %}
+{% extends "base.jinja" %}
 
 {% block body %}
 <section class="privacy above_the_fold">
   <div class="container">
     <div class="row">
       <div class="col-xs-12 col-sm-8 col-md-6 col_centered">
-        {% include "includes/splash_header.html" %}
+        {% include "includes/splash_header.jinja" %}
         <h1>
         Privacy Policy
         </h1>
@@ -60,7 +60,9 @@
 
 
           <h2>How we share your information</h2>
-          <p>Once you submit your Clear My Record inquiry on the Site, we share this information with the Public Defender in the County where you would like to clear an old conviction. Each California County has their own Public Defender, which processes applications to clear criminal records. Once your personal information is received by the Public Defender it is then subject to their respective privacy policies. All California Public Defenders are listed here: <a href="http://www.cpda.org/County/CountyPDWebSites.html">http://www.cpda.org/County/CountyPDWebSites.html</a></p>
+          <p>Once you submit your Clear My Record inquiry on the Site, we share this information with the Public Defender in the County where you would like to clear an old conviction. Each California County has their own Public Defender, which processes applications to clear criminal records. Once your personal information is received by the Public Defender it is then subject to their respective privacy policies. All California Public Defenders are listed here:
+          <a href="http://www.cpda.org/County/CountyPDWebSites.html"
+            >http://www.cpda.org/County/CountyPDWebSites.html</a></p>
           <p>We also disclose your personal information to Code for America employees, contractors, and affiliated organizations that need to know the information in order to provide the services of the Site.</p>
           <p>Besides County Public Defenders and individuals affiliated with the Site, we do not share your personal information with any other individuals or organizations, except to the minimal extent required by law.</p>
 
@@ -103,5 +105,5 @@
 
 
 
-{% include "includes/footer.html" %}
+{% include "includes/footer.jinja" %}
 {% endblock %}

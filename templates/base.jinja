@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    {% include "includes/head.html" %}
+    {% include "includes/head.jinja" %}
     <link rel="stylesheet" type="text/css" href="{{ static('css/main.css') }}">
   </head>
   <body
   {%- if body_class %} class="{{body_class}}"{%- endif %}>
     {% block body %}
-    {% include "includes/header.html" %}
+    {% include "includes/header.jinja" %}
 
     {% block main %}{% block content %}{% endblock %}{% endblock %}
     {% endblock body %}
@@ -18,8 +18,8 @@
       </script>
     {% endblock %}
 
-  {% include "includes/google_analytics.html" %}
-  {% include "includes/intercom.html" %}
+  {% include "includes/google_analytics.jinja" %}
+  {% include "includes/intercom.jinja" %}
 
 </body>
 </html>

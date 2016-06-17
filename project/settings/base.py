@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_jinja',
     'invitations',
     'storages',
     'intake',
@@ -43,13 +44,33 @@ ROOT_URLCONF = 'project.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'NAME': 'jinja',
+        'BACKEND': 'django_jinja.backend.Jinja2',
         'DIRS': [
             os.path.join(REPO_DIR, 'templates'),
         ],
         'APP_DIRS': True,
-        'OPTIONS': {
-            'environment': 'project.jinja2.jinja_config',
+        "OPTIONS": {
+            "match_extension": ".jinja",
+            "context_processors": [
+                "django.contrib.auth.context_processors.auth",
+                "django.template.context_processors.debug",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.static",
+                "django.template.context_processors.tz",
+                "django.contrib.messages.context_processors.messages",
+                'django.template.context_processors.request',
+            ],
+            "globals":{
+                "content": "project.content.constants",
+                "linkify": "project.jinja2.linkify",
+                "current_local_time": "project.jinja2.current_local_time",
+                "namify": "project.jinja2.namify",
+                "url_with_ids": "project.jinja2.url_with_ids",
+                "oxford_comma": "project.jinja2.oxford_comma",
+                "humanize": "project.jinja2.humanize",
+            }
         },
     },
     {
@@ -73,7 +94,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
-
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 # django-allauth and django-invitations
 ACCOUNT_FORMS = {
     'login': 'user_accounts.forms.LoginForm'

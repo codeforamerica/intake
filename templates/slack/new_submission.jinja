@@ -1,7 +1,7 @@
 New submission #{{submission_count}}!
 <{{ request.build_absolute_uri(
 		url('intake-filled_pdf',
-			kwargs=dict(submission_id=submission.id) )
+			submission_id=submission.id)
 	) }}|Review it here>
 {% if submission.get_contact_preferences() -%}
 They want to be contacted via {{ oxford_comma(submission.get_contact_preferences())}}

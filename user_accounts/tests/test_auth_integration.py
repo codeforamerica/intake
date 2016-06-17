@@ -50,52 +50,22 @@ class AuthIntegrationTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.have_an_invited_user_from_each_organization()
-
-    @classmethod
-    def have_two_orgs(cls):
-        organizations = getattr(cls, 'organizations', None)
-        if organizations: return organizations
         cls.orgs = [
             mock.OrganizationFactory.create()
             for i in range(2)
         ]
-        return cls.orgs
-
-    @classmethod
-    def have_a_superuser(cls):
-        superuser = getattr(cls, 'superuser', None)
-        if superuser: return superuser
         cls.superuser = mock.fake_superuser(
-            **cls.example_superuser
-            )
-        return cls.superuser
-
-    @classmethod
-    def have_an_invite_for_each_organization(cls):
-        invitations = getattr(cls, 'invitations', None)
-        if invitations: return invitations
-        orgs = cls.have_two_orgs()
-        superuser = cls.have_a_superuser()
+            **cls.example_superuser )
+        UserProfile.objects.create(user=cls.superuser, organization=cls.orgs[-1])
         cls.invitations = [
-            mock.fake_invitation(org, inviter=superuser)
-            for org in orgs
-        ]
-        return cls.invitations
-
-    @classmethod
-    def have_an_invited_user_from_each_organization(cls):
-        users = getattr(cls, 'users', None)
-        if users: return users
-        invites = cls.have_an_invite_for_each_organization()
+            mock.fake_invitation(org, inviter=cls.superuser)
+            for org in cls.orgs]
         cls.users = []
-        for invite in invites:
+        for invite in cls.invitations:
             user = invite.create_user_from_invite(
                 password=mock.fake_password,
-                name=mock.fake.name()
-                )
+                name=mock.fake.name())
             cls.users.append(user)
-        return cls.users
 
     def be_superuser(self):
         self.client.login(**self.example_superuser)
