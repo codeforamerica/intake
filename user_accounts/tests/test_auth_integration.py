@@ -48,8 +48,7 @@ class AuthIntegrationTestCase(TestCase):
         )
 
     @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
+    def setUpTestData(cls):
         cls.orgs = [
             mock.OrganizationFactory.create()
             for i in range(2)

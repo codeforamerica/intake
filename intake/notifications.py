@@ -21,6 +21,13 @@ class FrontAPIError(Exception):
     pass
 
 
+def check_that_remote_connections_are_okay(*output_if_not_okay):
+    if getattr(settings, 'DIVERT_REMOTE_CONNECTIONS', False):
+        print(*output_if_not_okay)
+        return False
+    return True
+
+
 class TemplateNotification:
 
     def __init__(self, default_context=None, **template_and_path_args):
@@ -93,7 +100,7 @@ class EmailNotification(TemplateNotification):
     def send(self, to=None, from_email=None, **context_args):
         content = self.render(**context_args)
         from_email = from_email or self.default_from_email
-        to = to or self.default_recipients
+        to = to or self.default_recipients  
         return mail.send_mail(
             subject=content.subject,
             message=content.body,
@@ -143,29 +150,27 @@ Error: {title}
         if hasattr(content, 'subject') and content.subject:
             data['subject'] = content.subject
         payload = json.dumps(data)
-        result = requests.post(
-            url=self.build_api_url_endpoint(),
-            data=payload,
-            headers=self.build_headers()
-            )
-        self.raise_post_errors(result)
-        return result
+        if check_that_remote_connections_are_okay(
+                'FRONT POST:', payload):
+            result = requests.post(
+                url=self.build_api_url_endpoint(),
+                data=payload,
+                headers=self.build_headers()
+                )
+            self.raise_post_errors(result)
+            return result
 
 
 
 class FrontEmailNotification(FrontNotification):
     channel_id = settings.FRONT_EMAIL_CHANNEL_ID
     def send(self, to, **context_args):
-        if getattr(settings, 'INSIDE_A_TEST', False):
-            to = [admin[1] for admin in settings.ADMINS]
         super().send(to, **context_args)
 
 
 class FrontSMSNotification(FrontNotification):
     channel_id = settings.FRONT_PHONE_CHANNEL_ID
     def send(self, to, **context_args):
-        if getattr(settings, 'INSIDE_A_TEST', False):
-            to = settings.ADMIN_PHONE_NUMBER
         super().send(to, **context_args)
 
 
@@ -181,10 +186,12 @@ class BasicSlackNotification:
         payload = json.dumps({
             'text': message_text
             })
-        return requests.post(
-            url=self.webhook_url,
-            data=payload,
-            headers=self.headers)
+        if check_that_remote_connections_are_okay(
+                'SLACK POST:', payload):
+            return requests.post(
+                url=self.webhook_url,
+                data=payload,
+                headers=self.headers)
 
 
 class SlackTemplateNotification(BasicSlackNotification, TemplateNotification):

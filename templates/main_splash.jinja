@@ -1,13 +1,15 @@
-{% extends "base.jinja" %}
+{% extends "public_base.jinja" %}
 
-{% block body %}
-
+{% block above_the_fold %}
 <section class="splash above_the_fold">
   <div class="container">
 
-  {% include "includes/splash_header.jinja" %}
+    <div class="row">
+      <div class="col-xs-12 col-sm-8 col-md-6">
+      {% include "includes/public_topbar.jinja" %}
+      </div>
+    </div>
 
-      {% block main %}
       <div class="row">
         <div class="col-md-6 col-sm-8 col-xs-12">
           <h1 class="main_headline new_section">
@@ -49,9 +51,12 @@
         </div>
       </div>
 
-      {% endblock main %}
   </div>
 </section>
+
+{% endblock above_the_fold %}
+{% block content %}
+
 
 <section class="about_the_service">
   <div class="container">
@@ -126,10 +131,6 @@
   </div>
 </section>
 
-{% include "includes/footer.jinja" %}
 
-{% endblock body %}
+{% endblock content %}
 
-
-{% block scripts %}
-{% endblock %}

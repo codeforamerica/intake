@@ -1,0 +1,16 @@
+{% extends "public_form_base.jinja" %}
+{% block head_title %}Sign In{% endblock %}
+{%- block header_title -%}
+Sign In
+{%- endblock header_title -%}
+{% block public_form %}
+      <form class="login" method="POST" action="{{ url('account_login') }}">
+        {% include "includes/csrf_field.jinja" %}
+        {{ form.as_p() }}
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+        <a class="button secondaryAction" href="{{ url('account_reset_password') }}">Forgot Password?</a>
+        <button class="primaryAction" type="submit">Sign In</button>
+      </form>
+{% endblock public_form %}

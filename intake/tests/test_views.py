@@ -14,8 +14,8 @@ from project.jinja2 import url_with_ids
 class TestViews(AuthIntegrationTestCase):
 
     @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
+    def setUpTestData(cls):
+        super().setUpTestData()
         cls.have_four_submissions()
         cls.have_a_fillable_pdf()
 

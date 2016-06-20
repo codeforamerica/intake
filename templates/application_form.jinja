@@ -1,19 +1,11 @@
-{% extends "base.jinja" %}
+{% extends "public_base.jinja" %}
 
-{% block body %}
-<section class="thanks above_the_fold">
-	<div class="container">
-		<div class="row">
-			<div class="col-xs-12 col-sm-8 col-md-6 col_centered">
-				{% include "includes/splash_header.jinja" %}
-				<h1>
-					Apply to Clear My Record
-				</h1>
-			</div>
-		</div>
-	</div>
-</section>
 
+{%- block header_title -%}
+Apply to Clear My Record
+{%- endblock header_title -%}
+
+{% block content %}
 <section class="application_form content">
 	<div class="container">
 		<div class="row">
@@ -439,7 +431,4 @@
 	</div>
 </section>
 
-
-{% include "includes/footer.jinja" %}
-
-{% endblock body %}
+{% endblock content %}

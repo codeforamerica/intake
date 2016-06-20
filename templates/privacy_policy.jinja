@@ -1,23 +1,13 @@
-{% extends "base.jinja" %}
+{% extends "public_base_single_column.jinja" %}
 
-{% block body %}
-<section class="privacy above_the_fold">
-  <div class="container">
-    <div class="row">
-      <div class="col-xs-12 col-sm-8 col-md-6 col_centered">
-        {% include "includes/splash_header.jinja" %}
-        <h1>
-        Privacy Policy
-        </h1>
-      </div>
-    </div>
-  </div>
-</section>
 
-<section class="privacy content">
-  <div class="container">
-    <div class="row">
-      <div class="col-xs-12 col-sm-8 col-md-6  col_centered">
+{%- block header_title -%}
+Privacy Policy
+{%- endblock header_title -%}
+
+{%- block section_class %}privacy{% endblock section_class -%}
+
+{% block column_content %}
           <p>{{ 'Clear My Record is a non-profit website run by Code for America Labs, Inc. ("Code for America", "we", "us", "our"). This Privacy Policy describes how the Clear My Record website (the "Site") collects, uses, and protects your personal information. By submitting your personal information on the Site, you agree to the terms in this Privacy Policy. If you do not agree with these terms, please do not use the Site. You can go to http://www.safeandjust.org/county-map/ to learn about other local programs to change your record.'|urlize }}</p>
 
           <h2>
@@ -94,16 +84,5 @@
             </li>
           </ul>
 
-          
-
           <p>We will do our best to resolve the issue.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-
-
-{% include "includes/footer.jinja" %}
-{% endblock %}
+{% endblock column_content %}

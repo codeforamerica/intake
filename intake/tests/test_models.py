@@ -11,8 +11,8 @@ from intake import models, anonymous_names
 class TestModels(TestCase):
 
     @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
+    def setUpTestData(cls):
+        super().setUpTestData()
         for key, models in create_fake_auth_models().items():
             setattr(cls, key, models)
 

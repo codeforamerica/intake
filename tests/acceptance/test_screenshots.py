@@ -2,6 +2,7 @@ import re
 from unittest import skipIf
 from unittest.mock import Mock, patch
 
+from django.test import override_settings
 from django.core import mail
 from django.core.urlresolvers import reverse
 
@@ -16,18 +17,18 @@ fake_password = auth_mock.fake_password
 
 
 
+@override_settings(DIVERT_REMOTE_CONNECTIONS=True)
 class TestWorkflows(base.ScreenSequenceTestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
+    def setUp(self):
+        super().setUp()
         for key, models in auth_mock.create_fake_auth_models().items():
-            setattr(cls, key, models)
-        cls.submissions = intake_mock.FormSubmissionFactory.create_batch(10)
-        cls.superuser = auth_mock.fake_superuser()
+            setattr(self, key, models)
+        self.submissions = intake_mock.FormSubmissionFactory.create_batch(10)
+        self.superuser = auth_mock.fake_superuser()
         accounts_models.UserProfile.objects.create(
-            user=cls.superuser,
-            organization=cls.organizations[-1])
+            user=self.superuser,
+            organization=self.organizations[-1])
 
     def get_link_from_email(self):
         self.browser.delete_all_cookies()
@@ -39,13 +40,26 @@ class TestWorkflows(base.ScreenSequenceTestCase):
         self.assertTrue(result)
         return result.group('link')
 
-    @skipIf(True, "off")
+    def test_public_views(self):
+        self.run_sequence(
+            "Browse public views",
+            [
+                S.get("splash page", '/'),
+                S.get("application form", '/apply/'),
+                S.get("thanks page", '/thanks/'),
+                S.get("privacy policy", '/privacy/'),
+                S.get("stats", '/stats/'),
+            ],
+            size=base.SMALL_DESKTOP
+            )
+
     def test_application_submission_workflow(self):
         # self.host = 'https://cmr-dev.herokuapp.com'
         sequence = [
             S.get('went to splash page', '/'),
             S.click_on('clicked apply now', 'Apply now'),
             S.fill_form('submitted form', **intake_mock.fake.sf_county_form_answers()),
+            S.click_on('clicked privacy policy', 'Privacy Policy'),
             ]
         sizes = {
             'Apply on a common mobile phone': base.COMMON_MOBILE,
@@ -55,7 +69,6 @@ class TestWorkflows(base.ScreenSequenceTestCase):
         for prefix, size in sizes.items():
             self.run_sequence(prefix, sequence, size=size)
 
-    @skipIf(True, "off")
     def test_login_and_password_reset_workflow(self):
         user = self.users[0]
         found_user = auth_models.User.objects.filter(email=user.email).first()
@@ -86,7 +99,7 @@ class TestWorkflows(base.ScreenSequenceTestCase):
                 S.get('logged out', reverse(AuthCase.logout_view)),
                 S.check_email('invite email'),
                 S.get('clicked link in email', self.get_link_from_email),
-                S.fill_form('entered name and password', name='My new name', password1=fake_password),
+                S.fill_form('entered name and password', name='Bartholomew McHumanperson', password1=fake_password),
                 S.get('went to applications', reverse('intake-app_index')),
             ], base.SMALL_DESKTOP )
 

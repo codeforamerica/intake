@@ -36,6 +36,10 @@ class Thanks(TemplateView):
     template_name = "thanks.jinja"
 
 
+class PrivacyPolicy(TemplateView):
+    template_name = "privacy_policy.jinja"
+
+
 class FilledPDF(View):
 
     def get(self, request, submission_id):
@@ -66,7 +70,7 @@ class Stats(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['stats'] = {
-            'recieved': models.FormSubmission.objects.count(),
+            'received': models.FormSubmission.objects.count(),
             'opened': models.FormSubmission.get_opened_apps().count()
         }
         return context
@@ -91,8 +95,7 @@ class ApplicationBundle(View, MultiSubmissionMixin):
             "app_bundle.jinja", {
                 'submissions': submissions,
                 'count': len(submissions),
-                'app_ids': submission_ids,
-                'body_class': 'admin',
+                'app_ids': submission_ids
              })
 
 
@@ -113,10 +116,7 @@ class Delete(View):
         submission = models.FormSubmission.objects.get(id=int(submission_id))
         return render(
             request,
-            self.template_name, {
-                'submission': submission,
-                'body_class': 'admin',
-                })
+            self.template_name, {'submission': submission})
 
     def post(self, request, submission_id):
         submission = models.FormSubmission.objects.get(id=int(submission_id))
@@ -196,6 +196,7 @@ class MultiIdPermanentRedirect(PermanentRedirectView):
 home = Home.as_view()
 apply_form = Apply.as_view()
 thanks = Thanks.as_view()
+privacy = PrivacyPolicy.as_view()
 stats = Stats.as_view()
 filled_pdf = FilledPDF.as_view()
 pdf_bundle = FilledPDFBundle.as_view()

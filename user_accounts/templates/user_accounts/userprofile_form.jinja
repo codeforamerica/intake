@@ -1,0 +1,21 @@
+{% extends "admin_base.jinja" %}
+
+
+{% block content %}
+<section>
+	<div class="container">
+		<div class="row">
+		
+			<form action="" method="post">{% csrf_token %}
+			    {{ form.as_p() }}
+			    <input type="submit" value="Update" />
+			</form>
+
+			<a href="{{ url('account_change_password') }}" class="btn btn-lg btn-primary">
+				Change your password
+			</a>
+			
+		</div>
+	</div>
+</section>
+{% endblock content %}

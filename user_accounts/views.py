@@ -9,6 +9,8 @@ from . import forms, models
 
 
 class CustomLoginView(allauth_views.LoginView):
+    template_name = "user_accounts/login.jinja"
+
 
     def get_form_class(self):
         return forms.LoginForm
@@ -33,7 +35,7 @@ class CustomSignupView(allauth_views.SignupView):
 
 
 class CustomSendInvite(SendInvite):
-    template_name = "user_accounts/invite_form.html"
+    template_name = "user_accounts/invite_form.jinja"
     form_class = forms.InviteForm
     success_url = reverse_lazy("user_accounts-profile")
 
@@ -46,7 +48,7 @@ class CustomSendInvite(SendInvite):
 
 
 class UserProfileView(FormView):
-    template_name = "user_accounts/userprofile_form.html"
+    template_name = "user_accounts/userprofile_form.jinja"
     form_class = forms.UserProfileForm
     success_url = reverse_lazy("user_accounts-profile")
 
@@ -80,6 +82,7 @@ class UserProfileView(FormView):
 
 
 class PasswordResetView(allauth_views.PasswordResetView):
+    template_name = 'user_accounts/request_password_reset.jinja'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -91,8 +94,12 @@ class PasswordResetView(allauth_views.PasswordResetView):
         return context
 
 
+class PasswordResetSentView(allauth_views.PasswordResetDoneView):
+    template_name = 'user_accounts/password_reset_sent.jinja'
+
+
 class PasswordResetFromKeyView(allauth_views.PasswordResetFromKeyView):
-    template_name = 'user_accounts/change_password.html'
+    template_name = 'user_accounts/change_password.jinja'
  
     def get_form_class(self):
         return forms.SetPasswordForm
@@ -102,8 +109,9 @@ class PasswordResetFromKeyView(allauth_views.PasswordResetFromKeyView):
         context['reset_user'] = getattr(self, 'reset_user', None)
         return context
 
+
 class PasswordChangeView(allauth_views.PasswordChangeView):
-    template_name = 'user_accounts/change_password.html'
+    template_name = 'user_accounts/change_password.jinja'
     success_url = reverse_lazy("user_accounts-profile")
 
     def get_form_class(self):
