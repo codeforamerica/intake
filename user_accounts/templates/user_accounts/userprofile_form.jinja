@@ -17,33 +17,39 @@ Account settings
 			
 			<ul class="profile_menu">
 				<li class="profile_menu-item">
-					<a href="{{ url('account_change_password') }}" class="btn btn-default">
-						Change your password
-					</a>
-				</li>
-				<li class="profile_menu-item">
 					<a href="{{ url('intake-app_index') }}" class="btn btn-default">
+						<span class="glyphicon glyphicon-list"></span>
 						View all applications
 					</a>
 				</li>
 				<li class="profile_menu-item">
+					<a href="{{ url('account_change_password') }}" class="btn btn-default">
+						<span class="glyphicon glyphicon-lock"></span>
+						Change your password
+					</a>
+				</li>
+				<li class="profile_menu-item">
 					<a href="{{ url('intake-stats') }}" class="btn btn-default">
+						<span class="glyphicon glyphicon-stats"></span>
 						View aggregate stats
 					</a>
 				</li>
 				<li class="profile_menu-item">
 					<a href="{{ url('intake-home') }}" class="btn btn-default">
+						<span class="glyphicon glyphicon-eye-open"></span>
 						View the splash page
 					</a>
 				</li>
 				{% if user.is_staff %}
 				<li class="profile_menu-item">
 					<a href="{{ url('user_accounts-send_invite') }}" class="btn btn-default">
+						<span class="glyphicon glyphicon-user"></span>
 						Invite a new user
 					</a>
 				</li>
 				<li class="profile_menu-item">
 					<a href="{{ url('admin:user_accounts_organization_add') }}" class="btn btn-default">
+						<span class="glyphicon glyphicon-plus"></span>
 						Add a new organization
 					</a>
 				</li>
