@@ -120,6 +120,11 @@ class Delete(View):
 
     def post(self, request, submission_id):
         submission = models.FormSubmission.objects.get(id=int(submission_id))
+        models.ApplicationLogEntry.objects.create(
+            user=request.user,
+            submission_id=submission_id,
+            event_type=models.ApplicationLogEntry.DELETED
+            )
         submission.delete()
         notifications.slack_submissions_deleted.send(
             submissions=[submission],
