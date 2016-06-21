@@ -228,6 +228,10 @@ h2.site_name {
   }
 }
 
+body.admin {
+  padding-bottom: 3em;
+}
+
 body.admin .container {
   max-width: 100rem;
 }
@@ -278,7 +282,12 @@ body.admin .top_bar {
     background-color: @gray-dark;
   }
 }
-
+.iframe_container {
+  background: @gray-dark;
+  color: #fff;
+  width: 800px;
+  height: 600px;
+}
 
 .top_bar {
   padding: 1.5em 0;
@@ -292,32 +301,6 @@ body.admin .top_bar {
   margin-right: .5em;
 }
 
-.loading .glyphicon-refresh {
-   -webkit-animation: fa-spin 2s infinite linear;
-  animation: fa-spin 2s infinite linear;
-}
-
-
-@-webkit-keyframes fa-spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(359deg);
-    transform: rotate(359deg);
-  }
-}
-@keyframes fa-spin {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(359deg);
-    transform: rotate(359deg);
-  }
-}
 
 @media (min-width: @screen-sm-min) {
 

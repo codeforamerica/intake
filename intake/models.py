@@ -220,9 +220,11 @@ class FillablePDF(models.Model):
         return parser.fill_pdf(self.get_pdf(), translator(*args, **kwargs))
 
     def fill_many(self, data_set, *args, **kwargs):
-        parser = get_parser()
-        translator = self.get_translator()
-        return parser.fill_many_pdfs(self.get_pdf(), [
-            translator(d, *args, **kwargs)
-            for d in data_set
-            ])
+        if data_set:
+            parser = get_parser()
+            translator = self.get_translator()
+            translated = [translator(d, *args, **kwargs)
+                            for d in data_set]
+            if len(translated) == 1:
+                return parser.fill_pdf(self.get_pdf(), translated[0])
+            return parser.fill_many_pdfs(self.get_pdf(), translated)
