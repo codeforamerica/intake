@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django_jinja',
     'invitations',
     'storages',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE_CLASSES = [
