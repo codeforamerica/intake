@@ -2,13 +2,20 @@
 {% import 'macros.jinja' as macros %}
 
 
+{%- block header_title -%}
+Account settings
+{%- endblock header_title -%}
+
 {% block form %}
 			<form action="" method="post">{% csrf_token %}
 			    {{ macros.render_form_fields(form) }}
-			    <input type="submit" value="Update" />
+			    <p>
+			    	<input class="btn btn-lg btn-primary" type="submit" value="Update" />	
+			    </p>
 			</form>
-
-			<a href="{{ url('account_change_password') }}" class="btn btn-lg btn-primary">
-				Change your password
-			</a>
+			<p>
+				<a href="{{ url('account_change_password') }}" class="btn btn-sm btn-default">
+					Change your password
+				</a>
+			</p>
 {% endblock form %}

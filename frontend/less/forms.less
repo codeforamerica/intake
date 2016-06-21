@@ -43,6 +43,8 @@ section.content.application_form {
 }
 .field + .field { margin-top: 1.5em; }
 .field + .note { margin-top: 1.5em; }
+.field + p { margin-top: 1.5em; }
+form p + p { margin-top: 1.5em; }
 span + .subfield { margin-top: .5em; }
 .options_list {
 	margin: .25em -.25em;
@@ -64,6 +66,18 @@ button {
 		margin: 0.5em 0.25em;
 		background-color: inherit; }
 button[type="submit"] { .btn-primary; .btn-lg; }
+
+ul.errorlist {
+	padding: 0;
+}
+ul.errorlist li {
+	&:before {
+		.glyphicon;
+		content: "\e101";
+		padding-right: 0.5em;
+		color: @brand-danger;
+	}
+}
 
 .subfield-row > .subfield { display: inline-block; }
 .address_city { width: 18em; }

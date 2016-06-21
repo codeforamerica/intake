@@ -1,4 +1,7 @@
 {% macro render_form_fields(form) %}
+{% if form.non_field_errors() %}
+{{ form.non_field_errors() }}
+{% endif %}
 {% for field in form %}
 <div class="field {{ field.html_name }}">
 	{% if field.errors %}

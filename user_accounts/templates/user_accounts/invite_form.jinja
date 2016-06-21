@@ -1,4 +1,5 @@
 {% extends "admin_form_base.jinja" %}
+{% import 'macros.jinja' as macros %}
 
 {%- block header_title -%}
 Invite a new user
@@ -7,16 +8,9 @@ Invite a new user
 <form id="invite-form" method="POST" action="{{ url('invitations:send-invite') }}">
   <p>Please add an email and organization below. The user will recieve an email with instructions.</p>
   {% include "includes/csrf_field.jinja" %}
-  <div class="form-group">
-    {{ form.email.errors }}
-    {{ form.email.label_tag() }}
-    {{ form.email }}
-  </div>
-  <div class="form-group">
-    {{ form.organization.errors }}
-    {{ form.organization.label_tag() }}
-    {{ form.organization }}
-  </div>
-  <input type="submit" value="Invite" class="btn btn-primary generic-ajax-submit">  
+  {{ macros.render_form_fields(form) }}
+  <p>
+    <input type="submit" value="Invite" class="btn btn-lg btn-primary generic-ajax-submit">  
+  </p>
 </form> 
 {% endblock form %}

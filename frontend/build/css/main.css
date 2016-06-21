@@ -3648,6 +3648,12 @@ section.content.application_form {
 .field + .note {
   margin-top: 1.5em;
 }
+.field + p {
+  margin-top: 1.5em;
+}
+form p + p {
+  margin-top: 1.5em;
+}
 span + .subfield {
   margin-top: .5em;
 }
@@ -3736,6 +3742,23 @@ fieldset[disabled] button[type="submit"].focus {
 button[type="submit"] .badge {
   color: #FEE228;
   background-color: #004A6C;
+}
+ul.errorlist {
+  padding: 0;
+}
+ul.errorlist li:before {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "\e101";
+  padding-right: 0.5em;
+  color: #d9534f;
 }
 .subfield-row > .subfield {
   display: inline-block;
@@ -3932,7 +3955,18 @@ body.admin header {
   background-color: #333333;
   color: #fff;
   font-size: .875em;
+}
+body.admin .top_bar {
+  line-height: 2.5em;
   font-weight: 100;
+}
+h2.site_name {
+  font-size: 1.25em;
+  margin: 0;
+  padding: 0;
+  font-weight: 500;
+  float: left;
+  line-height: inherit;
 }
 .flash_message {
   background-color: #555555;
@@ -3946,6 +3980,19 @@ body.admin header {
 }
 .flash_message.success {
   background-color: #5cb85c;
+}
+.flash_message.success .flash_message-body:before {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "\e084";
+  padding-right: 0.5em;
 }
 body.admin .container {
   max-width: 100rem;
@@ -3973,6 +4020,9 @@ a.logout_link {
 }
 .authenticated .username {
   font-weight: 500;
+}
+body.admin .top_bar {
+  padding: 1em 0;
 }
 .top_bar {
   padding: 1.5em 0;
