@@ -9,6 +9,8 @@ DATABASES = {
         default='postgresql://postgres@localhost:5432/intake')
 }
 
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
+
 # settings for file uploads
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', '')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', '')
@@ -25,7 +27,6 @@ else:
 # static files location
 STATIC_ROOT = os.environ.get('STATIC_ROOT', 
     os.path.join(REPO_DIR, 'project', 'static'))
-
 
 # Email settings
 EMAIL_BACKEND = "sgbackend.SendGridBackend"
