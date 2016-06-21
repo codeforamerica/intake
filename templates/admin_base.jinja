@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% include "includes/head.jinja" %}
+    <link rel="stylesheet" type="text/css" href="{{ static('css/main.css') }}">
+  </head>
+  <body class="{%- block body_class -%}admin{%- endblock body_class -%}">
+    {% block body %}
+      {% include "includes/header.jinja" %}
+      {% block main %}
+        {% block content %}
+        {% endblock content %}
+      {% endblock main %}
+    {% endblock body %}
+
+    {% block scripts %}
+    {% endblock scripts %}
+
+</body>
+</html>

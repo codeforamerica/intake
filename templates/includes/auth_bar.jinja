@@ -1,0 +1,9 @@
+        {% if request.user.is_authenticated() %}
+        <div class="auth-notice authenticated">
+          <span class="message">Signed in as</span>
+          <a href="{{ url('user_accounts-profile') }}">
+          <span class="username">{{ request.user.profile.get_display_name() }}</span>
+          </a>
+          <a href="{{ url('account_logout') }}" class="btn btn-sm logout_link">Sign out</a>
+        </div>
+        {% endif %}

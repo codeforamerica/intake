@@ -16,13 +16,13 @@ from project.jinja2 import url_with_ids
 
 
 class Home(TemplateView):
-    template_name = "main_splash.html"
+    template_name = "main_splash.jinja"
 
 
 class Apply(View):
 
     def get(self, request):
-        return render(request, "application_form.html")
+        return render(request, "application_form.jinja")
 
     def post(self, request):
         submission = models.FormSubmission.create_from_answers(dict(request.POST))
@@ -33,7 +33,11 @@ class Apply(View):
 
 
 class Thanks(TemplateView):
-    template_name = "thanks.html"
+    template_name = "thanks.jinja"
+
+
+class PrivacyPolicy(TemplateView):
+    template_name = "privacy_policy.jinja"
 
 
 class FilledPDF(View):
@@ -53,7 +57,7 @@ class FilledPDF(View):
 
 
 class ApplicationIndex(TemplateView):
-    template_name = "app_index.html"
+    template_name = "app_index.jinja"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['submissions'] = models.FormSubmission.objects.all().prefetch_related('logs__user')
@@ -62,11 +66,11 @@ class ApplicationIndex(TemplateView):
 
 
 class Stats(TemplateView):
-    template_name = "stats.html"
+    template_name = "stats.jinja"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['stats'] = {
-            'recieved': models.FormSubmission.objects.count(),
+            'received': models.FormSubmission.objects.count(),
             'opened': models.FormSubmission.get_opened_apps().count()
         }
         return context
@@ -88,11 +92,10 @@ class ApplicationBundle(View, MultiSubmissionMixin):
         models.FormSubmission.mark_viewed(submissions, request.user)
         return render(
             request,
-            "app_bundle.html", {
+            "app_bundle.jinja", {
                 'submissions': submissions,
                 'count': len(submissions),
-                'app_ids': submission_ids,
-                'body_class': 'admin',
+                'app_ids': submission_ids
              })
 
 
@@ -108,15 +111,12 @@ class FilledPDFBundle(View, MultiSubmissionMixin):
 
 
 class Delete(View):
-    template_name = "delete_page.html"
+    template_name = "delete_page.jinja"
     def get(self, request, submission_id):
         submission = models.FormSubmission.objects.get(id=int(submission_id))
         return render(
             request,
-            self.template_name, {
-                'submission': submission,
-                'body_class': 'admin',
-                })
+            self.template_name, {'submission': submission})
 
     def post(self, request, submission_id):
         submission = models.FormSubmission.objects.get(id=int(submission_id))
@@ -146,6 +146,22 @@ class MarkProcessed(MarkSubmissionStepView):
     process_step = models.ApplicationLogEntry.PROCESSED
     notification_function = notifications.slack_submissions_processed.send
 
+
+home = Home.as_view()
+apply_form = Apply.as_view()
+thanks = Thanks.as_view()
+privacy = PrivacyPolicy.as_view()
+stats = Stats.as_view()
+filled_pdf = FilledPDF.as_view()
+pdf_bundle = FilledPDFBundle.as_view()
+app_index = ApplicationIndex.as_view()
+app_bundle = ApplicationBundle.as_view()
+mark_processed = MarkProcessed.as_view()
+delete_page = Delete.as_view()
+
+
+######## REDIRECT VIEWS ########
+# for backwards compatibility
 
 class PermanentRedirectView(View):
     '''Permanently redirects to a url
@@ -193,16 +209,7 @@ class MultiIdPermanentRedirect(PermanentRedirectView):
             [s.id for s in submissions])
 
 
-home = Home.as_view()
-apply_form = Apply.as_view()
-thanks = Thanks.as_view()
-stats = Stats.as_view()
-filled_pdf = FilledPDF.as_view()
-pdf_bundle = FilledPDFBundle.as_view()
-app_index = ApplicationIndex.as_view()
-app_bundle = ApplicationBundle.as_view()
-mark_processed = MarkProcessed.as_view()
-delete_page = Delete.as_view()
+
 
 
 

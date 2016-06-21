@@ -1,6 +1,6 @@
 from unittest import TestCase as BaseTestCase
 from unittest.mock import Mock, patch, MagicMock
-from django.test import TestCase
+from django.test import TestCase, override_settings
 
 from django.core import mail
 from django.conf import settings
@@ -16,8 +16,6 @@ class TestNotifications(TestCase):
 
     def setUp(self):
         TestCase.setUp(self)
-        from project.jinja2 import jinja_config
-        jinja_config()
 
     def test_email(self):
         mail.send_mail(
@@ -29,7 +27,7 @@ class TestNotifications(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].from_email, settings.MAIL_DEFAULT_SENDER)
 
-    @patch('intake.notifications.get_template')
+    @patch('intake.notifications.loader.get_template')
     def test_email_notification_class(self, *args):
         from intake.notifications import EmailNotification
         default = EmailNotification("Hello {{name}}", "basic_email.txt")
@@ -39,14 +37,12 @@ class TestNotifications(TestCase):
         self.assertEqual(email.subject, "Hello Ben")
 
     @patch('intake.notifications.requests.post')
-    @patch('intake.notifications.get_template')
-    @patch('intake.notifications.settings')
-    def test_front_notifications(self, settings, get_template, mock_post):
+    @patch('intake.notifications.loader.get_template')
+    @override_settings(FRONT_API_TOKEN='mytoken', ADMIN_PHONE_NUMBER='+19993336666')
+    def test_front_notifications(self, get_template, mock_post):
         # check all the basics using an SMS example
-        settings.FRONT_API_TOKEN = 'mytoken'
         mock_post.return_value = mock.FrontSendMessageResponse.success()
-
-        from project.jinja2 import jinja_config as jinja
+        from intake.notifications import jinja
         get_template.return_value = jinja.env.from_string(
             "{{message}} can you read me?")
 

@@ -3616,7 +3616,9 @@ section.content.application_form {
 .field input {
   font-weight: 400;
 }
-.field input[type="text"] {
+.field input[type="text"],
+.field input[type="email"],
+.field input[type="password"] {
   display: block;
   width: 100%;
   font-size: 1.25em;
@@ -3626,6 +3628,10 @@ section.content.application_form {
   display: block;
   font-size: 1.25em;
   padding: .25em .5em;
+}
+.field input[type="checkbox"] + span.field-display_text {
+  display: inline-block;
+  padding-left: .5em;
 }
 .field legend {
   font-weight: 700;
@@ -3640,6 +3646,12 @@ section.content.application_form {
   margin-top: 1.5em;
 }
 .field + .note {
+  margin-top: 1.5em;
+}
+.field + p {
+  margin-top: 1.5em;
+}
+form p + p {
   margin-top: 1.5em;
 }
 span + .subfield {
@@ -3731,6 +3743,23 @@ button[type="submit"] .badge {
   color: #FEE228;
   background-color: #004A6C;
 }
+ul.errorlist {
+  padding: 0;
+}
+ul.errorlist li:before {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "\e101";
+  padding-right: 0.5em;
+  color: #d9534f;
+}
 .subfield-row > .subfield {
   display: inline-block;
 }
@@ -3751,9 +3780,6 @@ button[type="submit"] .badge {
 }
 .phone_number input[name="phone_number"] {
   width: 9em;
-}
-header {
-  padding: 1em 0;
 }
 .top_bar a {
   color: inherit;
@@ -3819,7 +3845,6 @@ p.step_headline {
 }
 .container {
   margin: 0 auto;
-  padding-bottom: 20px;
 }
 .above_the_fold {
   background-color: #069ED6;
@@ -3828,14 +3853,14 @@ p.step_headline {
 .splash.above_the_fold {
   background-color: #004A6C;
 }
-.about_the_service,
-section.content {
+body.public .about_the_service,
+body.public section.content {
   background-color: #E5E5E5;
 }
-.about_the_service p,
-section.content p,
-.about_the_service h2,
-section.content h2 {
+body.public .about_the_service p,
+body.public section.content p,
+body.public .about_the_service h2,
+body.public section.content h2 {
   text-align: left;
   max-width: 72rem;
 }
@@ -3852,9 +3877,6 @@ section.content h2 {
 }
 .privacy_description ul {
   list-style-type: circle;
-}
-span.glyphicon {
-  padding-right: 10px;
 }
 .time_expectation h2 {
   text-align: center;
@@ -3876,6 +3898,9 @@ span.glyphicon {
 }
 .footer_info {
   margin-top: 20px;
+}
+.footer_info li .glyphicon {
+  margin-right: .5em;
 }
 .cfa-logo {
   width: 12em;
@@ -3929,8 +3954,99 @@ section.footer.container.new_section {
   padding-bottom: 50px;
   color: #fff;
 }
-.breadcrumb .current {
+body.admin header {
+  background-color: #333333;
+  color: #fff;
+  font-size: .875em;
+}
+body.admin .top_bar {
+  line-height: 2.5em;
+  font-weight: 100;
+}
+h2.site_name {
+  font-size: 1.25em;
+  margin: 0;
+  padding: 0;
+  font-weight: 500;
+  float: left;
+  line-height: inherit;
+}
+.flash_message {
+  background-color: #555555;
+  padding: .25em 0;
+}
+.flash_message:first-child {
+  padding-top: 0.5em;
+}
+.flash_message:last-child {
+  padding-bottom: 0.5em;
+}
+.flash_message.success {
+  background-color: #5cb85c;
+}
+.flash_message.success .flash_message-body:before {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "\e084";
+  padding-right: 0.5em;
+}
+body.admin .container {
+  max-width: 100rem;
+}
+body.admin header .btn {
+  color: #fff;
+  border: 1px solid #fff;
+  background-color: inherit;
+}
+body.admin header .btn:hover {
   color: #333333;
+  background-color: #fff;
+}
+table.applications_list .btn {
+  background: inherit;
+  border: 1px solid #069ED6;
+  color: #069ED6;
+}
+table.applications_list .btn:hover {
+  color: #fff;
+  background-color: #069ED6;
+}
+a.logout_link {
+  margin-left: 1em;
+}
+.authenticated .username {
+  font-weight: 500;
+}
+body.admin .top_bar {
+  padding: 1em 0;
+}
+.profile_menu {
+  padding: 0;
+}
+.profile_menu-item + .profile_menu-item {
+  margin-top: .5em;
+}
+.profile_menu .btn {
+  color: #333333;
+  border: 1px solid #333333;
+  background-color: inherit;
+}
+.profile_menu .btn:hover {
+  color: #fff;
+  background-color: #333333;
+}
+.top_bar {
+  padding: 1.5em 0;
+}
+.auth-notice {
+  float: right;
 }
 .btn .glyphicon {
   margin-right: .5em;
@@ -3985,9 +4101,6 @@ section.footer.container.new_section {
   }
 }
 @media (min-width: 992px) {
-  header {
-    padding: 1.5em 0;
-  }
   .splash.above_the_fold {
     min-height: 40em;
   }

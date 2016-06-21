@@ -1,0 +1,35 @@
+{% macro render_form_fields(form) %}
+{% if form.non_field_errors() %}
+{{ form.non_field_errors() }}
+{% endif %}
+{% for field in form %}
+<div class="field {{ field.html_name }}">
+	{% if field.errors %}
+	{{ field.errors }}
+	{% endif %}
+	<label class="field-wrapping_label">
+		{% if field.field.widget.__class__.__name__ in ["CheckboxInput"] %}
+			{{ field }}
+			<span class="field-display_text">
+				{{ field.label }}
+			</span>
+			{% if field.help_text %}
+				<span class="field-help_text">
+					{{ field.help_text }}
+				</span>
+			{% endif %}
+		{% else %}
+			<span class="field-display_text">
+				{{ field.label }}
+			</span>
+			{% if field.help_text %}
+				<span class="field-help_text">
+					{{ field.help_text }}
+				</span>
+			{% endif %}
+			{{ field }}
+		{% endif %}
+	</label>
+</div>
+{% endfor %}
+{% endmacro %}

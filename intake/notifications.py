@@ -5,10 +5,9 @@ import requests
 from django.core import mail
 from django.conf import settings
 
-from django.template.loader import get_template
-from project.jinja2 import jinja_config as jinja
-from django.template import Context
+from django.template import loader, Context
 
+jinja = loader.engines['jinja']
 
 class JinjaNotInitializedError(Exception):
     pass
@@ -20,6 +19,13 @@ class DuplicateTemplateError(Exception):
 
 class FrontAPIError(Exception):
     pass
+
+
+def check_that_remote_connections_are_okay(*output_if_not_okay):
+    if getattr(settings, 'DIVERT_REMOTE_CONNECTIONS', False):
+        print(*output_if_not_okay)
+        return False
+    return True
 
 
 class TemplateNotification:
@@ -43,7 +49,7 @@ class TemplateNotification:
         if from_string:
             self.templates[key] = jinja.env.from_string(string)
         else:
-            self.templates[key] = get_template(string)
+            self.templates[key] = loader.get_template(string)
 
     def get_context(self, context_dict):
         context = self.default_context
@@ -94,7 +100,7 @@ class EmailNotification(TemplateNotification):
     def send(self, to=None, from_email=None, **context_args):
         content = self.render(**context_args)
         from_email = from_email or self.default_from_email
-        to = to or self.default_recipients
+        to = to or self.default_recipients  
         return mail.send_mail(
             subject=content.subject,
             message=content.body,
@@ -144,22 +150,28 @@ Error: {title}
         if hasattr(content, 'subject') and content.subject:
             data['subject'] = content.subject
         payload = json.dumps(data)
-        result = requests.post(
-            url=self.build_api_url_endpoint(),
-            data=payload,
-            headers=self.build_headers()
-            )
-        self.raise_post_errors(result)
-        return result
+        if check_that_remote_connections_are_okay(
+                'FRONT POST:', payload):
+            result = requests.post(
+                url=self.build_api_url_endpoint(),
+                data=payload,
+                headers=self.build_headers()
+                )
+            self.raise_post_errors(result)
+            return result
 
 
 
 class FrontEmailNotification(FrontNotification):
     channel_id = settings.FRONT_EMAIL_CHANNEL_ID
+    def send(self, to, **context_args):
+        super().send(to, **context_args)
 
 
 class FrontSMSNotification(FrontNotification):
     channel_id = settings.FRONT_PHONE_CHANNEL_ID
+    def send(self, to, **context_args):
+        super().send(to, **context_args)
 
 
 
@@ -174,10 +186,12 @@ class BasicSlackNotification:
         payload = json.dumps({
             'text': message_text
             })
-        return requests.post(
-            url=self.webhook_url,
-            data=payload,
-            headers=self.headers)
+        if check_that_remote_connections_are_okay(
+                'SLACK POST:', payload):
+            return requests.post(
+                url=self.webhook_url,
+                data=payload,
+                headers=self.headers)
 
 
 class SlackTemplateNotification(BasicSlackNotification, TemplateNotification):
@@ -198,24 +212,24 @@ slack_simple = BasicSlackNotification()
 
 # submission, submission_count, request
 slack_new_submission = SlackTemplateNotification(
-    message_template_path="new_submission.slack")
+    message_template_path="slack/new_submission.jinja")
 
 # submissions, user
 slack_submissions_viewed = SlackTemplateNotification(
     {'action': 'opened'},
-    message_template_path="bundle_action.slack")
+    message_template_path="slack/bundle_action.jinja")
 
 # submissions, user
 slack_submissions_processed = SlackTemplateNotification(
     {'action': 'processed'},
-    message_template_path="bundle_action.slack")
+    message_template_path="slack/bundle_action.jinja")
 
 # submissions, user
 slack_submissions_deleted = SlackTemplateNotification(
     {'action': 'deleted'},
-    message_template_path="bundle_action.slack")
+    message_template_path="slack/bundle_action.jinja")
 
 # count, request, submission_ids
 front_email_daily_app_bundle = FrontEmailNotification(
     subject_template="{{current_local_time('%a %b %-d, %Y')}}: Online applications to Clean Slate",
-    body_template_path='app_bundle_email.txt')
+    body_template_path='email/app_bundle_email.jinja')

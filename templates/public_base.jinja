@@ -1,0 +1,35 @@
+{% extends "admin_base.jinja" %}
+
+{% block social_meta %}
+	{% include "includes/social_meta.jinja" %}
+{% endblock social_meta %}
+
+{%- block body_class -%}{%- endblock body_class -%}
+
+{% block body %}
+
+	{% block above_the_fold %}
+	<section class="thanks above_the_fold">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-8 col-md-6 col_centered">
+				{% include "includes/public_topbar.jinja" %}
+					<h1>
+						{%- block header_title -%}
+						{%- endblock header_title -%}
+					</h1>
+				</div>
+			</div>
+		</div>
+	</section>
+	{% endblock above_the_fold %}
+	{% block main %}
+		{% block content %}
+		{% endblock content %}
+	{% endblock main %}
+	{% include "includes/footer.jinja" %}
+{% endblock body %}
+{% block scripts %}
+	{% include "includes/google_analytics.jinja" %}
+	{% include "includes/intercom.jinja" %}
+{% endblock scripts %}

@@ -1,0 +1,19 @@
+{% extends "admin_form_base.jinja" %}
+{% import 'macros.jinja' as macros %}
+{% block head_title %}Sign up{% endblock %}
+{%- block header_title -%}
+Sign up
+{%- endblock header_title -%}
+{% block form %}
+	<form class="signup" id="signup_form" method="post" action="{{ url('account_signup') }}">
+
+		{% include "includes/csrf_field.jinja" %}
+		{{ macros.render_form_fields(form) }}
+		{% if redirect_field_value %}
+		<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+		{% endif %}
+		<p>
+			<button class="btn btn-lg btn-primary" type="submit">Sign Up</button>
+		</p>
+	</form>
+{% endblock form %}

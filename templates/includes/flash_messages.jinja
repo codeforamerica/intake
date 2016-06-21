@@ -1,0 +1,18 @@
+
+    {% block flash_messages %}
+    <div class="flash_messages">
+      {%- if messages -%}
+      {%- for message in messages -%}
+      <div class="flash_message {{ message.tags }}">
+      	<div class="container">
+	      	<div class="row">
+            <span class="flash_message-body">
+            {{ message }}
+            </span>
+	      	</div>
+      	</div>
+      </div>
+      {%- endfor %}
+      {%- endif %}
+    </div>
+    {% endblock %}

@@ -9,5 +9,6 @@ whitenoise~=3.0
 boto~=2.40
 django-storages~=1.4
 django-allauth~=0.25
-django-invitations~=1.7
+git+git://github.com/bengolder/django-invitations.git#egg=django-invitations
 sendgrid-django~=2.0
+django-jinja~=2.1

@@ -14,8 +14,8 @@ from project.jinja2 import url_with_ids
 class TestViews(AuthIntegrationTestCase):
 
     @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
+    def setUpTestData(cls):
+        super().setUpTestData()
         cls.have_four_submissions()
         cls.have_a_fillable_pdf()
 
@@ -218,11 +218,6 @@ class TestViews(AuthIntegrationTestCase):
             new = url_with_ids(new_view, [s.id for s in ported_models_query])
             self.assertRedirects(response, new,
                 status_code=301, fetch_redirect_response=False)
-
-
-    @skipIf(True, "not yet implemented")
-    def test_old_urls_permanently_redirect_to_new_urls(self):
-        pass
 
     @skipIf(True, "not yet implemented")
     def test_authenticated_user_cannot_see_apps_to_other_org(self):

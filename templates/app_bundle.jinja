@@ -1,0 +1,33 @@
+{% extends "admin_base.jinja" %}
+
+{% block content %}
+
+<section class="content">
+	<div class="container">
+
+		<div class="row">				
+			{% if unopened %}
+			<h1>{{ count }} new unopened applications</h1>
+			{% else %}
+			<h1>{{ count }} applications</h1>
+			{% endif %}
+
+			<ol class="app_bundle_list">
+				{% for submission in submissions %}
+					<li>{{ namify(submission.answers.get("last_name", "")) }},
+					{{ namify(submission.answers.get("first_name", "")) }}</li>
+				{% endfor %}
+			</ol>
+
+		</div>
+
+		<div class="row">
+			<div class="iframe_container">
+				<iframe class="pdf_inset" src="{{
+				url_with_ids('intake-pdf_bundle', app_ids) 
+				}}" frameborder="0" width="800" height="600"></iframe>
+			</div>
+		</div>
+	</div>
+</section>
+{% endblock content %}

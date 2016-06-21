@@ -11,6 +11,10 @@ urlpatterns = [
         views.PasswordResetView.as_view(),
         name='user_accounts-send_password_reset'),
 
+    url(r'^accounts/password/reset/done/$',
+        views.PasswordResetSentView.as_view(),
+        name='user_accounts-password_reset_sent'),
+
     url(r"^accounts/password/reset/key/(?P<uidb36>[0-9A-Za-z]+)-(?P<key>.+)/$",
         views.PasswordResetFromKeyView.as_view(),
         name="user_accounts-reset_password_from_key"),

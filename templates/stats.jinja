@@ -1,0 +1,11 @@
+{% extends "public_base_single_column.jinja" %}
+
+{%- block header_title -%}
+Current Stats for Clear My Record
+{%- endblock header_title -%}
+{%- block section_class %}stats{% endblock section_class -%}
+{% block column_content %}
+	<h2>Since April 18th, 2016:</h2>
+	<h3>{{ stats.received }} total applications received</h3>
+	<h3>{{ stats.opened }} total applications opened</h3>
+{% endblock column_content %}

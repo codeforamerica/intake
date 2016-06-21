@@ -23,7 +23,7 @@ section.content.application_form {
 .field {
 	input {
 		font-weight: 400; }
-	input[type="text"] { 
+	input[type="text"], input[type="email"], input[type="password"] { 
 		display: block; width: 100%;
 		font-size: 1.25em;
 		padding: .25em .5em; }
@@ -31,6 +31,10 @@ section.content.application_form {
 		display: block;
 		font-size: 1.25em;
 		padding: .25em .5em; }
+	input[type="checkbox"] + span.field-display_text {
+		display: inline-block;
+		padding-left: .5em;
+	}
 	legend { 
 		font-weight: 700;
 		font-size: 1em;
@@ -39,6 +43,8 @@ section.content.application_form {
 }
 .field + .field { margin-top: 1.5em; }
 .field + .note { margin-top: 1.5em; }
+.field + p { margin-top: 1.5em; }
+form p + p { margin-top: 1.5em; }
 span + .subfield { margin-top: .5em; }
 .options_list {
 	margin: .25em -.25em;
@@ -60,6 +66,18 @@ button {
 		margin: 0.5em 0.25em;
 		background-color: inherit; }
 button[type="submit"] { .btn-primary; .btn-lg; }
+
+ul.errorlist {
+	padding: 0;
+}
+ul.errorlist li {
+	&:before {
+		.glyphicon;
+		content: "\e101";
+		padding-right: 0.5em;
+		color: @brand-danger;
+	}
+}
 
 .subfield-row > .subfield { display: inline-block; }
 .address_city { width: 18em; }

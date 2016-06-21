@@ -1,0 +1,22 @@
+{% extends "admin_base.jinja" %}
+
+{%- block head_title -%}
+Clear My Record
+{%- endblock head_title -%}
+
+{% block content %}
+<section class="content {% block section_class %}{% endblock section_class -%}">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-8 col-md-6  col_centered">
+		<h1>
+			{%- block header_title -%}
+			{%- endblock header_title -%}
+		</h1>
+      {% block column_content %}
+      {% endblock column_content %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

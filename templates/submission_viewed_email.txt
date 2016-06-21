@@ -1,4 +1,0 @@
-At {{ current_local_time("%-m/%-d/%Y %-I:%M %p %Z") }},
-{{ user.email }} viewed {{ request.build_absolute_uri(url(
-            'intake-filled_pdf', kwargs=dict(submission_id=submission.id)
-        ))}}
