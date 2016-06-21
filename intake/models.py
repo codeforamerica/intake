@@ -66,7 +66,7 @@ class FormSubmission(models.Model):
         if submission_ids:
             count = len(submission_ids)
             notifications.front_email_daily_app_bundle.send(
-                to=email,
+                to=[email],
                 count=count,
                 submission_ids=submission_ids
                 )

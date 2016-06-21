@@ -10,6 +10,7 @@ DATABASES = {
 }
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
+DEFAULT_HOST = os.environ.get('DEFAULT_HOST', 'http://localhost:8000')
 
 # settings for file uploads
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', '')

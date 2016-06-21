@@ -71,6 +71,7 @@ TEMPLATES = [
                 "url_with_ids": "project.jinja2.url_with_ids",
                 "oxford_comma": "project.jinja2.oxford_comma",
                 "humanize": "project.jinja2.humanize",
+                "settings": "django.conf.settings",
             }
         },
     },
