@@ -134,7 +134,7 @@ class TestSlackAndFront(BaseTestCase):
     def test_render_new_submission(self):
         expected_new_submission_text = str(
 """New submission #101!
-<http://filled_pdf/|Review it here>
+<http://filled_pdf/|Shining Koala>
 They want to be contacted via text message and email
 """)
         new_submission = notifications.slack_new_submission.render(
@@ -145,28 +145,31 @@ They want to be contacted via text message and email
 
     def test_render_submission_viewed(self):
         expected_submission_viewed_text = str(
-"""staff@org.org opened Shining Koala's application""")
+"""staff@org.org opened <url|Shining Koala's application>""")
         submission_viewed = notifications.slack_submissions_viewed.render(
             user=self.user,
-            submissions=[self.sub]
+            submissions=[self.sub],
+            bundle_url='url',
             ).message
         self.assertEqual(submission_viewed, expected_submission_viewed_text)
     
     def test_render_submissions_viewed(self):
         expected_submissions_viewed_text = str(
-"""staff@org.org opened apps from Shining Koala, Shining Koala, and Shining Koala""")
+"""staff@org.org opened apps from <url|Shining Koala, Shining Koala, and Shining Koala>""")
         submissions_viewed = notifications.slack_submissions_viewed.render(
             user=self.user,
-            submissions=[self.sub for i in range(3)]
+            submissions=[self.sub for i in range(3)],
+            bundle_url='url',
             ).message
         self.assertEqual(submissions_viewed, expected_submissions_viewed_text)
 
     def test_render_submission_deleted(self):
         expected_submission_deleted_text = str(
-"""staff@org.org deleted Shining Koala's application""")
+"""staff@org.org deleted <url|Shining Koala's application>""")
         deleted = notifications.slack_submissions_deleted.render(
             user=self.user,
-            submissions=[self.sub]
+            submissions=[self.sub],
+            bundle_url='url',
             ).message
         self.assertEqual(deleted, expected_submission_deleted_text)
 
@@ -185,7 +188,7 @@ They want to be contacted via text message and email
     @patch('intake.notifications.requests.post')
     def test_slack_send(self, mock_post):
         mock_post.return_value = "HTTP response"
-        expected_json = '{"text": "New submission #101!\\n<http://filled_pdf/|Review it here>\\nThey want to be contacted via text message and email\\n"}'
+        expected_json = '{"text": "New submission #101!\\n<http://filled_pdf/|Shining Koala>\\nThey want to be contacted via text message and email\\n"}'
         expected_headers = {'Content-type': 'application/json'}
         response = notifications.slack_new_submission.send(
             submission=self.sub,

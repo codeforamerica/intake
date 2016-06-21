@@ -1,7 +1,7 @@
 from collections import namedtuple
 import json
 import requests
-
+from project.jinja2 import url_with_ids
 from django.core import mail
 from django.conf import settings
 
@@ -202,6 +202,11 @@ class SlackTemplateNotification(BasicSlackNotification, TemplateNotification):
             message_template_path=message_template_path)
 
     def send(self, **context_args):
+        if 'submissions' in context_args:
+            bundle_url = getattr(settings, 'DEFAULT_HOST', '') + url_with_ids(
+                'intake-app_bundle',
+                [s.id for s in context_args['submissions']])
+            context_args.update(bundle_url=bundle_url)
         content = self.render(**context_args)
         super().send(message_text=content.message)
 
