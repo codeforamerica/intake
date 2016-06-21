@@ -147,6 +147,22 @@ class MarkProcessed(MarkSubmissionStepView):
     notification_function = notifications.slack_submissions_processed.send
 
 
+home = Home.as_view()
+apply_form = Apply.as_view()
+thanks = Thanks.as_view()
+privacy = PrivacyPolicy.as_view()
+stats = Stats.as_view()
+filled_pdf = FilledPDF.as_view()
+pdf_bundle = FilledPDFBundle.as_view()
+app_index = ApplicationIndex.as_view()
+app_bundle = ApplicationBundle.as_view()
+mark_processed = MarkProcessed.as_view()
+delete_page = Delete.as_view()
+
+
+######## REDIRECT VIEWS ########
+# for backwards compatibility
+
 class PermanentRedirectView(View):
     '''Permanently redirects to a url
     by default, it will build a url from any kwargs
@@ -193,17 +209,7 @@ class MultiIdPermanentRedirect(PermanentRedirectView):
             [s.id for s in submissions])
 
 
-home = Home.as_view()
-apply_form = Apply.as_view()
-thanks = Thanks.as_view()
-privacy = PrivacyPolicy.as_view()
-stats = Stats.as_view()
-filled_pdf = FilledPDF.as_view()
-pdf_bundle = FilledPDFBundle.as_view()
-app_index = ApplicationIndex.as_view()
-app_bundle = ApplicationBundle.as_view()
-mark_processed = MarkProcessed.as_view()
-delete_page = Delete.as_view()
+
 
 
 

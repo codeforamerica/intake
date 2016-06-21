@@ -7,15 +7,46 @@ Account settings
 {%- endblock header_title -%}
 
 {% block form %}
-			<form action="" method="post">{% csrf_token %}
+			<form action="" method="post">
+					{% csrf_token %}
 			    {{ macros.render_form_fields(form) }}
 			    <p>
 			    	<input class="btn btn-lg btn-primary" type="submit" value="Update" />	
 			    </p>
 			</form>
-			<p>
-				<a href="{{ url('account_change_password') }}" class="btn btn-sm btn-default">
-					Change your password
-				</a>
-			</p>
+			
+			<ul class="profile_menu">
+				<li class="profile_menu-item">
+					<a href="{{ url('account_change_password') }}" class="btn btn-default">
+						Change your password
+					</a>
+				</li>
+				<li class="profile_menu-item">
+					<a href="{{ url('intake-app_index') }}" class="btn btn-default">
+						View all applications
+					</a>
+				</li>
+				<li class="profile_menu-item">
+					<a href="{{ url('intake-stats') }}" class="btn btn-default">
+						View aggregate stats
+					</a>
+				</li>
+				<li class="profile_menu-item">
+					<a href="{{ url('intake-home') }}" class="btn btn-default">
+						View the splash page
+					</a>
+				</li>
+				{% if user.is_staff %}
+				<li class="profile_menu-item">
+					<a href="{{ url('user_accounts-send_invite') }}" class="btn btn-default">
+						Invite a new user
+					</a>
+				</li>
+				<li class="profile_menu-item">
+					<a href="{{ url('admin:user_accounts_organization_add') }}" class="btn btn-default">
+						Add a new organization
+					</a>
+				</li>
+				{% endif %}
+			</ul>
 {% endblock form %}

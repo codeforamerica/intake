@@ -4024,6 +4024,21 @@ a.logout_link {
 body.admin .top_bar {
   padding: 1em 0;
 }
+.profile_menu {
+  padding: 0;
+}
+.profile_menu-item + .profile_menu-item {
+  margin-top: .5em;
+}
+.profile_menu .btn {
+  color: #333333;
+  border: 1px solid #333333;
+  background-color: inherit;
+}
+.profile_menu .btn:hover {
+  color: #fff;
+  background-color: #333333;
+}
 .top_bar {
   padding: 1.5em 0;
 }
