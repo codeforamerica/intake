@@ -31,7 +31,6 @@ class Provider(BaseProvider):
             'dob_day': str(random.randint(1,31)),
             'dob_month': str(random.randint(1,12)),
             'dob_year': str(random.randint(1959, 2000)),
-            'drivers_license_number': self.bothify('?#######'),
             'monthly_expenses': str(random.randint(0, 3000)),
             'monthly_income': str(random.randint(0, 7000)),
             'rap_outside_sf': self.maybe(0.1),

@@ -3689,7 +3689,6 @@ button[type="submit"] {
   font-size: 20px;
   line-height: 1.3333333;
   border-radius: 6px;
-  margin-bottom: 12px;
 }
 button[type="submit"]:focus,
 button[type="submit"].focus {
@@ -3817,14 +3816,34 @@ h2.time_expectation {
   text-align: center;
   color: #069ED6;
 }
-p.step_headline {
-  font-weight: 600;
+h4 {
+  font-weight: 700;
+}
+.new_section {
+  padding-top: 24px;
+}
+.container {
+  margin: 0 auto;
+}
+.secondary_headline2 {
+  color: #004A6C;
+}
+.col_centered {
+  float: none;
+  margin: 0 auto;
+}
+.splash ul,
+.footer ul,
+.contact_info ul {
+  padding: 0;
+  line-height: 1.8em;
+}
+/**Hero Section**/
+.main_headline {
+  margin-top: 1em;
 }
 .call_to_action_time {
   margin-bottom: 26px;
-}
-.main_headline {
-  margin-top: 1em;
 }
 .call_to_action_button {
   width: 100%;
@@ -3840,12 +3859,6 @@ p.step_headline {
   color: #069ED6;
   font-weight: bold;
 }
-.new_section {
-  padding-top: 24px;
-}
-.container {
-  margin: 0 auto;
-}
 .above_the_fold {
   background-color: #069ED6;
   color: #ffffff;
@@ -3853,20 +3866,116 @@ p.step_headline {
 .splash.above_the_fold {
   background-color: #004A6C;
 }
-body.public .about_the_service,
-body.public section.content {
+body.public .about_the_service {
   background-color: #E5E5E5;
 }
 body.public .about_the_service p,
-body.public section.content p,
-body.public .about_the_service h2,
-body.public section.content h2 {
+body.public .about_the_service h2 {
   text-align: left;
   max-width: 72rem;
 }
-.apply_backup {
+.about_the_service h2 {
+  color: #004A6C;
+  line-height: 1.5;
+}
+/**Steps to apply**/
+p.step_headline {
+  font-weight: 600;
+}
+.apply_steps {
+  margin-top: 20px;
+}
+.step_headline {
+  color: #004A6C;
+}
+.step {
   background-color: #069ED6;
   color: #fff;
+  max-height: 300px;
+  padding: 12px;
+  border-radius: 4px;
+}
+.step-arrow {
+  color: #004A6C;
+  text-align: center;
+}
+/**Eligibility info**/
+.eligibility_headline {
+  margin-top: 70px;
+}
+.eligibility-list-header {
+  border: 2px solid #069ED6;
+  padding: 10px;
+  border-radius: 4px;
+  color: #069ED6;
+}
+.eligibility_list li {
+  list-style: disc;
+  margin-left: 10px;
+  padding-bottom: 5px;
+}
+/**About the service**/
+.about_the_service,
+.who_we_are {
+  padding-bottom: 50px;
+}
+/**Team**/
+.who_we_are {
+  background-color: #069ED6;
+  color: #fff;
+}
+.who_we_are h2 {
+  line-height: 1.5;
+}
+.who_we_are a {
+  color: #004A6C;
+}
+.team_faces h4 {
+  margin-bottom: 5px;
+}
+.cfa-staff {
+  height: 100px;
+  width: 100px;
+  background-color: #fff;
+  color: #fff;
+  border-radius: 200px;
+  text-align: center;
+  padding-top: 24px;
+  font-weight: bold;
+  margin-bottom: 25px;
+  border: 1px solid #fff;
+}
+#jazmyn-circle {
+  background: url('../img/jazmyn-latimer.jpg');
+  background-size: 100%;
+}
+#ben-circle {
+  background: url('../img/ben-golder.jpg');
+  background-size: 100%;
+}
+#tiffany-circle {
+  background: url('../img/tiffany-andrews.jpg');
+  background-size: 100%;
+}
+/**Apply backup**/
+h2.time_expectation {
+  font-weight: 700;
+  text-align: center;
+  color: #004A6C;
+}
+.apply_backup_2,
+.backup_apply_headline,
+.footer_logo {
+  text-align: center;
+}
+.journey_headline {
+  text-align: center;
+}
+/**Thanks and Privacy Page**/
+section.content.thanks,
+section.content.privacy {
+  padding-bottom: 3em;
+  background-color: #fff;
 }
 .privacy_description {
   padding-top: 40px;
@@ -3878,13 +3987,13 @@ body.public section.content h2 {
 .privacy_description ul {
   list-style-type: circle;
 }
-.time_expectation h2 {
-  text-align: center;
-  max-width: none;
+.privacy h2 {
   color: #004A6C;
-  margin-bottom: 40px;
-  padding-top: 40px;
 }
+.back_home_btn {
+  margin-top: 50px;
+}
+/**Footer**/
 .footer {
   background-color: #454545;
   color: #fff;
@@ -3913,14 +4022,10 @@ body.public section.content h2 {
 .footer_logo p {
   color: grey;
 }
-.btn-lg {
-  margin-bottom: 12px;
-}
-.splash.above_the_fold .btn {
-  margin-bottom: 20px;
-}
-.journey_headline {
-  text-align: center;
+section.footer.container.new_section {
+  padding-top: 80px;
+  padding-bottom: 50px;
+  color: #fff;
 }
 .gov_service_name,
 .gov_service_description,
@@ -3928,15 +4033,6 @@ body.public section.content h2 {
 .backup_apply_headline,
 .footer_logo {
   text-align: center;
-}
-.col_centered {
-  float: none;
-  margin: 0 auto;
-}
-.splash ul,
-.footer ul {
-  padding: 0;
-  line-height: 1.8em;
 }
 ul.opportunities {
   padding-top: 12px;
@@ -3948,11 +4044,6 @@ ul.opportunities {
 .opportunity:before {
   content: "\2713";
   padding-right: 0.75em;
-}
-section.footer.container.new_section {
-  padding-top: 80px;
-  padding-bottom: 50px;
-  color: #fff;
 }
 body.admin header {
   background-color: #333333;
