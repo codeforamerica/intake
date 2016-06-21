@@ -13,20 +13,20 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'intake',
+    'user_accounts',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
     'django_jinja',
     'invitations',
     'storages',
-    'intake',
-    'user_accounts'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -104,6 +104,8 @@ INVITATIONS_INVITATION_EXPIRY = 14
 INVITATIONS_INVITATION_ONLY = True
 INVITATIONS_SIGNUP_REDIRECT = 'account_signup'
 INVITATIONS_ADAPTER = ACCOUNT_ADAPTER
+ACCOUNT_EMAIL_SUBJECT_PREFIX = '' # don't prefix emails with the name of the site
+INVITATIONS_EMAIL_SUBJECT_PREFIX = ACCOUNT_EMAIL_SUBJECT_PREFIX
 ACCOUNT_EMAIL_VERIFICATION = "none"  # invitation only, so email confirmation is redundant
 ACCOUNT_SIGNUP_PASSWORD_VERIFICATION = False  # they can always reset the password
 ACCOUNT_EMAIL_REQUIRED = True  # ensure that people have emails

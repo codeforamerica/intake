@@ -1,0 +1,6 @@
+Hello,
+
+You've been invited to create an account on Clear My Record.
+
+If you'd like to join, please follow this link:
+{{ invite_url }}

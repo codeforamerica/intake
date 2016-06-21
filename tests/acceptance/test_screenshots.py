@@ -40,6 +40,7 @@ class TestWorkflows(base.ScreenSequenceTestCase):
         self.assertTrue(result)
         return result.group('link')
 
+    @skipIf(True, "switched off")
     def test_public_views(self):
         self.run_sequence(
             "Browse public views",
@@ -53,6 +54,7 @@ class TestWorkflows(base.ScreenSequenceTestCase):
             size=base.SMALL_DESKTOP
             )
 
+    @skipIf(True, "switched off")
     def test_application_submission_workflow(self):
         # self.host = 'https://cmr-dev.herokuapp.com'
         sequence = [

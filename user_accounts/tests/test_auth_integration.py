@@ -148,7 +148,9 @@ class TestUserAccounts(AuthIntegrationTestCase):
             )
         last_email = mail.outbox[-1]
         self.assertEqual(self.example_user['email'], last_email.to[0])
-        self.assertIn("invited to join", last_email.body)
+        self.assertIn(
+            "You've been invited to create an account on Clear My Record",
+            last_email.body)
 
     def test_invited_person_can_signup(self):
         self.be_superuser()
@@ -206,7 +208,6 @@ class TestUserAccounts(AuthIntegrationTestCase):
             session['failed_login_email'],
             self.users[0].email)
         form = response.context['form']
-        self.assertTemplateUsed(response, 'account/login.html')
         self.assertIn(expected_error_message,
             form.errors['__all__'])
         self.assertContains(
@@ -236,8 +237,8 @@ class TestUserAccounts(AuthIntegrationTestCase):
             )
         # get an email to reset password
         reset_email = mail.outbox[-1]
-        self.assertIn(
-            'Password Reset E-mail',
+        self.assertEqual(
+            'Password Reset for Clear My Record',
             reset_email.subject
             )
         # follow the link in the email
