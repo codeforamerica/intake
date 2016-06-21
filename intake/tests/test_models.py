@@ -152,7 +152,7 @@ class TestModels(TestCase):
 
         expected_message = "Emailed someone@agency.org with a link to 3 unopened applications"
         notifications.front_email_daily_app_bundle.send.assert_called_once_with(
-            to='someone@agency.org',
+            to=['someone@agency.org'],
             count=3,
             submission_ids=[1,2,3]
             )

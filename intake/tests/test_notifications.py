@@ -58,6 +58,7 @@ class TestNotifications(TestCase):
 
         expected_data = {
             'body': "Hey Ben can you read me?",
+            'text': "Hey Ben can you read me?",
             'to': ["+15555555555"],
             'options': {
                 'archive': False
@@ -101,7 +102,8 @@ class TestNotifications(TestCase):
         expected_data.update({
             'to': ["bgolder@codeforamerica.org"],
             'subject': 'Front test',
-            'body': 'Hi this is an email message body.'
+            'body': 'Hi this is an email message body.',
+            'text': 'Hi this is an email message body.',
             })
 
         post_args, post_kwargs = mock_post.call_args
@@ -195,13 +197,14 @@ They want to be contacted via text message and email
             called_kwargs['data'], expected_json)
         self.assertDictEqual(
             called_kwargs['headers'], expected_headers)
-
+    
+    @override_settings(DEFAULT_HOST='something.com')
     def test_render_front_email_daily_app_bundle(self):
         expected_subject = "current time: Online applications to Clean Slate"
         expected_body = """As of current time, you have one unopened application to Clean Slate.
 
 You can review and print them at this link:
-    /applications/bundle/?ids=1,2,3"""
+    something.com/applications/bundle/?ids=1,2,3"""
         request = Mock()
         request.build_absolute_uri.side_effect = lambda url: url
         current_time = Mock(return_value='current time')
