@@ -12,3 +12,4 @@ django-allauth~=0.25
 git+git://github.com/bee-keeper/django-invitations.git@bc83ad4bf999cf839a1facc906b4002f939f7738#egg=django-invitations
 sendgrid-django~=2.0
 django-jinja~=2.1
+django-debug-toolbar~=1.4
