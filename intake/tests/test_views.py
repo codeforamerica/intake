@@ -58,7 +58,8 @@ class TestViews(AuthIntegrationTestCase):
         with override_settings(
                 DEFAULT_AGENCY_USER_EMAIL=self.users[0].email):
             # mark all but the last of them as opened
-            models.FormSubmission.mark_viewed(submissions[:-1], self.users[0])
+            models.ApplicationLogEntry.log_opened(
+                [s.id for s in submissions[:-1]], self.users[0])
             response = self.client.get(reverse('intake-stats'))
             self.assertContains(response, str(total))
             self.assertContains(response, str(total - 1))
