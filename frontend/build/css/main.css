@@ -3899,6 +3899,9 @@ body.public section.content h2 {
 .footer_info {
   margin-top: 20px;
 }
+.footer_info li .glyphicon {
+  margin-right: .5em;
+}
 .cfa-logo {
   width: 12em;
   opacity: 0.3;
