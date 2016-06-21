@@ -1,7 +1,7 @@
 from unittest import skipIf
 from unittest.mock import patch, Mock
 import inspect
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase
 from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
@@ -53,9 +53,16 @@ class TestViews(AuthIntegrationTestCase):
             response.content.decode('utf-8'))
 
     def test_stats_view(self):
-        total = models.FormSubmission.objects.count()
-        response = self.client.get(reverse('intake-stats'))
-        self.assertContains(response, total)
+        submissions = list(models.FormSubmission.objects.all())
+        total = len(submissions)
+        with override_settings(
+                DEFAULT_AGENCY_USER_EMAIL=self.users[0].email):
+            # mark all but the last of them as opened
+            models.ApplicationLogEntry.log_opened(
+                [s.id for s in submissions[:-1]], self.users[0])
+            response = self.client.get(reverse('intake-stats'))
+            self.assertContains(response, str(total))
+            self.assertContains(response, str(total - 1))
 
 
     @patch('intake.views.notifications.slack_new_submission.send')

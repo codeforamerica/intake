@@ -89,7 +89,7 @@ class FormSubmission(models.Model):
     def get_opened_apps(cls):
         return cls.objects.filter(
             logs__user__email=settings.DEFAULT_AGENCY_USER_EMAIL
-            )
+            ).distinct()
 
     @classmethod
     def all_plus_logs(cls):
