@@ -31,6 +31,7 @@ STATIC_ROOT = os.environ.get('STATIC_ROOT',
 EMAIL_BACKEND = "sgbackend.SendGridBackend"
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", "admin@localhost")
+DEFAULT_FROM_EMAIL = MAIL_DEFAULT_SENDER
 DEFAULT_NOTIFICATION_EMAIL = os.environ.get("DEFAULT_NOTIFICATION_EMAIL", "user@localhost")
 
 # Slack Web hook
