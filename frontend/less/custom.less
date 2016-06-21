@@ -1,6 +1,5 @@
 
 
-header { padding: 1em 0;}
 .top_bar a { color: inherit; text-decoration: none; }
 p, ul { font-size: 18px; font-weight: 400; }
 h1 { font-size: 40px; font-weight: 700; }
@@ -57,7 +56,6 @@ p.step_headline{
 
 .container {
   margin: 0 auto;
-  padding-bottom: 20px;
 }
 
 // for all above the fold sections
@@ -70,7 +68,7 @@ p.step_headline{
 }
 
 
-.about_the_service, section.content {
+body.public .about_the_service, body.public section.content {
   background-color: @light-background;
   p, h2 {
     text-align: left;
@@ -94,11 +92,6 @@ p.step_headline{
 
 .privacy_description ul{
   list-style-type: circle;
-}
-
-
-span.glyphicon{
-  padding-right:10px;
 }
 
 .time_expectation h2{
@@ -190,10 +183,66 @@ section.footer.container.new_section{
   color: #fff;
 }
 
+body.admin header {
+  background-color: @gray-dark;
+  color: #fff;
+  font-size: .875em;
+  font-weight: 100;
+}
 
-// breadcrumbs
-.breadcrumb .current { color: @text-color; }
+.flash_message {
+  background-color: @gray;
+  padding: .25em 0;
+}
+.flash_message:first-child {
+  padding-top: 0.5em;
+}
+.flash_message:last-child {
+  padding-bottom: 0.5em;
+}
 
+.flash_message.success {
+  background-color: @brand-success;
+}
+
+body.admin .container {
+  max-width: 100rem;
+}
+
+body.admin header .btn {
+  color: #fff;
+  border: 1px solid #fff;
+  background-color: inherit;
+  &:hover {
+    color: @gray-dark;
+    background-color: #fff;
+  }
+}
+
+table.applications_list .btn {
+  background: inherit;
+  border: 1px solid @brand-primary;
+  color: @brand-primary;
+  &:hover {
+    color: #fff;
+    background-color: @brand-primary;
+  }
+}
+
+a.logout_link {
+  margin-left: 1em;
+}
+.authenticated .username {
+  font-weight: 500;
+}
+
+.top_bar {
+  padding: 1.5em 0;
+}
+
+.auth-notice {
+  float: right;
+}
 
 .btn .glyphicon {
   margin-right: .5em;
@@ -259,7 +308,6 @@ section.footer.container.new_section{
 
 @media (min-width: @screen-md-min) {
 
-  header { padding: 1.5em 0;}
   .splash.above_the_fold {
     min-height: 40em;
   }

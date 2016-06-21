@@ -1,21 +1,14 @@
-{% extends "admin_base.jinja" %}
+{% extends "admin_form_base.jinja" %}
+{% import 'macros.jinja' as macros %}
 
 
-{% block content %}
-<section>
-	<div class="container">
-		<div class="row">
-		
+{% block form %}
 			<form action="" method="post">{% csrf_token %}
-			    {{ form.as_p() }}
+			    {{ macros.render_form_fields(form) }}
 			    <input type="submit" value="Update" />
 			</form>
 
 			<a href="{{ url('account_change_password') }}" class="btn btn-lg btn-primary">
 				Change your password
 			</a>
-			
-		</div>
-	</div>
-</section>
-{% endblock content %}
+{% endblock form %}

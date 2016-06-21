@@ -11,6 +11,11 @@ from . import forms, models
 class CustomLoginView(allauth_views.LoginView):
     template_name = "user_accounts/login.jinja"
 
+    # def get(self, *args, **kwargs):
+    #     result = super().get(*args, **kwargs)
+    #     import ipdb; ipdb.set_trace()
+    #     return result
+
 
     def get_form_class(self):
         return forms.LoginForm

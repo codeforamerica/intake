@@ -1,9 +1,9 @@
-{% extends "public_form_base.jinja" %}
+{% extends "admin_form_base.jinja" %}
 {% block head_title %}Sign up{% endblock %}
 {%- block header_title -%}
 Sign up
 {%- endblock header_title -%}
-{% block public_form %}
+{% block form %}
 	<form class="signup" id="signup_form" method="post" action="{{ url('account_signup') }}">
 
 		{% include "includes/csrf_field.jinja" %}
@@ -13,4 +13,4 @@ Sign up
 		{% endif %}
 		<button type="submit">Sign Up</button>
 	</form>
-{% endblock public_form %}
+{% endblock form %}

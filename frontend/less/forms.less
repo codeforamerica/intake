@@ -23,7 +23,7 @@ section.content.application_form {
 .field {
 	input {
 		font-weight: 400; }
-	input[type="text"] { 
+	input[type="text"], input[type="email"], input[type="password"] { 
 		display: block; width: 100%;
 		font-size: 1.25em;
 		padding: .25em .5em; }
@@ -31,6 +31,10 @@ section.content.application_form {
 		display: block;
 		font-size: 1.25em;
 		padding: .25em .5em; }
+	input[type="checkbox"] + span.field-display_text {
+		display: inline-block;
+		padding-left: .5em;
+	}
 	legend { 
 		font-weight: 700;
 		font-size: 1em;

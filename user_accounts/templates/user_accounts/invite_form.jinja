@@ -1,18 +1,11 @@
-{% extends "admin_base.jinja" %}
+{% extends "admin_form_base.jinja" %}
 
-{% block content %}
-<section>
-  <div class="container">
-    <div class="row">
-<h4 class="title">Invite</h4>
-{% if success_message %}
-<span class="alert alert-success">
-    {{ success_message }}
-</span>
-{% endif %}
-<span class="alert alert-info">Please add an email and organization below. The user will recieve an email with instructions.</span>
-
+{%- block header_title -%}
+Invite a new user
+{%- endblock header_title -%}
+{% block form %}
 <form id="invite-form" method="POST" action="{{ url('invitations:send-invite') }}">
+  <p>Please add an email and organization below. The user will recieve an email with instructions.</p>
   {% include "includes/csrf_field.jinja" %}
   <div class="form-group">
     {{ form.email.errors }}
@@ -25,9 +18,5 @@
     {{ form.organization }}
   </div>
   <input type="submit" value="Invite" class="btn btn-primary generic-ajax-submit">  
-</form>  
-      
-    </div>
-  </div>
-</section>
-{% endblock content %}
+</form> 
+{% endblock form %}

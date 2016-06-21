@@ -26,7 +26,7 @@
 				<a href="{{ 
 					url('intake-filled_pdf',
 						submission_id=app.id
-						) }}">
+						) }}" class="btn btn-default btn-sm">
 						<span class="glyphicon glyphicon-file"></span>
 						PDF
 						</a>
@@ -40,15 +40,15 @@
 			{% if app.processed_by_agency() %}
 				<span class="glyphicon glyphicon-ok-sign"></span>
 				Added {{ humanize.naturaltime(app.processed_by_agency()) }}
-				{%- else -%}
-				<a class="btn btn-default" href="{{
+			{%- else -%}
+				<a class="btn btn-default btn-sm" href="{{
 					url_with_ids('intake-mark_processed',
 					ids=[app.id]) + '&next=' + url('intake-app_index')
 						 }}">
 				<span class="glyphicon glyphicon-plus"></span>
 				Mark as added
 				</a>
-				{% endif %}
+			{% endif %}
 			</td>
 			<td>
 				<a class="btn btn-default btn-sm delete" href="{{ url('intake-delete_page',
