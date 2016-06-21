@@ -98,9 +98,10 @@ class FormSubmission(models.Model):
     def agency_event_logs(self, event_type):
         '''assumes that self.logs and self.logs.user are prefetched'''
         for log in self.logs.all():
-            if (log.user.email == settings.DEFAULT_AGENCY_USER_EMAIL
-                    and log.event_type == event_type):
-                yield log
+            if log.user:
+                if (log.user.email == settings.DEFAULT_AGENCY_USER_EMAIL
+                        and log.event_type == event_type):
+                    yield log
 
     def opened_by_agency(self):
         return max((log.time for log in self.agency_event_logs(

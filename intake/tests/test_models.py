@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from datetime import datetime
 
 from unittest.mock import patch, Mock
@@ -170,6 +170,23 @@ class TestModels(TestCase):
         notifications.front_email_daily_app_bundle.send.assert_not_called()
         ApplicationLogEntry.log_referred.assert_not_called()
         self.assertEqual(output, expected_message)
+
+    @override_settings(DEFAULT_AGENCY_USER_EMAIL='someone@agency.org')
+    def test_agency_event_logs(self):
+        instance = Mock()
+        expected_log = Mock(user=Mock(email='someone@agency.org'), event_type=1)
+        instance.logs.all.return_value = [
+            Mock(user=None, event_type=1),
+            expected_log,
+            Mock(user=Mock(email='else@other.org'), event_type=1),
+            Mock(user=Mock(email='someone@agency.org'), event_type=2),
+        ]
+        expected_results = [expected_log]
+        results = [
+            n for n
+            in models.FormSubmission.agency_event_logs(
+                instance, 1)]
+        self.assertListEqual(expected_results, results)
 
 
 

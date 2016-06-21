@@ -3998,6 +3998,7 @@ h2.site_name {
   padding-right: 0.5em;
 }
 body.admin {
+  overflow: auto;
   padding-bottom: 3em;
 }
 body.admin .container {
