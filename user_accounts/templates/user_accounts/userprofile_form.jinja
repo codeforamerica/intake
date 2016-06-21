@@ -23,12 +23,6 @@ Account settings
 					</a>
 				</li>
 				<li class="profile_menu-item">
-					<a href="{{ url('account_change_password') }}" class="btn btn-default">
-						<span class="glyphicon glyphicon-lock"></span>
-						Change your password
-					</a>
-				</li>
-				<li class="profile_menu-item">
 					<a href="{{ url('intake-stats') }}" class="btn btn-default">
 						<span class="glyphicon glyphicon-stats"></span>
 						View aggregate stats
@@ -54,5 +48,11 @@ Account settings
 					</a>
 				</li>
 				{% endif %}
+				<li class="profile_menu-item">
+					<a href="{{ url('account_change_password') }}" class="btn btn-default">
+						<span class="glyphicon glyphicon-lock"></span>
+						Change your password
+					</a>
+				</li>
 			</ul>
 {% endblock form %}
