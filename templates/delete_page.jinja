@@ -14,7 +14,7 @@
 		<form class="delete" action="{{ 
 			url('intake-delete_page', submission_id=submission.id)
 			}}" method="POST" accept-charset="utf-8">
-			
+        {% include "includes/csrf_field.jinja" %}
 		<a href="{{ url('intake-app_index') }}" class="btn btn-default btn-lg">No, I'm not sure</a>
 		
 		<button class="btn btn-danger btn-lg" type="submit">Yes, delete it</button>

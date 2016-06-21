@@ -1,7 +1,7 @@
 from collections import namedtuple
 import json
 import requests
-
+from project.jinja2 import url_with_ids
 from django.core import mail
 from django.conf import settings
 
@@ -129,19 +129,22 @@ class FrontNotification(TemplateNotification):
         root_url = 'https://api2.frontapp.com/channels/{}/messages'
         return root_url.format(self.channel_id)
 
-    def raise_post_errors(self, response):
+    def raise_post_errors(self, response, payload):
         if response.status_code != 202:
             raise FrontAPIError(
 """
 STATUS {status}
 Error: {title}
 {detail}
-""".format(**response.json()['errors'][0]))
+REQUEST JSON:
+{payload}
+""".format(payload=payload, **response.json()['errors'][0]))
 
     def send(self, to, **context_args):
         content = self.render(**context_args)
         data = {
-            'body': content.body,
+            'body': content.body.replace('\n','<br>'),
+            'text': content.body,
             'to': to,
             'options': {
                 'archive': False
@@ -157,21 +160,17 @@ Error: {title}
                 data=payload,
                 headers=self.build_headers()
                 )
-            self.raise_post_errors(result)
+            self.raise_post_errors(result, payload)
             return result
 
 
 
 class FrontEmailNotification(FrontNotification):
     channel_id = settings.FRONT_EMAIL_CHANNEL_ID
-    def send(self, to, **context_args):
-        super().send(to, **context_args)
 
 
 class FrontSMSNotification(FrontNotification):
     channel_id = settings.FRONT_PHONE_CHANNEL_ID
-    def send(self, to, **context_args):
-        super().send(to, **context_args)
 
 
 
@@ -203,6 +202,11 @@ class SlackTemplateNotification(BasicSlackNotification, TemplateNotification):
             message_template_path=message_template_path)
 
     def send(self, **context_args):
+        if 'submissions' in context_args:
+            bundle_url = getattr(settings, 'DEFAULT_HOST', '') + url_with_ids(
+                'intake-app_bundle',
+                [s.id for s in context_args['submissions']])
+            context_args.update(bundle_url=bundle_url)
         content = self.render(**context_args)
         super().send(message_text=content.message)
 
@@ -229,7 +233,10 @@ slack_submissions_deleted = SlackTemplateNotification(
     {'action': 'deleted'},
     message_template_path="slack/bundle_action.jinja")
 
-# count, request, submission_ids
+# count, submission_ids
 front_email_daily_app_bundle = FrontEmailNotification(
+    subject_template="{{current_local_time('%a %b %-d, %Y')}}: Online applications to Clean Slate",
+    body_template_path='email/app_bundle_email.jinja')
+email_daily_app_bundle = EmailNotification(
     subject_template="{{current_local_time('%a %b %-d, %Y')}}: Online applications to Clean Slate",
     body_template_path='email/app_bundle_email.jinja')

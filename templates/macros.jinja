@@ -2,7 +2,10 @@
 {% if form.non_field_errors() %}
 {{ form.non_field_errors() }}
 {% endif %}
-{% for field in form %}
+{% for hidden in form.hidden_fields() %}
+{{ hidden }}
+{% endfor %}
+{% for field in form.visible_fields() %}
 <div class="field {{ field.html_name }}">
 	{% if field.errors %}
 	{{ field.errors }}

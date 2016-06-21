@@ -66,7 +66,7 @@ class FormSubmission(models.Model):
         if submission_ids:
             count = len(submission_ids)
             notifications.front_email_daily_app_bundle.send(
-                to=email,
+                to=[email],
                 count=count,
                 submission_ids=submission_ids
                 )
@@ -98,9 +98,10 @@ class FormSubmission(models.Model):
     def agency_event_logs(self, event_type):
         '''assumes that self.logs and self.logs.user are prefetched'''
         for log in self.logs.all():
-            if (log.user.email == settings.DEFAULT_AGENCY_USER_EMAIL
-                    and log.event_type == event_type):
-                yield log
+            if log.user:
+                if (log.user.email == settings.DEFAULT_AGENCY_USER_EMAIL
+                        and log.event_type == event_type):
+                    yield log
 
     def opened_by_agency(self):
         return max((log.time for log in self.agency_event_logs(
@@ -220,9 +221,11 @@ class FillablePDF(models.Model):
         return parser.fill_pdf(self.get_pdf(), translator(*args, **kwargs))
 
     def fill_many(self, data_set, *args, **kwargs):
-        parser = get_parser()
-        translator = self.get_translator()
-        return parser.fill_many_pdfs(self.get_pdf(), [
-            translator(d, *args, **kwargs)
-            for d in data_set
-            ])
+        if data_set:
+            parser = get_parser()
+            translator = self.get_translator()
+            translated = [translator(d, *args, **kwargs)
+                            for d in data_set]
+            if len(translated) == 1:
+                return parser.fill_pdf(self.get_pdf(), translated[0])
+            return parser.fill_many_pdfs(self.get_pdf(), translated)

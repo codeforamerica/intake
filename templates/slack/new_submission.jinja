@@ -2,7 +2,7 @@ New submission #{{submission_count}}!
 <{{ request.build_absolute_uri(
 		url('intake-filled_pdf',
 			submission_id=submission.id)
-	) }}|Review it here>
+	) }}|{{ submission.get_anonymous_display() }}>
 {% if submission.get_contact_preferences() -%}
 They want to be contacted via {{ oxford_comma(submission.get_contact_preferences())}}
 {% else -%}

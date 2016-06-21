@@ -1,2 +1,2 @@
-{{ user.email }} {{ action }}{% if submissions|length > 1 %} apps from {{
-oxford_comma(submissions) }}{% else %} {{ submissions[0] }}'s application{% endif %}
+{{ user.email }} {{ action }}{% if submissions|length > 1 %} apps from <{{ bundle_url}}|{{
+oxford_comma(submissions) }}>{% else %} <{{bundle_url}}|{{ submissions[0] }}'s application>{% endif %}

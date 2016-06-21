@@ -3,9 +3,10 @@ As of {{ current_local_time('%-I:%M %p %Z on %A %b %-d') }}, you have
 {%- endif %} to Clean Slate.
 
 You can review and print them at this link:
-    {{ request.build_absolute_uri(
-    		url_with_ids('intake-app_bundle', submission_ids)
-    	) }}
+    {{
+    settings.DEFAULT_HOST + url_with_ids(
+    	'intake-app_bundle', submission_ids)
+    }}
 
 If you have any questions or concerns, email us at clearmyrecord@codeforamerica.org and Jazmyn or Ben will get back to you right away.
 

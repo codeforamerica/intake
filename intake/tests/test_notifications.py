@@ -58,6 +58,7 @@ class TestNotifications(TestCase):
 
         expected_data = {
             'body': "Hey Ben can you read me?",
+            'text': "Hey Ben can you read me?",
             'to': ["+15555555555"],
             'options': {
                 'archive': False
@@ -101,7 +102,8 @@ class TestNotifications(TestCase):
         expected_data.update({
             'to': ["bgolder@codeforamerica.org"],
             'subject': 'Front test',
-            'body': 'Hi this is an email message body.'
+            'body': 'Hi this is an email message body.',
+            'text': 'Hi this is an email message body.',
             })
 
         post_args, post_kwargs = mock_post.call_args
@@ -132,7 +134,7 @@ class TestSlackAndFront(BaseTestCase):
     def test_render_new_submission(self):
         expected_new_submission_text = str(
 """New submission #101!
-<http://filled_pdf/|Review it here>
+<http://filled_pdf/|Shining Koala>
 They want to be contacted via text message and email
 """)
         new_submission = notifications.slack_new_submission.render(
@@ -143,28 +145,31 @@ They want to be contacted via text message and email
 
     def test_render_submission_viewed(self):
         expected_submission_viewed_text = str(
-"""staff@org.org opened Shining Koala's application""")
+"""staff@org.org opened <url|Shining Koala's application>""")
         submission_viewed = notifications.slack_submissions_viewed.render(
             user=self.user,
-            submissions=[self.sub]
+            submissions=[self.sub],
+            bundle_url='url',
             ).message
         self.assertEqual(submission_viewed, expected_submission_viewed_text)
     
     def test_render_submissions_viewed(self):
         expected_submissions_viewed_text = str(
-"""staff@org.org opened apps from Shining Koala, Shining Koala, and Shining Koala""")
+"""staff@org.org opened apps from <url|Shining Koala, Shining Koala, and Shining Koala>""")
         submissions_viewed = notifications.slack_submissions_viewed.render(
             user=self.user,
-            submissions=[self.sub for i in range(3)]
+            submissions=[self.sub for i in range(3)],
+            bundle_url='url',
             ).message
         self.assertEqual(submissions_viewed, expected_submissions_viewed_text)
 
     def test_render_submission_deleted(self):
         expected_submission_deleted_text = str(
-"""staff@org.org deleted Shining Koala's application""")
+"""staff@org.org deleted <url|Shining Koala's application>""")
         deleted = notifications.slack_submissions_deleted.render(
             user=self.user,
-            submissions=[self.sub]
+            submissions=[self.sub],
+            bundle_url='url',
             ).message
         self.assertEqual(deleted, expected_submission_deleted_text)
 
@@ -183,7 +188,7 @@ They want to be contacted via text message and email
     @patch('intake.notifications.requests.post')
     def test_slack_send(self, mock_post):
         mock_post.return_value = "HTTP response"
-        expected_json = '{"text": "New submission #101!\\n<http://filled_pdf/|Review it here>\\nThey want to be contacted via text message and email\\n"}'
+        expected_json = '{"text": "New submission #101!\\n<http://filled_pdf/|Shining Koala>\\nThey want to be contacted via text message and email\\n"}'
         expected_headers = {'Content-type': 'application/json'}
         response = notifications.slack_new_submission.send(
             submission=self.sub,
@@ -195,13 +200,14 @@ They want to be contacted via text message and email
             called_kwargs['data'], expected_json)
         self.assertDictEqual(
             called_kwargs['headers'], expected_headers)
-
+    
+    @override_settings(DEFAULT_HOST='something.com')
     def test_render_front_email_daily_app_bundle(self):
         expected_subject = "current time: Online applications to Clean Slate"
         expected_body = """As of current time, you have one unopened application to Clean Slate.
 
 You can review and print them at this link:
-    /applications/bundle/?ids=1,2,3"""
+    something.com/applications/bundle/?ids=1,2,3"""
         request = Mock()
         request.build_absolute_uri.side_effect = lambda url: url
         current_time = Mock(return_value='current time')
