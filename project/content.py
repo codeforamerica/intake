@@ -10,22 +10,24 @@ class constants:
         "Code for America for people with a criminal record in San Francisco. "
         "We are not a law firm and the information on this site is not legal advice.")
 
+    benefits_headline = "Clearing your criminal record could help you qualify for jobs, housing, and educational opportunities."
+    eligibilty_headline = "Are you eligible to clear your record?"
+
     gov_service_name = "Clean Slate is the San Francisco Public Defender's record clearance program"
-    gov_service_description = str(
-        "Clearing your record means you might be able to access more "
-        "employment, housing, education, and financial opportunities. Clear My Record is "
-        "a free, non-profit service that lets you apply to your county’s record "
-        "clearance program from your phone or computer. Once you apply, a Public "
-        "Defender will pull up your criminal record and figure out what record clearance "
-        "options make sense for you.")
+    gov_service_description_2 = str(
+        "Clear My Record is a free, online service made by Code for America.  It is for people who have a criminal record in San Francisco. It was made by Code for America, who works with government to make their services easier to use. Code for America is not a law firm and the information on this site is not legal advice." )
 
+    gov_service_description_1 = str(
+        "Applications to Clear My Record will go to the San Francisco Public Defender’s Office.  Once they receive your application, they will send you a letter with next steps." )
 
-    journey_headline = "3 Easy Steps to Apply"
-    step_1_headline = "1. Apply online –"
+    about_service_headline = "This is an online service by Code for America for the San Francisco Public Defender"
+
+    journey_headline = "Apply to Clear My Record in 3 easy steps:"
+    step_1_headline = "1. Apply online"
     step_1_paragraph = "Fill out the pre-screener to help the public defender understand your history."
-    step_2_headline = "2. Eligibility review –"
+    step_2_headline = "2. Check your eligibility"
     step_2_paragraph = "A public defender will pull up your criminal record and figure out what record clearance options make sense for you."
-    step_3_headline = "3. Wait for next steps –"
+    step_3_headline = "3. Wait for next steps"
     step_3_paragraph = str(
         "In about 4 weeks, you’ll receive a letter from the public defender "
         "with your results and instructions on next steps.")
@@ -55,7 +57,9 @@ class constants:
     footer_cleanslate = str(
         "Learn more about "
         "Clean Slate")
+    back_home_btn ="Go back to main page"
 
     metadata_title = "Clear My Record | Get help clearing your criminal record in San Francisco"
     metadata_description = "Clear My Record is a free, non-profit service to help you dismiss or reduce old convictions on your criminal record."
     metadata_author = "Clear My Record (by Code for America)"
+
