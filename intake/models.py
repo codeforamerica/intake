@@ -61,55 +61,57 @@ class FormSubmission(models.Model):
 
     @classmethod
     def refer_unopened_apps(cls):
-        email = settings.DEFAULT_NOTIFICATION_EMAIL
-        submission_ids=[s.id for s in cls.get_unopened_apps()]
-        if submission_ids:
+        users = User.objects.filter(profile__should_get_notifications=True)
+        emails = [user.email for user in users]
+        submissions = cls.get_unopened_apps()
+        submission_ids=[s.id for s in submissions]
+        if submissions:
             count = len(submission_ids)
             notifications.front_email_daily_app_bundle.send(
-                to=[email],
+                to=emails,
                 count=count,
                 submission_ids=submission_ids
                 )
             ApplicationLogEntry.log_referred(submission_ids, user=None)
-            result_message = "Emailed {} with a link to {} unopened applications".format(
-                        email, count)
-        else:
-            result_message = "No unopened applications. Didn't email {}".format(
-                    email)
-        notifications.slack_simple.send(result_message)
-        return result_message
+        notifications.slack_app_bundle_sent.send(submissions=submissions, emails=emails)
+        return notifications.slack_app_bundle_sent.render(submissions=submissions, emails=emails)
 
     @classmethod
     def get_unopened_apps(cls):
         return cls.objects.exclude(
-            logs__user__email=settings.DEFAULT_AGENCY_USER_EMAIL
+            logs__user__profile__organization__is_receiving_agency=True
             )
 
     @classmethod
     def get_opened_apps(cls):
         return cls.objects.filter(
-            logs__user__email=settings.DEFAULT_AGENCY_USER_EMAIL
+            logs__user__profile__organization__is_receiving_agency=True
             ).distinct()
 
     @classmethod
-    def all_plus_logs(cls):
-        return cls.objects.all().prefetch_related('logs__user')
+    def all_plus_related_objects(cls):
+        return cls.objects.prefetch_related('logs__user__profile__organization').all()
 
     def agency_event_logs(self, event_type):
         '''assumes that self.logs and self.logs.user are prefetched'''
         for log in self.logs.all():
             if log.user:
-                if (log.user.email == settings.DEFAULT_AGENCY_USER_EMAIL
-                        and log.event_type == event_type):
-                    yield log
+                if log.user.profile.organization.is_receiving_agency:
+                    if log.event_type == event_type:
+                        yield log
 
-    def opened_by_agency(self):
-        return max((log.time for log in self.agency_event_logs(
-            ApplicationLogEntry.OPENED)), default=None)
+    def agency_log_time(self, event_type, reduce_func=max):
+        return reduce_func((log.time for log in self.agency_event_logs(
+            event_type)), default=None)
 
-    def processed_by_agency(self):
-        return max((log.time for log in self.agency_event_logs(
-            ApplicationLogEntry.PROCESSED)), default=None)
+    def first_opened_by_agency(self):
+        return self.agency_log_time(ApplicationLogEntry.OPENED, min)
+
+    def last_opened_by_agency(self):
+        return self.agency_log_time(ApplicationLogEntry.OPENED, max)
+
+    def last_processed_by_agency(self):
+        return self.agency_log_time(ApplicationLogEntry.PROCESSED, max)
 
     def get_local_date_received(self, fmt, timezone_name='US/Pacific'):
         local_tz = timezone(timezone_name)

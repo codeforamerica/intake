@@ -219,6 +219,30 @@ You can review and print them at this link:
             )
         self.assertIn(expected_body, content.body)
         self.assertEqual(expected_subject, content.subject)
+    
+    @override_settings(DEFAULT_HOST='something.com')
+    def test_render_slack_app_bundle_sent(self):
+        # case: submissions
+        submissions = [
+            mock.FormSubmissionFactory.build(
+                id=i+1, anonymous_name='App')
+            for i in range(3)]
+        emails = ['email1', 'email2']
+        expected_message = """Emailed email1 and email2 with a link to apps from <something.com/applications/bundle/?ids=1,2,3|App, App, and App>"""
+        
+        content = notifications.slack_app_bundle_sent.render(
+            emails=emails,
+            submissions=submissions
+            )
+        self.assertEqual(expected_message, content.message)
+
+        # case: no submissions
+        expected_message = """No unopened applications. Did not email email1 and email2"""
+        content = notifications.slack_app_bundle_sent.render(
+            emails=emails,
+            submissions=[]
+            )
+        self.assertEqual(expected_message, content.message)
 
 
 

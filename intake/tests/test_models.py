@@ -24,8 +24,9 @@ class TestModels(TestCase):
         self.assertTrue(submission.old_uuid) # just have a truthy result
         anon = submission.get_anonymous_display()
         self.validate_anonymous_name(anon)
-        self.assertIsNone(submission.opened_by_agency())
-        self.assertIsNone(submission.processed_by_agency())
+        self.assertIsNone(submission.first_opened_by_agency())
+        self.assertIsNone(submission.last_opened_by_agency())
+        self.assertIsNone(submission.last_processed_by_agency())
         self.assertEqual(
             models.FormSubmission.objects.get(id=submission.id), submission)
 
@@ -60,7 +61,6 @@ class TestModels(TestCase):
         filled_pdf = pdf.fill(submission)
         self.assertEqual(type(filled_pdf), bytes)
 
-
     def test_anonymous_names(self):
         fake_name = anonymous_names.generate()
         self.validate_anonymous_name(fake_name)
@@ -84,7 +84,6 @@ class TestModels(TestCase):
     @patch('intake.models.notifications')
     @patch('intake.models.settings')
     def test_get_unopened_submissions(self, settings, notifications):
-        settings.DEFAULT_AGENCY_USER_EMAIL = self.users[0].email
         submissions = mock.FormSubmissionFactory.create_batch(4)
         group_a, group_b = submissions[:2], submissions[2:]
         models.FormSubmission.mark_viewed(group_a, self.users[0])
@@ -100,18 +99,16 @@ class TestModels(TestCase):
         self.assertFalse(unopened)
 
     @patch('intake.models.notifications')
-    @patch('intake.models.settings')
-    def test_mark_viewed(self, settings, notifications):
+    def test_mark_viewed(self, notifications):
         submission = mock.FormSubmissionFactory.create()
         submissions = [submission]
-        agency_user = self.users[0]
-        non_agency_user = self.users[1]
-        settings.DEFAULT_AGENCY_USER_EMAIL = agency_user.email
+        agency_user = self.agency_users[0]
+        non_agency_user = self.non_agency_users[0]
 
         # case: viewed by non agency user
         models.FormSubmission.mark_viewed(submissions, non_agency_user)
         instance = models.FormSubmission.objects.get(pk=submission.id)
-        self.assertIsNone(instance.opened_by_agency())
+        self.assertIsNone(instance.first_opened_by_agency())
         logs = instance.logs.all()
         self.assertEqual(len(logs), 1)
         log = logs[0]
@@ -127,7 +124,8 @@ class TestModels(TestCase):
         notifications.reset_mock()
         submissions, logs = models.FormSubmission.mark_viewed(submissions, agency_user)
         instance = models.FormSubmission.objects.get(pk=submission.id)
-        self.assertTrue(instance.opened_by_agency())
+        self.assertTrue(instance.last_opened_by_agency())
+        self.assertTrue(instance.first_opened_by_agency())
         logs = instance.logs.all()
         self.assertEqual(len(logs), 2)
         log = logs[0]
@@ -141,24 +139,30 @@ class TestModels(TestCase):
 
     @patch('intake.models.ApplicationLogEntry')
     @patch('intake.models.FormSubmission.get_unopened_apps')
+    @patch('intake.models.User.objects.filter')
     @patch('intake.models.notifications')
-    @patch('intake.models.settings')
-    def test_refer_unopened_apps(self, settings, notifications, get_unopened_apps, ApplicationLogEntry):
-        settings.DEFAULT_NOTIFICATION_EMAIL = 'someone@agency.org'
+    def test_refer_unopened_apps(self, notifications, get_notified_users, get_unopened_apps, ApplicationLogEntry):
+
+        emails = [u.email for u in self.users if u.profile.should_get_notifications]
+        get_notified_users.return_value = [Mock(email=email) for email in emails]
 
         # case: some unopened apps
-        get_unopened_apps.return_value = (Mock(id=i+1) for i in range(3))
+        submissions = [
+            mock.FormSubmissionFactory.build(
+                id=i+1, anonymous_name='App')
+            for i in range(3)]
+        get_unopened_apps.return_value = submissions
         output = models.FormSubmission.refer_unopened_apps()
 
-        expected_message = "Emailed someone@agency.org with a link to 3 unopened applications"
         notifications.front_email_daily_app_bundle.send.assert_called_once_with(
-            to=['someone@agency.org'],
+            to=emails,
             count=3,
             submission_ids=[1,2,3]
             )
-        notifications.slack_simple.send.assert_called_once_with(expected_message)
+        notifications.slack_app_bundle_sent.send.assert_called_once_with(
+            emails=emails, submissions=get_unopened_apps.return_value)
         ApplicationLogEntry.log_referred.assert_called_once_with([1,2,3], user=None)
-        self.assertEqual(output, expected_message)
+        self.assertEqual(output, notifications.slack_app_bundle_sent.render.return_value)
 
         # case: no unopened apps
         get_unopened_apps.return_value = []
@@ -166,27 +170,40 @@ class TestModels(TestCase):
         ApplicationLogEntry.reset_mock()
         output = models.FormSubmission.refer_unopened_apps()
 
-        expected_message = "No unopened applications. Didn't email someone@agency.org"
         notifications.front_email_daily_app_bundle.send.assert_not_called()
         ApplicationLogEntry.log_referred.assert_not_called()
-        self.assertEqual(output, expected_message)
+        notifications.slack_app_bundle_sent.send.assert_called_once_with(
+            emails=emails, submissions=get_unopened_apps.return_value)
+        self.assertEqual(output, notifications.slack_app_bundle_sent.render.return_value)
 
-    @override_settings(DEFAULT_AGENCY_USER_EMAIL='someone@agency.org')
     def test_agency_event_logs(self):
         instance = Mock()
-        expected_log = Mock(user=Mock(email='someone@agency.org'), event_type=1)
-        instance.logs.all.return_value = [
+        agency = Mock(is_receiving_agency=True)
+        non_agency = Mock(is_receiving_agency=False)
+        agency_user = Mock(**{'profile.organization': agency})
+        # notifications should not affect whether they show up here
+        agency_user_without_notifications = Mock(
+            should_get_notifications=False, **{'profile.organization': agency})
+        non_agency_user = Mock(**{'profile.organization': non_agency})
+        expected_logs = [
+            Mock(event_type=1, user=agency_user),
+            Mock(event_type=1, user=agency_user_without_notifications),
+            ]
+        unexpected_logs = [
             Mock(user=None, event_type=1),
-            expected_log,
-            Mock(user=Mock(email='else@other.org'), event_type=1),
-            Mock(user=Mock(email='someone@agency.org'), event_type=2),
+            Mock(user=None, event_type=2),
+            Mock(user=non_agency_user, event_type=1),
+            Mock(user=non_agency_user, event_type=2),
+            Mock(user=agency_user, event_type=2),
+            Mock(user=agency_user_without_notifications, event_type=2),
         ]
-        expected_results = [expected_log]
+        instance.logs.all.return_value = unexpected_logs + expected_logs
+        expected_results = expected_logs
         results = [
             n for n
             in models.FormSubmission.agency_event_logs(
                 instance, 1)]
-        self.assertListEqual(expected_results, results)
+        self.assertListEqual(results, expected_results)
 
 
 

@@ -201,12 +201,15 @@ class SlackTemplateNotification(BasicSlackNotification, TemplateNotification):
             default_context=default_context,
             message_template_path=message_template_path)
 
-    def send(self, **context_args):
-        if 'submissions' in context_args:
+    def render(self, **context_args):
+        if 'submissions' in context_args and 'bundle_url' not in context_args:
             bundle_url = getattr(settings, 'DEFAULT_HOST', '') + url_with_ids(
                 'intake-app_bundle',
                 [s.id for s in context_args['submissions']])
             context_args.update(bundle_url=bundle_url)
+        return super().render(**context_args)
+
+    def send(self, **context_args):
         content = self.render(**context_args)
         super().send(message_text=content.message)
 
@@ -240,3 +243,8 @@ front_email_daily_app_bundle = FrontEmailNotification(
 email_daily_app_bundle = EmailNotification(
     subject_template="{{current_local_time('%a %b %-d, %Y')}}: Online applications to Clean Slate",
     body_template_path='email/app_bundle_email.jinja')
+
+# submissions, emails
+slack_app_bundle_sent = SlackTemplateNotification(
+    message_template_path="slack/app_bundle_sent.jinja"
+    )

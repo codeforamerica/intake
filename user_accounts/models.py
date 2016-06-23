@@ -13,6 +13,7 @@ class Organization(models.Model):
     name = models.CharField(max_length=50, unique=True)
     website = models.URLField(blank=True)
     blurb = models.TextField(blank=True)
+    is_receiving_agency = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -74,9 +75,6 @@ class Invitation(BaseInvitation):
         return user
 
 
-
-
-
 class UserProfile(models.Model):
     name = models.CharField(max_length=200, blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE,
@@ -85,9 +83,13 @@ class UserProfile(models.Model):
         'Organization',
         on_delete=models.PROTECT
         )
+    should_get_notifications = models.BooleanField(default=False)
 
     def get_display_name(self):
         return self.name or self.user.email
+
+    def __str__(self):
+        return self.get_display_name()
 
     @classmethod
     def create_from_invited_user(cls, user, invitation=None, **kwargs):

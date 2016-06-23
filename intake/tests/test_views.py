@@ -84,7 +84,7 @@ class TestViews(AuthIntegrationTestCase):
 
     @patch('intake.models.notifications.slack_submissions_viewed.send')
     def test_authenticated_user_can_see_filled_pdf(self, slack):
-        self.be_regular_user()
+        self.be_non_agency_user()
         pdf = self.client.get(reverse('intake-filled_pdf',
             kwargs=dict(
                 submission_id=self.submissions[0].id
@@ -97,7 +97,7 @@ class TestViews(AuthIntegrationTestCase):
             user='User')
 
     def test_authenticated_user_can_see_list_of_submitted_apps(self):
-        self.be_regular_user()
+        self.be_non_agency_user()
         index = self.client.get(reverse('intake-app_index'))
         for submission in self.submissions:
             self.assertContains(index,
@@ -126,7 +126,7 @@ class TestViews(AuthIntegrationTestCase):
             )
 
     def test_authenticated_user_can_see_pdf_bundle(self):
-        self.be_regular_user()
+        self.be_non_agency_user()
         ids = [s.id for s in self.submissions]
         url = url_with_ids('intake-pdf_bundle', ids)
         bundle = self.client.get(url)
@@ -134,7 +134,7 @@ class TestViews(AuthIntegrationTestCase):
 
     @patch('intake.models.notifications.slack_submissions_viewed.send')
     def test_authenticated_user_can_see_app_bundle(self, slack):
-        self.be_regular_user()
+        self.be_non_agency_user()
         ids = [s.id for s in self.submissions]
         url = url_with_ids('intake-app_bundle', ids)
         bundle = self.client.get(url)
@@ -146,7 +146,7 @@ class TestViews(AuthIntegrationTestCase):
 
     @patch('intake.views.notifications.slack_submissions_deleted.send')
     def test_authenticated_user_can_delete_apps(self, slack):
-        self.be_regular_user()
+        self.be_non_agency_user()
         submission = self.submissions[-1]
         pdf_link = reverse('intake-filled_pdf',
             kwargs={'submission_id':submission.id})
@@ -164,8 +164,8 @@ class TestViews(AuthIntegrationTestCase):
             user='User')
 
     @patch('intake.views.MarkProcessed.notification_function')
-    def test_authenticated_user_can_mark_apps_as_processed(self, slack):
-        self.be_regular_user()
+    def test_agency_user_can_mark_apps_as_processed(self, slack):
+        self.be_agency_user()
         submissions = self.submissions[:2]
         ids = [s.id for s in submissions]
         mark_link = url_with_ids('intake-mark_processed', ids)
@@ -177,7 +177,7 @@ class TestViews(AuthIntegrationTestCase):
         self.assertRedirects(marked, reverse('intake-app_index'))
         args, kwargs = slack.call_args
         for sub in kwargs['submissions']:
-            self.assertTrue(sub.processed_by_agency)
+            self.assertTrue(sub.last_processed_by_agency())
             self.assertIn(sub.id, ids)
 
     def test_old_urls_return_permanent_redirect(self):

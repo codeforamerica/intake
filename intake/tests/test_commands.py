@@ -12,8 +12,7 @@ class TestCommands(TestCase):
         command = Mock()
         commands.send_unopened_apps_notification.Command.handle(command)
         models.FormSubmission.refer_unopened_apps.assert_called_once_with()
-        command.style.SUCCESS.assert_called_once_with(
-            models.FormSubmission.refer_unopened_apps.return_value)
+        command.style.SUCCESS.assert_called_once_with("Successfully referred any unopened apps")
 
 
     @patch('intake.management.commands.pull_data_from_typeseam.DataImporter')

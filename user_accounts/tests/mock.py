@@ -53,22 +53,29 @@ def create_user_with_profile(organization, **attributes):
     return models.UserProfile.objects.create(
         name=name,
         user=user,
-        organization=organization
+        organization=organization,
+        **attributes
         )
 
 def create_fake_auth_models(num_orgs=2, num_users_per_org=2):
     orgs = [
         OrganizationFactory.create()
         for i in range(num_orgs)]
+    orgs[0].is_receiving_agency = True
+    orgs[0].save()
     profiles = []
     for org in orgs:
         for i in range(num_users_per_org):
             profiles.append(
                 create_user_with_profile(
-                    organization=org))
+                    organization=org,
+                    should_get_notifications=org.is_receiving_agency))
     return {
             'organizations': orgs,
             'users': [p.user for p in profiles],
+            'notified_users': [p.user for p in profiles if p.should_get_notifications],
+            'agency_users': [p.user for p in profiles if p.organization.is_receiving_agency],
+            'non_agency_users': [p.user for p in profiles if not p.organization.is_receiving_agency],
             'profiles': profiles
         }
 

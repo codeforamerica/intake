@@ -53,12 +53,17 @@ class AuthIntegrationTestCase(TestCase):
             mock.OrganizationFactory.create()
             for i in range(2)
         ]
+        cls.orgs[1].is_receiving_agency = True
+        cls.orgs[1].save()
         cls.superuser = mock.fake_superuser(
             **cls.example_superuser )
         UserProfile.objects.create(user=cls.superuser, organization=cls.orgs[-1])
-        cls.invitations = [
-            mock.fake_invitation(org, inviter=cls.superuser)
-            for org in cls.orgs]
+        cls.invitations = []
+        for org in cls.orgs:
+            for i in range(2):  # 2 per org
+                cls.invitations.append(
+                    mock.fake_invitation(org, inviter=cls.superuser)
+                    )
         cls.users = []
         for invite in cls.invitations:
             user = invite.create_user_from_invite(
@@ -69,11 +74,19 @@ class AuthIntegrationTestCase(TestCase):
     def be_superuser(self):
         self.client.login(**self.example_superuser)
 
-    def be_regular_user(self):
+    def be_agency_user(self):
+        user = self.users[2]
+        self.client.login(
+            email=user.email,
+            password=mock.fake_password)
+        return user
+
+    def be_non_agency_user(self):
         user = self.users[0]
         self.client.login(
             email=user.email,
             password=mock.fake_password)
+        return user
 
     def be_anonymous(self):
         self.client.logout()
@@ -180,11 +193,11 @@ class TestUserAccounts(AuthIntegrationTestCase):
         self.assertEqual(get_user_display(users[0]), self.example_user['email'])
 
     def test_user_can_add_info_in_profile_view(self):
-        self.be_regular_user()
+        user = self.be_agency_user()
         # find link to profile
         response = self.client.get(reverse("user_accounts-profile"))
         self.assertContains(response, 
-            html_utils.escape(self.users[0].profile.name))
+            html_utils.escape(user.profile.name))
         result = self.client.fill_form(
             reverse("user_accounts-profile"),
             name=self.example_user['name'],
@@ -266,7 +279,7 @@ class TestUserAccounts(AuthIntegrationTestCase):
         self.assertLoggedInAs(self.users[0])
 
     def test_can_reset_password_while_logged_in(self):
-        self.be_regular_user()
+        user = self.be_agency_user()
         # go to profile
         profile = self.client.get(
             reverse("user_accounts-profile"))
@@ -278,7 +291,7 @@ class TestUserAccounts(AuthIntegrationTestCase):
         # make sure the change password page
         # knows who we are
         self.assertContains(change_password,
-            self.users[0].email)
+            user.email)
         # set a new password
         new_password = "FR35H H0T s3cr3tZ!1"
         reset_done = self.client.fill_form(
@@ -288,11 +301,11 @@ class TestUserAccounts(AuthIntegrationTestCase):
         self.assertRedirects(reset_done,
             reverse("user_accounts-profile"))
         # make sure we are logged in
-        self.assertLoggedInAs(self.users[0])
+        self.assertLoggedInAs(user)
         # make sure we can login with the new password
         self.client.logout()
         self.client.login(
-            email=self.users[0].email,
+            email=user.email,
             password=new_password
             )
-        self.assertLoggedInAs(self.users[0])
+        self.assertLoggedInAs(user)

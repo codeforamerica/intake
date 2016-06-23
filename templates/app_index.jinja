@@ -13,7 +13,7 @@
 			<th>Last Name</th>
 			<th>First Name</th>
 			<th>Intake PDF</th>
- 			<th>Opened by Aleem</th>
+ 			<th>Opened by SF Pub Defender</th>
 			<th>Added to DB</th>
 			<th>Delete?</th>
 		</tr>
@@ -32,14 +32,14 @@
 						</a>
 			</td> 
 			<td>
-			{% if app.opened_by_agency() %}
-			{{ humanize.naturaltime(app.opened_by_agency()) }}
+			{% if app.last_opened_by_agency() %}
+			{{ humanize.naturaltime(app.last_opened_by_agency()) }}
 			{%- else -%}------------{% endif %}
 			</td>
 			<td>
-			{% if app.processed_by_agency() %}
+			{% if app.last_processed_by_agency() %}
 				<span class="glyphicon glyphicon-ok-sign"></span>
-				Added {{ humanize.naturaltime(app.processed_by_agency()) }}
+				Added {{ humanize.naturaltime(app.last_processed_by_agency()) }}
 			{%- else -%}
 				<a class="btn btn-default btn-sm" href="{{
 					url_with_ids('intake-mark_processed',
