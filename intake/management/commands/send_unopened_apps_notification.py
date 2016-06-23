@@ -9,7 +9,7 @@ class Command(BaseCommand):
     help = 'Sends an email about unopened applications'
 
     def handle(self, *args, **options):
-        result_message = models.FormSubmission.refer_unopened_apps()
+        models.FormSubmission.refer_unopened_apps()
         self.stdout.write(
-            self.style.SUCCESS(result_message)
+            self.style.SUCCESS("Successfully referred any unopened apps")
             )
