@@ -25,6 +25,8 @@ test.acceptance:
 
 deploy.demo:
 	git push -f demo HEAD:master
+	heroku run --app cmr-demo python manage.py migrate
 
 deploy.prod:
 	git push prod master
+	heroku run --app cmr-prod python manage.py migrate
