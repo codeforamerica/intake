@@ -1,0 +1,14 @@
+EMAIL to alexandro-koelpin@yahoo.com
+
+----------------------------
+
+Invitation to create an account on Clear My Record
+
+----------------------------
+
+Hello,
+
+You've been invited to create an account on Clear My Record.
+
+If you'd like to join, please follow this link:
+http://localhost:8081/invitations/accept-invite/knazzsu8b4qs0c4hlguhx0qk5tsovbfbfcaptv2t7dmyvwmlxxbh5hyyp4bt2kqq

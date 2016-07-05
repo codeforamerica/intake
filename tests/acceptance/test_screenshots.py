@@ -69,6 +69,21 @@ class TestWorkflows(base.ScreenSequenceTestCase):
         for prefix, size in sizes.items():
             self.run_sequence(prefix, sequence, size=size)
 
+    def test_application_submission_failure(self):
+        address_fields = {
+            key: value for key, value in intake_mock.fake.sf_county_form_answers().items()
+            if 'address' in key
+            }
+        sequence = [
+            S.get('went to splash page', '/'),
+            S.click_on('clicked apply now', 'Apply now'),
+            S.fill_form('submitted incomplete form', first_name='Cornelius'),
+            S.fill_form('added last name', last_name='Cherimoya'),
+            S.fill_form('added address', **address_fields)
+        ]
+        self.run_sequence(
+            "Applying without enough information", sequence, size=base.COMMON_MOBILE)
+
     def test_login_and_password_reset_workflow(self):
         user = self.users[0]
         found_user = auth_models.User.objects.filter(email=user.email).first()

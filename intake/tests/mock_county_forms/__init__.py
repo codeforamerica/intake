@@ -11,15 +11,21 @@ class Provider(BaseProvider):
             "yes": chance_of_yes,
             "no": 1.0 - chance_of_yes})
 
-    def sf_county_form_answers(self):
-        return {
+    def generate_contact_preferences(self):
+        methods = {
             'prefers_email': self.maybe(0.2),
             'prefers_sms': self.maybe(0.7),
             'prefers_snailmail': self.maybe(0.02),
             'prefers_voicemail': self.maybe(0.3),
+        }
+        return [k for k, v in methods.items() if v == 'yes']
+
+    def sf_county_form_answers(self):
+        return {
             'first_name': self.generator.first_name(),
             'middle_name': self.generator.first_name(),
             'last_name': self.generator.last_name(),
+            'contact_preferences': self.generate_contact_preferences(),
             'phone_number': self.numerify('###-###-####'),
             'email': self.generator.free_email(),
             'address_street': self.generator.street_address(),
