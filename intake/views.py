@@ -31,7 +31,8 @@ class Confirm(FormView):
     template_name = "apply_page.jinja"
     form_class = forms.BaseApplicationForm
     success_url = reverse_lazy('intake-thanks')
-    incoming_message = _("Please check the form to make sure it is correct.")
+    incoming_message = _("Please double check form. Some parts are empty and may cause delays.")
+    error_message = _("There were some problems with your application. Please check the errors below.")
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -41,12 +42,18 @@ class Confirm(FormView):
             # make sure the form has warnings.
             # trigger data cleaning
             form.is_valid()
+            if form.has_warnings():
+                messages.warning(self.request, self.incoming_message)
             context['form'] = form
         return context
 
     def form_valid(self, form):
         self.save_submission_and_slack_it(form)
         return super().form_valid(form)
+
+    def form_invalid(self, *args, **kwargs):
+        messages.error(self.request, self.error_message)
+        return super().form_invalid(*args, **kwargs)
 
     def save_submission_and_slack_it(self, form):
         submission = models.FormSubmission(answers=form.cleaned_data)
@@ -63,13 +70,16 @@ class Apply(Confirm):
     confirmation_url = reverse_lazy('intake-confirm')
 
     def get_context_data(self, *args, **kwargs):
+        """Override custom context in confirmation page, just use FormView default
+        """
         return FormView.get_context_data(self, *args, **kwargs)
 
     def form_valid(self, form):
+        """If no errors, check for warnings, redirect to confirmation if needed
+        """
         if form.has_warnings():
             # send them to confirmation page with warnings
             self.request.session['form_in_progress'] = self.request.POST
-            messages.warning(self.request, Confirm.incoming_message)
             return redirect(self.confirmation_url)
         else:
             return super().form_valid(form)

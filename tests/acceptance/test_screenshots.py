@@ -27,7 +27,7 @@ class TestWorkflows(base.ScreenSequenceTestCase):
         self.submissions = intake_mock.FormSubmissionFactory.create_batch(10)
         self.superuser = auth_mock.fake_superuser()
         accounts_models.UserProfile.objects.create(
-            user=self.superuser,
+            user=self.superuser, 
             organization=self.organizations[-1])
 
     def get_link_from_email(self):

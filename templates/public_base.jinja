@@ -23,24 +23,12 @@
 		</div>
 	</section>
 	{% endblock above_the_fold %}
-	{% block messages %}
-	{% if messages %}
-	<section class="messages">
-	{% for message in messages %}
-		<div class="container">
-			<div class="row">
-				<div class="col-xs-12 col-sm-8 col-md-6 col_centered">
-					<div class="message {{ message.tags }}">
-						{{ message }}
-					</div>
-				</div>
-			</div>
-		</div>
-	{% endfor %}
-	</section>
-	{% endif %}
-	{% endblock messages %}
 	{% block main %}
+		{% block flash_messages %}
+		<section class="messages">
+			{% include "includes/public_flash_messages.jinja" %}
+		</section>
+		{% endblock flash_messages %}
 		{% block content %}
 		{% endblock content %}
 	{% endblock main %}

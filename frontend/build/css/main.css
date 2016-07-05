@@ -4076,7 +4076,6 @@ h2.site_name {
   line-height: inherit;
 }
 .flash_message {
-  background-color: #555555;
   padding: .25em 0;
 }
 .flash_message:first-child {
@@ -4099,6 +4098,40 @@ h2.site_name {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   content: "\e084";
+  padding-right: 0.5em;
+}
+.flash_message.error {
+  background-color: #d9534f;
+  color: white;
+}
+.flash_message.error .flash_message-body:before {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "\e209";
+  padding-right: 0.5em;
+}
+.flash_message.warning {
+  background-color: #f0ad4e;
+  color: white;
+}
+.flash_message.warning .flash_message-body:before {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "\e209";
   padding-right: 0.5em;
 }
 body.admin {
