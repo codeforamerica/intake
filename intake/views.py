@@ -1,16 +1,19 @@
 from django.conf import settings
+from django.utils.translation import ugettext as _
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse_lazy
+from django.contrib import messages
 
 from django.http import HttpResponseNotFound, HttpResponse
 from django.views.generic import View
 from django.views.generic.base import TemplateView
+from django.views.generic.edit import FormView
 
 
 
 from django.core import mail
 
-from intake import models, notifications
+from intake import models, notifications, forms
 from project.jinja2 import url_with_ids
 
 
@@ -19,17 +22,57 @@ class Home(TemplateView):
     template_name = "main_splash.jinja"
 
 
-class Apply(View):
 
-    def get(self, request):
-        return render(request, "application_form.jinja")
+class Confirm(FormView):
+    '''Intended to provide a final acceptance of a form,
+    after any necessary warnings have been raised.
+    It follows the `Apply` view, which checks for warnings.s
+    '''
+    template_name = "apply_page.jinja"
+    form_class = forms.BaseApplicationForm
+    success_url = reverse_lazy('intake-thanks')
+    incoming_message = _("Please check the form to make sure it is correct.")
 
-    def post(self, request):
-        submission = models.FormSubmission.create_from_answers(dict(request.POST))
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        form_data = self.request.session.get('form_in_progress', None)
+        if form_data:
+            form = self.form_class(form_data)
+            # make sure the form has warnings.
+            # trigger data cleaning
+            form.is_valid()
+            context['form'] = form
+        return context
+
+    def form_valid(self, form):
+        self.save_submission_and_slack_it(form)
+        return super().form_valid(form)
+
+    def save_submission_and_slack_it(self, form):
+        submission = models.FormSubmission(answers=form.cleaned_data)
+        submission.save()
         number = models.FormSubmission.objects.count()
         notifications.slack_new_submission.send(
-            submission=submission, request=request, submission_count=number)
-        return redirect(reverse_lazy('intake-thanks'))
+            submission=submission, request=self.request, submission_count=number)
+
+
+class Apply(Confirm):
+    '''The initial application page.
+    Checks for warnings, and if they exist, redirects to a confirmation page.
+    '''
+    confirmation_url = reverse_lazy('intake-confirm')
+
+    def get_context_data(self, *args, **kwargs):
+        return FormView.get_context_data(self, *args, **kwargs)
+
+    def form_valid(self, form):
+        if form.has_warnings():
+            # send them to confirmation page with warnings
+            self.request.session['form_in_progress'] = self.request.POST
+            messages.warning(self.request, Confirm.incoming_message)
+            return redirect(self.confirmation_url)
+        else:
+            return super().form_valid(form)
 
 
 class Thanks(TemplateView):
@@ -154,6 +197,7 @@ class MarkProcessed(MarkSubmissionStepView):
 
 home = Home.as_view()
 apply_form = Apply.as_view()
+confirm = Confirm.as_view()
 thanks = Thanks.as_view()
 privacy = PrivacyPolicy.as_view()
 stats = Stats.as_view()

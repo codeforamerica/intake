@@ -39,7 +39,6 @@ section.content.application_form {
 		font-weight: 700;
 		font-size: 1em;
 		border: 0; margin: 0; }
-	ul { padding: 0; }
 }
 .field + .field { margin-top: 1.5em; }
 .field + .note { margin-top: 1.5em; }
@@ -47,6 +46,7 @@ section.content.application_form {
 form p + p { margin-top: 1.5em; }
 span + .subfield { margin-top: .5em; }
 .options_list {
+	padding: 0;
 	margin: .25em -.25em;
 	li {
 		background-color: #fff;
@@ -67,19 +67,33 @@ button {
 		background-color: inherit; }
 button[type="submit"] { .btn-primary; .btn-lg; }
 
-ul.errorlist {
-	padding: 0;
+
+.warnings, .errors {
+	margin: 0 -1em;
+	padding: .5em 1em;
+	position: relative;
 }
-ul.errorlist li {
-	&:before {
-		.glyphicon;
-		content: "\e101";
-		padding-right: 0.5em;
-		color: @brand-danger;
-	}
+.errorlist, .warninglist {
+	font-size: 1em;
+	padding: 0;
+	margin: 0;
+	// font-weight: 600;
+}
+.warnings {
+	border-top: .25em solid @brand-warning;
+	border-bottom: .25em solid @brand-warning;
+	background-color: lighten(@brand-warning, 30%);
+}
+.errors {
+	border-top: .25em solid @brand-danger;
+	border-bottom: .25em solid @brand-danger;
+	background-color: lighten(@brand-danger, 36%);
 }
 
 .subfield-row > .subfield { display: inline-block; }
+.dob_month, .dob_day { width: 3em; }
+.dob_year { width: 5em; }
+.dob .subfield + .subfield { margin-left: .5em; }
 .address_city { width: 18em; }
 .address_state { width: 3.5em; }
 .address_zip { width: 8em; }

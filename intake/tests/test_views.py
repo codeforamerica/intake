@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
 
 from intake.tests import mock
-from intake import models
+from intake import models, forms, views
 
 from project.jinja2 import url_with_ids
 
@@ -47,10 +47,28 @@ class TestViews(AuthIntegrationTestCase):
         self.assertIn('Clear My Record', response.content.decode('utf-8'))
 
     def test_apply_view(self):
+        self.be_anonymous()
         response = self.client.get(reverse('intake-apply'))
         self.assertEqual(response.status_code, 200)
         self.assertIn('Apply to Clear My Record',
             response.content.decode('utf-8'))
+        self.assertNotContains(response, "This field is required.")
+        self.assertNotContains(response, forms.Warnings.ADDRESS)
+        self.assertNotContains(response, forms.Warnings.SSN)
+        self.assertNotContains(response, forms.Warnings.DOB)
+
+    def test_confirm_view(self):
+        self.be_anonymous()
+        base_data = mock.NEW_RAW_FORM_DATA
+        session = self.client.session
+        session['form_in_progress'] = base_data
+        session.save()
+        response = self.client.get(reverse('intake-confirm'))
+        self.assertContains(response, base_data['first_name'][0])
+        self.assertContains(response, base_data['last_name'][0])
+        self.assertContains(response, forms.Warnings.ADDRESS)
+        self.assertContains(response, forms.Warnings.SSN)
+        self.assertContains(response, forms.Warnings.DOB)
 
     def test_stats_view(self):
         submissions = list(models.FormSubmission.objects.all())
@@ -70,7 +88,16 @@ class TestViews(AuthIntegrationTestCase):
         self.be_anonymous()
         result = self.client.fill_form(
             reverse('intake-apply'),
-            first_name="Anonymous"
+            first_name="Anonymous",
+            last_name="Anderson",
+            ssn='123091203',
+            dob_day='10',
+            dob_month='10',
+            dob_year='80',
+            address_street='100 Market St',
+            address_city='San Francisco',
+            address_state='CA',
+            address_zip='99999',
             )
         self.assertRedirects(result, 
             reverse('intake-thanks'))
@@ -81,6 +108,39 @@ class TestViews(AuthIntegrationTestCase):
             submission='FormSubmission',
             request='WSGIRequest',
             submission_count='int')
+
+    @patch('intake.views.notifications.slack_new_submission.send')
+    def test_apply_with_name_only(self, slack):
+        self.be_anonymous()
+        # this should raise warnings
+        result = self.client.fill_form(
+            reverse('intake-apply'),
+            first_name="Foo",
+            last_name="Bar",
+            follow=True
+            )
+        self.assertEqual(result.wsgi_request.path, reverse('intake-confirm'))
+        self.assertContains(result, "Foo")
+        self.assertContains(result, "Bar")
+        self.assertContains(result, forms.Warnings.ADDRESS)
+        self.assertContains(result, forms.Warnings.SSN)
+        self.assertContains(result, forms.Warnings.DOB)
+        self.assertContains(result, views.Confirm.incoming_message)
+
+
+    def test_apply_with_insufficient_form(self):
+        # should return the same page, with the partially filled form
+        result = self.client.fill_form(
+            reverse('intake-apply'),
+            first_name="Foooo"
+            )
+        self.assertContains(result, "Foooo")
+        self.assertEqual(result.wsgi_request.path, reverse('intake-apply'))
+        self.assertContains(result, "This field is required.")
+        self.assertContains(result, forms.Warnings.ADDRESS)
+        self.assertContains(result, forms.Warnings.SSN)
+        self.assertContains(result, forms.Warnings.DOB)
+
 
     @patch('intake.models.notifications.slack_submissions_viewed.send')
     def test_authenticated_user_can_see_filled_pdf(self, slack):
@@ -225,6 +285,7 @@ class TestViews(AuthIntegrationTestCase):
             new = url_with_ids(new_view, [s.id for s in ported_models_query])
             self.assertRedirects(response, new,
                 status_code=301, fetch_redirect_response=False)
+
 
     @skipIf(True, "not yet implemented")
     def test_authenticated_user_cannot_see_apps_to_other_org(self):

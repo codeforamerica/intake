@@ -33,6 +33,28 @@ RAW_FORM_DATA = {
     'where_probation_or_parole': ['']
 }
 
+NEW_RAW_FORM_DATA = {
+    'address_city': '',
+    'address_state': 'CA',
+    'address_street': '',
+    'address_zip': '',
+    'contact_preferences': ['prefers_email'],
+    'dob_day': '',
+    'dob_month': '',
+    'dob_year': '',
+    'email': 'foo@bar.com',
+    'first_name': 'Foo',
+    'how_did_you_hear': '',
+    'last_name': 'Bar',
+    'middle_name': '',
+    'monthly_expenses': '',
+    'monthly_income': '',
+    'phone_number': '',
+    'ssn': '',
+    'when_probation_or_parole': '',
+    'when_where_outside_sf': '',
+    'where_probation_or_parole': '',
+}
 
 def local(datetime):
     return Pacific.localize(datetime)

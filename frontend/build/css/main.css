@@ -3639,9 +3639,6 @@ section.content.application_form {
   border: 0;
   margin: 0;
 }
-.field ul {
-  padding: 0;
-}
 .field + .field {
   margin-top: 1.5em;
 }
@@ -3658,6 +3655,7 @@ span + .subfield {
   margin-top: .5em;
 }
 .options_list {
+  padding: 0;
   margin: 0.25em -0.25em;
 }
 .options_list li {
@@ -3742,25 +3740,40 @@ button[type="submit"] .badge {
   color: #FEE228;
   background-color: #004A6C;
 }
-ul.errorlist {
-  padding: 0;
-}
-ul.errorlist li:before {
+.warnings,
+.errors {
+  margin: 0 -1em;
+  padding: .5em 1em;
   position: relative;
-  top: 1px;
-  display: inline-block;
-  font-family: 'Glyphicons Halflings';
-  font-style: normal;
-  font-weight: normal;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  content: "\e101";
-  padding-right: 0.5em;
-  color: #d9534f;
+}
+.errorlist,
+.warninglist {
+  font-size: 1em;
+  padding: 0;
+  margin: 0;
+}
+.warnings {
+  border-top: 0.25em solid #f0ad4e;
+  border-bottom: 0.25em solid #f0ad4e;
+  background-color: #fceedb;
+}
+.errors {
+  border-top: 0.25em solid #d9534f;
+  border-bottom: 0.25em solid #d9534f;
+  background-color: #fae7e6;
 }
 .subfield-row > .subfield {
   display: inline-block;
+}
+.dob_month,
+.dob_day {
+  width: 3em;
+}
+.dob_year {
+  width: 5em;
+}
+.dob .subfield + .subfield {
+  margin-left: .5em;
 }
 .address_city {
   width: 18em;

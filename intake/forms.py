@@ -10,6 +10,12 @@ YES_NO_CHOICES = (
     )
 
 
+class Warnings:
+    DOB = _("The public defender may not be able to check your RAP sheet without a full date of birth.")
+    ADDRESS = _("The public defender needs a mailing address to send you a letter with the next steps.")
+    SSN = _("The public defender may not be able to check your RAP sheet without a social security number.")
+
+
 def YesNoBlankField(**kwargs):
     """Returns a RadioSelect field with three valid options:
         'Yes', 'No', and ''
@@ -39,13 +45,13 @@ class BaseApplicationForm(forms.Form):
 
     fieldsets = {}
 
-    contact_preferences = forms.ChoiceField(
+    contact_preferences = forms.MultipleChoiceField(
         label=_('How would you like us to contact you?'),
         help_text=_(
             'Code for America will use this to update you about your application.'),
         choices=CONTACT_PREFERENCE_CHOICES,
         widget=forms.CheckboxSelectMultiple,
-        required=False,
+        required=False
         )
 
     first_name = forms.CharField(
@@ -156,9 +162,7 @@ class BaseApplicationForm(forms.Form):
 
     def check_ssn(self, data):
         if not data.get('ssn', None):
-            self.add_warning('ssn',
-                _("The public defender may not be able to check your RAP sheet without a social security number")
-                )
+            self.add_warning('ssn', Warnings.SSN)
 
     def all_keys(self, data, keys):
         return all([
@@ -183,17 +187,16 @@ class BaseApplicationForm(forms.Form):
 
     def check_dob(self, data):
         if not self.filled_all_dob_fields(data):
-            self.add_warning('dob',
-                _("The public defender may not be able to check your RAP sheet without a full date of birth")
-                )
+            self.add_warning('dob', Warnings.DOB)
 
     def check_address(self, data):
         if not self.filled_all_address_fields(data):
-            self.add_warning('address',
-                _("The public defender needs a mailing address to send you a letter with the next steps")
-                )
+            self.add_warning('address', Warnings.ADDRESS)
 
-    def should_raise_warnings(self):
+    def warnings_for(self, key):
+        return self._warnings.get(key, [])
+
+    def has_warnings(self):
         """returns True or False indicating whether or not warnings should
         be raised for the user on a confirmation submission page.
         """

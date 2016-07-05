@@ -6,6 +6,7 @@ urlpatterns = [
     # public views
     url(r'^$', views.home, name='intake-home'),
     url(r'^apply/$', views.apply_form, name='intake-apply'),
+    url(r'^confirm/$', views.confirm, name='intake-confirm'),
     url(r'^thanks/$', views.thanks, name='intake-thanks'),
     url(r'^stats/$', views.stats, name='intake-stats'),
     url(r'^privacy/$', views.privacy, name='intake-privacy'),

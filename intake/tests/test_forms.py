@@ -44,8 +44,7 @@ class TestForms(TestCase):
         if form.is_valid():
             warnings = form.get_warnings()
             self.assertIn('ssn', warnings)
-            self.assertListEqual(warnings['ssn'], 
-                ['The public defender may not be able to check your RAP sheet without a social security number'])
+            self.assertListEqual(warnings['ssn'], [forms.Warnings.SSN])
 
     def test_gives_warning_for_missing_dob(self):
         fake_answers = mock.fake.sf_county_form_answers()
@@ -54,8 +53,7 @@ class TestForms(TestCase):
         if form.is_valid():
             warnings = form.get_warnings()
             self.assertIn('dob', warnings)
-            self.assertListEqual(warnings['dob'], 
-                ['The public defender may not be able to check your RAP sheet without a full date of birth'])
+            self.assertListEqual(warnings['dob'], [forms.Warnings.DOB])
 
     def test_gives_warning_for_missing_address(self):
         fake_answers = mock.fake.sf_county_form_answers()
@@ -64,7 +62,81 @@ class TestForms(TestCase):
         if form.is_valid():
             warnings = form.get_warnings()
             self.assertIn('address', warnings)
-            self.assertListEqual(warnings['address'], 
-                ['The public defender needs a mailing address to send you a letter with the next steps'])
+            self.assertListEqual(warnings['address'], [forms.Warnings.ADDRESS])
+
+    def test_form_render_is_equivalent_to_previous_form(self):
+        from django.template import loader
+        fake_answers = mock.fake.sf_county_form_answers()
+        fake_answers['contact_preferences'] = ['prefers_email', 'prefers_sms']
+        form = forms.BaseApplicationForm(fake_answers)
+        context = {'form': form}
+
+        # previous = loader.get_template('application_form.jinja').render(context)
+        new = loader.get_template('apply_page.jinja').render(context)
+        # open("tests/new.html", "w").write(new)
+        # open("tests/previous.html", "w").write(previous)
+        # self.assertHTMLEqual(
+        #     previous, new
+        #     )
+
+    def test_check_options_macro(self):
+        from django.template import loader
+        jinja = loader.engines['jinja']
+        template = jinja.env.from_string("""{% import 'macros.jinja' as macros -%}
+        {{- macros.checkbox_options_field(form.contact_preferences) -}}
+        """)
+        fake_answers = mock.fake.sf_county_form_answers()
+        fake_answers['contact_preferences'] = ['prefers_email', 'prefers_sms']
+        form = forms.BaseApplicationForm(fake_answers)
+        context = {'form': form}
+        results = template.render(context)
+        expected = """
+    <div class="field field-checkbox_options contact_preferences">
+        <legend>
+            How would you like us to contact you?
+        </legend>
+        <div class="field-help_text">
+            Code for America will use this to update you about your application.
+        </div>
+        <ul class="checkbox_options options_list">
+        <li>
+            <label class="field-option_label">
+                <input type="checkbox" name="contact_preferences" value="prefers_email" checked="checked">
+                <span class="option-display_text">
+                    Email
+                </span>
+            </label>
+        </li>
+        <li>
+            <label class="field-option_label">
+                <input type="checkbox" name="contact_preferences" value="prefers_sms" checked="checked">
+                <span class="option-display_text">
+                    Text Message
+                </span>
+            </label>
+        </li>
+        <li>
+            <label class="field-option_label">
+                <input type="checkbox" name="contact_preferences" value="prefers_snailmail">
+                <span class="option-display_text">
+                    Paper mail
+                </span>
+            </label>
+        </li>
+        <li>
+            <label class="field-option_label">
+                <input type="checkbox" name="contact_preferences" value="prefers_voicemail">
+                <span class="option-display_text">
+                    Voicemail
+                </span>
+            </label>
+        </li>
+        </ul>
+    </div>
+    """
+        self.assertHTMLEqual(results, expected)
+
+
+
 
 
