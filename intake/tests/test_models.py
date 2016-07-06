@@ -256,6 +256,23 @@ class TestModels(TestCase):
             with self.assertRaises(ValidationError):
                 contact_info_field.validate(invalid_data, Mock())
 
+    def test_applicantcontactedlogentry_model(self):
+        submission = mock.FormSubmissionFactory.create()
+        sent_to = {'email': 'someone@gmail.com'}
+        log = models.ApplicantContactedLogEntry.objects.create(
+            submission=submission,
+            user=self.users[0],
+            event_type=models.ApplicationLogEntry.CONFIRMATION_SENT,
+            contact_info=sent_to,
+            message_sent="hi good job applying, ttyl")
+        retrieved = models.ApplicantContactedLogEntry.objects.get(id=log.id)
+        base_instance = models.ApplicationLogEntry.objects.get(id=log.id)
+        self.assertEqual(retrieved, log)
+        self.assertEqual(base_instance.id, retrieved.id)
+        self.assertDictEqual(log.contact_info, sent_to)
+        self.assertEqual(retrieved.submission, submission)
+        self.assertEqual(retrieved.message_sent, "hi good job applying, ttyl")
+
 
 
 

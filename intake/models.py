@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 
-from intake import pdfparser, anonymous_names, notifications
+from intake import pdfparser, anonymous_names, notifications, fields
 from intake.constants import CONTACT_METHOD_CHOICES
 
 
@@ -135,12 +135,14 @@ class ApplicationLogEntry(models.Model):
     REFERRED = 2
     PROCESSED = 3
     DELETED = 4
+    CONFIRMATION_SENT = 5
 
     EVENT_TYPES = (
-        (OPENED,    "opened"),
-        (REFERRED,  "referred"),
-        (PROCESSED, "processed"),
-        (DELETED,   "deleted"),
+        (OPENED,             "opened"),
+        (REFERRED,           "referred"),
+        (PROCESSED,          "processed"),
+        (DELETED,            "deleted"),
+        (CONFIRMATION_SENT,  "sent confirmation"),
         )
 
     time = models.DateTimeField(default=timezone_utils.now)
@@ -185,6 +187,10 @@ class ApplicationLogEntry(models.Model):
     def log_processed(cls, submission_ids, user, time=None):
         return cls.log_multiple(cls.PROCESSED, submission_ids, user, time)
 
+
+class ApplicantContactedLogEntry(ApplicationLogEntry):
+    contact_info = fields.ContactInfoJSONField(default=dict)
+    message_sent = models.TextField(blank=True)
 
 
 class FillablePDF(models.Model):
