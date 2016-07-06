@@ -3755,7 +3755,13 @@ button[type="submit"] .badge {
 .warnings {
   border-top: 0.25em solid #f0ad4e;
   border-bottom: 0.25em solid #f0ad4e;
-  background-color: #fceedb;
+  background-color: #fef9f3;
+}
+.warninglist {
+  color: #c77c11;
+}
+.errorlist {
+  color: #a82824;
 }
 .errors {
   border-top: 0.25em solid #d9534f;
@@ -4079,60 +4085,52 @@ h2.site_name {
   padding: .25em 0;
 }
 .flash_message:first-child {
-  padding-top: 0.5em;
+  padding-top: 1em;
 }
 .flash_message:last-child {
-  padding-bottom: 0.5em;
+  padding-bottom: 1em;
+}
+.flash_message .row {
+  position: relative;
+}
+.flash_message.error .row > div:before {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 2em;
+  position: absolute;
+  font-size: 0.8em;
+  padding-top: 0.2em;
+}
+.flash_message-body {
+  display: block;
+  margin-left: 1.3em;
+}
+.flash_message.error {
+  background-color: #fae7e6;
+  color: #a82824;
+}
+.flash_message.error .row > div:before {
+  content: "\e209";
 }
 .flash_message.success {
   background-color: #5cb85c;
 }
 .flash_message.success .flash_message-body:before {
-  position: relative;
-  top: 1px;
-  display: inline-block;
-  font-family: 'Glyphicons Halflings';
-  font-style: normal;
-  font-weight: normal;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   content: "\e084";
-  padding-right: 0.5em;
-}
-.flash_message.error {
-  background-color: #d9534f;
-  color: white;
-}
-.flash_message.error .flash_message-body:before {
-  position: relative;
-  top: 1px;
-  display: inline-block;
-  font-family: 'Glyphicons Halflings';
-  font-style: normal;
-  font-weight: normal;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  content: "\e209";
-  padding-right: 0.5em;
 }
 .flash_message.warning {
   background-color: #f0ad4e;
   color: white;
 }
 .flash_message.warning .flash_message-body:before {
-  position: relative;
-  top: 1px;
-  display: inline-block;
-  font-family: 'Glyphicons Halflings';
-  font-style: normal;
-  font-weight: normal;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   content: "\e209";
-  padding-right: 0.5em;
 }
 body.admin {
   overflow: auto;

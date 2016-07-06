@@ -82,12 +82,18 @@ button[type="submit"] { .btn-primary; .btn-lg; }
 .warnings {
 	border-top: .25em solid @brand-warning;
 	border-bottom: .25em solid @brand-warning;
-	background-color: lighten(@brand-warning, 30%);
+	background-color: @brand-warning-background;
+}
+.warninglist {
+	color: @brand-warning-text;
+}
+.errorlist {
+	color: @brand-danger-text;
 }
 .errors {
 	border-top: .25em solid @brand-danger;
 	border-bottom: .25em solid @brand-danger;
-	background-color: lighten(@brand-danger, 36%);
+	background-color: @brand-danger-background;
 }
 
 .subfield-row > .subfield { display: inline-block; }

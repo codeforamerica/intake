@@ -1,7 +1,6 @@
 from django import forms
 from django.utils.translation import ugettext as _
-
-
+from intake import validators
 
 
 YES_NO_CHOICES = (
@@ -146,6 +145,9 @@ class BaseApplicationForm(forms.Form):
         """Peforms default cleaning and checks for answers that should raise warnings
         """
         cleaned_data = super().clean()
+        # ensure that if they want to be contacted a specific way, that they gave
+        # the necessary info
+        validators.gave_preferred_contact_methods(self)
         # methods used to raise warnings
         warning_checks = [
             self.check_ssn,
@@ -185,6 +187,16 @@ class BaseApplicationForm(forms.Form):
                 'address_state',
                 'address_zip'])
 
+    @property
+    def formatted_address(self):
+        return '\n'.join(
+            self.cleaned_data[k] for k in [
+                'address_street',
+                'address_city',
+                'address_state',
+                'address_zip'
+            ])
+
     def check_dob(self, data):
         if not self.filled_all_dob_fields(data):
             self.add_warning('dob', Warnings.DOB)
@@ -204,4 +216,6 @@ class BaseApplicationForm(forms.Form):
 
     def get_warnings(self):
         return self._warnings
+
+
 

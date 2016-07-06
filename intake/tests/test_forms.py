@@ -1,6 +1,7 @@
 from django.test import TestCase
+from django.utils import html as html_utils
 
-from intake import forms
+from intake import forms, validators
 from intake.tests import mock
 
 class TestForms(TestCase):
@@ -13,14 +14,36 @@ class TestForms(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_application_form_with_raw_empty_post_data(self):
-        """Should not have trouble reading raw post data from
+        """Application form should not have trouble reading raw post data from
             a Django request.
         """
         form = forms.BaseApplicationForm(mock.RAW_FORM_DATA)
         self.assertTrue(not form.is_valid())
 
+    def test_preferred_contact_info_validation(self):
+        contact_preferences = [
+                "prefers_email",
+                "prefers_sms",
+                "prefers_snailmail",
+                "prefers_voicemail"
+        ]
+        form = forms.BaseApplicationForm(dict(
+            first_name="Foo",
+            last_name="Bar",
+            contact_preferences=contact_preferences
+            ))
+        error_messages = [
+            validators.gave_preferred_contact_methods.message(k)
+            for k in contact_preferences
+            ]
+        self.assertFalse(form.is_valid())
+        form_html = form.as_p()
+        for message in error_messages:
+            escaped = html_utils.escape(message)
+            self.assertIn(escaped, form_html)
+
     def test_name_is_minimal_requirement(self):
-        """Should be valid with nothing but a name
+        """Application form should be valid with nothing but a name
             Should not be valid with any empty name inputs
         """
         # valid with name only

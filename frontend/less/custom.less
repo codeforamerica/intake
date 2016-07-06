@@ -322,10 +322,34 @@ h2.site_name {
   padding: .25em 0;
 }
 .flash_message:first-child {
-  padding-top: 0.5em;
+  padding-top: 1em;
 }
 .flash_message:last-child {
-  padding-bottom: 0.5em;
+  padding-bottom: 1em;
+}
+.flash_message .row {
+  position: relative;
+}
+.flash_message.error .row > div:before  {
+    .glyphicon;
+    width: 2em;
+    position: absolute;
+    font-size: 0.8em;
+    padding-top: 0.2em;
+}
+.flash_message-body {
+  display: block;
+  margin-left: 1.3em;
+}
+
+.flash_message.error {
+  background-color: @brand-danger-background;
+  color: @brand-danger-text;
+}
+.flash_message.error .row > div {
+  &:before {
+    content:"\e209";
+  }
 }
 
 .flash_message.success {
@@ -333,32 +357,17 @@ h2.site_name {
 }
 .flash_message.success .flash_message-body {
   &:before {
-    .glyphicon;
     content: "\e084";
-    padding-right: 0.5em;
   }
 }
 
-.flash_message.error {
-  background-color: @brand-danger;
-  color: white;
-}
-.flash_message.error .flash_message-body {
-  &:before {
-    .glyphicon;
-    content:"\e209";
-    padding-right: 0.5em;
-  }
-}
 .flash_message.warning {
   background-color: @brand-warning;
   color: white;
 }
 .flash_message.warning .flash_message-body {
   &:before {
-    .glyphicon;
     content:"\e209";
-    padding-right: 0.5em;
   }
 }
 

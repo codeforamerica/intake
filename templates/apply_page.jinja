@@ -17,10 +17,11 @@ public apply
       <div class="col-xs-12 col-sm-8 col-md-6 col_centered">
 
 <form class="sanfrancisco" action="" method="POST" accept-charset="utf-8">
+  {#
+    Non field errors are not included here because they will be
+    displayed as flash messages in the header.
+  #}
 
-  {% if form.non_field_errors() %}
-  {{ form.non_field_errors() }}
-  {% endif %}
   {% for hidden_field in form.hidden_fields() %}
   {{ hidden_field }}
   {% endfor %}

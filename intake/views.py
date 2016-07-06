@@ -26,13 +26,17 @@ class Home(TemplateView):
 class Confirm(FormView):
     '''Intended to provide a final acceptance of a form,
     after any necessary warnings have been raised.
-    It follows the `Apply` view, which checks for warnings.s
+    It follows the `Apply` view, which checks for warnings.
     '''
     template_name = "apply_page.jinja"
     form_class = forms.BaseApplicationForm
     success_url = reverse_lazy('intake-thanks')
-    incoming_message = _("Please double check form. Some parts are empty and may cause delays.")
+    incoming_message = _("Please double check the form. Some parts are empty and may cause delays.")
     error_message = _("There were some problems with your application. Please check the errors below.")
+
+    def put_errors_in_flash_messages(self, form):
+        for error in form.non_field_errors():
+            messages.error(self.request, error)
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -51,9 +55,10 @@ class Confirm(FormView):
         self.save_submission_and_slack_it(form)
         return super().form_valid(form)
 
-    def form_invalid(self, *args, **kwargs):
+    def form_invalid(self, form, *args, **kwargs):
         messages.error(self.request, self.error_message)
-        return super().form_invalid(*args, **kwargs)
+        self.put_errors_in_flash_messages(form)
+        return super().form_invalid(form, *args, **kwargs)
 
     def save_submission_and_slack_it(self, form):
         submission = models.FormSubmission(answers=form.cleaned_data)
