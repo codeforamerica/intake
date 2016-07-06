@@ -9,14 +9,9 @@ from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 
 from intake import pdfparser, anonymous_names, notifications
+from intake.constants import CONTACT_METHOD_CHOICES
 
 
-CONTACT_METHOD_CHOICES = (
-    ('voicemail',  _('voicemail')),
-    ('sms',        _('text message')),
-    ('email',      _('email')),
-    ('snailmail',  _('paper mail')),
-)
 
 def gen_uuid():
     return uuid.uuid4().hex

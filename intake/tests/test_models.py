@@ -1,11 +1,12 @@
 from django.test import TestCase, override_settings
+from django.core.exceptions import ValidationError
 from datetime import datetime
 
 from unittest.mock import patch, Mock
 
 from intake.tests import mock
 from user_accounts.tests.mock import create_fake_auth_models
-from intake import models, anonymous_names
+from intake import models, anonymous_names, validators
 
 
 class TestModels(TestCase):
@@ -215,6 +216,43 @@ class TestModels(TestCase):
             in models.FormSubmission.agency_event_logs(
                 instance, 1)]
         self.assertListEqual(results, expected_results)
+
+    def test_contact_info_json_field_validation(self):
+        # it should not be checking the contact info itself
+        # that's it's own bag of problems
+        # I'm not ready to validate phone numbers or addresses
+        # but that would be cool
+        # this should just check if any methods are a valid method
+        # but if there is a method, the value must not be empty
+
+        # valid inputs
+        empty = {}
+        just_email = {'email': 'someone@gmail.com'}
+        all_methods = {
+            'email': 'someone@gmail.com',
+            'sms': '+19993334444',
+            'voicemail': '+19993334444',
+            'snailmail': '123 Main St\nOakland, CA\n94609'
+            }
+        # invalid inputs
+        nonexistent_method = {'twitter': '@someone'}
+        empty_contact_info = {'email': ''}
+        not_dict = [[], '', ' ', 10, True, None]
+
+        valid_cases = [empty, just_email, all_methods]
+        for valid_data in valid_cases:
+            validators.contact_info_json(
+                valid_data
+                )
+
+        invalid_cases = [nonexistent_method, empty_contact_info, *not_dict]
+        for invalid_data in invalid_cases:
+            with self.assertRaises(ValidationError):
+                validators.contact_info_json(
+                    invalid_data
+                    )
+
+
 
 
 
