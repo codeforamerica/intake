@@ -318,58 +318,6 @@ h2.site_name {
   line-height: inherit;
 }
 
-.flash_message {
-  padding: .25em 0;
-}
-.flash_message:first-child {
-  padding-top: 1em;
-}
-.flash_message:last-child {
-  padding-bottom: 1em;
-}
-.flash_message .row {
-  position: relative;
-}
-.flash_message.error .row > div:before  {
-    .glyphicon;
-    width: 2em;
-    position: absolute;
-    font-size: 0.8em;
-    padding-top: 0.2em;
-}
-.flash_message-body {
-  display: block;
-  margin-left: 1.3em;
-}
-
-.flash_message.error {
-  background-color: @brand-danger-background;
-  color: @brand-danger-text;
-}
-.flash_message.error .row > div {
-  &:before {
-    content:"\e209";
-  }
-}
-
-.flash_message.success {
-  background-color: @brand-success;
-}
-.flash_message.success .flash_message-body {
-  &:before {
-    content: "\e084";
-  }
-}
-
-.flash_message.warning {
-  background-color: @brand-warning;
-  color: white;
-}
-.flash_message.warning .flash_message-body {
-  &:before {
-    content:"\e209";
-  }
-}
 
 body.admin {
   overflow: auto;

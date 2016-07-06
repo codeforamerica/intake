@@ -4081,57 +4081,6 @@ h2.site_name {
   float: left;
   line-height: inherit;
 }
-.flash_message {
-  padding: .25em 0;
-}
-.flash_message:first-child {
-  padding-top: 1em;
-}
-.flash_message:last-child {
-  padding-bottom: 1em;
-}
-.flash_message .row {
-  position: relative;
-}
-.flash_message.error .row > div:before {
-  position: relative;
-  top: 1px;
-  display: inline-block;
-  font-family: 'Glyphicons Halflings';
-  font-style: normal;
-  font-weight: normal;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  width: 2em;
-  position: absolute;
-  font-size: 0.8em;
-  padding-top: 0.2em;
-}
-.flash_message-body {
-  display: block;
-  margin-left: 1.3em;
-}
-.flash_message.error {
-  background-color: #fae7e6;
-  color: #a82824;
-}
-.flash_message.error .row > div:before {
-  content: "\e209";
-}
-.flash_message.success {
-  background-color: #5cb85c;
-}
-.flash_message.success .flash_message-body:before {
-  content: "\e084";
-}
-.flash_message.warning {
-  background-color: #f0ad4e;
-  color: white;
-}
-.flash_message.warning .flash_message-body:before {
-  content: "\e209";
-}
 body.admin {
   overflow: auto;
   padding-bottom: 3em;
@@ -4235,4 +4184,54 @@ body.admin .top_bar {
 html,
 body {
   height: 100%;
+}
+.flash_message {
+  padding: .25em 0;
+}
+.flash_message:first-child {
+  padding-top: 1em;
+}
+.flash_message:last-child {
+  padding-bottom: 1em;
+}
+.flash_message .row {
+  position: relative;
+}
+.flash_message .row > div:before {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 2em;
+  position: absolute;
+}
+.flash_message-body {
+  display: block;
+  margin-left: 1.5em;
+}
+.flash_message.error {
+  background-color: #fae7e6;
+  color: #a82824;
+}
+.flash_message.error .row > div:before {
+  content: "\e209";
+}
+.flash_message.success {
+  background-color: #5cb85c;
+  color: white;
+}
+.flash_message.success .row > div:before {
+  content: "\e084";
+}
+.flash_message.warning {
+  background-color: #f0ad4e;
+  color: white;
+}
+.flash_message.warning .row > div:before {
+  content: "\e209";
 }
