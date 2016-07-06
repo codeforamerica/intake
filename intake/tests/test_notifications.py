@@ -123,7 +123,7 @@ class TestSlackAndFront(BaseTestCase):
                 return "Shining Koala"
             def __str__(self):
                 return self.get_anonymous_display()
-            def get_contact_preferences(self):
+            def get_nice_contact_preferences(self):
                 return ["text message", "email"]
         cls.sub = MockSub()
         cls.user = Mock(email='staff@org.org')
@@ -243,9 +243,6 @@ You can review and print them at this link:
             submissions=[]
             )
         self.assertEqual(expected_message, content.message)
-
-
-
 
 
 

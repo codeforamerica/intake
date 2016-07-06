@@ -3,8 +3,8 @@ New submission #{{submission_count}}!
 		url('intake-filled_pdf',
 			submission_id=submission.id)
 	) }}|{{ submission.get_anonymous_display() }}>
-{% if submission.get_contact_preferences() -%}
-They want to be contacted via {{ oxford_comma(submission.get_contact_preferences())}}
+{% if submission.get_nice_contact_preferences() -%}
+They want to be contacted via {{ oxford_comma(submission.get_nice_contact_preferences())}}
 {% else -%}
 They didn't give a contact method 
 {%- endif %}

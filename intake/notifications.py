@@ -4,6 +4,7 @@ import requests
 from project.jinja2 import url_with_ids
 from django.core import mail
 from django.conf import settings
+from django.utils.translation import ugettext as _
 
 from django.template import loader, Context
 
@@ -238,13 +239,31 @@ slack_submissions_deleted = SlackTemplateNotification(
 
 # count, submission_ids
 front_email_daily_app_bundle = FrontEmailNotification(
-    subject_template="{{current_local_time('%a %b %-d, %Y')}}: Online applications to Clean Slate",
+    subject_template=_("{{current_local_time('%a %b %-d, %Y')}}: Online applications to Clean Slate"),
     body_template_path='email/app_bundle_email.jinja')
 email_daily_app_bundle = EmailNotification(
-    subject_template="{{current_local_time('%a %b %-d, %Y')}}: Online applications to Clean Slate",
+    subject_template=_("{{current_local_time('%a %b %-d, %Y')}}: Online applications to Clean Slate"),
     body_template_path='email/app_bundle_email.jinja')
 
 # submissions, emails
 slack_app_bundle_sent = SlackTemplateNotification(
     message_template_path="slack/app_bundle_sent.jinja"
     )
+
+### CONFIRMATIONS
+
+# name, staff name
+email_confirmation = FrontEmailNotification(
+    subject_template = _("Thanks for applying - Next steps"),
+    body_template_path='email/confirmation.jinja')
+sms_confirmation = FrontSMSNotification(
+    body_template_path='text/confirmation.jinja'
+    )
+
+# submission, method
+slack_confirmation_sent = SlackTemplateNotification(
+    message_template_path="slack/confirmation_sent.jinja")
+# submission, method, errors
+slack_confirmation_send_failed = SlackTemplateNotification(
+    message_template_path="slack/confirmation_failed.jinja")
+

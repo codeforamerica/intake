@@ -1,15 +1,16 @@
 import importlib
+import uuid
+import random
 from django.conf import settings
 from django.db import models
 from pytz import timezone
-import uuid
 from django.utils import timezone as timezone_utils
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 
 from intake import pdfparser, anonymous_names, notifications, fields
-from intake.constants import CONTACT_METHOD_CHOICES
+from intake.constants import CONTACT_METHOD_CHOICES, CONTACT_PREFERENCE_CHECKS, STAFF_NAME_CHOICES
 
 
 
@@ -113,21 +114,44 @@ class FormSubmission(models.Model):
         return self.date_received.astimezone(local_tz).strftime(fmt)
 
     def get_contact_preferences(self):
-        preferences = []
-        for k in self.answers:
-            if "prefers" in k:
-                preferences.append(k[8:])
+        if 'contact_preferences' in self.answers:
+            return [k for k in self.answers.get('contact_preferences', [])]
+        else:
+            return [
+                k for k in self.answers
+                if 'prefers' in k and self.answers[k]
+                ]
+
+    def get_nice_contact_preferences(self):
+        preferences = [k[8:] for k in self.get_contact_preferences()]
         return [
             nice for key, nice
             in CONTACT_METHOD_CHOICES
             if key in preferences]
+
+    def get_formatted_address(self):
+        return "{address_street}\n{address_city}, {address_state}\n{address_zip}".format(
+            **self.answers)
+
+    def get_contact_info(self):
+        """Returns a dictionary of contact information structured to be valid for
+        intake.fields.ContactInfoJSONField 
+        """
+        info = {}
+        for key in self.get_contact_preferences():
+            short = key[8:]
+            field_names, nice, datum = CONTACT_PREFERENCE_CHECKS[key]
+            if short == 'snailmail':
+                info[short] = self.get_formatted_address()
+            else:
+                info[short] = self.answers.get(field_names[0], '')
+        return info
 
     def get_anonymous_display(self):
         return self.anonymous_name
 
     def __str__(self):
         return self.get_anonymous_display()
-
 
 
 class ApplicationLogEntry(models.Model):

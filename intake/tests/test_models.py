@@ -76,7 +76,7 @@ class TestModels(TestCase):
         }
         prefers_nothing = {}
         submission = mock.FormSubmissionFactory.build(answers=prefers_everything)
-        contact_preferences = submission.get_contact_preferences()
+        contact_preferences = submission.get_nice_contact_preferences()
         for label in ['voicemail', 'text message', 'email', 'paper mail']:
             self.assertIn(label, contact_preferences)
         submission = mock.FormSubmissionFactory.build(answers=prefers_nothing)
@@ -250,9 +250,7 @@ class TestModels(TestCase):
         invalid_cases = [nonexistent_method, empty_contact_info, *not_dict]
         for invalid_data in invalid_cases:
             with self.assertRaises(ValidationError):
-                validators.contact_info_json(
-                    invalid_data
-                    )
+                validators.contact_info_json(invalid_data)
             with self.assertRaises(ValidationError):
                 contact_info_field.validate(invalid_data, Mock())
 
@@ -272,6 +270,37 @@ class TestModels(TestCase):
         self.assertDictEqual(log.contact_info, sent_to)
         self.assertEqual(retrieved.submission, submission)
         self.assertEqual(retrieved.message_sent, "hi good job applying, ttyl")
+
+    def test_submission_get_contact_info(self):
+        submission = mock.FormSubmissionFactory.build()
+        # base case: easy
+        submission.answers['contact_preferences'] = ['prefers_email', 'prefers_sms']
+        submission.answers['email'] = 'someone@gmail.com'
+        submission.answers['phone_number'] = '+19993334444'
+        expected = {
+            'email': 'someone@gmail.com',
+            'sms': '+19993334444'}
+        result = submission.get_contact_info()
+        self.assertDictEqual(result, expected)
+
+        # case: address
+        submission.answers['contact_preferences'] = ['prefers_snailmail']
+        submission.answers['address_street'] = '123 Main St'
+        submission.answers['address_city'] = 'San Francisco'
+        submission.answers['address_state'] = 'CA'
+        submission.answers['address_zip'] = '99999'
+        expected = {'snailmail': '123 Main St\nSan Francisco, CA\n99999'}
+        result = submission.get_contact_info()
+        self.assertDictEqual(result, expected)
+
+        # case: no preference
+        submission.answers.pop('contact_preferences')
+        expected = {}
+        result = submission.get_contact_info()
+        self.assertDictEqual(result, expected)
+
+
+
 
 
 
