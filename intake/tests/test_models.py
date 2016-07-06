@@ -81,6 +81,17 @@ class TestModels(TestCase):
         submission = mock.FormSubmissionFactory.build(answers=prefers_nothing)
         self.assertListEqual([], submission.get_contact_preferences())
 
+    def test_send_confirmation_messages(self):
+        # grab the peferred contact methods
+        # try to send the notification
+        # notify us of the outcome
+        # log the confirmation
+        pass
+
+    def test_sent_confirmation_log(self):
+        pass
+
+
     @patch('intake.models.notifications')
     @patch('intake.models.settings')
     def test_get_unopened_submissions(self, settings, notifications):

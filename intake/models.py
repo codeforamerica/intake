@@ -11,12 +11,12 @@ from django.contrib.postgres.fields import JSONField
 from intake import pdfparser, anonymous_names, notifications
 
 
-nice_contact_choices = {
-    'voicemail': 'voicemail',
-    'sms': 'text message',
-    'email': 'email',
-    'snailmail': 'paper mail'
-}
+CONTACT_METHOD_CHOICES = (
+    ('voicemail',  _('voicemail')),
+    ('sms',        _('text message')),
+    ('email',      _('email')),
+    ('snailmail',  _('paper mail')),
+)
 
 def gen_uuid():
     return uuid.uuid4().hex
@@ -122,7 +122,10 @@ class FormSubmission(models.Model):
         for k in self.answers:
             if "prefers" in k:
                 preferences.append(k[8:])
-        return [nice_contact_choices[m] for m in preferences]
+        return [
+            nice for key, nice
+            in CONTACT_METHOD_CHOICES
+            if key in preferences]
 
     def get_anonymous_display(self):
         return self.anonymous_name
