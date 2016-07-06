@@ -6,7 +6,7 @@ from unittest.mock import patch, Mock
 
 from intake.tests import mock
 from user_accounts.tests.mock import create_fake_auth_models
-from intake import models, anonymous_names, validators
+from intake import models, fields, anonymous_names, validators
 
 
 class TestModels(TestCase):
@@ -217,7 +217,7 @@ class TestModels(TestCase):
                 instance, 1)]
         self.assertListEqual(results, expected_results)
 
-    def test_contact_info_json_field_validation(self):
+    def test_contact_info_json_field(self):
         # it should not be checking the contact info itself
         # that's it's own bag of problems
         # I'm not ready to validate phone numbers or addresses
@@ -225,6 +225,7 @@ class TestModels(TestCase):
         # this should just check if any methods are a valid method
         # but if there is a method, the value must not be empty
 
+        contact_info_field = fields.ContactInfoJSONField(default=dict, blank=True)
         # valid inputs
         empty = {}
         just_email = {'email': 'someone@gmail.com'}
@@ -244,6 +245,7 @@ class TestModels(TestCase):
             validators.contact_info_json(
                 valid_data
                 )
+            contact_info_field.validate(valid_data, Mock())
 
         invalid_cases = [nonexistent_method, empty_contact_info, *not_dict]
         for invalid_data in invalid_cases:
@@ -251,7 +253,8 @@ class TestModels(TestCase):
                 validators.contact_info_json(
                     invalid_data
                     )
-
+            with self.assertRaises(ValidationError):
+                contact_info_field.validate(invalid_data, Mock())
 
 
 
