@@ -118,7 +118,7 @@ class ApplicationIndex(TemplateView):
     template_name = "app_index.jinja"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['submissions'] = models.FormSubmission.objects.all().prefetch_related('logs__user')
+        context['submissions'] = models.FormSubmission.all_plus_related_objects()
         context['body_class'] = 'admin'
         return context
 

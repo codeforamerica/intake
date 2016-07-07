@@ -38,15 +38,6 @@ class FormSubmission(models.Model):
         ordering = ['-date_received']
 
     @classmethod
-    def create_from_answers(cls, post_data):
-        cleaned = {}
-        for key, value in post_data.items():
-            cleaned[key] = value[0]
-        instance = cls(answers=cleaned)
-        instance.save()
-        return instance
-
-    @classmethod
     def mark_viewed(cls, submissions, user):
         logs = ApplicationLogEntry.log_opened(
             [s.id for s in submissions], user)
@@ -225,7 +216,6 @@ class ApplicationLogEntry(models.Model):
     class Meta:
         ordering = ['-time']
 
-
     @classmethod
     def log_multiple(cls, event_type, submission_ids, user, time=None):
         if not time:
@@ -249,10 +239,6 @@ class ApplicationLogEntry(models.Model):
     @classmethod
     def log_referred(cls, submission_ids, user, time=None):
         return cls.log_multiple(cls.REFERRED, submission_ids, user, time)
-
-    @classmethod
-    def log_processed(cls, submission_ids, user, time=None):
-        return cls.log_multiple(cls.PROCESSED, submission_ids, user, time)
 
     @classmethod
     def log_confirmation_sent(cls, submission_id, user, time, contact_info=None, message_sent=''):

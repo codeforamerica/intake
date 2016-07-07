@@ -138,11 +138,10 @@ class TestModels(TestCase):
             user=agency_user
             )
 
-    @patch('intake.models.ApplicationLogEntry')
     @patch('intake.models.FormSubmission.get_unopened_apps')
     @patch('intake.models.User.objects.filter')
     @patch('intake.models.notifications')
-    def test_refer_unopened_apps(self, notifications, get_notified_users, get_unopened_apps, ApplicationLogEntry):
+    def test_refer_unopened_apps(self, notifications, get_notified_users, get_unopened_apps):
 
         emails = [u.email for u in self.users if u.profile.should_get_notifications]
         get_notified_users.return_value = [Mock(email=email) for email in emails]
@@ -162,17 +161,23 @@ class TestModels(TestCase):
             )
         notifications.slack_app_bundle_sent.send.assert_called_once_with(
             emails=emails, submissions=get_unopened_apps.return_value)
-        ApplicationLogEntry.log_referred.assert_called_once_with([1,2,3], user=None)
+        logs = models.ApplicationLogEntry.objects.filter(
+            event_type=models.ApplicationLogEntry.REFERRED, submission_id__in=[1,2,3]).all()
+        self.assertEqual(len(logs), 3)
+        for log in logs:
+            self.assertIsNone(log.user)
         self.assertEqual(output, notifications.slack_app_bundle_sent.render.return_value)
 
         # case: no unopened apps
         get_unopened_apps.return_value = []
+        logs.delete()
         notifications.reset_mock()
-        ApplicationLogEntry.reset_mock()
         output = models.FormSubmission.refer_unopened_apps()
 
         notifications.front_email_daily_app_bundle.send.assert_not_called()
-        ApplicationLogEntry.log_referred.assert_not_called()
+        logs = models.ApplicationLogEntry.objects.filter(
+            event_type=models.ApplicationLogEntry.REFERRED, submission_id__in=[1,2,3]).all()
+        self.assertEqual(len(logs), 0)
         notifications.slack_app_bundle_sent.send.assert_called_once_with(
             emails=emails, submissions=get_unopened_apps.return_value)
         self.assertEqual(output, notifications.slack_app_bundle_sent.render.return_value)
