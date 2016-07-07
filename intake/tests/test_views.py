@@ -83,8 +83,9 @@ class TestViews(AuthIntegrationTestCase):
             self.assertContains(response, str(total - 1))
 
 
+    @patch('intake.views.models.FormSubmission.send_confirmation_notifications')
     @patch('intake.views.notifications.slack_new_submission.send')
-    def test_anonymous_user_can_fill_out_app_and_reach_thanks_page(self, slack):
+    def test_anonymous_user_can_fill_out_app_and_reach_thanks_page(self, slack, send_confirmation):
         self.be_anonymous()
         result = self.client.fill_form(
             reverse('intake-apply'),
@@ -108,9 +109,11 @@ class TestViews(AuthIntegrationTestCase):
             submission='FormSubmission',
             request='WSGIRequest',
             submission_count='int')
+        send_confirmation.assert_called_once_with()
 
+    @patch('intake.views.models.FormSubmission.send_confirmation_notifications')
     @patch('intake.views.notifications.slack_new_submission.send')
-    def test_apply_with_name_only(self, slack):
+    def test_apply_with_name_only(self, slack, send_confirmation):
         self.be_anonymous()
         # this should raise warnings
         result = self.client.fill_form(
@@ -126,6 +129,20 @@ class TestViews(AuthIntegrationTestCase):
         self.assertContains(result, forms.Warnings.SSN)
         self.assertContains(result, forms.Warnings.DOB)
         self.assertContains(result, views.Confirm.incoming_message)
+        slack.assert_not_called()
+        result = self.client.fill_form(
+            reverse('intake-confirm'),
+            first_name="Foo",
+            last_name="Bar",
+            follow=True
+            )
+        self.assertEqual(result.wsgi_request.path, reverse('intake-thanks'))
+        self.assert_called_once_with_types(
+            slack,
+            submission='FormSubmission',
+            request='WSGIRequest',
+            submission_count='int')
+        send_confirmation.assert_called_once_with()
 
 
     def test_apply_with_insufficient_form(self):

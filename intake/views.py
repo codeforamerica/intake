@@ -66,6 +66,7 @@ class Confirm(FormView):
         number = models.FormSubmission.objects.count()
         notifications.slack_new_submission.send(
             submission=submission, request=self.request, submission_count=number)
+        submission.send_confirmation_notifications()
 
 
 class Apply(Confirm):
