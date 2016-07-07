@@ -244,6 +244,53 @@ You can review and print them at this link:
             )
         self.assertEqual(expected_message, content.message)
 
+    def test_render_slack_confirmation_sent(self):
+        submission = mock.FormSubmissionFactory.build(anonymous_name="App")
+
+        # case: email, sms
+        expected = "Successfully sent a confirmation to App via email\nSuccessfully sent a confirmation to App via sms\n"
+        methods = ['email', 'sms']
+        result = notifications.slack_confirmation_sent.render(submission=submission, methods=methods).message
+        self.assertEqual(expected, result)
+
+        # case: snailmail, voicemail
+        expected = "Did not send a confirmation to App via snailmail\nDid not send a confirmation to App via voicemail\n"
+        methods = ['snailmail', 'voicemail']
+        result = notifications.slack_confirmation_sent.render(submission=submission, methods=methods).message
+        self.assertEqual(expected, result)
+
+        # case: email, sms, snailmail, voicemail
+        expected = "\n".join([
+            "Successfully sent a confirmation to App via email",
+            "Successfully sent a confirmation to App via sms",
+            "Did not send a confirmation to App via snailmail",
+            "Did not send a confirmation to App via voicemail\n"])
+        methods = ['email', 'sms', 'snailmail', 'voicemail']
+        result = notifications.slack_confirmation_sent.render(submission=submission, methods=methods).message
+        self.assertEqual(expected, result)
+
+
+    def test_render_slack_confirmation_failed(self):
+        submission = mock.FormSubmissionFactory.build(anonymous_name="App")
+        errors = Mock(**{
+            'items.return_value': [
+                ("email", "some errors"),
+                ("sms", "more errors")
+                ],
+            'keys.return_value': ['email', 'sms']
+            })
+        expected = """Confirmation by email and sms for App failed with errors:
+```
+email:
+    some errors
+
+sms:
+    more errors
+```"""
+        result = notifications.slack_confirmation_send_failed.render(
+            submission=submission, errors=errors).message
+        self.assertEqual(expected, result)
+
 
 
 
