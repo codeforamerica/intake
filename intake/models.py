@@ -147,6 +147,49 @@ class FormSubmission(models.Model):
                 info[short] = self.answers.get(field_names[0], '')
         return info
 
+    def send_notification(self, notification, contact_info_key, **context):
+        contact_info = self.get_contact_info()
+        contact_info_used = {
+            contact_info_key: contact_info[contact_info_key]
+        }
+        notification.send(
+            to=[contact_info[contact_info_key]],
+            **context
+            )
+        ApplicationLogEntry.log_confirmation_sent(
+            submission_id=self.id, user=None, time=None,
+            contact_info=contact_info_used,
+            message_sent=notification.render_content_fields(**context)
+            )
+
+    def send_confirmation_notifications(self):
+        contact_info = self.get_contact_info()
+        errors = {}
+        context = dict(
+            staff_name=random.choice(STAFF_NAME_CHOICES),
+            name=self.answers['first_name']
+            )
+        notify_map = {
+            'email': notifications.email_confirmation,
+            'sms': notifications.sms_confirmation
+        }
+        for key, notification in notify_map.items():
+            if key in contact_info:
+                try:
+                    self.send_notification(
+                        notification, key, **context)
+                except notifications.FrontAPIError as error:
+                    errors[key] = error
+        successes = sorted([key for key in contact_info if key not in errors])
+        if successes:
+            notifications.slack_confirmation_sent.send(
+                submission=self,
+                methods=successes)
+        if errors:
+            notifications.slack_confirmation_send_failed.send(
+                submission=self,
+                errors=errors)
+
     def get_anonymous_display(self):
         return self.anonymous_name
 
@@ -210,6 +253,20 @@ class ApplicationLogEntry(models.Model):
     @classmethod
     def log_processed(cls, submission_ids, user, time=None):
         return cls.log_multiple(cls.PROCESSED, submission_ids, user, time)
+
+    @classmethod
+    def log_confirmation_sent(cls, submission_id, user, time, contact_info=None, message_sent=''):
+        if not time:
+            time = timezone_utils.now()
+        if not contact_info:
+            contact_info = {}
+        return ApplicantContactedLogEntry.objects.create(
+            submission_id=submission_id,
+            user=user,
+            event_type=cls.CONFIRMATION_SENT,
+            contact_info=contact_info,
+            message_sent=message_sent)
+
 
 
 class ApplicantContactedLogEntry(ApplicationLogEntry):

@@ -85,6 +85,12 @@ class TemplateNotification:
             for key, template in self.templates.items()
             })
 
+    def render_content_fields(self, **context_args):
+        content = self.render(**context_args)
+        return '\n\n'.join([
+            "{}:\n{}".format(fragment, getattr(content, fragment))
+            for fragment in content._fields])
+
 
 
 class EmailNotification(TemplateNotification):
