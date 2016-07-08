@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.utils.translation import ugettext as _
+from django.utils.datastructures import MultiValueDict
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse_lazy
 from django.contrib import messages
@@ -22,27 +23,63 @@ class Home(TemplateView):
     template_name = "main_splash.jinja"
 
 
+class MultiStepFormViewBase(FormView):
+    session_storage_key = "form_in_progress"
 
-class Confirm(FormView):
-    '''Intended to provide a final acceptance of a form,
-    after any necessary warnings have been raised.
-    It follows the `Apply` view, which checks for warnings.
-    '''
+    def dump_post_data_to_session(self):
+        post_data = dict(self.request.POST.lists())
+        self.request.session[self.session_storage_key] = post_data
+
+    def load_post_data_from_session(self):
+        data = self.request.session.get(self.session_storage_key, {})
+        return MultiValueDict(data)
+
+
+class MultiStepApplicationView(MultiStepFormViewBase):
     template_name = "apply_page.jinja"
     form_class = forms.BaseApplicationForm
     success_url = reverse_lazy('intake-thanks')
-    incoming_message = _("Please double check the form. Some parts are empty and may cause delays.")
     error_message = _("There were some problems with your application. Please check the errors below.")
 
     def put_errors_in_flash_messages(self, form):
         for error in form.non_field_errors():
             messages.error(self.request, error)
 
+    def form_invalid(self, form, *args, **kwargs):
+        messages.error(self.request, self.error_message)
+        self.put_errors_in_flash_messages(form)
+        return super().form_invalid(form, *args, **kwargs)
+
+    def confirmation(self, submission):
+        flash_messages = submission.send_confirmation_notifications()
+        for message in flash_messages:
+            messages.success(self.request, message)
+
+    def save_submission_and_send_notifications(self, form):
+        submission = models.FormSubmission(answers=form.cleaned_data)
+        submission.save()
+        number = models.FormSubmission.objects.count()
+        notifications.slack_new_submission.send(
+            submission=submission, request=self.request, submission_count=number)
+        self.confirmation(submission)
+
+    def form_valid(self, form):
+        self.save_submission_and_send_notifications(form)
+        return super().form_valid(form)
+
+
+class Confirm(MultiStepApplicationView):
+    '''Intended to provide a final acceptance of a form,
+    after any necessary warnings have been raised.
+    It follows the `Apply` view, which checks for warnings.
+    '''
+    incoming_message = _("Please double check the form. Some parts are empty and may cause delays.")
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        form_data = self.request.session.get('form_in_progress', None)
+        form_data = self.load_post_data_from_session()
         if form_data:
-            form = self.form_class(form_data)
+            form = self.form_class(data=form_data)
             # make sure the form has warnings.
             # trigger data cleaning
             form.is_valid()
@@ -51,41 +88,20 @@ class Confirm(FormView):
             context['form'] = form
         return context
 
-    def form_valid(self, form):
-        self.save_submission_and_slack_it(form)
-        return super().form_valid(form)
-
-    def form_invalid(self, form, *args, **kwargs):
-        messages.error(self.request, self.error_message)
-        self.put_errors_in_flash_messages(form)
-        return super().form_invalid(form, *args, **kwargs)
-
-    def save_submission_and_slack_it(self, form):
-        submission = models.FormSubmission(answers=form.cleaned_data)
-        submission.save()
-        number = models.FormSubmission.objects.count()
-        notifications.slack_new_submission.send(
-            submission=submission, request=self.request, submission_count=number)
-        submission.send_confirmation_notifications()
 
 
-class Apply(Confirm):
+class Apply(MultiStepApplicationView):
     '''The initial application page.
     Checks for warnings, and if they exist, redirects to a confirmation page.
     '''
     confirmation_url = reverse_lazy('intake-confirm')
 
-    def get_context_data(self, *args, **kwargs):
-        """Override custom context in confirmation page, just use FormView default
-        """
-        return FormView.get_context_data(self, *args, **kwargs)
-
     def form_valid(self, form):
         """If no errors, check for warnings, redirect to confirmation if needed
         """
         if form.has_warnings():
-            # send them to confirmation page with warnings
-            self.request.session['form_in_progress'] = self.request.POST
+            # save the post data and move them to confirmation step
+            self.dump_post_data_to_session()
             return redirect(self.confirmation_url)
         else:
             return super().form_valid(form)

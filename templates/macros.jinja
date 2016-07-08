@@ -74,7 +74,9 @@
 	<li>
 		<label class="field-option_label">
 			<input type="checkbox" name="{{ field.html_name }}" value="{{ option_key }}"
-			{%- if option_key in field.field.to_python(field.data) %} checked="checked"{% endif %}>
+				{%- if field.form.get_raw_data_for_field(field) %}
+					{%- if option_key in field.form.get_raw_data_for_field(field) %} checked="checked"{% endif %}
+				{%- endif -%}>
 			<span class="option-display_text">
 				{{ option_label }}
 			</span>
@@ -108,7 +110,9 @@
 		<li>
 			<label class="field-option_label">
 				<input type="radio" name="{{ field.html_name }}" value="{{ option_key }}"
-				{%- if option_key in field.field.to_python(field.data) %} checked="checked"{% endif %}>
+				{%- if field.form.get_raw_data_for_field(field) %}
+					{%- if option_key in field.form.get_raw_data_for_field(field) %} checked="checked"{% endif %}
+				{%- endif -%}>
 				<span class="option-display_text">
 					{{ option_label }}
 				</span>

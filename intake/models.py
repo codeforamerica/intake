@@ -180,6 +180,18 @@ class FormSubmission(models.Model):
             notifications.slack_confirmation_send_failed.send(
                 submission=self,
                 errors=errors)
+        return self.confirmation_flash_messages(successes, contact_info)
+
+    def confirmation_flash_messages(self, successes, contact_info):
+        messages = []
+        sent_email_message = _("We've sent you an email at {}")
+        sent_sms_message = _("We've sent you a text message at {}")
+        for method in successes:
+            if method == 'email':
+                messages.append(sent_email_message.format(contact_info['email']))
+            if method == 'sms':
+                messages.append(sent_sms_message.format(contact_info['sms']))
+        return messages
 
     def get_anonymous_display(self):
         return self.anonymous_name

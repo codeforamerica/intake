@@ -20,8 +20,8 @@ class Provider(BaseProvider):
         }
         return [k for k, v in methods.items() if v == 'yes']
 
-    def sf_county_form_answers(self):
-        return {
+    def sf_county_form_answers(self, **overrides):
+        data = {
             'first_name': self.generator.first_name(),
             'middle_name': self.generator.first_name(),
             'last_name': self.generator.last_name(),
@@ -49,3 +49,5 @@ class Provider(BaseProvider):
             'where_probation_or_parole': '',
             'how_did_you_hear': '',
             }
+        data.update(overrides)
+        return data

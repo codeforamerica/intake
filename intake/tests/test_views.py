@@ -82,7 +82,6 @@ class TestViews(AuthIntegrationTestCase):
             self.assertContains(response, str(total))
             self.assertContains(response, str(total - 1))
 
-
     @patch('intake.views.models.FormSubmission.send_confirmation_notifications')
     @patch('intake.views.notifications.slack_new_submission.send')
     def test_anonymous_user_can_fill_out_app_and_reach_thanks_page(self, slack, send_confirmation):
@@ -143,7 +142,6 @@ class TestViews(AuthIntegrationTestCase):
             request='WSGIRequest',
             submission_count='int')
         send_confirmation.assert_called_once_with()
-
 
     def test_apply_with_insufficient_form(self):
         # should return the same page, with the partially filled form

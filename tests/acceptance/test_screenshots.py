@@ -55,10 +55,11 @@ class TestWorkflows(base.ScreenSequenceTestCase):
 
     def test_application_submission_workflow(self):
         # self.host = 'https://cmr-dev.herokuapp.com'
+        answers = intake_mock.fake.sf_county_form_answers()
         sequence = [
             S.get('went to splash page', '/'),
             S.click_on('clicked apply now', 'Apply now'),
-            S.fill_form('submitted form', **intake_mock.fake.sf_county_form_answers()),
+            S.fill_form('submitted form', **answers),
             S.click_on('clicked privacy policy', 'Privacy Policy'),
             ]
         sizes = {

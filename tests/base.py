@@ -69,6 +69,16 @@ class FunctionalTestCase(StaticLiveServerTestCase):
         path = os.path.join('tests/screenshots', filename)
         self.browser.save_screenshot(path)
 
+    def handle_checkbox_input(self, inputs, value):
+        if not isinstance(value, str) and hasattr(value, "__iter__"):
+            # there are multiple values
+            should_click = lambda x: x in value
+        else:
+            should_click = lambda x: x == value
+        for element in inputs:
+            if should_click(element.get_attribute('value')):
+                element.click()
+
     def handle_input(self, name, value):
         elements = self.browser.find_elements_by_name(name)
         if not elements:
@@ -76,9 +86,7 @@ class FunctionalTestCase(StaticLiveServerTestCase):
                 "could not find element with name '{}'".format(name))
         input_type = elements[0].get_attribute('type')
         if input_type == 'checkbox':
-            for element in elements:
-                if element.get_attribute('value') == value:
-                    element.click()
+            self.handle_checkbox_input(elements, value)
         elif input_type == 'radio':
             for element in elements:
                 if element.get_attribute('value') == value:

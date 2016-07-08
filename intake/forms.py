@@ -1,4 +1,5 @@
 from django import forms
+from django.forms.boundfield import BoundField
 from django.utils.translation import ugettext as _
 from intake import validators
 
@@ -217,5 +218,8 @@ class BaseApplicationForm(forms.Form):
     def get_warnings(self):
         return self._warnings
 
-
-
+    def get_raw_data_for_field(self, field):
+        if self.is_bound:
+            return field.field.widget.value_from_datadict(self.data, self.files, self.add_prefix(field.name))
+        else:
+            return self.data.get(field.html_name)

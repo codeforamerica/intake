@@ -11,7 +11,7 @@ class GavePreferredContactMethods:
         return self.message_template.format(medium=medium, datum=datum)
 
     def __call__(self, form):
-        for key in form.cleaned_data['contact_preferences']:
+        for key in form.cleaned_data.get('contact_preferences', []):
             has_attributes = False
             attributes, medium, datum = CONTACT_PREFERENCE_CHECKS[key]
             for attribute in attributes:
