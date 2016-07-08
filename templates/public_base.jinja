@@ -24,6 +24,11 @@
 	</section>
 	{% endblock above_the_fold %}
 	{% block main %}
+		{% block flash_messages %}
+		<section class="messages">
+			{% include "includes/public_flash_messages.jinja" %}
+		</section>
+		{% endblock flash_messages %}
 		{% block content %}
 		{% endblock content %}
 	{% endblock main %}

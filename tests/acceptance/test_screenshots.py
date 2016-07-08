@@ -27,7 +27,7 @@ class TestWorkflows(base.ScreenSequenceTestCase):
         self.submissions = intake_mock.FormSubmissionFactory.create_batch(10)
         self.superuser = auth_mock.fake_superuser()
         accounts_models.UserProfile.objects.create(
-            user=self.superuser,
+            user=self.superuser, 
             organization=self.organizations[-1])
 
     def get_link_from_email(self):
@@ -55,10 +55,11 @@ class TestWorkflows(base.ScreenSequenceTestCase):
 
     def test_application_submission_workflow(self):
         # self.host = 'https://cmr-dev.herokuapp.com'
+        answers = intake_mock.fake.sf_county_form_answers()
         sequence = [
             S.get('went to splash page', '/'),
             S.click_on('clicked apply now', 'Apply now'),
-            S.fill_form('submitted form', **intake_mock.fake.sf_county_form_answers()),
+            S.fill_form('submitted form', **answers),
             S.click_on('clicked privacy policy', 'Privacy Policy'),
             ]
         sizes = {
@@ -68,6 +69,21 @@ class TestWorkflows(base.ScreenSequenceTestCase):
         }
         for prefix, size in sizes.items():
             self.run_sequence(prefix, sequence, size=size)
+
+    def test_application_submission_failure(self):
+        address_fields = {
+            key: value for key, value in intake_mock.fake.sf_county_form_answers().items()
+            if 'address' in key
+            }
+        sequence = [
+            S.get('went to splash page', '/'),
+            S.click_on('clicked apply now', 'Apply now'),
+            S.fill_form('submitted incomplete form', first_name='Cornelius'),
+            S.fill_form('added last name', last_name='Cherimoya'),
+            S.fill_form('added address', **address_fields)
+        ]
+        self.run_sequence(
+            "Applying without enough information", sequence, size=base.COMMON_MOBILE)
 
     def test_login_and_password_reset_workflow(self):
         user = self.users[0]

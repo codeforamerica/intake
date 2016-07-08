@@ -1,22 +1,18 @@
 import importlib
+import uuid
+import random
 from django.conf import settings
 from django.db import models
 from pytz import timezone
-import uuid
 from django.utils import timezone as timezone_utils
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 
-from intake import pdfparser, anonymous_names, notifications
+from intake import pdfparser, anonymous_names, notifications, fields
+from intake.constants import CONTACT_METHOD_CHOICES, CONTACT_PREFERENCE_CHECKS, STAFF_NAME_CHOICES
 
 
-nice_contact_choices = {
-    'voicemail': 'voicemail',
-    'sms': 'text message',
-    'email': 'email',
-    'snailmail': 'paper mail'
-}
 
 def gen_uuid():
     return uuid.uuid4().hex
@@ -40,15 +36,6 @@ class FormSubmission(models.Model):
 
     class Meta:
         ordering = ['-date_received']
-
-    @classmethod
-    def create_from_answers(cls, post_data):
-        cleaned = {}
-        for key, value in post_data.items():
-            cleaned[key] = value[0]
-        instance = cls(answers=cleaned)
-        instance.save()
-        return instance
 
     @classmethod
     def mark_viewed(cls, submissions, user):
@@ -118,11 +105,93 @@ class FormSubmission(models.Model):
         return self.date_received.astimezone(local_tz).strftime(fmt)
 
     def get_contact_preferences(self):
-        preferences = []
-        for k in self.answers:
-            if "prefers" in k:
-                preferences.append(k[8:])
-        return [nice_contact_choices[m] for m in preferences]
+        if 'contact_preferences' in self.answers:
+            return [k for k in self.answers.get('contact_preferences', [])]
+        else:
+            return [
+                k for k in self.answers
+                if 'prefers' in k and self.answers[k]
+                ]
+
+    def get_nice_contact_preferences(self):
+        preferences = [k[8:] for k in self.get_contact_preferences()]
+        return [
+            nice for key, nice
+            in CONTACT_METHOD_CHOICES
+            if key in preferences]
+
+    def get_formatted_address(self):
+        return "{address_street}\n{address_city}, {address_state}\n{address_zip}".format(
+            **self.answers)
+
+    def get_contact_info(self):
+        """Returns a dictionary of contact information structured to be valid for
+        intake.fields.ContactInfoJSONField 
+        """
+        info = {}
+        for key in self.get_contact_preferences():
+            short = key[8:]
+            field_names, nice, datum = CONTACT_PREFERENCE_CHECKS[key]
+            if short == 'snailmail':
+                info[short] = self.get_formatted_address()
+            else:
+                info[short] = self.answers.get(field_names[0], '')
+        return info
+
+    def send_notification(self, notification, contact_info_key, **context):
+        contact_info = self.get_contact_info()
+        contact_info_used = {
+            contact_info_key: contact_info[contact_info_key]
+        }
+        notification.send(
+            to=[contact_info[contact_info_key]],
+            **context
+            )
+        ApplicationLogEntry.log_confirmation_sent(
+            submission_id=self.id, user=None, time=None,
+            contact_info=contact_info_used,
+            message_sent=notification.render_content_fields(**context)
+            )
+
+    def send_confirmation_notifications(self):
+        contact_info = self.get_contact_info()
+        errors = {}
+        context = dict(
+            staff_name=random.choice(STAFF_NAME_CHOICES),
+            name=self.answers['first_name']
+            )
+        notify_map = {
+            'email': notifications.email_confirmation,
+            'sms': notifications.sms_confirmation
+        }
+        for key, notification in notify_map.items():
+            if key in contact_info:
+                try:
+                    self.send_notification(
+                        notification, key, **context)
+                except notifications.FrontAPIError as error:
+                    errors[key] = error
+        successes = sorted([key for key in contact_info if key not in errors])
+        if successes:
+            notifications.slack_confirmation_sent.send(
+                submission=self,
+                methods=successes)
+        if errors:
+            notifications.slack_confirmation_send_failed.send(
+                submission=self,
+                errors=errors)
+        return self.confirmation_flash_messages(successes, contact_info)
+
+    def confirmation_flash_messages(self, successes, contact_info):
+        messages = []
+        sent_email_message = _("We've sent you an email at {}")
+        sent_sms_message = _("We've sent you a text message at {}")
+        for method in successes:
+            if method == 'email':
+                messages.append(sent_email_message.format(contact_info['email']))
+            if method == 'sms':
+                messages.append(sent_sms_message.format(contact_info['sms']))
+        return messages
 
     def get_anonymous_display(self):
         return self.anonymous_name
@@ -131,18 +200,19 @@ class FormSubmission(models.Model):
         return self.get_anonymous_display()
 
 
-
 class ApplicationLogEntry(models.Model):
     OPENED = 1
     REFERRED = 2
     PROCESSED = 3
     DELETED = 4
+    CONFIRMATION_SENT = 5
 
     EVENT_TYPES = (
-        (OPENED,    "opened"),
-        (REFERRED,  "referred"),
-        (PROCESSED, "processed"),
-        (DELETED,   "deleted"),
+        (OPENED,             "opened"),
+        (REFERRED,           "referred"),
+        (PROCESSED,          "processed"),
+        (DELETED,            "deleted"),
+        (CONFIRMATION_SENT,  "sent confirmation"),
         )
 
     time = models.DateTimeField(default=timezone_utils.now)
@@ -157,7 +227,6 @@ class ApplicationLogEntry(models.Model):
 
     class Meta:
         ordering = ['-time']
-
 
     @classmethod
     def log_multiple(cls, event_type, submission_ids, user, time=None):
@@ -184,9 +253,23 @@ class ApplicationLogEntry(models.Model):
         return cls.log_multiple(cls.REFERRED, submission_ids, user, time)
 
     @classmethod
-    def log_processed(cls, submission_ids, user, time=None):
-        return cls.log_multiple(cls.PROCESSED, submission_ids, user, time)
+    def log_confirmation_sent(cls, submission_id, user, time, contact_info=None, message_sent=''):
+        if not time:
+            time = timezone_utils.now()
+        if not contact_info:
+            contact_info = {}
+        return ApplicantContactedLogEntry.objects.create(
+            submission_id=submission_id,
+            user=user,
+            event_type=cls.CONFIRMATION_SENT,
+            contact_info=contact_info,
+            message_sent=message_sent)
 
+
+
+class ApplicantContactedLogEntry(ApplicationLogEntry):
+    contact_info = fields.ContactInfoJSONField(default=dict)
+    message_sent = models.TextField(blank=True)
 
 
 class FillablePDF(models.Model):

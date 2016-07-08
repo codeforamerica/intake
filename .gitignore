@@ -14,7 +14,6 @@ pyvenv.cfg
 pip-selfcheck.json
 
 # test outputs to ignore
-tests/screenshots
 .coverage
 
 .env

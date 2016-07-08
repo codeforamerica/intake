@@ -1,0 +1,7 @@
+{% for method in methods %}
+{%- if method in ['email', 'sms'] -%}
+Successfully sent a confirmation to {{ submission.get_anonymous_display() }} via {{ method }}
+{%- else -%}
+Did not send a confirmation to {{ submission.get_anonymous_display() }} via {{ method }}
+{%- endif %}
+{% endfor %}

@@ -1,0 +1,69 @@
+{% extends "public_base.jinja" %}
+{% import 'macros.jinja' as macros %}
+
+
+{%- block header_title -%}
+Apply to Clear My Record
+{%- endblock header_title -%}
+
+{% block body_class -%}
+public apply
+{%- endblock body_class %}
+
+{% block content %}
+<section class="application_form content">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-8 col-md-6 col_centered">
+
+<form class="sanfrancisco" action="" method="POST" accept-charset="utf-8">
+  {#
+    Non field errors are not included here because they will be
+    displayed as flash messages in the header.
+  #}
+
+  {% for hidden_field in form.hidden_fields() %}
+  {{ hidden_field }}
+  {% endfor %}
+  
+  {% include "includes/csrf_field.jinja" %}
+
+  {{ macros.checkbox_options_field(form.contact_preferences) }}
+  {{ macros.basic_field(form.first_name) }}
+  {{ macros.basic_field(form.middle_name, optional=True) }}
+  {{ macros.basic_field(form.last_name) }}
+
+  {{ macros.basic_field(form.phone_number) }}
+  {{ macros.basic_field(form.email) }}
+  
+  {{ macros.dob_field(form) }}
+
+  {{ macros.basic_field(form.ssn) }}
+  {{ macros.radio_select_field(form.us_citizen) }}
+
+  {{ macros.address_field(form) }}
+
+  {{ macros.radio_select_field(form.on_probation_parole) }}
+  {{ macros.basic_field(form.where_probation_or_parole) }}
+  {{ macros.basic_field(form.when_probation_or_parole) }}
+  {{ macros.radio_select_field(form.serving_sentence) }}
+  {{ macros.radio_select_field(form.being_charged) }}
+  {{ macros.radio_select_field(form.rap_outside_sf) }}
+  {{ macros.basic_field(form.when_where_outside_sf) }}
+
+  {{ macros.radio_select_field(form.currently_employed) }}
+  {{ macros.basic_field(form.monthly_income) }}
+  {{ macros.basic_field(form.monthly_expenses) }}
+
+  {{ macros.basic_field(form.how_did_you_hear, optional=True) }}
+
+  <button type="submit">Apply</button>
+
+</form>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}

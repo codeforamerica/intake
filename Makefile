@@ -23,8 +23,15 @@ test.coverage:
 test.acceptance:
 	python ./manage.py test tests.acceptance
 
+test.screenshots:
+	python ./manage.py test \
+		tests.acceptance.test_screenshots \
+		--verbosity 2
+
 deploy.demo:
 	git push -f demo HEAD:master
+	heroku run --app cmr-demo python manage.py migrate
 
 deploy.prod:
 	git push prod master
+	heroku run --app cmr-prod python manage.py migrate
