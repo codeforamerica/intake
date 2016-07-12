@@ -21,41 +21,37 @@ public apply
     Non field errors are not included here because they will be
     displayed as flash messages in the header.
   #}
-
-  {% for hidden_field in form.hidden_fields() %}
-  {{ hidden_field }}
-  {% endfor %}
   
   {% include "includes/csrf_field.jinja" %}
 
-  {{ macros.checkbox_options_field(form.contact_preferences) }}
-  {{ macros.basic_field(form.first_name) }}
-  {{ macros.basic_field(form.middle_name, optional=True) }}
-  {{ macros.basic_field(form.last_name) }}
+  {{ macros.checkbox_options_field(form.fields.contact_preferences) }}
+  {{ macros.basic_field(form.fields.first_name) }}
+  {{ macros.basic_field(form.fields.middle_name, optional=True) }}
+  {{ macros.basic_field(form.fields.last_name) }}
 
-  {{ macros.basic_field(form.phone_number) }}
-  {{ macros.basic_field(form.email) }}
+  {{ macros.basic_field(form.fields.phone_number) }}
+  {{ macros.basic_field(form.fields.email) }}
   
-  {{ macros.dob_field(form) }}
+  {{ macros.dob_field(form.fields.dob) }}
 
-  {{ macros.basic_field(form.ssn) }}
-  {{ macros.radio_select_field(form.us_citizen) }}
+  {{ macros.basic_field(form.fields.ssn) }}
+  {{ macros.radio_select_field(form.fields.us_citizen) }}
 
-  {{ macros.address_field(form) }}
+  {{ macros.address_field(form.fields.address) }}
 
-  {{ macros.radio_select_field(form.on_probation_parole) }}
-  {{ macros.basic_field(form.where_probation_or_parole) }}
-  {{ macros.basic_field(form.when_probation_or_parole) }}
-  {{ macros.radio_select_field(form.serving_sentence) }}
-  {{ macros.radio_select_field(form.being_charged) }}
-  {{ macros.radio_select_field(form.rap_outside_sf) }}
-  {{ macros.basic_field(form.when_where_outside_sf) }}
+  {{ macros.radio_select_field(form.fields.on_probation_parole) }}
+  {{ macros.basic_field(form.fields.where_probation_or_parole) }}
+  {{ macros.basic_field(form.fields.when_probation_or_parole) }}
+  {{ macros.radio_select_field(form.fields.serving_sentence) }}
+  {{ macros.radio_select_field(form.fields.being_charged) }}
+  {{ macros.radio_select_field(form.fields.rap_outside_sf) }}
+  {{ macros.basic_field(form.fields.when_where_outside_sf) }}
 
-  {{ macros.radio_select_field(form.currently_employed) }}
-  {{ macros.basic_field(form.monthly_income) }}
-  {{ macros.basic_field(form.monthly_expenses) }}
+  {{ macros.radio_select_field(form.fields.currently_employed) }}
+  {{ macros.basic_field(form.fields.monthly_income) }}
+  {{ macros.basic_field(form.fields.monthly_expenses) }}
 
-  {{ macros.basic_field(form.how_did_you_hear, optional=True) }}
+  {{ macros.basic_field(form.fields.how_did_you_hear, optional=True) }}
 
   <div class="note">
     <p>

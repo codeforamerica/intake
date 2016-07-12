@@ -12,13 +12,13 @@ fake = FakerFactory.create('en_US', includes=['intake.tests.mock_county_forms'])
 Pacific = timezone('US/Pacific')
 
 RAW_FORM_DATA = MultiValueDict({
-    'address_city': [''],
-    'address_state': ['CA'],
-    'address_street': [''],
-    'address_zip': [''],
-    'dob_day': [''],
-    'dob_month': [''],
-    'dob_year': [''],
+    'address.city': [''],
+    'address.state': ['CA'],
+    'address.street': [''],
+    'address.zip': [''],
+    'dob.day': [''],
+    'dob.month': [''],
+    'dob.year': [''],
     'drivers_license_number': [''],
     'email': [''],
     'first_name': [''],
@@ -35,14 +35,14 @@ RAW_FORM_DATA = MultiValueDict({
 })
 
 NEW_RAW_FORM_DATA = {
-    'address_city': '',
-    'address_state': 'CA',
-    'address_street': '',
-    'address_zip': '',
+    'address.city': '',
+    'address.state': 'CA',
+    'address.street': '',
+    'address.zip': '',
     'contact_preferences': ['prefers_email'],
-    'dob_day': '',
-    'dob_month': '',
-    'dob_year': '',
+    'dob.day': '',
+    'dob.month': '',
+    'dob.year': '',
     'email': 'foo@bar.com',
     'first_name': 'Foo',
     'how_did_you_hear': '',
@@ -57,7 +57,15 @@ NEW_RAW_FORM_DATA = {
     'where_probation_or_parole': '',
 }
 
+def post_data(**kwargs):
+    for key, value in kwargs.items():
+        if isinstance(value, str):
+            kwargs[key] = [value] 
+    return MultiValueDict(kwargs)
 
+def form_answers(**kwargs):
+    data = fake.sf_county_form_answers(**kwargs)
+    return post_data(**data)
 
 def local(datetime):
     return Pacific.localize(datetime)
@@ -77,7 +85,7 @@ class FormSubmissionFactory(factory.DjangoModelFactory):
     date_received = factory.LazyFunction(
         lambda: local(fake.date_time_between('-2w', 'now')))
     answers = factory.LazyFunction(
-        lambda: fake.sf_county_form_answers())
+        lambda: fake.cleaned_sf_county_form_answers())
 
     class Meta:
         model = models.FormSubmission
