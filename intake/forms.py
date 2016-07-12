@@ -1,7 +1,11 @@
 from django import forms
 from django.forms.boundfield import BoundField
 from django.utils.translation import ugettext as _
+import rest_framework
 from rest_framework import serializers
+from django.core.exceptions import ValidationError as DjangoValidationError
+from rest_framework.serializers import ValidationError, get_validation_error_detail
+
 from intake import validators, fields
 
 
@@ -331,8 +335,45 @@ class FormSubmissionSerializer(serializers.Serializer):
             validators.gave_preferred_contact_methods
         ]
 
-    def __init__(self, *args, **kwargs):
+    def run_validation(self, data=rest_framework.fields.empty):
+        """Overrides rest_framework.serializers.Serializer.run_validation
+            in order to report errors at both the field level and the
+            serializer level.
+            In the parent class, if field-level errors were raised, then
+            serializer-level errors were not reported
+        """
+
+        (is_empty_value, data) = self.validate_empty_values(data)
+        if is_empty_value:
+            return data
+
+        errors = {}
+
+        value = data
+
+        try:
+            value = self.to_internal_value(data)
+        except (ValidationError, DjangoValidationError) as exc:
+            errors.update(get_validation_error_detail(exc))
+
+        try:
+            self.run_validators(value)
+            value = self.validate(value)
+            assert value is not None, '.validate() should return the validated data'
+        except (ValidationError, DjangoValidationError) as exc:
+            errors.update(get_validation_error_detail(exc))
+
+        if errors:
+            raise ValidationError(detail=errors)
+
+        return value
+
+
+    def __init__(self, data=None, **kwargs):
+        if data is None:
+            data = {}
+        kwargs['data'] = data
         self.warnings = {}
-        super().__init__(*args, **kwargs)
+        super().__init__(**kwargs)
 
 

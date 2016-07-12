@@ -57,7 +57,8 @@ class TestForms(TestCase):
             contact_preferences=contact_preferences
             ))
         self.assertFalse(form.is_valid())
-
+        self.assertIn('email', form.errors)
+        self.assertIn('phone_number', form.errors)
 
 
     def test_name_is_minimal_requirement(self):
@@ -65,16 +66,16 @@ class TestForms(TestCase):
             Should not be valid with any empty name inputs
         """
         # valid with name only
-        form = forms.BaseApplicationForm(
+        form = forms.FormSubmissionSerializer(
             dict(first_name="Foo", last_name="Bar"))
         self.assertTrue(form.is_valid())
 
         # invalid if missing either last or first name
-        form = forms.BaseApplicationForm(
+        form = forms.FormSubmissionSerializer(
             dict(first_name=" ", last_name="Bar"))
         self.assertTrue(not form.is_valid())
 
-        form = forms.BaseApplicationForm(
+        form = forms.FormSubmissionSerializer(
             dict(firt_name="Foo", last_name=" "))
         self.assertTrue(not form.is_valid())
 
