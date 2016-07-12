@@ -65,7 +65,7 @@ class TestWorkflows(base.ScreenSequenceTestCase):
         sizes = {
             'Apply on a common mobile phone': base.COMMON_MOBILE,
             # 'Apply on a small mobile phone': base.SMALL_MOBILE,
-            # 'Apply on a small desktop computer': base.SMALL_DESKTOP
+            'Apply on a small desktop computer': base.SMALL_DESKTOP
         }
         for prefix, size in sizes.items():
             self.run_sequence(prefix, sequence, size=size)
@@ -80,7 +80,7 @@ class TestWorkflows(base.ScreenSequenceTestCase):
             S.click_on('clicked apply now', 'Apply now'),
             S.fill_form('submitted incomplete form', first_name='Cornelius'),
             S.fill_form('added last name', last_name='Cherimoya'),
-            S.fill_form('added address', **address_fields)
+            S.fill_form('added address', contact_preferences=['prefers_snailmail'], **address_fields)
         ]
         self.run_sequence(
             "Applying without enough information", sequence, size=base.COMMON_MOBILE)

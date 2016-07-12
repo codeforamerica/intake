@@ -59,9 +59,9 @@ class TestViews(AuthIntegrationTestCase):
 
     def test_confirm_view(self):
         self.be_anonymous()
-        base_data = mock.NEW_RAW_FORM_DATA
+        base_data = mock.post_data(**mock.NEW_RAW_FORM_DATA)
         session = self.client.session
-        session['form_in_progress'] = base_data
+        session['form_in_progress'] = dict(base_data.lists())
         session.save()
         response = self.client.get(reverse('intake-confirm'))
         self.assertContains(response, base_data['first_name'][0])
@@ -91,14 +91,15 @@ class TestViews(AuthIntegrationTestCase):
             first_name="Anonymous",
             last_name="Anderson",
             ssn='123091203',
-            dob_day='10',
-            dob_month='10',
-            dob_year='80',
-            address_street='100 Market St',
-            address_city='San Francisco',
-            address_state='CA',
-            address_zip='99999',
-            )
+            **{
+            'dob.day': '10',
+            'dob.month': '10',
+            'dob.year': '80',
+            'address.street': '100 Market St',
+            'address.city': 'San Francisco',
+            'address.state': 'CA',
+            'address.zip': '99999',
+            })
         self.assertRedirects(result, 
             reverse('intake-thanks'))
         thanks_page = self.client.get(result.url)
@@ -151,7 +152,7 @@ class TestViews(AuthIntegrationTestCase):
             )
         self.assertContains(result, "Foooo")
         self.assertEqual(result.wsgi_request.path, reverse('intake-apply'))
-        self.assertContains(result, "This field is required.")
+        self.assertContains(result, "This field may not be blank.")
         self.assertContains(result, forms.Warnings.ADDRESS)
         self.assertContains(result, forms.Warnings.SSN)
         self.assertContains(result, forms.Warnings.DOB)

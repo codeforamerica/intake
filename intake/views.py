@@ -37,7 +37,7 @@ class MultiStepFormViewBase(FormView):
 
 class MultiStepApplicationView(MultiStepFormViewBase):
     template_name = "apply_page.jinja"
-    form_class = forms.BaseApplicationForm
+    form_class = forms.FormSubmissionSerializer
     success_url = reverse_lazy('intake-thanks')
     error_message = _("There were some problems with your application. Please check the errors below.")
 
@@ -56,7 +56,7 @@ class MultiStepApplicationView(MultiStepFormViewBase):
             messages.success(self.request, message)
 
     def save_submission_and_send_notifications(self, form):
-        submission = models.FormSubmission(answers=form.cleaned_data)
+        submission = models.FormSubmission(answers=form.data)
         submission.save()
         number = models.FormSubmission.objects.count()
         notifications.slack_new_submission.send(
@@ -83,7 +83,7 @@ class Confirm(MultiStepApplicationView):
             # make sure the form has warnings.
             # trigger data cleaning
             form.is_valid()
-            if form.has_warnings():
+            if form.warnings:
                 messages.warning(self.request, self.incoming_message)
             context['form'] = form
         return context
@@ -99,7 +99,7 @@ class Apply(MultiStepApplicationView):
     def form_valid(self, form):
         """If no errors, check for warnings, redirect to confirmation if needed
         """
-        if form.has_warnings():
+        if form.warnings:
             # save the post data and move them to confirmation step
             self.dump_post_data_to_session()
             return redirect(self.confirmation_url)

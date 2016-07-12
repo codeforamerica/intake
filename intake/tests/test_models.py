@@ -273,10 +273,10 @@ class TestModels(TestCase):
 
         # case: address
         submission.answers['contact_preferences'] = ['prefers_snailmail']
-        submission.answers['address_street'] = '123 Main St'
-        submission.answers['address_city'] = 'San Francisco'
-        submission.answers['address_state'] = 'CA'
-        submission.answers['address_zip'] = '99999'
+        submission.answers['address']['street'] = '123 Main St'
+        submission.answers['address']['city'] = 'San Francisco'
+        submission.answers['address']['state'] = 'CA'
+        submission.answers['address']['zip'] = '99999'
         expected = {'snailmail': '123 Main St\nSan Francisco, CA\n99999'}
         result = submission.get_contact_info()
         self.assertDictEqual(result, expected)

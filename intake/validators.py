@@ -1,7 +1,13 @@
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 from intake.constants import CONTACT_METHOD_CHOICES, CONTACT_PREFERENCE_CHECKS
+from rest_framework import serializers
+from rest_framework.utils import html
 
+def html_safe_get(obj, key, default=None):
+    if html.is_html_input(obj):
+        return obj.getlist(key, default)
+    return obj.get(key, default)
 
 class GavePreferredContactMethods:
     message_template = _("You said you preferred to be contacted through {medium}, but you didn't enter {datum}.")
@@ -10,16 +16,30 @@ class GavePreferredContactMethods:
         attributes, medium, datum = CONTACT_PREFERENCE_CHECKS[preference]
         return self.message_template.format(medium=medium, datum=datum)
 
-    def __call__(self, form):
-        for key in form.cleaned_data.get('contact_preferences', []):
-            has_attributes = False
-            attributes, medium, datum = CONTACT_PREFERENCE_CHECKS[key]
-            for attribute in attributes:
-                if form.cleaned_data.get(attribute, None):
-                    has_attributes = True
-            if not has_attributes:
-                error = ValidationError(self.message(key))
-                form.add_error(None, error)
+    def set_context(self, form):
+        self.context = form
+
+    def get_field_value(self, field_name, data):
+        field = self.context.fields[field_name]
+        if hasattr(field, 'fields'):
+            value = field.to_internal_value(data.get(field_name, {}))
+        else:
+            value = data.get(field_name, '')
+        return value
+
+    def __call__(self, data):
+        errors = {}
+        data = self.context.get_initial()
+        for key in data.get('contact_preferences', []):
+            attribute_name, medium, datum = CONTACT_PREFERENCE_CHECKS[key]
+            value = self.get_field_value(attribute_name, data)
+            has_attribute = bool(value)
+            if not has_attribute:
+                field_errors = errors.get(attribute_name, [])
+                field_errors.append(self.message(key))
+                errors[attribute_name] = field_errors
+        if errors:
+            raise serializers.ValidationError(errors)
 
 
 class ContactInfoJSON:
