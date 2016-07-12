@@ -6,6 +6,7 @@ from unittest.mock import patch, Mock
 
 from intake.tests import mock
 from user_accounts.tests.mock import create_fake_auth_models
+from user_accounts import models as auth_models
 from intake import models, fields, anonymous_names, validators, notifications
 
 
@@ -204,12 +205,40 @@ class TestModels(TestCase):
             Mock(user=agency_user_without_notifications, event_type=2),
         ]
         instance.logs.all.return_value = unexpected_logs + expected_logs
-        expected_results = expected_logs
         results = [
             n for n
             in models.FormSubmission.agency_event_logs(
                 instance, 1)]
-        self.assertListEqual(results, expected_results)
+        self.assertListEqual(results, expected_logs)
+
+    def test_agency_event_logs_handle_user_without_profile(self):
+        agency = Mock(is_receiving_agency=True)
+        agency_user = Mock(**{'profile.organization': agency})
+        instance = Mock()
+    
+        class NoProfile:
+            @property
+            def profile(self):
+                raise auth_models.Profile.DoesNotExist("no profile for this user")
+
+        user_with_no_profile = NoProfile()
+        expected_logs = [
+            Mock(event_type=1, user=agency_user),
+            ]
+        unexpected_logs = [
+            Mock(user=None, event_type=1),
+            Mock(user=None, event_type=2),
+            Mock(user=user_with_no_profile, event_type=1),
+            Mock(user=user_with_no_profile, event_type=2),
+            Mock(user=user_with_no_profile, event_type=2),
+            Mock(user=user_with_no_profile, event_type=2),
+        ]
+        instance.logs.all.return_value = unexpected_logs + expected_logs
+        results = [
+            n for n
+            in models.FormSubmission.agency_event_logs(
+                instance, 1)]
+        self.assertListEqual(results, expected_logs)
 
     def test_contact_info_json_field(self):
 

@@ -82,7 +82,7 @@ class FormSubmission(models.Model):
     def agency_event_logs(self, event_type):
         '''assumes that self.logs and self.logs.user are prefetched'''
         for log in self.logs.all():
-            if log.user:
+            if log.user and hasattr(log.user, 'profile'):
                 if log.user.profile.organization.is_receiving_agency:
                     if log.event_type == event_type:
                         yield log
