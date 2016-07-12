@@ -7,18 +7,20 @@ from intake.tests import mock
 class TestForms(TestCase):
 
     def test_application_form_with_mock_answers(self):
-        """Should work with a set of mock answers
-        """
+        # Should work with a set of mock answers
         fake_answers = mock.fake.sf_county_form_answers()
-        form = forms.BaseApplicationForm(fake_answers)
+        form = forms.FormSubmissionSerializer(data=fake_answers)
         self.assertTrue(form.is_valid())
 
     def test_application_form_with_raw_empty_post_data(self):
-        """Application form should not have trouble reading raw post data from
-            a Django request.
-        """
-        form = forms.BaseApplicationForm(mock.RAW_FORM_DATA)
+        # Application form should not have trouble reading raw post data from
+        # a Django request. But the form should not be valid
+        form = forms.FormSubmissionSerializer(data=mock.RAW_FORM_DATA)
         self.assertTrue(not form.is_valid())
+        keys = form.errors.keys()
+        self.assertTrue('first_name' in keys)
+        self.assertTrue('last_name' in keys)
+        self.assertEqual(len(keys), 2)
 
     def test_preferred_contact_info_validation(self):
         contact_preferences = [
@@ -27,7 +29,7 @@ class TestForms(TestCase):
                 "prefers_snailmail",
                 "prefers_voicemail"
         ]
-        form = forms.BaseApplicationForm(dict(
+        form = forms.FormSubmissionSerializer(data=dict(
             first_name="Foo",
             last_name="Bar",
             contact_preferences=contact_preferences
@@ -37,10 +39,26 @@ class TestForms(TestCase):
             for k in contact_preferences
             ]
         self.assertFalse(form.is_valid())
-        form_html = form.as_p()
-        for message in error_messages:
-            escaped = html_utils.escape(message)
-            self.assertIn(escaped, form_html)
+        errors = form.errors
+        self.assertIn(validators.gave_preferred_contact_methods.message('prefers_sms'), errors['phone_number'])
+        self.assertIn(validators.gave_preferred_contact_methods.message('prefers_voicemail'), errors['phone_number'])
+        self.assertIn(validators.gave_preferred_contact_methods.message('prefers_email'), errors['email'])
+        self.assertIn(validators.gave_preferred_contact_methods.message('prefers_snailmail'), errors['address_street'])
+
+    def test_contact_info_validation_errors_dont_override_field_errors(self):
+        contact_preferences = [
+                "prefers_email",
+                "prefers_sms",
+        ]
+        form = forms.FormSubmissionSerializer(data=dict(
+            first_name="Foo",
+            last_name="Bar",
+            email="not_good_gmail",
+            contact_preferences=contact_preferences
+            ))
+        self.assertFalse(form.is_valid())
+
+
 
     def test_name_is_minimal_requirement(self):
         """Application form should be valid with nothing but a name
@@ -159,7 +177,10 @@ class TestForms(TestCase):
     """
         self.assertHTMLEqual(results, expected)
 
-
-
-
+    def test_emailfield(self):
+        form = forms.FormSubmissionSerializer(data={
+            'email': ''
+            })
+        self.assertFalse(form.is_valid())
+        self.assertFalse('email' in form.errors)
 

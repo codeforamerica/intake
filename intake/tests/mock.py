@@ -3,6 +3,7 @@ import factory
 from faker import Factory as FakerFactory
 from django.core.files import File
 from pytz import timezone
+from django.utils.datastructures import MultiValueDict
 
 from intake import models
 from unittest.mock import Mock
@@ -10,7 +11,7 @@ from unittest.mock import Mock
 fake = FakerFactory.create('en_US', includes=['intake.tests.mock_county_forms'])
 Pacific = timezone('US/Pacific')
 
-RAW_FORM_DATA = {
+RAW_FORM_DATA = MultiValueDict({
     'address_city': [''],
     'address_state': ['CA'],
     'address_street': [''],
@@ -31,7 +32,7 @@ RAW_FORM_DATA = {
     'when_probation_or_parole': [''],
     'when_where_outside_sf': [''],
     'where_probation_or_parole': ['']
-}
+})
 
 NEW_RAW_FORM_DATA = {
     'address_city': '',
