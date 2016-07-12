@@ -121,8 +121,11 @@ class FormSubmission(models.Model):
             if key in preferences]
 
     def get_formatted_address(self):
-        return "{address_street}\n{address_city}, {address_state}\n{address_zip}".format(
-            **self.answers)
+        address = self.answers.get('address', {})
+        if not address:
+            return ""
+        return "{street}\n{city}, {state}\n{zip}".format(
+            **self.answers.get('address', {}))
 
     def get_contact_info(self):
         """Returns a dictionary of contact information structured to be valid for
@@ -131,11 +134,11 @@ class FormSubmission(models.Model):
         info = {}
         for key in self.get_contact_preferences():
             short = key[8:]
-            field_names, nice, datum = CONTACT_PREFERENCE_CHECKS[key]
+            field_name, nice, datum = CONTACT_PREFERENCE_CHECKS[key]
             if short == 'snailmail':
                 info[short] = self.get_formatted_address()
             else:
-                info[short] = self.answers.get(field_names[0], '')
+                info[short] = self.answers.get(field_name, '')
         return info
 
     def send_notification(self, notification, contact_info_key, **context):
