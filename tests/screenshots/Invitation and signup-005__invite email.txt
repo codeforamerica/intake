@@ -1,4 +1,4 @@
-EMAIL to kegan-ryan@gmail.com
+EMAIL to oley-gutmann@yahoo.com
 
 ----------------------------
 
@@ -11,4 +11,4 @@ Hello,
 You've been invited to create an account on Clear My Record.
 
 If you'd like to join, please follow this link:
-http://localhost:8081/invitations/accept-invite/7v12igqkqhkvtx045t6zvloevp5zyrr3fptr1v2jzirpgc0sib51261x1s8ejuuz
+http://localhost:8081/invitations/accept-invite/mgka0jgdch3nxhyg8u30ki8ugogjgmsi2rszn0fd4ogfqjrilpo0rs06doecey4j

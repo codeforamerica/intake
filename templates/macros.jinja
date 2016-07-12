@@ -66,7 +66,7 @@
 
 
 {% macro checkbox_options_field(field) %}
-<div class="field field-checkbox_options {{ field.field_name }}
+<div class="field field-checkbox_options {{ field.class_name() }}
 	{%- if field.field_warnings() %} warnings
 	{%- endif %}
 	{%- if field.field_errors() %} errors{% endif%}">
@@ -98,7 +98,7 @@
 
 
 {% macro radio_select_field(field) %}
-<div class="field field-radio_options {{ field.field_name }}
+<div class="field field-radio_options {{ field.class_name() }}
 	{%- if field.field_warnings() %} warnings
 	{%- endif %}
 	{%- if field.field_errors() %} errors{% endif%}">
@@ -130,7 +130,7 @@
 
 
 {% macro address_field(field) %}
-<div class="field field-address_fieldset {{ field.field_name }}
+<div class="field field-address_fieldset {{ field.class_name() }}
 	{%- if field.field_warnings() %} warnings{% endif %}
 	{%- if field.field_errors() %} errors{% endif %}">
 	{{ render_errors(field.field_errors()) }}
@@ -157,7 +157,7 @@
 {% endmacro %}
 
 {% macro dob_field(field) %}
-<div class="field field-dob_fieldset {{ field.field_name }}
+<div class="field field-dob_fieldset {{ field.class_name() }}
 	{%- if field.field_warnings() %} warnings{% endif %}
 	{%- if field.field_warnings() %} warnings{% endif %}">
 	{{ render_errors(field.field_errors()) }}
@@ -177,7 +177,7 @@
 {% endmacro %}
 
 {% macro basic_field(field, is_subfield=False, optional=False) %}
-<div class="{% if is_subfield %}sub{% endif %}field {{ field.field_name }}
+<div class="{% if is_subfield %}sub{% endif %}field {{ field.class_name() }}
 	{%- if field.field_warnings() %} warnings{% endif %}
 	{%- if field.field_errors() %} errors{% endif %}">
 	{{ render_errors(field.field_errors()) }}

@@ -98,9 +98,12 @@ class SerializerFormField(serializers.Field):
 
     def input_name(self):
         if hasattr(self, 'parent'):
-            if hasattr(self.parent, 'field_name'):
+            if getattr(self.parent, 'field_name', ''):
                 return "{}.{}".format(self.parent.field_name, self.field_name)
         return self.field_name
+
+    def class_name(self):
+        return self.input_name().replace('.', '_')
 
 
 class BlankIfNotRequiredField(SerializerFormField):

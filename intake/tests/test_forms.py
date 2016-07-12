@@ -278,6 +278,8 @@ class TestForms(TestCase):
         self.assertEqual(field.fields['street'].current_value(), '111 Main St.')
         self.assertEqual(field.fields['city'].current_value(), 'Oakland')
         self.assertEqual(field.fields['city'].input_name(), 'address.city')
+        self.assertEqual(field.fields['city'].class_name(), 'address_city')
+        self.assertEqual(form.fields['first_name'].input_name(), 'first_name')
         form = forms.FormSubmissionSerializer()
         for name, field in form.fields.items():
             self.assertEqual(field.current_value(), field.get_empty_value())
