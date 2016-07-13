@@ -1,4 +1,5 @@
 import re
+import random
 from unittest import skipIf
 from unittest.mock import Mock, patch
 
@@ -6,6 +7,8 @@ from django.test import override_settings
 from django.core import mail
 from django.core.urlresolvers import reverse
 
+from project.jinja2 import url_with_ids
+from intake import models
 from tests import base
 from tests import sequence_steps as S
 from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase as AuthCase
@@ -25,6 +28,7 @@ class TestWorkflows(base.ScreenSequenceTestCase):
         for key, models in auth_mock.create_fake_auth_models().items():
             setattr(self, key, models)
         self.submissions = intake_mock.FormSubmissionFactory.create_batch(10)
+        self.pdf = intake_mock.useable_pdf()
         self.superuser = auth_mock.fake_superuser()
         accounts_models.UserProfile.objects.create(
             user=self.superuser, 
@@ -118,4 +122,33 @@ class TestWorkflows(base.ScreenSequenceTestCase):
                 S.fill_form('entered name and password', name='Bartholomew McHumanperson', password1=fake_password),
                 S.get('went to applications', reverse('intake-app_index')),
             ], base.SMALL_DESKTOP )
+
+    def test_look_at_single_pdf(self):
+        user = self.users[0]
+        submission = random.choice(self.submissions)
+        self.run_sequence(
+            "Look at a single pdf",
+            [
+                S.get('tried to go to pdf',
+                    reverse('intake-filled_pdf',
+                        kwargs={'submission_id': submission.id})),
+                S.fill_form('entered login info',
+                    login=user.email, password=fake_password),
+                S.wait('wait for pdf to load', 2)
+            ], base.SMALL_DESKTOP)
+
+    def test_look_at_app_bundle(self):
+        user = self.users[0]
+        submissions = random.sample(
+            self.submissions, 3)
+        self.run_sequence(
+            "Look at app bundle",
+            [
+                S.get('tried to go to app bundle',
+                    url_with_ids('intake-app_bundle', [s.id for s in submissions])),
+                S.fill_form('entered login info',
+                    login=user.email, password=fake_password),
+                S.wait('wait for pdf to load', 4)
+            ], base.SMALL_DESKTOP)
+
 

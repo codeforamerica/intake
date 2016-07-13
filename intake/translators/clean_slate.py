@@ -26,7 +26,29 @@ def fmt_ssn(s, prefix='SS# '):
     return ''
 
 
-translator = AttributeTranslatorBase({
+class CleanSlateTranslator(AttributeTranslatorBase):
+
+    def is_new(self, data):
+        return (
+                'address' in data.answers
+            ) and (
+            isinstance(data.answers.get('address'), dict)
+            )
+
+    def oldify(self, data):
+        for key in ['address', 'dob']:
+            data_dict = data.answers.get(key, {})
+            for sub, val in data_dict.items():
+                new_key = '_'.join([key, sub])
+                data.answers[new_key] = val
+
+    def __call__(self, data):
+        if self.is_new(data):
+            self.oldify(data)
+        return super().__call__(data)
+
+
+translator = CleanSlateTranslator({
             'Address City': 'address_city',
             'Address State': 'address_state',
             'Address Street': 'address_street',
@@ -37,7 +59,6 @@ translator = AttributeTranslatorBase({
             'Date': lambda s: s.get_local_date_received('%-m/%-d/%Y'),
             'Date of Birth': get_formatted_dob,
             'Dates arrested outside SF': 'when_where_outside_sf',
-            'Drivers License': 'drivers_license_number',
             'Email Address': 'email',
             'Employed': lambda s: yesno(s, 'currently_employed'),
             'First Name': lambda s: namify(s.answers['first_name']),
