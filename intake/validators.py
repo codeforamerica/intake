@@ -4,12 +4,19 @@ from intake.constants import CONTACT_METHOD_CHOICES, CONTACT_PREFERENCE_CHECKS
 from rest_framework import serializers
 from rest_framework.utils import html
 
+
 def html_safe_get(obj, key, default=None):
     if html.is_html_input(obj):
         return obj.getlist(key, default)
     return obj.get(key, default)
 
+
 class GavePreferredContactMethods:
+    """Implements the validator protocol of Django REST Framework
+        - needs to be callable
+        - receives the parent form through the `set_context(form)` method
+        - if it finds errors, it should raise a ValidationError to return them
+    """
     message_template = _("You said you preferred to be contacted through {medium}, but you didn't enter {datum}.")
 
     def message(self, preference):
@@ -27,7 +34,7 @@ class GavePreferredContactMethods:
             value = data.get(field_name, '')
         return value
 
-    def __call__(self, data):
+    def __call__(self, ignored):
         errors = {}
         data = self.context.get_initial()
         for key in data.get('contact_preferences', []):

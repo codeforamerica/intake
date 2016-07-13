@@ -1,4 +1,4 @@
-from intake.translators.base import AttributeTranslatorBase
+from intake.translators.base import FormToPDFTranslator
 
 from project.jinja2 import namify
 
@@ -26,7 +26,7 @@ def fmt_ssn(s, prefix='SS# '):
     return ''
 
 
-class CleanSlateTranslator(AttributeTranslatorBase):
+class ClearMyRecordFormToPDFTranslator(FormToPDFTranslator):
 
     def is_new(self, data):
         return (
@@ -47,8 +47,10 @@ class CleanSlateTranslator(AttributeTranslatorBase):
             self.oldify(data)
         return super().__call__(data)
 
-
-translator = CleanSlateTranslator({
+# Places to make this clearer
+# Structure and naming
+# in tests
+translator = ClearMyRecordFormToPDFTranslator({
             'Address City': 'address_city',
             'Address State': 'address_state',
             'Address Street': 'address_street',
@@ -84,3 +86,4 @@ translator = CleanSlateTranslator({
             'FirstName': lambda s: namify(s.answers['first_name']),
             'LastName': lambda s: namify(s.answers['last_name'])
             }, att_object_extractor='answers')
+

@@ -1,6 +1,6 @@
 
 
-class AttributeTranslatorBase:
+class FormToPDFTranslator:
 
     def __init__(self, config, att_object_extractor=None):
         self.att_object_extractor = att_object_extractor

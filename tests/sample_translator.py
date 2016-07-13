@@ -1,7 +1,7 @@
-from intake.translators.base import AttributeTranslatorBase
+from intake.translators.base import FormToPDFTranslator
 
 
-translate = AttributeTranslatorBase({
+translate = FormToPDFTranslator({
         'Given Name Text Box': lambda s: s.answers['first_name'].capitalize(),
         'Family Name Text Box': 'last_name',
         'Address 1 Text Box': 'address_street',
