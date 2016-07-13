@@ -11,3 +11,6 @@ def fill_form(sequence_step_name, **answers):
 
 def check_email(sequence_step_name):
     return (sequence_step_name, 'print_email', [], {})
+
+def wait(sequence_step_name, seconds):
+    return (sequence_step_name, 'wait', [seconds], {})

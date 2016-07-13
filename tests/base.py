@@ -1,4 +1,5 @@
 import os
+import time
 from django.core import mail
 from django.conf import settings
 from django.test import LiveServerTestCase, override_settings
@@ -103,6 +104,9 @@ class FunctionalTestCase(StaticLiveServerTestCase):
             self.handle_input(name, value)
         form = self.browser.find_element_by_tag_name('form')
         form.submit()
+
+    def wait(self, seconds):
+        time.sleep(seconds)
 
 # relevant: http://selenium-python.readthedocs.io/faq.html#how-to-scroll-down-to-the-bottom-of-a-page
 class ScreenSequenceTestCase(FunctionalTestCase):

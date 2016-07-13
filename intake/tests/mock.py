@@ -1,4 +1,5 @@
 import uuid
+import os
 import factory
 from faker import Factory as FakerFactory
 from django.core.files import File
@@ -103,6 +104,15 @@ def fillable_pdf():
                 'tests/sample_pdfs/sample_form.pdf', 'rb')),
             translator = "tests.sample_translator.translate"
         )
+
+def useable_pdf():
+    example_pdf = File(open(os.environ.get('TEST_PDF_PATH'), 'rb'))
+    return FillablePDFFactory.create(
+            name="Clean Slate",
+            pdf=example_pdf,
+            translator = "intake.translators.clean_slate.translator"
+        )
+
 
 class FrontSendMessageResponse:
     SUCCESS_JSON = {'status': 'accepted'}
