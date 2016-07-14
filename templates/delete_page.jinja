@@ -4,31 +4,31 @@
 
 <section class="delete">
 <div class="container">
-	<div class="row">
-		<h3>Are you sure you want to delete this application?</h3>
-		<p>
-		It will be gone forever.
-		</p>
-	</div>
-	<div class="row">
-		<form class="delete" action="{{ 
-			url('intake-delete_page', submission_id=submission.id)
-			}}" method="POST" accept-charset="utf-8">
+  <div class="row">
+    <h3>Are you sure you want to delete this application?</h3>
+    <p>
+    It will be gone forever.
+    </p>
+  </div>
+  <div class="row">
+    <form class="delete" action="{{ 
+      url('intake-delete_page', submission_id=submission.id)
+      }}" method="POST" accept-charset="utf-8">
         {% include "includes/csrf_field.jinja" %}
-		<a href="{{ url('intake-app_index') }}" class="btn btn-default btn-lg">No, I'm not sure</a>
-		
-		<button class="btn btn-danger btn-lg" type="submit">Yes, delete it</button>
-		</form>
-	</div>
-	<div class="row">
-		<div class="iframe_container">
-			<iframe class="pdf_inset" src="{{ 
-				url('intake-filled_pdf', submission_id=submission.id)
-				}}" frameborder="0" width="800" height="600"></iframe>
-		</div>
-	</div>
+    <a href="{{ url('intake-app_index') }}" class="btn btn-default btn-lg">No, I'm not sure</a>
+    
+    <button class="btn btn-danger btn-lg" type="submit">Yes, delete it</button>
+    </form>
+  </div>
+  <div class="row">
+    <div class="iframe_container">
+      <iframe class="pdf_inset" src="{{ 
+        url('intake-filled_pdf', submission_id=submission.id)
+        }}" frameborder="0" width="800" height="600"></iframe>
+    </div>
+  </div>
 </div>
-	
+  
 </section>
 
 

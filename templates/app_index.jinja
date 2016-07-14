@@ -3,65 +3,65 @@
 {% block content %}
 
 <div class="container">
-	<div class="row">
-		<h1>All Clean Slate Applications</h1>
-	</div>
-	<div class="row">
-		<table class="table applications_list">
-		<tr>
-			<th>Date</th>
-			<th>Last Name</th>
-			<th>First Name</th>
-			<th>Intake PDF</th>
- 			<th>Opened by SF Pub Defender</th>
-			<th>Added to DB</th>
-			<th>Delete?</th>
-		</tr>
-		{% for app in submissions %}
-		<tr>
-			<td>{{ app.get_local_date_received('%-m/%-d/%y') }}</td>
-			<td>{{ namify(app.answers.get("last_name", "")) }}</td>
-			<td>{{ namify(app.answers.get("first_name", "")) }}</td>
-			<td>
-				<a href="{{ 
-					url('intake-filled_pdf',
-						submission_id=app.id
-						) }}" class="btn btn-default btn-sm">
-						<span class="glyphicon glyphicon-file"></span>
-						PDF
-						</a>
-			</td> 
-			<td>
-			{% if app.last_opened_by_agency() %}
-			{{ humanize.naturaltime(app.last_opened_by_agency()) }}
-			{%- else -%}------------{% endif %}
-			</td>
-			<td>
-			{% if app.last_processed_by_agency() %}
-				<span class="glyphicon glyphicon-ok-sign"></span>
-				Added {{ humanize.naturaltime(app.last_processed_by_agency()) }}
-			{%- else -%}
-				<a class="btn btn-default btn-sm" href="{{
-					url_with_ids('intake-mark_processed',
-					ids=[app.id]) + '&next=' + url('intake-app_index')
-						 }}">
-				<span class="glyphicon glyphicon-plus"></span>
-				Mark as added
-				</a>
-			{% endif %}
-			</td>
-			<td>
-				<a class="btn btn-default btn-sm delete" href="{{ url('intake-delete_page',
-					submission_id=app.id
-						) }}">
-					<span class="glyphicon glyphicon-remove"></span>
-					Delete
-				</a>
-			</td>
-		</tr>
-		{% endfor %}
-			
-		</table>
-	</div>
+  <div class="row">
+    <h1>All Clean Slate Applications</h1>
+  </div>
+  <div class="row">
+    <table class="table applications_list">
+    <tr>
+      <th>Date</th>
+      <th>Last Name</th>
+      <th>First Name</th>
+      <th>Intake PDF</th>
+      <th>Opened by SF Pub Defender</th>
+      <th>Added to DB</th>
+      <th>Delete?</th>
+    </tr>
+    {% for app in submissions %}
+    <tr>
+      <td>{{ app.get_local_date_received('%-m/%-d/%y') }}</td>
+      <td>{{ namify(app.answers.get("last_name", "")) }}</td>
+      <td>{{ namify(app.answers.get("first_name", "")) }}</td>
+      <td>
+        <a href="{{ 
+          url('intake-filled_pdf',
+            submission_id=app.id
+            ) }}" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-file"></span>
+            PDF
+            </a>
+      </td> 
+      <td>
+      {% if app.last_opened_by_agency() %}
+      {{ humanize.naturaltime(app.last_opened_by_agency()) }}
+      {%- else -%}------------{% endif %}
+      </td>
+      <td>
+      {% if app.last_processed_by_agency() %}
+        <span class="glyphicon glyphicon-ok-sign"></span>
+        Added {{ humanize.naturaltime(app.last_processed_by_agency()) }}
+      {%- else -%}
+        <a class="btn btn-default btn-sm" href="{{
+          url_with_ids('intake-mark_processed',
+          ids=[app.id]) + '&next=' + url('intake-app_index')
+             }}">
+        <span class="glyphicon glyphicon-plus"></span>
+        Mark as added
+        </a>
+      {% endif %}
+      </td>
+      <td>
+        <a class="btn btn-default btn-sm delete" href="{{ url('intake-delete_page',
+          submission_id=app.id
+            ) }}">
+          <span class="glyphicon glyphicon-remove"></span>
+          Delete
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+      
+    </table>
+  </div>
 </div>
 {% endblock content %}
