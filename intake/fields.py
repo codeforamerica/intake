@@ -45,7 +45,7 @@ class ContactInfoJSONField(JSONField):
         super().validate(value, model_instance)
 
 
-class SerializerFormField(serializers.Field):
+class FormField(serializers.Field):
     """A serializer field that adds some additional convenience attributes
         for rendering as an HTML form and mimicking parts of the Django
         FormField API
@@ -90,7 +90,7 @@ class SerializerFormField(serializers.Field):
             if hasattr(self, 'fields'):
                 base_value = self.get_value(base_data)
                 value = self.to_internal_value(base_value)
-            elif isinstance(self.parent, SerializerFormField):
+            elif isinstance(self.parent, FormField):
                 value = getattr(self.parent.current_value(), self.field_name)
             else:
                 value = self.get_value(base_data)
@@ -106,7 +106,7 @@ class SerializerFormField(serializers.Field):
         return self.input_name().replace('.', '_')
 
 
-class BlankIfNotRequiredField(SerializerFormField):
+class BlankIfNotRequiredField(FormField):
     def __init__(self, **kwargs):
         if not kwargs.get('required', True):
             kwargs['allow_blank'] = True
@@ -124,7 +124,7 @@ class ChoiceField(BlankIfNotRequiredField, serializers.ChoiceField):
     pass
 
 
-class MultipleChoiceField(SerializerFormField, serializers.MultipleChoiceField):
+class MultipleChoiceField(FormField, serializers.MultipleChoiceField):
     def to_internal_value(self, data):
         return serializers.MultipleChoiceField.to_internal_value(self, data)
 
@@ -135,7 +135,7 @@ class MultipleChoiceField(SerializerFormField, serializers.MultipleChoiceField):
         return []
 
 
-class MultiValueField(serializers.Serializer, SerializerFormField):
+class MultiValueFormField(serializers.Serializer, FormField):
 
     def to_internal_value(self, data):
         base_data = super().to_internal_value(data)
@@ -158,7 +158,7 @@ class MultiValueField(serializers.Serializer, SerializerFormField):
         return value
 
 
-class AddressFieldSerializer(MultiValueField):
+class AddressMultiValueFormField(MultiValueFormField):
     street = CharField(required=False)
     city = CharField(label=_("City"), required=False)
     state = CharField(label=_("State"), required=False)
@@ -168,7 +168,7 @@ class AddressFieldSerializer(MultiValueField):
         return Address(**kwargs)
 
 
-class DateOfBirthFieldSerializer(MultiValueField):
+class DateOfBirthMultiValueFormField(MultiValueFormField):
     month = CharField(label=_("Month"), required=False)
     day = CharField(label=_("Day"), required=False)
     year = CharField(label=_("Year"), required=False)

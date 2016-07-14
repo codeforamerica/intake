@@ -33,7 +33,7 @@ def YesNoBlankField(**kwargs):
     return fields.ChoiceField(**base_args)
 
 
-class FormSubmissionSerializer(serializers.Serializer):
+class ClearMyRecordSFForm(serializers.Serializer):
     """Builds on Django REST Framework's serializers to create a Form class
         with a cleaner API than Django's default forms.
     """

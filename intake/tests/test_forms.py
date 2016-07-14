@@ -9,13 +9,13 @@ class TestForms(TestCase):
     def test_application_form_with_mock_answers(self):
         # Should work with a set of mock answers
         fake_answers = mock.form_answers()
-        form = forms.FormSubmissionSerializer(fake_answers)
+        form = forms.ClearMyRecordSFForm(fake_answers)
         self.assertTrue(form.is_valid())
 
     def test_application_form_with_raw_empty_post_data(self):
         # Application form should not have trouble reading raw post data from
         # a Django request. But the form should not be valid
-        form = forms.FormSubmissionSerializer(mock.RAW_FORM_DATA)
+        form = forms.ClearMyRecordSFForm(mock.RAW_FORM_DATA)
         self.assertTrue(not form.is_valid())
         keys = form.errors.keys()
         self.assertTrue('first_name' in keys)
@@ -29,7 +29,7 @@ class TestForms(TestCase):
                 "prefers_snailmail",
                 "prefers_voicemail"
         ]
-        form = forms.FormSubmissionSerializer(dict(
+        form = forms.ClearMyRecordSFForm(dict(
             contact_preferences=contact_preferences
             ))
         error_messages = [
@@ -43,7 +43,7 @@ class TestForms(TestCase):
         self.assertIn(validators.gave_preferred_contact_methods.message('prefers_email'), errors['email'])
         self.assertIn(validators.gave_preferred_contact_methods.message('prefers_snailmail'), errors['address'])
         # case: only required errors, no contact info erros
-        form = forms.FormSubmissionSerializer(mock.post_data(**{
+        form = forms.ClearMyRecordSFForm(mock.post_data(**{
             'contact_preferences': contact_preferences,
             'address.street': '111 Main St.',
             'address.city': 'Oakland',
@@ -63,7 +63,7 @@ class TestForms(TestCase):
                 "prefers_email",
                 "prefers_sms",
         ]
-        form = forms.FormSubmissionSerializer(data=dict(
+        form = forms.ClearMyRecordSFForm(data=dict(
             first_name="Foo",
             last_name="Bar",
             email="not_good_gmail",
@@ -79,18 +79,18 @@ class TestForms(TestCase):
             Should not be valid with any empty name inputs
         """
         # valid with name only
-        form = forms.FormSubmissionSerializer(
+        form = forms.ClearMyRecordSFForm(
             dict(first_name="Foo", last_name="Bar"))
         self.assertTrue(form.is_valid())
         self.assertTrue(form.warnings)
 
         # invalid if missing either last or first name
-        form = forms.FormSubmissionSerializer(
+        form = forms.ClearMyRecordSFForm(
             dict(first_name=" ", last_name="Bar"))
         self.assertTrue(not form.is_valid())
         self.assertTrue(form.warnings)
 
-        form = forms.FormSubmissionSerializer(
+        form = forms.ClearMyRecordSFForm(
             dict(first_name="Foo", last_name=" "))
         self.assertTrue(not form.is_valid())
         self.assertTrue(form.warnings)
@@ -98,7 +98,7 @@ class TestForms(TestCase):
     def test_gives_warning_for_missing_ssn(self):
         fake_answers = mock.form_answers()
         fake_answers['ssn'] = ' '
-        form = forms.FormSubmissionSerializer(fake_answers)
+        form = forms.ClearMyRecordSFForm(fake_answers)
         if form.is_valid():
             warnings = form.warnings
             self.assertIn('ssn', warnings)
@@ -107,7 +107,7 @@ class TestForms(TestCase):
     def test_gives_warning_for_missing_dob(self):
         fake_answers = mock.form_answers()
         fake_answers['dob.day'] = ' '
-        form = forms.FormSubmissionSerializer(fake_answers)
+        form = forms.ClearMyRecordSFForm(fake_answers)
         if form.is_valid():
             warnings = form.warnings
             self.assertIn('dob', warnings)
@@ -116,7 +116,7 @@ class TestForms(TestCase):
     def test_gives_warning_for_missing_address(self):
         fake_answers = mock.form_answers()
         fake_answers['address.street'] = ' '
-        form = forms.FormSubmissionSerializer(fake_answers)
+        form = forms.ClearMyRecordSFForm(fake_answers)
         if form.is_valid():
             warnings = form.warnings
             self.assertIn('address', warnings)
@@ -126,7 +126,7 @@ class TestForms(TestCase):
         from django.template import loader
         fake_answers = mock.form_answers()
         fake_answers['contact_preferences'] = ['prefers_email', 'prefers_sms']
-        form = forms.FormSubmissionSerializer(fake_answers)
+        form = forms.ClearMyRecordSFForm(fake_answers)
         context = {'form': form}
 
         new = loader.get_template('apply_page.jinja').render(context)
@@ -143,7 +143,7 @@ class TestForms(TestCase):
         {{- macros.checkbox_options_field(form.fields.contact_preferences) -}}
         """)
         fake_answers = mock.form_answers(contact_preferences=['prefers_email', 'prefers_sms'])
-        form = forms.FormSubmissionSerializer(fake_answers)
+        form = forms.ClearMyRecordSFForm(fake_answers)
         field = form.fields['contact_preferences']
         context = {'form': form}
         results = template.render(context)
@@ -200,7 +200,7 @@ class TestForms(TestCase):
         {{- macros.radio_select_field(form.fields.currently_employed) -}}
         """)
         fake_answers = mock.form_answers(currently_employed='yes')
-        form = forms.FormSubmissionSerializer(fake_answers)
+        form = forms.ClearMyRecordSFForm(fake_answers)
         field = form.fields['currently_employed']
         context = {'form': form}
         results = template.render(context)
@@ -236,14 +236,14 @@ class TestForms(TestCase):
 
 
     def test_emailfield(self):
-        form = forms.FormSubmissionSerializer(data={
+        form = forms.ClearMyRecordSFForm(data={
             'email': ''
             })
         self.assertFalse(form.is_valid())
         self.assertFalse('email' in form.errors)
 
     def test_addressfield(self):
-        form = forms.FormSubmissionSerializer(
+        form = forms.ClearMyRecordSFForm(
             mock.post_data(**{
                 'contact_preferences': ['prefers_snailmail', 'prefers_email'],
                 'address.street': '111 Main St.',
@@ -270,7 +270,7 @@ class TestForms(TestCase):
                 'dob.year': '80',
                 'email': 'someone@gmail.com',
                 }
-        form = forms.FormSubmissionSerializer(mock.post_data(**data))
+        form = forms.ClearMyRecordSFForm(mock.post_data(**data))
         field = form.fields['address']
         self.assertEqual(
             str(field.current_value()),
@@ -280,7 +280,7 @@ class TestForms(TestCase):
         self.assertEqual(field.fields['city'].input_name(), 'address.city')
         self.assertEqual(field.fields['city'].class_name(), 'address_city')
         self.assertEqual(form.fields['first_name'].input_name(), 'first_name')
-        form = forms.FormSubmissionSerializer()
+        form = forms.ClearMyRecordSFForm()
         for name, field in form.fields.items():
             self.assertEqual(field.current_value(), field.get_empty_value())
 

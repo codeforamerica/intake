@@ -37,7 +37,7 @@ class MultiStepFormViewBase(FormView):
 
 class MultiStepApplicationView(MultiStepFormViewBase):
     template_name = "apply_page.jinja"
-    form_class = forms.FormSubmissionSerializer
+    form_class = forms.ClearMyRecordSFForm
     success_url = reverse_lazy('intake-thanks')
     error_message = _("There were some problems with your application. Please check the errors below.")
 
