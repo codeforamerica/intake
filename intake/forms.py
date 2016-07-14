@@ -10,11 +10,12 @@ from rest_framework.serializers import ValidationError, get_validation_error_det
 from intake import validators, fields
 
 
-YES_NO_CHOICES = (
-    ('yes', _('Yes')),
-    ('no',  _('No')),
+CONTACT_PREFERENCE_CHOICES = (
+    ('prefers_email',     _('Email')),
+    ('prefers_sms',       _('Text Message')),
+    ('prefers_snailmail', _('Paper mail')),
+    ('prefers_voicemail', _('Voicemail')),
     )
-
 
 class Warnings:
     DOB = _("The public defender may not be able to check your RAP sheet without a full date of birth.")
@@ -22,110 +23,10 @@ class Warnings:
     SSN = _("The public defender may not be able to check your RAP sheet without a social security number.")
 
 
-def YesNoBlankField(**kwargs):
-    """Returns a RadioSelect field with three valid options:
-        'Yes', 'No', and ''
-    """
-    base_args = dict(
-        choices=YES_NO_CHOICES,
-        required=False)
-    base_args.update(**kwargs)
-    return fields.ChoiceField(**base_args)
-
-
-class ClearMyRecordSFForm(serializers.Serializer):
+class Form(serializers.Serializer):
     """Builds on Django REST Framework's serializers to create a Form class
         with a cleaner API than Django's default forms.
     """
-
-    CONTACT_PREFERENCE_CHOICES = (
-        ('prefers_email',     _('Email')),
-        ('prefers_sms',       _('Text Message')),
-        ('prefers_snailmail', _('Paper mail')),
-        ('prefers_voicemail', _('Voicemail')),
-        )
-
-    contact_preferences = fields.MultipleChoiceField(
-        label=_('How would you like us to contact you?'),
-        help_text=_(
-            'Code for America will use this to update you about your application.'),
-        choices=CONTACT_PREFERENCE_CHOICES,
-        required=False
-        )
-
-    first_name = fields.CharField(
-        label=_('What is your first name?'))
-    middle_name = fields.CharField(
-        label=_('What is your middle name?'),
-        required=False)
-    last_name = fields.CharField(
-        label=_('What is your last name?'))
-
-    phone_number = fields.CharField(
-        label=_('What is your phone number?'),
-        help_text=_('Code for America and the public defender will use this to contact you about your application.'),
-        required=False)
-    email = fields.EmailField(
-        label=_('What is your email?'),
-        help_text=_('For example "yourname@example.com"'),
-        required=False)
-
-    dob = fields.DateOfBirthFieldSerializer(
-        label=_("What is your date of birth?"),
-        help_text=_("For example: 4/28/1986"),
-        required=False)
-    ssn = fields.CharField(
-        label=_('What is your Social Security Number?'),
-        help_text=_("The public defender's office will use this to get your San Francisco RAP sheet and find any convictions that can be reduced or dismissed."),
-        required=False)
-
-    us_citizen = YesNoBlankField(
-        label=_("Are you a U.S. citizen?"),
-        help_text=_("The public defender handles non-citizen cases differently and has staff who can help with citizenship issues."))
-
-    address = fields.AddressFieldSerializer(
-        label=_("What is your mailing address?"),
-        help_text=_("The public defender will need to send you important papers."),
-        required=False)
-
-    on_probation_parole = YesNoBlankField(
-        label=_("Are you on probation or parole?"))
-    where_probation_or_parole = fields.CharField(
-        label=_("Where is your probation or parole?"),
-        required=False)
-    when_probation_or_parole = fields.CharField(
-        label=_("When does your probation or parole end?"),
-        required=False)
-    serving_sentence = YesNoBlankField(
-        label=_("Are you currently serving a sentence?"))
-    being_charged = YesNoBlankField(
-        label=_("Are you currently being charged with a crime?"))
-    rap_outside_sf = YesNoBlankField(
-        label=_("Have you ever been arrested or convicted outside of San Francisco?"))
-    when_where_outside_sf = fields.CharField(
-        label=_("When and where were you arrested or convicted outside of San Francisco?"),
-        required=False)
-
-    currently_employed = YesNoBlankField(
-        label=_("Are you currently employed?"),
-        help_text=_("The Clean Slate program is free for you, but the public defender uses this information to get money from government programs."))
-    monthly_income = fields.CharField(
-        label=_("What is your monthly income?"),
-        help_text=_("The Clean Slate program is free for you, but the public defender uses this information to get money from government programs."),
-        required=False)
-    monthly_expenses = fields.CharField(
-        label=_("How much do you spend each month on things like rent, groceries, utilities, medical expenses, or childcare expenses?"),
-        help_text=_("The Clean Slate program is free for you, but the public defender uses this information to get money from government programs."),
-        required=False)
-
-    how_did_you_hear = fields.CharField(
-        label=_("How did you hear about this program or website?"),
-        required=False)
-
-    class Meta:
-        validators = [
-            validators.gave_preferred_contact_methods
-        ]
 
     def __init__(self, data=None, **kwargs):
         if data is None:
@@ -145,21 +46,6 @@ class ClearMyRecordSFForm(serializers.Serializer):
 
     def non_field_errors(self):
         return self.errors.get('non_field_errors', [])
-
-    def validate_address(self, address):
-        if not address:
-            self.add_warning('address', Warnings.ADDRESS)
-        return address
-
-    def validate_ssn(self, ssn):
-        if not ssn.strip():
-            self.add_warning('ssn', Warnings.SSN)
-        return ssn
-
-    def validate_dob(self, dob):
-        if not dob:
-            self.add_warning('dob', Warnings.DOB)
-        return dob
 
     def run_validation(self, data=rest_framework.fields.empty):
         """Overrides rest_framework.serializers.Serializer.run_validation
@@ -189,5 +75,124 @@ class ClearMyRecordSFForm(serializers.Serializer):
         if errors:
             raise ValidationError(detail=errors)
         return value
+
+
+class CleanSlateCommonForm(Form):
+    """A form with fields common across Clean Slate County forms
+        Includes fields for contact information and basic identifying information,
+        as well as common criteria
+    """
+
+    contact_preferences = fields.MultipleChoiceField(
+        label=_('How would you like us to contact you?'),
+        help_text=_(
+            'Code for America will use this to update you about your application.'),
+        choices=CONTACT_PREFERENCE_CHOICES,
+        required=False
+        )
+
+    first_name = fields.CharField(
+        label=_('What is your first name?'))
+    middle_name = fields.CharField(
+        label=_('What is your middle name?'),
+        required=False)
+    last_name = fields.CharField(
+        label=_('What is your last name?'))
+
+    dob = fields.DateOfBirthMultiValueFormField(required=False)
+
+    phone_number = fields.CharField(
+        label=_('What is your phone number?'),
+        help_text=_('Code for America and the public defender will use this to contact you about your application.'),
+        required=False)
+    email = fields.EmailField(
+        label=_('What is your email?'),
+        help_text=_('For example "yourname@example.com"'),
+        required=False)
+    address = fields.AddressMultiValueFormField(required=False)
+
+    serving_sentence = fields.YesNoBlankField(
+        label=_("Are you currently serving a sentence?"))
+    being_charged = fields.YesNoBlankField(
+        label=_("Are you currently being charged with a crime?"))
+
+    financial_screening_note = _("The Clean Slate program is free for you, but the public defender uses this information to get money from government programs.")
+    currently_employed = fields.YesNoBlankField(
+        label = _("Are you currently employed?"),
+        required=False)
+    monthly_income = fields.CharField(
+        label=_("What is your monthly income?"),
+        required=False)
+    monthly_expenses = fields.CharField(
+        label=_("How much do you spend each month on things like rent, groceries, utilities, medical expenses, or childcare expenses?"),
+        required=False)
+
+    how_did_you_hear = fields.CharField(
+        label=_("How did you hear about this program or website?"),
+        required=False)
+
+    class Meta:
+        validators = [
+            validators.gave_preferred_contact_methods
+        ]
+
+    def validate_address(self, address):
+        if not address:
+            self.add_warning('address', Warnings.ADDRESS)
+        return address
+
+    def validate_ssn(self, ssn):
+        if not ssn.strip():
+            self.add_warning('ssn', Warnings.SSN)
+        return ssn
+
+    def validate_dob(self, dob):
+        if not dob:
+            self.add_warning('dob', Warnings.DOB)
+        return dob
+
+
+class ContraCostaCleanSlateForm(CleanSlateCommonForm):
+    """A form for applying to Contra Costa County Public Defender's
+        Clean Slate program
+        inherits fields from CleanSlateCommonForm
+    """
+    address = fields.AddressMultiValueFormField(required=True)
+    dob = fields.DateOfBirthMultiValueFormField(
+        required=False)
+
+    on_probation = fields.YesNoBlankField(
+        label=_("Are you on probation?"))
+    on_parole = fields.YesNoBlankField(
+        label=_("Are you on parole?"))
+
+
+class ClearMyRecordSFForm(CleanSlateCommonForm):
+    """A form for applying to SF Public Defender's Clean Slate program
+    """
+
+    ssn = fields.CharField(
+        label=_('What is your Social Security Number?'),
+        help_text=_("The public defender's office will use this to get your San Francisco RAP sheet and find any convictions that can be reduced or dismissed."),
+        required=False)
+
+    us_citizen = fields.YesNoBlankField(
+        label=_("Are you a U.S. citizen?"),
+        help_text=_("The public defender handles non-citizen cases differently and has staff who can help with citizenship issues."))
+
+    on_probation_parole = fields.YesNoBlankField(
+        label=_("Are you on probation or parole?"))
+    where_probation_or_parole = fields.CharField(
+        label=_("Where is your probation or parole?"),
+        required=False)
+    when_probation_or_parole = fields.CharField(
+        label=_("When does your probation or parole end?"),
+        required=False)
+    rap_outside_sf = fields.YesNoBlankField(
+        label=_("Have you ever been arrested or convicted outside of San Francisco?"))
+    when_where_outside_sf = fields.CharField(
+        label=_("When and where were you arrested or convicted outside of San Francisco?"),
+        required=False)
+
 
 

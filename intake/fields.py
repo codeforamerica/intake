@@ -6,6 +6,11 @@ from rest_framework import serializers
 from django.utils.translation import ugettext as _
 
 
+YES_NO_CHOICES = (
+    ('yes', _('Yes')),
+    ('no',  _('No')),
+    )
+
 class FalseIfHasEmptyValue:
     def __bool__(self):
         return all(vars(self).values())
@@ -50,22 +55,45 @@ class FormField(serializers.Field):
         for rendering as an HTML form and mimicking parts of the Django
         FormField API
     """
-    def __init__(self, label=None, help_text="", html_attrs=None, **kwargs):
-        super().__init__(**kwargs)
-        self.label = label
-        self.help_text = help_text
-        if html_attrs is None:
-            html_attrs = {}
-        self.html_attrs = html_attrs
+    label = None
+    help_text = ""
+    html_attrs = {}
+
+    def __init__(self, *args, **kwargs):
+        self.add_default_init_args(kwargs)
+        super().__init__(*args, **kwargs)
+        self.label = kwargs.get('label', self.label)
+        self.help_text = kwargs.get('help_text', self.help_text)
+        self.html_attrs.update(kwargs.get('html_attrs', {}))
+
+    def add_default_init_args(self, kwargs):
+        """Allows FormField classes to set class attributes
+            that are passed to the parent class __init__ method
+            in order to be used as instance attributes.
+            In other words, add_default_init_args allows subclasses
+            to set class attributes that are used as default values
+            for instance attributes.
+        """
+        inheritable_args = ['required']
+        for key in inheritable_args:
+            if key not in kwargs and hasattr(self, key):
+                kwargs[key] = getattr(self, key)
+
 
     def get_value(self, dictionary):
         value = super().get_value(dictionary)
         return self.coerce_if_empty(value)
 
     def get_empty_value(self):
+        """Gets the default value for empty versions of this field
+            Often overridden in subclasses in order to provide different types of empty
+            values
+        """
         return ""
 
     def field_errors(self):
+        """Returns any errors from a parent field or form that pertain to this field
+        """
         if hasattr(self, 'parent'):
             parent = self.parent
             if hasattr(parent, '_errors'):
@@ -73,6 +101,8 @@ class FormField(serializers.Field):
         return []
 
     def field_warnings(self):
+        """Returns any warnings from a parent field or form that pertain to this field
+        """
         if hasattr(self, 'parent'):
             parent = self.parent
             if hasattr(parent, 'warnings'):
@@ -80,11 +110,17 @@ class FormField(serializers.Field):
         return []
 
     def coerce_if_empty(self, value):
+        """Coerces empty values to the default empty value for this field
+        """
         if value == rest_framework.fields.empty:
             return self.get_empty_value()
         return value
 
     def current_value(self):
+        """Returns the current value for this field
+        More research into Django REST Framework
+        might simplify or obviate this method
+        """
         if hasattr(self, 'parent'):
             base_data = getattr(self.parent, 'initial_data', self.parent.get_initial())
             if hasattr(self, 'fields'):
@@ -97,6 +133,8 @@ class FormField(serializers.Field):
             return self.coerce_if_empty(value)
 
     def input_name(self):
+        """Returns a string for use as an html input name value
+        """
         if hasattr(self, 'parent'):
             if getattr(self.parent, 'field_name', ''):
                 return "{}.{}".format(self.parent.field_name, self.field_name)
@@ -107,21 +145,34 @@ class FormField(serializers.Field):
 
 
 class BlankIfNotRequiredField(FormField):
-    def __init__(self, **kwargs):
-        if not kwargs.get('required', True):
+    def __init__(self, *args, **kwargs):
+        if not kwargs.get('required', getattr(self, 'required', True)):
             kwargs['allow_blank'] = True
-        super().__init__(**kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class CharField(BlankIfNotRequiredField, serializers.CharField):
     pass
+
 
 class EmailField(BlankIfNotRequiredField, serializers.EmailField):
     pass
 
 
 class ChoiceField(BlankIfNotRequiredField, serializers.ChoiceField):
-    pass
+    choices = None
+    def __init__(self, *args, **kwargs):
+        choices = kwargs.get('choices', None)
+        if not choices and hasattr(self, 'choices'):
+            choices = getattr(self, 'choices')
+        if not choices:
+            raise TypeError("'choices' is a required attribute. It must be provided or passed to __init__.")
+        super().__init__(choices, *args, **kwargs)
+
+
+class YesNoBlankField(ChoiceField):
+    choices = YES_NO_CHOICES
+    required = False
 
 
 class MultipleChoiceField(FormField, serializers.MultipleChoiceField):
@@ -159,6 +210,9 @@ class MultiValueFormField(serializers.Serializer, FormField):
 
 
 class AddressMultiValueFormField(MultiValueFormField):
+    label = _("What is your mailing address?")
+    help_text = _("The public defender will need to send you important papers.")
+
     street = CharField(required=False)
     city = CharField(label=_("City"), required=False)
     state = CharField(label=_("State"), required=False)
@@ -169,12 +223,12 @@ class AddressMultiValueFormField(MultiValueFormField):
 
 
 class DateOfBirthMultiValueFormField(MultiValueFormField):
+    label = _("What is your date of birth?")
+    help_text = _("For example: 4/28/1986")
+
     month = CharField(label=_("Month"), required=False)
     day = CharField(label=_("Day"), required=False)
     year = CharField(label=_("Year"), required=False)
 
     def build_instance(self, **kwargs):
         return DateOfBirth(**kwargs)
-
-
-

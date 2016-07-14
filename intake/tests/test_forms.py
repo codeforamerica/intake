@@ -128,13 +128,7 @@ class TestForms(TestCase):
         fake_answers['contact_preferences'] = ['prefers_email', 'prefers_sms']
         form = forms.ClearMyRecordSFForm(fake_answers)
         context = {'form': form}
-
-        new = loader.get_template('apply_page.jinja').render(context)
-        # open("tests/new.html", "w").write(new)
-        # open("tests/previous.html", "w").write(previous)
-        # self.assertHTMLEqual(
-        #     previous, new
-        #     )
+        result = loader.get_template('apply_page.jinja').render(context)
 
     def test_check_options_macro(self):
         from django.template import loader
@@ -209,9 +203,6 @@ class TestForms(TestCase):
     <legend>
         Are you currently employed?
     </legend>
-    <div class="field-help_text">
-        The Clean Slate program is free for you, but the public defender uses this information to get money from government programs.
-    </div>
     <ul class="radio_options options_list">
         <li>
             <label class="field-option_label">
