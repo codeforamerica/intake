@@ -62,8 +62,6 @@ class FormField(serializers.Field):
     def __init__(self, *args, **kwargs):
         self.add_default_init_args(kwargs)
         super().__init__(*args, **kwargs)
-        self.label = kwargs.get('label', self.label)
-        self.help_text = kwargs.get('help_text', self.help_text)
         self.html_attrs.update(kwargs.get('html_attrs', {}))
 
     def add_default_init_args(self, kwargs):
@@ -74,7 +72,7 @@ class FormField(serializers.Field):
             to set class attributes that are used as default values
             for instance attributes.
         """
-        inheritable_args = ['required']
+        inheritable_args = ['required', 'label', 'help_text']
         for key in inheritable_args:
             if key not in kwargs and hasattr(self, key):
                 kwargs[key] = getattr(self, key)
@@ -170,9 +168,31 @@ class ChoiceField(BlankIfNotRequiredField, serializers.ChoiceField):
         super().__init__(choices, *args, **kwargs)
 
 
-class YesNoBlankField(ChoiceField):
+class YesNoField(ChoiceField):
     choices = YES_NO_CHOICES
+
+class YesNoBlankField(YesNoField):
     required = False
+
+class IsUSCitizenField(YesNoField):
+    label=_("Are you a U.S. citizen?")
+    help_text=_("The public defender handles non-citizen cases differently and has staff who can help with citizenship issues.")
+
+
+class IsCurrentlyEmployedField(YesNoField):
+    label = _("Are you currently employed?")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+class MonthlyIncomeField(CharField):
+    label = _("How much do you spend each month on things like rent, groceries, utilities, medical expenses, or childcare expenses?")
+
+
+class MonthlyExpensesField(CharField):
+    label = _("How much do you spend each month on things like rent, groceries, utilities, medical expenses, or childcare expenses?")
+
+
 
 
 class MultipleChoiceField(FormField, serializers.MultipleChoiceField):

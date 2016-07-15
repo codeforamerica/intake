@@ -276,3 +276,23 @@ class TestForms(TestCase):
             self.assertEqual(field.current_value(), field.get_empty_value())
 
 
+class TestContraCostaCleanSlateForm(TestCase):
+
+    def test_correct_fields_are_required(self):
+        required_fields = [
+            'first_name',
+            'last_name',
+            'dob',
+            'us_citizen',
+            'address',
+            'on_parole',
+            'on_probation',
+            'currently_employed',
+            'monthly_income',
+            'income_source',
+            'monthly_expenses',
+        ]
+        form = forms.ContraCostaCleanSlateForm()
+        for name, field in form.fields.items():
+            if name in required_fields:
+                self.assertTrue(field.required, name)

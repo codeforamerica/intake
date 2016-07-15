@@ -98,8 +98,7 @@ class CleanSlateCommonForm(Form):
         required=False)
     last_name = fields.CharField(
         label=_('What is your last name?'))
-
-    dob = fields.DateOfBirthMultiValueFormField(required=False)
+    dob = fields.DateOfBirthMultiValueFormField()
 
     phone_number = fields.CharField(
         label=_('What is your phone number?'),
@@ -109,23 +108,18 @@ class CleanSlateCommonForm(Form):
         label=_('What is your email?'),
         help_text=_('For example "yourname@example.com"'),
         required=False)
-    address = fields.AddressMultiValueFormField(required=False)
+    address = fields.AddressMultiValueFormField()
 
+    us_citizen = fields.IsUSCitizenField()
     serving_sentence = fields.YesNoBlankField(
         label=_("Are you currently serving a sentence?"))
     being_charged = fields.YesNoBlankField(
         label=_("Are you currently being charged with a crime?"))
 
     financial_screening_note = _("The Clean Slate program is free for you, but the public defender uses this information to get money from government programs.")
-    currently_employed = fields.YesNoBlankField(
-        label = _("Are you currently employed?"),
-        required=False)
-    monthly_income = fields.CharField(
-        label=_("What is your monthly income?"),
-        required=False)
-    monthly_expenses = fields.CharField(
-        label=_("How much do you spend each month on things like rent, groceries, utilities, medical expenses, or childcare expenses?"),
-        required=False)
+    currently_employed = fields.IsCurrentlyEmployedField()
+    monthly_income = fields.MonthlyIncomeField()
+    monthly_expenses = fields.MonthlyExpensesField()
 
     how_did_you_hear = fields.CharField(
         label=_("How did you hear about this program or website?"),
@@ -136,50 +130,39 @@ class CleanSlateCommonForm(Form):
             validators.gave_preferred_contact_methods
         ]
 
-    def validate_address(self, address):
-        if not address:
-            self.add_warning('address', Warnings.ADDRESS)
-        return address
-
-    def validate_ssn(self, ssn):
-        if not ssn.strip():
-            self.add_warning('ssn', Warnings.SSN)
-        return ssn
-
-    def validate_dob(self, dob):
-        if not dob:
-            self.add_warning('dob', Warnings.DOB)
-        return dob
-
 
 class ContraCostaCleanSlateForm(CleanSlateCommonForm):
     """A form for applying to Contra Costa County Public Defender's
         Clean Slate program
         inherits fields from CleanSlateCommonForm
     """
-    address = fields.AddressMultiValueFormField(required=True)
-    dob = fields.DateOfBirthMultiValueFormField(
-        required=False)
 
-    on_probation = fields.YesNoBlankField(
+    on_probation = fields.YesNoField(
         label=_("Are you on probation?"))
-    on_parole = fields.YesNoBlankField(
+    on_parole = fields.YesNoField(
         label=_("Are you on parole?"))
+
+    income_source = fields.CharField(
+        label=_("Where does your income come from?"),
+        help_text=_("For example: Job, Social Security, Food stamps"))
 
 
 class ClearMyRecordSFForm(CleanSlateCommonForm):
     """A form for applying to SF Public Defender's Clean Slate program
     """
 
+    address = fields.AddressMultiValueFormField(required=False)
     ssn = fields.CharField(
         label=_('What is your Social Security Number?'),
         help_text=_("The public defender's office will use this to get your San Francisco RAP sheet and find any convictions that can be reduced or dismissed."),
         required=False)
+    dob = fields.DateOfBirthMultiValueFormField(required=False)
 
-    us_citizen = fields.YesNoBlankField(
-        label=_("Are you a U.S. citizen?"),
-        help_text=_("The public defender handles non-citizen cases differently and has staff who can help with citizenship issues."))
+    us_citizen = fields.IsUSCitizenField(required=False)
 
+    currently_employed = fields.IsCurrentlyEmployedField(required=False)
+    monthly_income = fields.MonthlyIncomeField(required=False)
+    monthly_expenses = fields.MonthlyExpensesField(required=False)
     on_probation_parole = fields.YesNoBlankField(
         label=_("Are you on probation or parole?"))
     where_probation_or_parole = fields.CharField(
@@ -194,5 +177,19 @@ class ClearMyRecordSFForm(CleanSlateCommonForm):
         label=_("When and where were you arrested or convicted outside of San Francisco?"),
         required=False)
 
+    def validate_ssn(self, ssn):
+        if not ssn.strip():
+            self.add_warning('ssn', Warnings.SSN)
+        return ssn
+
+    def validate_address(self, address):
+        if not address:
+            self.add_warning('address', Warnings.ADDRESS)
+        return address
+
+    def validate_dob(self, dob):
+        if not dob:
+            self.add_warning('dob', Warnings.DOB)
+        return dob
 
 
