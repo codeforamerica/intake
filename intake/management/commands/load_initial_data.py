@@ -26,7 +26,7 @@ class Command(BaseCommand):
         import_paths = []
         for filename in os.listdir(folder_path):
             base, ext = os.path.splitext(filename)
-            if 'py' in ext:
+            if 'py' in ext and '__init__' not in base:
                 import_path = '.'.join([
                     *initial_data_path_fragments,
                     base])
@@ -67,5 +67,5 @@ class Command(BaseCommand):
         data_import_paths = self.get_files_in_initial_data_folder()
         for import_path in data_import_paths:
             module = importlib.import_module(import_path)
-        self.load_data_from_module(module)
+            self.load_data_from_module(module)
         self.stdout.write("Finished loading data")
