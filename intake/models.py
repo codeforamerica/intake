@@ -24,8 +24,20 @@ def get_parser():
     return parser
 
 
+class County(models.Model):
+
+    slug = models.SlugField()
+    description = models.TextField()
+
+    def __str__(self):
+        return self.description
+
+
+
 class FormSubmission(models.Model):
 
+    counties = models.ManyToManyField(County,
+        related_name="submissions")
     answers = JSONField()
     # old_uuid is only used for porting legacy applications
     old_uuid = models.CharField(max_length=34, unique=True,

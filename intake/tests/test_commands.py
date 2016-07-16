@@ -4,6 +4,7 @@ from intake.tests import mock
 from django.test import TestCase
 
 from intake.management import commands
+from intake import models
 
 class TestCommands(TestCase):
 
@@ -102,3 +103,16 @@ No ApplicationLogEntry instances exist. Not deleting anything.
 --------
 Successfully imported 5 event logs from `fake_db_name` on `dbhost`'''
         self.assertEqual(importer.report(), expected_report)
+
+    def test_load_initial_data(self):
+        mock_stdout = Mock()
+        existing_counties = models.County.objects.all()
+        self.assertEqual(len(existing_counties), 0)
+        from intake.management.commands import load_initial_data
+        cmd = load_initial_data.Command()
+        cmd.stdout = mock_stdout
+        cmd.handle()
+        existing_counties = models.County.objects.all()
+        self.assertEqual(len(existing_counties), 3)
+        num_calls = len(mock_stdout.write.call_args_list)
+        self.assertEqual(num_calls, 3 + 2)

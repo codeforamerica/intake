@@ -396,6 +396,12 @@ class TestModels(TestCase):
 
 
 
+class TestCounty(TestCase):
+
+    def test_county_init(self):
+        county = models.County(slug="yolo", description="Yolo County")
+        self.assertEqual(county.slug, "yolo")
+        self.assertEqual(county.description, "Yolo County")
 
 
 

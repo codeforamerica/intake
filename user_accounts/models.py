@@ -5,12 +5,16 @@ from django.utils.crypto import get_random_string
 from allauth.account.adapter import get_adapter
 from allauth.account import utils as allauth_account_utils
 from invitations.models import Invitation as BaseInvitation
+from intake import models as intake_models
 from . import exceptions
 
 
 
 class Organization(models.Model):
     name = models.CharField(max_length=50, unique=True)
+    county = models.ForeignKey(intake_models.County,
+        on_delete=models.SET_NULL,
+        null=True, blank=True, related_name='organizations')
     website = models.URLField(blank=True)
     blurb = models.TextField(blank=True)
     is_receiving_agency = models.BooleanField(default=False)
