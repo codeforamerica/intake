@@ -8,6 +8,7 @@ from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework.serializers import ValidationError, get_validation_error_detail
 
 from intake import validators, fields
+from intake.constants import COUNTY_CHOICES
 
 
 CONTACT_PREFERENCE_CHOICES = (
@@ -77,12 +78,15 @@ class Form(serializers.Serializer):
         return value
 
 
+class CountySelectionForm(Form):
+    counties = fields.BayAreaCountiesField()
+
+
 class CleanSlateCommonForm(Form):
     """A form with fields common across Clean Slate County forms
         Includes fields for contact information and basic identifying information,
         as well as common criteria
     """
-
     contact_preferences = fields.MultipleChoiceField(
         label=_('How would you like us to contact you?'),
         help_text=_(
@@ -191,5 +195,15 @@ class ClearMyRecordSFForm(CleanSlateCommonForm):
         if not dob:
             self.add_warning('dob', Warnings.DOB)
         return dob
+
+
+def get_form_for_counties(counties):
+    form_map = {
+        'other': OtherCountyForm,
+        'sanfrancisco': ClearMyRecordSFForm,
+        'contracosta': ContraCostaCleanSlateForm
+    }
+    return [form_map[c] for c in counties]
+
 
 

@@ -5,6 +5,7 @@ from rest_framework import serializers
 
 from django.utils.translation import ugettext as _
 
+from intake.constants import COUNTY_CHOICES
 
 YES_NO_CHOICES = (
     ('yes', _('Yes')),
@@ -50,7 +51,7 @@ class ContactInfoJSONField(JSONField):
         super().validate(value, model_instance)
 
 
-class FormField(serializers.Field):
+class FormFieldMixin:
     """A serializer field that adds some additional convenience attributes
         for rendering as an HTML form and mimicking parts of the Django
         FormField API
@@ -124,7 +125,7 @@ class FormField(serializers.Field):
             if hasattr(self, 'fields'):
                 base_value = self.get_value(base_data)
                 value = self.to_internal_value(base_value)
-            elif isinstance(self.parent, FormField):
+            elif isinstance(self.parent, FormFieldMixin):
                 value = getattr(self.parent.current_value(), self.field_name)
             else:
                 value = self.get_value(base_data)
@@ -142,25 +143,9 @@ class FormField(serializers.Field):
         return self.input_name().replace('.', '_')
 
 
-class BlankIfNotRequiredField(FormField):
+class ChoicesMixin(FormFieldMixin):
     def __init__(self, *args, **kwargs):
-        if not kwargs.get('required', getattr(self, 'required', True)):
-            kwargs['allow_blank'] = True
-        super().__init__(*args, **kwargs)
-
-
-class CharField(BlankIfNotRequiredField, serializers.CharField):
-    pass
-
-
-class EmailField(BlankIfNotRequiredField, serializers.EmailField):
-    pass
-
-
-class ChoiceField(BlankIfNotRequiredField, serializers.ChoiceField):
-    choices = None
-    def __init__(self, *args, **kwargs):
-        choices = kwargs.get('choices', None)
+        choices = kwargs.pop('choices', None)
         if not choices and hasattr(self, 'choices'):
             choices = getattr(self, 'choices')
         if not choices:
@@ -168,11 +153,32 @@ class ChoiceField(BlankIfNotRequiredField, serializers.ChoiceField):
         super().__init__(choices, *args, **kwargs)
 
 
+class BlankIfNotRequiredMixin:
+    def __init__(self, *args, **kwargs):
+        if not kwargs.get('required', getattr(self, 'required', True)):
+            kwargs['allow_blank'] = True
+        super().__init__(*args, **kwargs)
+
+
+class CharField(FormFieldMixin, BlankIfNotRequiredMixin, serializers.CharField):
+    pass
+
+
+class EmailField(FormFieldMixin, BlankIfNotRequiredMixin, serializers.EmailField):
+    pass
+
+
+class ChoiceField(ChoicesMixin, BlankIfNotRequiredMixin, serializers.ChoiceField):
+    pass
+
+
 class YesNoField(ChoiceField):
     choices = YES_NO_CHOICES
 
+
 class YesNoBlankField(YesNoField):
     required = False
+
 
 class IsUSCitizenField(YesNoField):
     label=_("Are you a U.S. citizen?")
@@ -182,8 +188,6 @@ class IsUSCitizenField(YesNoField):
 class IsCurrentlyEmployedField(YesNoField):
     label = _("Are you currently employed?")
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
 class MonthlyIncomeField(CharField):
     label = _("How much do you spend each month on things like rent, groceries, utilities, medical expenses, or childcare expenses?")
@@ -194,8 +198,7 @@ class MonthlyExpensesField(CharField):
 
 
 
-
-class MultipleChoiceField(FormField, serializers.MultipleChoiceField):
+class MultipleChoiceField(ChoicesMixin, serializers.MultipleChoiceField):
     def to_internal_value(self, data):
         return serializers.MultipleChoiceField.to_internal_value(self, data)
 
@@ -206,7 +209,7 @@ class MultipleChoiceField(FormField, serializers.MultipleChoiceField):
         return []
 
 
-class MultiValueFormField(serializers.Serializer, FormField):
+class MultiValueFormField(serializers.Serializer, FormFieldMixin):
 
     def to_internal_value(self, data):
         base_data = super().to_internal_value(data)
@@ -252,3 +255,9 @@ class DateOfBirthMultiValueFormField(MultiValueFormField):
 
     def build_instance(self, **kwargs):
         return DateOfBirth(**kwargs)
+
+
+class BayAreaCountiesField(MultipleChoiceField):
+    choices = COUNTY_CHOICES
+    label = _("Which counties were you arrested in?")
+    

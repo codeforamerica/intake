@@ -15,3 +15,9 @@ CONTACT_PREFERENCE_CHECKS = {
     }
 
 STAFF_NAME_CHOICES = ['Jazmyn', 'Ben']
+
+COUNTY_CHOICES = (
+    ('sanfrancisco', _('San Francisco County or City')),
+    ('contracosta',  _('Conta Costa County (around Richmond, Walnut Creek, Antioch, or Brentwood)')),
+    ('other', _('Some other county'))
+    )

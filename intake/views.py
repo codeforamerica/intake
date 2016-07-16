@@ -26,11 +26,14 @@ class Home(TemplateView):
 class MultiStepFormViewBase(FormView):
     session_storage_key = "form_in_progress"
 
-    def dump_post_data_to_session(self):
+    def update_session_data(self):
+        form_data = self.request.session.get(self.session_storage_key, {})
         post_data = dict(self.request.POST.lists())
-        self.request.session[self.session_storage_key] = post_data
+        form_data.update(post_data)
+        self.request.session[self.session_storage_key] = form_data
+        return form_data
 
-    def load_post_data_from_session(self):
+    def get_session_data(self):
         data = self.request.session.get(self.session_storage_key, {})
         return MultiValueDict(data)
 
@@ -77,7 +80,7 @@ class Confirm(MultiStepApplicationView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        form_data = self.load_post_data_from_session()
+        form_data = self.get_session_data()
         if form_data:
             form = self.form_class(data=form_data)
             # make sure the form has warnings.
@@ -89,8 +92,7 @@ class Confirm(MultiStepApplicationView):
         return context
 
 
-
-class Apply(MultiStepApplicationView):
+class ApplySanFrancisco(MultiStepApplicationView):
     '''The initial application page.
     Checks for warnings, and if they exist, redirects to a confirmation page.
     '''
@@ -101,10 +103,34 @@ class Apply(MultiStepApplicationView):
         """
         if form.warnings:
             # save the post data and move them to confirmation step
-            self.dump_post_data_to_session()
+            self.update_session_data()
             return redirect(self.confirmation_url)
         else:
             return super().form_valid(form)
+
+
+
+class CountyApplication(MultiStepApplicationView):
+    template_name = "forms/county_form.jinja"
+    confirmation_url = reverse_lazy('intake-confirm')
+
+    def get_form(self):
+        form_data = self.get_session_data()
+        counties = form_data.getlist('counties', [])
+
+
+
+class SelectCounty(MultiStepApplicationView):
+    form_class = forms.CountySelectionForm
+    template_name = "forms/county_selection.jinja"
+    success_url = reverse_lazy('intake-county_application')
+
+    def form_valid(self, form):
+        form_data = self.update_session_data()
+        return super().form_valid()
+
+
+
 
 
 class Thanks(TemplateView):
@@ -228,7 +254,7 @@ class MarkProcessed(MarkSubmissionStepView):
 
 
 home = Home.as_view()
-apply_form = Apply.as_view()
+apply_form = ApplySanFrancisco.as_view()
 confirm = Confirm.as_view()
 thanks = Thanks.as_view()
 privacy = PrivacyPolicy.as_view()
