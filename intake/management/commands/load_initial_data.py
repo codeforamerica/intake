@@ -52,11 +52,15 @@ class Command(BaseCommand):
             defaults=data)
         return instance
 
-    def load_data_from_module(self, module):
+    def get_data_from_module(self, module_path):
+        module = importlib.import_module(module_path)
         data = getattr(module, 'data', None)
         if not data:
             message = "`data` not found in `{}`".format(module.__name__)
             raise NoDataFoundError(message)
+        return data
+
+    def load_instances(self, data):
         model_class = self.import_class(data['model'])
         lookup_keys  = data.get("lookup_keys", ["pk"])
         for instance_data in data["instances"]:
@@ -65,11 +69,43 @@ class Command(BaseCommand):
                 lookup_keys=lookup_keys)
             message = "Successfully loaded '{}'".format(instance)
             self.stdout.write(message)
+        self.loaded.append(data['model'])
+
+    def dependencies_loaded(self, item):
+        dependencies = item.get('dependencies', [])
+        if dependencies:
+            return all(
+                k in self.loaded
+                for k in dependencies)
+        return True
+
+    def assert_dependencies_exist_in_queue(self, item):
+        dependencies = item['dependencies']
+        class_names_in_queue = [
+            m['model'] for m in self.queue
+        ]
+        for other in dependencies:
+            if other not in class_names_in_queue:
+                message = "`{}` not found in {}".format(
+                    other, class_names_in_queue)
+                raise ClassNotFoundError(message)
+
+    def load_modules(self, paths):
+        self.loaded = []
+        self.queue = [
+            self.get_data_from_module(p)
+            for p in paths
+            ]
+        while self.queue:
+            item = self.queue.pop(0)
+            if self.dependencies_loaded(item):
+                self.load_instances(item)
+            else:
+                self.assert_dependencies_exist_in_queue(item)
+                self.queue.append(item)
 
     def handle(self, *args, **options):
         self.stdout.write("Loading initial data")
         data_import_paths = self.get_files_in_initial_data_folder()
-        for import_path in data_import_paths:
-            module = importlib.import_module(import_path)
-            self.load_data_from_module(module)
+        self.load_modules(data_import_paths)
         self.stdout.write("Finished loading data")
