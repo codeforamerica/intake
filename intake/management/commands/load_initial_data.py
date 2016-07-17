@@ -44,10 +44,11 @@ class Command(BaseCommand):
             raise ClassNotFoundError(message)
         return model_class
 
-    def load_or_update_instance(self, model_class, data):
-        pk = data.pop("pk")
+    def load_or_update_instance(self, model_class, data, lookup_keys):
+        lookup_atts = {k: data[k] for k in lookup_keys}
+        data.pop("pk", None) # don't try to update pk
         instance, created = model_class.objects.update_or_create(
-            pk=pk,
+            **lookup_atts,
             defaults=data)
         return instance
 
@@ -57,8 +58,11 @@ class Command(BaseCommand):
             message = "`data` not found in `{}`".format(module.__name__)
             raise NoDataFoundError(message)
         model_class = self.import_class(data['model'])
+        lookup_keys  = data.get("lookup_keys", ["pk"])
         for instance_data in data["instances"]:
-            instance = self.load_or_update_instance(model_class, instance_data)
+            instance = self.load_or_update_instance(
+                model_class, instance_data,
+                lookup_keys=lookup_keys)
             message = "Successfully loaded '{}'".format(instance)
             self.stdout.write(message)
 
