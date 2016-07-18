@@ -197,13 +197,6 @@ class ClearMyRecordSFForm(CleanSlateCommonForm):
         return dob
 
 
-def get_form_for_counties(counties):
-    form_map = {
-        'other': OtherCountyForm,
-        'sanfrancisco': ClearMyRecordSFForm,
-        'contracosta': ContraCostaCleanSlateForm
-    }
-    return [form_map[c] for c in counties]
 
 
 

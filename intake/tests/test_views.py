@@ -307,3 +307,22 @@ class TestViews(AuthIntegrationTestCase):
     def test_authenticated_user_cannot_see_apps_to_other_org(self):
         pass
 
+
+class TestSelectCountyView(AuthIntegrationTestCase):
+
+    def test_anonymous_user_can_access_county_view(self):
+        from intake.constants import COUNTY_CHOICES
+        self.be_anonymous()
+        county_view = self.client.get(
+            reverse('intake-select_county'))
+        for slug, description in COUNTY_CHOICES:
+            self.assertContains(county_view, slug)
+            self.assertContains(county_view, html_utils.escape(description))
+
+    def test_anonymous_user_can_submit_county_selection(self):
+        self.be_anonymous()
+        result = self.client.fill_form(
+            reverse('intake-select_county'),
+            counties=['contracosta'])
+        self.assertRedirects(result, reverse('intake-county_application'))
+        import ipdb; ipdb.set_trace()

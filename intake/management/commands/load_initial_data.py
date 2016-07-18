@@ -72,7 +72,7 @@ class Command(BaseCommand):
         self.loaded.append(data['model'])
 
     def dependencies_loaded(self, item):
-        dependencies = item.get('dependencies', [])
+        dependencies = item.get('depends_on', [])
         if dependencies:
             return all(
                 k in self.loaded
@@ -80,7 +80,7 @@ class Command(BaseCommand):
         return True
 
     def assert_dependencies_exist_in_queue(self, item):
-        dependencies = item['dependencies']
+        dependencies = item['depends_on']
         class_names_in_queue = [
             m['model'] for m in self.queue
         ]

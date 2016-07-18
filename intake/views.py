@@ -37,13 +37,6 @@ class MultiStepFormViewBase(FormView):
         data = self.request.session.get(self.session_storage_key, {})
         return MultiValueDict(data)
 
-
-class MultiStepApplicationView(MultiStepFormViewBase):
-    template_name = "apply_page.jinja"
-    form_class = forms.ClearMyRecordSFForm
-    success_url = reverse_lazy('intake-thanks')
-    error_message = _("There were some problems with your application. Please check the errors below.")
-
     def put_errors_in_flash_messages(self, form):
         for error in form.non_field_errors():
             messages.error(self.request, error)
@@ -52,6 +45,13 @@ class MultiStepApplicationView(MultiStepFormViewBase):
         messages.error(self.request, self.error_message)
         self.put_errors_in_flash_messages(form)
         return super().form_invalid(form, *args, **kwargs)
+
+
+class MultiStepApplicationView(MultiStepFormViewBase):
+    template_name = "apply_page.jinja"
+    form_class = forms.ClearMyRecordSFForm
+    success_url = reverse_lazy('intake-thanks')
+    error_message = _("There were some problems with your application. Please check the errors below.")
 
     def confirmation(self, submission):
         flash_messages = submission.send_confirmation_notifications()
@@ -115,22 +115,23 @@ class CountyApplication(MultiStepApplicationView):
     confirmation_url = reverse_lazy('intake-confirm')
 
     def get_form(self):
+        # pull counties value to determine form
         form_data = self.get_session_data()
         counties = form_data.getlist('counties', [])
+        # get the form class
+        # combine if necessary
+        # return a response with the rendered form
 
 
 
-class SelectCounty(MultiStepApplicationView):
+class SelectCounty(MultiStepFormViewBase):
     form_class = forms.CountySelectionForm
     template_name = "forms/county_selection.jinja"
     success_url = reverse_lazy('intake-county_application')
 
     def form_valid(self, form):
         form_data = self.update_session_data()
-        return super().form_valid()
-
-
-
+        return super().form_valid(form)
 
 
 class Thanks(TemplateView):
@@ -255,6 +256,8 @@ class MarkProcessed(MarkSubmissionStepView):
 
 home = Home.as_view()
 apply_form = ApplySanFrancisco.as_view()
+county_application = CountyApplication.as_view()
+select_county = SelectCounty.as_view()
 confirm = Confirm.as_view()
 thanks = Thanks.as_view()
 privacy = PrivacyPolicy.as_view()

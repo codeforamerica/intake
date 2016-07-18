@@ -2,25 +2,25 @@
     `data` is a required variable
 """
 
-from django.utils.translation import ugettext as _
+from intake.constants import COUNTY_CHOICES
 
 data = {
     "model": "intake.models.County",
     "instances": [
         {
             "pk": 1,
-            "slug": "sanfrancisco",
-            "description": _("San Francisco County or City")
+            "slug": COUNTY_CHOICES[0][0], # sanfrancisco
+            "description": COUNTY_CHOICES[0][1]
         },
         {
             "pk": 2,
-            "slug": "contracosta",
-            "description": _("Conta Costa County (around Richmond, Walnut Creek, Antioch, or Brentwood)")
+            "slug": COUNTY_CHOICES[1][0], # contracosta
+            "description": COUNTY_CHOICES[1][1]
         },
         {
             "pk": 3,
-            "slug": "other",
-            "description": _("Some other county")
+            "slug": COUNTY_CHOICES[2][0], # other
+            "description": COUNTY_CHOICES[2][1]
         }
     ]
 }
