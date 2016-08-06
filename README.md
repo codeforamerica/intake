@@ -7,10 +7,10 @@
 
 ## Requirements
 To get a local version of intake running, you'll need to have the following installed:
-*   [https://github.com/codeforamerica/howto/blob/master/Python-Virtualenv.md](virtualenv)
-*   [https://github.com/codeforamerica/howto/blob/master/Node.js.md](Node.js and npm)
-*   [https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md](Gulp), simply follow step 1 to enable the `gulp` command from your terminal
-*   [https://github.com/codeforamerica/howto/blob/master/PostgreSQL.md](Local PostreSQL)
+*   [virtualenv](https://github.com/codeforamerica/howto/blob/master/Python-Virtualenv.md)
+*   [Node.js and npm](https://github.com/codeforamerica/howto/blob/master/Node.js.md)
+*   [Gulp), simply follow step 1 to enable the `gulp` command from your termina](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md)
+*   [Local PostreSQL](https://github.com/codeforamerica/howto/blob/master/PostgreSQL.md)
 
 ## Installation
 
