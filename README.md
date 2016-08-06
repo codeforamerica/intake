@@ -5,24 +5,61 @@
 [![Build Status](https://travis-ci.org/codeforamerica/intake.svg?branch=master)](https://travis-ci.org/codeforamerica/intake) [![Test Coverage](https://codeclimate.com/github/codeforamerica/intake/badges/coverage.svg)](https://codeclimate.com/github/codeforamerica/intake/coverage) [![Code Climate](https://codeclimate.com/github/codeforamerica/intake/badges/gpa.svg)](https://codeclimate.com/github/codeforamerica/intake) 
 [![Requirements Status](https://requires.io/github/codeforamerica/intake/requirements.svg?branch=master)](https://requires.io/github/codeforamerica/intake/requirements/?branch=master)
 
+## Requirements
+To get a local version of intake running, you'll need to have the following installed:
+*   [https://github.com/codeforamerica/howto/blob/master/Python-Virtualenv.md](virtualenv)
+*   [https://github.com/codeforamerica/howto/blob/master/Node.js.md](Node.js and npm)
+*   [https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md](Gulp), simply follow step 1 to enable the `gulp` command from your terminal
+*   [https://github.com/codeforamerica/howto/blob/master/PostgreSQL.md](Local PostreSQL)
+
 ## Installation
 
 ```
 git clone https://github.com/codeforamerica/intake.git
 cd intake
+virtualenv .
 source bin/activate
 make install
+npm install
 ```
 
 ## Set up the database
+With whatever command line interface you're using to interact with your Postgres instance. Creat an intake database:
 
+```
+# CREATE DATABASE intake;
+```
 
-## Set up environmental variables
+By default our database owner will have username "postgres" and password="".
+To verify this user exists you can use:
 
+```
+# SELECT USENAME FROM pg_user;
+```
+
+If this user doesn't exist create them with:
+
+```
+# CREATE USER postgres PASSSWORD '';
+```
+
+## Set up environment variables
+To allow Django to deploy onto a localhost, add the following to whatever .__rc file is sourced when you open a terminal (.zshrc, .bashrc, etc.):
+
+```
+ALLOWED_HOSTS =  "localhost,127.0.0.1"
+```
+
+We're using Sendgrid to handle emails. If you don't have an account it's okay but we still need to set an API_Key. Emails won't work but the app will run. Add the following to the same file as above:
+
+```
+SENDGRID_API_KEY = ""
+```
+If you DO have a Sendgrid account, that's your spot for your api key.
 
 ## Run the local server
 
-The following command will spin up a local server at [http://localhost:5000/](http://localhost:5000/)
+The following command will spin up a local server at [http://localhost:8000/](http://localhost:8000/)
 
 ```
 make serve
