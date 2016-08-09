@@ -5,7 +5,7 @@ install:
 serve:
 	gulp
 
-SCOPE=user_accounts intake
+SCOPE=user_accounts intake formation
 test:
 	./manage.py test $(SCOPE) \
 		--verbosity 2
