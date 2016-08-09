@@ -40,7 +40,7 @@ To verify this user exists you can use:
 If this user doesn't exist create them with:
 
 ```
-# CREATE USER postgres PASSSWORD '';
+# CREATE USER postgres PASSWORD '';
 ```
 
 ## Set up environment variables

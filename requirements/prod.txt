@@ -1,5 +1,5 @@
 # Core dependencies for production
-Django~=1.9
+Django~=1.9.7
 dj-database-url~=0.4
 psycopg2~=2.6
 Jinja2~=2.8
