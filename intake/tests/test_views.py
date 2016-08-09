@@ -11,7 +11,7 @@ from intake import models, forms, views
 
 from project.jinja2 import url_with_ids
 
-class TestViews(AuthIntegrationTestCase):
+class TestCoreViews(AuthIntegrationTestCase):
 
     @classmethod
     def setUpTestData(cls):
@@ -307,3 +307,20 @@ class TestViews(AuthIntegrationTestCase):
     def test_authenticated_user_cannot_see_apps_to_other_org(self):
         pass
 
+
+
+class TestExcelDownloadView(TestCoreViews):
+
+    view_name = 'intake-xls-download'
+
+    def test_anonymous_user_is_redirected_to_splash_page(self):
+        self.be_anonymous()
+        response = self.client.get(reverse(self.view_name))
+        self.assertRedirects(response, reverse('intake-home'))
+
+    def test_agency_user_can_download_xls(self):
+        self.be_agency_user()
+        response = self.client.get(reverse(self.view_name))
+        # assert that we got an xls file and the http response is as expected
+
+    

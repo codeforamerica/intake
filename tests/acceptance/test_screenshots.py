@@ -152,3 +152,4 @@ class TestWorkflows(base.ScreenSequenceTestCase):
             ], base.SMALL_DESKTOP)
 
 
+
