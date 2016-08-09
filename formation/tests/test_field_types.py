@@ -359,43 +359,27 @@ class TestRenderFieldTypes(TestCase):
     @django_only
     def test_render_charfield(self):
         field = NameField()
-        try:
-            self.assertEqual(
-            field.render(),
-            mock.rendered.NAMEFIELD)
-        except AssertionError as error:
-            import ipdb; ipdb.set_trace()
-            raise error
+        self.assertEqual(
+        field.render(),
+        mock.rendered.NAMEFIELD)
 
     @django_only
     def test_render_choicefield(self):
         field = SingleFruit()
-        try:
-            self.assertEqual(
-            field.render(),
-            mock.rendered.FRUITSFIELD)
-        except AssertionError as error:
-            import ipdb; ipdb.set_trace()
-            raise error
+        self.assertEqual(
+        field.render(),
+        mock.rendered.FRUITSFIELD)
 
     @django_only
     def test_render_multiplechoicefield(self):
         field = MultipleFruit()
-        try:
-            self.assertEqual(
-            field.render(),
-            mock.rendered.MULTIPLEFRUITSFIELD)
-        except AssertionError as error:
-            import ipdb; ipdb.set_trace()
-            raise error
+        self.assertEqual(
+        field.render(),
+        mock.rendered.MULTIPLEFRUITSFIELD)
 
     @django_only
     def test_render_dateofbirthfield(self):
         field = fields.DateOfBirthField()
-        try:
-            self.assertEqual(
-            field.render(),
-            mock.rendered.DATEOFBIRTHFIELD)
-        except AssertionError as error:
-            import ipdb; ipdb.set_trace()
-            raise error
+        self.assertEqual(
+        field.render(),
+        mock.rendered.DATEOFBIRTHFIELD)

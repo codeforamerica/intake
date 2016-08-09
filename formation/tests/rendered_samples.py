@@ -65,7 +65,8 @@ MULTIPLEFRUITSFIELD = """<div class="field fruit">
 
 DATEOFBIRTHFIELD = """<div class="field field-multivalue_fieldset dob">
   <fieldset>
-    <legend>What is your date of birth?</legend>
+    <legend>What is your date of birth?
+    </legend>
     <div class="field-help_text">
       For example: 4/28/1986
     </div>
