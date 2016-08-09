@@ -12,5 +12,5 @@ django-allauth~=0.25
 https://github.com/bee-keeper/django-invitations/archive/master.tar.gz
 sendgrid-django~=2.0
 django-jinja~=2.1
-django-debug-toolbar~=1.4
+django-debug-toolbar==1.4
 djangorestframework~=3.3
