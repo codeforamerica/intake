@@ -14,7 +14,7 @@ from django.views.generic.edit import FormView
 
 from django.core import mail
 
-from intake import models, notifications
+from intake import models, notifications, constants
 from intake import serializer_forms as forms
 from formation.forms import county_form_selector
 from project.jinja2 import url_with_ids
@@ -50,8 +50,7 @@ class MultiStepFormViewBase(FormView):
 
 
 class MultiStepApplicationView(MultiStepFormViewBase):
-    template_name = "apply_page.jinja"
-    form_class = forms.ClearMyRecordSFForm
+    template_name = "forms/county_form.jinja"
     success_url = reverse_lazy('intake-thanks')
     error_message = _("There were some problems with your application. Please check the errors below.")
 
@@ -61,7 +60,7 @@ class MultiStepApplicationView(MultiStepFormViewBase):
             messages.success(self.request, message)
 
     def save_submission_and_send_notifications(self, form):
-        submission = models.FormSubmission(answers=form.data)
+        submission = models.FormSubmission(answers=form.cleaned_data)
         submission.save()
         number = models.FormSubmission.objects.count()
         notifications.slack_new_submission.send(
@@ -73,7 +72,28 @@ class MultiStepApplicationView(MultiStepFormViewBase):
         return super().form_valid(form)
 
 
-class Confirm(MultiStepApplicationView):
+class MultiCountyApplicationView(MultiStepApplicationView):
+
+    def get_form_kwargs(self):
+        kwargs = {}
+        if self.request.method in ('POST', 'PUT'):
+            kwargs.update({
+                'data': self.request.POST,
+                })
+        return kwargs
+
+    def get_form_class(self):
+        default_counties = [
+            constants.Counties.CONTRA_COSTA,
+            constants.Counties.SAN_FRANCISCO,
+            constants.Counties.OTHER,
+        ]
+        session_data = self.get_session_data()
+        counties = session_data.getlist('counties', default_counties)
+        return county_form_selector.get_combined_form_class(counties=counties)
+
+
+class Confirm(MultiCountyApplicationView):
     '''Intended to provide a final acceptance of a form,
     after any necessary warnings have been raised.
     It follows the `Apply` view, which checks for warnings.
@@ -84,7 +104,7 @@ class Confirm(MultiStepApplicationView):
         context = super().get_context_data(*args, **kwargs)
         form_data = self.get_session_data()
         if form_data:
-            form = self.form_class(data=form_data)
+            form = self.get_form_class()(data=form_data)
             # make sure the form has warnings.
             # trigger data cleaning
             form.is_valid()
@@ -94,7 +114,7 @@ class Confirm(MultiStepApplicationView):
         return context
 
 
-class ApplySanFrancisco(MultiStepApplicationView):
+class CountyApplication(MultiCountyApplicationView):
     '''The initial application page.
     Checks for warnings, and if they exist, redirects to a confirmation page.
     '''
@@ -109,18 +129,6 @@ class ApplySanFrancisco(MultiStepApplicationView):
             return redirect(self.confirmation_url)
         else:
             return super().form_valid(form)
-
-
-class CountyApplication(MultiStepApplicationView):
-    template_name = "forms/county_form.jinja"
-    confirmation_url = reverse_lazy('intake-confirm')
-
-    def get_form(self):
-        # pull counties value to determine form
-        form_data = self.get_session_data()
-        counties = form_data.getlist('counties', [])
-        form_class = county_form_selector.get_combined_form_class(counties=counties)
-        return form_class(form_data)
 
 
 class SelectCounty(MultiStepFormViewBase):
@@ -256,7 +264,6 @@ class MarkProcessed(MarkSubmissionStepView):
 
 
 home = Home.as_view()
-apply_form = ApplySanFrancisco.as_view()
 county_application = CountyApplication.as_view()
 select_county = SelectCounty.as_view()
 confirm = Confirm.as_view()

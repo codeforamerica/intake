@@ -8,6 +8,7 @@ from django.utils import html as html_utils
 
 from intake.tests import mock
 from intake import models, forms, views
+from formation import fields
 
 from project.jinja2 import url_with_ids
 
@@ -48,27 +49,27 @@ class TestViews(AuthIntegrationTestCase):
 
     def test_apply_view(self):
         self.be_anonymous()
-        response = self.client.get(reverse('intake-apply'))
+        response = self.client.get(reverse('intake-county_application'))
         self.assertEqual(response.status_code, 200)
         self.assertIn('Apply to Clear My Record',
             response.content.decode('utf-8'))
         self.assertNotContains(response, "This field is required.")
-        self.assertNotContains(response, forms.Warnings.ADDRESS)
-        self.assertNotContains(response, forms.Warnings.SSN)
-        self.assertNotContains(response, forms.Warnings.DOB)
+        self.assertNotContains(response, "warninglist")
 
     def test_confirm_view(self):
         self.be_anonymous()
-        base_data = mock.post_data(**mock.NEW_RAW_FORM_DATA)
+        base_data = mock.post_data(
+            counties=['sanfrancisco'],
+            **mock.NEW_RAW_FORM_DATA)
         session = self.client.session
         session['form_in_progress'] = dict(base_data.lists())
         session.save()
         response = self.client.get(reverse('intake-confirm'))
         self.assertContains(response, base_data['first_name'][0])
         self.assertContains(response, base_data['last_name'][0])
-        self.assertContains(response, forms.Warnings.ADDRESS)
-        self.assertContains(response, forms.Warnings.SSN)
-        self.assertContains(response, forms.Warnings.DOB)
+        self.assertContains(response, fields.AddressField.is_recommended_error_message)
+        self.assertContains(response, fields.SocialSecurityNumberField.is_recommended_error_message)
+        self.assertContains(response, fields.DateOfBirthField.is_recommended_error_message)
 
     def test_stats_view(self):
         submissions = list(models.FormSubmission.objects.all())
@@ -88,6 +89,11 @@ class TestViews(AuthIntegrationTestCase):
         self.be_anonymous()
         result = self.client.fill_form(
             reverse('intake-apply'),
+            counties=['sanfrancisco']
+            )
+        self.assertRedirects(result, reverse('intake-county_application'))
+        result = self.client.fill_form(
+            reverse('intake-county_application'),
             first_name="Anonymous",
             last_name="Anderson",
             ssn='123091203',
@@ -100,8 +106,7 @@ class TestViews(AuthIntegrationTestCase):
             'address.state': 'CA',
             'address.zip': '99999',
             })
-        self.assertRedirects(result, 
-            reverse('intake-thanks'))
+        self.assertRedirects(result, reverse('intake-thanks'))
         thanks_page = self.client.get(result.url)
         self.assertContains(thanks_page, "Thank")
         self.assert_called_once_with_types(
@@ -115,19 +120,24 @@ class TestViews(AuthIntegrationTestCase):
     @patch('intake.views.notifications.slack_new_submission.send')
     def test_apply_with_name_only(self, slack, send_confirmation):
         self.be_anonymous()
-        # this should raise warnings
         result = self.client.fill_form(
             reverse('intake-apply'),
-            first_name="Foo",
-            last_name="Bar",
+            counties=['sanfrancisco'],
             follow=True
             )
-        self.assertEqual(result.wsgi_request.path, reverse('intake-confirm'))
+        # this should raise warnings
+        result = self.client.fill_form(
+            reverse('intake-county_application'),
+            first_name="Foo",
+            last_name="Bar"
+            )
+        self.assertRedirects(result, reverse('intake-confirm'))
+        result = self.client.get(result.url)
         self.assertContains(result, "Foo")
         self.assertContains(result, "Bar")
-        self.assertContains(result, forms.Warnings.ADDRESS)
-        self.assertContains(result, forms.Warnings.SSN)
-        self.assertContains(result, forms.Warnings.DOB)
+        self.assertContains(result, fields.AddressField.is_recommended_error_message)
+        self.assertContains(result, fields.SocialSecurityNumberField.is_recommended_error_message)
+        self.assertContains(result, fields.DateOfBirthField.is_recommended_error_message)
         self.assertContains(result, views.Confirm.incoming_message)
         slack.assert_not_called()
         result = self.client.fill_form(
@@ -146,16 +156,19 @@ class TestViews(AuthIntegrationTestCase):
 
     def test_apply_with_insufficient_form(self):
         # should return the same page, with the partially filled form
+        self.client.session['form_in_progress'] = {
+            'counties': ['sanfrancisco']
+        }
         result = self.client.fill_form(
-            reverse('intake-apply'),
+            reverse('intake-county_application'),
             first_name="Foooo"
             )
         self.assertContains(result, "Foooo")
-        self.assertEqual(result.wsgi_request.path, reverse('intake-apply'))
-        self.assertContains(result, "This field may not be blank.")
-        self.assertContains(result, forms.Warnings.ADDRESS)
-        self.assertContains(result, forms.Warnings.SSN)
-        self.assertContains(result, forms.Warnings.DOB)
+        self.assertEqual(result.wsgi_request.path, reverse('intake-county_application'))
+        self.assertContains(result, "This field is required.")
+        self.assertContains(result, fields.AddressField.is_recommended_error_message)
+        self.assertContains(result, fields.SocialSecurityNumberField.is_recommended_error_message)
+        self.assertContains(result, fields.DateOfBirthField.is_recommended_error_message)
 
 
     @patch('intake.models.notifications.slack_submissions_viewed.send')
@@ -314,7 +327,7 @@ class TestSelectCountyView(AuthIntegrationTestCase):
         from intake.constants import COUNTY_CHOICES
         self.be_anonymous()
         county_view = self.client.get(
-            reverse('intake-select_county'))
+            reverse('intake-apply'))
         for slug, description in COUNTY_CHOICES:
             self.assertContains(county_view, slug)
             self.assertContains(county_view, html_utils.escape(description))
@@ -322,7 +335,6 @@ class TestSelectCountyView(AuthIntegrationTestCase):
     def test_anonymous_user_can_submit_county_selection(self):
         self.be_anonymous()
         result = self.client.fill_form(
-            reverse('intake-select_county'),
+            reverse('intake-apply'),
             counties=['contracosta'])
         self.assertRedirects(result, reverse('intake-county_application'))
-        import ipdb; ipdb.set_trace()

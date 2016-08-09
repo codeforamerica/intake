@@ -79,6 +79,7 @@ class Form(base.BindParseValidate):
             # runs validators on fields
             field.validate()
             self.errors.update(field.errors)
+            self.warnings.update(field.warnings)
         # runs own validators
         super().validate()
 
@@ -94,3 +95,10 @@ class Form(base.BindParseValidate):
             for field in self.get_usable_fields()
             if field.is_valid()
         }
+
+    def get_template_context(self, context):
+        """Add `self` as `form` in render context"""
+        context = super().get_template_context(context)
+        context['form'] = self
+        return context
+    

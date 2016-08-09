@@ -26,12 +26,12 @@ class BindParseValidate(Renderable):
     # context_key is used for scoping errors
     context_key = DEFAULT_CONTEXT_KEY
 
-    def __init__(self, raw_input_data=UNSET):
+    def __init__(self, data=UNSET):
         """`raw_input_data` is expected to be a `dict` or `MultiValueDict`
         By default it is `UNSET`.
         """
         super().__init__()
-        self.raw_input_data = raw_input_data
+        self.raw_input_data = data
         self.parsed_data = UNSET
         self.errors = {}
         self.warnings = {}
@@ -179,4 +179,9 @@ class BindParseValidate(Renderable):
             )
 
     def __str__(self):
+        for attribute in ('cleaned_data', 'parsed_data'):
+            data = getattr(self, attribute)
+            if data is not UNSET:
+                return data
+            return self.empty_value
         return self.render()

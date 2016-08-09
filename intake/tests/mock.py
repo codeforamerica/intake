@@ -37,7 +37,7 @@ RAW_FORM_DATA = MultiValueDict({
 
 NEW_RAW_FORM_DATA = {
     'address.city': '',
-    'address.state': 'CA',
+    'address.state': '',
     'address.street': '',
     'address.zip': '',
     'contact_preferences': ['prefers_email'],

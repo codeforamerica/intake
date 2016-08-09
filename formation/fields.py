@@ -71,6 +71,8 @@ class DateOfBirthField(MultiValueField):
     context_key = "dob"
     label = _("What is your date of birth?")
     help_text = _("For example: 4/28/1986")
+    is_required_error_message = _("The public defender may not be able to check your RAP sheet without a full date of birth.")
+    is_recommended_error_message = is_required_error_message
     subfields = [
         Month,
         Day,
@@ -83,7 +85,8 @@ class SocialSecurityNumberField(CharField):
     context_key = "ssn"
     label = _('What is your Social Security Number?')
     help_text = help_text=_("The public defender's office will use this to get your San Francisco RAP sheet and find any convictions that can be reduced or dismissed.")
-
+    is_required_error_message = _("The public defender may not be able to check your RAP sheet without a social security number.")
+    is_recommended_error_message = is_required_error_message
 
 
 ###
@@ -131,6 +134,8 @@ class AddressField(MultiValueField):
     label = _("What is your mailing address?")
     help_text = _("")
     template = "formation/multivalue_address.jinja"
+    is_required_error_message = _("The public defender needs a mailing address to send you a letter with the next steps.")
+    is_recommended_error_message = is_required_error_message
     subfields = [
         Street,
         City,

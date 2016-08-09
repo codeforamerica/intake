@@ -5,9 +5,8 @@ from . import views
 urlpatterns = [
     # public views
     url(r'^$', views.home, name='intake-home'),
-    url(r'^apply/$', views.apply_form, name='intake-apply'),
+    url(r'^apply/$', views.select_county, name='intake-apply'),
     url(r'^application/$', views.county_application, name='intake-county_application'),
-    url(r'^county/$', views.select_county, name='intake-select_county'),
     url(r'^confirm/$', views.confirm, name='intake-confirm'),
     url(r'^thanks/$', views.thanks, name='intake-thanks'),
     url(r'^stats/$', views.stats, name='intake-stats'),

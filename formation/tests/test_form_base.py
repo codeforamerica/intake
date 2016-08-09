@@ -39,7 +39,6 @@ class TestForm(PatchTranslationTestCase):
         self.assertTrue(form.is_valid())
 
     def test_empty_value_is_as_expected(self):
-        form = self.get_sf_form()
         expected_empty_value = {
             'address': {
                 'city': '', 
@@ -71,6 +70,9 @@ class TestForm(PatchTranslationTestCase):
             'when_where_outside_sf': '',
             'where_probation_or_parole': ''
             }
+        form = self.get_sf_form()
+        self.assertDictEqual(form.empty_value, expected_empty_value)
+        form = self.get_sf_form({})
         self.assertDictEqual(form.empty_value, expected_empty_value)
 
     def test_can_be_instantiated_with_preparsed_data(self):

@@ -1,0 +1,52 @@
+{% extends "public_base.jinja" %}
+{% import 'macros.jinja' as macros %}
+
+
+{%- block header_title -%}
+Apply to Clear My Record
+{%- endblock header_title -%}
+
+{% block body_class -%}
+public apply
+{%- endblock body_class %}
+
+{% block content %}
+<section class="application_form content">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-8 col-md-6 col_centered">
+
+<form class="county_form" action="" method="POST" accept-charset="utf-8">
+  {#
+    Non field errors are not included here because they will be
+    displayed as flash messages in the header.
+  #}
+  
+  {% include "includes/csrf_field.jinja" %}
+  
+  {% block form_content %}
+
+  {{ form.render()|safe }}
+
+
+  <div class="note">
+    <p>
+      By clicking "Apply",  you are:
+    </p>
+    <ol>
+      <li>Giving the San Francisco Public Defender's office permission to get your San Francisco RAP Sheet.</li>
+      <li>Acknowledging that filling out this form is not a guarantee that a public defender will represent you.</li>
+    </ol>
+  </div>
+  
+  <button type="submit">Apply</button>
+  {% endblock form_content %}
+
+</form>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}
