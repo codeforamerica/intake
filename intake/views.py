@@ -14,7 +14,9 @@ from django.views.generic.edit import FormView
 
 from django.core import mail
 
-from intake import models, notifications, forms
+from intake import models, notifications
+from intake import serializer_forms as forms
+from formation.forms import county_form_selector
 from project.jinja2 import url_with_ids
 
 
@@ -109,7 +111,6 @@ class ApplySanFrancisco(MultiStepApplicationView):
             return super().form_valid(form)
 
 
-
 class CountyApplication(MultiStepApplicationView):
     template_name = "forms/county_form.jinja"
     confirmation_url = reverse_lazy('intake-confirm')
@@ -118,10 +119,8 @@ class CountyApplication(MultiStepApplicationView):
         # pull counties value to determine form
         form_data = self.get_session_data()
         counties = form_data.getlist('counties', [])
-        # get the form class
-        # combine if necessary
-        # return a response with the rendered form
-
+        form_class = county_form_selector.get_combined_form_class(counties=counties)
+        return form_class(form_data)
 
 
 class SelectCounty(MultiStepFormViewBase):
@@ -145,6 +144,8 @@ class PrivacyPolicy(TemplateView):
 class FilledPDF(View):
 
     def get(self, request, submission_id):
+
+
         submission = models.FormSubmission.objects.get(id=int(submission_id))
         fillable = models.FillablePDF.get_default_instance()
         pdf = fillable.fill(submission)

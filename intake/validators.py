@@ -1,7 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 from intake.constants import CONTACT_METHOD_CHOICES, CONTACT_PREFERENCE_CHECKS
-from rest_framework import serializers
 from rest_framework.utils import html
 
 
@@ -46,7 +45,7 @@ class GavePreferredContactMethods:
                 field_errors.append(self.message(key))
                 errors[attribute_name] = field_errors
         if errors:
-            raise serializers.ValidationError(errors)
+            raise ValidationError(errors)
 
 
 class ContactInfoJSON:

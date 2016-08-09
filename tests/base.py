@@ -1,5 +1,6 @@
 import os
 import time
+from unittest import TestCase
 from django.core import mail
 from django.conf import settings
 from django.test import LiveServerTestCase, override_settings
@@ -208,3 +209,13 @@ class DEVICES:
     Samsung_Galaxy_Tab_7_7_8_9_10_1 = "Samsung Galaxy Tab 7.7, 8.9, 10.1"
     Samsung_Galaxy_Tab = "Samsung Galaxy Tab"
     Notebook_with_touch = "Notebook with touch"
+
+
+class TranslatableTestCase(TestCase):
+    """Performs basic setUp so that translatable text can be used
+    """
+    def setUp(self):
+        import django
+        django.setup()
+
+

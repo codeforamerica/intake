@@ -1,0 +1,19 @@
+<div class="{% if field.is_subfield %}sub{% endif %}field {{ field.get_html_class_name() }}
+  {%- if field.warnings %} warnings{% endif %}
+  {%- if field.errors %} errors{% endif %}">
+  {%- include "formation/messages_list.jinja" %}
+  <label class="field-wrapping_label">
+    <span class="field-display_text">
+      {{ field.label }}
+      {%- if field.optional %}
+      <span class="field-optional">(optional)</span>
+      {%- endif %}
+    </span>
+    {%- if field.help_text %}
+    <span class="field-help_text">
+      {{ field.help_text }}
+    </span>
+    {%- endif %}
+    <input type="text" name="{{ field.get_input_name() }}" value="{{ field.get_current_value() }}">
+  </label>
+</div>

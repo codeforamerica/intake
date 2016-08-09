@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django_jinja',
     'invitations',
     'storages',
+    'formation',
     'debug_toolbar',
 ]
 

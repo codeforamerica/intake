@@ -1,0 +1,6 @@
+{% extends "apply_page.jinja" %}
+
+{% block form_content %}
+{{ macros.checkbox_options_field(form.fields.counties) }}
+<button type="submit">{{ _("Apply") }}</button>
+{% endblock form_content %}

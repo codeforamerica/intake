@@ -1,0 +1,30 @@
+<div class="{% if field.is_subfield %}sub{% endif %}field {{ field.get_html_class_name() }}
+  {%- if field.warnings %} warnings{% endif %}
+  {%- if field.errors %} errors{% endif %}">
+  {%- include "formation/messages_list.jinja" %}
+  <fieldset>
+    <legend>
+      {{ field.label }}
+      {%- if field.optional %}
+      <span class="field-optional">(optional)</span>
+      {%- endif %}
+    </legend>
+    {%- if field.help_text %}
+    <div class="field-help_text">
+      {{ field.help_text }}
+    </div>
+    {%- endif %}
+    <ul class="radio_options options_list">
+    {%- for option_key, option_label in field.choices %}
+      <li>
+        <label class="field-option_label">
+          <input type="radio" name="{{ field.get_input_name() }}" value="{{ option_key }}"
+        {%- if option_key == field.get_current_value() %} checked="checked"{% endif %}>
+          <span class="option-display_text">
+            {{ option_label }}
+          </span>
+        </label>
+      </li>{% endfor %}
+    </ul>
+  </fieldset>
+</div>
