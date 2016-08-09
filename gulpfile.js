@@ -33,7 +33,7 @@ gulp.task('django', function(){
   var spawn = process.spawn;
   console.info('Starting django server');
   var PIPE = {stdio: 'inherit'};
-  spawn('python', ['manage.py','runserver'], PIPE);
+  spawn('python', ['manage.py','runserver','--settings=project.settings.dev'], PIPE);
 });
 
 
