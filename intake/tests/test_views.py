@@ -625,3 +625,20 @@ class TestStats(IntakeDataTestCase):
         for search_term in [total, sf_string, cc_string]:
             self.assertContains(response, search_term)
 
+
+
+class TestExcelDownloadView(TestCoreViews):
+
+    view_name = 'intake-xls-download'
+
+    def test_anonymous_user_is_redirected_to_splash_page(self):
+        self.be_anonymous()
+        response = self.client.get(reverse(self.view_name))
+        self.assertRedirects(response, reverse('intake-home'))
+
+    def test_agency_user_can_download_xls(self):
+        self.be_agency_user()
+        response = self.client.get(reverse(self.view_name))
+        # assert that we got an xls file and the http response is as expected
+
+    
