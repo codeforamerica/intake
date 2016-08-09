@@ -30,7 +30,7 @@ class County(models.Model):
     description = models.TextField()
 
     def __str__(self):
-        return self.description
+        return str(self.description)
 
 
 
