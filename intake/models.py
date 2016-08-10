@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 
-from intake import pdfparser, anonymous_names, notifications, fields
+from intake import pdfparser, anonymous_names, notifications, model_fields
 from intake.constants import CONTACT_METHOD_CHOICES, CONTACT_PREFERENCE_CHECKS, STAFF_NAME_CHOICES
 
 
@@ -283,7 +283,7 @@ class ApplicationLogEntry(models.Model):
 
 
 class ApplicantContactedLogEntry(ApplicationLogEntry):
-    contact_info = fields.ContactInfoJSONField(default=dict)
+    contact_info = model_fields.ContactInfoJSONField(default=dict)
     message_sent = models.TextField(blank=True)
 
 
