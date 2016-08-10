@@ -15,7 +15,6 @@ from django.views.generic.edit import FormView
 from django.core import mail
 
 from intake import models, notifications, constants
-from intake import serializer_forms as forms
 from formation.forms import county_form_selector, SelectCountyForm
 from project.jinja2 import url_with_ids
 
