@@ -7,7 +7,7 @@ from unittest.mock import patch, Mock
 from intake.tests import mock
 from user_accounts.tests.mock import create_fake_auth_models
 from user_accounts import models as auth_models
-from intake import models, fields, anonymous_names, validators, notifications
+from intake import models, model_fields, anonymous_names, validators, notifications
 
 
 class TestModels(TestCase):
@@ -242,7 +242,7 @@ class TestModels(TestCase):
 
     def test_contact_info_json_field(self):
 
-        contact_info_field = fields.ContactInfoJSONField(default=dict, blank=True)
+        contact_info_field = model_fields.ContactInfoJSONField(default=dict, blank=True)
         # valid inputs
         empty = {}
         just_email = {'email': 'someone@gmail.com'}
