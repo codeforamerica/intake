@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
 
 from intake.tests import mock
-from intake import models, forms, views
+from intake import models, views
 from formation import fields
 
 from project.jinja2 import url_with_ids
