@@ -6,7 +6,7 @@ from formation.tests import mock
 from formation.forms import county_form_selector
 from formation.field_base import Field
 from intake.constants import Counties
-from intake import validators
+from formation import validators
 
 
 class TestForm(PatchTranslationTestCase):
