@@ -1,4 +1,5 @@
 from formation.combinable_base import CombinableFormSpec, FormSpecSelector
+from formation.form_base import Form
 from formation import fields as F
 from intake.constants import Counties
 from formation.validators import gave_preferred_contact_methods
@@ -80,7 +81,6 @@ class SanFranciscoCountyForm(CombinableCountyFormSpec):
     ]
 
 
-
 class ContraCostaForm(CombinableCountyFormSpec):
     county = Counties.CONTRA_COSTA
     fields = {
@@ -124,6 +124,10 @@ class ContraCostaForm(CombinableCountyFormSpec):
         gave_preferred_contact_methods
     ]
 
+
+class SelectCountyForm(Form):
+    fields = [F.Counties]
+    required_fields = [F.Counties]
 
 
 county_form_selector = FormSpecSelector([

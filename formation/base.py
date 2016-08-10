@@ -26,15 +26,19 @@ class BindParseValidate(Renderable):
     # context_key is used for scoping errors
     context_key = DEFAULT_CONTEXT_KEY
 
-    def __init__(self, data=UNSET):
+    def __init__(self, data=UNSET, initial=None, prefix=None):
         """`raw_input_data` is expected to be a `dict` or `MultiValueDict`
         By default it is `UNSET`.
         """
         super().__init__()
         self.raw_input_data = data
+
         self.parsed_data = UNSET
         self.errors = {}
         self.warnings = {}
+        self.initial_data = initial
+        if prefix:
+            self.context_key = prefix + self.context_key
 
     def bind(self, data):
         """Sets or overwrites the raw input for this object

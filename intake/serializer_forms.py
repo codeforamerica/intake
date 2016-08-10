@@ -8,20 +8,8 @@ from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework.serializers import ValidationError, get_validation_error_detail
 
 from intake import validators, fields
-from intake.constants import COUNTY_CHOICES
+from intake.constants import COUNTY_CHOICES, CONTACT_PREFERENCE_CHOICES
 
-
-CONTACT_PREFERENCE_CHOICES = (
-    ('prefers_email',     _('Email')),
-    ('prefers_sms',       _('Text Message')),
-    ('prefers_snailmail', _('Paper mail')),
-    ('prefers_voicemail', _('Voicemail')),
-    )
-
-class Warnings:
-    DOB = _("The public defender may not be able to check your RAP sheet without a full date of birth.")
-    ADDRESS = _("The public defender needs a mailing address to send you a letter with the next steps.")
-    SSN = _("The public defender may not be able to check your RAP sheet without a social security number.")
 
 
 class Form(serializers.Serializer):

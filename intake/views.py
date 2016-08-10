@@ -16,7 +16,7 @@ from django.core import mail
 
 from intake import models, notifications, constants
 from intake import serializer_forms as forms
-from formation.forms import county_form_selector
+from formation.forms import county_form_selector, SelectCountyForm
 from project.jinja2 import url_with_ids
 
 
@@ -132,7 +132,7 @@ class CountyApplication(MultiCountyApplicationView):
 
 
 class SelectCounty(MultiStepFormViewBase):
-    form_class = forms.CountySelectionForm
+    form_class = SelectCountyForm
     template_name = "forms/county_selection.jinja"
     success_url = reverse_lazy('intake-county_application')
 

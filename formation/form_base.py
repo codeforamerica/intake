@@ -12,7 +12,7 @@ class Form(base.BindParseValidate):
         'optional_fields'
     ]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, files=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields = OrderedDict([
             (field_class.context_key, self.build_field(field_class))
@@ -35,19 +35,17 @@ class Form(base.BindParseValidate):
 
     def build_field(self, field_class):
         # get init args (required, optional, recommended)
-        init_kwargs = dict(
-            form=self,
-            recommended=field_class in self.recommended_fields,
-            required=field_class in self.required_fields,
-            optional=field_class in self.optional_fields
-            )
+        init_kwargs = dict(form=self)
+        for attribute_name in self.field_attributes:
+            arg_key = attribute_name.replace('_fields', '')
+            init_kwargs[arg_key] = field_class in getattr(self, attribute_name, [])
         init_args = []
         if self.raw_input_data is not base.UNSET:
             init_args.append(self.raw_input_data)
         field = field_class(*init_args, **init_kwargs)
         # replace class with instance in attributes
         for att_name in self.field_attributes:
-            field_attribute = getattr(self, att_name)
+            field_attribute = getattr(self, att_name, [])
             if field_class in field_attribute:
                 index = field_attribute.index(field_class)
                 field_attribute[index] = field
