@@ -7,7 +7,9 @@ from unittest.mock import patch, Mock
 from intake.tests import mock
 from user_accounts.tests.mock import create_fake_auth_models
 from user_accounts import models as auth_models
-from intake import models, model_fields, anonymous_names, validators, notifications
+from intake import models, model_fields, anonymous_names, validators, notifications, constants
+from intake.management.commands import load_initial_data
+from formation.validators import are_valid_choices
 
 
 class TestModels(TestCase):
@@ -17,6 +19,13 @@ class TestModels(TestCase):
         super().setUpTestData()
         for key, models in create_fake_auth_models().items():
             setattr(cls, key, models)
+        cls.load_initial_data()
+
+    @classmethod
+    def load_initial_data(cls):
+        command = load_initial_data.Command()
+        command.stdout = Mock()
+        command.handle()
 
     def test_submission(self):
         submission = mock.FormSubmissionFactory.create()
@@ -393,7 +402,17 @@ class TestModels(TestCase):
         slack_failed_notification.assert_called_once_with(
             submission=submission, errors={'sms': sms_error, 'email': email_error})
 
-
+    def test_can_get_counties_from_submissions(self):
+        submission = mock.FormSubmissionFactory.create()
+        counties = list(submission.counties.all())
+        mock_field = Mock(
+            choices=constants.COUNTY_CHOICES,
+            required=True
+            )
+        slugs = [county.slug for county in counties]
+        are_valid_choices.set_context(mock_field)
+        are_valid_choices(slugs)
+        mock_field.add_error.assert_not_called()
 
 
 class TestCounty(TestCase):

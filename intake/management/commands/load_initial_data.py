@@ -65,7 +65,7 @@ class Command(BaseCommand):
         lookup_keys  = data.get("lookup_keys", ["pk"])
         for instance_data in data["instances"]:
             instance = self.load_or_update_instance(
-                model_class, instance_data,
+                model_class, instance_data.copy(),
                 lookup_keys=lookup_keys)
             message = "Successfully loaded '{}'".format(instance)
             self.stdout.write(message)

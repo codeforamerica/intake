@@ -89,7 +89,10 @@ class FormSubmission(models.Model):
 
     @classmethod
     def all_plus_related_objects(cls):
-        return cls.objects.prefetch_related('logs__user__profile__organization').all()
+        return cls.objects.prefetch_related(
+            'logs__user__profile__organization',
+            'counties'
+            ).all()
 
     def agency_event_logs(self, event_type):
         '''assumes that self.logs and self.logs.user are prefetched'''
