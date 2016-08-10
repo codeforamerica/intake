@@ -72,11 +72,6 @@ class CombinableFormSpec:
             class_attributes_dictionary
             )
 
-    def get_form_instance(self, *args, **kwargs):
-        form_class = self.build_form_class()
-        return form_class(*args, **kwargs)
-
-
 
 class FormSpecSelector:
 

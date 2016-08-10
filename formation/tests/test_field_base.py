@@ -58,6 +58,14 @@ class TestField(PatchTranslationTestCase):
         self.assertEqual(
             field.parsed_data, "some data")
 
+    def test_raises_error_if_given_nondict(self):
+        MyField = self.get_example_subclass()
+        for non_dict in ['what', ['something'], 9]:
+            with self.assertRaises(exceptions.RawDataMustBeDictError):
+                field = MyField(non_dict)
+                field.is_valid()
+
+
     def test_basic_inheritance(self):
         MyField = self.get_example_subclass()
         field = MyField()

@@ -115,7 +115,10 @@ class TestBindParseValidate(TestCase):
         }
         self.assertDictEqual(expected_errors, form.errors)
 
-
-
+    def test_prefix(self):
+        class Scoped(base.BindParseValidate):
+            context_key = "bar"
+        unbound = Scoped(prefix="foo")
+        self.assertEqual(unbound.context_key, "foobar")
 
 

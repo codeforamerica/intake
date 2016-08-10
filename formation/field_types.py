@@ -162,7 +162,7 @@ class MultiValueField(Field):
 
 
 class FormNote:
-    """An extremely simple field type for including content with
+    """A simple type for including content with
     no input for forms, such as a brief statement.
     """
     content = ""

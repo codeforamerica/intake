@@ -83,12 +83,12 @@ class BindParseValidate(Renderable):
         return raw_data
 
     def _messages_att_key(self, message_type):
-        if 'error' in message_type:
-            att_key = 'errors'
-        elif 'warning' in message_type:
+        """defaults to errors
+        """
+        if 'warning' in message_type:
             att_key = 'warnings'
         else:
-            att_key = None
+            att_key = 'errors'
         return att_key
 
     def _get_messages_att(self, message_type):
@@ -183,9 +183,4 @@ class BindParseValidate(Renderable):
             )
 
     def __str__(self):
-        for attribute in ('cleaned_data', 'parsed_data'):
-            data = getattr(self, attribute)
-            if data is not UNSET:
-                return data
-            return self.empty_value
         return self.render()

@@ -78,6 +78,15 @@ class TestCharField(PatchTranslationTestCase):
         self.assertFalse(field.errors)
         self.assertEqual(field.get_current_value(), 'Marzipan')
 
+    def test_can_shut_off_stripping(self):
+        class WhitespaceField(field_types.CharField):
+            context_key = "whitespace"
+            should_strip_input = False
+        field = WhitespaceField({"whitespace": "\n \t\r"})
+        self.assertTrue(field.is_valid())
+        self.assertFalse(field.is_empty())
+        self.assertEqual(field.get_current_value(), "\n \t\r")
+
 
 class TestChoiceField(PatchTranslationTestCase):
 
@@ -359,27 +368,23 @@ class TestRenderFieldTypes(TestCase):
     @django_only
     def test_render_charfield(self):
         field = NameField()
-        self.assertEqual(
-        field.render(),
-        mock.rendered.NAMEFIELD)
+        self.assertEqual(field.render(), str(field))
+        self.assertEqual(field.render(), mock.rendered.NAMEFIELD)
 
     @django_only
     def test_render_choicefield(self):
         field = SingleFruit()
-        self.assertEqual(
-        field.render(),
-        mock.rendered.FRUITSFIELD)
+        self.assertEqual(field.render(), str(field))
+        self.assertEqual(field.render(), mock.rendered.FRUITSFIELD)
 
     @django_only
     def test_render_multiplechoicefield(self):
         field = MultipleFruit()
-        self.assertEqual(
-        field.render(),
-        mock.rendered.MULTIPLEFRUITSFIELD)
+        self.assertEqual(field.render(), str(field))
+        self.assertEqual(field.render(), mock.rendered.MULTIPLEFRUITSFIELD)
 
     @django_only
     def test_render_dateofbirthfield(self):
         field = fields.DateOfBirthField()
-        self.assertEqual(
-        field.render(),
-        mock.rendered.DATEOFBIRTHFIELD)
+        self.assertEqual(field.render(), str(field))
+        self.assertEqual(field.render(), mock.rendered.DATEOFBIRTHFIELD)
