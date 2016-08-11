@@ -11,6 +11,7 @@ REPO_DIR = os.path.dirname(
 ALLOWED_HOSTS = []
 
 
+DEBUG_TOOLBAR_PATCH_SETTINGS = False
 INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.admin',

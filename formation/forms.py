@@ -55,6 +55,7 @@ class SanFranciscoCountyForm(CombinableCountyFormSpec):
         F.OnProbationParole,
         F.WhereProbationParole,
         F.WhenProbationParole,
+        F.BeingCharged,
         F.RAPOutsideSF,
         F.WhenWhereOutsideSF,
         F.FinancialScreeningNote,

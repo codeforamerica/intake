@@ -236,6 +236,7 @@ INTAKE_FIELDS = [
     SocialSecurityNumberField,
 
     USCitizen,
+    BeingCharged,
     ServingSentence,
     OnProbationParole,
     WhereProbationParole,

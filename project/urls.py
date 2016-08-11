@@ -15,3 +15,10 @@ urlpatterns += [
     url(r'^accounts/', include('allauth.urls')),
     url(r'^invitations/', include('invitations.urls', namespace='invitations')),
 ]
+
+# django debug toolbar
+if settings.DEBUG and settings.USE_DEBUG_TOOLBAR:
+    import debug_toolbar
+    urlpatterns += [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ]

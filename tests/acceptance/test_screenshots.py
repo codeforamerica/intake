@@ -27,6 +27,7 @@ class TestWorkflows(base.ScreenSequenceTestCase):
         super().setUp()
         for key, models in auth_mock.create_fake_auth_models().items():
             setattr(self, key, models)
+        intake_mock.load_counties_and_orgs()
         self.submissions = intake_mock.FormSubmissionFactory.create_batch(10)
         self.pdf = intake_mock.useable_pdf()
         self.superuser = auth_mock.fake_superuser()
@@ -57,18 +58,16 @@ class TestWorkflows(base.ScreenSequenceTestCase):
             size=base.SMALL_DESKTOP
             )
 
-    def test_application_submission_workflow(self):
-        # self.host = 'https://cmr-dev.herokuapp.com'
+    def test_apply_to_san_francisco(self):
         answers = intake_mock.fake.sf_county_form_answers()
         sequence = [
             S.get('went to splash page', '/'),
             S.click_on('clicked apply now', 'Apply now'),
-            S.fill_form('submitted form', **answers),
-            S.click_on('clicked privacy policy', 'Privacy Policy'),
+            S.fill_form('selected San Francisco', counties=['sanfrancisco']),
+            S.fill_form('submitted form', **answers)
             ]
         sizes = {
             'Apply on a common mobile phone': base.COMMON_MOBILE,
-            # 'Apply on a small mobile phone': base.SMALL_MOBILE,
             'Apply on a small desktop computer': base.SMALL_DESKTOP
         }
         for prefix, size in sizes.items():
@@ -82,6 +81,7 @@ class TestWorkflows(base.ScreenSequenceTestCase):
         sequence = [
             S.get('went to splash page', '/'),
             S.click_on('clicked apply now', 'Apply now'),
+            S.fill_form('selected San Francisco', counties=['sanfrancisco']),
             S.fill_form('submitted incomplete form', first_name='Cornelius'),
             S.fill_form('added last name', last_name='Cherimoya'),
             S.fill_form('added address', contact_preferences=['prefers_snailmail'], **address_fields)
@@ -150,5 +150,29 @@ class TestWorkflows(base.ScreenSequenceTestCase):
                     login=user.email, password=fake_password),
                 S.wait('wait for pdf to load', 4)
             ], base.SMALL_DESKTOP)
+
+    def test_apply_to_contra_costa(self):
+        answers = intake_mock.fake.contra_costa_county_form_answers()
+        sequence = [
+            S.get('went to splash page', '/'),
+            S.click_on('clicked apply now', 'Apply now'),
+            S.fill_form('picked contra costa', counties=['contracosta']),
+            S.fill_form('submitted form', **answers),
+            ]
+        self.run_sequence('Apply to Contra Costa', sequence, size=base.COMMON_MOBILE)
+
+    def test_apply_to_other_county(self):
+        answers = intake_mock.fake.other_county_answers()
+        sequence = [
+            S.get('went to splash page', '/'),
+            S.click_on('clicked apply now', 'Apply now'),
+            S.fill_form('picked other', counties=['other']),
+            S.fill_form('submitted form', **answers),
+            ]
+        self.run_sequence('Apply to other county', sequence, size=base.COMMON_MOBILE)
+
+
+
+
 
 

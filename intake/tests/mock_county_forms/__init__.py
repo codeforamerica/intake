@@ -54,10 +54,9 @@ class Provider(BaseProvider):
 
     def contra_costa_county_form_answers(self, **overrides):
         data = {
-            'first_name': self.generator.first_name(),
-            'middle_name': self.generator.first_name(),
-            'last_name': self.generator.last_name(),
             'contact_preferences': self.generate_contact_preferences(),
+            'first_name': self.generator.first_name(),
+            'last_name': self.generator.last_name(),
             'phone_number': self.numerify('###-###-####'),
             'email': self.generator.free_email(),
             'dob.day': str(random.randint(1,31)),
@@ -68,13 +67,28 @@ class Provider(BaseProvider):
             'address.city': self.generator.city(),
             'address.state': self.generator.state_abbr(),
             'address.zip': self.generator.zipcode(),
-            'on_probation': self.maybe(0.1),
-            'on_parole': self.maybe(0.1),
+            'on_probation_parole': self.maybe(0.1),
             'serving_sentence': self.maybe(0.05),
-            'being_charged': self.maybe(0.05),
             'currently_employed': self.maybe(0.4),
             'monthly_income': str(random.randint(0, 7000)),
             'monthly_expenses': str(random.randint(0, 3000)),
+            'case_number': '',
+            'how_did_you_hear': '',
+            'additional_information': '',
+        }
+        data.update(overrides)
+        return data
+
+    def other_county_answers(self, **overrides):
+        data = {
+            'contact_preferences': self.generate_contact_preferences(),
+            'first_name': self.generator.first_name(),
+            'phone_number': self.numerify('###-###-####'),
+            'email': self.generator.free_email(),
+            'address.street': self.generator.street_address(),
+            'address.city': self.generator.city(),
+            'address.state': self.generator.state_abbr(),
+            'address.zip': self.generator.zipcode(),
             'how_did_you_hear': '',
         }
         data.update(overrides)
