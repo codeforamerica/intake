@@ -32,6 +32,12 @@ class TestModels(TestCase):
         self.assertEqual(
             models.FormSubmission.objects.get(id=submission.id), submission)
 
+    def test_all_submissions_have_counties(self):
+        all_submissions = models.FormSubmission.all_plus_related_objects()
+        for submission in all_submissions:
+            counties = submission.counties.all()
+            self.assertTrue(list(counties))
+
     def test_applicationlogentry(self):
         submission = mock.FormSubmissionFactory.create()
         log = models.ApplicationLogEntry.objects.create(
