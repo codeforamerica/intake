@@ -3901,6 +3901,18 @@ p.step_headline {
 .apply_steps {
   margin-top: 20px;
 }
+.col-md-3-33 {
+  position: relative;
+  min-height: 1px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+@media (min-width: 992px) {
+  .col-md-3-33 {
+    float: left;
+    width: 27.75%;
+  }
+}
 .step_headline {
   color: #004A6C;
 }
