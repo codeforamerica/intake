@@ -69,8 +69,7 @@ class FormSubmission(models.Model):
             notifications.front_email_daily_app_bundle.send(
                 to=emails,
                 count=count,
-                submission_ids=submission_ids
-                )
+                submission_ids=submission_ids)
             ApplicationLogEntry.log_referred(submission_ids, user=None)
         notifications.slack_app_bundle_sent.send(submissions=submissions, emails=emails)
         return notifications.slack_app_bundle_sent.render(submissions=submissions, emails=emails)

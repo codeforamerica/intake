@@ -1,6 +1,5 @@
 import os
 import time
-from unittest import TestCase
 from django.core import mail
 from django.conf import settings
 from django.test import LiveServerTestCase, override_settings
@@ -211,11 +210,5 @@ class DEVICES:
     Notebook_with_touch = "Notebook with touch"
 
 
-class TranslatableTestCase(TestCase):
-    """Performs basic setUp so that translatable text can be used
-    """
-    def setUp(self):
-        import django
-        django.setup()
 
 

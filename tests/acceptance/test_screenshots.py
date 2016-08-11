@@ -27,6 +27,7 @@ class TestWorkflows(base.ScreenSequenceTestCase):
         super().setUp()
         for key, models in auth_mock.create_fake_auth_models().items():
             setattr(self, key, models)
+        intake_mock.load_counties_and_orgs()
         self.submissions = intake_mock.FormSubmissionFactory.create_batch(10)
         self.pdf = intake_mock.useable_pdf()
         self.superuser = auth_mock.fake_superuser()

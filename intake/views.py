@@ -61,6 +61,7 @@ class MultiStepApplicationView(MultiStepFormViewBase):
     def save_submission_and_send_notifications(self, form):
         submission = models.FormSubmission(answers=form.cleaned_data)
         submission.save()
+        submission.counties = self.get_counties()
         number = models.FormSubmission.objects.count()
         notifications.slack_new_submission.send(
             submission=submission, request=self.request, submission_count=number)
@@ -73,20 +74,23 @@ class MultiStepApplicationView(MultiStepFormViewBase):
 
 class MultiCountyApplicationView(MultiStepApplicationView):
 
+    def get_counties(self):
+        session_data = self.get_session_data()
+        county_slugs = session_data.getlist('counties')
+        return models.County.objects.filter(slug__in=county_slugs)
+
     def get_form_kwargs(self):
         kwargs = {}
         if self.request.method in ('POST', 'PUT'):
             kwargs.update({
-                'data': self.request.POST,
-                })
+                'data': self.request.POST})
         return kwargs
 
     def get_form_class(self):
         default_counties = [
             constants.Counties.CONTRA_COSTA,
             constants.Counties.SAN_FRANCISCO,
-            constants.Counties.OTHER,
-        ]
+            constants.Counties.OTHER]
         session_data = self.get_session_data()
         counties = session_data.getlist('counties', default_counties)
         return county_form_selector.get_combined_form_class(counties=counties)

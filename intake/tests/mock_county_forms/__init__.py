@@ -72,6 +72,7 @@ class Provider(BaseProvider):
             'currently_employed': self.maybe(0.4),
             'monthly_income': str(random.randint(0, 7000)),
             'monthly_expenses': str(random.randint(0, 3000)),
+            'income_source': 'a job',
             'case_number': '',
             'how_did_you_hear': '',
             'additional_information': '',

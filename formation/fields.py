@@ -206,7 +206,7 @@ class CurrentlyEmployed(YesNoField):
 
 class MonthlyIncome(CharField):
     context_key = "monthly_income"
-    label = _("What is your monthly_income?")
+    label = _("What is your monthly income?")
 
 
 class IncomeSource(CharField):

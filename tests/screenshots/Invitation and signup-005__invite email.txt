@@ -1,4 +1,4 @@
-EMAIL to dr-dominik-satterfield-iii@yahoo.com
+EMAIL to felix-batz@yahoo.com
 
 ----------------------------
 
@@ -11,4 +11,4 @@ Hello,
 You've been invited to create an account on Clear My Record.
 
 If you'd like to join, please follow this link:
-http://localhost:8081/invitations/accept-invite/vfiauzd9oqeqqeghljxexp89kyirahbwzfrvh84swbd5kznggy96tuoz4wck3yd3
+http://localhost:8081/invitations/accept-invite/s022vwe5yuxso7ed8ldl7dglexmcdwcg01o86okp3tvuwazfxyb7i0yj0rdbloyw

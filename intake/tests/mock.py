@@ -5,6 +5,7 @@ import random
 from pytz import timezone
 from faker import Factory as FakerFactory
 from django.core.files import File
+from django.db.utils import IntegrityError
 from django.utils.datastructures import MultiValueDict
 
 from intake import models
@@ -61,6 +62,11 @@ NEW_RAW_FORM_DATA = {
 }
 
 
+def load_counties_and_orgs():
+    command = load_initial_data.Command()
+    command.stdout = Mock()
+    command.handle()
+    
 
 def post_data(**kwargs):
     for key, value in kwargs.items():
@@ -95,26 +101,24 @@ class PrepopulatedModelFactory:
     def __init__(self, model):
         self.model = model
         self.row_count = None
-        self._object_cache = None
 
     def ensure_county_count(self):
-        if self.row_count is None:
-            self._object_cache = list(self.model.objects.all())
-            self.row_count = len(self._object_cache)
+        self.objects = list(self.model.objects.all())
+        self.row_count = len(self.objects)
         if not self.row_count:
             raise Exception(
                 "`{}` table is not yet populated.".format(self.model.__name__))
 
     def choice(self):
         self.ensure_county_count()
-        return random.choice(self._object_cache)
+        return random.choice(self.objects)
 
     def sample(self, size=None, zero_is_okay=False):
         self.ensure_county_count()
         if not size:
             lower_limit = 0 if zero_is_okay else 1
             size = random.randint(lower_limit, self.row_count)
-        return random.sample(self._object_cache, size)
+        return random.sample(self.objects, size)
 
 
 CountyFactory = PrepopulatedModelFactory(models.County)
@@ -134,8 +138,13 @@ class FormSubmissionFactory(factory.DjangoModelFactory):
         if not create:
             return
         if extracted:
-            for county in extracted:
-                self.counties.add(county)
+            try:
+                self.counties.add(*[
+                    county.id for county in extracted
+                    ])
+            except IntegrityError as err:
+                import ipdb; ipdb.set_trace()
+                raise err
 
     @classmethod
     def create(cls, *args, **kwargs):

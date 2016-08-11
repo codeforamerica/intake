@@ -8,10 +8,11 @@ from django.utils import html as html_utils
 
 from intake.tests import mock
 from intake.tests.test_models import TestModels
-from intake import models, views
-from formation import fields
+from intake import models, views, constants
+from formation import fields, forms
 
 from project.jinja2 import url_with_ids
+
 
 class TestViews(AuthIntegrationTestCase):
 
@@ -325,11 +326,10 @@ class TestViews(AuthIntegrationTestCase):
 class TestSelectCountyView(AuthIntegrationTestCase):
 
     def test_anonymous_user_can_access_county_view(self):
-        from intake.constants import COUNTY_CHOICES
         self.be_anonymous()
         county_view = self.client.get(
             reverse('intake-apply'))
-        for slug, description in COUNTY_CHOICES:
+        for slug, description in constants.COUNTY_CHOICES:
             self.assertContains(county_view, slug)
             self.assertContains(county_view, html_utils.escape(description))
 
@@ -339,3 +339,56 @@ class TestSelectCountyView(AuthIntegrationTestCase):
             reverse('intake-apply'),
             counties=['contracosta'])
         self.assertRedirects(result, reverse('intake-county_application'))
+
+
+class TestMultiCountyApplication(AuthIntegrationTestCase):
+
+    @patch('intake.views.models.FormSubmission.send_confirmation_notifications')
+    @patch('intake.views.notifications.slack_new_submission.send')
+    def test_can_apply_to_contra_costa_alone(self, slack, send_confirmation):
+        self.be_anonymous()
+        contracosta = constants.Counties.CONTRA_COSTA
+        answers = mock.fake.contra_costa_county_form_answers()
+        
+
+        county_fields = forms.ContraCostaForm.fields
+        other_county_fields = forms.SanFranciscoCountyForm.fields | forms.OtherCountyForm.fields
+        county_specific_fields = county_fields - other_county_fields
+        county_specific_field_names = [Field.context_key for Field in county_specific_fields]
+        other_county_fields = other_county_fields - county_fields
+        other_county_field_names = [Field.context_key for Field in other_county_fields]
+
+        result = self.client.fill_form(reverse('intake-apply'), counties=[contracosta])
+        self.assertRedirects(result, reverse('intake-county_application'))
+        result = self.client.get(reverse('intake-county_application'))
+        form = result.context['form']
+        self.assertListEqual(form.counties, [contracosta])
+
+        for field_name in county_specific_field_names:
+            self.assertContains(result, field_name)
+
+        for field_name in other_county_field_names:
+            self.assertNotContains(result, field_name)
+
+        result = self.client.fill_form(
+            reverse('intake-county_application'),
+            **answers)
+        self.assertRedirects(result, reverse('intake-thanks'))
+        lookup = {
+            key: answers[key]
+            for key in [
+                'email', 'first_name', 'last_name', 'phone_number'
+                ]
+            }
+
+        submission = models.FormSubmission.objects.filter(
+            answers__contains=lookup).first()
+        county_slugs = [county.slug for county in submission.counties.all()]
+        self.assertListEqual(county_slugs, [contracosta])
+
+
+
+
+
+
+
