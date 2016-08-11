@@ -8,9 +8,7 @@ from intake.tests import mock
 from user_accounts.tests.mock import create_fake_auth_models
 from user_accounts import models as auth_models
 from intake import models, model_fields, anonymous_names, validators, notifications, constants
-from intake.management.commands import load_initial_data
 from formation.validators import are_valid_choices
-
 
 class TestModels(TestCase):
 
@@ -19,13 +17,7 @@ class TestModels(TestCase):
         super().setUpTestData()
         for key, models in create_fake_auth_models().items():
             setattr(cls, key, models)
-        cls.load_initial_data()
-
-    @classmethod
-    def load_initial_data(cls):
-        command = load_initial_data.Command()
-        command.stdout = Mock()
-        command.handle()
+        mock.load_counties_and_orgs()
 
     def test_submission(self):
         submission = mock.FormSubmissionFactory.create()

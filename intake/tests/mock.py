@@ -8,6 +8,7 @@ from django.core.files import File
 from django.utils.datastructures import MultiValueDict
 
 from intake import models
+from intake.management.commands import load_initial_data
 from unittest.mock import Mock
 Pacific = timezone('US/Pacific')
 
@@ -61,7 +62,10 @@ NEW_RAW_FORM_DATA = {
 
 
 
-
+def load_counties_and_orgs():
+    command = load_initial_data.Command()
+    command.stdout = Mock()
+    command.handle()
 
 
 

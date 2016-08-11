@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
 
 from intake.tests import mock
+from intake.tests.test_models import TestModels
 from intake import models, views
 from formation import fields
 
@@ -17,6 +18,7 @@ class TestViews(AuthIntegrationTestCase):
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
+        mock.load_counties_and_orgs()
         cls.have_four_submissions()
         cls.have_a_fillable_pdf()
 
