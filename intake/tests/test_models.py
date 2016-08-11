@@ -17,7 +17,6 @@ class TestModels(TestCase):
         super().setUpTestData()
         for key, models in create_fake_auth_models().items():
             setattr(cls, key, models)
-        mock.load_counties_and_orgs()
 
     def test_submission(self):
         submission = mock.FormSubmissionFactory.create()

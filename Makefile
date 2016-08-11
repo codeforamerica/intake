@@ -3,7 +3,7 @@ install:
 	pip install -r requirements/dev.txt
 
 serve:
-	USE_DEBUG_TOOLBAR=1 gulp
+	gulp
 
 SCOPE=user_accounts intake formation
 test:

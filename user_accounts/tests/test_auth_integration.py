@@ -144,12 +144,12 @@ class TestUserAccounts(AuthIntegrationTestCase):
         # add an organization
         response = self.client.fill_form(
             reverse('admin:user_accounts_organization_add'),
-            name='East Bay Community Law Center'
+            name='Magical Lawyers Guild'
             )
         self.assertRedirects(response,
             reverse('admin:user_accounts_organization_changelist'))
         result = self.client.get(response.url)
-        self.assertContains(result, 'East Bay Community Law Center')
+        self.assertContains(result, 'Magical Lawyers Guild')
 
     def test_superuser_can_invite_people(self):
         self.be_superuser()

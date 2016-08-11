@@ -62,13 +62,6 @@ NEW_RAW_FORM_DATA = {
 
 
 
-def load_counties_and_orgs():
-    command = load_initial_data.Command()
-    command.stdout = Mock()
-    command.handle()
-
-
-
 def post_data(**kwargs):
     for key, value in kwargs.items():
         if isinstance(value, str):

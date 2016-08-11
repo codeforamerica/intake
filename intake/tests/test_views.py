@@ -18,7 +18,6 @@ class TestViews(AuthIntegrationTestCase):
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
-        mock.load_counties_and_orgs()
         cls.have_four_submissions()
         cls.have_a_fillable_pdf()
 
