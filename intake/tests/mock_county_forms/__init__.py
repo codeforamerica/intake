@@ -73,7 +73,6 @@ class Provider(BaseProvider):
             'monthly_income': str(random.randint(0, 7000)),
             'monthly_expenses': str(random.randint(0, 3000)),
             'income_source': 'a job',
-            'case_number': '',
             'how_did_you_hear': '',
             'additional_information': '',
         }

@@ -100,7 +100,6 @@ class ContraCostaForm(CombinableCountyFormSpec):
         F.MonthlyIncome,
         F.IncomeSource,
         F.MonthlyExpenses,
-        F.CaseNumber,
         F.HowDidYouHear,
         F.AdditionalInformation
     }

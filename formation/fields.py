@@ -17,17 +17,12 @@ class Counties(MultipleChoiceField):
     context_key = "counties"
     choices = COUNTY_CHOICES
     label = _('Which counties were you arrested in?')
+    help_text = _("We will send your Clear My Record application to these counties.")
 
 
 class HowDidYouHear(CharField):
     context_key = "how_did_you_hear"
     label = _("How did you hear about this program or website?")
-
-
-class CaseNumber(CharField):
-    context_key = "case_number"
-    label = _('If you have one, what is your case number?')
-    help_text = _("If you don't have one or don't remember, that's okay.")
 
 
 class AdditionalInformation(CharField):
@@ -250,7 +245,6 @@ INTAKE_FIELDS = [
     IncomeSource,
     MonthlyExpenses,
 
-    CaseNumber,
     HowDidYouHear,
     AdditionalInformation,
 ]
