@@ -22,6 +22,14 @@ class Organization(models.Model):
     def __str__(self):
         return self.name
 
+    def get_referral_emails(self):
+        """Get the emails of users who get notifications for this agency.
+        This is not an efficient query and assumes that profiles and 
+        users have been prefetched in a previous query.
+        """
+        profiles = self.profiles.filter(should_get_notifications=True)
+        return [profile.user.email for profile in profiles]
+
 
 class Invitation(BaseInvitation):
     organization = models.ForeignKey(
@@ -85,7 +93,8 @@ class UserProfile(models.Model):
         related_name='profile')
     organization = models.ForeignKey(
         'Organization',
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
+        related_name='profiles'
         )
     should_get_notifications = models.BooleanField(default=False)
 

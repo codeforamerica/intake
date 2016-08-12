@@ -66,22 +66,6 @@ class FormSubmission(models.Model):
         return submissions, logs
 
     @classmethod
-    def refer_unopened_apps(cls):
-        users = User.objects.filter(profile__should_get_notifications=True)
-        emails = [user.email for user in users]
-        submissions = cls.get_unopened_apps()
-        submission_ids=[s.id for s in submissions]
-        if submissions:
-            count = len(submission_ids)
-            notifications.front_email_daily_app_bundle.send(
-                to=emails,
-                count=count,
-                submission_ids=submission_ids)
-            ApplicationLogEntry.log_referred(submission_ids, user=None)
-        notifications.slack_app_bundle_sent.send(submissions=submissions, emails=emails)
-        return notifications.slack_app_bundle_sent.render(submissions=submissions, emails=emails)
-
-    @classmethod
     def get_unopened_apps(cls):
         return cls.objects.exclude(
             logs__user__profile__organization__is_receiving_agency=True

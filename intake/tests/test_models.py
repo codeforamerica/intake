@@ -145,50 +145,6 @@ class TestModels(TestCase):
             user=agency_user
             )
 
-    @patch('intake.models.FormSubmission.get_unopened_apps')
-    @patch('intake.models.User.objects.filter')
-    @patch('intake.models.notifications')
-    def test_refer_unopened_apps(self, notifications, get_notified_users, get_unopened_apps):
-
-        emails = [u.email for u in self.users if u.profile.should_get_notifications]
-        get_notified_users.return_value = [Mock(email=email) for email in emails]
-
-        # case: some unopened apps
-        submissions = [
-            mock.FormSubmissionFactory.build(
-                id=i+1, anonymous_name='App')
-            for i in range(3)]
-        get_unopened_apps.return_value = submissions
-        output = models.FormSubmission.refer_unopened_apps()
-
-        notifications.front_email_daily_app_bundle.send.assert_called_once_with(
-            to=emails,
-            count=3,
-            submission_ids=[1,2,3]
-            )
-        notifications.slack_app_bundle_sent.send.assert_called_once_with(
-            emails=emails, submissions=get_unopened_apps.return_value)
-        logs = models.ApplicationLogEntry.objects.filter(
-            event_type=models.ApplicationLogEntry.REFERRED, submission_id__in=[1,2,3]).all()
-        self.assertEqual(len(logs), 3)
-        for log in logs:
-            self.assertIsNone(log.user)
-        self.assertEqual(output, notifications.slack_app_bundle_sent.render.return_value)
-
-        # case: no unopened apps
-        get_unopened_apps.return_value = []
-        logs.delete()
-        notifications.reset_mock()
-        output = models.FormSubmission.refer_unopened_apps()
-
-        notifications.front_email_daily_app_bundle.send.assert_not_called()
-        logs = models.ApplicationLogEntry.objects.filter(
-            event_type=models.ApplicationLogEntry.REFERRED, submission_id__in=[1,2,3]).all()
-        self.assertEqual(len(logs), 0)
-        notifications.slack_app_bundle_sent.send.assert_called_once_with(
-            emails=emails, submissions=get_unopened_apps.return_value)
-        self.assertEqual(output, notifications.slack_app_bundle_sent.render.return_value)
-
     def test_agency_event_logs(self):
         instance = Mock()
         agency = Mock(is_receiving_agency=True)

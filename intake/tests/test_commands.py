@@ -8,11 +8,11 @@ from intake import models
 
 class TestCommands(TestCase):
 
-    @patch('intake.management.commands.send_unopened_apps_notification.models')
-    def test_send_unopened_apps_notification(self, models):
+    @patch('intake.management.commands.send_unopened_apps_notification.submission_bundler')
+    def test_send_unopened_apps_notification(self, submission_bundler):
         command = Mock()
         commands.send_unopened_apps_notification.Command.handle(command)
-        models.FormSubmission.refer_unopened_apps.assert_called_once_with()
+        submission_bundler.bundle_and_notify.assert_called_once_with()
         command.style.SUCCESS.assert_called_once_with("Successfully referred any unopened apps")
 
 
