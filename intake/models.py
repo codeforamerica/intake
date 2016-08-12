@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 
 from intake import pdfparser, anonymous_names, notifications, model_fields
-from intake.constants import CONTACT_METHOD_CHOICES, CONTACT_PREFERENCE_CHECKS, STAFF_NAME_CHOICES
+from intake.constants import CONTACT_METHOD_CHOICES, CONTACT_PREFERENCE_CHECKS, STAFF_NAME_CHOICES, Counties
 
 
 
@@ -27,6 +27,15 @@ def get_parser():
 class County(models.Model):
     slug = models.SlugField()
     description = models.TextField()
+
+    def get_receiving_agency(self, submission=None):
+        """Returns the appropriate receiving agency
+        for this county. Currently there is only one per county,
+        but in the future this can be used to make eligibility
+        determinations
+        """
+        return self.organizations.filter(is_receiving_agency=True).first()
+
     def __str__(self):
         return str(self.description)
 
