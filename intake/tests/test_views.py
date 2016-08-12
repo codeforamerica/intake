@@ -1,6 +1,7 @@
 from unittest import skipIf
 from unittest.mock import patch, Mock
 import inspect
+import random
 from django.test import TestCase, override_settings
 from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase
 from django.core.urlresolvers import reverse
@@ -30,6 +31,16 @@ class TestViews(AuthIntegrationTestCase):
     def have_a_fillable_pdf(cls):
         cls.fillable = mock.fillable_pdf()
 
+    def setUp(self):
+        self.session = self.client.session
+
+    def set_session_counties(self, counties=None):
+        if not counties:
+            counties = [constants.Counties.SAN_FRANCISCO]
+        self.session['form_in_progress'] = {
+            'counties': counties }
+        self.session.save()
+
     def assert_called_once_with_types(self, mock_obj, *arg_types, **kwarg_types):
         self.assertEqual(mock_obj.call_count, 1)
         arguments, keyword_arguments = mock_obj.call_args
@@ -50,7 +61,7 @@ class TestViews(AuthIntegrationTestCase):
         self.assertIn('Clear My Record', response.content.decode('utf-8'))
 
     def test_apply_view(self):
-        self.be_anonymous()
+        self.set_session_counties()
         response = self.client.get(reverse('intake-county_application'))
         self.assertEqual(response.status_code, 200)
         self.assertIn('Apply to Clear My Record',
@@ -158,9 +169,7 @@ class TestViews(AuthIntegrationTestCase):
 
     def test_apply_with_insufficient_form(self):
         # should return the same page, with the partially filled form
-        self.client.session['form_in_progress'] = {
-            'counties': ['sanfrancisco']
-        }
+        self.set_session_counties()
         result = self.client.fill_form(
             reverse('intake-county_application'),
             first_name="Foooo"
@@ -385,6 +394,52 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
             answers__contains=lookup).first()
         county_slugs = [county.slug for county in submission.counties.all()]
         self.assertListEqual(county_slugs, [contracosta])
+
+    @patch('intake.views.models.FormSubmission.send_confirmation_notifications')
+    @patch('intake.views.notifications.slack_new_submission.send')
+    def test_contra_costa_errors_properly(self, slack, send_confirmation):
+        self.be_anonymous()
+        contracosta = constants.Counties.CONTRA_COSTA
+        answers = mock.fake.contra_costa_county_form_answers()
+        result = self.client.fill_form(reverse('intake-apply'), counties=[contracosta])
+        required_fields = forms.ContraCostaForm.required_fields
+
+        for required_field in required_fields:
+            if hasattr(required_field, 'subfields'):
+                continue
+            field_key = required_field.context_key
+            bad_data = answers.copy()
+            bad_data[field_key] = ''
+            result = self.client.fill_form(
+                reverse('intake-county_application'),
+                **bad_data)
+            self.assertContains(result, required_field.is_required_error_message)
+        result = self.client.fill_form(
+                reverse('intake-county_application'),
+                **answers)
+        self.assertRedirects(result, reverse('intake-thanks'))
+
+    def test_can_go_back_and_reset_counties(self):
+        self.be_anonymous()
+        county_slugs = [slug for slug, text in constants.COUNTY_CHOICES]
+        first_choices = random.sample(county_slugs, 2)
+        second_choices = [random.choice(county_slugs)]
+        result = self.client.fill_form(reverse('intake-apply'), counties=first_choices, follow=True)
+        form = result.context['form']
+        self.assertEqual(form.counties, first_choices)
+        county_setting = self.client.session['form_in_progress']['counties']
+        self.assertEqual(county_setting, first_choices)
+
+        result = self.client.fill_form(reverse('intake-apply'), counties=second_choices, follow=True)
+        form = result.context['form']
+        self.assertEqual(form.counties, second_choices)
+        county_setting = self.client.session['form_in_progress']['counties']
+        self.assertEqual(county_setting, second_choices)
+
+
+
+
+
 
 
 

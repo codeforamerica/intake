@@ -87,12 +87,8 @@ class MultiCountyApplicationView(MultiStepApplicationView):
         return kwargs
 
     def get_form_class(self):
-        default_counties = [
-            constants.Counties.CONTRA_COSTA,
-            constants.Counties.SAN_FRANCISCO,
-            constants.Counties.OTHER]
         session_data = self.get_session_data()
-        counties = session_data.getlist('counties', default_counties)
+        counties = session_data.getlist('counties')
         return county_form_selector.get_combined_form_class(counties=counties)
 
 

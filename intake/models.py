@@ -25,10 +25,8 @@ def get_parser():
 
 
 class County(models.Model):
-
     slug = models.SlugField()
     description = models.TextField()
-
     def __str__(self):
         return str(self.description)
 
