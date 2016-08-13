@@ -1,6 +1,6 @@
 New submission #{{submission_count}}!
 <{{ request.build_absolute_uri(
-		url('intake-filled_pdf',
+		url('intake-app_detail',
 			submission_id=submission.id)
 	) }}|{{ submission.get_anonymous_display() }}>
 {% if submission.get_nice_contact_preferences() -%}

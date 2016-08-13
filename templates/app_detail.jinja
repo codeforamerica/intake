@@ -1,14 +1,23 @@
 {% extends "admin_base.jinja" %}
 
 {% block content %}
-
 <section class="content">
   <div class="container">
     <div class="row">
       <div class="data_display-dataset">
-      {{ form.display()|safe }}
+{{ submission.get_display_form_for_user(request.user).display()|safe }}
       </div> 
     </div>
+    {%- if show_pdf %}
+    <div class="row">
+      <div class="iframe_container">
+        <iframe class="pdf_inset" src="{{
+        url('intake-filled_pdf', submission_id=submission.id)
+        }}" frameborder="0" width="800" height="600">
+        </iframe>
+      </div>
+    </div>
+    {%- endif %}
   </div>
 </section>
 {% endblock content %}

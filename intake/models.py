@@ -125,6 +125,25 @@ class FormSubmission(models.Model):
             in CONTACT_METHOD_CHOICES
             if key in preferences]
 
+    def get_display_form_for_user(self, user):
+        """
+        based on user information, get the correct Form class and return it
+        instantiated with the data for self
+        """
+        DisplayFormClass = user.profile.get_submission_display_form()
+        data = {}
+        for field in DisplayFormClass.fields:
+            key = field.context_key
+            if key in self.answers:
+                data[key] = self.answers[key]
+            elif hasattr(self, key):
+                data[key] = getattr(self, key)
+        display_form = DisplayFormClass(data)
+        # initiate parsing
+        display_form.is_valid()
+        return display_form
+
+
     def get_formatted_address(self):
         address = self.answers.get('address', {})
         if not address:

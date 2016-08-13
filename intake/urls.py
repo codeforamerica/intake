@@ -14,6 +14,10 @@ urlpatterns = [
 
     # protected views
     url(r'^application/(?P<submission_id>[0-9]+)/$', 
+        login_required(views.app_detail),
+        name='intake-app_detail')
+
+    url(r'^application/(?P<submission_id>[0-9]+)/pdf/$', 
         login_required(views.filled_pdf),
         name='intake-filled_pdf'),
     

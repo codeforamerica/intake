@@ -6,6 +6,7 @@ from allauth.account.adapter import get_adapter
 from allauth.account import utils as allauth_account_utils
 from invitations.models import Invitation as BaseInvitation
 from intake import models as intake_models
+from formation.forms import county_form_selector
 from . import exceptions
 
 
@@ -29,6 +30,18 @@ class Organization(models.Model):
         """
         profiles = self.profiles.filter(should_get_notifications=True)
         return [profile.user.email for profile in profiles]
+
+    def has_a_pdf(self):
+        """Checks for any linked intake.models.FillablePDF objects
+        """
+        return self.pdfs.count() > 0
+
+    def get_default_form(self):
+        """Get the basic input form for this organization
+        For the time being, this is purely based on the county
+        """
+        return county_form_selector.get_combined_form_class(counties=[self.county])
+
 
 
 class Invitation(BaseInvitation):
@@ -125,6 +138,18 @@ class UserProfile(models.Model):
             )
         profile.save()
         return profile
+
+    def get_submission_display_form(self):
+        """Returns a form class appropriate for displaying
+        submission data to this user.
+        For now, this is based on the default form for the organization
+        """
+        return self.organization.get_default_form()
+
+    def should_see_pdf(self):
+        """This should be based on whether or not this user's org has a pdf
+        """
+        return self.organzation.has_a_pdf()
 
 
 def get_user_display(user):

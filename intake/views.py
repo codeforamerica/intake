@@ -148,18 +148,38 @@ class PrivacyPolicy(TemplateView):
     template_name = "privacy_policy.jinja"
 
 
-class FilledPDF(View):
+class ApplicationDetail(View):
+    template_name = "app_detail.jinja"
+
+    def get_submission(self, submission_id):
+        return models.FormSubmission.objects.get(id=int(submission_id))
+
+    def mark_viewed(self, request, submissions):
+        if not isinstance(submissions, list):
+            submissions = [submissions]
+        models.FormSubmission.mark_viewed(submissions, request.user)
 
     def get(self, request, submission_id):
-        submission = models.FormSubmission.objects.get(id=int(submission_id))
-        fillable = models.FillablePDF.get_default_instance()
-        pdf = fillable.fill(submission)
-        # wrapper = FileWrapper(file(filename))
-        # response = HttpResponse(wrapper, content_type='text/plain')
-        # response['Content-Disposition'] = 'attachment; filename="%s"' % os.path.basename(filename)
-        # response['Content-Length'] = os.path.getsize(filename)
-        # return response
-        models.FormSubmission.mark_viewed([submission], request.user)
+        submission = self.get_submission(submission_id)
+        context = dict(
+            submission=submission,
+            show_pdf=request.user.profile.should_see_pdf())
+        self.mark_viewed(submission)
+        return render(request, self.template_name, context)
+
+
+class FilledPDF(ApplicationDetail):
+
+    def get_pdf_for_user(self, request, submission_data):
+        organization = request.user.profile.organization
+        fillable = models.FillablePDF.objects.filter(organization=organization).first()
+        if isinstance(submission_data, list):
+            return fillable.fill_many(submission_data)
+        return fillable.fill(submission)
+
+    def get(self, request, submission_id):
+        submission = self.get_submission(submission_id)
+        pdf = self.get_pdf_for_user(request, submission)
         return HttpResponse(pdf,
             content_type="application/pdf")
 
@@ -189,7 +209,6 @@ class MultiSubmissionMixin:
     """A mixin for pulling multiple submission ids
     out of request query params.
     """
-
     def get_ids_from_params(self, request):
         id_set = request.GET.get('ids')
         return [int(i) for i in id_set.split(',')]
@@ -201,10 +220,10 @@ class MultiSubmissionMixin:
 
 
 
-class ApplicationBundle(View, MultiSubmissionMixin):
+class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
     def get(self, request):
         submissions = self.get_submissions_from_params(request)
-        models.FormSubmission.mark_viewed(submissions, request.user)
+        self.mark_viewed(request, submissions)
         return render(
             request,
             "app_bundle.jinja", {
@@ -214,14 +233,11 @@ class ApplicationBundle(View, MultiSubmissionMixin):
              })
 
 
-class FilledPDFBundle(View, MultiSubmissionMixin):
+class FilledPDFBundle(FilledPDF, MultiSubmissionMixin):
     def get(self, request):
         submissions = self.get_submissions_from_params(request)
-        organization = request.user.profile.organization
-        fillable = models.FillablePDF.objects.filter(organization=organization).first()
-        pdf = fillable.fill_many(submissions)
-        return HttpResponse(pdf,
-            content_type="application/pdf")
+        pdf = self.get_pdf_for_user(request, submissions)
+        return HttpResponse(pdf, content_type="application/pdf")
 
 
 class Delete(View):
@@ -284,6 +300,7 @@ filled_pdf = FilledPDF.as_view()
 pdf_bundle = FilledPDFBundle.as_view()
 app_index = ApplicationIndex.as_view()
 app_bundle = ApplicationBundle.as_view()
+app_detail = ApplicationDetail.as_view()
 mark_processed = MarkProcessed.as_view()
 delete_page = Delete.as_view()
 
