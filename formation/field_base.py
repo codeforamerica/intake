@@ -21,6 +21,7 @@ class Field(base.BindParseValidate):
     is_recommended_error_message = _("Leaving this field blank might cause problems.")
     empty_value = base.UNSET
     template_name = "formation/text_input.jinja"
+    display_template_name = "formation/default_input_display.jinja"
 
     def __init__(self, *args, form=None, required=True, recommended=False,
         optional=False, is_subfield=False, label=None, **kwargs):
@@ -124,6 +125,13 @@ class Field(base.BindParseValidate):
         context['field'] = self
         return context
 
+    def get_display_label(self):
+        if hasattr(self, 'display_label'):
+            return self.display_label
+        return self.context_key.capitalize().replace('_', ' ')
+
+    def get_display_value(self):
+        return self.get_current_value()
 
 
 

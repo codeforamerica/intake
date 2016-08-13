@@ -1,0 +1,6 @@
+<div class="data_display {% if field.is_subfield %}sub{% endif %}datum {{ field.get_html_class_name() }}">
+  <div class="data_display-label">{{ field.get_display_label() }}</div>
+  <div class="data_display-value">
+    <pre>{{ field.get_display_value() }}</pre>
+  </div>
+</div>

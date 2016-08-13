@@ -3,6 +3,8 @@ from formation.base import UNSET
 from formation import exceptions, validators
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import force_text
+from django.utils.html import conditional_escape
+from project.jinja2 import oxford_comma
 
 YES = 'yes'
 NO = 'no'
@@ -24,7 +26,7 @@ class CharField(Field):
         safety check. Strip the input based on `.should_strip_input` 
         """
         self.assert_parse_received_correct_type(raw_value, str)
-        raw_value = force_text(raw_value)
+        raw_value = conditional_escape(raw_value)
         if self.should_strip_input:
             return raw_value.strip()
         return raw_value
@@ -52,6 +54,13 @@ class ChoiceField(CharField):
             raise exceptions.NoChoicesGivenError(str(
                 "This field requires a `choices` attribute."
                 ))
+        self.choice_display_dict = {
+            key: display
+            for key, display in self.choices
+        }
+
+    def get_display_for_choice(self, value):
+        return self.choice_display_dict[value]
         
 
 class MultipleChoiceField(ChoiceField):
@@ -82,9 +91,18 @@ class MultipleChoiceField(ChoiceField):
                 values.append(value)
         return values
 
+    def get_display_value(self):
+        return oxford_comma([
+            self.get_display_for_choice(choice)
+            for choice in self.get_current_value()
+            ])
+
 
 class YesNoField(ChoiceField):
     choices = YES_NO_CHOICES
+
+    def get_display_value(self):
+        return self.get_current_value().capitalize()
 
 
 class MultiValueField(Field):

@@ -7,7 +7,7 @@ from formation.field_types import (
      FormNote
      )
 from intake.constants import COUNTY_CHOICES, CONTACT_PREFERENCE_CHOICES
-
+from project.jinja2 import namify
 
 ###
 ### Meta fields about the application
@@ -18,33 +18,39 @@ class Counties(MultipleChoiceField):
     choices = COUNTY_CHOICES
     label = _('Which counties were you arrested in?')
     help_text = _("We will send your Clear My Record application to these counties.")
+    display_label = "Wants help with record in"
 
 
 class HowDidYouHear(CharField):
     context_key = "how_did_you_hear"
     label = _("How did you hear about this program or website?")
+    display_label = "Heard about this from"
 
 
 class AdditionalInformation(CharField):
     context_key = "additional_information"
-    label = _("Is there anything else you want to say?") 
+    label = _("Is there anything else you want to say?")
 
 
 ###
 ### Identification Questions
 ###
 
-class FirstName(CharField):
+class NameField(CharField):
+    def display_value(self):
+        return namify(self.get_current_value())
+
+class FirstName(NameField):
     context_key = "first_name"
     label = _('What is your first name?')
 
 
-class MiddleName(CharField):
+class MiddleName(NameField):
     context_key = "middle_name"
     label = _('What is your middle name?')
 
 
-class LastName(CharField):
+class LastName(NameField):
     context_key = "last_name"
     label = _('What is your last name?')
 
@@ -73,6 +79,10 @@ class DateOfBirthField(MultiValueField):
         Day,
         Year
     ]
+    display_label = "Date of birth"
+
+    def get_display_value(self):
+        return "{month}/{day}/{year}".format(**self.get_current_value())
 
 
 
@@ -82,6 +92,7 @@ class SocialSecurityNumberField(CharField):
     help_text = help_text=_("The public defender's office will use this to get your San Francisco RAP sheet and find any convictions that can be reduced or dismissed.")
     is_required_error_message = _("The public defender may not be able to check your RAP sheet without a social security number.")
     is_recommended_error_message = is_required_error_message
+    display_label = "SSN"
 
 
 ###
@@ -128,7 +139,7 @@ class AddressField(MultiValueField):
     context_key = "address"
     label = _("What is your mailing address?")
     help_text = _("")
-    template = "formation/multivalue_address.jinja"
+    template_name = "formation/multivalue_address.jinja"
     is_required_error_message = _("The public defender needs a mailing address to send you a letter with the next steps.")
     is_recommended_error_message = is_required_error_message
     subfields = [
@@ -137,7 +148,10 @@ class AddressField(MultiValueField):
         State,
         Zip
     ]
+    display_template_name = "formation/address_display.jinja"
 
+    def get_display_value(self):
+        return "{street}\n{city}, {state}\n{zip}".format(**self.get_current_value())
 
 
 ###
@@ -148,40 +162,48 @@ class USCitizen(YesNoField):
     context_key = "us_citizen"
     label = _("Are you a U.S. citizen?")
     help_text = _("The public defender handles non-citizen cases differently and has staff who can help with citizenship issues.")
+    display_label = "Is a citizen"
 
 
 class BeingCharged(YesNoField):
     context_key = "being_charged"
     label = _("Are you currently being charged with a crime?")
+    display_label = "Is currently being charged"
 
 
 class ServingSentence(YesNoField):
     context_key = "serving_sentence"
     label = _("Are you currently serving a sentence?")
+    display_label = "Is serving a sentence"
 
 
 class OnProbationParole(YesNoField):
     context_key = "on_probation_parole"
     label = _("Are you on probation or parole?")
+    display_label = "Is on probation or parole"
 
 class WhereProbationParole(CharField):
     context_key = "where_probation_or_parole"
     label = _("Where is your probation or parole?")
+    display_label = "Probation/Parole location"
 
 
 class WhenProbationParole(CharField):
     context_key = "when_probation_or_parole"
     label = _("When does your probation or parole end?")
+    display_label = "Probation/Parole ends"
 
 
 class RAPOutsideSF(YesNoField):
     context_key = "rap_outside_sf"
     label = _("When and where were you arrested or convicted outside of San Francisco?")
+    display_label = "Has RAP outside SF"
 
 
 class WhenWhereOutsideSF(CharField):
     context_key = "when_where_outside_sf"
     label = _("When and where were you arrested or convicted outside of San Francisco?")
+    display_label = "Convictions/arrests outside SF"
 
 
 ###
@@ -197,6 +219,7 @@ class FinancialScreeningNote(FormNote):
 class CurrentlyEmployed(YesNoField):
     context_key = "currently_employed"
     label = _("Are you currently employed?")
+    display_label = "Is employed"
 
 
 class MonthlyIncome(CharField):

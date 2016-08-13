@@ -26,6 +26,8 @@ def url_with_ids(view_name, ids):
 
 def oxford_comma(things):
     things = list(things)
+    if not things:
+        return ""
     if len(things) == 1:
         return str(things[0])
     elif len(things) == 2:

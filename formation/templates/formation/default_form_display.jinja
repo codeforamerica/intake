@@ -1,0 +1,3 @@
+  {%- for field in form.get_usable_fields() %}
+{{ field.display()|safe }}
+  {%- endfor %}

@@ -32,9 +32,6 @@ class TestForm(PatchTranslationTestCase):
 
     def test_application_form_with_mock_answers(self):
         fake_answers = mock.form_answers()
-        form_class = county_form_selector.get_combined_form_class(
-            counties=[Counties.SAN_FRANCISCO]
-            )
         form = self.get_sf_form(fake_answers)
         self.assertTrue(form.is_valid())
 
@@ -148,3 +145,10 @@ class TestForm(PatchTranslationTestCase):
         self.assertFalse('phone_number' in form.errors)
         self.assertFalse('email' in form.errors)
         self.assertFalse('address' in form.errors)
+
+    @django_only
+    def test_form_display(self):
+        fake_answers = mock.FILLED_SF_DATA
+        form = self.get_sf_form(fake_answers)
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.display(), mock.rendered.FORM_DISPLAY)

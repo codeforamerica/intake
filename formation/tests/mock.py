@@ -58,6 +58,34 @@ NEW_RAW_FORM_DATA = {
 }
 
 
+FILLED_SF_DATA = MultiValueDict({
+ 'address.city': ['New Anwarville'],
+ 'address.state': ['AZ'],
+ 'address.street': ['973 Migdalia Plain'],
+ 'address.zip': ['62145'],
+ 'being_charged': ['no'],
+ 'contact_preferences': ['prefers_sms'],
+ 'currently_employed': ['yes'],
+ 'dob.day': ['19'],
+ 'dob.month': ['3'],
+ 'dob.year': ['1999'],
+ 'email': ['anson16@gmail.com'],
+ 'first_name': ['Wess'],
+ 'how_did_you_hear': [''],
+ 'last_name': ['Kutch'],
+ 'middle_name': ['Gussie'],
+ 'monthly_expenses': ['803'],
+ 'monthly_income': ['6471'],
+ 'on_probation_parole': ['no'],
+ 'phone_number': ['671-928-8799'],
+ 'rap_outside_sf': ['no'],
+ 'serving_sentence': ['no'],
+ 'ssn': ['214259752'],
+ 'us_citizen': ['yes'],
+ 'when_probation_or_parole': [''],
+ 'when_where_outside_sf': [''],
+ 'where_probation_or_parole': ['']})
+
 def post_data(**kwargs):
     for key, value in kwargs.items():
         if isinstance(value, str):

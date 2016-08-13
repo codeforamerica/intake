@@ -1,0 +1,14 @@
+{% extends "admin_base.jinja" %}
+
+{% block content %}
+
+<section class="content">
+  <div class="container">
+    <div class="row">
+      <div class="data_display-dataset">
+      {{ form.display()|safe }}
+      </div> 
+    </div>
+  </div>
+</section>
+{% endblock content %}

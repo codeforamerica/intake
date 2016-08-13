@@ -5,6 +5,7 @@ class Form(base.BindParseValidate):
 
     context_key = '__all__'
     template_name = "formation/generic_form.jinja"
+    display_template_name = "formation/default_form_display.jinja"
     validators = []
     field_attributes = [
         'recommended_fields',
