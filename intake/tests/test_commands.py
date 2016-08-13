@@ -105,14 +105,11 @@ Successfully imported 5 event logs from `fake_db_name` on `dbhost`'''
         self.assertEqual(importer.report(), expected_report)
 
     def test_load_initial_data(self):
-        mock_stdout = Mock()
         existing_counties = models.County.objects.all()
-        self.assertEqual(len(existing_counties), 3)
+        self.assertEqual(len(existing_counties), 2)
         from intake.management.commands import load_initial_data
         cmd = load_initial_data.Command()
-        cmd.stdout = mock_stdout
+        cmd.stdout = Mock()
         cmd.handle()
         existing_counties = models.County.objects.all()
-        self.assertEqual(len(existing_counties), 3)
-        num_calls = len(mock_stdout.write.call_args_list)
-        self.assertTrue(num_calls > 3 + 2)
+        self.assertEqual(len(existing_counties), 2)

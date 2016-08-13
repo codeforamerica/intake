@@ -13,7 +13,7 @@ class CombinableCountyFormSpec(CombinableFormSpec):
 
 
 class OtherCountyForm(CombinableCountyFormSpec):
-    """This is used by Code for America to send applicants
+    """This could be used by Code for America to send applicants
     information on clean slate services in other counties or states.
     """
     county = Counties.OTHER

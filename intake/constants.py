@@ -29,7 +29,7 @@ class Counties:
     OTHER = 'other'
 
 COUNTY_CHOICES = (
-    (Counties.SAN_FRANCISCO, _('San Francisco County or City')),
+    (Counties.SAN_FRANCISCO, _('San Francisco')),
     (Counties.CONTRA_COSTA,  _('Conta Costa County (around Richmond, Walnut Creek, Antioch, or Brentwood)')),
-    (Counties.OTHER, _('Some other county'))
+    # (Counties.OTHER, _('Some other county'))
     )

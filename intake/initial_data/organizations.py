@@ -12,8 +12,8 @@ data = {
     "instances": [
         {
             "name": _("Code for America"), 
-            "county_id": 3, # receives 'other' county applications
-            "is_receiving_agency": True,
+            "county_id": None,
+            "is_receiving_agency": False,
         },
         {
             "name": _("San Francisco Public Defender"),

@@ -161,18 +161,5 @@ class TestWorkflows(base.ScreenSequenceTestCase):
             ]
         self.run_sequence('Apply to Contra Costa', sequence, size=base.COMMON_MOBILE)
 
-    def test_apply_to_other_county(self):
-        answers = intake_mock.fake.other_county_answers()
-        sequence = [
-            S.get('went to splash page', '/'),
-            S.click_on('clicked apply now', 'Apply now'),
-            S.fill_form('picked other', counties=['other']),
-            S.fill_form('submitted form', **answers),
-            ]
-        self.run_sequence('Apply to other county', sequence, size=base.COMMON_MOBILE)
-
-
-
-
 
 

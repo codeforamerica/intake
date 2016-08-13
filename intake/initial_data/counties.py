@@ -16,11 +16,6 @@ data = {
             "pk": 2,
             "slug": Counties.CONTRA_COSTA, # contracosta
             "description": COUNTY_CHOICES[1][1]
-        },
-        {
-            "pk": 3,
-            "slug": Counties.OTHER, # other
-            "description": COUNTY_CHOICES[2][1]
         }
     ]
 }
