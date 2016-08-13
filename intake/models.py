@@ -227,6 +227,11 @@ class ApplicationLogEntry(models.Model):
     user = models.ForeignKey(User,
         on_delete=models.SET_NULL, null=True,
         related_name='application_logs')
+    organization = models.ForeignKey(
+        'user_accounts.Organization',
+        on_delete=models.SET_NULL, null=True,
+        related_name='logs'
+        )
     submission = models.ForeignKey(FormSubmission,
         on_delete=models.SET_NULL, null=True,
         related_name='logs')
@@ -237,14 +242,17 @@ class ApplicationLogEntry(models.Model):
         ordering = ['-time']
 
     @classmethod
-    def log_multiple(cls, event_type, submission_ids, user, time=None):
+    def log_multiple(cls, event_type, submission_ids, user, time=None, organization=None):
         if not time:
             time = timezone_utils.now()
+        if event_type in [cls.PROCESSED, cls.OPENED, cls.DELETED] and not organization:
+            organization = user.profile.organization
         logs = []
         for submission_id in submission_ids:
             log = cls(
                 time=time,
                 user=user,
+                organization=organization,
                 submission_id=submission_id,
                 event_type=event_type
                 )
@@ -254,11 +262,13 @@ class ApplicationLogEntry(models.Model):
 
     @classmethod
     def log_opened(cls, submission_ids, user, time=None):
+        """When a user opens submissions, they represent their organization
+        """
         return cls.log_multiple(cls.OPENED, submission_ids, user, time)
 
     @classmethod
-    def log_referred(cls, submission_ids, user, time=None):
-        return cls.log_multiple(cls.REFERRED, submission_ids, user, time)
+    def log_referred(cls, submission_ids, user, time=None, organization=None):
+        return cls.log_multiple(cls.REFERRED, submission_ids, user, time, organization)
 
     @classmethod
     def log_confirmation_sent(cls, submission_id, user, time, contact_info=None, message_sent=''):
@@ -284,6 +294,12 @@ class FillablePDF(models.Model):
     name = models.CharField(max_length=50)
     pdf = models.FileField(upload_to='pdfs/')
     translator = models.TextField()
+    organization = models.ForeignKey(
+        'user_accounts.Organization',
+        on_delete=models.CASCADE,
+        related_name='pdfs',
+        null=True
+        )
 
     @classmethod
     def get_default_instance(cls):

@@ -151,8 +151,6 @@ class PrivacyPolicy(TemplateView):
 class FilledPDF(View):
 
     def get(self, request, submission_id):
-
-
         submission = models.FormSubmission.objects.get(id=int(submission_id))
         fillable = models.FillablePDF.get_default_instance()
         pdf = fillable.fill(submission)
@@ -188,6 +186,9 @@ class Stats(TemplateView):
 
 
 class MultiSubmissionMixin:
+    """A mixin for pulling multiple submission ids
+    out of request query params.
+    """
 
     def get_ids_from_params(self, request):
         id_set = request.GET.get('ids')
@@ -233,6 +234,7 @@ class Delete(View):
         models.ApplicationLogEntry.objects.create(
             user=request.user,
             submission_id=submission_id,
+            organization=request.user.profile.organization,
             event_type=models.ApplicationLogEntry.DELETED
             )
         submission.delete()
@@ -244,12 +246,18 @@ class Delete(View):
 
 class MarkSubmissionStepView(View, MultiSubmissionMixin):
 
+    def get_organization(self, user):
+        """Get the organization for logging this step.
+        """
+        return user.profile.organization
+
     def get(self, request):
         submission_ids = self.get_ids_from_params(request)
         next_param = request.GET.get('next',
             reverse_lazy('intake-app_index'))
         models.ApplicationLogEntry.log_multiple(
-            self.process_step, submission_ids, request.user)
+            self.process_step, submission_ids, request.user,
+            organization=self.get_organization(request.user))
         submissions = models.FormSubmission.objects.filter(pk__in=submission_ids)
         if hasattr(self, 'notification_function'):
             self.notification_function(

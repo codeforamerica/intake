@@ -38,7 +38,7 @@ class OrganizationBundle:
             submission_ids=ids
             )
         intake_models.ApplicationLogEntry.log_referred(
-            ids, user=None)
+            ids, user=None, organization=self.organization)
         notifications.slack_app_bundle_sent.send(
             submissions=self.submissions,
             emails=self.notification_emails)
