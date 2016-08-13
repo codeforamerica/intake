@@ -159,13 +159,15 @@ class FillablePDFFactory(factory.DjangoModelFactory):
         model = models.FillablePDF
 
 
-def fillable_pdf():
-    return FillablePDFFactory.create(
+def fillable_pdf(**kwargs):
+    attributes = dict(
             name = "Sample PDF",
             pdf = File(open(
                 'tests/sample_pdfs/sample_form.pdf', 'rb')),
-            translator = "tests.sample_translator.translate"
+            translator = "tests.sample_translator.translate",
         )
+    attributes.update(kwargs)
+    return FillablePDFFactory.create(**attributes)
 
 def useable_pdf():
     example_pdf = File(open(os.environ.get('TEST_PDF_PATH'), 'rb'))

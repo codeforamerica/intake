@@ -70,23 +70,23 @@ class AuthIntegrationTestCase(TestCase):
                 password=mock.fake_password,
                 name=mock.fake.name())
             cls.users.append(user)
+        cls.non_agency_user = cls.users[0]
+        cls.agency_user = cls.users[2]
 
     def be_superuser(self):
         self.client.login(**self.example_superuser)
 
     def be_agency_user(self):
-        user = self.users[2]
         self.client.login(
-            email=user.email,
+            email=self.agency_user.email,
             password=mock.fake_password)
-        return user
+        return self.agency_user
 
     def be_non_agency_user(self):
-        user = self.users[0]
         self.client.login(
-            email=user.email,
+            email=self.non_agency_user.email,
             password=mock.fake_password)
-        return user
+        return self.non_agency_user
 
     def be_anonymous(self):
         self.client.logout()

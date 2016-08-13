@@ -194,28 +194,31 @@ class MultiSubmissionMixin:
         id_set = request.GET.get('ids')
         return [int(i) for i in id_set.split(',')]
 
+    def get_submissions_from_params(self, request):
+        ids = self.get_ids_from_params(request)
+        return list(models.FormSubmission.objects.filter(
+            pk__in=ids))
+
+
 
 class ApplicationBundle(View, MultiSubmissionMixin):
     def get(self, request):
-        submission_ids = self.get_ids_from_params(request)
-        submissions = list(models.FormSubmission.objects.filter(
-            pk__in=submission_ids))
+        submissions = self.get_submissions_from_params(request)
         models.FormSubmission.mark_viewed(submissions, request.user)
         return render(
             request,
             "app_bundle.jinja", {
                 'submissions': submissions,
                 'count': len(submissions),
-                'app_ids': submission_ids
+                'app_ids': [sub.id for sub in submissions]
              })
 
 
 class FilledPDFBundle(View, MultiSubmissionMixin):
     def get(self, request):
-        submission_ids = self.get_ids_from_params(request)
-        submissions = models.FormSubmission.objects.filter(
-            pk__in=submission_ids)
-        fillable = models.FillablePDF.get_default_instance()
+        submissions = self.get_submissions_from_params(request)
+        organization = request.user.profile.organization
+        fillable = models.FillablePDF.objects.filter(organization=organization).first()
         pdf = fillable.fill_many(submissions)
         return HttpResponse(pdf,
             content_type="application/pdf")
@@ -252,16 +255,16 @@ class MarkSubmissionStepView(View, MultiSubmissionMixin):
         return user.profile.organization
 
     def get(self, request):
-        submission_ids = self.get_ids_from_params(request)
+        submissions = self.get_submissions_from_params(request)
+        submission_ids = [sub.id for sub in submissions]
         next_param = request.GET.get('next',
             reverse_lazy('intake-app_index'))
         models.ApplicationLogEntry.log_multiple(
             self.process_step, submission_ids, request.user,
             organization=self.get_organization(request.user))
-        submissions = models.FormSubmission.objects.filter(pk__in=submission_ids)
         if hasattr(self, 'notification_function'):
             self.notification_function(
-                submissions=list(submissions), user=request.user)
+                submissions=submissions, user=request.user)
         return redirect(next_param)
 
 

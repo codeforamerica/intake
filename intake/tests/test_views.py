@@ -29,7 +29,7 @@ class TestViews(AuthIntegrationTestCase):
 
     @classmethod
     def have_a_fillable_pdf(cls):
-        cls.fillable = mock.fillable_pdf()
+        cls.fillable = mock.fillable_pdf(organization=cls.non_agency_user.profile.organization)
 
     def setUp(self):
         self.session = self.client.session
@@ -235,6 +235,7 @@ class TestViews(AuthIntegrationTestCase):
     @patch('intake.models.notifications.slack_submissions_viewed.send')
     def test_authenticated_user_can_see_app_bundle(self, slack):
         self.be_non_agency_user()
+        # we need a pdf for this users organization
         ids = [s.id for s in self.submissions]
         url = url_with_ids('intake-app_bundle', ids)
         bundle = self.client.get(url)
