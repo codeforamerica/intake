@@ -138,13 +138,9 @@ class FormSubmissionFactory(factory.DjangoModelFactory):
         if not create:
             return
         if extracted:
-            try:
-                self.counties.add(*[
-                    county.id for county in extracted
-                    ])
-            except IntegrityError as err:
-                import ipdb; ipdb.set_trace()
-                raise err
+            self.counties.add(*[
+                county.id for county in extracted
+                ])
 
     @classmethod
     def create(cls, *args, **kwargs):
@@ -169,12 +165,13 @@ def fillable_pdf(**kwargs):
     attributes.update(kwargs)
     return FillablePDFFactory.create(**attributes)
 
-def useable_pdf():
+def useable_pdf(org):
     example_pdf = File(open(os.environ.get('TEST_PDF_PATH'), 'rb'))
     return FillablePDFFactory.create(
             name="Clean Slate",
             pdf=example_pdf,
-            translator = "intake.translators.clean_slate.translator"
+            translator = "intake.translators.clean_slate.translator",
+            organization=org,
         )
 
 

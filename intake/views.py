@@ -213,10 +213,16 @@ class Stats(TemplateView):
     template_name = "stats.jinja"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        county_totals = []
+        counties = models.County.objects.all()
+        for county in counties:
+            county_totals.append(dict(
+                count=models.FormSubmission.objects.filter(counties=county).count(),
+                county_name=county.name))
         context['stats'] = {
-            'received': models.FormSubmission.objects.count(),
-            'opened': models.FormSubmission.get_opened_apps().count()
-        }
+            'total_all_counties': models.FormSubmission.objects.count(),
+            'county_totals': county_totals
+        }   
         return context
 
 
@@ -242,6 +248,7 @@ class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
             return self.not_allowed(request)
         context = dict(
             submissions=submissions,
+            count=len(submissions),
             show_pdf=request.user.profile.should_see_pdf(),
             app_ids=[sub.id for sub in submissions]
             )

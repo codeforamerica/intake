@@ -8,7 +8,7 @@ from django.core import mail
 from django.core.urlresolvers import reverse
 
 from project.jinja2 import url_with_ids
-from intake import models
+from intake import models, constants
 from tests import base
 from tests import sequence_steps as S
 from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase as AuthCase
@@ -25,15 +25,24 @@ class TestWorkflows(base.ScreenSequenceTestCase):
 
     def setUp(self):
         super().setUp()
-        for key, models in auth_mock.create_fake_auth_models().items():
-            setattr(self, key, models)
         intake_mock.load_counties_and_orgs()
-        self.submissions = intake_mock.FormSubmissionFactory.create_batch(10)
-        self.pdf = intake_mock.useable_pdf()
+        for key, instances in auth_mock.create_fake_auth_models().items():
+            setattr(self, key, instances)
+        counties = models.County.objects.all()
+        for county in counties:
+            if county.slug == constants.Counties.SAN_FRANCISCO:
+                self.sfcounty = county
+            elif county.slug == constants.Counties.CONTRA_COSTA:
+                self.cccounty = county
+        self.sf_submissions = list(intake_mock.FormSubmissionFactory.create_batch(2, counties=[self.sfcounty]))
+        self.cc_submissions = list(intake_mock.FormSubmissionFactory.create_batch(2, counties=[self.cccounty]))
+        self.combo_submissions = list(intake_mock.FormSubmissionFactory.create_batch(2, counties=[self.sfcounty, self.cccounty]))
+        self.submissions = self.sf_submissions + self.cc_submissions + self.combo_submissions
+        self.pdf = intake_mock.useable_pdf(self.sfpubdef)
         self.superuser = auth_mock.fake_superuser()
         accounts_models.UserProfile.objects.create(
             user=self.superuser, 
-            organization=self.organizations[-1])
+            organization=self.cfa)
 
     def get_link_from_email(self):
         self.browser.delete_all_cookies()
@@ -90,8 +99,7 @@ class TestWorkflows(base.ScreenSequenceTestCase):
             "Applying without enough information", sequence, size=base.COMMON_MOBILE)
 
     def test_login_and_password_reset_workflow(self):
-        user = self.users[0]
-        found_user = auth_models.User.objects.filter(email=user.email).first()
+        user = self.ccpubdef_users[0]
         self.run_sequence(
             "Fail login and reset password",
             [
@@ -106,9 +114,8 @@ class TestWorkflows(base.ScreenSequenceTestCase):
 
     def test_invite_user_workflow(self):
         superuser = self.superuser
-        organization = self.organizations[0]
+        organization = self.sfpubdef
         new_user = auth_mock.fake_user_data()
-
         self.run_sequence(
             "Invitation and signup",
             [
@@ -123,26 +130,52 @@ class TestWorkflows(base.ScreenSequenceTestCase):
                 S.get('went to applications', reverse('intake-app_index')),
             ], base.SMALL_DESKTOP )
 
-    def test_look_at_single_pdf(self):
-        user = self.users[0]
-        submission = random.choice(self.submissions)
+    def test_look_at_app_detail_with_pdf(self):
+        user = self.sfpubdef_users[0]
+        submission = random.choice(self.sf_submissions)
         self.run_sequence(
-            "Look at a single pdf",
+            "Look at app with pdf",
             [
-                S.get('tried to go to pdf',
-                    reverse('intake-filled_pdf',
+                S.get('tried to go to app detail',
+                    reverse('intake-app_detail',
                         kwargs={'submission_id': submission.id})),
                 S.fill_form('entered login info',
                     login=user.email, password=fake_password),
                 S.wait('wait for pdf to load', 2)
             ], base.SMALL_DESKTOP)
 
-    def test_look_at_app_bundle(self):
-        user = self.users[0]
-        submissions = random.sample(
-            self.submissions, 3)
+    def test_look_at_app_detail_without_pdf(self):
+        user = self.ccpubdef_users[0]
+        submission = random.choice(self.cc_submissions)
         self.run_sequence(
-            "Look at app bundle",
+            "Look at app with pdf",
+            [
+                S.get('tried to go to app detail',
+                    reverse('intake-app_detail',
+                        kwargs={'submission_id': submission.id})),
+                S.fill_form('entered login info',
+                    login=user.email, password=fake_password),
+                S.wait('wait for pdf to load', 2)
+            ], base.SMALL_DESKTOP)
+
+    def test_look_at_app_bundle_with_pdf(self):
+        user = self.sfpubdef_users[0]
+        submissions = self.sf_submissions
+        self.run_sequence(
+            "Look at app pdf bundle",
+            [
+                S.get('tried to go to app bundle',
+                    url_with_ids('intake-app_bundle', [s.id for s in submissions])),
+                S.fill_form('entered login info',
+                    login=user.email, password=fake_password),
+                S.wait('wait for pdf to load', 4)
+            ], base.SMALL_DESKTOP)
+
+    def test_look_at_app_bundle_without_pdf(self):
+        user = self.ccpubdef_users[0]
+        submissions = self.cc_submissions
+        self.run_sequence(
+            "Look at app pdf bundle",
             [
                 S.get('tried to go to app bundle',
                     url_with_ids('intake-app_bundle', [s.id for s in submissions])),

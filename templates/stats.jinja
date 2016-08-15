@@ -6,6 +6,9 @@ Current Stats for Clear My Record
 {%- block section_class %}stats{% endblock section_class -%}
 {% block column_content %}
 	<h2>Since April 18th, 2016:</h2>
-	<h3>{{ stats.received }} total applications received</h3>
-	<h3>{{ stats.opened }} total applications opened</h3>
+	<h3>{{ stats.total_all_counties }} total applications received</h3>
+  <p class="caveat"><em>(some applications may be for multiple counties)</em></p>
+  {%- for county_total in stats.county_totals %}
+  <h3>{{ county_total.count }} applications for {{ county_total.county_name }} County</h3>
+  {%- endfor %}
 {% endblock column_content %}

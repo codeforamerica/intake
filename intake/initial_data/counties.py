@@ -2,7 +2,7 @@
     `data` is a required variable
 """
 
-from intake.constants import Counties, COUNTY_CHOICES
+from intake.constants import Counties, CountyNames, COUNTY_CHOICES
 
 data = {
     "model": "intake.models.County",
@@ -10,11 +10,13 @@ data = {
         {
             "pk": 1,
             "slug": Counties.SAN_FRANCISCO, # sanfrancisco
+            "name": CountyNames.SAN_FRANCISCO,
             "description": COUNTY_CHOICES[0][1]
         },
         {
             "pk": 2,
             "slug": Counties.CONTRA_COSTA, # contracosta
+            "name": CountyNames.CONTRA_COSTA,
             "description": COUNTY_CHOICES[1][1]
         }
     ]

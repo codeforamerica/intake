@@ -108,18 +108,6 @@ class TestViews(IntakeDataTestCase):
         self.assertContains(response, fields.SocialSecurityNumberField.is_recommended_error_message)
         self.assertContains(response, fields.DateOfBirthField.is_recommended_error_message)
 
-    def test_stats_view(self):
-        submissions = list(models.FormSubmission.objects.all())
-        total = len(submissions)
-        with override_settings(
-                DEFAULT_AGENCY_USER_EMAIL=self.users[0].email):
-            # mark all but the last of them as opened
-            models.ApplicationLogEntry.log_opened(
-                [s.id for s in submissions[:-1]], self.users[0])
-            response = self.client.get(reverse('intake-stats'))
-            self.assertContains(response, str(total))
-            self.assertContains(response, str(total - 1))
-
     @patch('intake.views.models.FormSubmission.send_confirmation_notifications')
     @patch('intake.views.notifications.slack_new_submission.send')
     def test_anonymous_user_can_fill_out_app_and_reach_thanks_page(self, slack, send_confirmation):
@@ -581,7 +569,7 @@ class TestApplicationBundle(IntakeDataTestCase):
 
 
 
-class ApplicationIndexTestCase(IntakeDataTestCase):
+class TestApplicationIndex(IntakeDataTestCase):
 
     def assertContainsSubmissions(self, response, submissions):
         for submission in submissions:
@@ -609,4 +597,18 @@ class ApplicationIndexTestCase(IntakeDataTestCase):
 
 
 
+class TestStats(IntakeDataTestCase):
+
+    def test_that_page_shows_counts_by_county(self):
+        # get numbers
+        all_any = len(self.submissions)
+        all_sf = len(self.sf_submissions) + len(self.combo_submissions)
+        all_cc = len(self.cc_submissions) + len(self.combo_submissions)
+        total = "{} total applications".format(all_any)
+        sf_string = "{} applications for San Francisco County".format(all_sf)
+        cc_string = "{} applications for Contra Costa County".format(all_cc)
+        self.be_anonymous()
+        response = self.client.get(reverse('intake-stats'))
+        for search_term in [total, sf_string, cc_string]:
+            self.assertContains(response, search_term)
 

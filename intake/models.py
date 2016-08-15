@@ -27,6 +27,7 @@ def get_parser():
 
 class County(models.Model):
     slug = models.SlugField()
+    name = models.TextField()
     description = models.TextField()
 
     def get_receiving_agency(self, submission=None):
@@ -38,7 +39,7 @@ class County(models.Model):
         return self.organizations.filter(is_receiving_agency=True).first()
 
     def __str__(self):
-        return str(self.description)
+        return str(self.name)
 
 
 
