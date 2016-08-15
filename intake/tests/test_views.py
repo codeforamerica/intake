@@ -1,5 +1,7 @@
 from unittest import skipIf
 from unittest.mock import patch, Mock
+import cProfile
+from pstats import Stats
 import inspect
 import random
 from django.test import TestCase, override_settings
@@ -41,6 +43,19 @@ class IntakeDataTestCase(AuthIntegrationTestCase):
     def have_a_fillable_pdf(cls):
         cls.fillable = mock.fillable_pdf(organization=cls.sfpubdef)
 
+    def assert_called_once_with_types(self, mock_obj, *arg_types, **kwarg_types):
+        self.assertEqual(mock_obj.call_count, 1)
+        arguments, keyword_arguments = mock_obj.call_args
+        argument_classes = [getattr(
+                arg, '__qualname__', arg.__class__.__qualname__
+                ) for arg in arguments] 
+        self.assertListEqual(argument_classes, list(arg_types))
+        keyword_argument_classes = {}    
+        for keyword, arg in keyword_arguments.items():
+            keyword_argument_classes[keyword] = getattr(
+                arg, '__qualname__', arg.__class__.__qualname__
+                )
+        self.assertDictEqual(keyword_argument_classes, dict(kwarg_types))
 
 
 class TestViews(IntakeDataTestCase):
@@ -55,20 +70,6 @@ class TestViews(IntakeDataTestCase):
         self.session['form_in_progress'] = {
             'counties': counties }
         self.session.save()
-
-    def assert_called_once_with_types(self, mock_obj, *arg_types, **kwarg_types):
-        self.assertEqual(mock_obj.call_count, 1)
-        arguments, keyword_arguments = mock_obj.call_args
-        argument_classes = [getattr(
-                arg, '__qualname__', arg.__class__.__qualname__
-                ) for arg in arguments] 
-        self.assertListEqual(argument_classes, list(arg_types))
-        keyword_argument_classes = {}    
-        for keyword, arg in keyword_arguments.items():
-            keyword_argument_classes[keyword] = getattr(
-                arg, '__qualname__', arg.__class__.__qualname__
-                )
-        self.assertDictEqual(keyword_argument_classes, dict(kwarg_types))
 
     def test_home_view(self):
         response = self.client.get(reverse('intake-home'))
@@ -457,21 +458,32 @@ class TestApplicationDetail(IntakeDataTestCase):
                 kwargs=dict(submission_id=submission.id)))
         return submission, result
 
-    def test_logged_in_user_can_get_submission_display(self):
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_logged_in_user_can_get_submission_display(self, slack):
         user = self.be_ccpubdef_user()
         form_class = self.ccpubdef.get_default_form()
+        form_fields = [
+            'first_name', 'last_name']
         submission, result = self.get_submission()
         self.assertEqual(result.context['submission'], submission)
+        self.assert_called_once_with_types(
+            slack, submissions='list', user='User')
         for field, value in submission.answers.items():
             escaped_value = html_utils.conditional_escape(value)
-            if isinstance(value, str) and hasattr(form_class, field):
+            if isinstance(value, str) and field in form_fields:
                 self.assertContains(result, escaped_value)
 
-    def test_user_with_pdf_redirected_to_pdf(self):
-        self.be_sfpubdef_user() # agency user's agency has a pdf
+    @patch('intake.models.FillablePDF')
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_user_with_pdf_redirected_to_pdf(self, slack, FillablePDF):
+        self.be_sfpubdef_user()
         submission, result = self.get_submission()
         self.assertRedirects(result, reverse('intake-filled_pdf', 
-            kwargs=dict(submission_id=submission.id)))
+            kwargs=dict(submission_id=submission.id)),
+            fetch_redirect_response=False)
+        slack.assert_not_called() # notification should be deferred to pdf view
+        FillablePDF.assert_not_called()
+
 
 
 

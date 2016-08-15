@@ -1,3 +1,6 @@
+import sys
+import cProfile
+from pstats import Stats
 import os
 import time
 from django.core import mail
@@ -161,6 +164,32 @@ class ScreenSequenceTestCase(FunctionalTestCase):
                 height = max(size['height'], int(body.get_attribute('scrollHeight')))
                 self.set_size(dict(width=size['width'], height=height))
             self.screenshot(self.build_filepath(prefix, i, step_name))
+
+
+
+class TimeProfileTestMixin:
+    """A mixin that allows code to be profiled using cProfile
+    """
+    @classmethod
+    def setUpClass(cls):
+        search_term = '--profile'
+        for arg in sys.argv:
+            if search_term in arg:
+                cls.should_profile = True
+
+    def setUp(self):
+        super().setUp()
+        if self.should_profile:
+            self.profile = cProfile.Profile()
+            self.profile.enable()
+
+    def tearDown(self):
+        if self.should_profile:
+            results = Stats(self.profile)
+            results.strip_dirs()
+            results.sort_stats('cumulative')
+            results.print_stats(50)
+        super().tearDown()
 
 
 class DEVICES:
