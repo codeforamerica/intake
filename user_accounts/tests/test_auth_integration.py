@@ -15,6 +15,7 @@ from user_accounts.models import (
 
 from user_accounts.tests import mock, clients
 
+
 class AuthIntegrationTestCase(TestCase):
     """
     A class for integration tests that depend on
@@ -109,6 +110,8 @@ class AuthIntegrationTestCase(TestCase):
             email.body).group('link')
         self.assertTrue(link)
         return link
+
+
 
 
 class TestUserAccounts(AuthIntegrationTestCase):

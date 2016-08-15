@@ -150,9 +150,21 @@ class PrivacyPolicy(TemplateView):
 
 class ApplicationDetail(View):
     template_name = "app_detail.jinja"
+    not_allowed_message = str(
+        "Sorry, you are not allowed to access that client information. "
+        "If you have any questions, please contact us at "
+        "clearmyrecord@codeforamerica.org")
 
-    def get_submission(self, submission_id):
-        return models.FormSubmission.objects.get(id=int(submission_id))
+    def get_permitted_submissions(self, request, submission_ids):
+        submissions = models.FormSubmission.objects.filter(pk__in=submission_ids)
+        if request.user.is_staff:
+            return list(submissions)
+        county = request.user.profile.organization.county
+        return list(submissions.filter(counties=county))
+
+    def not_allowed(self, request):
+        messages.error(request, self.not_allowed_message)
+        return redirect('intake-app_index')
 
     def mark_viewed(self, request, submissions):
         if not isinstance(submissions, list):
@@ -163,7 +175,10 @@ class ApplicationDetail(View):
         if request.user.profile.should_see_pdf():
             return redirect(reverse_lazy('intake-filled_pdf',
                 kwargs=dict(submission_id=submission_id)))
-        submission = self.get_submission(submission_id)
+        submissions = self.get_permitted_submissions(request, [submission_id])
+        if not submissions:
+            return self.not_allowed(request)
+        submission = submissions[0]
         context = dict(submission=submission)
         self.mark_viewed(request, submission)
         return render(request, self.template_name, context)
@@ -179,7 +194,10 @@ class FilledPDF(ApplicationDetail):
         return fillable.fill(submission_data)
 
     def get(self, request, submission_id):
-        submission = self.get_submission(submission_id)
+        submissions = self.get_permitted_submissions(request, [submission_id])
+        if not submissions:
+            return self.not_allowed(request)
+        submission = submissions[0]
         pdf = self.get_pdf_for_user(request, submission)
         self.mark_viewed(request, submission)
         return HttpResponse(pdf,
@@ -217,28 +235,32 @@ class MultiSubmissionMixin:
 
     def get_submissions_from_params(self, request):
         ids = self.get_ids_from_params(request)
-        return list(models.FormSubmission.objects.filter(
-            pk__in=ids))
+        if hasattr(self, 'get_permitted_submissions'):
+            return self.get_permitted_submissions(request, ids)
+        return list(models.FormSubmission.objects.filter(pk__in=ids))
 
 
 
 class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
     def get(self, request):
         submissions = self.get_submissions_from_params(request)
+        if not submissions:
+            return self.not_allowed(request)
+        context = dict(
+            submissions=submissions,
+            show_pdf=request.user.profile.should_see_pdf(),
+            app_ids=[sub.id for sub in submissions]
+            )
         self.mark_viewed(request, submissions)
-        return render(
-            request,
-            "app_bundle.jinja", {
-                'submissions': submissions,
-                'count': len(submissions),
-                'app_ids': [sub.id for sub in submissions]
-             })
+        return render(request, "app_bundle.jinja", context)
 
 
 class FilledPDFBundle(FilledPDF, MultiSubmissionMixin):
     def get(self, request):
         submissions = self.get_submissions_from_params(request)
-        pdf = self.get_pdf_for_user(request, submissions)
+        if not submissions:
+            return self.not_allowed(request)
+        pdf = self.get_pdf_for_user(request, list(submissions))
         return HttpResponse(pdf, content_type="application/pdf")
 
 

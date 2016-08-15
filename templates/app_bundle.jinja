@@ -22,12 +22,18 @@
     </div>
 
     <div class="row">
+      {%- if show_pdf %}
       <div class="iframe_container">
         <iframe class="pdf_inset" src="{{
         url_with_ids('intake-pdf_bundle', app_ids) 
         }}" frameborder="0" width="800" height="600">
         </iframe>
       </div>
+      {%- else %}
+      {%- for submission in submissions %}
+{{ submission.get_display_form_for_user(request.user).display()|safe }}
+      {%- endfor %}
+      {%- endif %}
     </div>
   </div>
 </section>

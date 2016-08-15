@@ -20,6 +20,14 @@ from project.jinja2 import url_with_ids
 
 class IntakeDataTestCase(AuthIntegrationTestCase):
     
+    display_field_checks = [
+        'first_name',
+        'last_name',
+        'phone_number',
+        'email',
+        'monthly_income'
+    ]
+
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
@@ -34,10 +42,10 @@ class IntakeDataTestCase(AuthIntegrationTestCase):
                 cls.sfcounty = county
             elif county.slug == constants.Counties.CONTRA_COSTA:
                 cls.cccounty = county
-        cls.sf_submissions = mock.FormSubmissionFactory.create_batch(2, counties=[cls.sfcounty])
-        cls.cc_submissions = mock.FormSubmissionFactory.create_batch(2, counties=[cls.cccounty])
-        cls.combo_submissions = mock.FormSubmissionFactory.create_batch(2, counties=[cls.sfcounty, cls.cccounty])
-        cls.submissions = cls.sf_submissions + cls.cc_submissions + cls.combo_submissions
+        cls.sf_submissions = list(mock.FormSubmissionFactory.create_batch(2, counties=[cls.sfcounty]))
+        cls.cc_submissions = list(mock.FormSubmissionFactory.create_batch(2, counties=[cls.cccounty]))
+        cls.combo_submissions = list(mock.FormSubmissionFactory.create_batch(2, counties=[cls.sfcounty, cls.cccounty]))
+        cls.submissions = [*cls.sf_submissions, *cls.cc_submissions, *cls.combo_submissions]
 
     @classmethod
     def have_a_fillable_pdf(cls):
@@ -197,7 +205,8 @@ class TestViews(IntakeDataTestCase):
         self.assertContains(result, fields.SocialSecurityNumberField.is_recommended_error_message)
         self.assertContains(result, fields.DateOfBirthField.is_recommended_error_message)
 
-    def test_authenticated_user_can_see_filled_pdf(self):
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_authenticated_user_can_see_filled_pdf(self, slack):
         self.be_sfpubdef_user()
         pdf = self.client.get(reverse('intake-filled_pdf',
             kwargs=dict(
@@ -205,6 +214,8 @@ class TestViews(IntakeDataTestCase):
                 )))
         self.assertTrue(len(pdf.content) > 69000)
         self.assertEqual(type(pdf.content), bytes)
+        self.assert_called_once_with_types(
+            slack, submissions='list', user='User')
 
     def test_authenticated_user_can_see_list_of_submitted_apps(self):
         self.be_cfa_user()
@@ -338,10 +349,6 @@ class TestViews(IntakeDataTestCase):
                 status_code=301, fetch_redirect_response=False)
 
 
-    @skipIf(True, "not yet implemented")
-    def test_authenticated_user_cannot_see_apps_to_other_org(self):
-        pass
-
 
 class TestSelectCountyView(AuthIntegrationTestCase):
 
@@ -451,43 +458,125 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
 
 class TestApplicationDetail(IntakeDataTestCase):
 
-    def get_submission(self):
-        submission = self.submissions[0]
+    def get_detail(self, submission):
         result = self.client.get(
             reverse('intake-app_detail',
                 kwargs=dict(submission_id=submission.id)))
-        return submission, result
+        return result
+
+    def assertHasDisplayData(self, response, submission):
+        for field, value in submission.answers.items():
+            if field in self.display_field_checks:
+                escaped_value = html_utils.conditional_escape(value)
+                self.assertContains(response, escaped_value)
 
     @patch('intake.models.notifications.slack_submissions_viewed.send')
     def test_logged_in_user_can_get_submission_display(self, slack):
         user = self.be_ccpubdef_user()
-        form_class = self.ccpubdef.get_default_form()
-        form_fields = [
-            'first_name', 'last_name']
-        submission, result = self.get_submission()
+        submission = self.cc_submissions[0]
+        result = self.get_detail(submission)
         self.assertEqual(result.context['submission'], submission)
         self.assert_called_once_with_types(
             slack, submissions='list', user='User')
-        for field, value in submission.answers.items():
-            escaped_value = html_utils.conditional_escape(value)
-            if isinstance(value, str) and field in form_fields:
-                self.assertContains(result, escaped_value)
+        self.assertHasDisplayData(result, submission)
+
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_staff_user_can_get_submission_display(self, slack):
+        user = self.be_cfa_user()
+        submission = self.combo_submissions[0]
+        result = self.get_detail(submission)
+        self.assertEqual(result.context['submission'], submission)
+        self.assert_called_once_with_types(
+            slack, submissions='list', user='User')
+        self.assertHasDisplayData(result, submission)
 
     @patch('intake.models.FillablePDF')
     @patch('intake.models.notifications.slack_submissions_viewed.send')
     def test_user_with_pdf_redirected_to_pdf(self, slack, FillablePDF):
         self.be_sfpubdef_user()
-        submission, result = self.get_submission()
+        submission = self.sf_submissions[0]
+        result = self.get_detail(submission)
         self.assertRedirects(result, reverse('intake-filled_pdf', 
             kwargs=dict(submission_id=submission.id)),
             fetch_redirect_response=False)
         slack.assert_not_called() # notification should be deferred to pdf view
         FillablePDF.assert_not_called()
 
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_user_cant_see_app_detail_for_other_county(self, slack):
+        self.be_ccpubdef_user()
+        submission = self.sf_submissions[0]
+        response = self.get_detail(submission)
+        self.assertRedirects(response, reverse('intake-app_index')) 
+        slack.assert_not_called()
+
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_user_can_see_app_detail_for_multi_county(self, slack):
+        self.be_ccpubdef_user()
+        submission = self.combo_submissions[0]
+        response = self.get_detail(submission)
+        self.assert_called_once_with_types(
+            slack, submissions='list', user='User')
+        self.assertHasDisplayData(response, submission)
 
 
+class TestApplicationBundle(IntakeDataTestCase):
+
+    def get_submissions(self, group):
+        ids = [s.id for s in group]
+        url = url_with_ids('intake-app_bundle', ids)
+        return self.client.get(url)
+
+    def assertHasDisplayData(self, response, submissions):
+        for submission in submissions:
+            for field, value in submission.answers.items():
+                if field in self.display_field_checks:
+                    escaped_value = html_utils.conditional_escape(value)
+                    self.assertContains(response, escaped_value)
+
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_user_can_get_app_bundle_without_pdf(self, slack):
+        user = self.be_ccpubdef_user()
+        response = self.get_submissions(self.cc_submissions)
+        self.assert_called_once_with_types(
+            slack, submissions='list', user='User')
+        self.assertNotContains(response, 'iframe class="pdf_inset"')
+        self.assertHasDisplayData(response, self.cc_submissions)
+
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_staff_user_can_get_app_bundle_without_pdf(self, slack):
+        user = self.be_cfa_user()
+        response = self.get_submissions(self.combo_submissions)
+        self.assert_called_once_with_types(
+            slack, submissions='list', user='User')
+        self.assertNotContains(response, 'iframe class="pdf_inset"')
+        self.assertHasDisplayData(response, self.combo_submissions)
 
 
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_user_can_get_bundle_with_pdf(self, slack):
+        self.be_sfpubdef_user()
+        response = self.get_submissions(self.sf_submissions)
+        self.assertContains(response, 'iframe class="pdf_inset"')
+        self.assert_called_once_with_types(
+            slack, submissions='list', user='User')
 
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_user_cant_see_app_bundle_for_other_county(self, slack):
+        self.be_sfpubdef_user()
+        response = self.get_submissions(self.cc_submissions)
+        self.assertRedirects(response, reverse('intake-app_index'))
+        response = self.client.get(response.url)
+        slack.assert_not_called()
+
+
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_user_can_see_app_bundle_for_multi_county(self, slack):
+        self.be_ccpubdef_user()
+        response = self.get_submissions(self.combo_submissions)
+        self.assert_called_once_with_types(
+            slack, submissions='list', user='User')
+        self.assertNotContains(response, 'iframe class="pdf_inset"')
+        self.assertHasDisplayData(response, self.combo_submissions)
 
 

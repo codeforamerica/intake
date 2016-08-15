@@ -12,6 +12,7 @@ from django.contrib.postgres.fields import JSONField
 from intake import pdfparser, anonymous_names, notifications, model_fields
 from intake.constants import CONTACT_METHOD_CHOICES, CONTACT_PREFERENCE_CHECKS, STAFF_NAME_CHOICES, Counties
 
+from formation.forms import county_form_selector
 
 
 def gen_uuid():
@@ -130,7 +131,14 @@ class FormSubmission(models.Model):
         based on user information, get the correct Form class and return it
         instantiated with the data for self
         """
-        DisplayFormClass = user.profile.get_submission_display_form()
+        if not user.is_staff:
+            DisplayFormClass = user.profile.get_submission_display_form()
+        else:
+            DisplayFormClass = county_form_selector.get_combined_form_class(
+                counties=[
+                    Counties.SAN_FRANCISCO,
+                    Counties.CONTRA_COSTA
+                    ])
         data = {}
         for field in DisplayFormClass.fields:
             key = field.context_key
@@ -142,7 +150,6 @@ class FormSubmission(models.Model):
         # initiate parsing
         display_form.is_valid()
         return display_form
-
 
     def get_formatted_address(self):
         address = self.answers.get('address', {})
