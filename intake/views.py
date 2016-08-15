@@ -175,7 +175,7 @@ class FilledPDF(ApplicationDetail):
         fillable = models.FillablePDF.objects.filter(organization=organization).first()
         if isinstance(submission_data, list):
             return fillable.fill_many(submission_data)
-        return fillable.fill(submission)
+        return fillable.fill(submission_data)
 
     def get(self, request, submission_id):
         submission = self.get_submission(submission_id)

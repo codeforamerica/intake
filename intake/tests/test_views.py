@@ -181,9 +181,7 @@ class TestViews(AuthIntegrationTestCase):
         self.assertContains(result, fields.SocialSecurityNumberField.is_recommended_error_message)
         self.assertContains(result, fields.DateOfBirthField.is_recommended_error_message)
 
-
-    @patch('intake.models.notifications.slack_submissions_viewed.send')
-    def test_authenticated_user_can_see_filled_pdf(self, slack):
+    def test_authenticated_user_can_see_filled_pdf(self):
         self.be_non_agency_user()
         pdf = self.client.get(reverse('intake-filled_pdf',
             kwargs=dict(
@@ -191,10 +189,6 @@ class TestViews(AuthIntegrationTestCase):
                 )))
         self.assertTrue(len(pdf.content) > 69000)
         self.assertEqual(type(pdf.content), bytes)
-        self.assert_called_once_with_types(
-            slack,
-            submissions='list',
-            user='User')
 
     def test_authenticated_user_can_see_list_of_submitted_apps(self):
         self.be_non_agency_user()
