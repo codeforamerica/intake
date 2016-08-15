@@ -184,6 +184,19 @@ class TestWorkflows(base.ScreenSequenceTestCase):
                 S.wait('wait for pdf to load', 4)
             ], base.SMALL_DESKTOP)
 
+    def test_look_at_app_bundle_of_another_org(self):
+        user = self.ccpubdef_users[0]
+        submissions = self.sf_submissions
+        self.run_sequence(
+            "Look at bundle of another org",
+            [
+                S.get('tried to go to app bundle',
+                    url_with_ids('intake-app_bundle', [s.id for s in submissions])),
+                S.fill_form('entered login info',
+                    login=user.email, password=fake_password),
+                S.wait('wait for pdf to load', 4)
+            ], base.SMALL_DESKTOP)
+
     def test_apply_to_contra_costa(self):
         answers = intake_mock.fake.contra_costa_county_form_answers()
         sequence = [
