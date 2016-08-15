@@ -160,11 +160,12 @@ class ApplicationDetail(View):
         models.FormSubmission.mark_viewed(submissions, request.user)
 
     def get(self, request, submission_id):
+        if request.user.profile.should_see_pdf():
+            return redirect(reverse_lazy('intake-filled_pdf',
+                kwargs=dict(submission_id=submission_id)))
         submission = self.get_submission(submission_id)
-        context = dict(
-            submission=submission,
-            show_pdf=request.user.profile.should_see_pdf())
-        self.mark_viewed(submission)
+        context = dict(submission=submission)
+        self.mark_viewed(request, submission)
         return render(request, self.template_name, context)
 
 
@@ -180,6 +181,7 @@ class FilledPDF(ApplicationDetail):
     def get(self, request, submission_id):
         submission = self.get_submission(submission_id)
         pdf = self.get_pdf_for_user(request, submission)
+        self.mark_viewed(request, submission)
         return HttpResponse(pdf,
             content_type="application/pdf")
 

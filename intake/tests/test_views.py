@@ -15,23 +15,38 @@ from formation import fields, forms
 from project.jinja2 import url_with_ids
 
 
-class TestViews(AuthIntegrationTestCase):
 
+class IntakeDataTestCase(AuthIntegrationTestCase):
+    
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
-        cls.have_four_submissions()
+        cls.have_some_submissions()
         cls.have_a_fillable_pdf()
 
     @classmethod
-    def have_four_submissions(cls):
-        cls.submissions = mock.FormSubmissionFactory.create_batch(4)
+    def have_some_submissions(cls):
+        counties = models.County.objects.all()
+        for county in counties:
+            if county.slug == constants.Counties.SAN_FRANCISCO:
+                cls.sfcounty = county
+            elif county.slug == constants.Counties.CONTRA_COSTA:
+                cls.cccounty = county
+        cls.sf_submissions = mock.FormSubmissionFactory.create_batch(2, counties=[cls.sfcounty])
+        cls.cc_submissions = mock.FormSubmissionFactory.create_batch(2, counties=[cls.cccounty])
+        cls.combo_submissions = mock.FormSubmissionFactory.create_batch(2, counties=[cls.sfcounty, cls.cccounty])
+        cls.submissions = cls.sf_submissions + cls.cc_submissions + cls.combo_submissions
 
     @classmethod
     def have_a_fillable_pdf(cls):
-        cls.fillable = mock.fillable_pdf(organization=cls.non_agency_user.profile.organization)
+        cls.fillable = mock.fillable_pdf(organization=cls.sfpubdef)
+
+
+
+class TestViews(IntakeDataTestCase):
 
     def setUp(self):
+        super().setUp()
         self.session = self.client.session
 
     def set_session_counties(self, counties=None):
@@ -182,7 +197,7 @@ class TestViews(AuthIntegrationTestCase):
         self.assertContains(result, fields.DateOfBirthField.is_recommended_error_message)
 
     def test_authenticated_user_can_see_filled_pdf(self):
-        self.be_non_agency_user()
+        self.be_sfpubdef_user()
         pdf = self.client.get(reverse('intake-filled_pdf',
             kwargs=dict(
                 submission_id=self.submissions[0].id
@@ -191,7 +206,7 @@ class TestViews(AuthIntegrationTestCase):
         self.assertEqual(type(pdf.content), bytes)
 
     def test_authenticated_user_can_see_list_of_submitted_apps(self):
-        self.be_non_agency_user()
+        self.be_cfa_user()
         index = self.client.get(reverse('intake-app_index'))
         for submission in self.submissions:
             self.assertContains(index,
@@ -220,7 +235,7 @@ class TestViews(AuthIntegrationTestCase):
             )
 
     def test_authenticated_user_can_see_pdf_bundle(self):
-        self.be_non_agency_user()
+        self.be_sfpubdef_user()
         ids = [s.id for s in self.submissions]
         url = url_with_ids('intake-pdf_bundle', ids)
         bundle = self.client.get(url)
@@ -228,7 +243,7 @@ class TestViews(AuthIntegrationTestCase):
 
     @patch('intake.models.notifications.slack_submissions_viewed.send')
     def test_authenticated_user_can_see_app_bundle(self, slack):
-        self.be_non_agency_user()
+        self.be_cfa_user()
         # we need a pdf for this users organization
         ids = [s.id for s in self.submissions]
         url = url_with_ids('intake-app_bundle', ids)
@@ -241,7 +256,7 @@ class TestViews(AuthIntegrationTestCase):
 
     @patch('intake.views.notifications.slack_submissions_deleted.send')
     def test_authenticated_user_can_delete_apps(self, slack):
-        self.be_non_agency_user()
+        self.be_cfa_user()
         submission = self.submissions[-1]
         pdf_link = reverse('intake-filled_pdf',
             kwargs={'submission_id':submission.id})
@@ -260,7 +275,7 @@ class TestViews(AuthIntegrationTestCase):
 
     @patch('intake.views.MarkProcessed.notification_function')
     def test_agency_user_can_mark_apps_as_processed(self, slack):
-        self.be_agency_user()
+        self.be_sfpubdef_user()
         submissions = self.submissions[:2]
         ids = [s.id for s in submissions]
         mark_link = url_with_ids('intake-mark_processed', ids)
@@ -433,8 +448,30 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
 
 
 
+class TestApplicationDetail(IntakeDataTestCase):
 
+    def get_submission(self):
+        submission = self.submissions[0]
+        result = self.client.get(
+            reverse('intake-app_detail',
+                kwargs=dict(submission_id=submission.id)))
+        return submission, result
 
+    def test_logged_in_user_can_get_submission_display(self):
+        user = self.be_ccpubdef_user()
+        form_class = self.ccpubdef.get_default_form()
+        submission, result = self.get_submission()
+        self.assertEqual(result.context['submission'], submission)
+        for field, value in submission.answers.items():
+            escaped_value = html_utils.conditional_escape(value)
+            if isinstance(value, str) and hasattr(form_class, field):
+                self.assertContains(result, escaped_value)
+
+    def test_user_with_pdf_redirected_to_pdf(self):
+        self.be_sfpubdef_user() # agency user's agency has a pdf
+        submission, result = self.get_submission()
+        self.assertRedirects(result, reverse('intake-filled_pdf', 
+            kwargs=dict(submission_id=submission.id)))
 
 
 

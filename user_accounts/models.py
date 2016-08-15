@@ -40,7 +40,7 @@ class Organization(models.Model):
         """Get the basic input form for this organization
         For the time being, this is purely based on the county
         """
-        return county_form_selector.get_combined_form_class(counties=[self.county])
+        return county_form_selector.get_combined_form_class(counties=[self.county.slug])
 
 
 
@@ -149,7 +149,7 @@ class UserProfile(models.Model):
     def should_see_pdf(self):
         """This should be based on whether or not this user's org has a pdf
         """
-        return self.organzation.has_a_pdf()
+        return self.organization.has_a_pdf()
 
 
 def get_user_display(user):

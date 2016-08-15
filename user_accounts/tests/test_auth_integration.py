@@ -38,7 +38,7 @@ class AuthIntegrationTestCase(TestCase):
     example_superuser = dict(
             username="super",
             email="super@codeforamerica.org",
-            password="en9op4gI4jil0"
+            password=mock.fake_password
         )
 
     example_user = dict(
@@ -49,44 +49,50 @@ class AuthIntegrationTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.orgs = [
-            mock.OrganizationFactory.create()
-            for i in range(2)
-        ]
-        cls.orgs[1].is_receiving_agency = True
-        cls.orgs[1].save()
+        cls.orgs = Organization.objects.all()
+        for org in cls.orgs:
+            if org.name == "San Francisco Public Defender":
+                cls.sfpubdef = org
+            elif org.name == "Contra Costa Public Defender":
+                cls.ccpubdef = org
+            elif org.name == "Code for America":
+                cls.cfa = org
         cls.superuser = mock.fake_superuser(
             **cls.example_superuser )
-        UserProfile.objects.create(user=cls.superuser, organization=cls.orgs[-1])
+        UserProfile.objects.create(user=cls.superuser,
+            organization=cls.cfa)
         cls.invitations = []
         for org in cls.orgs:
             for i in range(2):  # 2 per org
                 cls.invitations.append(
-                    mock.fake_invitation(org, inviter=cls.superuser)
-                    )
+                    mock.fake_invitation(org, inviter=cls.superuser))
         cls.users = []
         for invite in cls.invitations:
             user = invite.create_user_from_invite(
                 password=mock.fake_password,
                 name=mock.fake.name())
             cls.users.append(user)
-        cls.non_agency_user = cls.users[0]
-        cls.agency_user = cls.users[2]
+        cls.cfa_user = cls.cfa.profiles.first().user
+        cls.sfpubdef_user = cls.sfpubdef.profiles.first().user
+        cls.ccpubdef_user = cls.ccpubdef.profiles.first().user
 
     def be_superuser(self):
         self.client.login(**self.example_superuser)
 
-    def be_agency_user(self):
+    def be_user(self, user):
         self.client.login(
-            email=self.agency_user.email,
+            email=user.email,
             password=mock.fake_password)
-        return self.agency_user
+        return user
 
-    def be_non_agency_user(self):
-        self.client.login(
-            email=self.non_agency_user.email,
-            password=mock.fake_password)
-        return self.non_agency_user
+    def be_sfpubdef_user(self):
+        return self.be_user(self.sfpubdef_user)
+
+    def be_ccpubdef_user(self):
+        return self.be_user(self.ccpubdef_user)
+
+    def be_cfa_user(self):
+        return self.be_user(self.cfa_user)
 
     def be_anonymous(self):
         self.client.logout()
@@ -193,7 +199,7 @@ class TestUserAccounts(AuthIntegrationTestCase):
         self.assertEqual(get_user_display(users[0]), self.example_user['email'])
 
     def test_user_can_add_info_in_profile_view(self):
-        user = self.be_agency_user()
+        user = self.be_sfpubdef_user()
         # find link to profile
         response = self.client.get(reverse("user_accounts-profile"))
         self.assertContains(response, 
@@ -279,7 +285,7 @@ class TestUserAccounts(AuthIntegrationTestCase):
         self.assertLoggedInAs(self.users[0])
 
     def test_can_reset_password_while_logged_in(self):
-        user = self.be_agency_user()
+        user = self.be_sfpubdef_user()
         # go to profile
         profile = self.client.get(
             reverse("user_accounts-profile"))
