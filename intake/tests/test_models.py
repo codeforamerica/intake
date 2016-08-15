@@ -10,6 +10,7 @@ from user_accounts import models as auth_models
 from intake import models, model_fields, anonymous_names, validators, notifications, constants
 from formation.validators import are_valid_choices
 
+
 class TestModels(TestCase):
 
     @classmethod
@@ -366,6 +367,7 @@ class TestModels(TestCase):
         are_valid_choices.set_context(mock_field)
         are_valid_choices(slugs)
         mock_field.add_error.assert_not_called()
+
 
 
 class TestCounty(TestCase):

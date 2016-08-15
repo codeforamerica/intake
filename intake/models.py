@@ -141,6 +141,9 @@ class FormSubmission(models.Model):
             in CONTACT_METHOD_CHOICES
             if key in preferences]
 
+    def get_nice_counties(self):
+        return self.counties.all().values_list('name', flat=True)
+
     def get_display_form_for_user(self, user):
         """
         based on user information, get the correct Form class and return it

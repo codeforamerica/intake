@@ -1,4 +1,4 @@
-New submission #{{submission_count}}!
+New submission #{{submission_count}} to {{ oxford_comma(submission.get_nice_counties())}}!
 <{{ request.build_absolute_uri(
 		url('intake-app_detail',
 			submission_id=submission.id)
