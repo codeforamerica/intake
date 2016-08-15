@@ -73,11 +73,12 @@ class Field(base.BindParseValidate):
         set `.raw_value` to `formation.base.UNSET` to indicate that the
         value was not found.
         """
-        # this is unsafe!
         fallback = raw_data.get(
             self.context_key, base.UNSET)
+        alternate_input = raw_data.get(
+            self.get_html_class_name(), fallback)
         return raw_data.get(
-            self.get_input_name(), fallback)
+            self.get_input_name(), alternate_input)
 
     def parse_and_validate(self, raw_data):
         """Fields must pull their raw inputs out of an

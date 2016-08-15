@@ -319,7 +319,12 @@ class TestMultiValueField(PatchTranslationTestCase):
             'dob.day': '2',
             'dob.month': '12',
             }
-        for input_data in [prestructured, dotsep]:
+        undersep = {
+            'dob_year': '1982',
+            'dob_day': '2',
+            'dob_month': '12',
+            }
+        for input_data in [prestructured, dotsep, undersep]:
             field = fields.DateOfBirthField(input_data)
             self.assertParsesCorrectly(field, self.parsed_value)
 

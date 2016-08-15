@@ -3799,6 +3799,23 @@ button[type="submit"] .badge {
 .phone_number input[name="phone_number"] {
   width: 9em;
 }
+.data_display + .data_display {
+  border-top: 1px solid #555555;
+}
+.data_display {
+  padding: 0.25em;
+}
+.data_display-label {
+  color: #777777;
+  font-size: .9em;
+}
+.data_display-value {
+  font-size: 1.1em;
+}
+.data_display-value.empty:after {
+  content: "EMPTY";
+  color: #eeeeee;
+}
 .top_bar a {
   color: inherit;
   text-decoration: none;

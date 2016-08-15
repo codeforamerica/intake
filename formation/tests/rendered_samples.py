@@ -127,10 +127,9 @@ FORM_DISPLAY = """
 <div class="data_display datum address">
   <div class="data_display-label">Address</div>
   <div class="data_display-value">
-    <pre>973 Migdalia Plain
+  <pre>973 Migdalia Plain
 New Anwarville, AZ
-62145</pre>
-  </div>
+62145</pre></div>
 </div>
 <div class="data_display datum dob">
   <div class="data_display-label">Date of birth</div>

@@ -1,0 +1,19 @@
+.data_display + .data_display {
+	border-top: 1px solid @gray;
+}
+.data_display {
+	padding: 0.25em;
+}
+
+.data_display-label {
+	color: @gray-light;
+	font-size: .9em;
+}
+.data_display-value {
+	font-size: 1.1em;
+}
+
+.data_display-value.empty:after {
+	content: "EMPTY";
+	color: @gray-lighter;
+}

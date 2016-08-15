@@ -19,7 +19,11 @@
     </tr>
     {% for app in submissions %}
     <tr>
-      <td>{{ app.get_local_date_received('%-m/%-d/%y') }}</td>
+      <td>
+        <a href="{{ url('intake-app_detail', submission_id=app.id)}}">
+        {{ app.get_local_date_received('%-m/%-d/%y') }}
+        </a>
+      </td>
       <td>{{ namify(app.answers.get("last_name", "")) }}</td>
       <td>{{ namify(app.answers.get("first_name", "")) }}</td>
       <td>

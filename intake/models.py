@@ -139,14 +139,7 @@ class FormSubmission(models.Model):
                     Counties.SAN_FRANCISCO,
                     Counties.CONTRA_COSTA
                     ])
-        data = {}
-        for field in DisplayFormClass.fields:
-            key = field.context_key
-            if key in self.answers:
-                data[key] = self.answers[key]
-            elif hasattr(self, key):
-                data[key] = getattr(self, key)
-        display_form = DisplayFormClass(data)
+        display_form = DisplayFormClass(self.answers)
         # initiate parsing
         display_form.is_valid()
         return display_form
