@@ -155,13 +155,6 @@ class ApplicationDetail(View):
         "If you have any questions, please contact us at "
         "clearmyrecord@codeforamerica.org")
 
-    def get_permitted_submissions(self, request, submission_ids):
-        submissions = models.FormSubmission.objects.filter(pk__in=submission_ids)
-        if request.user.is_staff:
-            return list(submissions)
-        county = request.user.profile.organization.county
-        return list(submissions.filter(counties=county))
-
     def not_allowed(self, request):
         messages.error(request, self.not_allowed_message)
         return redirect('intake-app_index')
@@ -175,7 +168,8 @@ class ApplicationDetail(View):
         if request.user.profile.should_see_pdf():
             return redirect(reverse_lazy('intake-filled_pdf',
                 kwargs=dict(submission_id=submission_id)))
-        submissions = self.get_permitted_submissions(request, [submission_id])
+        submissions = list(models.FormSubmission.get_permitted_submissions(
+            request.user, [submission_id]))
         if not submissions:
             return self.not_allowed(request)
         submission = submissions[0]
@@ -194,7 +188,8 @@ class FilledPDF(ApplicationDetail):
         return fillable.fill(submission_data)
 
     def get(self, request, submission_id):
-        submissions = self.get_permitted_submissions(request, [submission_id])
+        submissions = list(models.FormSubmission.get_permitted_submissions(
+            request.user, [submission_id]))
         if not submissions:
             return self.not_allowed(request)
         submission = submissions[0]
@@ -208,7 +203,8 @@ class ApplicationIndex(TemplateView):
     template_name = "app_index.jinja"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['submissions'] = models.FormSubmission.all_plus_related_objects()
+        context['submissions'] = list(models.FormSubmission.get_permitted_submissions(
+            self.request.user, related_objects=True))
         context['body_class'] = 'admin'
         return context
 
@@ -235,10 +231,8 @@ class MultiSubmissionMixin:
 
     def get_submissions_from_params(self, request):
         ids = self.get_ids_from_params(request)
-        if hasattr(self, 'get_permitted_submissions'):
-            return self.get_permitted_submissions(request, ids)
-        return list(models.FormSubmission.objects.filter(pk__in=ids))
-
+        return list(models.FormSubmission.get_permitted_submissions(
+            request.user, ids))
 
 
 class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):

@@ -79,6 +79,20 @@ class FormSubmission(models.Model):
             ).distinct()
 
     @classmethod
+    def get_permitted_submissions(cls, user, ids=None, related_objects=False):
+        query = cls.objects
+        if related_objects:
+            query = query.prefetch_related(
+                'logs__user__profile__organization',
+                'counties')
+        if ids:
+            query = query.filter(pk__in=ids)
+        if user.is_staff:
+            return query
+        county = user.profile.organization.county
+        return query.filter(counties=county)
+
+    @classmethod
     def all_plus_related_objects(cls):
         return cls.objects.prefetch_related(
             'logs__user__profile__organization',

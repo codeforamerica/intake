@@ -580,3 +580,33 @@ class TestApplicationBundle(IntakeDataTestCase):
         self.assertHasDisplayData(response, self.combo_submissions)
 
 
+
+class ApplicationIndexTestCase(IntakeDataTestCase):
+
+    def assertContainsSubmissions(self, response, submissions):
+        for submission in submissions:
+            detail_url_link = reverse('intake-app_detail',
+                kwargs=dict(submission_id=submission.id))
+            self.assertContains(response, detail_url_link)
+
+    def assertNotContainsSubmissions(self, response, submissions):
+        for submission in submissions:
+            detail_url_link = reverse('intake-app_detail',
+                kwargs=dict(submission_id=submission.id))
+            self.assertNotContains(response, detail_url_link)
+
+    def test_that_org_user_can_only_see_apps_to_own_org(self):
+        self.be_ccpubdef_user()
+        response = self.client.get(reverse('intake-app_index'))
+        self.assertContainsSubmissions(response, self.cc_submissions)
+        self.assertContainsSubmissions(response, self.combo_submissions)
+        self.assertNotContainsSubmissions(response, self.sf_submissions)
+
+    def test_that_cfa_user_can_see_apps_to_all_orgs(self):
+        self.be_cfa_user()
+        response = self.client.get(reverse('intake-app_index'))
+        self.assertContainsSubmissions(response, self.cc_submissions)
+
+
+
+
