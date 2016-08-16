@@ -184,6 +184,6 @@ New Anwarville, AZ
   <div class="data_display-value">803</div>
 </div>
 <div class="data_display datum how_did_you_hear">
-  <div class="data_display-label">Heard about this from</div>
+  <div class="data_display-label">How they found out about this</div>
   <div class="data_display-value empty"></div>
 </div>"""

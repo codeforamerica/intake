@@ -91,7 +91,7 @@ county_migrator = UpdateCounties()
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('intake', '0013_add_county_model'),
+        ('intake', '0014_county_name'),
         ('user_accounts', '0006_add_county_model'),
     ]
 

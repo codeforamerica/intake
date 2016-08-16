@@ -40,7 +40,7 @@ def backward(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('intake', '0017_add_default_org_to_pdfs_and_logs'),
+        ('intake', '0018_add_default_org_to_pdfs_and_logs'),
     ]
 
     operations = [

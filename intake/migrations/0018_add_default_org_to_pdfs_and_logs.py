@@ -48,7 +48,7 @@ def remove_sf_from_pdfs_and_logs(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('intake', '0016_fillablepdf_organization'),
+        ('intake', '0017_fillablepdf_organization'),
         ('user_accounts', '0007_add_profiles_related_name_to_organization'),
     ]
 
