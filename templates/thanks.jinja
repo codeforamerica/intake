@@ -2,33 +2,28 @@
 
 
 {%- block header_title -%}
-Thank you
+{{ _("Thank you") }}
 {%- endblock header_title -%}
 
 {%- block section_class %}thanks{% endblock section_class -%}
 
 {% block column_content %}
-  <p>
-    We will send your information to the San Francisco Public Defender's Clean Slate program right away.
+  {%- for county in counties %}
+  <p class="next_step {{ county.slug }}">
+    {{ intake_constants.CONFIRMATION_MESSAGES[county.slug] }}
   </p>
-  <p>
-    You will receive a letter from the Public Defender explaining your next steps within 2-4 weeks.
-  </p>
+  {%- endfor %}
 
   <p>
-    Please let us know if your contact information changes.
-  </p>
-
-  <p>
-    If you have any questions or concerns, please email us at
+    {{ _("If you have any questions or concerns, please email us at") }}
     <a href="mailto:clearmyrecord@codeforamerica.org">clearmyrecord@codeforamerica.org</a> 
-    or text us at
+    {{ _("or text us at") }}
     <a href="tel:14156259633">(415) 625-9633</a>.
   </p>
 
 
   <div class="back_home_btn">
-    <a href="/" class="btn btn-default btn-lg call_to_action_button">
+    <a href="{{ url('intake-home') }}" class="btn btn-default btn-lg call_to_action_button">
       <span class="main-action-text">
         {{ content.back_home_btn }}
       </span>

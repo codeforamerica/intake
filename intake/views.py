@@ -16,7 +16,7 @@ from django.core import mail
 
 from intake import models, notifications, constants
 from formation.forms import county_form_selector, SelectCountyForm
-from project.jinja2 import url_with_ids
+from project.jinja2 import url_with_ids, oxford_comma
 
 
 
@@ -30,9 +30,27 @@ class Home(TemplateView):
         return context
 
 
-
-class MultiStepFormViewBase(FormView):
+class GetFormSessionDataMixin:
     session_storage_key = "form_in_progress"
+
+    def get_session_data(self):
+        data = self.request.session.get(self.session_storage_key, {})
+        return MultiValueDict(data)
+
+    def get_counties(self):
+        session_data = self.get_session_data()
+        county_slugs = session_data.getlist('counties')
+        return models.County.objects.filter(slug__in=county_slugs)
+
+    def get_county_context(self):
+        counties = self.get_counties()
+        return dict(
+            counties=counties,
+            county_list=[county.name + " County" for county in counties]
+            )
+
+
+class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
 
     def update_session_data(self):
         form_data = self.request.session.get(self.session_storage_key, {})
@@ -40,10 +58,6 @@ class MultiStepFormViewBase(FormView):
         form_data.update(post_data)
         self.request.session[self.session_storage_key] = form_data
         return form_data
-
-    def get_session_data(self):
-        data = self.request.session.get(self.session_storage_key, {})
-        return MultiValueDict(data)
 
     def put_errors_in_flash_messages(self, form):
         for error in form.non_field_errors():
@@ -54,6 +68,11 @@ class MultiStepFormViewBase(FormView):
         self.put_errors_in_flash_messages(form)
         return super().form_invalid(form, *args, **kwargs)
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context.update(self.get_county_context())
+        return context
+
 
 class MultiStepApplicationView(MultiStepFormViewBase):
     template_name = "forms/county_form.jinja"
@@ -61,6 +80,9 @@ class MultiStepApplicationView(MultiStepFormViewBase):
     error_message = _("There were some problems with your application. Please check the errors below.")
 
     def confirmation(self, submission):
+        county_list = [county.name + " County" for county in submission.counties.all()]
+        messages.success(self.request,
+            _("You have applied for help in ") + oxford_comma(county_list))
         flash_messages = submission.send_confirmation_notifications()
         for message in flash_messages:
             messages.success(self.request, message)
@@ -81,23 +103,12 @@ class MultiStepApplicationView(MultiStepFormViewBase):
 
 class MultiCountyApplicationView(MultiStepApplicationView):
 
-    def get_counties(self):
-        session_data = self.get_session_data()
-        county_slugs = session_data.getlist('counties')
-        return models.County.objects.filter(slug__in=county_slugs)
-
     def get_form_kwargs(self):
         kwargs = {}
         if self.request.method in ('POST', 'PUT'):
             kwargs.update({
                 'data': self.request.POST})
         return kwargs
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        context['counties'] = self.get_counties()
-        context['county_list'] = [county.name + " County" for county in context['counties']]
-        return context
 
     def get_form_class(self):
         session_data = self.get_session_data()
@@ -153,8 +164,13 @@ class SelectCounty(MultiStepFormViewBase):
         return super().form_valid(form)
 
 
-class Thanks(TemplateView):
+class Thanks(TemplateView, GetFormSessionDataMixin):
     template_name = "thanks.jinja"
+
+    def get_context_data(self, *args, **kwargs):
+        context = self.get_county_context()
+        context['intake_constants'] = constants
+        return context
 
 
 class PrivacyPolicy(TemplateView):

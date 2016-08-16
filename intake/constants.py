@@ -33,6 +33,12 @@ class CountyNames:
     CONTRA_COSTA = 'Contra Costa'
     ALL = 'San Francisco and Contra Costa Counties'
 
+CONFIRMATION_MESSAGES = {
+    Counties.SAN_FRANCISCO: _("You will get a letter in the mail from the San Francisco Public Defender in 2-4 weeks."),
+    Counties.CONTRA_COSTA: _("The Contra Costa Public Defender will follow up with you if they need any other information.")
+    }
+
+
 COUNTY_CHOICES = (
     (Counties.SAN_FRANCISCO, _('San Francisco')),
     (Counties.CONTRA_COSTA,  _('Conta Costa County (around Richmond, Walnut Creek, Antioch, or Brentwood)')),

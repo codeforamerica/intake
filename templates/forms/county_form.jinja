@@ -10,6 +10,10 @@ Apply to Clear My Record
 public apply
 {%- endblock body_class %}
 
+{% block county_scope %}
+  {% include "includes/county_list.jinja" %}
+{% endblock county_scope %}
+
 {% block content %}
 <section class="application_form content">
   <div class="container">
