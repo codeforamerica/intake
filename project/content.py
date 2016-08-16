@@ -76,3 +76,6 @@ class constants:
     metadata_description = "Clear My Record is a free, non-profit service to help you dismiss or reduce old convictions on your criminal record."
     metadata_author = "Clear My Record (by Code for America)"
 
+    cmr_phone_number = "(415) 301-6005"
+    cmr_email = "clearmyrecord@codeforamerica.org"
+

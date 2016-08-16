@@ -80,7 +80,7 @@ class MultiStepApplicationView(MultiStepFormViewBase):
     error_message = _("There were some problems with your application. Please check the errors below.")
 
     def confirmation(self, submission):
-        county_list = [county.name + " County" for county in submission.counties.all()]
+        county_list = [name + " County" for name in submission.get_nice_counties()]
         messages.success(self.request,
             _("You have applied for help in ") + oxford_comma(county_list))
         flash_messages = submission.send_confirmation_notifications()

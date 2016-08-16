@@ -15,12 +15,11 @@
   {%- endfor %}
 
   <p>
-    {{ _("If you have any questions or concerns, please email us at") }}
-    <a href="mailto:clearmyrecord@codeforamerica.org">clearmyrecord@codeforamerica.org</a> 
-    {{ _("or text us at") }}
-    <a href="tel:14156259633">(415) 625-9633</a>.
+    {{_("If you have any questions or concerns, please email us at")}}
+    {{ linkify(content.cmr_email) }} 
+    {{ _("or text us at")}}
+    {{ linkify(content.cmr_phone_number) }} 
   </p>
-
 
   <div class="back_home_btn">
     <a href="{{ url('intake-home') }}" class="btn btn-default btn-lg call_to_action_button">
