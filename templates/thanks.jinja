@@ -10,7 +10,7 @@
 {% block column_content %}
   {%- for county in counties %}
   <p class="next_step {{ county.slug }}">
-    {{ intake_constants.CONFIRMATION_MESSAGES[county.slug] }}
+    {{ linkify(intake_constants.CONFIRMATION_MESSAGES[county.slug]) }}
   </p>
   {%- endfor %}
 

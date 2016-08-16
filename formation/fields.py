@@ -24,7 +24,7 @@ class Counties(MultipleChoiceField):
 class HowDidYouHear(CharField):
     context_key = "how_did_you_hear"
     label = _("How did you hear about this program or website?")
-    display_label = "Heard about this from"
+    display_label = "How they found out about this"
 
 
 class AdditionalInformation(CharField):
@@ -196,7 +196,7 @@ class WhenProbationParole(CharField):
 
 class RAPOutsideSF(YesNoField):
     context_key = "rap_outside_sf"
-    label = _("When and where were you arrested or convicted outside of San Francisco?")
+    label = _("Have you ever been arrested or convicted outside of San Francisco?")
     display_label = "Has RAP outside SF"
 
 
