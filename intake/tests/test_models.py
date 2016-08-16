@@ -19,6 +19,10 @@ class TestModels(TestCase):
         for key, models in create_fake_auth_models().items():
             setattr(cls, key, models)
 
+    def assertWasCalledOnce(self, mock_obj):
+        call_list = mock_obj.mock_calls
+        self.assertEqual(len(call_list), 1)
+
     def test_submission(self):
         submission = mock.FormSubmissionFactory.create()
         self.assertEqual(int, type(submission.id))
@@ -301,10 +305,8 @@ class TestModels(TestCase):
             submission=submission,
             event_type=models.ApplicationLogEntry.CONFIRMATION_SENT).all()
         self.assertEqual(len(logs), 2)
-        email_notification.assert_called_once_with(
-            staff_name='Staff', name='Foo', to=['someone@gmail.com'])
-        sms_notification.assert_called_once_with(
-            staff_name='Staff', name='Foo', to=['+19993334444'])
+        self.assertWasCalledOnce(email_notification)
+        self.assertWasCalledOnce(sms_notification)
         sent_notification.assert_called_once_with(
             submission=submission, methods=['email', 'sms', 'snailmail', 'voicemail'])
         slack_failed_notification.assert_not_called()
@@ -322,10 +324,8 @@ class TestModels(TestCase):
             submission=submission,
             event_type=models.ApplicationLogEntry.CONFIRMATION_SENT).all()
         self.assertEqual(len(logs), 1)
-        email_notification.assert_called_once_with(
-            staff_name='Staff', name='Foo', to=['someone@gmail.com'])
-        sms_notification.assert_called_once_with(
-            staff_name='Staff', name='Foo', to=['+19993334444'])
+        self.assertWasCalledOnce(email_notification)
+        self.assertWasCalledOnce(sms_notification)
         sent_notification.assert_called_once_with(
             submission=submission, methods=['email', 'snailmail', 'voicemail'])
         slack_failed_notification.assert_called_once_with(
@@ -347,10 +347,8 @@ class TestModels(TestCase):
             submission=submission,
             event_type=models.ApplicationLogEntry.CONFIRMATION_SENT).all()
         self.assertEqual(len(logs), 0)
-        email_notification.assert_called_once_with(
-            staff_name='Staff', name='Foo', to=['someone@gmail.com'])
-        sms_notification.assert_called_once_with(
-            staff_name='Staff', name='Foo', to=['+19993334444'])
+        self.assertWasCalledOnce(email_notification)
+        self.assertWasCalledOnce(sms_notification)
         sent_notification.assert_called_once_with(
             submission=submission, methods=['snailmail', 'voicemail'])
         slack_failed_notification.assert_called_once_with(

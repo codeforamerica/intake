@@ -9,8 +9,10 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 
-from intake import pdfparser, anonymous_names, notifications, model_fields
-from intake.constants import CONTACT_METHOD_CHOICES, CONTACT_PREFERENCE_CHECKS, STAFF_NAME_CHOICES, Counties
+from intake import (
+    pdfparser, anonymous_names, notifications, model_fields,
+    constants
+    )
 
 from formation.forms import county_form_selector
 
@@ -138,7 +140,7 @@ class FormSubmission(models.Model):
         preferences = [k[8:] for k in self.get_contact_preferences()]
         return [
             nice for key, nice
-            in CONTACT_METHOD_CHOICES
+            in constants.CONTACT_METHOD_CHOICES
             if key in preferences]
 
     def get_nice_counties(self):
@@ -154,8 +156,8 @@ class FormSubmission(models.Model):
         else:
             DisplayFormClass = county_form_selector.get_combined_form_class(
                 counties=[
-                    Counties.SAN_FRANCISCO,
-                    Counties.CONTRA_COSTA
+                    constants.Counties.SAN_FRANCISCO,
+                    constants.Counties.CONTRA_COSTA
                     ])
         display_form = DisplayFormClass(self.answers)
         # initiate parsing
@@ -176,7 +178,7 @@ class FormSubmission(models.Model):
         info = {}
         for key in self.get_contact_preferences():
             short = key[8:]
-            field_name, nice, datum = CONTACT_PREFERENCE_CHECKS[key]
+            field_name, nice, datum = constants.CONTACT_PREFERENCE_CHECKS[key]
             if short == 'snailmail':
                 info[short] = self.get_formatted_address()
             else:
@@ -201,10 +203,17 @@ class FormSubmission(models.Model):
     def send_confirmation_notifications(self):
         contact_info = self.get_contact_info()
         errors = {}
+        counties = self.counties.all()
+        county_names = [name + " County" for name in self.get_nice_counties()]
+        next_steps = [
+            constants.CONFIRMATION_MESSAGES[county.slug]
+            for county in counties]
         context = dict(
-            staff_name=random.choice(STAFF_NAME_CHOICES),
-            name=self.answers['first_name']
-            )
+            staff_name=random.choice(constants.STAFF_NAME_CHOICES),
+            name=self.answers['first_name'],
+            county_names=county_names,
+            organizations=[county.get_receiving_agency() for county in counties],
+            next_steps=next_steps)
         notify_map = {
             'email': notifications.email_confirmation,
             'sms': notifications.sms_confirmation
