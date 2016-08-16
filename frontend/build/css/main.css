@@ -3959,6 +3959,12 @@ p.step_headline {
 .who_we_are {
   padding-bottom: 50px;
 }
+h2.gov_service_name {
+  text-align: left;
+}
+.partner_list {
+  padding: 0;
+}
 /**Team**/
 .who_we_are {
   background-color: #069ED6;

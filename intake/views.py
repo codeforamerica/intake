@@ -22,6 +22,13 @@ from project.jinja2 import url_with_ids
 
 class Home(TemplateView):
     template_name = "main_splash.jinja"
+    
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        counties = models.County.objects.prefetch_related('organizations').all()
+        context['counties'] = counties
+        return context
+
 
 
 class MultiStepFormViewBase(FormView):

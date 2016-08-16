@@ -31,7 +31,7 @@ class Counties:
 class CountyNames:
     SAN_FRANCISCO = 'San Francisco'
     CONTRA_COSTA = 'Contra Costa'
-
+    ALL = 'San Francisco and Contra Costa Counties'
 
 COUNTY_CHOICES = (
     (Counties.SAN_FRANCISCO, _('San Francisco')),
