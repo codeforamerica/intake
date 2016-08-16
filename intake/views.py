@@ -22,7 +22,7 @@ from project.jinja2 import url_with_ids
 
 class Home(TemplateView):
     template_name = "main_splash.jinja"
-    
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         counties = models.County.objects.prefetch_related('organizations').all()
@@ -92,6 +92,12 @@ class MultiCountyApplicationView(MultiStepApplicationView):
             kwargs.update({
                 'data': self.request.POST})
         return kwargs
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['counties'] = self.get_counties()
+        context['county_list'] = [county.name + " County" for county in context['counties']]
+        return context
 
     def get_form_class(self):
         session_data = self.get_session_data()

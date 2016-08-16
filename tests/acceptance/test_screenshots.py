@@ -141,21 +141,20 @@ class TestWorkflows(base.ScreenSequenceTestCase):
                         kwargs={'submission_id': submission.id})),
                 S.fill_form('entered login info',
                     login=user.email, password=fake_password),
-                S.wait('wait for pdf to load', 2)
+                S.wait('wait for pdf to load', 1)
             ], base.SMALL_DESKTOP)
 
     def test_look_at_app_detail_without_pdf(self):
         user = self.ccpubdef_users[0]
         submission = random.choice(self.cc_submissions)
         self.run_sequence(
-            "Look at app with pdf",
+            "Look at app detail",
             [
                 S.get('tried to go to app detail',
                     reverse('intake-app_detail',
                         kwargs={'submission_id': submission.id})),
                 S.fill_form('entered login info',
-                    login=user.email, password=fake_password),
-                S.wait('wait for pdf to load', 2)
+                    login=user.email, password=fake_password)
             ], base.SMALL_DESKTOP)
 
     def test_look_at_app_bundle_with_pdf(self):
@@ -168,20 +167,19 @@ class TestWorkflows(base.ScreenSequenceTestCase):
                     url_with_ids('intake-app_bundle', [s.id for s in submissions])),
                 S.fill_form('entered login info',
                     login=user.email, password=fake_password),
-                S.wait('wait for pdf to load', 4)
+                S.wait('wait for pdf to load', 2)
             ], base.SMALL_DESKTOP)
 
     def test_look_at_app_bundle_without_pdf(self):
         user = self.ccpubdef_users[0]
         submissions = self.cc_submissions
         self.run_sequence(
-            "Look at app pdf bundle",
+            "Look at app bundle",
             [
                 S.get('tried to go to app bundle',
                     url_with_ids('intake-app_bundle', [s.id for s in submissions])),
                 S.fill_form('entered login info',
-                    login=user.email, password=fake_password),
-                S.wait('wait for pdf to load', 4)
+                    login=user.email, password=fake_password)
             ], base.SMALL_DESKTOP)
 
     def test_look_at_app_bundle_of_another_org(self):
@@ -193,8 +191,7 @@ class TestWorkflows(base.ScreenSequenceTestCase):
                 S.get('tried to go to app bundle',
                     url_with_ids('intake-app_bundle', [s.id for s in submissions])),
                 S.fill_form('entered login info',
-                    login=user.email, password=fake_password),
-                S.wait('wait for pdf to load', 4)
+                    login=user.email, password=fake_password)
             ], base.SMALL_DESKTOP)
 
     def test_apply_to_contra_costa(self):

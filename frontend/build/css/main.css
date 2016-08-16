@@ -3587,6 +3587,14 @@ input[type="button"].btn-block {
     display: none !important;
   }
 }
+section.county_notice {
+  background-color: #ddf5fe;
+  font-size: 1em;
+  padding: 1em 0;
+}
+section.county_notice p {
+  margin: 0;
+}
 section.content.application_form {
   background-color: #fff;
 }
