@@ -1,4 +1,5 @@
 from django.template import loader
+from django.utils.safestring import mark_safe
 
 class Renderable:
     """A class that implements rendering functionality
@@ -12,16 +13,17 @@ class Renderable:
         self.default_context = default_context or {}
         self._template = None
         self._display_template = None
+        self.display_only = False
 
     def render(self, display=False, **extra_context):
         """Uses self and extra_context to render the compiled template
         """
+        display = display or self.display_only
         template_attr = "_display_template" if display else "_template"
         if not getattr(self, template_attr):
             self.compile_template(template_attr)
-
-        return getattr(self, template_attr).render(
-            self.get_template_context(extra_context))
+        return mark_safe(getattr(self, template_attr).render(
+            self.get_template_context(extra_context)))
 
     def display(self, **extra_context):
         return self.render(display=True, **extra_context)
@@ -43,5 +45,8 @@ class Renderable:
                 getattr(self, name_attr)
                 )
             )
+
+    def __html__(self):
+        return self.render()
 
 

@@ -1,5 +1,4 @@
 import copy
-from formation.form_base import Form
 from formation.fields import get_field_index
 
 
@@ -60,12 +59,14 @@ class CombinableFormSpec:
             class_attributes[attribute_name] = value
         return class_attributes
 
-    def build_form_class(self, extra_class_attributes=None):
+    def build_form_class(self, extra_class_attributes=None, ParentClass=None):
         """Builds up a CombinedForm class
         """
         class_attributes_dictionary = self.build_form_class_attributes()
         class_attributes_dictionary.update(extra_class_attributes or {})
-        parent_classes_tuple = (Form,)
+        if not ParentClass:
+            ParentClass = object
+        parent_classes_tuple = (ParentClass,)
         return type(
             'CombinedForm',
             parent_classes_tuple,
@@ -75,11 +76,11 @@ class CombinableFormSpec:
 
 class FormSpecSelector:
 
-    def __init__(self, form_specs, form_base_class=None):
-        if form_base_class is None:
-            form_base_class = Form
+    def __init__(self, form_specs, form_parent_class=None):
+        if form_parent_class is None:
+            form_parent_class = Form
         self.form_specs = form_specs
-        self.form_base_class = form_base_class
+        self.form_parent_class = form_parent_class
 
     def get_combined_form_class(self, **criteria):
         combined_spec = None
@@ -91,4 +92,4 @@ class FormSpecSelector:
                 combined_spec = spec
             else:
                 combined_spec |= spec
-        return combined_spec.build_form_class(criteria)
+        return combined_spec.build_form_class(criteria, self.form_parent_class)

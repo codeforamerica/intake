@@ -14,7 +14,7 @@ from intake import (
     constants
     )
 
-from formation.forms import county_form_selector
+from formation.forms import display_form_selector
 
 
 def gen_uuid():
@@ -154,12 +154,19 @@ class FormSubmission(models.Model):
         if not user.is_staff:
             DisplayFormClass = user.profile.get_submission_display_form()
         else:
-            DisplayFormClass = county_form_selector.get_combined_form_class(
+            DisplayFormClass = display_form_selector.get_combined_form_class(
                 counties=[
                     constants.Counties.SAN_FRANCISCO,
                     constants.Counties.CONTRA_COSTA
                     ])
-        display_form = DisplayFormClass(self.answers)
+        init_data = {}
+        field_keys = DisplayFormClass.get_field_keys()
+        unfound_keys = [key for key in field_keys if key not in self.answers]
+        for unfound in unfound_keys:
+            if hasattr(self, unfound):
+                init_data[unfound] = getattr(self, unfound)
+        init_data.update(self.answers)
+        display_form = DisplayFormClass(init_data)
         # initiate parsing
         display_form.is_valid()
         return display_form

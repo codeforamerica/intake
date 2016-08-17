@@ -116,9 +116,10 @@ class Field(base.BindParseValidate):
         """Returns the value for this field, based on 
         """
         if self.parsed_data is not base.UNSET:
-            return self.parsed_data
+            current_value = self.parsed_data
         else:
-            return self.empty_value
+            current_value = self.empty_value
+        return current_value
 
     def get_template_context(self, context):
         """Add `self` as `field` in render context"""

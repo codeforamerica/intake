@@ -3,6 +3,7 @@ from formation.base import UNSET
 from formation import exceptions, validators
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import force_text
+from django.utils.safestring import mark_safe
 from django.utils.html import conditional_escape
 from project.jinja2 import oxford_comma
 
@@ -41,6 +42,9 @@ class CharField(Field):
         if raw_value:
             value = raw_value
         return value
+
+    def get_current_value(self):
+        return mark_safe(Field.get_current_value(self))
 
 
 class ChoiceField(CharField):
@@ -91,9 +95,12 @@ class MultipleChoiceField(ChoiceField):
                 values.append(value)
         return values
 
+    def get_current_value(self):
+        return Field.get_current_value(self)
+
     def get_display_value(self):
         return oxford_comma([
-            self.get_display_for_choice(choice)
+            mark_safe(self.get_display_for_choice(choice))
             for choice in self.get_current_value()
             ])
 
@@ -155,7 +162,7 @@ class MultiValueField(Field):
 
     def parse(self, raw_value):
         # should create a dict with simplified child keys
-        value = self.empty_value
+        value = self.empty_value.copy()
         for sub in self.subfields:
             sub.parsed_data = sub.parse(sub.raw_input_value)
             value[sub.context_key] = sub.parsed_data
@@ -178,6 +185,12 @@ class MultiValueField(Field):
         # runs own validators
         super().validate()
 
+    def get_current_value(self):
+        return {
+            sub.context_key: sub.get_current_value()
+            for sub in self.subfields
+            }
+
 
 class FormNote:
     """A simple type for including content with
@@ -190,7 +203,7 @@ class FormNote:
         pass
         
     def render(self):
-        return self.template_string.format(self.content)
+        return mark_safe(self.template_string.format(self.content))
 
     def __repr__(self):
         return 'FormNote(content="{}")'.format(self.content)

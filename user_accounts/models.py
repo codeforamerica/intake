@@ -6,7 +6,7 @@ from allauth.account.adapter import get_adapter
 from allauth.account import utils as allauth_account_utils
 from invitations.models import Invitation as BaseInvitation
 from intake import models as intake_models
-from formation.forms import county_form_selector
+from formation.forms import county_form_selector, display_form_selector
 from . import exceptions
 
 
@@ -36,12 +36,15 @@ class Organization(models.Model):
         """
         return self.pdfs.count() > 0
 
-    def get_default_form(self):
+    def get_default_form(self, display=False):
         """Get the basic input form for this organization
         For the time being, this is purely based on the county
         """
-        return county_form_selector.get_combined_form_class(counties=[self.county.slug])
+        form_selector = display_form_selector if display else county_form_selector
+        return form_selector.get_combined_form_class(counties=[self.county.slug])
 
+    def get_display_form(self):
+        return self.get_default_form(display=True)
 
 
 class Invitation(BaseInvitation):
@@ -144,7 +147,7 @@ class UserProfile(models.Model):
         submission data to this user.
         For now, this is based on the default form for the organization
         """
-        return self.organization.get_default_form()
+        return self.organization.get_display_form()
 
     def should_see_pdf(self):
         """This should be based on whether or not this user's org has a pdf

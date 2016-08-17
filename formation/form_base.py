@@ -23,6 +23,11 @@ class Form(base.BindParseValidate):
             for field in self.get_usable_fields()}
         self.cleaned_data = base.UNSET
 
+    @classmethod
+    def get_field_keys(cls):
+        for field_class in cls.fields:
+            yield field_class.context_key
+
     def get_initial(self):
         return self.parsed_data
 

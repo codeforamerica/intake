@@ -4,9 +4,8 @@
 <section class="content">
   <div class="container">
     <div class="row">
-      <div class="data_display-dataset">
-{{ submission.get_display_form_for_user(request.user).display()|safe }}
-      </div> 
+      {%- set form = submission.get_display_form_for_user(request.user) %}
+      {% include "formation/intake_display.jinja" %}
     </div>
   </div>
 </section>
