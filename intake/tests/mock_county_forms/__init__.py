@@ -97,10 +97,8 @@ class Provider(BaseProvider):
             'on_probation_parole': self.maybe(0.1),
             'being_charged': self.maybe(0.05),
             'serving_sentence': self.maybe(0.05),
-            'currently_employed': self.maybe(0.4),
             'monthly_income': str(random.randint(0, 7000)),
-            'how_did_you_hear': '',
-            'additional_information': '',
+            'how_did_you_hear': ''
         }
         data.update(overrides)
         return data
