@@ -1,4 +1,5 @@
 from django.utils import timezone
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import EmailValidator
 from formation.field_types import (
@@ -41,12 +42,22 @@ class DateReceived(DateTimeField):
 class Counties(MultipleChoiceField):
     context_key = "counties"
     choices = COUNTY_CHOICES
-    label = _('Which counties were you arrested in?')
+    label = _('Where were you arrested or convicted?')
     help_text = _("We will send your Clear My Record application to these counties.")
     display_label = "Wants help with record in"
     choice_display_dict = COUNTY_CHOICE_DISPLAY_DICT
 
 
+class ConsentNote(FormNote):
+    context_key = "consent_note"
+    content = mark_safe("""
+    <p>
+      By clicking "Apply",  you are:
+    </p>
+    <ol>
+      <li>Giving the San Francisco Public Defender's office permission to get your San Francisco RAP Sheet.</li>
+      <li>Acknowledging that filling out this form is not a guarantee that a public defender will represent you.</li>
+    </ol>""")
 
 class HowDidYouHear(CharField):
     context_key = "how_did_you_hear"
@@ -343,6 +354,7 @@ INTAKE_FIELDS = [
 
     HowDidYouHear,
     AdditionalInformation,
+    ConsentNote,
 ]
 
 

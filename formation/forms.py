@@ -74,7 +74,8 @@ class SanFranciscoCountyForm(CombinableCountyFormSpec):
         F.CurrentlyEmployed,
         F.MonthlyIncome,
         F.MonthlyExpenses,
-        F.HowDidYouHear
+        F.HowDidYouHear,
+        F.ConsentNote,
     }
     required_fields = {
         F.FirstName,
