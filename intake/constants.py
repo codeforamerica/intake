@@ -51,7 +51,7 @@ CONFIRMATION_MESSAGES = {
 
 COUNTY_CHOICES = (
     (Counties.SAN_FRANCISCO, _('San Francisco')),
-    (Counties.CONTRA_COSTA,  _('Conta Costa County (near Richmond, Walnut Creek, Antioch, or Brentwood)')),
+    (Counties.CONTRA_COSTA,  _('Conta Costa County (near Richmond, Concord, Walnut Creek, San Ramon, Antioch, or Brentwood)')),
     (Counties.ALAMEDA,  _('Alameda County (near Oakland, Berkeley, San Leandro, Hayward, Union City, Pleasanton, or Livermore)')),
     # (Counties.OTHER, _('Some other county'))
     )

@@ -160,7 +160,8 @@ class FormSubmission(models.Model):
             DisplayFormClass = display_form_selector.get_combined_form_class(
                 counties=[
                     constants.Counties.SAN_FRANCISCO,
-                    constants.Counties.CONTRA_COSTA
+                    constants.Counties.CONTRA_COSTA,
+                    constants.Counties.ALAMEDA,
                     ])
         init_data = dict(
             date_received=self.get_local_date_received(),
