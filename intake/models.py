@@ -123,9 +123,12 @@ class FormSubmission(models.Model):
     def last_processed_by_agency(self):
         return self.agency_log_time(ApplicationLogEntry.PROCESSED, max)
 
-    def get_local_date_received(self, fmt, timezone_name='US/Pacific'):
+    def get_local_date_received(self, fmt=None, timezone_name='US/Pacific'):
         local_tz = timezone(timezone_name)
-        return self.date_received.astimezone(local_tz).strftime(fmt)
+        local_datetime = self.date_received.astimezone(local_tz)
+        if not fmt:
+            return local_datetime
+        return local_datetime.strftime(fmt)
 
     def get_contact_preferences(self):
         if 'contact_preferences' in self.answers:
@@ -160,7 +163,7 @@ class FormSubmission(models.Model):
                     constants.Counties.CONTRA_COSTA
                     ])
         init_data = dict(
-            date_received=self.date_received,
+            date_received=self.get_local_date_received(),
             counties=list(self.counties.all().values_list('slug', flat=True))
             )
         init_data.update(self.answers)

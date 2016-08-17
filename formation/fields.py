@@ -1,4 +1,4 @@
-
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import EmailValidator
 from formation.field_types import (
@@ -6,7 +6,7 @@ from formation.field_types import (
      MultipleChoiceField, MultiValueField,
      FormNote, DateTimeField
      )
-from intake.constants import COUNTY_CHOICES, CONTACT_PREFERENCE_CHOICES
+from intake.constants import COUNTY_CHOICES, CONTACT_PREFERENCE_CHOICES, COUNTY_CHOICE_DISPLAY_DICT
 from project.jinja2 import namify
 
 ###
@@ -18,6 +18,21 @@ class DateReceived(DateTimeField):
     default_display_format = "%b %-d, %Y"
     display_label = "Applied on"
 
+    def get_display_value(self):
+        value = super().get_display_value()
+        if value:
+            local_now = timezone.now()
+            time_delta = local_now - self.get_current_value()
+            n_days = abs(time_delta.days)
+            if n_days == 0:
+                note = " (today)"
+            else:
+                note = " ({} day{} ago)".format(
+                    n_days,
+                    's' if n_days != 1 else '')
+            value = value + note
+        return value
+
 
 class Counties(MultipleChoiceField):
     context_key = "counties"
@@ -25,6 +40,8 @@ class Counties(MultipleChoiceField):
     label = _('Which counties were you arrested in?')
     help_text = _("We will send your Clear My Record application to these counties.")
     display_label = "Wants help with record in"
+    choice_display_dict = COUNTY_CHOICE_DISPLAY_DICT
+
 
 
 class HowDidYouHear(CharField):
@@ -110,6 +127,10 @@ class ContactPreferences(MultipleChoiceField):
     choices = CONTACT_PREFERENCE_CHOICES
     label = _('How would you like us to contact you?')
     help_text = _('Code for America will use this to update you about your application.')
+    display_label = "Prefers contact via"
+
+    def get_display_value(self):
+        return super().get_display_value(use_or=True)
 
 
 class PhoneNumberField(CharField):
@@ -175,41 +196,45 @@ class BeingCharged(YesNoField):
     context_key = "being_charged"
     label = _("Are you currently being charged with a crime?")
     display_label = "Is currently being charged"
+    flip_display_choice_order = True
 
 
 class ServingSentence(YesNoField):
     context_key = "serving_sentence"
     label = _("Are you currently serving a sentence?")
     display_label = "Is serving a sentence"
+    flip_display_choice_order = True
 
 
 class OnProbationParole(YesNoField):
     context_key = "on_probation_parole"
     label = _("Are you on probation or parole?")
     display_label = "Is on probation or parole"
+    flip_display_choice_order = True
 
 class WhereProbationParole(CharField):
     context_key = "where_probation_or_parole"
     label = _("Where is your probation or parole?")
-    display_label = "Probation/Parole location"
+    display_label = "Where"
 
 
 class WhenProbationParole(CharField):
     context_key = "when_probation_or_parole"
     label = _("When does your probation or parole end?")
-    display_label = "Probation/Parole ends"
+    display_label = "Until"
 
 
 class RAPOutsideSF(YesNoField):
     context_key = "rap_outside_sf"
     label = _("Have you ever been arrested or convicted outside of San Francisco?")
     display_label = "Has RAP outside SF"
+    flip_display_choice_order = True
 
 
 class WhenWhereOutsideSF(CharField):
     context_key = "when_where_outside_sf"
     label = _("When and where were you arrested or convicted outside of San Francisco?")
-    display_label = "Convictions/arrests outside SF"
+    display_label = "Where/when"
 
 
 ###

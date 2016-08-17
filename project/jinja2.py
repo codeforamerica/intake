@@ -24,15 +24,16 @@ def url_with_ids(view_name, ids):
     return url + params
 
 
-def oxford_comma(things):
+def oxford_comma(things, use_or=False):
     things = list(things)
+    sep = "or" if use_or else "and"
     if not things:
         return ""
     if len(things) == 1:
         return str(things[0])
     elif len(things) == 2:
-        return " and ".join(map(str, things))
-    return ", ".join(list(map(str, things[:-1])) + ["and "+str(things[-1])])
+        return (" "+sep+" ").join(map(str, things))
+    return ", ".join(list(map(str, things[:-1])) + [sep+" "+str(things[-1])])
 
 
 class Linkifier:

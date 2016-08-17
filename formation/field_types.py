@@ -105,13 +105,17 @@ class ChoiceField(CharField):
             raise exceptions.NoChoicesGivenError(str(
                 "This field requires a `choices` attribute."
                 ))
-        self.choice_display_dict = {
-            key: display
-            for key, display in self.choices
-        }
+        if not hasattr(self, 'choice_display_dict'):
+            self.choice_display_dict = {
+                key: display
+                for key, display in self.choices
+            }
 
     def get_display_for_choice(self, value):
         return self.choice_display_dict[value]
+
+    def is_current_choice(self, choice_option):
+        return self.get_current_value() == choice_option
         
 
 class MultipleChoiceField(ChoiceField):
@@ -145,18 +149,27 @@ class MultipleChoiceField(ChoiceField):
     def get_current_value(self):
         return Field.get_current_value(self)
 
-    def get_display_value(self):
+    def get_display_value(self, use_or=False):
         return oxford_comma([
             mark_safe(self.get_display_for_choice(choice))
             for choice in self.get_current_value()
-            ])
+            ], use_or)
 
 
 class YesNoField(ChoiceField):
     choices = YES_NO_CHOICES
+    display_template_name = "formation/option_set_display.jinja"
+
+    def get_display_choices(self):
+        if getattr(self, 'flip_display_choice_order', False):
+            return reversed(self.choices)
+        return self.choices
 
     def get_display_value(self):
         return self.get_current_value().capitalize()
+
+    def __bool__(self):
+        return self.get_current_value() == YES
 
 
 class MultiValueField(Field):

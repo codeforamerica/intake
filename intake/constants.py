@@ -44,3 +44,9 @@ COUNTY_CHOICES = (
     (Counties.CONTRA_COSTA,  _('Conta Costa County (around Richmond, Walnut Creek, Antioch, or Brentwood)')),
     # (Counties.OTHER, _('Some other county'))
     )
+
+COUNTY_CHOICE_DISPLAY_DICT = {
+    Counties.SAN_FRANCISCO: CountyNames.SAN_FRANCISCO,
+    Counties.CONTRA_COSTA: CountyNames.CONTRA_COSTA,
+}
+

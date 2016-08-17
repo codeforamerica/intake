@@ -1,24 +1,131 @@
-.data_display + .data_display {
-	border-top: 1px solid @gray;
+h1.bundle-count {
+	font-size: 1.5em;
 }
-.data_display {
-	padding: 0.25em;
+
+ol.app_bundle_list {
+	padding-left: 1.5em;
+	font-size: 1.3em;
+}
+div.application-data_display {
+	border-top: .5em solid @gray-light;
+	position: relative;
+	padding-top: 1em;
+	margin-top: 2em;
+}
+.application-loop-id {
+	display: inline-block;
+	font-size: 1.5em;
+	color: white;
+	background-color: @gray-light;
+	height: 2em;
+	width: 2em;
+	border-radius: 1em;
+	text-align: center;
+	line-height: 2em;
+	position: absolute;
+	top: -1.2em;
+	left: -1.5em;
+}
+
+.data_display-dataset {
+	position: relative;
+	width: 48em;
 }
 
 .data_display-label {
-	color: @gray-light;
+	color: lighten(@gray-light, 20%);
 	font-size: .9em;
 }
 .data_display-value {
-	font-size: 1.1em;
+	color: black;
+	font-size: 1.2em;
 }
 
 .data_display-value.empty:after {
 	content: "EMPTY";
 	color: @gray-lighter;
 }
+.data_display-section {
+	max-width: 34em;
+	padding: 0.7em 0;
+}
+.data_display-section + .data_display-section {
+	border-top: 1px solid @gray-lighter;
+}
+
+h3.data_display-section_header {
+	color: @gray-light;
+	padding: 0;
+	margin: 0;
+	font-size: .8em;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	margin-bottom: 0.7em;
+}
+
+.data_display-row + .data_display-row {
+	margin-top: 1em;
+}
+.data_display-row > .datum {
+	display: inline-block;
+}
+
+.data_display-section.time_place {
+	height: 4em;
+	max-width: 48em;
+	.data_display-value {
+		font-size: 1em;
+	}
+}
+.data_display-section.case_status {
+	margin-top: 0;
+	position: absolute;
+	top: 4em;
+	left: 36em;
+	width: 12em;
+}
+
+.data_display-row .datum + .datum {
+	margin-left: 2em;
+}
+
+.data_display-row.name .data_display-value {
+	font-size: 1.5em;
+}
 
 .data_display.address pre {
 	font-family: @font-family-sans-serif;
 	margin: 0;
+}
+
+.data_display-stack  + .data_display-stack {
+	border-top: 1px solid @gray-lighter;
+	margin-top: 0.5em;
+	padding-top: 0.5em;
+}
+
+.data_display-value_option_set {
+	padding: 0.2em 0;
+}
+
+.data_display-value_option {
+	display: inline-block;
+	padding: 0.1em 1em;
+	border-radius: 1em;
+	font-size: 1em;
+}
+
+.data_display-value_option + .data_display-value_option {
+	margin-left: 1em;
+}
+
+.data_display-value.not_chosen {
+	color: lighten(@gray-light, 25%);
+	background-color: @gray-lighter;
+	border: 2px solid @gray-lighter;
+}
+
+.data_display-value.chosen {
+	color: black;
+	border: 2px solid black;
 }
