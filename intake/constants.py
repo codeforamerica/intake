@@ -21,6 +21,13 @@ CONTACT_PREFERENCE_CHECKS = {
     'prefers_voicemail': ('phone_number', _('voicemail'), _("a phone number")),
     }
 
+GENDER_PRONOUN_CHOICES = (
+    ('he',   _('He/Him/His')),
+    ('she',  _('She/Her/Hers')),
+    ('they', _('They/Them/Theirs')),
+    ('none', _('Prefer not to answer')),
+    )
+
 STAFF_NAME_CHOICES = ['Jazmyn', 'Ben']
 
 class Counties:

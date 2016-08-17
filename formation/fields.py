@@ -4,9 +4,13 @@ from django.core.validators import EmailValidator
 from formation.field_types import (
      CharField, ChoiceField, YesNoField,
      MultipleChoiceField, MultiValueField,
-     FormNote, DateTimeField
+     FormNote, DateTimeField, YES_NO_CHOICES
      )
-from intake.constants import COUNTY_CHOICES, CONTACT_PREFERENCE_CHOICES, COUNTY_CHOICE_DISPLAY_DICT
+from intake.constants import (
+    COUNTY_CHOICES, CONTACT_PREFERENCE_CHOICES,
+    GENDER_PRONOUN_CHOICES,
+    COUNTY_CHOICE_DISPLAY_DICT
+    )
 from project.jinja2 import namify
 
 ###
@@ -133,6 +137,13 @@ class ContactPreferences(MultipleChoiceField):
         return super().get_display_value(use_or=True)
 
 
+class PreferredPronouns(ChoiceField):
+    context_key = "preferred_pronouns"
+    choices = GENDER_PRONOUN_CHOICES
+    label = _('How would you like us to address you?')
+    display_label = "Preferred pronouns"
+
+
 class PhoneNumberField(CharField):
     context_key = "phone_number"
     label= _('What is your phone number?')
@@ -212,6 +223,7 @@ class OnProbationParole(YesNoField):
     display_label = "Is on probation or parole"
     flip_display_choice_order = True
 
+
 class WhereProbationParole(CharField):
     context_key = "where_probation_or_parole"
     label = _("Where is your probation or parole?")
@@ -222,6 +234,13 @@ class WhenProbationParole(CharField):
     context_key = "when_probation_or_parole"
     label = _("When does your probation or parole end?")
     display_label = "Until"
+
+
+class FinishedHalfProbation(ChoiceField):
+    context_key = "finished_half_probation"
+    choices = YES_NO_CHOICES + (('not_applicable', _("Not on probation")),)
+    label = _("If you're on probation, have you finished half of your probation time?")
+    display_label = "Past half probation"
 
 
 class RAPOutsideSF(YesNoField):
@@ -264,9 +283,25 @@ class IncomeSource(CharField):
     help_text = _("For example: Job, Social Security, Food stamps")
 
 
+class OnPublicBenefits(YesNoField):
+    context_key = "on_public_benefits"
+    label = _("Are you on any government benefits?")
+
+
+class OwnsHome(YesNoField):
+    context_key = "owns_home"
+    label = _("Do you own your home?")
+
+
 class MonthlyExpenses(CharField):
     context_key = "monthly_expenses"
     label = _("How much do you spend each month on things like rent, groceries, utilities, medical expenses, or childcare expenses?")
+
+
+class HouseholdSize(CharField):
+    context_key = "household_size"
+    label = _("How many people live with you?")
+    help_text = _('For example: "3"')
 
 
 INTAKE_FIELDS = [
@@ -278,6 +313,8 @@ INTAKE_FIELDS = [
     FirstName,
     MiddleName,
     LastName,
+
+    PreferredPronouns,
 
     PhoneNumberField,
     EmailField,
@@ -291,6 +328,7 @@ INTAKE_FIELDS = [
     OnProbationParole,
     WhereProbationParole,
     WhenProbationParole,
+    FinishedHalfProbation,
     RAPOutsideSF,
     WhenWhereOutsideSF,
 
@@ -298,7 +336,10 @@ INTAKE_FIELDS = [
     CurrentlyEmployed,
     MonthlyIncome,
     IncomeSource,
+    OnPublicBenefits,
     MonthlyExpenses,
+    OwnsHome,
+    HouseholdSize,
 
     HowDidYouHear,
     AdditionalInformation,

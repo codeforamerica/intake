@@ -3,8 +3,14 @@ from faker import Faker
 # first, import a similar Provider or use the default one
 from faker.providers import BaseProvider
 
+from intake.constants import GENDER_PRONOUN_CHOICES
+
 # create new provider class
 class Provider(BaseProvider):
+
+    def some_choice(self, choices):
+        return random.choice(
+            [key for key, display in choices])
 
     def maybe(self, chance_of_yes=0.5):
         return self.random_element({
@@ -82,6 +88,7 @@ class Provider(BaseProvider):
     def alameda_county_form_answers(self, **overrides):
         data = {
             'contact_preferences': self.generate_contact_preferences(),
+            'preferred_pronouns': self.some_choice(GENDER_PRONOUN_CHOICES),
             'first_name': self.generator.first_name(),
             'last_name': self.generator.last_name(),
             'phone_number': self.numerify('###-###-####'),
@@ -95,9 +102,13 @@ class Provider(BaseProvider):
             'address.state': self.generator.state_abbr(),
             'address.zip': self.generator.zipcode(),
             'on_probation_parole': self.maybe(0.1),
+            'finished_half_probation': 'not_applicable',
             'being_charged': self.maybe(0.05),
             'serving_sentence': self.maybe(0.05),
             'monthly_income': str(random.randint(0, 7000)),
+            'on_public_benefits': self.maybe(0.7),
+            'owns_home': self.maybe(0.1),
+            'household_size': str(random.randint(0, 4)),
             'how_did_you_hear': ''
         }
         data.update(overrides)
