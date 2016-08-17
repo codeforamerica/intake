@@ -31,7 +31,7 @@ gulp.task('watch', function(){
 gulp.task('django', function(){
   var spawn = process.spawn;
   console.info('Starting django server');
-  spawn('python', ['manage.py','runserver'], {stdio: 'inherit'});
+  spawn('python', ['manage.py','runserver','--settings=project.settings.dev'], {stdio: 'inherit'});
 });
 
 
