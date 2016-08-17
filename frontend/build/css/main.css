@@ -3776,6 +3776,17 @@ button[type="submit"] .badge {
   border-bottom: 0.25em solid #d9534f;
   background-color: #fae7e6;
 }
+.counties label > * {
+  vertical-align: text-top;
+  display: inline-block;
+}
+.counties input {
+  width: 1em;
+}
+.counties .option-display_text {
+  width: 17em;
+  line-height: 1.3em;
+}
 .subfield-row > .subfield {
   display: inline-block;
 }
