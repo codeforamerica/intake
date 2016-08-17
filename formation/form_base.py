@@ -23,6 +23,14 @@ class Form(base.BindParseValidate):
             for field in self.get_usable_fields()}
         self.cleaned_data = base.UNSET
 
+    def _add_message(self, message_type, message, key=None):
+        """For adding errors or warnings, they are added both to 
+        this form as well as to the relevant field, if it exists 
+        """
+        super()._add_message(message_type, message, key)
+        if key and key in self.fields:
+            self.fields.get(key)._add_message(message_type, message, key)
+
     @classmethod
     def get_field_keys(cls):
         for field_class in cls.fields:
@@ -32,6 +40,9 @@ class Form(base.BindParseValidate):
         return self.parsed_data
 
     def get_usable_fields(self):
+        """Returns fields that subclass BindParseValidate
+        (and therefor only those which handle input)
+        """
         for field in self.fields.values():
             if isinstance(field, base.BindParseValidate):
                 yield field

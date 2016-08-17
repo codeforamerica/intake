@@ -74,7 +74,7 @@ class TestBindParseValidate(TestCase):
         expected_errors = {
             base.DEFAULT_CONTEXT_KEY: [
                 mock.sample_error_message,
-                mock.sample_error_message
+                mock.sample_error_message2
             ]
         }
         self.assertDictEqual(expected_errors, form.errors)
@@ -96,7 +96,7 @@ class TestBindParseValidate(TestCase):
         expected_errors = {
             "special": [
                 mock.sample_error_message,
-                mock.sample_error_message
+                mock.sample_error_message2
             ]
         }
         self.assertDictEqual(expected_errors, form.errors)

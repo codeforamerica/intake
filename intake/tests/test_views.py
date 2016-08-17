@@ -410,6 +410,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         result = self.client.fill_form(reverse('intake-apply'), counties=[contracosta])
         required_fields = forms.ContraCostaForm.required_fields
 
+        # check that leaving out any required field returns an error on that field
         for required_field in required_fields:
             if hasattr(required_field, 'subfields'):
                 continue
@@ -420,6 +421,18 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
                 reverse('intake-county_application'),
                 **bad_data)
             self.assertContains(result, required_field.is_required_error_message)
+
+        # check for the preferred contact methods validator
+        bad_data = answers.copy()
+        bad_data['contact_preferences'] = ['prefers_email', 'prefers_sms']
+        bad_data['email'] = ''
+        bad_data['phone_number'] = ''
+        result = self.client.fill_form(
+            reverse('intake-county_application'),
+            **bad_data)
+        self.assertTrue(result.context['form'].email.errors)
+        self.assertTrue(result.context['form'].phone_number.errors)
+
         result = self.client.fill_form(
                 reverse('intake-county_application'),
                 **answers)

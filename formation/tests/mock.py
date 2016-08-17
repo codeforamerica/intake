@@ -5,6 +5,7 @@ from formation.tests import rendered_samples as rendered
 from faker import Factory as FakerFactory
 
 sample_error_message = "not okay"
+sample_error_message2 = "not okay at all"
 
 bad_email = "someone@nothing"
 good_email = "someone@something.org"
@@ -113,7 +114,7 @@ context_validator = ContextValidator()
 
 
 def list_validator(value):
-    errors = [sample_error_message, sample_error_message]
+    errors = [sample_error_message, sample_error_message2]
     raise ValidationError(errors)
 
 
@@ -125,7 +126,7 @@ def dict_validator(value):
 
 def dict_with_list_validator(value):
     raise ValidationError({
-        "special": [sample_error_message, sample_error_message]
+        "special": [sample_error_message, sample_error_message2]
         })
 
 

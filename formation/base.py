@@ -99,13 +99,20 @@ class BindParseValidate(Renderable):
         """Adds warnings or errors based on the message_type
         """
         key = key or self.context_key
+        # pull from the fields
         scoped_message_list = self._get_messages_list(message_type, key)
-        scoped_message_list.append(message)
-        messages_dict = {key: scoped_message_list}
-        self._get_messages_att(message_type).update(messages_dict)
+        # don't add the error/warning message if it's already there
+        if message not in scoped_message_list:
+            scoped_message_list.append(message)
+            messages_dict = {key: scoped_message_list}
+            # set the error on the fields
+            self._get_messages_att(message_type).update(messages_dict)
 
     def _get_messages_list(self, message_type, key=None):
+        """gets warnings/errors, possibly scoped by a key
+        """
         key = key or self.context_key
+        # pull from fields
         messages_dict = self._get_messages_att(message_type)
         return messages_dict.get(key, [])
 
