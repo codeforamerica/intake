@@ -40,7 +40,7 @@ class CountyNames:
     SAN_FRANCISCO = 'San Francisco'
     CONTRA_COSTA = 'Contra Costa'
     ALAMEDA = 'Alameda'
-    ALL = 'San Francisco and Contra Costa Counties'
+    ALL = 'San Francisco, Alameda, and Contra Costa Counties'
 
 CONFIRMATION_MESSAGES = {
     Counties.SAN_FRANCISCO: _("You will get a letter in the mail from the San Francisco Public Defender in 2-4 weeks."),

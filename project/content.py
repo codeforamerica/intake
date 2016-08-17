@@ -70,6 +70,9 @@ class constants:
     footer_cc = str(
         "Learn more about "
         "the Contra Costa Public Defender")
+    footer_alameda = str(
+        "Learn more about "
+        "the Alameda Public Defender")
     back_home_btn ="Go back to main page"
 
     metadata_title = topbar

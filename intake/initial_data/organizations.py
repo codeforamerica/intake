@@ -30,5 +30,10 @@ data = {
             "county_id": None,
             "is_receiving_agency": False,
         },
+        {
+            "name": _("Alameda Public Defender"),
+            "county_id": 3,
+            "is_receiving_agency": True,
+        },
     ]
 }

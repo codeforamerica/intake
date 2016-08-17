@@ -63,8 +63,10 @@ linkify_links = {
     "Privacy Policy": reverse_lazy("intake-privacy"),
     "San Francisco Public Defender": "http://sfpublicdefender.org/services/clean-slate/",
     "Contra Costa Public Defender": "http://co.contra-costa.ca.us/1555/Public-Defender",
+    "Alameda Public Defender": "http://www.co.alameda.ca.us/defender/services/cleanslate.htm",
     "clearmyrecord@codeforamerica.org": "mailto:clearmyrecord@codeforamerica.org",
     "(415) 301-6005": "tel:14153016005"
 }
+
 linkify=Linkifier(linkify_links)
     
