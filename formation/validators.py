@@ -12,7 +12,7 @@ class ValidChoiceValidator:
     reporting the invalid input.
     """
 
-    not_found_error = _("'{}' is not a valid choice.")
+    not_found_error = _("{} is not a valid choice.")
 
     def set_context(self, field):
         if not hasattr(field, 'choices'):
@@ -43,7 +43,7 @@ class MultipleValidChoiceValidator(ValidChoiceValidator):
         "{} are not valid choices.")
 
     def format_error_message(self, missing_values):
-        things = ["'{}'".format(val) for val in missing_values]
+        things = ["{}".format(val) for val in missing_values]
         if len(things) == 1:
             fragment = things[0]
             template = self.not_found_error

@@ -18,6 +18,12 @@ data = {
             "slug": Counties.CONTRA_COSTA, # contracosta
             "name": CountyNames.CONTRA_COSTA,
             "description": COUNTY_CHOICES[1][1]
+        },
+        {
+            "pk": 3,
+            "slug": Counties.ALAMEDA, # contracosta
+            "name": CountyNames.ALAMEDA,
+            "description": COUNTY_CHOICES[2][1]
         }
     ]
 }

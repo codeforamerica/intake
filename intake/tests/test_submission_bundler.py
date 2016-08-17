@@ -12,8 +12,9 @@ class BundlerTestCase(TestCase):
     def setUpTestData(cls):
         super().setUpTestData()
         counties = models.County.objects.order_by('slug').all()
-        contra_costa = counties[0]
-        san_francisco = counties[1]
+        alameda = counties[0]
+        contra_costa = counties[1]
+        san_francisco = counties[2]
         # 6 submissions
         # 3 sf only
         # 2 cc only

@@ -51,6 +51,7 @@ class GetFormSessionDataMixin:
 
 
 class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
+    error_message = _("There were some problems with your application. Please check the errors below.")
 
     def update_session_data(self):
         form_data = self.request.session.get(self.session_storage_key, {})
@@ -77,7 +78,7 @@ class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
 class MultiStepApplicationView(MultiStepFormViewBase):
     template_name = "forms/county_form.jinja"
     success_url = reverse_lazy('intake-thanks')
-    error_message = _("There were some problems with your application. Please check the errors below.")
+    
 
     def confirmation(self, submission):
         county_list = [name + " County" for name in submission.get_nice_counties()]

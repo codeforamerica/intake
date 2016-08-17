@@ -26,27 +26,32 @@ STAFF_NAME_CHOICES = ['Jazmyn', 'Ben']
 class Counties:
     CONTRA_COSTA = 'contracosta'
     SAN_FRANCISCO = 'sanfrancisco'
+    ALAMEDA = 'alameda'
     OTHER = 'other'
 
 class CountyNames:
     SAN_FRANCISCO = 'San Francisco'
     CONTRA_COSTA = 'Contra Costa'
+    ALAMEDA = 'Alameda'
     ALL = 'San Francisco and Contra Costa Counties'
 
 CONFIRMATION_MESSAGES = {
     Counties.SAN_FRANCISCO: _("You will get a letter in the mail from the San Francisco Public Defender in 2-4 weeks."),
-    Counties.CONTRA_COSTA: _("The Contra Costa Public Defender will follow up with you if they need any other information.")
+    Counties.CONTRA_COSTA: _("The Contra Costa Public Defender will follow up with you if they need any other information."),
+    Counties.ALAMEDA: _("In # weeks, you will get a phone call from the Alameda Public Defender with an update on your case.")
     }
 
 
 COUNTY_CHOICES = (
     (Counties.SAN_FRANCISCO, _('San Francisco')),
-    (Counties.CONTRA_COSTA,  _('Conta Costa County (around Richmond, Walnut Creek, Antioch, or Brentwood)')),
+    (Counties.CONTRA_COSTA,  _('Conta Costa County (near Richmond, Walnut Creek, Antioch, or Brentwood)')),
+    (Counties.ALAMEDA,  _('Alameda County (near Oakland, Berkeley, San Leandro, Hayward, Union City, Pleasanton, or Livermore)')),
     # (Counties.OTHER, _('Some other county'))
     )
 
 COUNTY_CHOICE_DISPLAY_DICT = {
     Counties.SAN_FRANCISCO: CountyNames.SAN_FRANCISCO,
     Counties.CONTRA_COSTA: CountyNames.CONTRA_COSTA,
+    Counties.ALAMEDA: CountyNames.ALAMEDA,
 }
 

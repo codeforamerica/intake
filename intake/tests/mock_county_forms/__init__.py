@@ -79,6 +79,32 @@ class Provider(BaseProvider):
         data.update(overrides)
         return data
 
+    def alameda_county_form_answers(self, **overrides):
+        data = {
+            'contact_preferences': self.generate_contact_preferences(),
+            'first_name': self.generator.first_name(),
+            'last_name': self.generator.last_name(),
+            'phone_number': self.numerify('###-###-####'),
+            'email': self.generator.free_email(),
+            'dob.day': str(random.randint(1,31)),
+            'dob.month': str(random.randint(1,12)),
+            'dob.year': str(random.randint(1959, 2000)),
+            'us_citizen': self.maybe(0.8),
+            'address.street': self.generator.street_address(),
+            'address.city': self.generator.city(),
+            'address.state': self.generator.state_abbr(),
+            'address.zip': self.generator.zipcode(),
+            'on_probation_parole': self.maybe(0.1),
+            'being_charged': self.maybe(0.05),
+            'serving_sentence': self.maybe(0.05),
+            'currently_employed': self.maybe(0.4),
+            'monthly_income': str(random.randint(0, 7000)),
+            'how_did_you_hear': '',
+            'additional_information': '',
+        }
+        data.update(overrides)
+        return data
+
     def other_county_answers(self, **overrides):
         data = {
             'contact_preferences': self.generate_contact_preferences(),

@@ -29,8 +29,7 @@ class TestCombinableFormSpec(PatchTranslationTestCase):
             ])
         expected_optional_fields = {
             F.HowDidYouHear,
-            F.AdditionalInformation,
-            F.MiddleName,
+            F.AdditionalInformation
         }
         self.assertTrue(
             expected_optional_fields == set(CombinedForm.optional_fields)

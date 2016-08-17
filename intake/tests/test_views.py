@@ -438,6 +438,30 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
                 **answers)
         self.assertRedirects(result, reverse('intake-thanks'))
 
+    @patch('intake.views.models.FormSubmission.send_confirmation_notifications')
+    @patch('intake.views.notifications.slack_new_submission.send')
+    def test_can_apply_to_alameda_alone(self, slack, send_confirmation):
+        self.be_anonymous()
+        alameda = constants.Counties.ALAMEDA
+        answers = mock.fake.alameda_county_form_answers()
+        result = self.client.fill_form(reverse('intake-apply'), counties=[alameda])
+        self.assertRedirects(result, reverse('intake-county_application'))
+        result = self.client.get(reverse('intake-county_application'))
+        form = result.context['form']
+        self.assertListEqual(form.counties, [alameda])
+
+        result = self.client.fill_form(
+            reverse('intake-county_application'),
+            **answers)
+        lookup = {
+            key: answers[key]
+            for key in ['email', 'first_name', 'last_name', 'phone_number']}
+
+        submission = models.FormSubmission.objects.filter(
+            answers__contains=lookup).first()
+        county_slugs = [county.slug for county in submission.counties.all()]
+        self.assertListEqual(county_slugs, [alameda])
+
     def test_can_go_back_and_reset_counties(self):
         self.be_anonymous()
         county_slugs = [slug for slug, text in constants.COUNTY_CHOICES]
