@@ -159,12 +159,10 @@ class FormSubmission(models.Model):
                     constants.Counties.SAN_FRANCISCO,
                     constants.Counties.CONTRA_COSTA
                     ])
-        init_data = {}
-        field_keys = DisplayFormClass.get_field_keys()
-        unfound_keys = [key for key in field_keys if key not in self.answers]
-        for unfound in unfound_keys:
-            if hasattr(self, unfound):
-                init_data[unfound] = getattr(self, unfound)
+        init_data = dict(
+            date_received=self.date_received,
+            counties=list(self.counties.all().values_list('slug', flat=True))
+            )
         init_data.update(self.answers)
         display_form = DisplayFormClass(init_data)
         # initiate parsing

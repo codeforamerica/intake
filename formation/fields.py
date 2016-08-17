@@ -4,7 +4,7 @@ from django.core.validators import EmailValidator
 from formation.field_types import (
      CharField, ChoiceField, YesNoField,
      MultipleChoiceField, MultiValueField,
-     FormNote
+     FormNote, DateTimeField
      )
 from intake.constants import COUNTY_CHOICES, CONTACT_PREFERENCE_CHOICES
 from project.jinja2 import namify
@@ -12,6 +12,12 @@ from project.jinja2 import namify
 ###
 ### Meta fields about the application
 ###
+
+class DateReceived(DateTimeField):
+    context_key = "date_received"
+    default_display_format = "%b %-d, %Y"
+    display_label = "Applied on"
+
 
 class Counties(MultipleChoiceField):
     context_key = "counties"
@@ -239,6 +245,7 @@ class MonthlyExpenses(CharField):
 
 
 INTAKE_FIELDS = [
+    DateReceived,
     Counties,
 
     ContactPreferences,
