@@ -5,6 +5,7 @@ psycopg2~=2.6
 Jinja2~=2.8
 gunicorn~=19.4
 pytz~=2016.4
+python-dateutil~=2.5
 whitenoise~=3.0
 boto~=2.40
 django-storages~=1.4
@@ -14,3 +15,6 @@ sendgrid-django~=2.0
 django-jinja~=2.1
 django-debug-toolbar~=1.4
 djangorestframework~=3.3
+# for debugging in production
+ipdb~=0.8
+ipython~=5.0

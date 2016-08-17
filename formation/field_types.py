@@ -6,6 +6,8 @@ from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 from django.utils.html import conditional_escape
 from project.jinja2 import oxford_comma
+from dateutil.parser import parse as dateutil_parse
+from datetime import datetime
 
 YES = 'yes'
 NO = 'no'
@@ -45,6 +47,51 @@ class CharField(Field):
 
     def get_current_value(self):
         return mark_safe(Field.get_current_value(self))
+
+
+
+class DateTimeField(CharField):
+    """A DateTimeField takes an input string or datetime
+    and stores a datetime value internally
+    get_current_value will return either a datetime or None
+    get_display_value will return an html safe string
+    """
+    empty_value = None
+    default_display_format = "%c"
+    parse_error_message = _("'{}' does not look like a date")
+
+    def parse(self, raw_value):
+        """If the input is already a datetime,
+        pass it through. Otherwise, ensure that it is a str
+        and use dateutil to parse it
+        """
+        value = self.empty_value
+        if isinstance(raw_value, datetime) or raw_value is None:
+            return raw_value
+        self.assert_parse_received_correct_type(raw_value, str)
+        raw_value = self.parse_as_text(raw_value)
+        if raw_value:
+            try:
+                value = dateutil_parse(raw_value)
+            except ValueError:
+                self.add_error(
+                    self.parse_error_message.format(raw_value))
+        else:
+            value = None
+        return value
+
+    def get_display_value(self, strftime_format=None):
+        if not strftime_format:
+            strftime_format = self.default_display_format
+        value = self.get_current_value()
+        if value:
+            value = value.strftime(strftime_format)
+        else:
+            value = ''
+        return mark_safe(value)
+
+    def get_current_value(self):
+        return Field.get_current_value(self)
 
 
 class ChoiceField(CharField):

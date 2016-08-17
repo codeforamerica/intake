@@ -1,4 +1,5 @@
 import inspect
+import datetime
 from unittest import TestCase
 from unittest.mock import Mock, patch
 from formation.tests import mock
@@ -15,6 +16,11 @@ class NameField(field_types.CharField):
     help_text = "What should we call you?"
 
 
+class DateReceived(field_types.DateTimeField):
+    default_display_format = "%Y-%m-%d"
+    context_key = "received"
+
+
 class SingleFruit(field_types.ChoiceField):
     context_key = "fruit"
     choices = (
@@ -27,6 +33,7 @@ class MultipleFruit(field_types.MultipleChoiceField):
     choices = (
         ('apples', 'Apples'),
         ('oranges', 'Oranges'))
+
 
 class TestCharField(PatchTranslationTestCase):
 
@@ -86,6 +93,62 @@ class TestCharField(PatchTranslationTestCase):
         self.assertTrue(field.is_valid())
         self.assertFalse(field.is_empty())
         self.assertEqual(field.get_current_value(), "\n \t\r")
+
+
+class TestDateTimeField(PatchTranslationTestCase):
+    example_datetime = datetime.datetime(2016, 4, 18)
+
+    def as_input(self, thing):
+        return {DateReceived.context_key: thing}
+
+    def test_parses_datetime_unchanged(self):
+        dt = self.as_input(self.example_datetime)
+        field = DateReceived(dt)
+        self.assertTrue(field.is_valid())
+        self.assertEqual(field.get_current_value(), self.example_datetime)
+        self.assertEqual(field.parsed_data, self.example_datetime)
+
+    def test_parses_strings_using_dateutil(self):
+        datestrings = [
+            "2016-04-18",
+            "4/18/2016"]
+        for datestring in datestrings:
+            field = DateReceived(self.as_input(datestring))
+            self.assertTrue(field.is_valid())
+            self.assertEqual(field.get_current_value(), self.example_datetime)
+            self.assertEqual(field.parsed_data, self.example_datetime)
+
+    def test_adds_error_for_bad_text(self):
+        badstrings = [
+            "9ans09dn"
+            "1324/314123"
+            "2/15"]
+        for badstring in badstrings:
+            field = DateReceived(self.as_input(badstring))
+            self.assertFalse(field.is_valid())
+
+    def test_raises_error_if_not_datetime_or_str(self):
+        bad_inputs = [[], {}, 5]
+        for bad_input in bad_inputs:
+            with self.assertRaises(TypeError):
+                field = DateReceived(self.as_input(bad_input))
+                field.is_valid()
+
+    def test_get_display_value_returns_string(self):
+        inputs = [
+            self.example_datetime,
+            '4/18/2016',
+            '']
+        for input_sample in inputs:
+            field = DateReceived(self.as_input(input_sample))
+            field.is_valid()
+            is_str = isinstance(field.get_display_value(), str)
+            self.assertTrue(is_str)
+
+    def test_can_override_default_display_format(self):
+        field = DateReceived({'received': '4/18/2016'})
+        field.is_valid()
+        self.assertEqual(field.get_display_value(), '2016-04-18')
 
 
 class TestChoiceField(PatchTranslationTestCase):
@@ -366,6 +429,7 @@ class TestMultiValueField(PatchTranslationTestCase):
 
         with self.assertRaises(exceptions.MultiValueFieldSubfieldError):
             field = BadMulti()
+
 
 
 class TestRenderFieldTypes(TestCase):
