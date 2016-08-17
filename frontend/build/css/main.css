@@ -3584,6 +3584,14 @@ input[type="button"].btn-block {
     display: none !important;
   }
 }
+section.county_notice {
+  background-color: #ddf5fe;
+  font-size: 1em;
+  padding: 1em 0;
+}
+section.county_notice p {
+  margin: 0;
+}
 section.content.application_form {
   background-color: #fff;
 }
@@ -3796,6 +3804,121 @@ button[type="submit"] .badge {
 .phone_number input[name="phone_number"] {
   width: 9em;
 }
+h1.bundle-count {
+  font-size: 1.5em;
+}
+ol.app_bundle_list {
+  padding-left: 1.5em;
+  font-size: 1.3em;
+}
+div.application-data_display {
+  border-top: 0.5em solid #777777;
+  position: relative;
+  padding-top: 1em;
+  margin-top: 2em;
+}
+.application-loop-id {
+  display: inline-block;
+  font-size: 1.5em;
+  color: white;
+  background-color: #777777;
+  height: 2em;
+  width: 2em;
+  border-radius: 1em;
+  text-align: center;
+  line-height: 2em;
+  position: absolute;
+  top: -1.2em;
+  left: -1.5em;
+}
+.data_display-dataset {
+  position: relative;
+  width: 48em;
+}
+.data_display-label {
+  color: #aaaaaa;
+  font-size: .9em;
+}
+.data_display-value {
+  color: black;
+  font-size: 1.2em;
+}
+.data_display-value.empty:after {
+  content: "EMPTY";
+  color: #eeeeee;
+}
+.data_display-section {
+  max-width: 34em;
+  padding: 0.7em 0;
+}
+.data_display-section + .data_display-section {
+  border-top: 1px solid #eeeeee;
+}
+h3.data_display-section_header {
+  color: #777777;
+  padding: 0;
+  margin: 0;
+  font-size: .8em;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 0.7em;
+}
+.data_display-row + .data_display-row {
+  margin-top: 1em;
+}
+.data_display-row > .datum {
+  display: inline-block;
+}
+.data_display-section.time_place {
+  height: 4em;
+  max-width: 48em;
+}
+.data_display-section.time_place .data_display-value {
+  font-size: 1em;
+}
+.data_display-section.case_status {
+  margin-top: 0;
+  position: absolute;
+  top: 4em;
+  left: 36em;
+  width: 12em;
+}
+.data_display-row .datum + .datum {
+  margin-left: 2em;
+}
+.data_display-row.name .data_display-value {
+  font-size: 1.5em;
+}
+.data_display.address pre {
+  font-family: 'Segoe UI', 'Roboto', 'Helvetica Nueue', sans-serif;
+  margin: 0;
+}
+.data_display-stack + .data_display-stack {
+  border-top: 1px solid #eeeeee;
+  margin-top: 0.5em;
+  padding-top: 0.5em;
+}
+.data_display-value_option_set {
+  padding: 0.2em 0;
+}
+.data_display-value_option {
+  display: inline-block;
+  padding: 0.1em 1em;
+  border-radius: 1em;
+  font-size: 1em;
+}
+.data_display-value_option + .data_display-value_option {
+  margin-left: 1em;
+}
+.data_display-value.not_chosen {
+  color: #b7b7b7;
+  background-color: #eeeeee;
+  border: 2px solid #eeeeee;
+}
+.data_display-value.chosen {
+  color: black;
+  border: 2px solid black;
+}
 .top_bar a {
   color: inherit;
   text-decoration: none;
@@ -3946,6 +4069,12 @@ p.step_headline {
 .about_the_service,
 .who_we_are {
   padding-bottom: 50px;
+}
+h2.gov_service_name {
+  text-align: left;
+}
+.partner_list {
+  padding: 0;
 }
 /**Team**/
 .who_we_are {

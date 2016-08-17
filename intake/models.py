@@ -9,9 +9,12 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 
-from intake import pdfparser, anonymous_names, notifications, fields
-from intake.constants import CONTACT_METHOD_CHOICES, CONTACT_PREFERENCE_CHECKS, STAFF_NAME_CHOICES
+from intake import (
+    pdfparser, anonymous_names, notifications, model_fields,
+    constants
+    )
 
+from formation.forms import display_form_selector
 
 
 def gen_uuid():
@@ -24,8 +27,28 @@ def get_parser():
     return parser
 
 
+class County(models.Model):
+    slug = models.SlugField()
+    name = models.TextField()
+    description = models.TextField()
+
+    def get_receiving_agency(self, submission=None):
+        """Returns the appropriate receiving agency
+        for this county. Currently there is only one per county,
+        but in the future this can be used to make eligibility
+        determinations
+        """
+        return self.organizations.filter(is_receiving_agency=True).first()
+
+    def __str__(self):
+        return str(self.name)
+
+
+
 class FormSubmission(models.Model):
 
+    counties = models.ManyToManyField(County,
+        related_name="submissions")
     answers = JSONField()
     # old_uuid is only used for porting legacy applications
     old_uuid = models.CharField(max_length=34, unique=True,
@@ -47,23 +70,6 @@ class FormSubmission(models.Model):
         return submissions, logs
 
     @classmethod
-    def refer_unopened_apps(cls):
-        users = User.objects.filter(profile__should_get_notifications=True)
-        emails = [user.email for user in users]
-        submissions = cls.get_unopened_apps()
-        submission_ids=[s.id for s in submissions]
-        if submissions:
-            count = len(submission_ids)
-            notifications.front_email_daily_app_bundle.send(
-                to=emails,
-                count=count,
-                submission_ids=submission_ids
-                )
-            ApplicationLogEntry.log_referred(submission_ids, user=None)
-        notifications.slack_app_bundle_sent.send(submissions=submissions, emails=emails)
-        return notifications.slack_app_bundle_sent.render(submissions=submissions, emails=emails)
-
-    @classmethod
     def get_unopened_apps(cls):
         return cls.objects.exclude(
             logs__user__profile__organization__is_receiving_agency=True
@@ -76,8 +82,25 @@ class FormSubmission(models.Model):
             ).distinct()
 
     @classmethod
+    def get_permitted_submissions(cls, user, ids=None, related_objects=False):
+        query = cls.objects
+        if related_objects:
+            query = query.prefetch_related(
+                'logs__user__profile__organization',
+                'counties')
+        if ids:
+            query = query.filter(pk__in=ids)
+        if user.is_staff:
+            return query
+        county = user.profile.organization.county
+        return query.filter(counties=county)
+
+    @classmethod
     def all_plus_related_objects(cls):
-        return cls.objects.prefetch_related('logs__user__profile__organization').all()
+        return cls.objects.prefetch_related(
+            'logs__user__profile__organization',
+            'counties'
+            ).all()
 
     def agency_event_logs(self, event_type):
         '''assumes that self.logs and self.logs.user are prefetched'''
@@ -100,9 +123,12 @@ class FormSubmission(models.Model):
     def last_processed_by_agency(self):
         return self.agency_log_time(ApplicationLogEntry.PROCESSED, max)
 
-    def get_local_date_received(self, fmt, timezone_name='US/Pacific'):
+    def get_local_date_received(self, fmt=None, timezone_name='US/Pacific'):
         local_tz = timezone(timezone_name)
-        return self.date_received.astimezone(local_tz).strftime(fmt)
+        local_datetime = self.date_received.astimezone(local_tz)
+        if not fmt:
+            return local_datetime
+        return local_datetime.strftime(fmt)
 
     def get_contact_preferences(self):
         if 'contact_preferences' in self.answers:
@@ -117,8 +143,34 @@ class FormSubmission(models.Model):
         preferences = [k[8:] for k in self.get_contact_preferences()]
         return [
             nice for key, nice
-            in CONTACT_METHOD_CHOICES
+            in constants.CONTACT_METHOD_CHOICES
             if key in preferences]
+
+    def get_nice_counties(self):
+        return self.counties.all().values_list('name', flat=True)
+
+    def get_display_form_for_user(self, user):
+        """
+        based on user information, get the correct Form class and return it
+        instantiated with the data for self
+        """
+        if not user.is_staff:
+            DisplayFormClass = user.profile.get_submission_display_form()
+        else:
+            DisplayFormClass = display_form_selector.get_combined_form_class(
+                counties=[
+                    constants.Counties.SAN_FRANCISCO,
+                    constants.Counties.CONTRA_COSTA
+                    ])
+        init_data = dict(
+            date_received=self.get_local_date_received(),
+            counties=list(self.counties.all().values_list('slug', flat=True))
+            )
+        init_data.update(self.answers)
+        display_form = DisplayFormClass(init_data)
+        # initiate parsing
+        display_form.is_valid()
+        return display_form
 
     def get_formatted_address(self):
         address = self.answers.get('address', {})
@@ -134,7 +186,7 @@ class FormSubmission(models.Model):
         info = {}
         for key in self.get_contact_preferences():
             short = key[8:]
-            field_name, nice, datum = CONTACT_PREFERENCE_CHECKS[key]
+            field_name, nice, datum = constants.CONTACT_PREFERENCE_CHECKS[key]
             if short == 'snailmail':
                 info[short] = self.get_formatted_address()
             else:
@@ -159,10 +211,17 @@ class FormSubmission(models.Model):
     def send_confirmation_notifications(self):
         contact_info = self.get_contact_info()
         errors = {}
+        counties = self.counties.all()
+        county_names = [name + " County" for name in self.get_nice_counties()]
+        next_steps = [
+            constants.CONFIRMATION_MESSAGES[county.slug]
+            for county in counties]
         context = dict(
-            staff_name=random.choice(STAFF_NAME_CHOICES),
-            name=self.answers['first_name']
-            )
+            staff_name=random.choice(constants.STAFF_NAME_CHOICES),
+            name=self.answers['first_name'],
+            county_names=county_names,
+            organizations=[county.get_receiving_agency() for county in counties],
+            next_steps=next_steps)
         notify_map = {
             'email': notifications.email_confirmation,
             'sms': notifications.sms_confirmation
@@ -222,6 +281,11 @@ class ApplicationLogEntry(models.Model):
     user = models.ForeignKey(User,
         on_delete=models.SET_NULL, null=True,
         related_name='application_logs')
+    organization = models.ForeignKey(
+        'user_accounts.Organization',
+        on_delete=models.SET_NULL, null=True,
+        related_name='logs'
+        )
     submission = models.ForeignKey(FormSubmission,
         on_delete=models.SET_NULL, null=True,
         related_name='logs')
@@ -232,14 +296,17 @@ class ApplicationLogEntry(models.Model):
         ordering = ['-time']
 
     @classmethod
-    def log_multiple(cls, event_type, submission_ids, user, time=None):
+    def log_multiple(cls, event_type, submission_ids, user, time=None, organization=None):
         if not time:
             time = timezone_utils.now()
+        if event_type in [cls.PROCESSED, cls.OPENED, cls.DELETED] and not organization:
+            organization = user.profile.organization
         logs = []
         for submission_id in submission_ids:
             log = cls(
                 time=time,
                 user=user,
+                organization=organization,
                 submission_id=submission_id,
                 event_type=event_type
                 )
@@ -249,11 +316,13 @@ class ApplicationLogEntry(models.Model):
 
     @classmethod
     def log_opened(cls, submission_ids, user, time=None):
+        """When a user opens submissions, they represent their organization
+        """
         return cls.log_multiple(cls.OPENED, submission_ids, user, time)
 
     @classmethod
-    def log_referred(cls, submission_ids, user, time=None):
-        return cls.log_multiple(cls.REFERRED, submission_ids, user, time)
+    def log_referred(cls, submission_ids, user, time=None, organization=None):
+        return cls.log_multiple(cls.REFERRED, submission_ids, user, time, organization)
 
     @classmethod
     def log_confirmation_sent(cls, submission_id, user, time, contact_info=None, message_sent=''):
@@ -271,7 +340,7 @@ class ApplicationLogEntry(models.Model):
 
 
 class ApplicantContactedLogEntry(ApplicationLogEntry):
-    contact_info = fields.ContactInfoJSONField(default=dict)
+    contact_info = model_fields.ContactInfoJSONField(default=dict)
     message_sent = models.TextField(blank=True)
 
 
@@ -279,6 +348,12 @@ class FillablePDF(models.Model):
     name = models.CharField(max_length=50)
     pdf = models.FileField(upload_to='pdfs/')
     translator = models.TextField()
+    organization = models.ForeignKey(
+        'user_accounts.Organization',
+        on_delete=models.CASCADE,
+        related_name='pdfs',
+        null=True
+        )
 
     @classmethod
     def get_default_instance(cls):

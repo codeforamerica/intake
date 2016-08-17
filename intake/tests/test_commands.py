@@ -4,14 +4,15 @@ from intake.tests import mock
 from django.test import TestCase
 
 from intake.management import commands
+from intake import models
 
 class TestCommands(TestCase):
 
-    @patch('intake.management.commands.send_unopened_apps_notification.models')
-    def test_send_unopened_apps_notification(self, models):
+    @patch('intake.management.commands.send_unopened_apps_notification.submission_bundler')
+    def test_send_unopened_apps_notification(self, submission_bundler):
         command = Mock()
         commands.send_unopened_apps_notification.Command.handle(command)
-        models.FormSubmission.refer_unopened_apps.assert_called_once_with()
+        submission_bundler.bundle_and_notify.assert_called_once_with()
         command.style.SUCCESS.assert_called_once_with("Successfully referred any unopened apps")
 
 
@@ -102,3 +103,13 @@ No ApplicationLogEntry instances exist. Not deleting anything.
 --------
 Successfully imported 5 event logs from `fake_db_name` on `dbhost`'''
         self.assertEqual(importer.report(), expected_report)
+
+    def test_load_initial_data(self):
+        existing_counties = models.County.objects.all()
+        self.assertEqual(len(existing_counties), 2)
+        from intake.management.commands import load_initial_data
+        cmd = load_initial_data.Command()
+        cmd.stdout = Mock()
+        cmd.handle()
+        existing_counties = models.County.objects.all()
+        self.assertEqual(len(existing_counties), 2)

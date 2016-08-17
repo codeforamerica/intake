@@ -1,0 +1,17 @@
+<div class="data_display {% if field.is_subfield %}sub{% endif %}datum {{ field.get_html_class_name() }}">
+  <div class="data_display-label">{{ field.get_display_label() }}</div>
+  {%- if not field.is_empty() %}
+  <div class="data_display-value_option_set">
+    {%- for option, option_display in field.get_display_choices() %}
+    <span class="data_display-value data_display-value_option {{ option }}
+      {%- if field.is_current_choice(option) %} chosen
+      {%- else %} not_chosen
+      {%- endif %}">
+      {{ field.get_display_for_choice(option) }} 
+    </span>
+    {%- endfor %}
+  </div>
+  {%- else %}
+  <div class="data_display-value empty"></div>
+  {%- endif %}
+</div>

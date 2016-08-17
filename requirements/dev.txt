@@ -3,5 +3,3 @@
 selenium~=2.53
 autopep8~=1.2
 pep8~=1.6
-ipdb~=0.8
-ipython~=5.0

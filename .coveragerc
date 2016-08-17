@@ -3,6 +3,7 @@ source =
 	project
 	intake
 	user_accounts
+	formation
 omit = 
 	*/tests/*
 	project/settings/prod.py

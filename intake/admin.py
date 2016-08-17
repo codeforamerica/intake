@@ -1,7 +1,10 @@
 from django.contrib import admin
-from .models import FillablePDF
+from intake import models
 
+@admin.register(models.FillablePDF)
+class FillablePDFAdmin(admin.ModelAdmin):
+    pass
 
-@admin.register(FillablePDF)
-class AuthorAdmin(admin.ModelAdmin):
+@admin.register(models.County)
+class CountyAdmin(admin.ModelAdmin):
     pass

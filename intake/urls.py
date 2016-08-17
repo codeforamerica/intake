@@ -5,7 +5,8 @@ from . import views
 urlpatterns = [
     # public views
     url(r'^$', views.home, name='intake-home'),
-    url(r'^apply/$', views.apply_form, name='intake-apply'),
+    url(r'^apply/$', views.select_county, name='intake-apply'),
+    url(r'^application/$', views.county_application, name='intake-county_application'),
     url(r'^confirm/$', views.confirm, name='intake-confirm'),
     url(r'^thanks/$', views.thanks, name='intake-thanks'),
     url(r'^stats/$', views.stats, name='intake-stats'),
@@ -13,6 +14,10 @@ urlpatterns = [
 
     # protected views
     url(r'^application/(?P<submission_id>[0-9]+)/$', 
+        login_required(views.app_detail),
+        name='intake-app_detail'),
+
+    url(r'^application/(?P<submission_id>[0-9]+)/pdf/$', 
         login_required(views.filled_pdf),
         name='intake-filled_pdf'),
     

@@ -1,3 +1,6 @@
+import sys
+import cProfile
+from pstats import Stats
 import os
 import time
 from django.core import mail
@@ -163,6 +166,32 @@ class ScreenSequenceTestCase(FunctionalTestCase):
             self.screenshot(self.build_filepath(prefix, i, step_name))
 
 
+
+class TimeProfileTestMixin:
+    """A mixin that allows code to be profiled using cProfile
+    """
+    @classmethod
+    def setUpClass(cls):
+        search_term = '--profile'
+        for arg in sys.argv:
+            if search_term in arg:
+                cls.should_profile = True
+
+    def setUp(self):
+        super().setUp()
+        if self.should_profile:
+            self.profile = cProfile.Profile()
+            self.profile.enable()
+
+    def tearDown(self):
+        if self.should_profile:
+            results = Stats(self.profile)
+            results.strip_dirs()
+            results.sort_stats('cumulative')
+            results.print_stats(50)
+        super().tearDown()
+
+
 class DEVICES:
     Apple_iPhone_3GS = "Apple iPhone 3GS"
     Apple_iPhone_4 = "Apple iPhone 4"
@@ -208,3 +237,7 @@ class DEVICES:
     Samsung_Galaxy_Tab_7_7_8_9_10_1 = "Samsung Galaxy Tab 7.7, 8.9, 10.1"
     Samsung_Galaxy_Tab = "Samsung Galaxy Tab"
     Notebook_with_touch = "Notebook with touch"
+
+
+
+

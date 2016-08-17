@@ -1,3 +1,12 @@
+
+{% macro help_text(field, tag="span") %}
+      {%- if field.help_text -%}
+        <{{tag}} class="field-help_text">
+          {{ field.help_text }}
+        </{{tag}}>
+      {%- endif -%}
+{% endmacro %}
+
 {% macro render_form_fields(form) %}
 {% if form.non_field_errors() %}
 {{ form.non_field_errors() }}
@@ -7,33 +16,29 @@
 {% endfor %}
 {% for field in form.visible_fields() %}
 <div class="field {{ field.html_name }}
-	{%- if field.errors %} errors{% endif %}">
-	{% if field.errors %}
-	{{ field.errors }}
-	{% endif %}
-	<label class="field-wrapping_label">
-		{% if field.field.widget.__class__.__name__ in ["CheckboxInput"] %}
-			{{ field }}
-			<span class="field-display_text">
-				{{ field.label }}
-			</span>
-			{% if field.help_text %}
-				<span class="field-help_text">
-					{{ field.help_text }}
-				</span>
-			{% endif %}
-		{% else %}
-			<span class="field-display_text">
-				{{ field.label }}
-			</span>
-			{% if field.help_text %}
-				<span class="field-help_text">
-					{{ field.help_text }}
-				</span>
-			{% endif %}
-			{{ field }}
-		{% endif %}
-	</label>
+  {%- if field.errors %} errors{% endif %}">
+  {% if field.errors %}
+  {{ field.errors }}
+  {% endif %}
+  <label class="field-wrapping_label">
+    {% if field.field.widget.__class__.__name__ in ["CheckboxInput"] %}
+      {{ field }}
+      <span class="field-display_text">
+        {{ field.label }}
+      </span>
+      {{ help_text(field) }}
+    {% else %}
+      <span class="field-display_text">
+        {{ field.label }}
+      </span>
+      {% if field.help_text %}
+        <span class="field-help_text">
+          {{ field.help_text }}
+        </span>
+      {% endif %}
+      {{ field }}
+    {% endif %}
+  </label>
 </div>
 {% endfor %}
 {% endmacro %}
@@ -43,9 +48,9 @@
 {%- if warnings -%}
 <ul class="warninglist">
 {%- for warning in warnings %}
-	<li class="warning">
-		{{ warning }}
-	</li>
+  <li class="warning">
+    {{ warning }}
+  </li>
 {%- endfor -%}
 </ul>
 {%- endif -%}
@@ -56,9 +61,9 @@
 {%- if errors -%}
 <ul class="errorlist">
 {%- for error in errors %}
-	<li class="error">
-		{{ error }}
-	</li>
+  <li class="error">
+    {{ error }}
+  </li>
 {%- endfor -%}
 </ul>
 {%- endif -%}
@@ -67,133 +72,123 @@
 
 {% macro checkbox_options_field(field) %}
 <div class="field field-checkbox_options {{ field.class_name() }}
-	{%- if field.field_warnings() %} warnings
-	{%- endif %}
-	{%- if field.field_errors() %} errors{% endif%}">
-	{{ render_errors(field.field_errors()) }}
-	{{ render_warnings(field.field_warnings()) }}
-	<legend>
-		{{ field.label }}
-	</legend>
-	<div class="field-help_text">
-		{{ field.help_text }}
-	</div>
-	<ul class="checkbox_options options_list">
-	{%- for option_key, option_label in field.choices.items() %}
-	<li>
-		<label class="field-option_label">
-			<input type="checkbox" name="{{ field.field_name }}" value="{{ option_key }}"
-				{%- if field.current_value() %}
-					{%- if option_key in field.current_value() %} checked="checked"{% endif %}
-				{%- endif -%}>
-			<span class="option-display_text">
-				{{ option_label }}
-			</span>
-		</label>
-	</li>
-	{% endfor -%}
-	</ul>
+  {%- if field.field_warnings() %} warnings
+  {%- endif %}
+  {%- if field.field_errors() %} errors{% endif%}">
+  {{ render_errors(field.field_errors()) -}}
+  {{ render_warnings(field.field_warnings()) -}}
+  <legend>
+    {{ field.label }}
+  </legend>
+  {{- help_text(field, tag="div") }}
+  <ul class="checkbox_options options_list">
+  {%- for option_key, option_label in field.choices.items() %}
+  <li>
+    <label class="field-option_label">
+      <input type="checkbox" name="{{ field.field_name }}" value="{{ option_key }}"
+        {%- if field.current_value() %}
+          {%- if option_key in field.current_value() %} checked="checked"{% endif %}
+        {%- endif -%}>
+      <span class="option-display_text">
+        {{ option_label }}
+      </span>
+    </label>
+  </li>
+  {% endfor -%}
+  </ul>
 </div>
 {% endmacro %}
 
 
 {% macro radio_select_field(field) %}
 <div class="field field-radio_options {{ field.class_name() }}
-	{%- if field.field_warnings() %} warnings
-	{%- endif %}
-	{%- if field.field_errors() %} errors{% endif%}">
-	{{ render_warnings(field.field_warnings()) }}
-	{{ render_errors(field.field_errors()) }}
-	<legend>
-		{{ field.label }}
-	</legend>
-	<div class="field-help_text">
-		{{ field.help_text }}
-	</div>
-	<ul class="radio_options options_list">
-	{%- for option_key, option_label in field.choices.items() %}
-		<li>
-			<label class="field-option_label">
-				<input type="radio" name="{{ field.field_name }}" value="{{ option_key }}"
-				{%- if field.current_value() %}
-					{%- if option_key in field.current_value() %} checked="checked"{% endif %}
-				{%- endif -%}>
-				<span class="option-display_text">
-					{{ option_label }}
-				</span>
-			</label>
-		</li>
-	{% endfor -%}
-	</ul>
+  {%- if field.field_warnings() %} warnings
+  {%- endif %}
+  {%- if field.field_errors() %} errors{% endif%}">
+  {{ render_warnings(field.field_warnings()) }}
+  {{ render_errors(field.field_errors()) }}
+  <legend>
+    {{ field.label }}
+  </legend>
+  {{ help_text(field, tag="div") }}
+  <ul class="radio_options options_list">
+  {%- for option_key, option_label in field.choices.items() %}
+    <li>
+      <label class="field-option_label">
+        <input type="radio" name="{{ field.field_name }}" value="{{ option_key }}"
+        {%- if field.current_value() %}
+          {%- if option_key in field.current_value() %} checked="checked"{% endif %}
+        {%- endif -%}>
+        <span class="option-display_text">
+          {{ option_label }}
+        </span>
+      </label>
+    </li>
+  {% endfor -%}
+  </ul>
 </div>
 {% endmacro %}
 
 
 {% macro address_field(field) %}
 <div class="field field-address_fieldset {{ field.class_name() }}
-	{%- if field.field_warnings() %} warnings{% endif %}
-	{%- if field.field_errors() %} errors{% endif %}">
-	{{ render_errors(field.field_errors()) }}
-	{{ render_warnings(field.field_warnings()) }}
-	<fieldset>
-		<div class="subfield address_street">
-			<label class="field-wrapping_label">
-				<span class="field-display_text">
-					{{ field.label }}
-				</span>
-				<span class="field-help_text">
-					{{ field.help_text }}
-				</span>
-				<input type="text" name="{{ field.fields.street.input_name() }}" value="{{ field.current_value().street }}">
-			</label>
-		</div>
-		<div class="subfield-row">
-			{{ basic_field(field.fields.city,  is_subfield=True) }}
-			{{ basic_field(field.fields.state, is_subfield=True) }}
-			{{ basic_field(field.fields.zip,   is_subfield=True) }}
-		</div>
-	</fieldset>
+  {%- if field.field_warnings() %} warnings{% endif %}
+  {%- if field.field_errors() %} errors{% endif %}">
+  {{ render_errors(field.field_errors()) }}
+  {{ render_warnings(field.field_warnings()) }}
+  <fieldset>
+    <div class="subfield address_street">
+      <label class="field-wrapping_label">
+        <span class="field-display_text">
+          {{ field.label }}
+        </span>
+        {{ help_text(field) }}
+        <input type="text" name="{{ field.fields.street.input_name() }}" value="{{ field.current_value().street }}">
+      </label>
+    </div>
+    <div class="subfield-row">
+      {{ basic_field(field.fields.city,  is_subfield=True) }}
+      {{ basic_field(field.fields.state, is_subfield=True) }}
+      {{ basic_field(field.fields.zip,   is_subfield=True) }}
+    </div>
+  </fieldset>
 </div>
 {% endmacro %}
 
 {% macro dob_field(field) %}
 <div class="field field-dob_fieldset {{ field.class_name() }}
-	{%- if field.field_warnings() %} warnings{% endif %}
-	{%- if field.field_warnings() %} warnings{% endif %}">
-	{{ render_errors(field.field_errors()) }}
-	{{ render_warnings(field.field_warnings()) }}
-	<fieldset>
-		<legend>{{ field.label }}</legend>
-		<span class="field-help_text">
-		    {{ field.help_text }}
-    </span>
-		<div class="subfield-row">
-			{{ basic_field(field.fields.month, is_subfield=True) }}
-			{{ basic_field(field.fields.day,   is_subfield=True) }}
-			{{ basic_field(field.fields.year,  is_subfield=True) }}
-		</div>
-	</fieldset>
+  {%- if field.field_warnings() %} warnings{% endif %}
+  {%- if field.field_warnings() %} warnings{% endif %}">
+  {{ render_errors(field.field_errors()) }}
+  {{ render_warnings(field.field_warnings()) }}
+  <fieldset>
+    <legend>{{ field.label }}</legend>
+    {{ help_text(field, tag="div") }}
+    <div class="subfield-row">
+      {{ basic_field(field.fields.month, is_subfield=True) }}
+      {{ basic_field(field.fields.day,   is_subfield=True) }}
+      {{ basic_field(field.fields.year,  is_subfield=True) }}
+    </div>
+  </fieldset>
 </div>
 {% endmacro %}
 
 {% macro basic_field(field, is_subfield=False, optional=False) %}
 <div class="{% if is_subfield %}sub{% endif %}field {{ field.class_name() }}
-	{%- if field.field_warnings() %} warnings{% endif %}
-	{%- if field.field_errors() %} errors{% endif %}">
-	{{ render_errors(field.field_errors()) }}
-	{{ render_warnings(field.field_warnings()) }}
-	<label class="field-wrapping_label">
-		<span class="field-display_text">
-			{{ field.label }}
-			{% if optional -%}
-			<span class="field-optional">(optional)</span>
-			{%- endif %}
-		</span>
-		<span class="field-help_text">
-			{{ field.help_text }}
-		</span>
-		<input type="text" name="{{ field.input_name() }}" value="{{ field.current_value() }}">
-	</label>
+  {%- if field.field_warnings() %} warnings{% endif %}
+  {%- if field.field_errors() %} errors{% endif %}">
+  {{ render_errors(field.field_errors()) }}
+  {{ render_warnings(field.field_warnings()) }}
+  <label class="field-wrapping_label">
+    <span class="field-display_text">
+      {{ field.label }}
+      {% if optional -%}
+      <span class="field-optional">(optional)</span>
+      {%- endif %}
+    </span>
+    {{ help_text(field) }}
+    <input type="text" name="{{ field.input_name() }}" value="{{ field.current_value() }}">
+  </label>
 </div>
 {% endmacro %}
 

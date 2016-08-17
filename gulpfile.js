@@ -3,7 +3,6 @@ var concat = require('gulp-concat');
 var less = require('gulp-less');
 var process = require('child_process');
 
-
 gulp.task('fonts', function(){
   return gulp.src('./node_modules/bootstrap/fonts/*.{ttf,woff,woff2,eot,svg}')
     .pipe(gulp.dest('./frontend/build/fonts/'))
@@ -32,8 +31,7 @@ gulp.task('watch', function(){
 gulp.task('django', function(){
   var spawn = process.spawn;
   console.info('Starting django server');
-  var PIPE = {stdio: 'inherit'};
-  spawn('python', ['manage.py','runserver','--settings=project.settings.dev'], PIPE);
+  spawn('python', ['manage.py','runserver','--settings=project.settings.dev'], {stdio: 'inherit'});
 });
 
 

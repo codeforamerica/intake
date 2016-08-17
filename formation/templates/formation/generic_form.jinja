@@ -1,0 +1,4 @@
+
+  {% for field in form.iter_fields() %}
+    {{ field.render()|indent(4)|safe }}
+  {% endfor %}

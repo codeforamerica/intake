@@ -7,7 +7,8 @@ from unittest.mock import patch, Mock
 from intake.tests import mock
 from user_accounts.tests.mock import create_fake_auth_models
 from user_accounts import models as auth_models
-from intake import models, fields, anonymous_names, validators, notifications
+from intake import models, model_fields, anonymous_names, validators, notifications, constants
+from formation.validators import are_valid_choices
 
 
 class TestModels(TestCase):
@@ -17,6 +18,10 @@ class TestModels(TestCase):
         super().setUpTestData()
         for key, models in create_fake_auth_models().items():
             setattr(cls, key, models)
+
+    def assertWasCalledOnce(self, mock_obj):
+        call_list = mock_obj.mock_calls
+        self.assertEqual(len(call_list), 1)
 
     def test_submission(self):
         submission = mock.FormSubmissionFactory.create()
@@ -31,6 +36,12 @@ class TestModels(TestCase):
         self.assertIsNone(submission.last_processed_by_agency())
         self.assertEqual(
             models.FormSubmission.objects.get(id=submission.id), submission)
+
+    def test_all_submissions_have_counties(self):
+        all_submissions = models.FormSubmission.all_plus_related_objects()
+        for submission in all_submissions:
+            counties = submission.counties.all()
+            self.assertTrue(list(counties))
 
     def test_applicationlogentry(self):
         submission = mock.FormSubmissionFactory.create()
@@ -139,50 +150,6 @@ class TestModels(TestCase):
             user=agency_user
             )
 
-    @patch('intake.models.FormSubmission.get_unopened_apps')
-    @patch('intake.models.User.objects.filter')
-    @patch('intake.models.notifications')
-    def test_refer_unopened_apps(self, notifications, get_notified_users, get_unopened_apps):
-
-        emails = [u.email for u in self.users if u.profile.should_get_notifications]
-        get_notified_users.return_value = [Mock(email=email) for email in emails]
-
-        # case: some unopened apps
-        submissions = [
-            mock.FormSubmissionFactory.build(
-                id=i+1, anonymous_name='App')
-            for i in range(3)]
-        get_unopened_apps.return_value = submissions
-        output = models.FormSubmission.refer_unopened_apps()
-
-        notifications.front_email_daily_app_bundle.send.assert_called_once_with(
-            to=emails,
-            count=3,
-            submission_ids=[1,2,3]
-            )
-        notifications.slack_app_bundle_sent.send.assert_called_once_with(
-            emails=emails, submissions=get_unopened_apps.return_value)
-        logs = models.ApplicationLogEntry.objects.filter(
-            event_type=models.ApplicationLogEntry.REFERRED, submission_id__in=[1,2,3]).all()
-        self.assertEqual(len(logs), 3)
-        for log in logs:
-            self.assertIsNone(log.user)
-        self.assertEqual(output, notifications.slack_app_bundle_sent.render.return_value)
-
-        # case: no unopened apps
-        get_unopened_apps.return_value = []
-        logs.delete()
-        notifications.reset_mock()
-        output = models.FormSubmission.refer_unopened_apps()
-
-        notifications.front_email_daily_app_bundle.send.assert_not_called()
-        logs = models.ApplicationLogEntry.objects.filter(
-            event_type=models.ApplicationLogEntry.REFERRED, submission_id__in=[1,2,3]).all()
-        self.assertEqual(len(logs), 0)
-        notifications.slack_app_bundle_sent.send.assert_called_once_with(
-            emails=emails, submissions=get_unopened_apps.return_value)
-        self.assertEqual(output, notifications.slack_app_bundle_sent.render.return_value)
-
     def test_agency_event_logs(self):
         instance = Mock()
         agency = Mock(is_receiving_agency=True)
@@ -242,7 +209,7 @@ class TestModels(TestCase):
 
     def test_contact_info_json_field(self):
 
-        contact_info_field = fields.ContactInfoJSONField(default=dict, blank=True)
+        contact_info_field = model_fields.ContactInfoJSONField(default=dict, blank=True)
         # valid inputs
         empty = {}
         just_email = {'email': 'someone@gmail.com'}
@@ -338,10 +305,8 @@ class TestModels(TestCase):
             submission=submission,
             event_type=models.ApplicationLogEntry.CONFIRMATION_SENT).all()
         self.assertEqual(len(logs), 2)
-        email_notification.assert_called_once_with(
-            staff_name='Staff', name='Foo', to=['someone@gmail.com'])
-        sms_notification.assert_called_once_with(
-            staff_name='Staff', name='Foo', to=['+19993334444'])
+        self.assertWasCalledOnce(email_notification)
+        self.assertWasCalledOnce(sms_notification)
         sent_notification.assert_called_once_with(
             submission=submission, methods=['email', 'sms', 'snailmail', 'voicemail'])
         slack_failed_notification.assert_not_called()
@@ -359,10 +324,8 @@ class TestModels(TestCase):
             submission=submission,
             event_type=models.ApplicationLogEntry.CONFIRMATION_SENT).all()
         self.assertEqual(len(logs), 1)
-        email_notification.assert_called_once_with(
-            staff_name='Staff', name='Foo', to=['someone@gmail.com'])
-        sms_notification.assert_called_once_with(
-            staff_name='Staff', name='Foo', to=['+19993334444'])
+        self.assertWasCalledOnce(email_notification)
+        self.assertWasCalledOnce(sms_notification)
         sent_notification.assert_called_once_with(
             submission=submission, methods=['email', 'snailmail', 'voicemail'])
         slack_failed_notification.assert_called_once_with(
@@ -384,17 +347,43 @@ class TestModels(TestCase):
             submission=submission,
             event_type=models.ApplicationLogEntry.CONFIRMATION_SENT).all()
         self.assertEqual(len(logs), 0)
-        email_notification.assert_called_once_with(
-            staff_name='Staff', name='Foo', to=['someone@gmail.com'])
-        sms_notification.assert_called_once_with(
-            staff_name='Staff', name='Foo', to=['+19993334444'])
+        self.assertWasCalledOnce(email_notification)
+        self.assertWasCalledOnce(sms_notification)
         sent_notification.assert_called_once_with(
             submission=submission, methods=['snailmail', 'voicemail'])
         slack_failed_notification.assert_called_once_with(
             submission=submission, errors={'sms': sms_error, 'email': email_error})
 
+    def test_can_get_counties_from_submissions(self):
+        submission = mock.FormSubmissionFactory.create()
+        counties = list(submission.counties.all())
+        mock_field = Mock(
+            choices=constants.COUNTY_CHOICES,
+            required=True
+            )
+        slugs = [county.slug for county in counties]
+        are_valid_choices.set_context(mock_field)
+        are_valid_choices(slugs)
+        mock_field.add_error.assert_not_called()
 
 
+
+class TestCounty(TestCase):
+
+    def test_county_init(self):
+        county = models.County(slug="yolo", description="Yolo County")
+        self.assertEqual(county.slug, "yolo")
+        self.assertEqual(county.description, "Yolo County")
+
+    def test_get_receiving_agency(self):
+        expected_matches = (
+            (constants.Counties.SAN_FRANCISCO, "San Francisco Public Defender"),
+            (constants.Counties.CONTRA_COSTA, "Contra Costa Public Defender"))
+        counties = models.County.objects.all()
+        for county_slug, agency_name in expected_matches:
+            county = counties.filter(slug=county_slug).first()
+            organization = county.get_receiving_agency()
+            self.assertEqual(organization.name, agency_name)
 
 
 

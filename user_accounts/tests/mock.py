@@ -57,22 +57,31 @@ def create_user_with_profile(organization, **attributes):
         **attributes
         )
 
-def create_fake_auth_models(num_orgs=2, num_users_per_org=2):
-    orgs = [
-        OrganizationFactory.create()
-        for i in range(num_orgs)]
-    orgs[0].is_receiving_agency = True
-    orgs[0].save()
+def create_fake_auth_models(num_users_per_org=2):
     profiles = []
+    orgs = models.Organization.objects.all()
     for org in orgs:
+        if org.name == "San Francisco Public Defender":
+            sfpubdef = org
+        elif org.name == "Contra Costa Public Defender":
+            ccpubdef = org
+        elif org.name == "Code for America":
+            cfa = org
+    for org in [sfpubdef, ccpubdef, cfa]:
         for i in range(num_users_per_org):
-            profiles.append(
-                create_user_with_profile(
+            profile = create_user_with_profile(
                     organization=org,
-                    should_get_notifications=org.is_receiving_agency))
+                    should_get_notifications=org.is_receiving_agency)
+            profiles.append(profile)
     return {
+            'sfpubdef': sfpubdef,
+            'ccpubdef': ccpubdef,
+            'cfa': cfa,
             'organizations': orgs,
             'users': [p.user for p in profiles],
+            'cfa_users': [p.user for p in profiles if p.organization == cfa],
+            'sfpubdef_users': [p.user for p in profiles if p.organization == sfpubdef],
+            'ccpubdef_users': [p.user for p in profiles if p.organization == ccpubdef],
             'notified_users': [p.user for p in profiles if p.should_get_notifications],
             'agency_users': [p.user for p in profiles if p.organization.is_receiving_agency],
             'non_agency_users': [p.user for p in profiles if not p.organization.is_receiving_agency],

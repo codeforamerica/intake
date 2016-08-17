@@ -3,32 +3,51 @@
 {% block content %}
 
 <section class="content">
-	<div class="container">
+  <div class="container">
 
-		<div class="row">				
-			{% if unopened %}
-			<h1>{{ count }} new unopened applications</h1>
-			{% else %}
-			<h1>{{ count }} applications</h1>
-			{% endif %}
+    <div class="row">
+      <div class="bundle-metadata col-xs-12 col-md-10 col_centered">
+        <h1 class="bundle-count">{{ count }} applications</h1>
 
-			<ol class="app_bundle_list">
-				{% for submission in submissions %}
-					<li>{{ namify(submission.answers.get("last_name", "")) }},
-					{{ namify(submission.answers.get("first_name", "")) }}</li>
-				{% endfor %}
-			</ol>
+    {%- if show_pdf %}
+        <p><a href="#bundle-pdf">Scroll to PDF</a></p>
+    {%- endif %}
 
-		</div>
+        <ol class="app_bundle_list">
+          {% for submission in submissions %}
+            {%- set form = submission.get_display_form_for_user(request.user) %}
+            <li>
+              <a href="#application-{{ loop.index }}" class="bundle_list_name">
+                {{ form.last_name.get_display_value() }},
+                {{ form.first_name.get_display_value() }}
+              </a>
+            </li>
+          {% endfor %}
+        </ol>
+        
+      </div> 
+    </div>
 
-		<div class="row">
-			<div class="iframe_container">
-				<iframe class="pdf_inset" src="{{
-				url_with_ids('intake-pdf_bundle', app_ids) 
-				}}" frameborder="0" width="800" height="600">
-				</iframe>
-			</div>
-		</div>
-	</div>
+    {%- for submission in submissions %}
+    <div id="application-{{ loop.index }}" class="row">
+      <div class="application-data_display col-xs-12 col-md-10 col_centered">
+        <div class="application-loop-id">{{ loop.index }}</div>
+        {%- set form = submission.get_display_form_for_user(request.user) %}
+        {% include "formation/intake_display.jinja" %}
+      </div>
+    </div>
+    {%- endfor %}
+
+    {%- if show_pdf %}
+    <div id="bundle-pdf" class="row">
+      <div class="iframe_container col-xs-12 col-md-10 col_centered">
+        <iframe class="pdf_inset" src="{{
+        url_with_ids('intake-pdf_bundle', app_ids) 
+        }}" frameborder="0" width="800" height="600">
+        </iframe>
+      </div>
+    </div>
+    {%- endif %}
+  </div>
 </section>
 {% endblock content %}

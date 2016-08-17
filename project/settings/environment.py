@@ -49,3 +49,6 @@ ADMIN_PHONE_NUMBER=os.environ.get('ADMIN_PHONE_NUMBER')
 # Temporary defaults for agencies
 DEFAULT_AGENCY_USER_EMAIL = os.environ.get('DEFAULT_AGENCY_USER_EMAIL',
     'clearmyrecord@codeforamerica.org')
+
+# configure django-debug-toolbar
+USE_DEBUG_TOOLBAR = os.environ.get('USE_DEBUG_TOOLBAR', 0)

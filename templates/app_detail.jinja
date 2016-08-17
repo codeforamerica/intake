@@ -1,0 +1,16 @@
+{% extends "admin_base.jinja" %}
+
+{% block content %}
+<section class="content">
+  <div class="container">
+    <div class="row">
+      <div class="app_detail-data_display col-xs-12 col-md-10 col_centered">
+
+      {%- set form = submission.get_display_form_for_user(request.user) %}
+      {% include "formation/intake_display.jinja" %}
+        
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

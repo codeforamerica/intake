@@ -125,6 +125,8 @@ class TestSlackAndFront(BaseTestCase):
                 return self.get_anonymous_display()
             def get_nice_contact_preferences(self):
                 return ["text message", "email"]
+            def get_nice_counties(self):
+                return ['San Francisco', 'Contra Costa']
         cls.sub = MockSub()
         cls.user = Mock(email='staff@org.org')
         cls.request = Mock()
@@ -133,7 +135,7 @@ class TestSlackAndFront(BaseTestCase):
 
     def test_render_new_submission(self):
         expected_new_submission_text = str(
-"""New submission #101!
+"""New submission #101 to San Francisco and Contra Costa!
 <http://filled_pdf/|Shining Koala>
 They want to be contacted via text message and email
 """)
@@ -188,7 +190,7 @@ They want to be contacted via text message and email
     @patch('intake.notifications.requests.post')
     def test_slack_send(self, mock_post):
         mock_post.return_value = "HTTP response"
-        expected_json = '{"text": "New submission #101!\\n<http://filled_pdf/|Shining Koala>\\nThey want to be contacted via text message and email\\n"}'
+        expected_json = '{"text": "New submission #101 to San Francisco and Contra Costa!\\n<http://filled_pdf/|Shining Koala>\\nThey want to be contacted via text message and email\\n"}'
         expected_headers = {'Content-type': 'application/json'}
         response = notifications.slack_new_submission.send(
             submission=self.sub,
