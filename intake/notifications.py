@@ -27,8 +27,10 @@ def check_that_remote_connections_are_okay(*output_if_not_okay):
         print(*output_if_not_okay)
         return False
     else:
-        pass
-        #TODO: check for environment variables
+        getattr(settings, 'FRONT_API_TOKEN')
+        getattr(settings, 'FRONT_EMAIL_CHANNEL_ID')
+        getattr(settings, 'FRONT_PHONE_CHANNEL_ID')
+        getattr(settings, 'SLACK_WEBHOOK_URL')
     return True
 
 
