@@ -30,12 +30,14 @@ GENDER_PRONOUN_CHOICES = (
 
 STAFF_NAME_CHOICES = ['Jazmyn', 'Ben']
 
+
 class Organizations:
     CFA = 'cfa'
     SF_PUBDEF = 'sf_pubdef'
     COCO_PUBDEF = 'cc_pubdef'
     ALAMEDA_PUBDEF = 'a_pubdef'
     EBCLC = 'ebclc'
+
 
 ORG_NAMES = {
     Organizations.CFA: _("Code for America"),
@@ -52,11 +54,13 @@ class Counties:
     ALAMEDA = 'alameda'
     OTHER = 'other'
 
+
 class CountyNames:
     SAN_FRANCISCO = 'San Francisco'
     CONTRA_COSTA = 'Contra Costa'
     ALAMEDA = 'Alameda'
     ALL = 'San Francisco, Alameda, and Contra Costa Counties'
+
 
 CONFIRMATION_MESSAGES = {
     Counties.SAN_FRANCISCO: _("You will get a letter in the mail from the San Francisco Public Defender in 2-4 weeks."),
