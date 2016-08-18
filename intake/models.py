@@ -49,8 +49,6 @@ class FormSubmission(models.Model):
 
     counties = models.ManyToManyField(County,
         related_name="submissions")
-    organizations = models.ManyToManyField('user_accounts.Organization',
-        related_name="submissions")
     answers = JSONField()
     # old_uuid is only used for porting legacy applications
     old_uuid = models.CharField(max_length=34, unique=True,

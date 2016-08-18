@@ -30,6 +30,22 @@ GENDER_PRONOUN_CHOICES = (
 
 STAFF_NAME_CHOICES = ['Jazmyn', 'Ben']
 
+class Organizations:
+    CFA = 'cfa'
+    SF_PUBDEF = 'sf_pubdef'
+    COCO_PUBDEF = 'cc_pubdef'
+    ALAMEDA_PUBDEF = 'a_pubdef'
+    EBCLC = 'ebclc'
+
+ORG_NAMES = {
+    Organizations.CFA: _("Code for America"),
+    Organizations.SF_PUBDEF: _("San Francisco Public Defender"),
+    Organizations.COCO_PUBDEF: _("Contra Costa Public Defender"),
+    Organizations.ALAMEDA_PUBDEF: _("Alameda Public Defender"),
+    Organizations.EBCLC: _("East Bay Community Law Center"),
+}
+
+
 class Counties:
     CONTRA_COSTA = 'contracosta'
     SAN_FRANCISCO = 'sanfrancisco'
