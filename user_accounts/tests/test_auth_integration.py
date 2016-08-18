@@ -153,7 +153,8 @@ class TestUserAccounts(AuthIntegrationTestCase):
         # add an organization
         response = self.client.fill_form(
             reverse('admin:user_accounts_organization_add'),
-            name='Magical Lawyers Guild'
+            name='Magical Lawyers Guild',
+            slug="mlg",
             )
         self.assertRedirects(response,
             reverse('admin:user_accounts_organization_changelist'))
