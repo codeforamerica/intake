@@ -22,3 +22,4 @@ db.sqlite3
 node_modules
 project/static
 project/media
+local_settings.py
