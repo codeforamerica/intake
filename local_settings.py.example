@@ -1,0 +1,44 @@
+from project.settings.base import *
+
+DEBUG = True
+
+# debug toolbar settings
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_COLLAPSED': True,
+}
+INTERNAL_IPS = ['127.0.0.1', '::1']
+
+USE_DEBUG_TOOLBAR = False #Broken
+
+if USE_DEBUG_TOOLBAR:
+    MIDDLEWARE_CLASSES.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware',)
+
+SECRET_KEY = 'something super secret'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'intake',
+        'USER': 'your db user',
+    }
+}
+
+ALLOWED_HOSTS = []
+DEFAULT_HOST = []
+
+# settings for file uploads
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+
+MEDIA_ROOT = os.path.join(REPO_DIR, 'project', 'media')
+
+# static files location
+STATIC_ROOT = os.path.join(REPO_DIR, 'project', 'static')
+
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+MAIL_DEFAULT_SENDER = "admin@localhost"
+DEFAULT_NOTIFICATION_EMAIL = "user@localhost"
+
+
+DIVERT_REMOTE_CONNECTIONS = True

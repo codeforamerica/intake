@@ -26,6 +26,11 @@ def check_that_remote_connections_are_okay(*output_if_not_okay):
     if getattr(settings, 'DIVERT_REMOTE_CONNECTIONS', False):
         print(*output_if_not_okay)
         return False
+    else:
+        getattr(settings, 'FRONT_API_TOKEN')
+        getattr(settings, 'FRONT_EMAIL_CHANNEL_ID')
+        getattr(settings, 'FRONT_PHONE_CHANNEL_ID')
+        getattr(settings, 'SLACK_WEBHOOK_URL')
     return True
 
 
@@ -94,7 +99,7 @@ class TemplateNotification:
 
 
 class EmailNotification(TemplateNotification):
-    
+
     default_from_email = settings.MAIL_DEFAULT_SENDER
     default_recipients = [settings.DEFAULT_NOTIFICATION_EMAIL]
 
@@ -107,7 +112,7 @@ class EmailNotification(TemplateNotification):
     def send(self, to=None, from_email=None, **context_args):
         content = self.render(**context_args)
         from_email = from_email or self.default_from_email
-        to = to or self.default_recipients  
+        to = to or self.default_recipients
         return mail.send_mail(
             subject=content.subject,
             message=content.body,
@@ -115,7 +120,7 @@ class EmailNotification(TemplateNotification):
             recipient_list=to
             )
 
-class FrontNotification(TemplateNotification): 
+class FrontNotification(TemplateNotification):
 
     def __init__(self, default_context=None, subject_template='', body_template_path=''):
         super().__init__(
@@ -127,7 +132,7 @@ class FrontNotification(TemplateNotification):
     def build_headers(self):
         return {
             'Authorization': 'Bearer {}'.format(
-                settings.FRONT_API_TOKEN),
+                getattr(settings, 'FRONT_API_TOKEN', None)),
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         }
@@ -173,11 +178,11 @@ REQUEST JSON:
 
 
 class FrontEmailNotification(FrontNotification):
-    channel_id = settings.FRONT_EMAIL_CHANNEL_ID
+    channel_id = getattr(settings, 'FRONT_EMAIL_CHANNEL_ID', None)
 
 
 class FrontSMSNotification(FrontNotification):
-    channel_id = settings.FRONT_PHONE_CHANNEL_ID
+    channel_id = getattr(settings, 'FRONT_PHONE_CHANNEL_ID', None)
 
 
 
@@ -186,7 +191,7 @@ class BasicSlackNotification:
     headers = {'Content-type': 'application/json'}
 
     def __init__(self, webhook_url=None):
-        self.webhook_url = webhook_url or settings.SLACK_WEBHOOK_URL
+        self.webhook_url = webhook_url or getattr(settings, 'SLACK_WEBHOOK_URL', None)
 
     def send(self, message_text):
         payload = json.dumps({
@@ -272,4 +277,3 @@ slack_confirmation_sent = SlackTemplateNotification(
 # submission, method, errors
 slack_confirmation_send_failed = SlackTemplateNotification(
     message_template_path="slack/confirmation_failed.jinja")
-
