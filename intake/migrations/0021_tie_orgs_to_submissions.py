@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
-from intake.constants import Organizations
+from intake.constants import Organizations, Counties
 
 
 def get_classes(apps, schema_editor):
@@ -17,11 +17,12 @@ def get_classes(apps, schema_editor):
 
 def forward(*args):
     Organization, FormSubmission = get_classes(*args)
-    sf_public_defender = Organization.filter(slug=Organizations.SF_PUBDEF).first()
     for sub in FormSubmission.all():
-        sub.organizations.add(sf_public_defender)
-        sub.save()
-
+        counties = sub.counties.all()
+        for county in counties:
+            for org in Organization.all():
+                if org.county == county:
+                    sub.organizations.add(org)
 
 def backward(*args):
     Organization, FormSubmission = get_classes(*args)
