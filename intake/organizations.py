@@ -1,1 +1,0 @@
-from intake.organization_base import Organization
