@@ -364,7 +364,6 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         self.be_anonymous()
         contracosta = constants.Counties.CONTRA_COSTA
         answers = mock.fake.contra_costa_county_form_answers()
-        
 
         county_fields = forms.ContraCostaForm.fields
         other_county_fields = forms.SanFranciscoCountyForm.fields | forms.OtherCountyForm.fields
@@ -392,22 +391,23 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         lookup = {
             key: answers[key]
             for key in [
-                'email', 'first_name', 'last_name', 'phone_number'
-                ]
-            }
+                'email', 'phone_number', 'monthly_income', 'monthly_expenses']}
 
         submission = models.FormSubmission.objects.filter(
             answers__contains=lookup).first()
         county_slugs = [county.slug for county in submission.counties.all()]
         self.assertListEqual(county_slugs, [contracosta])
 
-    @patch('intake.views.models.FormSubmission.send_confirmation_notifications')
+    @patch(
+        'intake.views.models.FormSubmission.send_confirmation_notifications')
     @patch('intake.views.notifications.slack_new_submission.send')
     def test_contra_costa_errors_properly(self, slack, send_confirmation):
         self.be_anonymous()
         contracosta = constants.Counties.CONTRA_COSTA
         answers = mock.fake.contra_costa_county_form_answers()
-        result = self.client.fill_form(reverse('intake-apply'), counties=[contracosta])
+        result = self.client.fill_form(
+                                reverse('intake-apply'),
+                                counties=[contracosta])
         required_fields = forms.ContraCostaForm.required_fields
 
         # check that leaving out any required field returns an error on that field
@@ -455,7 +455,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
             **answers)
         lookup = {
             key: answers[key]
-            for key in ['email', 'first_name', 'last_name', 'phone_number']}
+            for key in [
+                'email', 'phone_number', 'monthly_income']}
 
         submission = models.FormSubmission.objects.filter(
             answers__contains=lookup).first()
