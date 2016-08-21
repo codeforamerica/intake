@@ -627,9 +627,9 @@ class TestStats(IntakeDataTestCase):
 
 
 
-class TestExcelDownloadView(TestCoreViews):
+class TestExcelDownloadView(IntakeDataTestCase):
 
-    view_name = 'intake-xls-download'
+    view_name = 'intake-excel_download'
 
     def test_anonymous_user_is_redirected_to_splash_page(self):
         self.be_anonymous()
@@ -637,7 +637,7 @@ class TestExcelDownloadView(TestCoreViews):
         self.assertRedirects(response, reverse('intake-home'))
 
     def test_agency_user_can_download_xls(self):
-        self.be_agency_user()
+        self.be_sfpubdef_user()
         response = self.client.get(reverse(self.view_name))
         # assert that we got an xls file and the http response is as expected
 

@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'storages',
     'formation',
     'debug_toolbar',
+    'xlsxwriter',
 ]
 
 MIDDLEWARE_CLASSES = [

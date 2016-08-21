@@ -40,6 +40,9 @@ urlpatterns = [
     url(r'^applications/mark/processed/$',
         login_required(views.mark_processed),
         name='intake-mark_processed'),
+    url(r'^applications/excel/$',
+        login_required(views.excel_download),
+        name='intake-excel_download'),
 ]
 
 redirects = [

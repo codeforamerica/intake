@@ -18,6 +18,8 @@ from intake import models, notifications, constants
 from formation.forms import county_form_selector, SelectCountyForm
 from project.jinja2 import url_with_ids, oxford_comma
 
+from io import StringIO
+import xlsxwriter
 
 
 class Home(TemplateView):
@@ -251,7 +253,7 @@ class Stats(TemplateView):
         context['stats'] = {
             'total_all_counties': models.FormSubmission.objects.count(),
             'county_totals': county_totals
-        }   
+        }
         return context
 
 
@@ -316,6 +318,33 @@ class Delete(View):
             user=request.user)
         return redirect(reverse_lazy('intake-app_index'))
 
+class ExcelDownload(ApplicationDetail):
+
+    def build_xlsx(self, request):
+        output = StringIO()
+        workbook = xlsxwriter.Workbook(output)
+
+        # Here we will adding the code to add data
+        organization = request.user.profile.organization
+        # TODO: Add more filters
+        applications = models.FormSubmission.objects
+
+        fields = [
+        ]
+        import pdb; pdb.set_trace()
+        worksheet_s.write(4, 0, ugettext("No"), header)
+
+        workbook.close()
+        xlsx_file = output.getvalue()
+        return xlsx_file
+
+    def get(self, request):
+        response = HttpResponse(content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename=Report.xlsx'
+        xlsx_file = self.build_xlsx(request)
+        response.write(xlsx_file)
+        return response
+
 
 class MarkSubmissionStepView(View, MultiSubmissionMixin):
 
@@ -355,6 +384,7 @@ pdf_bundle = FilledPDFBundle.as_view()
 app_index = ApplicationIndex.as_view()
 app_bundle = ApplicationBundle.as_view()
 app_detail = ApplicationDetail.as_view()
+excel_download = ExcelDownload.as_view()
 mark_processed = MarkProcessed.as_view()
 delete_page = Delete.as_view()
 
@@ -380,7 +410,7 @@ class PermanentRedirectView(View):
 
 
 class SingleIdPermanentRedirect(PermanentRedirectView):
-    '''Redirects from 
+    '''Redirects from
         sanfrancisco/0efd75e8721c4308a8f3247a8c63305d/
     to
         application/3/
