@@ -6,6 +6,7 @@ from pytz import timezone
 from faker import Factory as FakerFactory
 from django.core.files import File
 from django.db.utils import IntegrityError
+from django.conf import settings
 from django.utils.datastructures import MultiValueDict
 
 from intake import models
@@ -168,7 +169,8 @@ def fillable_pdf(**kwargs):
 
 
 def useable_pdf(org):
-    example_pdf = File(open(os.environ.get('TEST_PDF_PATH'), 'rb'))
+    path = getattr(settings, 'TEST_PDF_PATH', os.environ.get('TEST_PDF_PATH'))
+    example_pdf = File(open(path, 'rb'))
     return FillablePDFFactory.create(
         name="Clean Slate",
         pdf=example_pdf,

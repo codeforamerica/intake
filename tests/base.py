@@ -31,7 +31,7 @@ class FunctionalTestCase(StaticLiveServerTestCase):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if settings.DEBUG == False:
+        if not settings.DEBUG:
             settings.DEBUG = True
 
     @classmethod
@@ -81,9 +81,9 @@ class FunctionalTestCase(StaticLiveServerTestCase):
     def handle_checkbox_input(self, inputs, value):
         if not isinstance(value, str) and hasattr(value, "__iter__"):
             # there are multiple values
-            should_click = lambda x: x in value
+            def should_click(x): return x in value
         else:
-            should_click = lambda x: x == value
+            def should_click(x): return x == value
         for element in inputs:
             if should_click(element.get_attribute('value')):
                 element.click()

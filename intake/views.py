@@ -381,8 +381,7 @@ mark_processed = MarkProcessed.as_view()
 delete_page = Delete.as_view()
 
 
-######## REDIRECT VIEWS ########
-# for backwards compatibility
+# REDIRECT VIEWS for backwards compatibility
 
 class PermanentRedirectView(View):
     """Permanently redirects to a url

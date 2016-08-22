@@ -218,9 +218,9 @@ class SlackTemplateNotification(BasicSlackNotification, TemplateNotification):
 
     def render(self, **context_args):
         if 'submissions' in context_args and 'bundle_url' not in context_args:
-            bundle_url = getattr(settings, 'DEFAULT_HOST', '') + url_with_ids(
-                'intake-app_bundle',
-                [s.id for s in context_args['submissions']])
+            submission_ids = [s.id for s in context_args['submissions']]
+            url = url_with_ids('intake-app_bundle', submission_ids)
+            bundle_url = getattr(settings, 'DEFAULT_HOST', '') + url
             context_args.update(bundle_url=bundle_url)
         return super().render(**context_args)
 
