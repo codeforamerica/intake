@@ -5,6 +5,7 @@ from formation.tests.utils import PatchTranslationTestCase, django_only
 
 from formation import fields
 
+
 class TestAddressField(PatchTranslationTestCase):
 
     def test_address_get_display_value(self):
@@ -13,7 +14,7 @@ class TestAddressField(PatchTranslationTestCase):
             'address_city': 'Oakland',
             'address_state': 'CA',
             'address_zip': '94609',
-            }
+        }
         expected_output = {
             'street': '1 Main St.',
             'city': 'Oakland',

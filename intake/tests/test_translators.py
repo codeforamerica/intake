@@ -5,7 +5,6 @@ from intake.tests import mock
 from intake.translators import fields
 
 
-
 class TestTranslators(TestCase):
 
     def test_clean_slate(self):
@@ -17,14 +16,13 @@ class TestTranslators(TestCase):
         self.assertDictEqual(old_results, expected)
         self.assertDictEqual(new_results, expected)
 
-
     def test_yes_no_radio_field(self):
         yes_inputs = [
             'yes', 'Yes', 'YES',
-            True, 1 ]
+            True, 1]
         no_inputs = [
             'no', 'No', 'NO',
-            False, 0 ]
+            False, 0]
         off_inputs = [
             'off', 'Off', 'OFF', 'oFf',
             '', ' ', '\n', 'ndadsliajfnieuniub',
@@ -39,12 +37,16 @@ class TestTranslators(TestCase):
         for val in off_inputs:
             self.assertEqual(field(val), 'Off')
 
+
 def pdf_fillable_models():
     """Creates mock objects that are fed to the form to pdf translator
     """
     new_model_for_pdf = Mock(
         answers=dict(
-            contact_preferences=['prefers_email', 'prefers_sms', 'prefers_snailmail'],
+            contact_preferences=[
+                'prefers_email',
+                'prefers_sms',
+                'prefers_snailmail'],
             address=dict(
                 street='111 Main St.',
                 city='Oakland',
@@ -69,7 +71,7 @@ def pdf_fillable_models():
             ssn='999999999',
             us_citizen='yes',
             serving_sentence='no',
-            ))
+        ))
 
     old_model_for_pdf = Mock(
         answers=dict(
@@ -100,7 +102,7 @@ def pdf_fillable_models():
             ssn='999999999',
             us_citizen='yes',
             serving_sentence='no',
-            ))
+        ))
     for model in [old_model_for_pdf, new_model_for_pdf]:
         model.get_local_date_received.return_value = '6/11/2016'
 
@@ -140,4 +142,3 @@ PDF_FILLABLE_DATA = {
     'US Citizen': 'Yes',
     'What is your monthly income': '1800',
     'Work phone number': ''}
-

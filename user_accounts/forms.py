@@ -59,9 +59,4 @@ class SetPasswordForm(forms.Form):
     def save(self):
         allauth_forms.get_adapter().set_password(
             self.user, self.cleaned_data['password']
-            )
-
-
-
-
-
+        )

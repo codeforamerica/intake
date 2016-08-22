@@ -7,6 +7,7 @@ from formation.forms import county_form_selector, gave_preferred_contact_methods
 from formation import fields as F
 from intake.constants import Counties
 
+
 class TestCombinableFormSpec(PatchTranslationTestCase):
 
     def test_can_combine_validators(self):
@@ -17,8 +18,8 @@ class TestCombinableFormSpec(PatchTranslationTestCase):
                 Counties.CONTRA_COSTA
             ])
         self.assertListEqual(CombinedForm.validators,
-            [gave_preferred_contact_methods]
-            )
+                             [gave_preferred_contact_methods]
+                             )
 
     def test_combines_optional_fields_properly(self):
         CombinedForm = county_form_selector.get_combined_form_class(
@@ -33,4 +34,4 @@ class TestCombinableFormSpec(PatchTranslationTestCase):
         }
         self.assertTrue(
             expected_optional_fields == set(CombinedForm.optional_fields)
-            )
+        )

@@ -20,13 +20,13 @@ data = {
         {
             "name": ORG_NAMES[Organizations.SF_PUBDEF],
             "slug": Organizations.SF_PUBDEF,
-            "county_id": 1, # receives SF apps
+            "county_id": 1,  # receives SF apps
             "is_receiving_agency": True,
         },
         {
             "name": ORG_NAMES[Organizations.COCO_PUBDEF],
             "slug": Organizations.COCO_PUBDEF,
-            "county_id": 2, # receives Contra Costa apps
+            "county_id": 2,  # receives Contra Costa apps
             "is_receiving_agency": True,
         },
         {

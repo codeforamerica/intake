@@ -21,6 +21,7 @@ class AccessorField:
 
 
 class YesNoRadioField(AccessorField):
+
     def __init__(self, default="Off"):
         super().__init__(default=default)
         self.YES = "Yes"

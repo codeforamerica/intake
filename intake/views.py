@@ -11,7 +11,6 @@ from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 
 
-
 from django.core import mail
 
 from intake import models, notifications, constants
@@ -19,18 +18,24 @@ from formation.forms import county_form_selector, SelectCountyForm
 from project.jinja2 import url_with_ids, oxford_comma
 
 
-
 class Home(TemplateView):
+    """Homepage view which lists available counties.
+    """
+
     template_name = "main_splash.jinja"
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        counties = models.County.objects.prefetch_related('organizations').all()
+        counties = models.County.objects.prefetch_related(
+            'organizations').all()
         context['counties'] = counties
         return context
 
 
 class GetFormSessionDataMixin:
+    """Responsable for storing form data in a session.
+    """
+
     session_storage_key = "form_in_progress"
 
     def get_session_data(self):
@@ -47,11 +52,15 @@ class GetFormSessionDataMixin:
         return dict(
             counties=counties,
             county_list=[county.name + " County" for county in counties]
-            )
+        )
 
 
 class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
-    error_message = _("There were some problems with your application. Please check the errors below.")
+    """Makes a form that goes across multiple pages.
+    """
+
+    ERROR_MESSAGE = _(
+        "There were some problems with your application. Please check the errors below.")
 
     def update_session_data(self):
         form_data = self.request.session.get(self.session_storage_key, {})
@@ -65,7 +74,7 @@ class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
             messages.error(self.request, error)
 
     def form_invalid(self, form, *args, **kwargs):
-        messages.error(self.request, self.error_message)
+        messages.error(self.request, self.ERROR_MESSAGE)
         self.put_errors_in_flash_messages(form)
         return super().form_invalid(form, *args, **kwargs)
 
@@ -76,14 +85,17 @@ class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
 
 
 class MultiStepApplicationView(MultiStepFormViewBase):
+    """Manages multiple page forms and their confirmation and submission.
+    """
+
     template_name = "forms/county_form.jinja"
     success_url = reverse_lazy('intake-thanks')
-    
 
     def confirmation(self, submission):
-        county_list = [name + " County" for name in submission.get_nice_counties()]
+        county_list = [
+            name + " County" for name in submission.get_nice_counties()]
         messages.success(self.request,
-            _("You have applied for help in ") + oxford_comma(county_list))
+                         _("You have applied for help in ") + oxford_comma(county_list))
         flash_messages = submission.send_confirmation_notifications()
         for message in flash_messages:
             messages.success(self.request, message)
@@ -103,6 +115,7 @@ class MultiStepApplicationView(MultiStepFormViewBase):
 
 
 class MultiCountyApplicationView(MultiStepApplicationView):
+    """Extends `MultiStepApplicationView` with county information."""
 
     def get_form_kwargs(self):
         kwargs = {}
@@ -118,11 +131,12 @@ class MultiCountyApplicationView(MultiStepApplicationView):
 
 
 class Confirm(MultiCountyApplicationView):
-    '''Intended to provide a final acceptance of a form,
+    """Intended to provide a final acceptance of a form,
     after any necessary warnings have been raised.
     It follows the `Apply` view, which checks for warnings.
-    '''
-    incoming_message = _("Please double check the form. Some parts are empty and may cause delays.")
+    """
+    incoming_message = _(
+        "Please double check the form. Some parts are empty and may cause delays.")
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -139,9 +153,9 @@ class Confirm(MultiCountyApplicationView):
 
 
 class CountyApplication(MultiCountyApplicationView):
-    '''The initial application page.
+    """The initial application page.
     Checks for warnings, and if they exist, redirects to a confirmation page.
-    '''
+    """
     confirmation_url = reverse_lazy('intake-confirm')
 
     def form_valid(self, form):
@@ -197,7 +211,7 @@ class ApplicationDetail(View):
     def get(self, request, submission_id):
         if request.user.profile.should_see_pdf():
             return redirect(reverse_lazy('intake-filled_pdf',
-                kwargs=dict(submission_id=submission_id)))
+                                         kwargs=dict(submission_id=submission_id)))
         submissions = list(models.FormSubmission.get_permitted_submissions(
             request.user, [submission_id]))
         if not submissions:
@@ -212,7 +226,8 @@ class FilledPDF(ApplicationDetail):
 
     def get_pdf_for_user(self, request, submission_data):
         organization = request.user.profile.organization
-        fillable = models.FillablePDF.objects.filter(organization=organization).first()
+        fillable = models.FillablePDF.objects.filter(
+            organization=organization).first()
         if isinstance(submission_data, list):
             return fillable.fill_many(submission_data)
         return fillable.fill(submission_data)
@@ -226,11 +241,12 @@ class FilledPDF(ApplicationDetail):
         pdf = self.get_pdf_for_user(request, submission)
         self.mark_viewed(request, submission)
         return HttpResponse(pdf,
-            content_type="application/pdf")
+                            content_type="application/pdf")
 
 
 class ApplicationIndex(TemplateView):
     template_name = "app_index.jinja"
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['submissions'] = list(models.FormSubmission.get_permitted_submissions(
@@ -241,26 +257,28 @@ class ApplicationIndex(TemplateView):
 
 class Stats(TemplateView):
     template_name = "stats.jinja"
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         county_totals = []
         counties = models.County.objects.all()
         for county in counties:
             county_totals.append(dict(
-                count=models.FormSubmission.objects.filter(counties=county).count(),
+                count=models.FormSubmission.objects.filter(
+                    counties=county).count(),
                 county_name=county.name))
         context['stats'] = {
             'total_all_counties': models.FormSubmission.objects.count(),
             'county_totals': county_totals
-        }   
+        }
         return context
-
 
 
 class MultiSubmissionMixin:
     """A mixin for pulling multiple submission ids
     out of request query params.
     """
+
     def get_ids_from_params(self, request):
         id_set = request.GET.get('ids')
         return [int(i) for i in id_set.split(',')]
@@ -272,6 +290,7 @@ class MultiSubmissionMixin:
 
 
 class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
+
     def get(self, request):
         submissions = self.get_submissions_from_params(request)
         if not submissions:
@@ -281,12 +300,13 @@ class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
             count=len(submissions),
             show_pdf=request.user.profile.should_see_pdf(),
             app_ids=[sub.id for sub in submissions]
-            )
+        )
         self.mark_viewed(request, submissions)
         return render(request, "app_bundle.jinja", context)
 
 
 class FilledPDFBundle(FilledPDF, MultiSubmissionMixin):
+
     def get(self, request):
         submissions = self.get_submissions_from_params(request)
         if not submissions:
@@ -297,6 +317,7 @@ class FilledPDFBundle(FilledPDF, MultiSubmissionMixin):
 
 class Delete(View):
     template_name = "delete_page.jinja"
+
     def get(self, request, submission_id):
         submission = models.FormSubmission.objects.get(id=int(submission_id))
         return render(
@@ -310,7 +331,7 @@ class Delete(View):
             submission_id=submission_id,
             organization=request.user.profile.organization,
             event_type=models.ApplicationLogEntry.DELETED
-            )
+        )
         submission.delete()
         notifications.slack_submissions_deleted.send(
             submissions=[submission],
@@ -329,7 +350,7 @@ class MarkSubmissionStepView(View, MultiSubmissionMixin):
         submissions = self.get_submissions_from_params(request)
         submission_ids = [sub.id for sub in submissions]
         next_param = request.GET.get('next',
-            reverse_lazy('intake-app_index'))
+                                     reverse_lazy('intake-app_index'))
         models.ApplicationLogEntry.log_multiple(
             self.process_step, submission_ids, request.user,
             organization=self.get_organization(request.user))
@@ -364,10 +385,10 @@ delete_page = Delete.as_view()
 # for backwards compatibility
 
 class PermanentRedirectView(View):
-    '''Permanently redirects to a url
+    """Permanently redirects to a url
     by default, it will build a url from any kwargs
     self.build_redirect_url() can be overridden to provide logic
-    '''
+    """
     redirect_view_name = None
 
     def build_redirect_url(self, request, **kwargs):
@@ -381,24 +402,26 @@ class PermanentRedirectView(View):
 
 
 class SingleIdPermanentRedirect(PermanentRedirectView):
-    '''Redirects from 
+    """Redirects from
         sanfrancisco/0efd75e8721c4308a8f3247a8c63305d/
     to
         application/3/
-    '''
+    """
+
     def build_redirect_url(self, request, submission_id):
         submission = models.FormSubmission.objects.get(old_uuid=submission_id)
         return reverse_lazy(self.redirect_view_name,
-            kwargs=dict(submission_id=submission.id)
-            )
+                            kwargs=dict(submission_id=submission.id)
+                            )
 
 
 class MultiIdPermanentRedirect(PermanentRedirectView):
-    '''Redirects from
+    """Redirects from
         sanfrancisco/bundle/?keys=0efd75e8721c4308a8f3247a8c63305d|b873c4ceb1cd4939b1d4c890997ef29c
     to
         applications/bundle/?ids=3,4
-    '''
+    """
+
     def build_redirect_url(self, request):
         key_set = request.GET.get('keys')
         uuids = [key for key in key_set.split('|')]
@@ -407,11 +430,3 @@ class MultiIdPermanentRedirect(PermanentRedirectView):
         return url_with_ids(
             self.redirect_view_name,
             [s.id for s in submissions])
-
-
-
-
-
-
-
-

@@ -1,7 +1,6 @@
 from django.test import Client
 
 
-
 class CsrfClient(Client):
 
     def __init__(self, **defaults):

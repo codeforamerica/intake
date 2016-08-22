@@ -10,6 +10,7 @@ from django.template import loader, Context
 
 jinja = loader.engines['jinja']
 
+
 class JinjaNotInitializedError(Exception):
     pass
 
@@ -69,7 +70,8 @@ class TemplateNotification:
 
     def init_templates(self):
         if not jinja.env:
-            raise JinjaNotInitializedError("the jinja environment has not been initialized")
+            raise JinjaNotInitializedError(
+                "the jinja environment has not been initialized")
         content_keys = []
         for key, value in self.template_and_path_args.items():
             pieces = key.split('_')
@@ -80,7 +82,7 @@ class TemplateNotification:
                 built_key = '_'.join(pieces[:-1])
                 self.set_template(built_key, value, from_string=True)
         self._content_base = namedtuple('RenderedContent',
-            self.templates.keys())
+                                        self.templates.keys())
 
     def render(self, **context_args):
         if not self.templates:
@@ -88,14 +90,13 @@ class TemplateNotification:
         return self._content_base(**{
             key: self._render_template(template, context_args)
             for key, template in self.templates.items()
-            })
+        })
 
     def render_content_fields(self, **context_args):
         content = self.render(**context_args)
         return '\n\n'.join([
             "{}:\n{}".format(fragment, getattr(content, fragment))
             for fragment in content._fields])
-
 
 
 class EmailNotification(TemplateNotification):
@@ -107,7 +108,7 @@ class EmailNotification(TemplateNotification):
         super().__init__(
             subject_template=subject_template,
             body_template_path=body_template_path
-            )
+        )
 
     def send(self, to=None, from_email=None, **context_args):
         content = self.render(**context_args)
@@ -118,16 +119,18 @@ class EmailNotification(TemplateNotification):
             message=content.body,
             from_email=from_email,
             recipient_list=to
-            )
+        )
+
 
 class FrontNotification(TemplateNotification):
 
-    def __init__(self, default_context=None, subject_template='', body_template_path=''):
+    def __init__(self, default_context=None, subject_template='',
+                 body_template_path=''):
         super().__init__(
             default_context=default_context,
             subject_template=subject_template,
             body_template_path=body_template_path
-            )
+        )
 
     def build_headers(self):
         return {
@@ -144,7 +147,7 @@ class FrontNotification(TemplateNotification):
     def raise_post_errors(self, response, payload):
         if response.status_code != 202:
             raise FrontAPIError(
-"""
+                """
 STATUS {status}
 Error: {title}
 {detail}
@@ -155,13 +158,13 @@ REQUEST JSON:
     def send(self, to, **context_args):
         content = self.render(**context_args)
         data = {
-            'body': content.body.replace('\n','<br>'),
+            'body': content.body.replace('\n', '<br>'),
             'text': content.body,
             'to': to,
             'options': {
                 'archive': False
-                }
             }
+        }
         if hasattr(content, 'subject') and content.subject:
             data['subject'] = content.subject
         payload = json.dumps(data)
@@ -171,10 +174,9 @@ REQUEST JSON:
                 url=self.build_api_url_endpoint(),
                 data=payload,
                 headers=self.build_headers()
-                )
+            )
             self.raise_post_errors(result, payload)
             return result
-
 
 
 class FrontEmailNotification(FrontNotification):
@@ -185,18 +187,18 @@ class FrontSMSNotification(FrontNotification):
     channel_id = getattr(settings, 'FRONT_PHONE_CHANNEL_ID', None)
 
 
-
 class BasicSlackNotification:
 
     headers = {'Content-type': 'application/json'}
 
     def __init__(self, webhook_url=None):
-        self.webhook_url = webhook_url or getattr(settings, 'SLACK_WEBHOOK_URL', None)
+        self.webhook_url = webhook_url or getattr(
+            settings, 'SLACK_WEBHOOK_URL', None)
 
     def send(self, message_text):
         payload = json.dumps({
             'text': message_text
-            })
+        })
         if check_that_remote_connections_are_okay(
                 'SLACK POST:', payload):
             return requests.post(
@@ -207,11 +209,12 @@ class BasicSlackNotification:
 
 class SlackTemplateNotification(BasicSlackNotification, TemplateNotification):
 
-    def __init__(self, default_context=None, message_template_path='', webhook_url=None):
+    def __init__(self, default_context=None,
+                 message_template_path='', webhook_url=None):
         BasicSlackNotification.__init__(self, webhook_url)
         TemplateNotification.__init__(self,
-            default_context=default_context,
-            message_template_path=message_template_path)
+                                      default_context=default_context,
+                                      message_template_path=message_template_path)
 
     def render(self, **context_args):
         if 'submissions' in context_args and 'bundle_url' not in context_args:
@@ -224,7 +227,6 @@ class SlackTemplateNotification(BasicSlackNotification, TemplateNotification):
     def send(self, **context_args):
         content = self.render(**context_args)
         super().send(message_text=content.message)
-
 
 
 slack_simple = BasicSlackNotification()
@@ -250,26 +252,28 @@ slack_submissions_deleted = SlackTemplateNotification(
 
 # count, submission_ids
 front_email_daily_app_bundle = FrontEmailNotification(
-    subject_template=_("{{current_local_time('%a %b %-d, %Y')}}: Online applications to Clean Slate"),
+    subject_template=_(
+        "{{current_local_time('%a %b %-d, %Y')}}: Online applications to Clean Slate"),
     body_template_path='email/app_bundle_email.jinja')
 email_daily_app_bundle = EmailNotification(
-    subject_template=_("{{current_local_time('%a %b %-d, %Y')}}: Online applications to Clean Slate"),
+    subject_template=_(
+        "{{current_local_time('%a %b %-d, %Y')}}: Online applications to Clean Slate"),
     body_template_path='email/app_bundle_email.jinja')
 
 # submissions, emails
 slack_app_bundle_sent = SlackTemplateNotification(
     message_template_path="slack/app_bundle_sent.jinja"
-    )
+)
 
-### CONFIRMATIONS
+# CONFIRMATIONS
 
 # name, staff name
 email_confirmation = FrontEmailNotification(
-    subject_template = _("Thanks for applying - Next steps"),
+    subject_template=_("Thanks for applying - Next steps"),
     body_template_path='email/confirmation.jinja')
 sms_confirmation = FrontSMSNotification(
     body_template_path='text/confirmation.jinja'
-    )
+)
 
 # submission, method
 slack_confirmation_sent = SlackTemplateNotification(

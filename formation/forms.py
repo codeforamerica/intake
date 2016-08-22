@@ -20,7 +20,7 @@ class SupplementaryDisplayForm(CombinableCountyFormSpec):
 
     fields = {
         F.DateReceived,
-        F.Counties,       
+        F.Counties,
     }
 
 
@@ -47,7 +47,6 @@ class OtherCountyForm(CombinableCountyFormSpec):
     validators = [
         gave_preferred_contact_methods
     ]
-
 
 
 class SanFranciscoCountyForm(CombinableCountyFormSpec):
@@ -138,6 +137,7 @@ class ContraCostaForm(CombinableCountyFormSpec):
         gave_preferred_contact_methods
     ]
 
+
 class AlamedaCountyForm(CombinableCountyFormSpec):
     county = Counties.ALAMEDA
     fields = {
@@ -155,14 +155,14 @@ class AlamedaCountyForm(CombinableCountyFormSpec):
         F.OwnsHome,
         F.HouseholdSize,
         F.DateOfBirthField,
-        #F.LastFourOfSSN,
+        # F.LastFourOfSSN,
         F.USCitizen,
         F.OnProbationParole,
         F.FinishedHalfProbation,
         F.ServingSentence,
         F.BeingCharged,
-        #F.HasExternalRAP,
-        #F.ExternalRAPWhereWhen,
+        # F.HasExternalRAP,
+        # F.ExternalRAPWhereWhen,
         F.HowDidYouHear,
     }
     required_fields = {

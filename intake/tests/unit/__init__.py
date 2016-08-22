@@ -1,6 +1,7 @@
 from unittest import TestCase
 from unittest.mock import Mock, patch, MagicMock
 
+
 class TestContextProcessors(TestCase):
 
     def test_oxford_comma(self):

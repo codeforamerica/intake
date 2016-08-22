@@ -21,7 +21,7 @@ class Command(BaseCommand):
             'intake', 'initial_data'
         ]
         folder_path = os.path.join(
-            settings.REPO_DIR, 
+            settings.REPO_DIR,
             *initial_data_path_fragments)
         import_paths = []
         for filename in os.listdir(folder_path):
@@ -46,7 +46,7 @@ class Command(BaseCommand):
 
     def load_or_update_instance(self, model_class, data, lookup_keys):
         lookup_atts = {k: data[k] for k in lookup_keys}
-        data.pop("pk", None) # don't try to update pk
+        data.pop("pk", None)  # don't try to update pk
         instance, created = model_class.objects.update_or_create(
             **lookup_atts,
             defaults=data)
@@ -62,7 +62,7 @@ class Command(BaseCommand):
 
     def load_instances(self, data):
         model_class = self.import_class(data['model'])
-        lookup_keys  = data.get("lookup_keys", ["pk"])
+        lookup_keys = data.get("lookup_keys", ["pk"])
         for instance_data in data["instances"]:
             instance = self.load_or_update_instance(
                 model_class, instance_data.copy(),
@@ -95,7 +95,7 @@ class Command(BaseCommand):
         self.queue = [
             self.get_data_from_module(p)
             for p in paths
-            ]
+        ]
         while self.queue:
             item = self.queue.pop(0)
             if self.dependencies_loaded(item):
