@@ -86,11 +86,10 @@ class Field(base.BindParseValidate):
         HTTP post or dictionary before running parsing and validation
         """
         if not isinstance(raw_data, dict):
-            raise exceptions.RawDataMustBeDictError(
-                "The raw data passed to `{}` was `{}` type, not dict.".format(
-                    self, type(raw_data))
-                + " Raw data passed to forms and fields must be an instance of dict."
-            )
+            message = "The raw data passed to `{}` was `{}` type, not dict.".format(
+                self, type(raw_data))
+            message += " Raw data passed to forms and fields must be an instance of dict."
+            raise exceptions.RawDataMustBeDictError(message)
         self.raw_input_value = self.extract_raw_value(raw_data)
         super().parse_and_validate(self.raw_input_value)
 

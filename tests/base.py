@@ -81,9 +81,11 @@ class FunctionalTestCase(StaticLiveServerTestCase):
     def handle_checkbox_input(self, inputs, value):
         if not isinstance(value, str) and hasattr(value, "__iter__"):
             # there are multiple values
-            def should_click(x): return x in value
+            def should_click(x):
+                return x in value
         else:
-            def should_click(x): return x == value
+            def should_click(x):
+                return x == value
         for element in inputs:
             if should_click(element.get_attribute('value')):
                 element.click()
