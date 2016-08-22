@@ -9,19 +9,19 @@ data = {
     "instances": [
         {
             "pk": 1,
-            "slug": Counties.SAN_FRANCISCO, # sanfrancisco
+            "slug": Counties.SAN_FRANCISCO,  # sanfrancisco
             "name": CountyNames.SAN_FRANCISCO,
             "description": COUNTY_CHOICES[0][1]
         },
         {
             "pk": 2,
-            "slug": Counties.CONTRA_COSTA, # contracosta
+            "slug": Counties.CONTRA_COSTA,  # contracosta
             "name": CountyNames.CONTRA_COSTA,
             "description": COUNTY_CHOICES[1][1]
         },
         {
             "pk": 3,
-            "slug": Counties.ALAMEDA, # contracosta
+            "slug": Counties.ALAMEDA,  # contracosta
             "name": CountyNames.ALAMEDA,
             "description": COUNTY_CHOICES[2][1]
         }

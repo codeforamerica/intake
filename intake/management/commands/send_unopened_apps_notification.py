@@ -12,4 +12,4 @@ class Command(BaseCommand):
         submission_bundler.bundle_and_notify()
         self.stdout.write(
             self.style.SUCCESS("Successfully referred any unopened apps")
-            )
+        )

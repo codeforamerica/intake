@@ -34,7 +34,8 @@ class Organization:
         For the time being, this is purely based on the county
         """
         form_selector = display_form_selector if display else county_form_selector
-        return form_selector.get_combined_form_class(counties=[cls.county.slug])
+        return form_selector.get_combined_form_class(
+            counties=[cls.county.slug])
 
     @classmethod
     def get_display_form(cls):

@@ -17,7 +17,7 @@ notification_mock_settings = dict(
     FRONT_EMAIL_CHANNEL_ID='email_ch',
     FRONT_PHONE_CHANNEL_ID='phone_ch',
     SLACK_WEBHOOK_URL='slack',
-    )
+)
 
 
 class TestNotifications(TestCase):
@@ -31,9 +31,11 @@ class TestNotifications(TestCase):
             'Hi',
             settings.MAIL_DEFAULT_SENDER,
             [settings.DEFAULT_NOTIFICATION_EMAIL]
-            )
+        )
         self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(mail.outbox[0].from_email, settings.MAIL_DEFAULT_SENDER)
+        self.assertEqual(
+            mail.outbox[0].from_email,
+            settings.MAIL_DEFAULT_SENDER)
 
     @patch('intake.notifications.loader.get_template')
     def test_email_notification_class(self, *args):
@@ -46,7 +48,8 @@ class TestNotifications(TestCase):
 
     @patch('intake.notifications.requests.post')
     @patch('intake.notifications.loader.get_template')
-    @override_settings(DIVERT_REMOTE_CONNECTIONS=False, **notification_mock_settings)
+    @override_settings(DIVERT_REMOTE_CONNECTIONS=False,
+                       **notification_mock_settings)
     def test_front_notifications(self, get_template, mock_post):
         # check all the basics using an SMS example
         mock_post.return_value = mock.FrontSendMessageResponse.success()
@@ -56,7 +59,7 @@ class TestNotifications(TestCase):
 
         front_text = notifications.FrontSMSNotification(
             body_template_path="front_body_template.txt"
-            )
+        )
 
         front_text.channel_id = 'phone_id'
 
@@ -70,7 +73,7 @@ class TestNotifications(TestCase):
             'to': ["+15555555555"],
             'options': {
                 'archive': False
-                }
+            }
         }
         expected_headers = {
             'Authorization': 'Bearer mytoken',
@@ -81,15 +84,16 @@ class TestNotifications(TestCase):
         posted_data = json.loads(post_kwargs['data'])
         self.assertDictEqual(posted_data, expected_data)
         self.assertDictEqual(post_kwargs['headers'], expected_headers)
-        self.assertEqual(post_kwargs['url'], 'https://api2.frontapp.com/channels/phone_id/messages')
+        self.assertEqual(
+            post_kwargs['url'],
+            'https://api2.frontapp.com/channels/phone_id/messages')
 
         # make sure we get errors as expected
         mock_post.return_value = mock.FrontSendMessageResponse.error()
         with self.assertRaises(notifications.FrontAPIError):
             front_text.send(
-            to=["+15555555555"],
-            message="Hi")
-
+                to=["+15555555555"],
+                message="Hi")
 
         # check the front email works as expected
         mock_post.reset_mock()
@@ -100,7 +104,7 @@ class TestNotifications(TestCase):
         front_email = notifications.FrontEmailNotification(
             subject_template="Front test",
             body_template_path="front_body_template.txt"
-            )
+        )
         front_email.channel_id = 'email_id'
 
         result = front_email.send(
@@ -111,13 +115,15 @@ class TestNotifications(TestCase):
             'subject': 'Front test',
             'body': 'Hi this is an email message body.',
             'text': 'Hi this is an email message body.',
-            })
+        })
 
         post_args, post_kwargs = [*mock_post.call_args]
         posted_data = json.loads(post_kwargs['data'])
         self.assertDictEqual(posted_data, expected_data)
         self.assertDictEqual(post_kwargs['headers'], expected_headers)
-        self.assertEqual(post_kwargs['url'], 'https://api2.frontapp.com/channels/email_id/messages')
+        self.assertEqual(
+            post_kwargs['url'],
+            'https://api2.frontapp.com/channels/email_id/messages')
 
 
 class TestSlackAndFront(BaseTestCase):
@@ -126,12 +132,16 @@ class TestSlackAndFront(BaseTestCase):
     def setUpClass(cls):
         class MockSub:
             id = 2
+
             def get_anonymous_display(self):
                 return "Shining Koala"
+
             def __str__(self):
                 return self.get_anonymous_display()
+
             def get_nice_contact_preferences(self):
                 return ["text message", "email"]
+
             def get_nice_counties(self):
                 return ['San Francisco', 'Contra Costa']
         cls.sub = MockSub()
@@ -142,7 +152,7 @@ class TestSlackAndFront(BaseTestCase):
 
     def test_render_new_submission(self):
         expected_new_submission_text = str(
-"""New submission #101 to San Francisco and Contra Costa!
+            """New submission #101 to San Francisco and Contra Costa!
 <http://filled_pdf/|Shining Koala>
 They want to be contacted via text message and email
 """)
@@ -150,40 +160,41 @@ They want to be contacted via text message and email
             submission=self.sub,
             submission_count=self.submission_count,
             request=self.request
-            ).message
+        ).message
 
     def test_render_submission_viewed(self):
         expected_submission_viewed_text = str(
-"""staff@org.org opened <url|Shining Koala's application>""")
+            """staff@org.org opened <url|Shining Koala's application>""")
         submission_viewed = notifications.slack_submissions_viewed.render(
             user=self.user,
             submissions=[self.sub],
             bundle_url='url',
-            ).message
+        ).message
         self.assertEqual(submission_viewed, expected_submission_viewed_text)
-    
+
     def test_render_submissions_viewed(self):
         expected_submissions_viewed_text = str(
-"""staff@org.org opened apps from <url|Shining Koala, Shining Koala, and Shining Koala>""")
+            """staff@org.org opened apps from <url|Shining Koala, Shining Koala, and Shining Koala>""")
         submissions_viewed = notifications.slack_submissions_viewed.render(
             user=self.user,
             submissions=[self.sub for i in range(3)],
             bundle_url='url',
-            ).message
+        ).message
         self.assertEqual(submissions_viewed, expected_submissions_viewed_text)
 
     def test_render_submission_deleted(self):
         expected_submission_deleted_text = str(
-"""staff@org.org deleted <url|Shining Koala's application>""")
+            """staff@org.org deleted <url|Shining Koala's application>""")
         deleted = notifications.slack_submissions_deleted.render(
             user=self.user,
             submissions=[self.sub],
             bundle_url='url',
-            ).message
+        ).message
         self.assertEqual(deleted, expected_submission_deleted_text)
 
     @patch('intake.notifications.requests.post')
-    @override_settings(DIVERT_REMOTE_CONNECTIONS=False, **notification_mock_settings)
+    @override_settings(DIVERT_REMOTE_CONNECTIONS=False,
+                       **notification_mock_settings)
     def test_slack_simple(self, mock_post):
         mock_post.return_value = "HTTP response"
         expected_json = '{"text": "Hello slack <&>"}'
@@ -196,7 +207,8 @@ They want to be contacted via text message and email
             called_kwargs['headers'], expected_headers)
 
     @patch('intake.notifications.requests.post')
-    @override_settings(DIVERT_REMOTE_CONNECTIONS=False, **notification_mock_settings)
+    @override_settings(DIVERT_REMOTE_CONNECTIONS=False,
+                       **notification_mock_settings)
     def test_slack_send(self, mock_post):
         mock_post.return_value = "HTTP response"
         expected_json = '{"text": "New submission #101 to San Francisco and Contra Costa!\\n<http://filled_pdf/|Shining Koala>\\nThey want to be contacted via text message and email\\n"}'
@@ -205,13 +217,13 @@ They want to be contacted via text message and email
             submission=self.sub,
             submission_count=self.submission_count,
             request=self.request
-            )
+        )
         called_args, called_kwargs = [*mock_post.call_args]
         self.assertEqual(
             called_kwargs['data'], expected_json)
         self.assertDictEqual(
             called_kwargs['headers'], expected_headers)
-    
+
     @override_settings(DEFAULT_HOST='something.com')
     def test_render_front_email_daily_app_bundle(self):
         expected_subject = "current time: Online applications to Clean Slate"
@@ -225,26 +237,26 @@ You can review and print them at this link:
         content = notifications.front_email_daily_app_bundle.render(
             count=1,
             request=request,
-            current_local_time= current_time,
-            submission_ids=[1,2,3]
-            )
+            current_local_time=current_time,
+            submission_ids=[1, 2, 3]
+        )
         self.assertIn(expected_body, content.body)
         self.assertEqual(expected_subject, content.subject)
-    
+
     @override_settings(DEFAULT_HOST='something.com')
     def test_render_slack_app_bundle_sent(self):
         # case: submissions
         submissions = [
             mock.FormSubmissionFactory.build(
-                id=i+1, anonymous_name='App')
+                id=i + 1, anonymous_name='App')
             for i in range(3)]
         emails = ['email1', 'email2']
         expected_message = """Emailed email1 and email2 with a link to apps from <something.com/applications/bundle/?ids=1,2,3|App, App, and App>"""
-        
+
         content = notifications.slack_app_bundle_sent.render(
             emails=emails,
             submissions=submissions
-            )
+        )
         self.assertEqual(expected_message, content.message)
 
         # case: no submissions
@@ -252,7 +264,7 @@ You can review and print them at this link:
         content = notifications.slack_app_bundle_sent.render(
             emails=emails,
             submissions=[]
-            )
+        )
         self.assertEqual(expected_message, content.message)
 
     def test_render_slack_confirmation_sent(self):
@@ -261,13 +273,15 @@ You can review and print them at this link:
         # case: email, sms
         expected = "Successfully sent a confirmation to App via email\nSuccessfully sent a confirmation to App via sms\n"
         methods = ['email', 'sms']
-        result = notifications.slack_confirmation_sent.render(submission=submission, methods=methods).message
+        result = notifications.slack_confirmation_sent.render(
+            submission=submission, methods=methods).message
         self.assertEqual(expected, result)
 
         # case: snailmail, voicemail
         expected = "Did not send a confirmation to App via snailmail\nDid not send a confirmation to App via voicemail\n"
         methods = ['snailmail', 'voicemail']
-        result = notifications.slack_confirmation_sent.render(submission=submission, methods=methods).message
+        result = notifications.slack_confirmation_sent.render(
+            submission=submission, methods=methods).message
         self.assertEqual(expected, result)
 
         # case: email, sms, snailmail, voicemail
@@ -277,9 +291,9 @@ You can review and print them at this link:
             "Did not send a confirmation to App via snailmail",
             "Did not send a confirmation to App via voicemail\n"])
         methods = ['email', 'sms', 'snailmail', 'voicemail']
-        result = notifications.slack_confirmation_sent.render(submission=submission, methods=methods).message
+        result = notifications.slack_confirmation_sent.render(
+            submission=submission, methods=methods).message
         self.assertEqual(expected, result)
-
 
     def test_render_slack_confirmation_failed(self):
         submission = mock.FormSubmissionFactory.build(anonymous_name="App")
@@ -287,9 +301,9 @@ You can review and print them at this link:
             'items.return_value': [
                 ("email", "some errors"),
                 ("sms", "more errors")
-                ],
+            ],
             'keys.return_value': ['email', 'sms']
-            })
+        })
         expected = """Confirmation by email and sms for App failed with errors:
 ```
 email:
@@ -301,14 +315,3 @@ sms:
         result = notifications.slack_confirmation_send_failed.render(
             submission=submission, errors=errors).message
         self.assertEqual(expected, result)
-
-
-
-
-
-
-
-
-
-
-

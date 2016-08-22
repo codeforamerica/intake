@@ -13,10 +13,10 @@ class TestField(PatchTranslationTestCase):
     not_empty = {'my_field': 'something'}
     required_error = {
         "my_field": ["This field is required."]
-        }
+    }
     recommended_warning = recommended_warning = {
         "my_field": ["Leaving this field blank might cause problems."]
-        }
+    }
 
     def get_example_subclass(self):
 
@@ -32,7 +32,6 @@ class TestField(PatchTranslationTestCase):
 
         return MyField
 
-
     def test_init(self):
         field = field_base.Field()
         self.assertFalse(field.is_multivalue)
@@ -42,7 +41,7 @@ class TestField(PatchTranslationTestCase):
             field.get_html_class_name(), base.DEFAULT_CONTEXT_KEY)
         self.assertFalse(field.is_bound())
         with self.assertRaises(NotImplementedError):
-            field.is_valid()  
+            field.is_valid()
 
     def test_init_with_data(self):
         data = {
@@ -65,7 +64,6 @@ class TestField(PatchTranslationTestCase):
                 field = MyField(non_dict)
                 field.is_valid()
 
-
     def test_basic_inheritance(self):
         MyField = self.get_example_subclass()
         field = MyField()
@@ -87,7 +85,7 @@ class TestField(PatchTranslationTestCase):
         error_message = field.errors['no_context'].pop()
         # must be cast as string to evaluate the lazy translation string
         self.assertEqual(str(error_message), expected_error_message)
-    
+
     def test_adds_required_error_if_gets_empty_values(self):
         # make a subclass that has a custom empty value
         MyField = self.get_example_subclass()
@@ -146,8 +144,9 @@ class TestField(PatchTranslationTestCase):
         self.assertTrue(field.is_valid())
         self.assertFalse(field.errors)
         self.assertFalse(field.warnings)
-        
-    def test_recommended_empty_extra_validator_returns_recommended_warning_only(self):
+
+    def test_recommended_empty_extra_validator_returns_recommended_warning_only(
+            self):
         from formation.fields import EmailField
         field = EmailField(self.empty, recommended=True, required=False)
         self.assertTrue(field.is_valid())
@@ -156,6 +155,3 @@ class TestField(PatchTranslationTestCase):
             "email": ["Leaving this field blank might cause problems."]
 
         })
-
-
-

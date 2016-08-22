@@ -14,11 +14,8 @@ class Command(BaseCommand):
         importer = DataImporter(
             import_from=os.environ.get('IMPORT_DATABASE_URL', ''),
             ssl=True
-            )
+        )
         importer.import_records(delete_existing=True)
         results = importer.report()
         self.stdout.write(results)
         notifications.slack_simple.send(results)
-
-
-

@@ -6,21 +6,22 @@ urlpatterns = [
     # public views
     url(r'^$', views.home, name='intake-home'),
     url(r'^apply/$', views.select_county, name='intake-apply'),
-    url(r'^application/$', views.county_application, name='intake-county_application'),
+    url(r'^application/$', views.county_application,
+        name='intake-county_application'),
     url(r'^confirm/$', views.confirm, name='intake-confirm'),
     url(r'^thanks/$', views.thanks, name='intake-thanks'),
     url(r'^stats/$', views.stats, name='intake-stats'),
     url(r'^privacy/$', views.privacy, name='intake-privacy'),
 
     # protected views
-    url(r'^application/(?P<submission_id>[0-9]+)/$', 
+    url(r'^application/(?P<submission_id>[0-9]+)/$',
         login_required(views.app_detail),
         name='intake-app_detail'),
 
-    url(r'^application/(?P<submission_id>[0-9]+)/pdf/$', 
+    url(r'^application/(?P<submission_id>[0-9]+)/pdf/$',
         login_required(views.filled_pdf),
         name='intake-filled_pdf'),
-    
+
     url(r'^applications/$',
         login_required(views.app_index),
         name='intake-app_index'),
@@ -36,14 +37,14 @@ urlpatterns = [
     url(r'^application/(?P<submission_id>[0-9]+)/delete/$',
         login_required(views.delete_page),
         name='intake-delete_page'),
-    
+
     url(r'^applications/mark/processed/$',
         login_required(views.mark_processed),
         name='intake-mark_processed'),
 ]
 
 redirects = [
-    url(r'^sanfrancisco/$', 
+    url(r'^sanfrancisco/$',
         views.PermanentRedirectView.as_view(
             redirect_view_name='intake-apply')),
     url(r'^sanfrancisco/applications/$',

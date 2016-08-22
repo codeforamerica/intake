@@ -5,11 +5,11 @@ from formation.fields import get_field_index
 class CombinableFormSpec:
 
     union_attributes = [
-            'fields',
-            'required_fields',
-            'recommended_fields',
-            'validators'
-        ]
+        'fields',
+        'required_fields',
+        'recommended_fields',
+        'validators'
+    ]
     difference_attributes = [
         'optional_fields'
     ]
@@ -22,9 +22,9 @@ class CombinableFormSpec:
                 setattr(self, attribute_key, set(init_value))
 
     def get_att_sets(self, other, att):
-            self_set = getattr(self, att, set())
-            other_set = getattr(other, att, set())
-            return set(self_set), set(other_set)
+        self_set = getattr(self, att, set())
+        other_set = getattr(other, att, set())
+        return set(self_set), set(other_set)
 
     def __or__(self, other):
         """Combines this spec with another spec
@@ -71,7 +71,7 @@ class CombinableFormSpec:
             'CombinedForm',
             parent_classes_tuple,
             class_attributes_dictionary
-            )
+        )
 
 
 class FormSpecSelector:
