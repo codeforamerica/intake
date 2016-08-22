@@ -27,7 +27,15 @@ def get_parser():
     return parser
 
 
+class CountyManager(models.Manager):
+
+    def get_by_natural_key(self, slug):
+        return self.get(slug=slug)
+
+
 class County(models.Model):
+    objects = CountyManager()
+    
     slug = models.SlugField()
     name = models.TextField()
     description = models.TextField()
@@ -287,8 +295,7 @@ class ApplicationLogEntry(models.Model):
     organization = models.ForeignKey(
         'user_accounts.Organization',
         on_delete=models.SET_NULL, null=True,
-        related_name='logs'
-        )
+        related_name='logs')
     submission = models.ForeignKey(FormSubmission,
         on_delete=models.SET_NULL, null=True,
         related_name='logs')

@@ -10,8 +10,14 @@ from formation.forms import county_form_selector, display_form_selector
 from . import exceptions
 
 
+class OrganizationManager(models.Manager):
+
+    def get_by_natural_key(self, name):
+        return self.get(name=name)
+
 
 class Organization(models.Model):
+    objects = OrganizationManager()
     name = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(unique=True, null=True)
     county = models.ForeignKey(intake_models.County,

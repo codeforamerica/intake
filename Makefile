@@ -37,3 +37,4 @@ deploy.prod:
 	git push prod master
 	heroku run --app cmr-prod python manage.py migrate
 	heroku run --app cmr-prod python manage.py load_initial_data
+
