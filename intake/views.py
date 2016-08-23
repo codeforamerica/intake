@@ -1,17 +1,41 @@
-from django.conf import settings
+"""
+Here are the important views in a rough order that follows the path of a
+submission:
+
+* `Home` - where a user would learn about the service and hit 'apply'
+* `SelectCounty` - a user selects the counties they need help with. This stores
+    the county selection in the session.
+* `CountyApplication` - a dynamic form built based on the county selection data
+    that was stored in the session. This view does most of the validation work.
+* `Confirm` (maybe) - if warnings exist on the form, users will be directed
+    here to confirm their submission. Unlike errors, warnings do not prevent
+    submission. This is just a slightly reduced version of `CountyApplication`.
+* `Thanks` - a confirmation page that shows data from the newly saved
+    submission.
+
+A daily notification is sent to organizations with a link to a bundle of their
+new applications.
+
+* `ApplicationBundle` - This is typically the main page that organization users
+    will access. Here they will see a collection of new applications, and, if
+    needed, can see a filled pdf for their intake forms. If they need a pdf
+    it will be served in an iframe by `FilledPDFBundle`
+* `ApplicationIndex` - This is a list page that lets an org user see all the
+    applications to their organization, organized in a table. Here they can
+    access links to `ApplicationDetail` and `FilledPDF` for each app.
+* `ApplicationDetail` - This shows the detail of one particular FormSubmission
+"""
+
 from django.utils.translation import ugettext as _
 from django.utils.datastructures import MultiValueDict
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse_lazy
 from django.contrib import messages
 
-from django.http import HttpResponseNotFound, HttpResponse
+from django.http import HttpResponse
 from django.views.generic import View
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
-
-
-from django.core import mail
 
 from intake import models, notifications, constants
 from formation.forms import county_form_selector, SelectCountyForm
@@ -19,9 +43,8 @@ from project.jinja2 import url_with_ids, oxford_comma
 
 
 class Home(TemplateView):
-    """Homepage view which lists available counties.
+    """Homepage view which shows information about the service
     """
-
     template_name = "main_splash.jinja"
 
     def get_context_data(self, *args, **kwargs):
@@ -33,9 +56,10 @@ class Home(TemplateView):
 
 
 class GetFormSessionDataMixin:
-    """Responsable for storing form data in a session.
-    """
+    """Responsible for retreiving form data stored in a session.
 
+    This adds methods for getting session data, but not for setting it
+    """
     session_storage_key = "form_in_progress"
 
     def get_session_data(self):
@@ -56,11 +80,11 @@ class GetFormSessionDataMixin:
 
 
 class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
-    """Makes a form that goes across multiple pages.
+    """A FormView saves form data in a session for persistence between URLs.
     """
-
-    ERROR_MESSAGE = _(
-        "There were some problems with your application. Please check the errors below.")
+    ERROR_MESSAGE = _(str(
+        "There were some problems with your application. "
+        "Please check the errors below."))
 
     def update_session_data(self):
         form_data = self.request.session.get(self.session_storage_key, {})
@@ -84,40 +108,18 @@ class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
         return context
 
 
-class MultiStepApplicationView(MultiStepFormViewBase):
-    """Manages multiple page forms and their confirmation and submission.
-    """
+class MultiCountyApplicationBase(MultiStepFormViewBase):
+    """A multi-page dynamic form view based on data stored in the session.
 
+    The form class is created dynamically based on data stored in the session.
+    Once created, the form class is fed POST data from the session.
+    """
     template_name = "forms/county_form.jinja"
     success_url = reverse_lazy('intake-thanks')
 
-    def confirmation(self, submission):
-        county_list = [
-            name + " County" for name in submission.get_nice_counties()]
-        messages.success(self.request,
-                         _("You have applied for help in ") + oxford_comma(county_list))
-        flash_messages = submission.send_confirmation_notifications()
-        for message in flash_messages:
-            messages.success(self.request, message)
-
-    def save_submission_and_send_notifications(self, form):
-        submission = models.FormSubmission(answers=form.cleaned_data)
-        submission.save()
-        submission.counties = self.get_counties()
-        number = models.FormSubmission.objects.count()
-        notifications.slack_new_submission.send(
-            submission=submission, request=self.request, submission_count=number)
-        self.confirmation(submission)
-
-    def form_valid(self, form):
-        self.save_submission_and_send_notifications(form)
-        return super().form_valid(form)
-
-
-class MultiCountyApplicationView(MultiStepApplicationView):
-    """Extends `MultiStepApplicationView` with county information."""
-
     def get_form_kwargs(self):
+        """Ensures that the dynamic form class is instantiated with POST data.
+        """
         kwargs = {}
         if self.request.method in ('POST', 'PUT'):
             kwargs.update({
@@ -125,18 +127,52 @@ class MultiCountyApplicationView(MultiStepApplicationView):
         return kwargs
 
     def get_form_class(self):
+        """Builds a form class dynamically, based on a list of county slugs
+        stored in the session.
+        """
         session_data = self.get_session_data()
         counties = session_data.getlist('counties')
         return county_form_selector.get_combined_form_class(counties=counties)
 
+    def create_confirmations_for_user(self, submission):
+        """Sends texts/emails to user and adds flash messages
+        """
+        county_list = [
+            name + " County" for name in submission.get_nice_counties()]
+        joined_county_list = oxford_comma(county_list)
+        full_message = _("You have applied for help in ") + joined_county_list
+        messages.success(self.request, full_message)
+        # send emails and texts
+        sent_confirmations = submission.send_confirmation_notifications()
+        for message in sent_confirmations:
+            messages.success(self.request, message)
 
-class Confirm(MultiCountyApplicationView):
+    def save_submission_and_send_notifications(self, form):
+        """Save the submission data, confirm for CfA and the user
+        """
+        submission = models.FormSubmission(answers=form.cleaned_data)
+        submission.save()
+        submission.counties = self.get_counties()
+        number = models.FormSubmission.objects.count()
+        notifications.slack_new_submission.send(
+            submission=submission,
+            request=self.request,
+            submission_count=number)
+        self.create_confirmations_for_user(submission)
+
+    def form_valid(self, form):
+        self.save_submission_and_send_notifications(form)
+        return super().form_valid(form)
+
+
+class Confirm(MultiCountyApplicationBase):
     """Intended to provide a final acceptance of a form,
     after any necessary warnings have been raised.
     It follows the `Apply` view, which checks for warnings.
     """
-    incoming_message = _(
-        "Please double check the form. Some parts are empty and may cause delays.")
+    incoming_message = _(str(
+        "Please double check the form. "
+        "Some parts are empty and may cause delays."))
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -152,7 +188,7 @@ class Confirm(MultiCountyApplicationView):
         return context
 
 
-class CountyApplication(MultiCountyApplicationView):
+class CountyApplication(MultiCountyApplicationBase):
     """The initial application page.
     Checks for warnings, and if they exist, redirects to a confirmation page.
     """
@@ -170,16 +206,23 @@ class CountyApplication(MultiCountyApplicationView):
 
 
 class SelectCounty(MultiStepFormViewBase):
+    """A page where users select the counties they'd like help with.
+
+    The user's county selection is stored in the session.
+    """
     form_class = SelectCountyForm
     template_name = "forms/county_selection.jinja"
     success_url = reverse_lazy('intake-county_application')
 
     def form_valid(self, form):
-        form_data = self.update_session_data()
+        self.update_session_data()
         return super().form_valid(form)
 
 
 class Thanks(TemplateView, GetFormSessionDataMixin):
+    """A confirmation page that shows flash messages and next steps for a
+    user.
+    """
     template_name = "thanks.jinja"
 
     def get_context_data(self, *args, **kwargs):
@@ -193,6 +236,8 @@ class PrivacyPolicy(TemplateView):
 
 
 class ApplicationDetail(View):
+    """Displays detailed information for an org user.
+    """
     template_name = "app_detail.jinja"
     not_allowed_message = str(
         "Sorry, you are not allowed to access that client information. "
@@ -210,8 +255,9 @@ class ApplicationDetail(View):
 
     def get(self, request, submission_id):
         if request.user.profile.should_see_pdf():
-            return redirect(reverse_lazy('intake-filled_pdf',
-                                         kwargs=dict(submission_id=submission_id)))
+            return redirect(
+                reverse_lazy('intake-filled_pdf',
+                             kwargs=dict(submission_id=submission_id)))
         submissions = list(models.FormSubmission.get_permitted_submissions(
             request.user, [submission_id]))
         if not submissions:
@@ -223,6 +269,9 @@ class ApplicationDetail(View):
 
 
 class FilledPDF(ApplicationDetail):
+    """Serves a filled PDF for an org user, based on the PDF
+    needed by that user's organization.
+    """
 
     def get_pdf_for_user(self, request, submission_data):
         organization = request.user.profile.organization
@@ -245,17 +294,22 @@ class FilledPDF(ApplicationDetail):
 
 
 class ApplicationIndex(TemplateView):
+    """A list view of all the application to a user's organization.
+    """
     template_name = "app_index.jinja"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['submissions'] = list(models.FormSubmission.get_permitted_submissions(
-            self.request.user, related_objects=True))
+        context['submissions'] = list(
+            models.FormSubmission.get_permitted_submissions(
+                self.request.user, related_objects=True))
         context['body_class'] = 'admin'
         return context
 
 
 class Stats(TemplateView):
+    """A view that shows a public summary of service performance.
+    """
     template_name = "stats.jinja"
 
     def get_context_data(self, **kwargs):
@@ -290,6 +344,9 @@ class MultiSubmissionMixin:
 
 
 class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
+    """Displays a set of submissions for an org user. These are typically
+    new submissions, and the org user has followed a link from their email.
+    """
 
     def get(self, request):
         submissions = self.get_submissions_from_params(request)
@@ -306,6 +363,9 @@ class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
 
 
 class FilledPDFBundle(FilledPDF, MultiSubmissionMixin):
+    """A concatenated PDF of individual filled PDFs for an org user.
+    Typically this is displayed in an iframe in `ApplicationBundle`
+    """
 
     def get(self, request):
         submissions = self.get_submissions_from_params(request)
@@ -316,6 +376,8 @@ class FilledPDFBundle(FilledPDF, MultiSubmissionMixin):
 
 
 class Delete(View):
+    """A page to confirm the deletion of an individual application.
+    """
     template_name = "delete_page.jinja"
 
     def get(self, request, submission_id):
