@@ -410,10 +410,8 @@ class FillablePDF(models.Model):
             return parser.fill_many_pdfs(self.get_pdf(), translated)
 
 
-"""
-TODO
 class FilledPDF(models.Model):
     pdf = models.FileField()
     orginal_pdf = models.ForeignKey(FillablePDF)
     submission = models.ForeignKey(FormSubmission)
-"""
+    organization = models.ForeignKey('user_accounts.Organization')

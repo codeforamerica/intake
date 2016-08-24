@@ -59,8 +59,10 @@ class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
     """Makes a form that goes across multiple pages.
     """
 
-    ERROR_MESSAGE = _(
-        "There were some problems with your application. Please check the errors below.")
+    ERROR_MESSAGE = _((
+        "There were some problems with your application."
+        " Please check the errors below."
+    ))
 
     def update_session_data(self):
         form_data = self.request.session.get(self.session_storage_key, {})
@@ -84,6 +86,19 @@ class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
         return context
 
 
+
+def get_pdf_for_user(user, submission_data):
+    """
+    Creates a filled out pdf for a submission.
+    """
+    organization = user.profile.organization
+    fillable = organization.pdfs.first()
+    if isinstance(submission_data, list):
+        return fillable.fill_many(submission_data)
+    return fillable.fill(submission_data)
+
+
+
 class MultiStepApplicationView(MultiStepFormViewBase):
     """Manages multiple page forms and their confirmation and submission.
     """
@@ -94,8 +109,8 @@ class MultiStepApplicationView(MultiStepFormViewBase):
     def confirmation(self, submission):
         county_list = [
             name + " County" for name in submission.get_nice_counties()]
-        messages.success(self.request,
-                         _("You have applied for help in ") + oxford_comma(county_list))
+        msg = _("You have applied for help in ") + oxford_comma(county_list)
+        messages.success(self.request, msg)
         flash_messages = submission.send_confirmation_notifications()
         for message in flash_messages:
             messages.success(self.request, message)
@@ -106,7 +121,17 @@ class MultiStepApplicationView(MultiStepFormViewBase):
         submission.counties = self.get_counties()
         number = models.FormSubmission.objects.count()
         notifications.slack_new_submission.send(
-            submission=submission, request=self.request, submission_count=number)
+            submission=submission, request=self.request,
+            submission_count=number)
+        pdf = get_pdf_for_user(self.request.user, submission)
+        org = self.request.user.organization
+        models.FilledPDF(
+                pdf=pdf,
+                original_pdf=org.pdfs.first(),
+                organization=org,
+                submission=submission,
+        )
+        self.mark_viewed(request, submission)
         self.confirmation(submission)
 
     def form_valid(self, form):
@@ -224,24 +249,15 @@ class ApplicationDetail(View):
 
 class FilledPDF(ApplicationDetail):
 
-    def get_pdf_for_user(self, request, submission_data):
-        organization = request.user.profile.organization
-        fillable = models.FillablePDF.objects.filter(
-            organization=organization).first()
-        if isinstance(submission_data, list):
-            return fillable.fill_many(submission_data)
-        return fillable.fill(submission_data)
-
     def get(self, request, submission_id):
         submissions = list(models.FormSubmission.get_permitted_submissions(
             request.user, [submission_id]))
         if not submissions:
             return self.not_allowed(request)
         submission = submissions[0]
-        pdf = self.get_pdf_for_user(request, submission)
+        pdf = submission.filledpdf_set.first()
         self.mark_viewed(request, submission)
-        return HttpResponse(pdf,
-                            content_type="application/pdf")
+        return HttpResponse(pdf, content_type="application/pdf")
 
 
 class ApplicationIndex(TemplateView):
@@ -311,7 +327,7 @@ class FilledPDFBundle(FilledPDF, MultiSubmissionMixin):
         submissions = self.get_submissions_from_params(request)
         if not submissions:
             return self.not_allowed(request)
-        pdf = self.get_pdf_for_user(request, list(submissions))
+        pdf = get_pdf_for_user(request.user, list(submissions))
         return HttpResponse(pdf, content_type="application/pdf")
 
 
