@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('intake', '0020_formsubmission_organizations'),
-        ('user_accounts', '0009_add_slugs_to_orgs'),
+        ('user_accounts', '0010_add_slugs_to_orgs'),
     ]
 
     operations = [

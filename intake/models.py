@@ -52,6 +52,9 @@ class County(models.Model):
     def __str__(self):
         return str(self.name)
 
+    def natural_key(self):
+        return (self.slug, )
+
 
 class FormSubmission(models.Model):
 

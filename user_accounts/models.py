@@ -22,7 +22,8 @@ class Organization(models.Model):
     slug = models.SlugField(unique=True, null=True)
     county = models.ForeignKey(intake_models.County,
                                on_delete=models.SET_NULL,
-                               null=True, blank=True, related_name='organizations')
+                               null=True, blank=True,
+                               related_name='organizations')
     website = models.URLField(blank=True)
     blurb = models.TextField(blank=True)
     is_receiving_agency = models.BooleanField(default=False)
@@ -35,6 +36,9 @@ class Organization(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+    def natural_key(self):
+        return (self.__str__(), )
 
     def get_referral_emails(self):
         """Get the emails of users who get notifications for this agency.

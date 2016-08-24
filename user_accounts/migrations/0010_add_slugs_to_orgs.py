@@ -35,7 +35,7 @@ def backward(*args):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user_accounts', '0008_organization_slug'),
+        ('user_accounts', '0009_organization_slug'),
     ]
 
     operations = [

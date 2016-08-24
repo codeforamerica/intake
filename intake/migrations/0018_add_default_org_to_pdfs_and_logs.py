@@ -49,7 +49,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('intake', '0017_fillablepdf_organization'),
-        ('user_accounts', '0007_add_profiles_related_name_to_organization'),
+        ('user_accounts', '0008_add_profiles_related_name_to_organization'),
     ]
 
     operations = [
