@@ -3,6 +3,7 @@ from django.utils.translation import ugettext as _
 from django.utils.datastructures import MultiValueDict
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse_lazy
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib import messages
 
 from django.http import HttpResponseNotFound, HttpResponse
@@ -86,19 +87,6 @@ class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
         return context
 
 
-
-def get_pdf_for_user(user, submission_data):
-    """
-    Creates a filled out pdf for a submission.
-    """
-    organization = user.profile.organization
-    fillable = organization.pdfs.first()
-    if isinstance(submission_data, list):
-        return fillable.fill_many(submission_data)
-    return fillable.fill(submission_data)
-
-
-
 class MultiStepApplicationView(MultiStepFormViewBase):
     """Manages multiple page forms and their confirmation and submission.
     """
@@ -123,15 +111,20 @@ class MultiStepApplicationView(MultiStepFormViewBase):
         notifications.slack_new_submission.send(
             submission=submission, request=self.request,
             submission_count=number)
-        pdf = get_pdf_for_user(self.request.user, submission)
-        org = self.request.user.organization
-        models.FilledPDF(
-                pdf=pdf,
-                original_pdf=org.pdfs.first(),
-                organization=org,
+        counties = submission.counties.values_list('pk', flat=True)
+        fillable_pdfs = models.FillablePDF.objects.filter(
+            organization__county__in=counties).all()
+
+        for fillable_pdf in fillable_pdfs:
+            filled_pdf_bytes = fillable_pdf.fill(submission)
+            pdf_file = SimpleUploadedFile('filled.pdf', filled_pdf_bytes,
+                                          content_type='application/pdf')
+            pdf = models.FilledPDF(
+                pdf=pdf_file,
+                original_pdf=fillable_pdf,
                 submission=submission,
-        )
-        self.mark_viewed(request, submission)
+            )
+            pdf.save()
         self.confirmation(submission)
 
     def form_valid(self, form):
@@ -321,12 +314,26 @@ class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
         return render(request, "app_bundle.jinja", context)
 
 
+def get_pdf_for_user(user, submission_data):
+    """
+    Creates a filled out pdf for a submission.
+
+    TODO: remove
+    """
+    organization = user.profile.organization
+    fillable = organization.pdfs.first()
+    if isinstance(submission_data, list):
+        return fillable.fill_many(submission_data)
+    return fillable.fill(submission_data)
+
+
 class FilledPDFBundle(FilledPDF, MultiSubmissionMixin):
 
     def get(self, request):
         submissions = self.get_submissions_from_params(request)
         if not submissions:
             return self.not_allowed(request)
+        # TODO: get from FilledPDFs and update cronjob
         pdf = get_pdf_for_user(request.user, list(submissions))
         return HttpResponse(pdf, content_type="application/pdf")
 

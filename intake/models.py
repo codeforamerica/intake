@@ -412,6 +412,5 @@ class FillablePDF(models.Model):
 
 class FilledPDF(models.Model):
     pdf = models.FileField()
-    orginal_pdf = models.ForeignKey(FillablePDF)
+    original_pdf = models.ForeignKey(FillablePDF)
     submission = models.ForeignKey(FormSubmission)
-    organization = models.ForeignKey('user_accounts.Organization')

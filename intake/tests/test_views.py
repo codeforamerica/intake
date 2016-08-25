@@ -7,6 +7,7 @@ import random
 from django.test import TestCase, override_settings
 from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase
 from django.core.urlresolvers import reverse
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils import html as html_utils
 
 from intake.tests import mock
@@ -223,9 +224,20 @@ class TestViews(IntakeDataTestCase):
     @patch('intake.models.notifications.slack_submissions_viewed.send')
     def test_authenticated_user_can_see_filled_pdf(self, slack):
         self.be_sfpubdef_user()
+        submission = self.submissions[0]
+
+        filled_pdf_bytes = self.fillable.fill(submission)
+        pdf_file = SimpleUploadedFile('filled.pdf', filled_pdf_bytes,
+                                      content_type='application/pdf')
+        filled_pdf_model = models.FilledPDF(
+            original_pdf=self.fillable,
+            submission=submission,
+            pdf=pdf_file
+        )
+        filled_pdf_model.save()
         pdf = self.client.get(reverse('intake-filled_pdf',
                                       kwargs=dict(
-                                          submission_id=self.submissions[0].id
+                                          submission_id=submission.id
                                       )))
         self.assertTrue(len(pdf.content) > 69000)
         self.assertEqual(type(pdf.content), bytes)
