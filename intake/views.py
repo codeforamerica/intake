@@ -250,7 +250,11 @@ class FilledPDF(ApplicationDetail):
         submission = submissions[0]
         pdf = submission.filledpdf_set.first()
         self.mark_viewed(request, submission)
-        return HttpResponse(pdf, content_type="application/pdf")
+        response = HttpResponse(pdf.pdf,
+                                content_type='application/pdf')
+        response['Content-Disposition'] = \
+            'attachment; filename=submission%s.pdf' % submission_id
+        return response
 
 
 class ApplicationIndex(TemplateView):
