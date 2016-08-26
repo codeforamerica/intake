@@ -18,6 +18,7 @@ class AddDefaultOrgsAndLinkToCounties(FixtureDataMigration):
             '0007_add_default_orgs_for_counties_data.json')
     ]
     lookup_keys = ['name']
+    relation_id_fields = ['county']
 
     @classmethod
     def reverse(cls, *args):

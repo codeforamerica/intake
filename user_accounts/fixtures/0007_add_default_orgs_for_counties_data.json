@@ -3,7 +3,7 @@
   "model": "user_accounts.organization",
   "fields": {
     "name": "Code for America",
-    "county_id": null,
+    "county": null,
     "website": "",
     "blurb": "",
     "is_receiving_agency": false
@@ -13,7 +13,7 @@
   "model": "user_accounts.organization",
   "fields": {
     "name": "San Francisco Public Defender",
-    "county_id": 1,
+    "county": 1,
     "website": "",
     "blurb": "",
     "is_receiving_agency": true
@@ -23,7 +23,7 @@
   "model": "user_accounts.organization",
   "fields": {
     "name": "Contra Costa Public Defender",
-    "county_id": 2,
+    "county": 2,
     "website": "",
     "blurb": "",
     "is_receiving_agency": true
@@ -43,7 +43,7 @@
   "model": "user_accounts.organization",
   "fields": {
     "name": "Alameda Public Defender",
-    "county_id": 3,
+    "county": 3,
     "website": "",
     "blurb": "",
     "is_receiving_agency": true

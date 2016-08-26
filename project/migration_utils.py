@@ -2,19 +2,35 @@ import os
 from django.core import serializers
 from django.forms.models import model_to_dict
 
+upsert_sql = """
+INSERT INTO {table_name} ({columns})
+VALUES ({values})
+ON CONFLICT ({lookup_keys})
+DO UPDATE
+SET ({update_columns}) = (
+EXCLUDED.{update_column},
+...
+)
+"""
+
 
 class FixtureDataMigration:
     """Loads data from a fixture
 
     `forward` loads the fixture
     `reverse` will delete all rows of the designated models
+
+    `fixture_specs` - should be a list of tuples:
+      ('appname', 'MyModel', 'fixture_file_name.json')
+
+    `relation_id_fields` should be a list of strings
+        specifying relational fields that contain ids (in place of objects)
+        and which consequently require modification before saving
     """
 
-    # fixture_specs
-    # should be a list of tuples:
-    #   ('appname', 'MyModel', 'fixture_file_name.json')
     fixture_specs = []
     lookup_keys = ['id']  # `pk` is `id` in `model_to_dict` output
+    relation_id_fields = []
 
     @classmethod
     def fixture_path(cls, app_name, filename):
@@ -24,6 +40,15 @@ class FixtureDataMigration:
         return file_path, ext
 
     @classmethod
+    def update_existing_attributes(cls, instance, data):
+        for attribute, value in data.items():
+            if attribute in cls.relation_id_fields:
+                pk = data.get(attribute, None)
+                setattr(instance, attribute + "_id", pk)
+            else:
+                setattr(instance, attribute, value)
+
+    @classmethod
     def get_existing_model(cls, data, lookup, qset):
         for instance in qset:
             is_object = True
@@ -31,8 +56,7 @@ class FixtureDataMigration:
                 if getattr(instance, key, None) != lookup[key]:
                     is_object = False
             if is_object:
-                for attribute, value in data.items():
-                    setattr(instance, attribute, value)
+                cls.update_existing_attributes(instance, data)
                 return instance
         return None
 

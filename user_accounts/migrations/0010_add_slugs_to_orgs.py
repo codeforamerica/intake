@@ -3,13 +3,15 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
-from intake.constants import Organizations, ORG_NAMES
+from intake.constants import ORG_NAMES
+
 
 def get_name_map():
     return {
         name: slug
         for slug, name in ORG_NAMES.items()
         }
+
 
 def get_models(apps, schema_editor):
     db_alias = schema_editor.connection.alias
