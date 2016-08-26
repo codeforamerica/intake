@@ -7,12 +7,8 @@ from project.migration_utils import FixtureDataMigration
 
 
 class AddDefaultCounties(FixtureDataMigration):
-    fixture_files = [
-        ('intake', '0015_add_default_counties_data.json')
-    ]
-
-    model_classes = [
-        ('intake', 'County')
+    fixture_specs = [
+        ('intake', 'County', '0015_add_default_counties_data.json')
     ]
 
 

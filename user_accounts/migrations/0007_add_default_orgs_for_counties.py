@@ -13,20 +13,20 @@ class AddDefaultOrgsAndLinkToCounties(FixtureDataMigration):
     `forward` loads the fixture
     `reverse` will unlink counties from orgs
     """
-    fixture_files = [
-        ('user_accounts', '0007_add_default_orgs_for_counties_data.json')
+    fixture_specs = [
+        ('user_accounts', 'Organization',
+            '0007_add_default_orgs_for_counties_data.json')
     ]
-    model_classes = [
-        ('user_accounts', 'Organization')
-    ]
+    lookup_keys = ['name']
 
     @classmethod
     def reverse(cls, *args):
         """just unsets the 'county' attribute on each org
         Any added orgs remain in the database
         """
-        Organization = list(cls.get_classes(*args))[0]
-        for instance in Organization.all():
+        app_name, model_name, fixture_file_name = cls.fixture_specs[0]
+        Organization = cls.get_model_class(app_name, model_name, *args)
+        for instance in Organization:
             instance.county = None
             instance.save()
 

@@ -1,5 +1,6 @@
 import os
 from django.core import serializers
+from django.forms.models import model_to_dict
 
 
 class FixtureDataMigration:
@@ -9,15 +10,11 @@ class FixtureDataMigration:
     `reverse` will delete all rows of the designated models
     """
 
-    # fixture_files
+    # fixture_specs
     # should be a list of tuples:
-    #   ('appname', 'fixture_file_name.json')
-    fixture_files = []
-
-    # model_classes
-    # should be a list of tuples:
-    #   ('appname', 'MyModel')
-    model_classes = []
+    #   ('appname', 'MyModel', 'fixture_file_name.json')
+    fixture_specs = []
+    lookup_keys = ['id']  # `pk` is `id` in `model_to_dict` output
 
     @classmethod
     def fixture_path(cls, app_name, filename):
@@ -27,32 +24,57 @@ class FixtureDataMigration:
         return file_path, ext
 
     @classmethod
+    def get_existing_model(cls, data, lookup, qset):
+        for instance in qset:
+            is_object = True
+            for key in lookup:
+                if getattr(instance, key, None) != lookup[key]:
+                    is_object = False
+            if is_object:
+                for attribute, value in data.items():
+                    setattr(instance, attribute, value)
+                return instance
+        return None
+
+    @classmethod
+    def update_or_create_object(cls, deserialized_object, queryset):
+        data = model_to_dict(deserialized_object.object)
+        lookup = {key: data.pop(key) for key in cls.lookup_keys}
+        # hack for the default None value of id in model_to_dict results
+        data.pop('id', None)
+        existing = cls.get_existing_model(data, lookup, queryset)
+        instance = existing or deserialized_object
+        instance.save()
+
+    @classmethod
     def load_fixture(cls, fixture_spec, apps, schema_editor):
+        app_name, model_name, fixture_file_name = fixture_spec
         original_apps = serializers.python.apps
         serializers.python.apps = apps
-        path, fixture_type = cls.fixture_path(*fixture_spec)
+        queryset = cls.get_model_class(app_name, model_name,
+                                       apps, schema_editor)
+        path, fixture_type = cls.fixture_path(app_name, fixture_file_name)
         fixture_file = open(path)
         objects = serializers.deserialize(fixture_type,
                                           fixture_file,
                                           ignorenonexistent=True)
         for obj in objects:
-            obj.save()
+            cls.update_or_create_object(obj, queryset)
         fixture_file.close()
         serializers.python.apps = original_apps
 
     @classmethod
-    def get_classes(cls, apps, schema_editor):
+    def get_model_class(cls, app_name, model_name, apps, schema_editor):
         db_alias = schema_editor.connection.alias
-        for app_name, model_name in cls.model_classes:
-            yield apps.get_model(
-                app_name, model_name).objects.using(db_alias)
+        return apps.get_model(app_name, model_name).objects.using(db_alias)
 
     @classmethod
     def forward(cls, *args):
-        for fixture in cls.fixture_files:
-            cls.load_fixture(fixture, *args)
+        for spec in cls.fixture_specs:
+            cls.load_fixture(spec, *args)
 
     @classmethod
     def reverse(cls, *args):
-        for model in cls.get_classes(*args):
-            model.all().delete()
+        for app_name, model_name, fixture_file_name in cls.fixture_specs:
+            ModelManager = cls.get_model_class(app_name, model_name, *args)
+            ModelManager.all().delete()

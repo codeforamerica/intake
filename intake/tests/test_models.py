@@ -294,8 +294,9 @@ class TestModels(TestCase):
     @patch('intake.models.notifications.sms_confirmation.send')
     @patch('intake.models.notifications.email_confirmation.send')
     @patch('intake.models.random')
-    def test_send_submission_confirmation(
-            self, random, email_notification, sms_notification, sent_notification, slack_failed_notification):
+    def test_send_submission_confirmation(self, random, email_notification,
+                                          sms_notification, sent_notification,
+                                          slack_failed_notification):
         random.choice.return_value = 'Staff'
         submission = mock.FormSubmissionFactory.create()
         submission.answers['first_name'] = 'Foo'
@@ -359,7 +360,8 @@ class TestModels(TestCase):
         sent_notification.assert_called_once_with(
             submission=submission, methods=['snailmail', 'voicemail'])
         slack_failed_notification.assert_called_once_with(
-            submission=submission, errors={'sms': sms_error, 'email': email_error})
+            submission=submission,
+            errors={'sms': sms_error, 'email': email_error})
 
     def test_can_get_counties_from_submissions(self):
         submission = mock.FormSubmissionFactory.create()
@@ -383,8 +385,8 @@ class TestCounty(TestCase):
 
     def test_get_receiving_agency(self):
         expected_matches = (
-            (constants.Counties.SAN_FRANCISCO, "San Francisco Public Defender"),
-            (constants.Counties.CONTRA_COSTA, "Contra Costa Public Defender"))
+           (constants.Counties.SAN_FRANCISCO, "San Francisco Public Defender"),
+           (constants.Counties.CONTRA_COSTA, "Contra Costa Public Defender"))
         counties = models.County.objects.all()
         for county_slug, agency_name in expected_matches:
             county = counties.filter(slug=county_slug).first()
