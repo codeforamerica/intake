@@ -172,7 +172,7 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
                 submission=submission,
             )
             pdf.save()
-        self.confirmation(submission)
+        self.create_confirmations_for_user(submission)
 
     def form_valid(self, form):
         self.save_submission_and_send_notifications(form)
