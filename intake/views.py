@@ -293,7 +293,7 @@ class FilledPDF(ApplicationDetail):
         if not submissions:
             return self.not_allowed(request)
         submission = submissions[0]
-        pdf = submission.filledpdf_set.first()
+        pdf = submission.filled_pdfs.first()
         self.mark_viewed(request, submission)
         response = HttpResponse(pdf.pdf,
                                 content_type='application/pdf')

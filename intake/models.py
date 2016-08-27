@@ -425,4 +425,4 @@ class FilledPDF(models.Model):
     submission = models.ForeignKey(
         FormSubmission,
         on_delete=models.CASCADE,
-        related_name='filled_copies')
+        related_name='filled_pdfs')
