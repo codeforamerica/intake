@@ -83,17 +83,9 @@ class GetFormSessionDataMixin:
 class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
     """A FormView saves form data in a session for persistence between URLs.
     """
-<<<<<<< HEAD
     ERROR_MESSAGE = _(str(
         "There were some problems with your application. "
         "Please check the errors below."))
-=======
-
-    ERROR_MESSAGE = _((
-        "There were some problems with your application."
-        " Please check the errors below."
-    ))
->>>>>>> alameda_prototype_prebuildpdf
 
     def update_session_data(self):
         form_data = self.request.session.get(self.session_storage_key, {})
@@ -148,19 +140,12 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
         """
         county_list = [
             name + " County" for name in submission.get_nice_counties()]
-<<<<<<< HEAD
         joined_county_list = oxford_comma(county_list)
         full_message = _("You have applied for help in ") + joined_county_list
         messages.success(self.request, full_message)
         # send emails and texts
         sent_confirmations = submission.send_confirmation_notifications()
         for message in sent_confirmations:
-=======
-        msg = _("You have applied for help in ") + oxford_comma(county_list)
-        messages.success(self.request, msg)
-        flash_messages = submission.send_confirmation_notifications()
-        for message in flash_messages:
->>>>>>> alameda_prototype_prebuildpdf
             messages.success(self.request, message)
 
     def save_submission_and_send_notifications(self, form):
@@ -171,12 +156,6 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
         submission.counties = self.get_counties()
         number = models.FormSubmission.objects.count()
         notifications.slack_new_submission.send(
-<<<<<<< HEAD
-            submission=submission,
-            request=self.request,
-            submission_count=number)
-        self.create_confirmations_for_user(submission)
-=======
             submission=submission, request=self.request,
             submission_count=number)
         counties = submission.counties.values_list('pk', flat=True)
@@ -194,7 +173,6 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
             )
             pdf.save()
         self.confirmation(submission)
->>>>>>> alameda_prototype_prebuildpdf
 
     def form_valid(self, form):
         self.save_submission_and_send_notifications(form)

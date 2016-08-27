@@ -9,7 +9,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user_accounts', '0010_organization_confirmation_message_contact_info_etc'),
+        ('user_accounts', '0011_organization_confirmation_message_contact_info_etc'),
         ('intake', '0021_tie_orgs_to_submissions'),
     ]
 
@@ -19,8 +19,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('pdf', models.FileField(upload_to='')),
-                ('organization', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='user_accounts.Organization')),
-                ('orginal_pdf', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='intake.FillablePDF')),
+                ('original_pdf', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, to='intake.FillablePDF')),
                 ('submission', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='intake.FormSubmission')),
             ],
         ),
