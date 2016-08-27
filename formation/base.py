@@ -1,10 +1,12 @@
 from django.core.exceptions import ValidationError
 from formation.render_base import Renderable
 
+
 class Unset:
     """A class that allows us to differentiate between None (or null)
         and a value that has not been set.
     """
+
     def __bool__(self):
         return False
 
@@ -12,9 +14,10 @@ UNSET = Unset()
 
 DEFAULT_CONTEXT_KEY = "no_context"
 
+
 class BindParseValidate(Renderable):
     """Performs the essential tasks of any form or form field.
-    If given raw input data as a dict or MultiValueDict, it 
+    If given raw input data as a dict or MultiValueDict, it
     will parse and validate the data, storing any parsed data
     and any errors that arose.
 
@@ -48,7 +51,7 @@ class BindParseValidate(Renderable):
     def is_bound(self):
         """Checks whether or not any raw_input_data was passed to
         instantiate this field. If `self.is_bound() returns True,
-        then this object should be able to 
+        then this object should be able to
         Returns True if any raw input data was passed.
         Returns False if no raw input data was given.
         """
@@ -61,9 +64,9 @@ class BindParseValidate(Renderable):
         if not self.is_bound():
             raise NotImplementedError(
                 str(
-        "There is no defined behavior for checking validity of an unbound form.\n"
-        "Please instantiate this class or call `.bind()` with input data"
-        "before checking validity."
+                    "There is no defined behavior for checking validity of an unbound form.\n"
+                    "Please instantiate this class or call `.bind()` with input data"
+                    "before checking validity."
                 ))
         if self.parsed_data is UNSET:
             self.parse_and_validate(self.raw_input_data)
@@ -136,14 +139,14 @@ class BindParseValidate(Renderable):
 
     def get_errors_list(self, key=None):
         """Returns a list of error messages, scoped by `key`.
-        If no key is given, it will return messages based on 
+        If no key is given, it will return messages based on
         this objects `.context_key`
         """
         return self._get_messages_list('errors', key)
 
     def get_warnings_list(self, key=None):
         """Returns a list of warning messages, scoped by `key`.
-        If no key is given, it will return messages based on 
+        If no key is given, it will return messages based on
         this objects `.context_key`
         """
         return self._get_messages_list('warnings', key)
@@ -151,9 +154,9 @@ class BindParseValidate(Renderable):
     def handle_django_validation_error(self, error):
         """Django's ValidationError can include lists of errors,
         dicts of errors or just have a simple error message.
-        This method is responsible for pulling error messages out of 
+        This method is responsible for pulling error messages out of
         Django ValidationError objects and selecting the right way to
-        add the error messages to this object's own error dictionary 
+        add the error messages to this object's own error dictionary
         """
         if hasattr(error, 'error_dict'):
             for key, message in error.message_dict.items():
@@ -187,8 +190,7 @@ class BindParseValidate(Renderable):
         return template.format(
             klass=self.__class__.__name__,
             bound=self.is_bound()
-            )
+        )
 
     def __str__(self):
         return self.render()
-

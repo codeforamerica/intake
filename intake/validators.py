@@ -3,7 +3,6 @@ from django.core.exceptions import ValidationError
 from intake.constants import CONTACT_METHOD_CHOICES, CONTACT_PREFERENCE_CHECKS
 
 
-
 class ContactInfoJSON:
 
     NOT_A_DICT = _("ContactInfoJSON must be a dictionary or inherit from it")
@@ -11,7 +10,6 @@ class ContactInfoJSON:
     NO_VALUE = _("All contact methods should have associated contact info")
 
     VALID_METHODS = [key for key, verbose in CONTACT_METHOD_CHOICES]
-
 
     def should_be_a_dict(self, data):
         if not isinstance(data, dict):

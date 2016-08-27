@@ -1,21 +1,24 @@
 from intake.constants import CountyNames
 
+
 class constants:
 
-    topbar = "Clear My Record | Get help clearing your criminal record in {}".format(CountyNames.ALL)
+    topbar = "Clear My Record | Get help clearing your criminal record in {}".format(
+        CountyNames.ALL)
     main_headline = "Better days ahead"
     subheadline = "Reduce or dismiss convictions on your criminal record"
     call_to_action_time = "Take the first step. Apply in 10 minutes."
     call_to_action_button = "Apply now"
     learn_more_button = "Learn more"
     credibility_note = str("Clear My Record is a free, non-profit service from "
-        "Code for America for people with a criminal record in {}. "
-        "We are not a law firm and the information on this site is not legal advice.").format(CountyNames.ALL)
+                           "Code for America for people with a criminal record in {}. "
+                           "We are not a law firm and the information on this site is not legal advice.").format(CountyNames.ALL)
 
     benefits_headline = "Clearing your criminal record could help you qualify for jobs, housing, and educational opportunities."
     eligibilty_headline = "Are you eligible to clear your record?"
 
-    gov_service_name = "Clear My Record sends applications to our official partners in {}.".format(CountyNames.ALL)
+    gov_service_name = "Clear My Record sends applications to our official partners in {}.".format(
+        CountyNames.ALL)
     gov_service_description_2 = str(
         "Clear My Record is a free, online service made by Code for America. "
         "It is for people who have a criminal record in {}. It was made by "
@@ -28,7 +31,7 @@ class constants:
         "you have selected. Each county will follow up with you with next steps. "
         "For example, if you apply in San Francisco and Contra Costa County, you "
         "will hear from both San Francisco Public Defender and Contra Costa Public "
-        "Defender separately." )
+        "Defender separately.")
 
     about_service_headline = "This is an online service by Code for America for the San Francisco Public Defender"
 
@@ -51,8 +54,8 @@ class constants:
     returning_user_question = "Already applied to Clean Slate?"
     returning_user_headline = "Get in touch with the San Francisco public defender"
     returning_user_help_paragraph = str("Have questions about your pending application? "
-        "Call the San Francisco Public Defender’s office to get the information you need. "
-        "If something has gone wrong, report the problem directly to us.")
+                                        "Call the San Francisco Public Defender’s office to get the information you need. "
+                                        "If something has gone wrong, report the problem directly to us.")
     returning_user_call_to_action_button = "Contact your public defender"
 
     backup_apply_headline = "Apply today to learn if you qualify"
@@ -70,7 +73,10 @@ class constants:
     footer_cc = str(
         "Learn more about "
         "the Contra Costa Public Defender")
-    back_home_btn ="Go back to main page"
+    footer_alameda = str(
+        "Learn more about "
+        "the Alameda Public Defender")
+    back_home_btn = "Go back to main page"
 
     metadata_title = topbar
     metadata_description = "Clear My Record is a free, non-profit service to help you dismiss or reduce old convictions on your criminal record."
@@ -78,4 +84,3 @@ class constants:
 
     cmr_phone_number = "(415) 301-6005"
     cmr_email = "clearmyrecord@codeforamerica.org"
-

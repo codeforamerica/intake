@@ -28,7 +28,7 @@ class TestModels(TestCase):
         self.assertEqual(int, type(submission.id))
         self.assertEqual(dict, type(submission.answers))
         self.assertEqual(datetime, type(submission.date_received))
-        self.assertTrue(submission.old_uuid) # just have a truthy result
+        self.assertTrue(submission.old_uuid)  # just have a truthy result
         anon = submission.get_anonymous_display()
         self.validate_anonymous_name(anon)
         self.assertIsNone(submission.first_opened_by_agency())
@@ -49,16 +49,16 @@ class TestModels(TestCase):
             submission=submission,
             user=self.users[0],
             event_type=models.ApplicationLogEntry.PROCESSED
-            )
+        )
         self.assertEqual(
             models.ApplicationLogEntry.objects.get(id=log.id), log)
 
     def validate_anonymous_name(self, name):
         first_name, *last_names = name.split(' ')
         self.assertIn(first_name,
-            anonymous_names.fake_first_names)
-        self.assertIn(' '.join(last_names), 
-            anonymous_names.fake_last_names)
+                      anonymous_names.fake_first_names)
+        self.assertIn(' '.join(last_names),
+                      anonymous_names.fake_last_names)
 
     def test_fillablepdf(self):
         submission = mock.FormSubmissionFactory.create()
@@ -68,7 +68,7 @@ class TestModels(TestCase):
             name="Sample_pdf",
             pdf=File(open(sample_pdf_path, 'rb')),
             translator='tests.sample_translator.translate'
-            )
+        )
         fields = pdf.get_pdf_fields()
         self.assertEqual(type(fields), list)
         filled_pdf = pdf.fill(submission)
@@ -87,7 +87,8 @@ class TestModels(TestCase):
             'prefers_voicemail': 'yes',
         }
         prefers_nothing = {}
-        submission = mock.FormSubmissionFactory.build(answers=prefers_everything)
+        submission = mock.FormSubmissionFactory.build(
+            answers=prefers_everything)
         contact_preferences = submission.get_nice_contact_preferences()
         for label in ['voicemail', 'text message', 'email', 'paper mail']:
             self.assertIn(label, contact_preferences)
@@ -131,11 +132,12 @@ class TestModels(TestCase):
         notifications.slack_submissions_viewed.send.assert_called_once_with(
             submissions=submissions,
             user=non_agency_user
-            )
+        )
 
         # case: viewed by agency user
         notifications.reset_mock()
-        submissions, logs = models.FormSubmission.mark_viewed(submissions, agency_user)
+        submissions, logs = models.FormSubmission.mark_viewed(
+            submissions, agency_user)
         instance = models.FormSubmission.objects.get(pk=submission.id)
         self.assertTrue(instance.last_opened_by_agency())
         self.assertTrue(instance.first_opened_by_agency())
@@ -148,7 +150,7 @@ class TestModels(TestCase):
         notifications.slack_submissions_viewed.send.assert_called_once_with(
             submissions=submissions,
             user=agency_user
-            )
+        )
 
     def test_agency_event_logs(self):
         instance = Mock()
@@ -162,7 +164,7 @@ class TestModels(TestCase):
         expected_logs = [
             Mock(event_type=1, user=agency_user),
             Mock(event_type=1, user=agency_user_without_notifications),
-            ]
+        ]
         unexpected_logs = [
             Mock(user=None, event_type=1),
             Mock(user=None, event_type=2),
@@ -182,16 +184,18 @@ class TestModels(TestCase):
         agency = Mock(is_receiving_agency=True)
         agency_user = Mock(**{'profile.organization': agency})
         instance = Mock()
-    
+
         class NoProfile:
+
             @property
             def profile(self):
-                raise auth_models.Profile.DoesNotExist("no profile for this user")
+                raise auth_models.Profile.DoesNotExist(
+                    "no profile for this user")
 
         user_with_no_profile = NoProfile()
         expected_logs = [
             Mock(event_type=1, user=agency_user),
-            ]
+        ]
         unexpected_logs = [
             Mock(user=None, event_type=1),
             Mock(user=None, event_type=2),
@@ -209,7 +213,8 @@ class TestModels(TestCase):
 
     def test_contact_info_json_field(self):
 
-        contact_info_field = model_fields.ContactInfoJSONField(default=dict, blank=True)
+        contact_info_field = model_fields.ContactInfoJSONField(
+            default=dict, blank=True)
         # valid inputs
         empty = {}
         just_email = {'email': 'someone@gmail.com'}
@@ -218,7 +223,7 @@ class TestModels(TestCase):
             'sms': '+19993334444',
             'voicemail': '+19993334444',
             'snailmail': '123 Main St\nOakland, CA\n94609'
-            }
+        }
         # invalid inputs
         nonexistent_method = {'twitter': '@someone'}
         empty_contact_info = {'email': ''}
@@ -228,7 +233,7 @@ class TestModels(TestCase):
         for valid_data in valid_cases:
             validators.contact_info_json(
                 valid_data
-                )
+            )
             contact_info_field.validate(valid_data, Mock())
 
         invalid_cases = [nonexistent_method, empty_contact_info, *not_dict]
@@ -258,7 +263,8 @@ class TestModels(TestCase):
     def test_submission_get_contact_info(self):
         submission = mock.FormSubmissionFactory.build()
         # base case: easy
-        submission.answers['contact_preferences'] = ['prefers_email', 'prefers_sms']
+        submission.answers['contact_preferences'] = [
+            'prefers_email', 'prefers_sms']
         submission.answers['email'] = 'someone@gmail.com'
         submission.answers['phone_number'] = '+19993334444'
         expected = {
@@ -283,19 +289,20 @@ class TestModels(TestCase):
         result = submission.get_contact_info()
         self.assertDictEqual(result, expected)
 
-
     @patch('intake.models.notifications.slack_confirmation_send_failed.send')
     @patch('intake.models.notifications.slack_confirmation_sent.send')
     @patch('intake.models.notifications.sms_confirmation.send')
     @patch('intake.models.notifications.email_confirmation.send')
     @patch('intake.models.random')
-    def test_send_submission_confirmation(self, random, email_notification, sms_notification, sent_notification, slack_failed_notification):
+    def test_send_submission_confirmation(
+            self, random, email_notification, sms_notification, sent_notification, slack_failed_notification):
         random.choice.return_value = 'Staff'
         submission = mock.FormSubmissionFactory.create()
         submission.answers['first_name'] = 'Foo'
 
         # case: all methods all good
-        submission.answers['contact_preferences'] = ['prefers_email', 'prefers_sms', 'prefers_snailmail', 'prefers_voicemail']
+        submission.answers['contact_preferences'] = [
+            'prefers_email', 'prefers_sms', 'prefers_snailmail', 'prefers_voicemail']
         submission.answers['email'] = 'someone@gmail.com'
         submission.answers['phone_number'] = '+19993334444'
 
@@ -318,7 +325,7 @@ class TestModels(TestCase):
         logs.delete()
         sms_error = notifications.FrontAPIError('front error')
         sms_notification.side_effect = sms_error
-        
+
         submission.send_confirmation_notifications()
         logs = models.ApplicationLogEntry.objects.filter(
             submission=submission,
@@ -360,12 +367,11 @@ class TestModels(TestCase):
         mock_field = Mock(
             choices=constants.COUNTY_CHOICES,
             required=True
-            )
+        )
         slugs = [county.slug for county in counties]
         are_valid_choices.set_context(mock_field)
         are_valid_choices(slugs)
         mock_field.add_error.assert_not_called()
-
 
 
 class TestCounty(TestCase):
@@ -384,26 +390,3 @@ class TestCounty(TestCase):
             county = counties.filter(slug=county_slug).first()
             organization = county.get_receiving_agency()
             self.assertEqual(organization.name, agency_name)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    

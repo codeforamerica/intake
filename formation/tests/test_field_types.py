@@ -39,7 +39,7 @@ class TestCharField(PatchTranslationTestCase):
 
     def test_handles_multivaluedict_properly(self):
         single, multi, empty, blank, missing = mock.get_multivalue_examples(
-            'name', ['Croissant','Marzipan'])
+            'name', ['Croissant', 'Marzipan'])
         for input_data in [single, multi]:
             field = NameField(input_data)
             self.assertTrue(field.is_valid())
@@ -200,7 +200,6 @@ class TestChoiceField(PatchTranslationTestCase):
             field = NoChoices()
 
 
-
 class TestMultipleChoiceField(PatchTranslationTestCase):
 
     def test_handles_multivaluedict_properly(self):
@@ -282,43 +281,42 @@ class TestYesNoField(PatchTranslationTestCase):
             self.assertEqual(field.get_current_value(), '')
 
 
-
 class TestMultiValueField(PatchTranslationTestCase):
     parsed_value = {
-                    'day': '2',
-                    'year': '1982',
-                    'month': '12'
-                }
+        'day': '2',
+        'year': '1982',
+        'month': '12'
+    }
     empty_value = {
-                    'day': '',
-                    'year': '',
-                    'month': ''
-                }
+        'day': '',
+        'year': '',
+        'month': ''
+    }
     missing_month_value = {
-                    'day': '2',
-                    'year': '1982',
-                    'month': ''
-                }
-
+        'day': '2',
+        'year': '1982',
+        'month': ''
+    }
 
     missing_subkey = {'dob': {
-                    'day': '2',
-                    'year': '1982',
-                }}
+        'day': '2',
+        'year': '1982',
+    }}
     incorrect_subkey = {'dob': {
-                    'day': '2',
-                    'year': '1982',
-                    'apple': '12',
-                }}
+        'day': '2',
+        'year': '1982',
+        'apple': '12',
+    }}
     dotsep_incorrect_subkey = {
-                'dob.day': '2',
-                'dob.year': '1982',
-                'dob.apple': '12',}
+        'dob.day': '2',
+        'dob.year': '1982',
+        'dob.apple': '12', }
     dotsep_missing_subkey = {
-                'dob.day': '2',
-                'dob.year': '1982'}
+        'dob.day': '2',
+        'dob.year': '1982'}
 
-    def assertParsesCorrectly(self, field, expected_output, subfield_vals=['12', '2', '1982']):
+    def assertParsesCorrectly(
+            self, field, expected_output, subfield_vals=['12', '2', '1982']):
         self.assertTrue(field.is_valid())
         self.assertDictEqual(field.get_current_value(), expected_output)
         for subfield, value in zip(field.subfields, subfield_vals):
@@ -345,12 +343,12 @@ class TestMultiValueField(PatchTranslationTestCase):
             'dob.year': ['1982'],
             'dob.day': ['2'],
             'dob.month': ['12'],
-            })
+        })
         multi = MultiValueDict({
             'dob.year': ['2000', '1982'],
             'dob.day': ['5', '2'],
             'dob.month': ['1', '12'],
-            })
+        })
         for input_data in [single, multi]:
             field = fields.DateOfBirthField(input_data)
             self.assertParsesCorrectly(field, self.parsed_value)
@@ -360,33 +358,33 @@ class TestMultiValueField(PatchTranslationTestCase):
             'dob.year': [],
             'dob.day': [],
             'dob.month': [],
-            })
+        })
         blank = MultiValueDict({
             'dob.year': [''],
             'dob.day': [''],
             'dob.month': [''],
-            })
+        })
         missing = MultiValueDict({})
         for input_data in [empty, blank, missing]:
             field = fields.DateOfBirthField(input_data, required=False)
-            self.assertParsesCorrectly(field, self.empty_value, ['','',''])
+            self.assertParsesCorrectly(field, self.empty_value, ['', '', ''])
 
     def test_can_be_instantiated_with_preparsed_data(self):
         prestructured = {'dob': {
-                            'day': '2',
-                            'year': '1982',
-                            'month': '12'
-                            }}
+            'day': '2',
+            'year': '1982',
+            'month': '12'
+        }}
         dotsep = {
             'dob.year': '1982',
             'dob.day': '2',
             'dob.month': '12',
-            }
+        }
         undersep = {
             'dob_year': '1982',
             'dob_day': '2',
             'dob_month': '12',
-            }
+        }
         for input_data in [prestructured, dotsep, undersep]:
             field = fields.DateOfBirthField(input_data)
             self.assertParsesCorrectly(field, self.parsed_value)
@@ -394,28 +392,33 @@ class TestMultiValueField(PatchTranslationTestCase):
     def test_valid_with_missing_subkey(self):
         for input_data in [self.missing_subkey, self.dotsep_missing_subkey]:
             field = fields.DateOfBirthField(input_data)
-            self.assertParsesCorrectly(field, self.missing_month_value, ['', '2', '1982'])
+            self.assertParsesCorrectly(
+                field, self.missing_month_value, [
+                    '', '2', '1982'])
 
     def test_valid_with_incorrect_subkey(self):
-        for input_data in [self.incorrect_subkey, self.dotsep_incorrect_subkey]:
+        for input_data in [self.incorrect_subkey,
+                           self.dotsep_incorrect_subkey]:
             field = fields.DateOfBirthField(input_data)
-            self.assertParsesCorrectly(field, self.missing_month_value, ['', '2', '1982'])
+            self.assertParsesCorrectly(
+                field, self.missing_month_value, [
+                    '', '2', '1982'])
 
     def test_required_only_fails_with_all_missing_data(self):
         only_one = {
             'dob.day': '2',
-            }
+        }
         field = fields.DateOfBirthField(only_one)
         self.assertParsesCorrectly(field,
-            {'year': '', 'month': '', 'day': '2'},
-            ['', '2', ''])
+                                   {'year': '', 'month': '', 'day': '2'},
+                                   ['', '2', ''])
         self.assertFalse(field.is_empty())
 
         blank = {
             'dob.year': '',
             'dob.day': '',
             'dob.month': '',
-            }
+        }
         missing = {}
         for input_data in [missing, blank]:
             field = fields.DateOfBirthField(input_data)
@@ -429,7 +432,6 @@ class TestMultiValueField(PatchTranslationTestCase):
 
         with self.assertRaises(exceptions.MultiValueFieldSubfieldError):
             field = BadMulti()
-
 
 
 class TestRenderFieldTypes(TestCase):

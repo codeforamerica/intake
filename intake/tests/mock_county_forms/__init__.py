@@ -3,8 +3,16 @@ from faker import Faker
 # first, import a similar Provider or use the default one
 from faker.providers import BaseProvider
 
+from intake.constants import GENDER_PRONOUN_CHOICES
+
 # create new provider class
+
+
 class Provider(BaseProvider):
+
+    def some_choice(self, choices):
+        return random.choice(
+            [key for key, display in choices])
 
     def maybe(self, chance_of_yes=0.5):
         return self.random_element({
@@ -34,8 +42,8 @@ class Provider(BaseProvider):
             'address.zip': self.generator.zipcode(),
             'being_charged': self.maybe(0.05),
             'currently_employed': self.maybe(0.4),
-            'dob.day': str(random.randint(1,31)),
-            'dob.month': str(random.randint(1,12)),
+            'dob.day': str(random.randint(1, 31)),
+            'dob.month': str(random.randint(1, 12)),
             'dob.year': str(random.randint(1959, 2000)),
             'monthly_expenses': str(random.randint(0, 3000)),
             'monthly_income': str(random.randint(0, 7000)),
@@ -48,7 +56,7 @@ class Provider(BaseProvider):
             'when_where_outside_sf': '',
             'where_probation_or_parole': '',
             'how_did_you_hear': '',
-            }
+        }
         data.update(overrides)
         return data
 
@@ -59,8 +67,8 @@ class Provider(BaseProvider):
             'last_name': self.generator.last_name(),
             'phone_number': self.numerify('###-###-####'),
             'email': self.generator.free_email(),
-            'dob.day': str(random.randint(1,31)),
-            'dob.month': str(random.randint(1,12)),
+            'dob.day': str(random.randint(1, 31)),
+            'dob.month': str(random.randint(1, 12)),
             'dob.year': str(random.randint(1959, 2000)),
             'us_citizen': self.maybe(0.8),
             'address.street': self.generator.street_address(),
@@ -75,6 +83,35 @@ class Provider(BaseProvider):
             'income_source': 'a job',
             'how_did_you_hear': '',
             'additional_information': '',
+        }
+        data.update(overrides)
+        return data
+
+    def alameda_county_form_answers(self, **overrides):
+        data = {
+            'contact_preferences': self.generate_contact_preferences(),
+            'preferred_pronouns': self.some_choice(GENDER_PRONOUN_CHOICES),
+            'first_name': self.generator.first_name(),
+            'last_name': self.generator.last_name(),
+            'phone_number': self.numerify('###-###-####'),
+            'email': self.generator.free_email(),
+            'dob.day': str(random.randint(1, 31)),
+            'dob.month': str(random.randint(1, 12)),
+            'dob.year': str(random.randint(1959, 2000)),
+            'us_citizen': self.maybe(0.8),
+            'address.street': self.generator.street_address(),
+            'address.city': self.generator.city(),
+            'address.state': self.generator.state_abbr(),
+            'address.zip': self.generator.zipcode(),
+            'on_probation_parole': self.maybe(0.1),
+            'finished_half_probation': 'not_applicable',
+            'being_charged': self.maybe(0.05),
+            'serving_sentence': self.maybe(0.05),
+            'monthly_income': str(random.randint(0, 7000)),
+            'on_public_benefits': self.maybe(0.7),
+            'owns_home': self.maybe(0.1),
+            'household_size': str(random.randint(0, 4)),
+            'how_did_you_hear': ''
         }
         data.update(overrides)
         return data
@@ -111,8 +148,8 @@ class Provider(BaseProvider):
             'being_charged': self.maybe(0.05),
             'currently_employed': self.maybe(0.4),
             'dob': {
-                'day': str(random.randint(1,31)),
-                'month': str(random.randint(1,12)),
+                'day': str(random.randint(1, 31)),
+                'month': str(random.randint(1, 12)),
                 'year': str(random.randint(1959, 2000)),
             },
             'monthly_expenses': str(random.randint(0, 3000)),
@@ -126,7 +163,6 @@ class Provider(BaseProvider):
             'when_where_outside_sf': '',
             'where_probation_or_parole': '',
             'how_did_you_hear': '',
-            }
+        }
         data.update(overrides)
         return data
-

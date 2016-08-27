@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class Field(base.BindParseValidate):
-    """Fields are responsible for 
+    """Fields are responsible for
      - pulling their data from raw HTTP post data
      - having a clear `name` to use for html inputs
      - accessing their raw data
@@ -18,13 +18,14 @@ class Field(base.BindParseValidate):
     """
     is_multivalue = False
     is_required_error_message = _("This field is required.")
-    is_recommended_error_message = _("Leaving this field blank might cause problems.")
+    is_recommended_error_message = _(
+        "Leaving this field blank might cause problems.")
     empty_value = base.UNSET
     template_name = "formation/text_input.jinja"
     display_template_name = "formation/default_input_display.jinja"
 
     def __init__(self, *args, form=None, required=True, recommended=False,
-        optional=False, is_subfield=False, label=None, **kwargs):
+                 optional=False, is_subfield=False, label=None, **kwargs):
         """Sets the `required` attribute for this field.
         """
         super().__init__(*args, **kwargs)
@@ -41,7 +42,7 @@ class Field(base.BindParseValidate):
     def get_input_name(self):
         """Return a key that can be used to extract
         raw data from a dict or http post of all fields.
-        The key should be unique to this field, and is used 
+        The key should be unique to this field, and is used
         for the `name` attribute in html inputs.
         """
         if self.parent:
@@ -60,7 +61,7 @@ class Field(base.BindParseValidate):
 
     def get_html_class_name(self):
         """Returns the input name of this field, using underscores
-        in place of `.` as a field 
+        in place of `.` as a field
         """
         return self.get_input_name().replace('.', '_')
 
@@ -85,11 +86,10 @@ class Field(base.BindParseValidate):
         HTTP post or dictionary before running parsing and validation
         """
         if not isinstance(raw_data, dict):
-            raise exceptions.RawDataMustBeDictError(
-                "The raw data passed to `{}` was `{}` type, not dict.".format(
-                    self, type(raw_data))\
-                + " Raw data passed to forms and fields must be an instance of dict."
-            )
+            message = "The raw data passed to `{}` was `{}` type, not dict.".format(
+                self, type(raw_data))
+            message += " Raw data passed to forms and fields must be an instance of dict."
+            raise exceptions.RawDataMustBeDictError(message)
         self.raw_input_value = self.extract_raw_value(raw_data)
         super().parse_and_validate(self.raw_input_value)
 
@@ -113,7 +113,7 @@ class Field(base.BindParseValidate):
             super().validate()
 
     def get_current_value(self):
-        """Returns the value for this field, based on 
+        """Returns the value for this field, based on
         """
         if self.parsed_data is not base.UNSET:
             current_value = self.parsed_data
@@ -134,6 +134,3 @@ class Field(base.BindParseValidate):
 
     def get_display_value(self):
         return self.get_current_value()
-
-
-

@@ -14,8 +14,8 @@ NO = 'no'
 
 YES_NO_CHOICES = (
     (YES, _('Yes')),
-    (NO,  _('No')),
-    )
+    (NO, _('No')),
+)
 
 
 class CharField(Field):
@@ -26,7 +26,7 @@ class CharField(Field):
         """Responsible for raising an error if the raw
         extracted value is not a string instance. If it recognizes
         the input as a string, use Django's `force_text` as an additional
-        safety check. Strip the input based on `.should_strip_input` 
+        safety check. Strip the input based on `.should_strip_input`
         """
         self.assert_parse_received_correct_type(raw_value, str)
         raw_value = conditional_escape(raw_value)
@@ -47,7 +47,6 @@ class CharField(Field):
 
     def get_current_value(self):
         return mark_safe(Field.get_current_value(self))
-
 
 
 class DateTimeField(CharField):
@@ -97,6 +96,7 @@ class DateTimeField(CharField):
 class ChoiceField(CharField):
     validators = [validators.is_a_valid_choice]
     template_name = "formation/radio_select.jinja"
+
     def __init__(self, *args, **kwargs):
         """Asserts that this field has a choices attribute
         """
@@ -104,7 +104,7 @@ class ChoiceField(CharField):
         if not hasattr(self, 'choices'):
             raise exceptions.NoChoicesGivenError(str(
                 "This field requires a `choices` attribute."
-                ))
+            ))
         if not hasattr(self, 'choice_display_dict'):
             self.choice_display_dict = {
                 key: display
@@ -116,7 +116,7 @@ class ChoiceField(CharField):
 
     def is_current_choice(self, choice_option):
         return self.get_current_value() == choice_option
-        
+
 
 class MultipleChoiceField(ChoiceField):
     empty_value = []
@@ -153,7 +153,7 @@ class MultipleChoiceField(ChoiceField):
         return oxford_comma([
             mark_safe(self.get_display_for_choice(choice))
             for choice in self.get_current_value()
-            ], use_or)
+        ], use_or)
 
 
 class YesNoField(ChoiceField):
@@ -199,10 +199,10 @@ class MultiValueField(Field):
         """Creates a subfield instance
         """
         instance = subfield_class(
-                self.raw_input_data,
-                required=False,
-                is_subfield=True
-            )
+            self.raw_input_data,
+            required=False,
+            is_subfield=True
+        )
         instance.parent = self
         # this might error if a context_key is not a valid
         # python variable name
@@ -210,7 +210,7 @@ class MultiValueField(Field):
         return instance
 
     def extract_raw_value(self, raw_data):
-        # self.raw_data should be a dict that is the subset 
+        # self.raw_data should be a dict that is the subset
         # of child field keys
         raw_value = {}
         if self.context_key in raw_data:
@@ -249,7 +249,7 @@ class MultiValueField(Field):
         return {
             sub.context_key: sub.get_current_value()
             for sub in self.subfields
-            }
+        }
 
 
 class FormNote:
@@ -261,7 +261,7 @@ class FormNote:
 
     def __init__(self, *args, **kwargs):
         pass
-        
+
     def render(self):
         return mark_safe(self.template_string.format(self.content))
 

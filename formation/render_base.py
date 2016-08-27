@@ -1,6 +1,7 @@
 from django.template import loader
 from django.utils.safestring import mark_safe
 
+
 class Renderable:
     """A class that implements rendering functionality
         Can be used by forms, fields, or anything else
@@ -41,12 +42,10 @@ class Renderable:
         """
         name_attr = template_attr[1:] + "_name"
         setattr(self, template_attr,
-            loader.get_template(
-                getattr(self, name_attr)
+                loader.get_template(
+                    getattr(self, name_attr)
                 )
-            )
+                )
 
     def __html__(self):
         return self.render()
-
-

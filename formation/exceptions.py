@@ -1,6 +1,5 @@
 
 
-
 class RawDataMustBeDictError(Exception):
     """Raise this if the input raw data for
     forms or form fields is not a dict or dict descendant

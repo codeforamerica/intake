@@ -6,7 +6,6 @@ import django
 from django.utils.html import escape, conditional_escape
 
 
-
 class TestRenderable(TestCase):
 
     example_template = "formation/example.html"
@@ -49,6 +48,3 @@ class TestRenderable(TestCase):
         display_result = first_name.display()
         self.assertNotIn(bad_string, display_result)
         self.assertIn(escaped_bad_string, display_result)
-
-
-

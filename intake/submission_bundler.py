@@ -2,7 +2,7 @@
 from intake import (
     notifications,
     models as intake_models
-    )
+)
 from user_accounts import models as auth_models
 
 
@@ -36,7 +36,7 @@ class OrganizationBundle:
             to=self.notification_emails,
             count=count,
             submission_ids=ids
-            )
+        )
         intake_models.ApplicationLogEntry.log_referred(
             ids, user=None, organization=self.organization)
         notifications.slack_app_bundle_sent.send(
@@ -49,6 +49,7 @@ class SubmissionBundler:
     get the relevant submissions, bundling up submissions,
     and telling the bundles to send notifications
     """
+
     def __init__(self):
         self.queryset = intake_models.FormSubmission.get_unopened_apps().prefetch_related(
             'counties',
@@ -90,4 +91,3 @@ def bundle_and_notify():
     bundler = SubmissionBundler()
     bundler.make_bundled_referrals()
     return bundler
-

@@ -3,6 +3,7 @@
 """
 
 from django.utils.translation import ugettext as _
+from intake.constants import Organizations, ORG_NAMES
 
 
 data = {
@@ -11,24 +12,34 @@ data = {
     "lookup_keys": ["name"],
     "instances": [
         {
-            "name": _("Code for America"), 
+            "name": ORG_NAMES[Organizations.CFA],
+            "slug": Organizations.CFA,
             "county_id": None,
             "is_receiving_agency": False,
         },
         {
-            "name": _("San Francisco Public Defender"),
-            "county_id": 1, # receives SF apps
+            "name": ORG_NAMES[Organizations.SF_PUBDEF],
+            "slug": Organizations.SF_PUBDEF,
+            "county_id": 1,  # receives SF apps
             "is_receiving_agency": True,
         },
         {
-            "name": _("Contra Costa Public Defender"),
-            "county_id": 2, # receives Contra Costa apps
+            "name": ORG_NAMES[Organizations.COCO_PUBDEF],
+            "slug": Organizations.COCO_PUBDEF,
+            "county_id": 2,  # receives Contra Costa apps
             "is_receiving_agency": True,
         },
         {
-            "name": _("East Bay Community Law Center"),
+            "name": ORG_NAMES[Organizations.EBCLC],
+            "slug": Organizations.EBCLC,
             "county_id": None,
             "is_receiving_agency": False,
+        },
+        {
+            "name": ORG_NAMES[Organizations.ALAMEDA_PUBDEF],
+            "slug": Organizations.ALAMEDA_PUBDEF,
+            "county_id": 3,
+            "is_receiving_agency": True,
         },
     ]
 }
