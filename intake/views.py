@@ -30,6 +30,7 @@ from django.utils.translation import ugettext as _
 from django.utils.datastructures import MultiValueDict
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse_lazy
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib import messages
 
 from django.http import HttpResponse
@@ -82,9 +83,17 @@ class GetFormSessionDataMixin:
 class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
     """A FormView saves form data in a session for persistence between URLs.
     """
+<<<<<<< HEAD
     ERROR_MESSAGE = _(str(
         "There were some problems with your application. "
         "Please check the errors below."))
+=======
+
+    ERROR_MESSAGE = _((
+        "There were some problems with your application."
+        " Please check the errors below."
+    ))
+>>>>>>> alameda_prototype_prebuildpdf
 
     def update_session_data(self):
         form_data = self.request.session.get(self.session_storage_key, {})
@@ -139,12 +148,19 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
         """
         county_list = [
             name + " County" for name in submission.get_nice_counties()]
+<<<<<<< HEAD
         joined_county_list = oxford_comma(county_list)
         full_message = _("You have applied for help in ") + joined_county_list
         messages.success(self.request, full_message)
         # send emails and texts
         sent_confirmations = submission.send_confirmation_notifications()
         for message in sent_confirmations:
+=======
+        msg = _("You have applied for help in ") + oxford_comma(county_list)
+        messages.success(self.request, msg)
+        flash_messages = submission.send_confirmation_notifications()
+        for message in flash_messages:
+>>>>>>> alameda_prototype_prebuildpdf
             messages.success(self.request, message)
 
     def save_submission_and_send_notifications(self, form):
@@ -155,10 +171,30 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
         submission.counties = self.get_counties()
         number = models.FormSubmission.objects.count()
         notifications.slack_new_submission.send(
+<<<<<<< HEAD
             submission=submission,
             request=self.request,
             submission_count=number)
         self.create_confirmations_for_user(submission)
+=======
+            submission=submission, request=self.request,
+            submission_count=number)
+        counties = submission.counties.values_list('pk', flat=True)
+        fillable_pdfs = models.FillablePDF.objects.filter(
+            organization__county__in=counties).all()
+
+        for fillable_pdf in fillable_pdfs:
+            filled_pdf_bytes = fillable_pdf.fill(submission)
+            pdf_file = SimpleUploadedFile('filled.pdf', filled_pdf_bytes,
+                                          content_type='application/pdf')
+            pdf = models.FilledPDF(
+                pdf=pdf_file,
+                original_pdf=fillable_pdf,
+                submission=submission,
+            )
+            pdf.save()
+        self.confirmation(submission)
+>>>>>>> alameda_prototype_prebuildpdf
 
     def form_valid(self, form):
         self.save_submission_and_send_notifications(form)
@@ -273,24 +309,19 @@ class FilledPDF(ApplicationDetail):
     needed by that user's organization.
     """
 
-    def get_pdf_for_user(self, request, submission_data):
-        organization = request.user.profile.organization
-        fillable = models.FillablePDF.objects.filter(
-            organization=organization).first()
-        if isinstance(submission_data, list):
-            return fillable.fill_many(submission_data)
-        return fillable.fill(submission_data)
-
     def get(self, request, submission_id):
         submissions = list(models.FormSubmission.get_permitted_submissions(
             request.user, [submission_id]))
         if not submissions:
             return self.not_allowed(request)
         submission = submissions[0]
-        pdf = self.get_pdf_for_user(request, submission)
+        pdf = submission.filledpdf_set.first()
         self.mark_viewed(request, submission)
-        return HttpResponse(pdf,
-                            content_type="application/pdf")
+        response = HttpResponse(pdf.pdf,
+                                content_type='application/pdf')
+        response['Content-Disposition'] = \
+            'attachment; filename=submission%s.pdf' % submission_id
+        return response
 
 
 class ApplicationIndex(TemplateView):
@@ -362,6 +393,19 @@ class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
         return render(request, "app_bundle.jinja", context)
 
 
+def get_pdf_for_user(user, submission_data):
+    """
+    Creates a filled out pdf for a submission.
+
+    TODO: remove
+    """
+    organization = user.profile.organization
+    fillable = organization.pdfs.first()
+    if isinstance(submission_data, list):
+        return fillable.fill_many(submission_data)
+    return fillable.fill(submission_data)
+
+
 class FilledPDFBundle(FilledPDF, MultiSubmissionMixin):
     """A concatenated PDF of individual filled PDFs for an org user.
     Typically this is displayed in an iframe in `ApplicationBundle`
@@ -371,7 +415,8 @@ class FilledPDFBundle(FilledPDF, MultiSubmissionMixin):
         submissions = self.get_submissions_from_params(request)
         if not submissions:
             return self.not_allowed(request)
-        pdf = self.get_pdf_for_user(request, list(submissions))
+        # TODO: get from FilledPDFs and update cronjob
+        pdf = get_pdf_for_user(request.user, list(submissions))
         return HttpResponse(pdf, content_type="application/pdf")
 
 
