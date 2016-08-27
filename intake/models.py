@@ -414,6 +414,15 @@ class FillablePDF(models.Model):
 
 
 class FilledPDF(models.Model):
-    pdf = models.FileField()
-    original_pdf = models.ForeignKey(FillablePDF)
-    submission = models.ForeignKey(FormSubmission)
+    """A FillablePDF filled with FormSubmission data.
+    """
+    pdf = models.FileField(upload_to='filled_pdfs/')
+    original_pdf = models.ForeignKey(
+        FillablePDF,
+        on_delete=models.SET_NULL,
+        related_name='filled_copies',
+        null=True)
+    submission = models.ForeignKey(
+        FormSubmission,
+        on_delete=models.CASCADE,
+        related_name='filled_copies')
