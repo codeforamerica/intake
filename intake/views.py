@@ -290,7 +290,9 @@ class FilledPDF(ApplicationDetail):
         submission = submissions[0]
         pdf = submission.filled_pdfs.first()
         if not pdf:
-            # TODO: log this so we can remove or fix bugs
+            no_pdf_str = \
+                "No prefilled pdf was made for submission: %s" % submission.pk
+            notifications.slack_simple.send(no_pdf_str)
             org = request.user.profile.organization
             fillable_pdf = models.FillablePDF.objects.filter(
                 organization=org).first()
