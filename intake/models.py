@@ -9,6 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.urlresolvers import reverse_lazy
 
 from intake import (
     pdfparser, anonymous_names, notifications, model_fields,
@@ -455,3 +456,8 @@ class ApplicationBundle(models.Model):
                                      related_name='bundles')
     bundled_pdf = models.FileField(upload_to='pdf_bundles/', null=True,
                                    blank=True)
+
+    def get_absolute_url(self):
+        return reverse_lazy(
+            'intake-app_bundle_detail',
+            kwargs=dict(bundle_id=self.id))
