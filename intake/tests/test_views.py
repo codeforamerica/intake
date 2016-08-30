@@ -252,6 +252,28 @@ class TestViews(IntakeDataTestCase):
         self.assert_called_once_with_types(
             slack, submissions='list', user='User')
 
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_authenticated_user_can_get_filled_pdf_without_building(self, slack):
+        """
+        test_authenticated_user_can_get_filled_pdf_without_building
+
+        this tests that a pdf will be served even if not pregenerated
+        """
+        self.be_sfpubdef_user()
+        submission = self.submissions[0]
+
+        filled_pdf_bytes = self.fillable.fill(submission)
+        pdf_file = SimpleUploadedFile('filled.pdf', filled_pdf_bytes,
+                                      content_type='application/pdf')
+        pdf = self.client.get(reverse('intake-filled_pdf',
+                                      kwargs=dict(
+                                          submission_id=submission.id
+                                      )))
+        self.assertTrue(len(pdf.content) > 69000)
+        self.assertEqual(type(pdf.content), bytes)
+        self.assert_called_once_with_types(
+            slack, submissions='list', user='User')
+
     def test_authenticated_user_can_see_list_of_submitted_apps(self):
         self.be_cfa_user()
         index = self.client.get(reverse('intake-app_index'))

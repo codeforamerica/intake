@@ -163,15 +163,7 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
             organization__county__in=counties).all()
 
         for fillable_pdf in fillable_pdfs:
-            filled_pdf_bytes = fillable_pdf.fill(submission)
-            pdf_file = SimpleUploadedFile('filled.pdf', filled_pdf_bytes,
-                                          content_type='application/pdf')
-            pdf = models.FilledPDF(
-                pdf=pdf_file,
-                original_pdf=fillable_pdf,
-                submission=submission,
-            )
-            pdf.save()
+            filled_pdf = fillable_pdf.fill_for_submission(submission)
         self.create_confirmations_for_user(submission)
 
     def form_valid(self, form):
@@ -285,6 +277,9 @@ class ApplicationDetail(View):
 class FilledPDF(ApplicationDetail):
     """Serves a filled PDF for an org user, based on the PDF
     needed by that user's organization.
+
+    Deals with if a pdf doesn't exist but this shouldn't happen.
+    Consider removing in favor of erroring and retrying on submission.
     """
 
     def get(self, request, submission_id):
@@ -294,6 +289,12 @@ class FilledPDF(ApplicationDetail):
             return self.not_allowed(request)
         submission = submissions[0]
         pdf = submission.filled_pdfs.first()
+        if not pdf:
+            # TODO: log this so we can remove or fix bugs
+            org = request.user.profile.organization
+            fillable_pdf = models.FillablePDF.objects.filter(
+                organization=org).first()
+            pdf = fillable_pdf.fill_for_submission(submission)
         self.mark_viewed(request, submission)
         response = HttpResponse(pdf.pdf,
                                 content_type='application/pdf')

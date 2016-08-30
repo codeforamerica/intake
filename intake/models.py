@@ -8,6 +8,7 @@ from django.utils import timezone as timezone_utils
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from intake import (
     pdfparser, anonymous_names, notifications, model_fields,
@@ -397,6 +398,23 @@ class FillablePDF(models.Model):
 
     def __str__(self):
         return self.name
+
+    def fill_for_submission(self, submission):
+        """Fills out a pdf and saves it to FilledPDF
+
+        used when saving a new submission
+        used when retrieving a filled pdf if it doesn't
+        """
+        filled_pdf_bytes = self.fill(submission)
+        pdf_file = SimpleUploadedFile('filled.pdf', filled_pdf_bytes,
+                                      content_type='application/pdf')
+        pdf = FilledPDF(
+            pdf=pdf_file,
+            original_pdf=self,
+            submission=submission,
+        )
+        pdf.save()
+        return pdf
 
     def fill(self, *args, **kwargs):
         parser = get_parser()
