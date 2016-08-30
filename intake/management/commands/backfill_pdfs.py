@@ -13,14 +13,13 @@ class Command(BaseCommand):
                 filled_pdfs=None):
             counties = submission.counties.values_list('pk', flat=True)
             for pdf in models.FillablePDF.objects.filter(
-                        organization__county__in=counties).all():
+                    organization__county__in=counties).all():
                 pdf_bytes = pdf.fill(submission)
                 pdf_file = SimpleUploadedFile('filled.pdf', pdf_bytes,
-                                            content_type='application/pdf')
+                                              content_type='application/pdf')
                 filled_pdf = models.FilledPDF(
                     pdf=pdf_file,
                     original_pdf=pdf,
                     submission=submission,
                 )
                 filled_pdf.save()
-
