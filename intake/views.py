@@ -255,6 +255,7 @@ class ApplicationDetail(View):
         return redirect('intake-app_index')
 
     def mark_viewed(self, request, submissions):
+        # TODO: doesn't ned to be here
         if not isinstance(submissions, list):
             submissions = [submissions]
         models.FormSubmission.mark_viewed(submissions, request.user)
@@ -374,6 +375,16 @@ class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
         return render(request, "app_bundle.jinja", context)
 
 
+class ApplicationBundleDetail(ApplicationDetail):
+    """New aplication bundle view which uses prerendered bundles
+
+    Given a bundle id it returns a detail page for ApplicationBundle
+    """
+
+    def get(self, request, bundle_id):
+        return None
+
+
 def get_pdf_for_user(user, submission_data):
     """
     Creates a filled out pdf for a submission.
@@ -467,9 +478,10 @@ app_bundle = ApplicationBundle.as_view()
 app_detail = ApplicationDetail.as_view()
 mark_processed = MarkProcessed.as_view()
 delete_page = Delete.as_view()
-
+app_bundle_detail = ApplicationBundleDetail.as_view()
 
 # REDIRECT VIEWS for backwards compatibility
+
 
 class PermanentRedirectView(View):
     """Permanently redirects to a url

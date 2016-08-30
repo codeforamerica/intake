@@ -1,3 +1,4 @@
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from intake import (
     notifications,
@@ -25,6 +26,22 @@ class OrganizationBundle:
     def get_submission_ids(self):
         return [submission.id for submission in self.submissions]
 
+    def create_app_bundle(self):
+        filled_pdfs = intake_models.FilledPDF.objects.filter(
+            submission__in=self.submissions)
+        bundle = intake_models.ApplicationBundle(
+            organization=self.organization,
+        )
+        if filled_pdfs:
+            pdf_objects = [filled.pdf for filled in filled.pdfs]
+            bundled_pdf_bytes = intake_models.get_parser().join_pdfs(pdf_objects)
+            pdf_file = SimpleUploadedFile('filled.pdf', bundled_pdf_bytes,
+                                          content_type='application/pdf')
+            bundle.bundled_pdf = pdf_file
+        bundle.save()
+        bundle.submissions.add(*self.submissions)
+        return bundle
+
     def make_referrals(self):
         """Send notifications to self.organization users
         with the bundle of submissions
@@ -32,6 +49,7 @@ class OrganizationBundle:
         """
         count = len(self.submissions)
         ids = self.get_submission_ids()
+        app_bundle = self.create_app_bundle()
         notifications.front_email_daily_app_bundle.send(
             to=self.notification_emails,
             count=count,

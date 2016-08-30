@@ -447,9 +447,11 @@ class FilledPDF(models.Model):
         related_name='filled_pdfs')
 
 
-"""
 class ApplicationBundle(models.Model):
-    submissions = models.ManyToMany()
-    organization = models.ForeignKey()
-    bundled_pdf = models.FileField()
-"""
+    submissions = models.ManyToManyField(FormSubmission,
+                                         related_name='bundles')
+    organization = models.ForeignKey('user_accounts.Organization',
+                                     on_delete=models.PROTECT,
+                                     related_name='bundles')
+    bundled_pdf = models.FileField(upload_to='pdf_bundles/', null=True,
+                                   blank=True)

@@ -67,6 +67,8 @@ class TestOrganizationBundle(BundlerTestCase):
         self.assertEqual(
             self.notifications.slack_app_bundle_sent.send.call_count, 2)
         self.assertEqual(self.log_referred.call_count, 2)
+        bundles = models.ApplicationBundle.objects.all()
+        self.assertEqual(bundles.count(), 2)
 
     def test_bundle_with_no_unopened_apps(self):
         self.patch_unopened([])
