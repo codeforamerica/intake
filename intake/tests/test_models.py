@@ -385,8 +385,8 @@ class TestCounty(TestCase):
 
     def test_get_receiving_agency(self):
         expected_matches = (
-           (constants.Counties.SAN_FRANCISCO, "San Francisco Public Defender"),
-           (constants.Counties.CONTRA_COSTA, "Contra Costa Public Defender"))
+            (constants.Counties.SAN_FRANCISCO, "San Francisco Public Defender"),
+            (constants.Counties.CONTRA_COSTA, "Contra Costa Public Defender"))
         counties = models.County.objects.all()
         for county_slug, agency_name in expected_matches:
             county = counties.filter(slug=county_slug).first()

@@ -153,6 +153,14 @@ class TestViews(IntakeDataTestCase):
             })
         self.assertRedirects(result, reverse('intake-thanks'))
         thanks_page = self.client.get(result.url)
+        filled_pdf = models.FilledPDF.objects.first()
+        self.assertTrue(filled_pdf)
+        self.assertTrue(filled_pdf.pdf)
+        self.assertNotEqual(filled_pdf.pdf.size, 0)
+        submission = models.FormSubmission.objects.order_by('-pk').first()
+        self.assertEqual(filled_pdf.submission, submission)
+        organization = submission.counties.first().organizations.first()
+        self.assertEqual(filled_pdf.original_pdf, organization.pdfs.first())
         self.assertContains(thanks_page, "Thank")
         self.assert_called_once_with_types(
             slack,
@@ -509,6 +517,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
             answers__contains=lookup).first()
         county_slugs = [county.slug for county in submission.counties.all()]
         self.assertListEqual(county_slugs, [alameda])
+        filled_pdf_count = models.FilledPDF.objects.count()
+        self.assertEqual(filled_pdf_count, 0)
 
     def test_can_go_back_and_reset_counties(self):
         self.be_anonymous()

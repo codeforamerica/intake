@@ -75,6 +75,7 @@ class FormSubmission(models.Model):
 
     @classmethod
     def mark_viewed(cls, submissions, user):
+        # TODO: doesn't need to be a method here
         logs = ApplicationLogEntry.log_opened(
             [s.id for s in submissions], user)
         # send a slack notification
@@ -426,3 +427,11 @@ class FilledPDF(models.Model):
         FormSubmission,
         on_delete=models.CASCADE,
         related_name='filled_pdfs')
+
+
+"""
+class ApplicationBundle(models.Model):
+    submissions = models.ManyToMany()
+    organization = models.ForeignKey()
+    bundled_pdf = models.FileField()
+"""
