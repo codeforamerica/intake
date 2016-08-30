@@ -3,7 +3,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import EmailValidator
 from formation.field_types import (
-    CharField, ChoiceField, YesNoField,
+    CharField, WholeDollarField, ChoiceField, YesNoField,
     MultipleChoiceField, MultiValueField,
     FormNote, DateTimeField, YES_NO_CHOICES
 )
@@ -302,7 +302,7 @@ class CurrentlyEmployed(YesNoField):
     display_label = "Is employed"
 
 
-class MonthlyIncome(CharField):
+class MonthlyIncome(WholeDollarField):
     context_key = "monthly_income"
     label = _("What is your monthly income?")
 

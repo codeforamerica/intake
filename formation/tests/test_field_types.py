@@ -1,8 +1,9 @@
 import inspect
 import datetime
 from unittest import TestCase
-from unittest.mock import Mock, patch
 from formation.tests import mock
+from formation.tests import sample_income_answers
+
 from formation.tests.utils import PatchTranslationTestCase, django_only
 
 from formation import field_types, exceptions, fields
@@ -93,6 +94,17 @@ class TestCharField(PatchTranslationTestCase):
         self.assertTrue(field.is_valid())
         self.assertFalse(field.is_empty())
         self.assertEqual(field.get_current_value(), "\n \t\r")
+
+
+class TestWholeDollarField(PatchTranslationTestCase):
+
+    def test_parse_monthly_income(self):
+        test_data = sample_income_answers.test_pairs
+        for sample_input, expected_result in test_data.items():
+            data = {'monthly_income': sample_input}
+            field = fields.MonthlyIncome(data)
+            field.is_valid()
+            self.assertEqual(field.parsed_data, expected_result)
 
 
 class TestDateTimeField(PatchTranslationTestCase):

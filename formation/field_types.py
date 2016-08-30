@@ -1,3 +1,4 @@
+import re
 from formation.field_base import Field
 from formation.base import UNSET
 from formation import exceptions, validators
@@ -47,6 +48,37 @@ class CharField(Field):
 
     def get_current_value(self):
         return mark_safe(Field.get_current_value(self))
+
+
+class WholeDollarField(CharField):
+    empty_value = None
+    default_display_format = ""
+    # https://regex101.com/r/dP5wX1/1
+    dollars_pattern = re.compile(r"(?P<dollars>[\d,]+)(?P<cents>[\.]\d\d?)?")
+    # https://regex101.com/r/iM0xY3/1
+    special_zero_pattern = re.compile(r"n\/a|no income|none",
+                                      flags=re.IGNORECASE)
+    parse_error_message = _("'{}' does not look like a dollar amount")
+
+    def parse(self, raw_value):
+        value = self.empty_value
+        if isinstance(raw_value, int) or raw_value is None:
+            return raw_value
+        if isinstance(raw_value, float):
+            return round(raw_value)
+        self.assert_parse_received_correct_type(raw_value, str)
+        raw_value = self.parse_as_text(raw_value)
+        if raw_value:
+            # does not check for multiple separate dollar amounts
+            possible_amount = re.search(self.dollars_pattern, raw_value)
+            if possible_amount:
+                dollars = possible_amount.group('dollars')
+                value = int(dollars.replace(",", ""))
+            else:
+                special_zero = re.search(self.special_zero_pattern, raw_value)
+                if special_zero:
+                    value = 0
+        return value
 
 
 class DateTimeField(CharField):

@@ -1,7 +1,4 @@
-
-from unittest.mock import Mock, patch
-from formation.tests import mock
-from formation.tests.utils import PatchTranslationTestCase, django_only
+from formation.tests.utils import PatchTranslationTestCase
 
 from formation import fields
 

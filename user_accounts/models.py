@@ -8,6 +8,7 @@ from invitations.models import Invitation as BaseInvitation
 from intake import models as intake_models
 from formation.forms import county_form_selector, display_form_selector
 from . import exceptions
+from intake.constants import Organizations, ORG_NAMES
 
 
 class OrganizationManager(models.Manager):
