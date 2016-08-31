@@ -733,7 +733,8 @@ class TestStats(IntakeDataTestCase):
 
 class TestApplicationBundleDetailView(IntakeDataTestCase):
 
-    def test_returns_200_on_existing_bundle_id(self):
+    @patch('intake.views.notifications.slack_submissions_viewed.send')
+    def test_returns_200_on_existing_bundle_id(self, slack):
         """`ApplicationBundleDetailView` return `OK` for existing bundle
 
         create an `ApplicationBundle`,
@@ -776,7 +777,8 @@ class TestApplicationBundleDetailView(IntakeDataTestCase):
                     kwargs=dict(bundle_id=bundle.id)))
         self.assertRedirects(result, reverse('intake-app_index'))
 
-    def test_has_pdf_bundle_url_if_needed(self):
+    @patch('intake.views.notifications.slack_submissions_viewed.send')
+    def test_has_pdf_bundle_url_if_needed(self, slack):
         """ApplicationBundleDetailView return pdf url if needed
 
         create an `ApplicationBundle` that needs a pdf
