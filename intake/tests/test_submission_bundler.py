@@ -1,5 +1,5 @@
 from django.test import TestCase
-from unittest.mock import patch, Mock, call
+from unittest.mock import patch
 from intake.tests import mock
 from intake import models, submission_bundler
 
@@ -26,6 +26,7 @@ class BundlerTestCase(TestCase):
             [contra_costa]]
         cls.sf = san_francisco
         cls.cc = contra_costa
+        cls.alameda = alameda
         cls.submissions = []
         for county_set in county_sets:
             cls.submissions.append(
@@ -39,7 +40,8 @@ class BundlerTestCase(TestCase):
             'get_unopened_apps',
         ]))
         self.log_referred_patcher = patch(
-            'intake.submission_bundler.intake_models.ApplicationLogEntry.log_referred')
+            'intake.submission_bundler.intake_models'
+            '.ApplicationLogEntry.log_referred')
         self.notifications_patcher = patch(
             'intake.submission_bundler.notifications')
 
@@ -48,7 +50,8 @@ class BundlerTestCase(TestCase):
 
     def patch_unopened(self, return_value):
         unopened = self.get_unopened_patcher.start()
-        unopened.return_value.prefetch_related.return_value.all.return_value = return_value
+        unopened.return_value.prefetch_related\
+            .return_value.all.return_value = return_value
 
     def restore_unopened(self):
         self.get_unopened_patcher.stop()
@@ -61,7 +64,7 @@ class BundlerTestCase(TestCase):
 class TestOrganizationBundle(BundlerTestCase):
 
     def test_bundle_unopened_apps(self):
-        bundler = submission_bundler.bundle_and_notify()
+        submission_bundler.bundle_and_notify()
         self.assertEqual(
             self.notifications.front_email_daily_app_bundle.send.call_count, 2)
         self.assertEqual(

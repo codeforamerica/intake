@@ -1,10 +1,5 @@
-from unittest import skipIf
-from unittest.mock import patch, Mock
-import cProfile
-from pstats import Stats
-import inspect
+from unittest.mock import patch
 import random
-from django.test import TestCase, override_settings
 from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase
 from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -225,7 +220,8 @@ class TestViews(IntakeDataTestCase):
         self.assertContains(
             result, fields.AddressField.is_recommended_error_message)
         self.assertContains(
-            result, fields.SocialSecurityNumberField.is_recommended_error_message)
+            result,
+            fields.SocialSecurityNumberField.is_recommended_error_message)
         self.assertContains(
             result, fields.DateOfBirthField.is_recommended_error_message)
 
@@ -253,7 +249,9 @@ class TestViews(IntakeDataTestCase):
             slack, submissions='list', user='User')
 
     @patch('intake.models.notifications.slack_submissions_viewed.send')
-    def test_authenticated_user_can_get_filled_pdf_without_building(self, slack):
+    @patch('intake.models.notifications.slack_simple.send')
+    def test_authenticated_user_can_get_filled_pdf_without_building(
+            self, slack_simple, slack_viewed):
         """
         test_authenticated_user_can_get_filled_pdf_without_building
 
@@ -272,14 +270,16 @@ class TestViews(IntakeDataTestCase):
         self.assertTrue(len(pdf.content) > 69000)
         self.assertEqual(type(pdf.content), bytes)
         self.assert_called_once_with_types(
-            slack, submissions='list', user='User')
+            slack_viewed, submissions='list', user='User')
 
     def test_authenticated_user_can_see_list_of_submitted_apps(self):
         self.be_cfa_user()
         index = self.client.get(reverse('intake-app_index'))
         for submission in self.submissions:
-            self.assertContains(index,
-                                html_utils.escape(submission.answers['last_name']))
+            self.assertContains(
+                index,
+                html_utils.escape(submission.answers['last_name'])
+            )
 
     def test_anonymous_user_cannot_see_filled_pdfs(self):
         self.be_anonymous()

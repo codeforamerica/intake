@@ -1,5 +1,6 @@
 import importlib
 import uuid
+from urllib.parse import urljoin
 import random
 from django.conf import settings
 from django.db import models
@@ -9,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse
 
 from intake import (
     pdfparser, anonymous_names, notifications, model_fields,
@@ -458,6 +459,9 @@ class ApplicationBundle(models.Model):
                                    blank=True)
 
     def get_absolute_url(self):
-        return reverse_lazy(
+        return reverse(
             'intake-app_bundle_detail',
             kwargs=dict(bundle_id=self.id))
+
+    def get_external_url(self):
+        return urljoin(settings.DEFAULT_HOST, self.get_absolute_url())

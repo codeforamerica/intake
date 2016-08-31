@@ -230,15 +230,14 @@ They want to be contacted via text message and email
         expected_body = """As of current time, you have one unopened application to Clean Slate.
 
 You can review and print them at this link:
-    something.com/applications/bundle/?ids=1,2,3"""
+    something.com/applications/bundle/1/"""
         request = Mock()
-        request.build_absolute_uri.side_effect = lambda url: url
         current_time = Mock(return_value='current time')
         content = notifications.front_email_daily_app_bundle.render(
             count=1,
             request=request,
             current_local_time=current_time,
-            submission_ids=[1, 2, 3]
+            bundle_url="something.com/applications/bundle/1/"
         )
         self.assertIn(expected_body, content.body)
         self.assertEqual(expected_subject, content.subject)
@@ -251,11 +250,12 @@ You can review and print them at this link:
                 id=i + 1, anonymous_name='App')
             for i in range(3)]
         emails = ['email1', 'email2']
-        expected_message = """Emailed email1 and email2 with a link to apps from <something.com/applications/bundle/?ids=1,2,3|App, App, and App>"""
+        expected_message = """Emailed email1 and email2 with a link to apps from <something.com/applications/bundle/1/|App, App, and App>"""
 
         content = notifications.slack_app_bundle_sent.render(
             emails=emails,
-            submissions=submissions
+            submissions=submissions,
+            bundle_url="something.com/applications/bundle/1/"
         )
         self.assertEqual(expected_message, content.message)
 
