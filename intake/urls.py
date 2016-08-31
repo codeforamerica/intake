@@ -30,6 +30,14 @@ urlpatterns = [
         login_required(views.app_bundle),
         name='intake-app_bundle'),
 
+    url(r'^applications/bundle/(?P<bundle_id>[0-9]+)/$',
+        login_required(views.app_bundle_detail),
+        name='intake-app_bundle_detail'),
+
+    url(r'^applications/bundle/(?P<bundle_id>[0-9]+)/pdf/$',
+        login_required(views.app_bundle_detail_pdf),
+        name='intake-app_bundle_detail_pdf'),
+
     url(r'^applications/pdfs/$',
         login_required(views.pdf_bundle),
         name='intake-pdf_bundle'),

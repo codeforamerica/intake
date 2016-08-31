@@ -1,10 +1,5 @@
-from unittest import skipIf
-from unittest.mock import patch, Mock
-import cProfile
-from pstats import Stats
-import inspect
+from unittest.mock import patch
 import random
-from django.test import TestCase, override_settings
 from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase
 from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -153,6 +148,14 @@ class TestViews(IntakeDataTestCase):
             })
         self.assertRedirects(result, reverse('intake-thanks'))
         thanks_page = self.client.get(result.url)
+        filled_pdf = models.FilledPDF.objects.first()
+        self.assertTrue(filled_pdf)
+        self.assertTrue(filled_pdf.pdf)
+        self.assertNotEqual(filled_pdf.pdf.size, 0)
+        submission = models.FormSubmission.objects.order_by('-pk').first()
+        self.assertEqual(filled_pdf.submission, submission)
+        organization = submission.counties.first().organizations.first()
+        self.assertEqual(filled_pdf.original_pdf, organization.pdfs.first())
         self.assertContains(thanks_page, "Thank")
         self.assert_called_once_with_types(
             slack,
@@ -217,7 +220,8 @@ class TestViews(IntakeDataTestCase):
         self.assertContains(
             result, fields.AddressField.is_recommended_error_message)
         self.assertContains(
-            result, fields.SocialSecurityNumberField.is_recommended_error_message)
+            result,
+            fields.SocialSecurityNumberField.is_recommended_error_message)
         self.assertContains(
             result, fields.DateOfBirthField.is_recommended_error_message)
 
@@ -244,12 +248,38 @@ class TestViews(IntakeDataTestCase):
         self.assert_called_once_with_types(
             slack, submissions='list', user='User')
 
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    @patch('intake.models.notifications.slack_simple.send')
+    def test_authenticated_user_can_get_filled_pdf_without_building(
+            self, slack_simple, slack_viewed):
+        """
+        test_authenticated_user_can_get_filled_pdf_without_building
+
+        this tests that a pdf will be served even if not pregenerated
+        """
+        self.be_sfpubdef_user()
+        submission = self.submissions[0]
+
+        filled_pdf_bytes = self.fillable.fill(submission)
+        pdf_file = SimpleUploadedFile('filled.pdf', filled_pdf_bytes,
+                                      content_type='application/pdf')
+        pdf = self.client.get(reverse('intake-filled_pdf',
+                                      kwargs=dict(
+                                          submission_id=submission.id
+                                      )))
+        self.assertTrue(len(pdf.content) > 69000)
+        self.assertEqual(type(pdf.content), bytes)
+        self.assert_called_once_with_types(
+            slack_viewed, submissions='list', user='User')
+
     def test_authenticated_user_can_see_list_of_submitted_apps(self):
         self.be_cfa_user()
         index = self.client.get(reverse('intake-app_index'))
         for submission in self.submissions:
-            self.assertContains(index,
-                                html_utils.escape(submission.answers['last_name']))
+            self.assertContains(
+                index,
+                html_utils.escape(submission.answers['last_name'])
+            )
 
     def test_anonymous_user_cannot_see_filled_pdfs(self):
         self.be_anonymous()
@@ -509,6 +539,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
             answers__contains=lookup).first()
         county_slugs = [county.slug for county in submission.counties.all()]
         self.assertListEqual(county_slugs, [alameda])
+        filled_pdf_count = models.FilledPDF.objects.count()
+        self.assertEqual(filled_pdf_count, 0)
 
     def test_can_go_back_and_reset_counties(self):
         self.be_anonymous()
@@ -697,3 +729,72 @@ class TestStats(IntakeDataTestCase):
         response = self.client.get(reverse('intake-stats'))
         for search_term in [total, sf_string, cc_string]:
             self.assertContains(response, search_term)
+
+
+class TestApplicationBundleDetailView(IntakeDataTestCase):
+
+    @patch('intake.views.notifications.slack_submissions_viewed.send')
+    def test_returns_200_on_existing_bundle_id(self, slack):
+        """`ApplicationBundleDetailView` return `OK` for existing bundle
+
+        create an `ApplicationBundle`,
+        try to access `ApplicationBundleDetailView` using `id`
+        assert that 200 OK is returned
+        """
+        self.be_ccpubdef_user()
+        bundle = models.ApplicationBundle.create_with_submissions(
+            organization=self.ccpubdef, submissions=self.submissions)
+        result = self.client.get(reverse(
+                    'intake-app_bundle_detail',
+                    kwargs=dict(bundle_id=bundle.id)))
+        self.assertEqual(result.status_code, 200)
+
+    def test_returns_404_on_nonexisting_bundle_id(self):
+        """ApplicationBundleDetailView return 404 if not found
+
+        with no existing `ApplicationBundle`
+        try to access `ApplicationBundleDetailView` using a made up `id`
+        assert that 404 is returned
+        """
+        self.be_ccpubdef_user()
+        result = self.client.get(reverse(
+                    'intake-app_bundle_detail',
+                    kwargs=dict(bundle_id=20909872435)))
+        self.assertEqual(result.status_code, 404)
+
+    def test_user_from_wrong_org_is_redirected_to_app_index(self):
+        """ApplicationBundleDetailView redirects unpermitted users
+
+        with existing `ApplicationBundle`
+        try to access `ApplicationBundleDetailView` as a user from another org
+        assert that redirects to `ApplicationIdex`
+        """
+        bundle = models.ApplicationBundle.create_with_submissions(
+            organization=self.ccpubdef, submissions=self.submissions)
+        self.be_sfpubdef_user()
+        result = self.client.get(reverse(
+                    'intake-app_bundle_detail',
+                    kwargs=dict(bundle_id=bundle.id)))
+        self.assertRedirects(result, reverse('intake-app_index'))
+
+    @patch('intake.views.notifications.slack_submissions_viewed.send')
+    def test_has_pdf_bundle_url_if_needed(self, slack):
+        """ApplicationBundleDetailView return pdf url if needed
+
+        create an `ApplicationBundle` that needs a pdf
+        try to access `ApplicationBundleDetailView` using `id`
+        assert that the url for `FilledPDFBundle` is in the template.
+        """
+        self.be_sfpubdef_user()
+        mock_pdf = SimpleUploadedFile(
+            'a.pdf', b"things", content_type="application/pdf")
+        bundle = models.ApplicationBundle.create_with_submissions(
+            organization=self.sfpubdef,
+            submissions=self.submissions,
+            bundled_pdf=mock_pdf
+            )
+        url = bundle.get_pdf_bundle_url()
+        result = self.client.get(reverse(
+                    'intake-app_bundle_detail',
+                    kwargs=dict(bundle_id=bundle.id)))
+        self.assertContains(result, url)

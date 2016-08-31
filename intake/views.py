@@ -28,7 +28,7 @@ new applications.
 
 from django.utils.translation import ugettext as _
 from django.utils.datastructures import MultiValueDict
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse_lazy
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib import messages
@@ -163,15 +163,7 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
             organization__county__in=counties).all()
 
         for fillable_pdf in fillable_pdfs:
-            filled_pdf_bytes = fillable_pdf.fill(submission)
-            pdf_file = SimpleUploadedFile('filled.pdf', filled_pdf_bytes,
-                                          content_type='application/pdf')
-            pdf = models.FilledPDF(
-                pdf=pdf_file,
-                original_pdf=fillable_pdf,
-                submission=submission,
-            )
-            pdf.save()
+            filled_pdf = fillable_pdf.fill_for_submission(submission)
         self.create_confirmations_for_user(submission)
 
     def form_valid(self, form):
@@ -263,6 +255,7 @@ class ApplicationDetail(View):
         return redirect('intake-app_index')
 
     def mark_viewed(self, request, submissions):
+        # TODO: doesn't ned to be here
         if not isinstance(submissions, list):
             submissions = [submissions]
         models.FormSubmission.mark_viewed(submissions, request.user)
@@ -285,6 +278,9 @@ class ApplicationDetail(View):
 class FilledPDF(ApplicationDetail):
     """Serves a filled PDF for an org user, based on the PDF
     needed by that user's organization.
+
+    Deals with if a pdf doesn't exist but this shouldn't happen.
+    Consider removing in favor of erroring and retrying on submission.
     """
 
     def get(self, request, submission_id):
@@ -294,11 +290,17 @@ class FilledPDF(ApplicationDetail):
             return self.not_allowed(request)
         submission = submissions[0]
         pdf = submission.filled_pdfs.first()
+        if not pdf:
+            no_pdf_str = \
+                "No prefilled pdf was made for submission: %s" % submission.pk
+            notifications.slack_simple.send(no_pdf_str)
+            org = request.user.profile.organization
+            fillable_pdf = models.FillablePDF.objects.filter(
+                organization=org).first()
+            pdf = fillable_pdf.fill_for_submission(submission)
         self.mark_viewed(request, submission)
         response = HttpResponse(pdf.pdf,
                                 content_type='application/pdf')
-        response['Content-Disposition'] = \
-            'attachment; filename=submission%s.pdf' % submission_id
         return response
 
 
@@ -369,6 +371,41 @@ class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
         )
         self.mark_viewed(request, submissions)
         return render(request, "app_bundle.jinja", context)
+
+
+class ApplicationBundleDetail(ApplicationDetail):
+    """New aplication bundle view which uses prerendered bundles
+
+    Given a bundle id it returns a detail page for ApplicationBundle
+    """
+    def get(self, request, bundle_id):
+        bundle = get_object_or_404(models.ApplicationBundle, pk=int(bundle_id))
+        if bundle.organization != request.user.profile.organization:
+            return self.not_allowed(request)
+        submissions = list(bundle.submissions.all())
+        context = dict(
+            submissions=submissions,
+            count=len(submissions),
+            show_pdf=bool(bundle.bundled_pdf),
+            app_ids=[sub.id for sub in submissions],
+            bundled_pdf_url=bundle.get_pdf_bundle_url())
+        models.ApplicationLogEntry.log_bundle_opened(bundle, request.user)
+        notifications.slack_submissions_viewed.send(
+            submissions=submissions, user=request.user,
+            bundle_url=bundle.get_external_url())
+        return render(request, "app_bundle.jinja", context)
+
+
+class ApplicationBundleDetailPDFView(View):
+    """A concatenated PDF of individual filled PDFs for an org user
+
+    replaces FilledPDFBundle
+    """
+    def get(self, request, bundle_id):
+        bundle = get_object_or_404(models.ApplicationBundle, pk=int(bundle_id))
+        if bundle.organization != request.user.profile.organization:
+            return self.not_allowed(request)
+        return HttpResponse(bundle.bundled_pdf, content_type="application/pdf")
 
 
 def get_pdf_for_user(user, submission_data):
@@ -464,9 +501,11 @@ app_bundle = ApplicationBundle.as_view()
 app_detail = ApplicationDetail.as_view()
 mark_processed = MarkProcessed.as_view()
 delete_page = Delete.as_view()
-
+app_bundle_detail = ApplicationBundleDetail.as_view()
+app_bundle_detail_pdf = ApplicationBundleDetailPDFView.as_view()
 
 # REDIRECT VIEWS for backwards compatibility
+
 
 class PermanentRedirectView(View):
     """Permanently redirects to a url

@@ -41,9 +41,13 @@
     {%- if show_pdf %}
     <div id="bundle-pdf" class="row">
       <div class="iframe_container col-xs-12 col-md-10 col_centered">
-        <iframe class="pdf_inset" src="{{
-        url_with_ids('intake-pdf_bundle', app_ids) 
-        }}" frameborder="0" width="800" height="600">
+        <iframe class="pdf_inset" src="
+          {%- if bundled_pdf_url -%}
+            {{ bundled_pdf_url }}
+          {%- else -%}
+            {{ url_with_ids('intake-pdf_bundle', app_ids) }}
+          {%- endif -%}
+        " frameborder="0" width="800" height="600">
         </iframe>
       </div>
     </div>

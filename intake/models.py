@@ -1,5 +1,6 @@
 import importlib
 import uuid
+from urllib.parse import urljoin
 import random
 from django.conf import settings
 from django.db import models
@@ -8,6 +9,8 @@ from django.utils import timezone as timezone_utils
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.urlresolvers import reverse
 
 from intake import (
     pdfparser, anonymous_names, notifications, model_fields,
@@ -82,6 +85,7 @@ class FormSubmission(models.Model):
 
     @classmethod
     def mark_viewed(cls, submissions, user):
+        # TODO: doesn't need to be a method here
         logs = ApplicationLogEntry.log_opened(
             [s.id for s in submissions], user)
         # send a slack notification
@@ -341,9 +345,12 @@ class ApplicationLogEntry(models.Model):
 
     @classmethod
     def log_opened(cls, submission_ids, user, time=None):
-        """When a user opens submissions, they represent their organization
-        """
         return cls.log_multiple(cls.OPENED, submission_ids, user, time)
+
+    @classmethod
+    def log_bundle_opened(cls, bundle, user, time=None):
+        sub_ids = bundle.submissions.values_list('pk', flat=True)
+        return cls.log_opened(sub_ids, user, time)
 
     @classmethod
     def log_referred(cls, submission_ids, user, time=None, organization=None):
@@ -404,6 +411,23 @@ class FillablePDF(models.Model):
     def __str__(self):
         return self.name
 
+    def fill_for_submission(self, submission):
+        """Fills out a pdf and saves it to FilledPDF
+
+        used when saving a new submission
+        used when retrieving a filled pdf if it doesn't
+        """
+        filled_pdf_bytes = self.fill(submission)
+        pdf_file = SimpleUploadedFile('filled.pdf', filled_pdf_bytes,
+                                      content_type='application/pdf')
+        pdf = FilledPDF(
+            pdf=pdf_file,
+            original_pdf=self,
+            submission=submission,
+        )
+        pdf.save()
+        return pdf
+
     def fill(self, *args, **kwargs):
         parser = get_parser()
         translator = self.get_translator()
@@ -433,3 +457,35 @@ class FilledPDF(models.Model):
         FormSubmission,
         on_delete=models.CASCADE,
         related_name='filled_pdfs')
+
+
+class ApplicationBundle(models.Model):
+    submissions = models.ManyToManyField(FormSubmission,
+                                         related_name='bundles')
+    organization = models.ForeignKey('user_accounts.Organization',
+                                     on_delete=models.PROTECT,
+                                     related_name='bundles')
+    bundled_pdf = models.FileField(upload_to='pdf_bundles/', null=True,
+                                   blank=True)
+
+    @classmethod
+    def create_with_submissions(cls, **kwargs):
+        submissions = kwargs.pop('submissions', [])
+        instance = cls(**kwargs)
+        instance.save()
+        if submissions:
+            instance.submissions.add(*submissions)
+        return instance
+
+    def get_pdf_bundle_url(self):
+        return reverse(
+            'intake-app_bundle_detail_pdf',
+            kwargs=dict(bundle_id=self.id))
+
+    def get_absolute_url(self):
+        return reverse(
+            'intake-app_bundle_detail',
+            kwargs=dict(bundle_id=self.id))
+
+    def get_external_url(self):
+        return urljoin(settings.DEFAULT_HOST, self.get_absolute_url())

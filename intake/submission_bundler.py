@@ -1,9 +1,9 @@
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from intake import (
     notifications,
     models as intake_models
 )
-from user_accounts import models as auth_models
 
 
 class OrganizationBundle:
@@ -25,6 +25,24 @@ class OrganizationBundle:
     def get_submission_ids(self):
         return [submission.id for submission in self.submissions]
 
+    def create_app_bundle(self):
+        filled_pdfs = intake_models.FilledPDF.objects.filter(
+            submission__in=self.submissions)
+        bundle = intake_models.ApplicationBundle(
+            organization=self.organization,
+        )
+        if filled_pdfs:
+            # TODO: test that the pdf is made properly
+            pdf_objects = [filled.pdf for filled in filled_pdfs]
+            bundled_pdf_bytes = intake_models.get_parser().join_pdfs(
+                pdf_objects)
+            pdf_file = SimpleUploadedFile('filled.pdf', bundled_pdf_bytes,
+                                          content_type='application/pdf')
+            bundle.bundled_pdf = pdf_file
+        bundle.save()
+        bundle.submissions.add(*self.submissions)
+        return bundle
+
     def make_referrals(self):
         """Send notifications to self.organization users
         with the bundle of submissions
@@ -32,16 +50,20 @@ class OrganizationBundle:
         """
         count = len(self.submissions)
         ids = self.get_submission_ids()
+        app_bundle = self.create_app_bundle()
+        bundle_url = app_bundle.get_external_url()
         notifications.front_email_daily_app_bundle.send(
             to=self.notification_emails,
             count=count,
-            submission_ids=ids
+            bundle_url=bundle_url
         )
         intake_models.ApplicationLogEntry.log_referred(
             ids, user=None, organization=self.organization)
         notifications.slack_app_bundle_sent.send(
             submissions=self.submissions,
-            emails=self.notification_emails)
+            emails=self.notification_emails,
+            bundle_url=bundle_url
+            )
 
 
 class SubmissionBundler:
@@ -51,11 +73,13 @@ class SubmissionBundler:
     """
 
     def __init__(self):
-        self.queryset = intake_models.FormSubmission.get_unopened_apps().prefetch_related(
-            'counties',
-            'counties__organizations',
-            'counties__organizations__profiles',
-            'counties__organizations__profiles__user').all()
+        self.queryset = intake_models.FormSubmission.get_unopened_apps()\
+                            .prefetch_related(
+                                'counties',
+                                'counties__organizations',
+                                'counties__organizations__profiles',
+                                'counties__organizations__profiles__user'
+                            ).all()
         self.organization_bundle_map = {}
 
     def get_org_referral(self, organization):
