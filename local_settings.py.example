@@ -42,3 +42,6 @@ DEFAULT_NOTIFICATION_EMAIL = "user@localhost"
 
 
 DIVERT_REMOTE_CONNECTIONS = True
+
+# specific to intake.translators.clean_slate.translator
+TEST_PDF_PATH = "./CleanSlateCombined.pdf"
