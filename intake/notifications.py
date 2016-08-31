@@ -216,14 +216,6 @@ class SlackTemplateNotification(BasicSlackNotification, TemplateNotification):
                                       default_context=default_context,
                                       message_template_path=message_template_path)
 
-    def render(self, **context_args):
-        if 'submissions' in context_args and 'bundle_url' not in context_args:
-            submission_ids = [s.id for s in context_args['submissions']]
-            url = url_with_ids('intake-app_bundle', submission_ids)
-            bundle_url = getattr(settings, 'DEFAULT_HOST', '') + url
-            context_args.update(bundle_url=bundle_url)
-        return super().render(**context_args)
-
     def send(self, **context_args):
         content = self.render(**context_args)
         super().send(message_text=content.message)

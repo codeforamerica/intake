@@ -338,9 +338,12 @@ class ApplicationLogEntry(models.Model):
 
     @classmethod
     def log_opened(cls, submission_ids, user, time=None):
-        """When a user opens submissions, they represent their organization
-        """
         return cls.log_multiple(cls.OPENED, submission_ids, user, time)
+
+    @classmethod
+    def log_bundle_opened(cls, bundle, user, time=None):
+        sub_ids = bundle.submissions.values_list('pk', flat=True)
+        return cls.log_opened(sub_ids, user, time)
 
     @classmethod
     def log_referred(cls, submission_ids, user, time=None, organization=None):
@@ -457,6 +460,20 @@ class ApplicationBundle(models.Model):
                                      related_name='bundles')
     bundled_pdf = models.FileField(upload_to='pdf_bundles/', null=True,
                                    blank=True)
+
+    @classmethod
+    def create_with_submissions(cls, **kwargs):
+        submissions = kwargs.pop('submissions', [])
+        instance = cls(**kwargs)
+        instance.save()
+        if submissions:
+            instance.submissions.add(*submissions)
+        return instance
+
+    def get_pdf_bundle_url(self):
+        return reverse(
+            'intake-app_bundle_detail_pdf',
+            kwargs=dict(bundle_id=self.id))
 
     def get_absolute_url(self):
         return reverse(

@@ -28,7 +28,7 @@ new applications.
 
 from django.utils.translation import ugettext as _
 from django.utils.datastructures import MultiValueDict
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse_lazy
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib import messages
@@ -301,8 +301,6 @@ class FilledPDF(ApplicationDetail):
         self.mark_viewed(request, submission)
         response = HttpResponse(pdf.pdf,
                                 content_type='application/pdf')
-        response['Content-Disposition'] = \
-            'attachment; filename=submission%s.pdf' % submission_id
         return response
 
 
@@ -380,9 +378,34 @@ class ApplicationBundleDetail(ApplicationDetail):
 
     Given a bundle id it returns a detail page for ApplicationBundle
     """
-
     def get(self, request, bundle_id):
-        return None
+        bundle = get_object_or_404(models.ApplicationBundle, pk=int(bundle_id))
+        if bundle.organization != request.user.profile.organization:
+            return self.not_allowed(request)
+        submissions = list(bundle.submissions.all())
+        context = dict(
+            submissions=submissions,
+            count=len(submissions),
+            show_pdf=bool(bundle.bundled_pdf),
+            app_ids=[sub.id for sub in submissions],
+            bundled_pdf_url=bundle.get_pdf_bundle_url())
+        models.ApplicationLogEntry.log_bundle_opened(bundle, request.user)
+        notifications.slack_submissions_viewed.send(
+            submissions=submissions, user=request.user,
+            bundle_url=bundle.get_external_url())
+        return render(request, "app_bundle.jinja", context)
+
+
+class ApplicationBundleDetailPDFView(View):
+    """A concatenated PDF of individual filled PDFs for an org user
+
+    replaces FilledPDFBundle
+    """
+    def get(self, request, bundle_id):
+        bundle = get_object_or_404(models.ApplicationBundle, pk=int(bundle_id))
+        if bundle.organization != request.user.profile.organization:
+            return self.not_allowed(request)
+        return HttpResponse(bundle.bundled_pdf, content_type="application/pdf")
 
 
 def get_pdf_for_user(user, submission_data):
@@ -479,6 +502,7 @@ app_detail = ApplicationDetail.as_view()
 mark_processed = MarkProcessed.as_view()
 delete_page = Delete.as_view()
 app_bundle_detail = ApplicationBundleDetail.as_view()
+app_bundle_detail_pdf = ApplicationBundleDetailPDFView.as_view()
 
 # REDIRECT VIEWS for backwards compatibility
 

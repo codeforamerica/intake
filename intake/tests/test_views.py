@@ -729,3 +729,70 @@ class TestStats(IntakeDataTestCase):
         response = self.client.get(reverse('intake-stats'))
         for search_term in [total, sf_string, cc_string]:
             self.assertContains(response, search_term)
+
+
+class TestApplicationBundleDetailView(IntakeDataTestCase):
+
+    def test_returns_200_on_existing_bundle_id(self):
+        """`ApplicationBundleDetailView` return `OK` for existing bundle
+
+        create an `ApplicationBundle`,
+        try to access `ApplicationBundleDetailView` using `id`
+        assert that 200 OK is returned
+        """
+        self.be_ccpubdef_user()
+        bundle = models.ApplicationBundle.create_with_submissions(
+            organization=self.ccpubdef, submissions=self.submissions)
+        result = self.client.get(reverse(
+                    'intake-app_bundle_detail',
+                    kwargs=dict(bundle_id=bundle.id)))
+        self.assertEqual(result.status_code, 200)
+
+    def test_returns_404_on_nonexisting_bundle_id(self):
+        """ApplicationBundleDetailView return 404 if not found
+
+        with no existing `ApplicationBundle`
+        try to access `ApplicationBundleDetailView` using a made up `id`
+        assert that 404 is returned
+        """
+        self.be_ccpubdef_user()
+        result = self.client.get(reverse(
+                    'intake-app_bundle_detail',
+                    kwargs=dict(bundle_id=20909872435)))
+        self.assertEqual(result.status_code, 404)
+
+    def test_user_from_wrong_org_is_redirected_to_app_index(self):
+        """ApplicationBundleDetailView redirects unpermitted users
+
+        with existing `ApplicationBundle`
+        try to access `ApplicationBundleDetailView` as a user from another org
+        assert that redirects to `ApplicationIdex`
+        """
+        bundle = models.ApplicationBundle.create_with_submissions(
+            organization=self.ccpubdef, submissions=self.submissions)
+        self.be_sfpubdef_user()
+        result = self.client.get(reverse(
+                    'intake-app_bundle_detail',
+                    kwargs=dict(bundle_id=bundle.id)))
+        self.assertRedirects(result, reverse('intake-app_index'))
+
+    def test_has_pdf_bundle_url_if_needed(self):
+        """ApplicationBundleDetailView return pdf url if needed
+
+        create an `ApplicationBundle` that needs a pdf
+        try to access `ApplicationBundleDetailView` using `id`
+        assert that the url for `FilledPDFBundle` is in the template.
+        """
+        self.be_sfpubdef_user()
+        mock_pdf = SimpleUploadedFile(
+            'a.pdf', b"things", content_type="application/pdf")
+        bundle = models.ApplicationBundle.create_with_submissions(
+            organization=self.sfpubdef,
+            submissions=self.submissions,
+            bundled_pdf=mock_pdf
+            )
+        url = bundle.get_pdf_bundle_url()
+        result = self.client.get(reverse(
+                    'intake-app_bundle_detail',
+                    kwargs=dict(bundle_id=bundle.id)))
+        self.assertContains(result, url)
