@@ -5,6 +5,7 @@ import random
 from pytz import timezone
 from faker import Factory as FakerFactory
 from django.core.files import File
+from django.core.management import call_command
 from django.db.utils import IntegrityError
 from django.conf import settings
 from django.utils.datastructures import MultiValueDict
@@ -65,9 +66,8 @@ NEW_RAW_FORM_DATA = {
 
 
 def load_counties_and_orgs():
-    command = load_initial_data.Command()
-    command.stdout = Mock()
-    command.handle()
+    fixtures = ['counties', 'organizations']
+    call_command('loaddata', *fixtures)
 
 
 def post_data(**kwargs):

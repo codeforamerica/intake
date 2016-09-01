@@ -7,7 +7,6 @@ from django.test import override_settings
 from django.core import mail
 from django.core.urlresolvers import reverse
 
-from project.jinja2 import url_with_ids
 from intake import models, constants
 from tests import base
 from tests import sequence_steps as S
@@ -184,12 +183,15 @@ class TestWorkflows(base.ScreenSequenceTestCase):
 
     def test_look_at_app_bundle_with_pdf(self):
         user = self.sfpubdef_users[0]
-        submissions = self.sf_submissions
+        bundle = models.ApplicationBundle.create_with_submissions(
+            submissions=self.sf_submissions,
+            organization=self.sfpubdef)
         self.run_sequence(
             "Look at app pdf bundle",
             [
                 S.get('tried to go to app bundle',
-                      url_with_ids('intake-app_bundle', [s.id for s in submissions])),
+                      reverse('intake-app_bundle_detail',
+                              kwargs=dict(bundle_id=bundle.id))),
                 S.fill_form('entered login info',
                             login=user.email, password=fake_password),
                 S.wait('wait for pdf to load', 2)
@@ -197,24 +199,30 @@ class TestWorkflows(base.ScreenSequenceTestCase):
 
     def test_look_at_app_bundle_without_pdf(self):
         user = self.ccpubdef_users[0]
-        submissions = self.cc_submissions
+        bundle = models.ApplicationBundle.create_with_submissions(
+            submissions=self.cc_submissions,
+            organization=self.ccpubdef)
         self.run_sequence(
             "Look at app bundle",
             [
                 S.get('tried to go to app bundle',
-                      url_with_ids('intake-app_bundle', [s.id for s in submissions])),
+                      reverse('intake-app_bundle_detail',
+                              kwargs=dict(bundle_id=bundle.id))),
                 S.fill_form('entered login info',
                             login=user.email, password=fake_password)
             ], base.SMALL_DESKTOP)
 
     def test_look_at_app_bundle_of_another_org(self):
         user = self.ccpubdef_users[0]
-        submissions = self.sf_submissions
+        bundle = models.ApplicationBundle.create_with_submissions(
+            submissions=self.sf_submissions,
+            organization=self.sfpubdef)
         self.run_sequence(
             "Look at bundle of another org",
             [
                 S.get('tried to go to app bundle',
-                      url_with_ids('intake-app_bundle', [s.id for s in submissions])),
+                      reverse('intake-app_bundle_detail',
+                              kwargs=dict(bundle_id=bundle.id))),
                 S.fill_form('entered login info',
                             login=user.email, password=fake_password)
             ], base.SMALL_DESKTOP)

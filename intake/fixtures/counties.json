@@ -1,0 +1,29 @@
+[
+{
+  "model": "intake.county",
+  "pk": 1,
+  "fields": {
+    "slug": "sanfrancisco",
+    "name": "San Francisco",
+    "description": "San Francisco"
+  }
+},
+{
+  "model": "intake.county",
+  "pk": 2,
+  "fields": {
+    "slug": "contracosta",
+    "name": "Contra Costa",
+    "description": "Conta Costa County (near Richmond, Concord, Walnut Creek, San Ramon, Antioch, or Brentwood)"
+  }
+},
+{
+  "model": "intake.county",
+  "pk": 3,
+  "fields": {
+    "slug": "alameda",
+    "name": "Alameda",
+    "description": "Alameda County (near Oakland, Berkeley, San Leandro, Hayward, Union City, Pleasanton, or Livermore)"
+  }
+}
+]

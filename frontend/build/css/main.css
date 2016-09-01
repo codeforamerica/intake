@@ -4270,6 +4270,9 @@ body.admin header .btn:hover {
   color: #333333;
   background-color: #fff;
 }
+body.admin h1 {
+  font-size: 1.8em;
+}
 table.applications_list .btn {
   background: inherit;
   border: 1px solid #069ED6;
