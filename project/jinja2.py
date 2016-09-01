@@ -50,9 +50,9 @@ class Linkifier:
     def __call__(self, content):
         output = content
         for str_lookup in self.links:
-            if str_lookup in content:
+            if str_lookup in output:
                 link = self.build_link(str_lookup)
-                output = content.replace(str_lookup, link)
+                output = output.replace(str_lookup, link)
         return Markup(output)
 
 
@@ -66,6 +66,7 @@ linkify_links = {
     "San Francisco Public Defender": "http://sfpublicdefender.org/services/clean-slate/",
     "Contra Costa Public Defender": "http://co.contra-costa.ca.us/1555/Public-Defender",
     "Alameda Public Defender": "http://www.co.alameda.ca.us/defender/services/cleanslate.htm",
+    "East Bay Community Law Center": "http://ebclc.org/need-services/clean-slate-services/",
     "clearmyrecord@codeforamerica.org": "mailto:clearmyrecord@codeforamerica.org",
     "(415) 301-6005": "tel:14153016005"
 }

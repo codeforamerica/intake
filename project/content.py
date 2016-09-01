@@ -1,4 +1,5 @@
-from intake.constants import CountyNames
+from intake.constants import CountyNames, SCOPE_TO_LIVE_COUNTIES
+
 
 
 class constants:
@@ -33,8 +34,13 @@ class constants:
         "will hear from both San Francisco Public Defender and Contra Costa Public "
         "Defender separately.")
 
-    about_service_headline = "This is an online service by Code for America for the San Francisco Public Defender"
-
+    if SCOPE_TO_LIVE_COUNTIES:
+        gov_service_description_1 = str(
+            "Applications to Clear My Record will go to the San Francisco "
+            "Public Defender’s Office. Once they receive your application, "
+            "they will send you a letter with next steps."
+            )
+        
     journey_headline = "Apply to Clear My Record in 3 easy steps:"
     step_1_headline = "1. Apply online"
     step_1_paragraph = "Fill out the pre-screener to help the attorney understand your history."

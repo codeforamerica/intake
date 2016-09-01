@@ -47,3 +47,5 @@ FRONT_PHONE_CHANNEL_ID = os.environ.get("FRONT_PHONE_CHANNEL_ID")
 
 # configure django-debug-toolbar
 USE_DEBUG_TOOLBAR = os.environ.get('USE_DEBUG_TOOLBAR', 0)
+
+LIVE_COUNTY_CHOICES = os.environ.get('LIVE_COUNTY_CHOICES', False)

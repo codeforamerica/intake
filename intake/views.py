@@ -50,8 +50,12 @@ class Home(TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        counties = models.County.objects.prefetch_related(
-            'organizations').all()
+        if constants.SCOPE_TO_LIVE_COUNTIES:
+            counties = models.County.objects.prefetch_related(
+                'organizations').filter(slug=constants.Counties.SAN_FRANCISCO)
+        else:
+            counties = models.County.objects.prefetch_related(
+                'organizations').all()
         context['counties'] = counties
         return context
 

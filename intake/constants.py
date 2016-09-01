@@ -1,4 +1,8 @@
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
+
+
+SCOPE_TO_LIVE_COUNTIES = getattr(settings, 'LIVE_COUNTY_CHOICES', False)
 
 CONTACT_METHOD_CHOICES = (
     ('voicemail', _('voicemail')),
@@ -61,6 +65,9 @@ class CountyNames:
     ALAMEDA = 'Alameda'
     ALL = 'San Francisco, Alameda, and Contra Costa Counties'
 
+if SCOPE_TO_LIVE_COUNTIES:
+    CountyNames.ALL = 'San Francisco'
+
 
 CONFIRMATION_MESSAGES = {
     Counties.SAN_FRANCISCO: _("You will get a letter in the mail from the San Francisco Public Defender in 2-4 weeks."),
@@ -69,13 +76,23 @@ CONFIRMATION_MESSAGES = {
 }
 
 
-COUNTY_CHOICES = (
-    (Counties.SAN_FRANCISCO, _('San Francisco')),
-    (Counties.CONTRA_COSTA, _(
-        'Conta Costa County (near Richmond, Concord, Walnut Creek, San Ramon, Antioch, or Brentwood)')),
-    (Counties.ALAMEDA, _('Alameda County (near Oakland, Berkeley, San Leandro, Hayward, Union City, Pleasanton, or Livermore)')),
-    # (Counties.OTHER, _('Some other county'))
-)
+
+if SCOPE_TO_LIVE_COUNTIES:
+    COUNTY_CHOICES = (
+        (Counties.SAN_FRANCISCO, _('San Francisco')),
+        # (Counties.CONTRA_COSTA, _(
+        #     'Conta Costa County (near Richmond, Concord, Walnut Creek, San Ramon, Antioch, or Brentwood)')),
+        # (Counties.ALAMEDA, _('Alameda County (near Oakland, Berkeley, San Leandro, Hayward, Union City, Pleasanton, or Livermore)')),
+        # (Counties.OTHER, _('Some other county'))
+    )
+else:
+    COUNTY_CHOICES = (
+        (Counties.SAN_FRANCISCO, _('San Francisco')),
+        (Counties.CONTRA_COSTA, _(
+            'Conta Costa County (near Richmond, Concord, Walnut Creek, San Ramon, Antioch, or Brentwood)')),
+        (Counties.ALAMEDA, _('Alameda County (near Oakland, Berkeley, San Leandro, Hayward, Union City, Pleasanton, or Livermore)')),
+        # (Counties.OTHER, _('Some other county'))
+    )
 
 COUNTY_CHOICE_DISPLAY_DICT = {
     Counties.SAN_FRANCISCO: CountyNames.SAN_FRANCISCO,
