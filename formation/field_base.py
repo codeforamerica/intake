@@ -57,7 +57,7 @@ class Field(base.BindParseValidate):
         message_template = "`{}` needed a `{}` object for parsing. Received a `{}`"
         if not isinstance(raw_value, type_):
             raise TypeError(message_template.format(
-                self.__repr__, type_, type(raw_value)))
+                self.__class__.__name__, type_, type(raw_value)))
 
     def get_html_class_name(self):
         """Returns the input name of this field, using underscores

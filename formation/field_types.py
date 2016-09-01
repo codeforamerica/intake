@@ -51,7 +51,6 @@ class CharField(Field):
 
 
 class WholeDollarField(CharField):
-    template_name = "formation/whole_dollar_input.jinja"
     empty_value = None
     # https://regex101.com/r/dP5wX1/1
     dollars_pattern = re.compile(r"(?P<dollars>[\d,]+)(?P<cents>[\.]\d\d?)?")
@@ -62,6 +61,8 @@ class WholeDollarField(CharField):
 
     def parse(self, raw_value):
         value = self.empty_value
+        if raw_value is UNSET:
+            return value
         if isinstance(raw_value, int) or raw_value is None:
             return raw_value
         if isinstance(raw_value, float):
@@ -108,6 +109,8 @@ class DateTimeField(CharField):
         and use dateutil to parse it
         """
         value = self.empty_value
+        if raw_value is UNSET:
+            return value
         if isinstance(raw_value, datetime) or raw_value is None:
             return raw_value
         self.assert_parse_received_correct_type(raw_value, str)

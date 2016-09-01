@@ -105,6 +105,11 @@ def get_validated_monthly_income_field_with(input_value):
 
 class TestWholeDollarField(PatchTranslationTestCase):
 
+    def test_is_okay_with_unset_raw_value(self):
+        field = fields.MonthlyIncome({})
+        field.is_valid()
+        self.assertIsNone(field.get_current_value())
+
     def test_parse_monthly_income(self):
         test_data = sample_income_answers.test_pairs
         for sample_input, expected_result in test_data.items():
@@ -141,7 +146,7 @@ class TestWholeDollarField(PatchTranslationTestCase):
         """WholeDollarField.get_current_value() None if empty
         """
         field = fields.MonthlyIncome()
-        self.assertTrue(field.get_current_value() is None)
+        self.assertIsNone(field.get_current_value())
 
 
 class TestDateTimeField(PatchTranslationTestCase):
@@ -149,6 +154,11 @@ class TestDateTimeField(PatchTranslationTestCase):
 
     def as_input(self, thing):
         return {DateReceived.context_key: thing}
+
+    def test_is_okay_with_unset_raw_value(self):
+        field = DateReceived({})
+        field.is_valid()
+        self.assertTrue(field.get_current_value() is None)
 
     def test_parses_datetime_unchanged(self):
         dt = self.as_input(self.example_datetime)
