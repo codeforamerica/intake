@@ -21,9 +21,10 @@ fake_password = auth_mock.fake_password
 @override_settings(DIVERT_REMOTE_CONNECTIONS=True)
 class TestWorkflows(base.ScreenSequenceTestCase):
 
+    fixtures = ['counties', 'organizations']
+
     def setUp(self):
         super().setUp()
-        intake_mock.load_counties_and_orgs()
         for key, instances in auth_mock.create_fake_auth_models().items():
             setattr(self, key, instances)
         counties = models.County.objects.all()
