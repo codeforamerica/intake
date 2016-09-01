@@ -1,0 +1,95 @@
+[
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Code for America",
+    "slug": "cfa",
+    "county": null,
+    "website": "",
+    "blurb": "",
+    "is_receiving_agency": false,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": false,
+    "new_submission_confirmation_message": "",
+    "address": "",
+    "phone_number": "",
+    "email": ""
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "San Francisco Public Defender",
+    "slug": "sf_pubdef",
+    "county": [
+      "sanfrancisco"
+    ],
+    "website": "",
+    "blurb": "",
+    "is_receiving_agency": true,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": false,
+    "new_submission_confirmation_message": "",
+    "address": "",
+    "phone_number": "",
+    "email": ""
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Contra Costa Public Defender",
+    "slug": "cc_pubdef",
+    "county": [
+      "contracosta"
+    ],
+    "website": "",
+    "blurb": "",
+    "is_receiving_agency": true,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": false,
+    "new_submission_confirmation_message": "",
+    "address": "",
+    "phone_number": "",
+    "email": ""
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "East Bay Community Law Center",
+    "slug": "ebclc",
+    "county": [
+      "alameda"
+    ],
+    "website": "",
+    "blurb": "",
+    "is_receiving_agency": true,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": false,
+    "new_submission_confirmation_message": "",
+    "address": "",
+    "phone_number": "",
+    "email": ""
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Alameda Public Defender",
+    "slug": "a_pubdef",
+    "county": [
+      "alameda"
+    ],
+    "website": "",
+    "blurb": "",
+    "is_receiving_agency": true,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": false,
+    "new_submission_confirmation_message": "",
+    "address": "",
+    "phone_number": "",
+    "email": ""
+  }
+}
+]

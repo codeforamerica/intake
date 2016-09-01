@@ -57,6 +57,20 @@ class County(models.Model):
         but in the future this can be used to make eligibility
         determinations
         """
+        # if alameda
+        if self.slug == constants.Counties.ALAMEDA:
+            # if under 3000 and not owns home
+            income = submission.answers.get('monthly_income')
+            owns_home = submission.answers.get('owns_home')
+            if income < 3000 and not owns_home:
+                # return alameda pub def
+                return self.organizations.get(
+                    slug=constants.Organizations.ALAMEDA_PUBDEF)
+            else:
+                # return ebclc
+                return self.organizations.get(
+                    slug=constants.Organizations.EBCLC)
+            # return first receiving agency
         return self.organizations.filter(is_receiving_agency=True).first()
 
     def __str__(self):

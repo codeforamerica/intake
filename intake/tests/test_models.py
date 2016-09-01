@@ -378,12 +378,14 @@ class TestModels(TestCase):
 
 class TestCounty(TestCase):
 
+    fixtures = ['organizations']
+
     def test_county_init(self):
         county = models.County(slug="yolo", description="Yolo County")
         self.assertEqual(county.slug, "yolo")
         self.assertEqual(county.description, "Yolo County")
 
-    def test_get_receiving_agency(self):
+    def test_get_receiving_agency_with_no_criteria(self):
         expected_matches = (
             (constants.Counties.SAN_FRANCISCO, "San Francisco Public Defender"),
             (constants.Counties.CONTRA_COSTA, "Contra Costa Public Defender"))
@@ -392,6 +394,33 @@ class TestCounty(TestCase):
             county = counties.filter(slug=county_slug).first()
             organization = county.get_receiving_agency()
             self.assertEqual(organization.name, agency_name)
+
+    def test_get_receiving_agency_alameda_eligible_for_apd(self):
+        alameda = models.County.objects.get(slug=constants.Counties.ALAMEDA)
+        eligible_for_apd = dict(monthly_income=2999, owns_home=False)
+        submission = Mock(answers=eligible_for_apd)
+        result = alameda.get_receiving_agency(submission)
+        alameda_pubdef = auth_models.Organization.objects.get(
+            slug=constants.Organizations.ALAMEDA_PUBDEF)
+        self.assertEqual(result, alameda_pubdef)
+
+    def test_get_receiving_agency_high_income_alameda_gets_ebclc(self):
+        alameda = models.County.objects.get(slug=constants.Counties.ALAMEDA)
+        ebclc_high_income = dict(monthly_income=3000, owns_home=False)
+        submission = Mock(answers=ebclc_high_income)
+        result = alameda.get_receiving_agency(submission)
+        ebclc = auth_models.Organization.objects.get(
+            slug=constants.Organizations.EBCLC)
+        self.assertEqual(result, ebclc)
+
+    def test_get_receiving_agency_owns_home_alameda_gets_ebclc(self):
+        alameda = models.County.objects.get(slug=constants.Counties.ALAMEDA)
+        ebclc_owns_home = dict(monthly_income=2999, owns_home=True)
+        submission = Mock(answers=ebclc_owns_home)
+        result = alameda.get_receiving_agency(submission)
+        ebclc = auth_models.Organization.objects.get(
+            slug=constants.Organizations.EBCLC)
+        self.assertEqual(result, ebclc)
 
 
 class TestApplicationBundle(TestCase):
