@@ -6,7 +6,6 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils import html as html_utils
 
 from intake.tests import mock
-from intake.tests.test_models import TestModels
 from intake import models, views, constants
 from formation import fields, forms
 
@@ -20,7 +19,7 @@ class IntakeDataTestCase(AuthIntegrationTestCase):
         'last_name',
         'phone_number',
         'email',
-        'monthly_income'
+        'monthly_expenses'
     ]
 
     @classmethod
@@ -465,7 +464,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         lookup = {
             key: answers[key]
             for key in [
-                'email', 'phone_number', 'monthly_income', 'monthly_expenses']}
+                'email', 'phone_number', 'monthly_expenses']}
 
         submission = models.FormSubmission.objects.filter(
             answers__contains=lookup).first()
@@ -533,7 +532,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         lookup = {
             key: answers[key]
             for key in [
-                'email', 'phone_number', 'monthly_income']}
+                'email', 'phone_number', 'first_name']}
 
         submission = models.FormSubmission.objects.filter(
             answers__contains=lookup).first()

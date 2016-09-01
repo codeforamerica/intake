@@ -33,11 +33,11 @@ section.content.application_form {
 	input {
 		font-weight: 400; }
 	input[type="text"], input[type="email"], input[type="password"] { 
-		display: block; width: 100%;
+		display: inline-block; width: 100%;
 		font-size: 1.25em;
 		padding: .25em .5em; }
 	input[type="number"] {
-		display: block;
+		display: inline-block;
 		font-size: 1.25em;
 		padding: .25em .5em; }
 	input[type="checkbox"] + span.field-display_text {
@@ -118,4 +118,27 @@ button[type="submit"] { .btn-primary; .btn-lg; }
 .drivers_license_number input[name="drivers_license_number"] { width: 8em; }
 .ssn input[name="ssn"] { width: 8em; }
 .phone_number input[name="phone_number"] { width: 9em; }
+.monthly_income input[type="text"], .monthly_expenses input[type="text"] {
+	width: 7em;
+}
+
+.monthly_income .field-input_wrapper {
+	&::before {
+		content: "$";
+		width: 1em;
+		font-size: 1.25em;
+		padding: .25em 0;
+		font-weight: 400;
+	}
+	&::after {
+		content: ".00 / month";
+		width: 1em;
+		font-size: 1.25em;
+		padding: .25em .5em .25em 0;
+		font-weight: 400;
+	}
+	input {
+		text-align: right;
+	}
+}
 

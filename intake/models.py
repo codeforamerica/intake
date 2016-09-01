@@ -44,6 +44,13 @@ class County(models.Model):
     name = models.TextField()
     description = models.TextField()
 
+    def should_go_to_alameda_pub_def(self, submission):
+        """Checks whether or not a submission should go
+        to the alameda public defender.
+        """
+        # under 3,000/month income
+        # doesn't own a home
+
     def get_receiving_agency(self, submission=None):
         """Returns the appropriate receiving agency
         for this county. Currently there is only one per county,

@@ -1022,6 +1022,7 @@ a:focus {
   text-decoration: underline;
 }
 a:focus {
+  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -2394,6 +2395,7 @@ select[size] {
 input[type="file"]:focus,
 input[type="radio"]:focus,
 input[type="checkbox"]:focus {
+  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -2884,6 +2886,7 @@ select[multiple].input-lg {
 .btn.focus,
 .btn:active.focus,
 .btn.active.focus {
+  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -3624,13 +3627,13 @@ section.content.application_form {
 .field input[type="text"],
 .field input[type="email"],
 .field input[type="password"] {
-  display: block;
+  display: inline-block;
   width: 100%;
   font-size: 1.25em;
   padding: .25em .5em;
 }
 .field input[type="number"] {
-  display: block;
+  display: inline-block;
   font-size: 1.25em;
   padding: .25em .5em;
 }
@@ -3814,6 +3817,27 @@ button[type="submit"] .badge {
 }
 .phone_number input[name="phone_number"] {
   width: 9em;
+}
+.monthly_income input[type="text"],
+.monthly_expenses input[type="text"] {
+  width: 7em;
+}
+.monthly_income .field-input_wrapper::before {
+  content: "$";
+  width: 1em;
+  font-size: 1.25em;
+  padding: .25em 0;
+  font-weight: 400;
+}
+.monthly_income .field-input_wrapper::after {
+  content: ".00 / month";
+  width: 1em;
+  font-size: 1.25em;
+  padding: .25em .5em .25em 0;
+  font-weight: 400;
+}
+.monthly_income .field-input_wrapper input {
+  text-align: right;
 }
 h1.bundle-count {
   font-size: 1.5em;
