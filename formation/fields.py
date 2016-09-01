@@ -302,9 +302,33 @@ class CurrentlyEmployed(YesNoField):
     display_label = "Is employed"
 
 
+class IsReasonableMonthsWages:
+    amount_warning = _("Are you sure {} is the right amount per month ?")
+
+    def __init__(self, bottom, top, zero_okay=True):
+        self.interval = (bottom, top)
+        self.zero_okay = zero_okay
+
+    def set_context(self, field):
+        self.field = field
+
+    def __call__(self, value):
+        bottom, top = self.interval
+        if self.zero_okay and value == 0:
+            return
+        if not (bottom < value < top):
+            self.field.add_warning(
+                self.amount_warning.format(
+                    self.field.get_display_value())
+                )
+
+
 class MonthlyIncome(WholeDollarField):
     context_key = "monthly_income"
     label = _("What is your monthly income?")
+    validators = [
+        IsReasonableMonthsWages(10, 10000),
+    ]
 
 
 class IncomeSource(CharField):

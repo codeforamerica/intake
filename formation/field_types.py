@@ -3,7 +3,7 @@ from formation.field_base import Field
 from formation.base import UNSET
 from formation import exceptions, validators
 from django.utils.translation import ugettext_lazy as _
-from django.utils.encoding import force_text
+from django.contrib.humanize.templatetags.humanize import intcomma
 from django.utils.safestring import mark_safe
 from django.utils.html import conditional_escape
 from project.jinja2 import oxford_comma
@@ -51,8 +51,8 @@ class CharField(Field):
 
 
 class WholeDollarField(CharField):
+    template_name = "formation/whole_dollar_input.jinja"
     empty_value = None
-    default_display_format = ""
     # https://regex101.com/r/dP5wX1/1
     dollars_pattern = re.compile(r"(?P<dollars>[\d,]+)(?P<cents>[\.]\d\d?)?")
     # https://regex101.com/r/iM0xY3/1
@@ -79,6 +79,17 @@ class WholeDollarField(CharField):
                 if special_zero:
                     value = 0
         return value
+
+    def get_display_value(self):
+        """should return $100.00
+        """
+        value = self.get_current_value()
+        if value is None:
+            return ''
+        return "${}.00".format(intcomma(value))
+
+    def get_current_value(self):
+        return Field.get_current_value(self)
 
 
 class DateTimeField(CharField):

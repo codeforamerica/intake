@@ -96,6 +96,13 @@ class TestCharField(PatchTranslationTestCase):
         self.assertEqual(field.get_current_value(), "\n \t\r")
 
 
+def get_validated_monthly_income_field_with(input_value):
+    data = {'monthly_income': input_value}
+    field = fields.MonthlyIncome(data)
+    field.is_valid()
+    return field
+
+
 class TestWholeDollarField(PatchTranslationTestCase):
 
     def test_parse_monthly_income(self):
@@ -105,6 +112,36 @@ class TestWholeDollarField(PatchTranslationTestCase):
             field = fields.MonthlyIncome(data)
             field.is_valid()
             self.assertEqual(field.parsed_data, expected_result)
+
+    def test_comma_display(self):
+        """WholeDollarField.get_display_value() 1000 -> $1,000.00
+        """
+        field = get_validated_monthly_income_field_with(1000)
+        self.assertEqual(field.get_display_value(), "$1,000.00")
+
+    def test_simple_display(self):
+        """WholeDollarField.get_display_value() 20 -> $20.00
+        """
+        field = get_validated_monthly_income_field_with(20)
+        self.assertEqual(field.get_display_value(), "$20.00")
+
+    def test_negative_display(self):
+        """WholeDollarField.get_display_value() -20 -> -$20.00
+        """
+        field = get_validated_monthly_income_field_with(-20)
+        self.assertEqual(field.get_display_value(), "$-20.00")
+
+    def test_get_current_value_int_if_not_empty(self):
+        """WholeDollarField.get_current_value() returns int
+        """
+        field = get_validated_monthly_income_field_with(5)
+        self.assertEqual(type(field.get_current_value()), int)
+
+    def test_get_current_value_none_if_empty(self):
+        """WholeDollarField.get_current_value() None if empty
+        """
+        field = fields.MonthlyIncome()
+        self.assertTrue(field.get_current_value() is None)
 
 
 class TestDateTimeField(PatchTranslationTestCase):
