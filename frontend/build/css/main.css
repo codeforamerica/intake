@@ -3830,7 +3830,7 @@ button[type="submit"] .badge {
   font-weight: 400;
 }
 .monthly_income .field-input_wrapper::after {
-  content: ".00";
+  content: ".00 / month";
   width: 1em;
   font-size: 1.25em;
   padding: .25em .5em .25em 0;

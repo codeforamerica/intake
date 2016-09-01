@@ -57,7 +57,8 @@ class WholeDollarField(CharField):
     # https://regex101.com/r/iM0xY3/1
     special_zero_pattern = re.compile(r"n\/a|no income|none",
                                       flags=re.IGNORECASE)
-    parse_error_message = _("'{}' does not look like a dollar amount")
+    parse_error_message = _("You entered '{}', which "
+                            "doesn't look like a dollar amount")
 
     def parse(self, raw_value):
         value = self.empty_value
@@ -72,13 +73,14 @@ class WholeDollarField(CharField):
         if raw_value:
             # does not check for multiple separate dollar amounts
             possible_amount = re.search(self.dollars_pattern, raw_value)
+            special_zero = re.search(self.special_zero_pattern, raw_value)
             if possible_amount:
                 dollars = possible_amount.group('dollars')
                 value = int(dollars.replace(",", ""))
+            elif special_zero:
+                value = 0
             else:
-                special_zero = re.search(self.special_zero_pattern, raw_value)
-                if special_zero:
-                    value = 0
+                self.add_error(self.parse_error_message.format(raw_value))
         return value
 
     def get_display_value(self):
