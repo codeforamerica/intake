@@ -70,7 +70,7 @@ class GetFormSessionDataMixin:
     def get_counties(self):
         session_data = self.get_session_data()
         county_slugs = session_data.getlist('counties')
-        return models.County.objects.filter(slug__in=county_slugs)
+        return models.County.objects.filter(slug__in=county_slugs).all()
 
     def get_county_context(self):
         counties = self.get_counties()
@@ -153,17 +153,22 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
         """
         submission = models.FormSubmission(answers=form.cleaned_data)
         submission.save()
-        submission.counties = self.get_counties()
+        counties = self.get_counties()
+        submission.counties = counties
+        orgs = [
+            county.get_receiving_agency(submission)
+            for county in counties]
+        submission.organizations = orgs
+        # TODO: check for cerrect org in view tests
         number = models.FormSubmission.objects.count()
+        # TODO: say which orgs this is going to in notification
         notifications.slack_new_submission.send(
             submission=submission, request=self.request,
             submission_count=number)
-        counties = submission.counties.values_list('pk', flat=True)
         fillable_pdfs = models.FillablePDF.objects.filter(
-            organization__county__in=counties).all()
-
+            organization__in=orgs).all()
         for fillable_pdf in fillable_pdfs:
-            filled_pdf = fillable_pdf.fill_for_submission(submission)
+            fillable_pdf.fill_for_submission(submission)
         self.create_confirmations_for_user(submission)
 
     def form_valid(self, form):

@@ -75,6 +75,7 @@ class IntakeDataTestCase(AuthIntegrationTestCase):
 
 class TestViews(IntakeDataTestCase):
 
+
     def setUp(self):
         super().setUp()
         self.session = self.client.session
@@ -427,15 +428,19 @@ class TestSelectCountyView(AuthIntegrationTestCase):
 
 class TestMultiCountyApplication(AuthIntegrationTestCase):
 
+    fixtures = ['organizations']
+
     @patch('intake.views.models.FormSubmission.send_confirmation_notifications')
     @patch('intake.views.notifications.slack_new_submission.send')
     def test_can_apply_to_contra_costa_alone(self, slack, send_confirmation):
         self.be_anonymous()
         contracosta = constants.Counties.CONTRA_COSTA
+        cc_pubdef = constants.Organizations.COCO_PUBDEF
         answers = mock.fake.contra_costa_county_form_answers()
 
         county_fields = forms.ContraCostaForm.fields
-        other_county_fields = forms.SanFranciscoCountyForm.fields | forms.OtherCountyForm.fields
+        other_county_fields = \
+            forms.SanFranciscoCountyForm.fields | forms.OtherCountyForm.fields
         county_specific_fields = county_fields - other_county_fields
         county_specific_field_names = [
             Field.context_key for Field in county_specific_fields]
@@ -470,6 +475,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
             answers__contains=lookup).first()
         county_slugs = [county.slug for county in submission.counties.all()]
         self.assertListEqual(county_slugs, [contracosta])
+        org_slugs = [org.slug for org in submission.organizations.all()]
+        self.assertListEqual(org_slugs, [cc_pubdef])
 
     @patch(
         'intake.views.models.FormSubmission.send_confirmation_notifications')
@@ -513,7 +520,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
             **answers)
         self.assertRedirects(result, reverse('intake-thanks'))
 
-    @patch('intake.views.models.FormSubmission.send_confirmation_notifications')
+    @patch(
+        'intake.views.models.FormSubmission.send_confirmation_notifications')
     @patch('intake.views.notifications.slack_new_submission.send')
     def test_can_apply_to_alameda_alone(self, slack, send_confirmation):
         self.be_anonymous()
@@ -538,6 +546,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
             answers__contains=lookup).first()
         county_slugs = [county.slug for county in submission.counties.all()]
         self.assertListEqual(county_slugs, [alameda])
+        self.assertEqual(submission.organizations.count(), 1)
+        self.assertEqual(submission.organizations.first().county.slug, alameda)
         filled_pdf_count = models.FilledPDF.objects.count()
         self.assertEqual(filled_pdf_count, 0)
 

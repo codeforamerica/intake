@@ -44,13 +44,6 @@ class County(models.Model):
     name = models.TextField()
     description = models.TextField()
 
-    def should_go_to_alameda_pub_def(self, submission):
-        """Checks whether or not a submission should go
-        to the alameda public defender.
-        """
-        # under 3,000/month income
-        # doesn't own a home
-
     def get_receiving_agency(self, submission=None):
         """Returns the appropriate receiving agency
         for this county. Currently there is only one per county,
@@ -259,8 +252,7 @@ class FormSubmission(models.Model):
             staff_name=random.choice(constants.STAFF_NAME_CHOICES),
             name=self.answers['first_name'],
             county_names=county_names,
-            organizations=[county.get_receiving_agency()
-                           for county in counties],
+            organizations=self.organizations.all(),
             next_steps=next_steps)
         notify_map = {
             'email': notifications.email_confirmation,
