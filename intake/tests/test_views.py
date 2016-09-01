@@ -723,6 +723,11 @@ class TestApplicationIndex(IntakeDataTestCase):
         response = self.client.get(reverse('intake-app_index'))
         self.assertContainsSubmissions(response, self.cc_submissions)
 
+    def test_org_user_sees_name_of_org_in_index(self):
+        user = self.be_ccpubdef_user()
+        response = self.client.get(reverse('intake-app_index'))
+        self.assertContains(response, user.profile.organization.name)
+
 
 class TestStats(IntakeDataTestCase):
 

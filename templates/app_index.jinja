@@ -4,7 +4,12 @@
 
 <div class="container">
   <div class="row">
+    {%- if request.user.is_staff %}
     <h1>All Clean Slate Applications</h1>
+    {%- else %}
+    <h1>All Clean Slate Applications to {{ request.user.profile.organization.name }}</h1>
+    {%- endif %}
+    }
   </div>
   <div class="row">
     <table class="table applications_list">
