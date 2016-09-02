@@ -38,3 +38,7 @@ deploy.prod:
 	heroku run --app cmr-prod python manage.py migrate
 	heroku run --app cmr-prod python manage.py loaddata organizations
 
+
+db.pull.demo:
+	dropdb intake --if-exists
+	heroku pg:pull --app cmr-demo DATABASE_URL intake

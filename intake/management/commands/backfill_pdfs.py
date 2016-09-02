@@ -16,7 +16,9 @@ class Command(BaseCommand):
             for fillable in models.FillablePDF.objects.filter(
                     organization__county__in=counties).all():
                 pdf_bytes = fillable.fill(submission)
-                pdf_file = SimpleUploadedFile('filled.pdf', pdf_bytes,
+                filename = 'filled_{0:0>4}-{1:0>6}.pdf'.format(
+                    fillable.id, submission.id)
+                pdf_file = SimpleUploadedFile(filename, pdf_bytes,
                                               content_type='application/pdf')
                 filled_pdf = models.FilledPDF(
                     pdf=pdf_file,
@@ -26,5 +28,5 @@ class Command(BaseCommand):
                 filled_pdf.save()
                 self.stdout.write(
                     "filled pdf {} for {}".format(
-                        fillable.name, submission)
+                        filename, submission)
                     )
