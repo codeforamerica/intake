@@ -2,36 +2,36 @@ from django.test import TestCase
 from unittest.mock import patch
 from intake.tests import mock
 from intake import models, submission_bundler
+from user_accounts import models as auth_models
 
 
 class BundlerTestCase(TestCase):
 
+    fixtures = ['organizations']
+
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
-        counties = models.County.objects.order_by('slug').all()
-        alameda = counties[0]
-        contra_costa = counties[1]
-        san_francisco = counties[2]
+        orgs = auth_models.Organization.objects.all()
+        for org in orgs:
+            setattr(cls, org.slug, org)
         # 6 submissions
         # 3 sf only
         # 2 cc only
         # 1 to sf & cc both
-        county_sets = [
-            [san_francisco],
-            [san_francisco],
-            [san_francisco],
-            [san_francisco, contra_costa],
-            [contra_costa],
-            [contra_costa]]
-        cls.sf = san_francisco
-        cls.cc = contra_costa
-        cls.alameda = alameda
+        org_sets = [
+            [cls.sf_pubdef],
+            [cls.sf_pubdef],
+            [cls.sf_pubdef],
+            [cls.sf_pubdef, cls.cc_pubdef],
+            [cls.cc_pubdef],
+            [cls.cc_pubdef]]
         cls.submissions = []
-        for county_set in county_sets:
+        for org_set in org_sets:
             cls.submissions.append(
-                mock.FormSubmissionFactory.create(
-                    counties=county_set))
+                models.FormSubmission.create_for_organizations(
+                    organizations=org_set, answers={}
+                    ))
 
     def setUp(self):
         self.get_unopened_patcher = patch('.'.join([
@@ -95,9 +95,9 @@ class TestSubmissionBundler(BundlerTestCase):
         bundler = submission_bundler.bundle_and_notify()
         self.assertEqual(len(bundler.queryset), 6)
         for org_bundle in bundler.organization_bundle_map.values():
-            if org_bundle.organization.county == self.sf:
+            if org_bundle.organization == self.sf_pubdef:
                 self.assertEqual(
                     len(org_bundle.submissions), 4)
-            elif org_bundle.organization.county == self.cc:
+            elif org_bundle.organization == self.cc_pubdef:
                 self.assertEqual(
                     len(org_bundle.submissions), 3)

@@ -198,7 +198,7 @@ class FormSubmission(models.Model):
             if key in preferences]
 
     def get_counties(self):
-        county_ids = self.organizations.values_list('county_id', flat=True)
+        county_ids = self.organizations.values('county_id')
         return County.objects.filter(pk__in=county_ids)
 
     def get_nice_counties(self):
@@ -220,7 +220,9 @@ class FormSubmission(models.Model):
                 ])
         init_data = dict(
             date_received=self.get_local_date_received(),
-            counties=list(self.counties.all().values_list('slug', flat=True))
+            counties=list(self.get_counties().values_list('slug', flat=True)),
+            organizations=list(
+                self.organizations.values_list('name', flat=True))
         )
         init_data.update(self.answers)
         display_form = DisplayFormClass(init_data)

@@ -157,7 +157,7 @@ class TestViews(IntakeDataTestCase):
         self.assertNotEqual(filled_pdf.pdf.size, 0)
         submission = models.FormSubmission.objects.order_by('-pk').first()
         self.assertEqual(filled_pdf.submission, submission)
-        organization = submission.counties.first().organizations.first()
+        organization = submission.organizations.first()
         self.assertEqual(filled_pdf.original_pdf, organization.pdfs.first())
         self.assertContains(thanks_page, "Thank")
         self.assert_called_once_with_types(
@@ -475,7 +475,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
 
         submission = models.FormSubmission.objects.filter(
             answers__contains=lookup).first()
-        county_slugs = [county.slug for county in submission.counties.all()]
+        county_slugs = [county.slug for county in submission.get_counties()]
         self.assertListEqual(county_slugs, [contracosta])
         org_slugs = [org.slug for org in submission.organizations.all()]
         self.assertListEqual(org_slugs, [cc_pubdef])
@@ -546,7 +546,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
 
         submission = models.FormSubmission.objects.filter(
             answers__contains=lookup).first()
-        county_slugs = [county.slug for county in submission.counties.all()]
+        county_slugs = [county.slug for county in submission.get_counties()]
         self.assertListEqual(county_slugs, [alameda])
         self.assertEqual(submission.organizations.count(), 1)
         self.assertEqual(submission.organizations.first().county.slug, alameda)

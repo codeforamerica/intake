@@ -75,10 +75,9 @@ class SubmissionBundler:
     def __init__(self):
         self.queryset = intake_models.FormSubmission.get_unopened_apps()\
                             .prefetch_related(
-                                'counties',
-                                'counties__organizations',
-                                'counties__organizations__profiles',
-                                'counties__organizations__profiles__user'
+                                'organizations',
+                                'organizations__profiles',
+                                'organizations__profiles__user'
                             ).all()
         self.organization_bundle_map = {}
 
