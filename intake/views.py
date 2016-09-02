@@ -293,11 +293,11 @@ class FilledPDF(ApplicationDetail):
     """
 
     def get(self, request, submission_id):
-        submissions = list(models.FormSubmission.get_permitted_submissions(
-            request.user, [submission_id]))
-        if not submissions:
+        submission = get_object_or_404(
+            models.FormSubmission, pk=int(submission_id))
+        if not submission.organizations.filter(
+            pk=request.user.profile.organization.id).count():
             return self.not_allowed(request)
-        submission = submissions[0]
         pdf = submission.filled_pdfs.first()
         if not pdf:
             no_pdf_str = \

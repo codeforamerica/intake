@@ -9,17 +9,16 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # get submissions that don't have any filled pdfs
-        for submission in models.FormSubmission.objects.filter(
-                filled_pdfs=None):
+        for submission in models.FormSubmission.objects.all():
             counties = submission.counties.values_list('pk', flat=True)
-            for pdf in models.FillablePDF.objects.filter(
+            for fillable in models.FillablePDF.objects.filter(
                     organization__county__in=counties).all():
-                pdf_bytes = pdf.fill(submission)
+                pdf_bytes = fillable.fill(submission)
                 pdf_file = SimpleUploadedFile('filled.pdf', pdf_bytes,
                                               content_type='application/pdf')
                 filled_pdf = models.FilledPDF(
                     pdf=pdf_file,
-                    original_pdf=pdf,
+                    original_pdf=fillable,
                     submission=submission,
                 )
                 filled_pdf.save()
