@@ -267,7 +267,6 @@ class TestViews(IntakeDataTestCase):
                                       kwargs=dict(
                                           submission_id=submission.id
                                       )))
-        self.assertTrue(len(pdf.content) > 69000)
         self.assertEqual(type(pdf.content), bytes)
         self.assert_called_once_with_types(
             slack_viewed, submissions='list', user='User')

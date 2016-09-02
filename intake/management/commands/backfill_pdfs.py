@@ -9,6 +9,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # get submissions that don't have any filled pdfs
+        results = models.FilledPDF.objects.all().delete()
+        self.stdout.write(str(results))
         for submission in models.FormSubmission.objects.all():
             counties = submission.counties.values_list('pk', flat=True)
             for fillable in models.FillablePDF.objects.filter(
@@ -22,3 +24,7 @@ class Command(BaseCommand):
                     submission=submission,
                 )
                 filled_pdf.save()
+                self.stdout.write(
+                    "filled pdf {} for {}".format(
+                        fillable.name, submission)
+                    )
