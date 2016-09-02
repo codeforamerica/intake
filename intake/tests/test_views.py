@@ -7,6 +7,7 @@ from django.utils import html as html_utils
 
 from intake.tests import mock
 from intake import models, views, constants
+from user_accounts import models as auth_models
 from formation import fields, forms
 
 from project.jinja2 import url_with_ids
@@ -22,6 +23,8 @@ class IntakeDataTestCase(AuthIntegrationTestCase):
         'monthly_expenses'
     ]
 
+    fixtures = ['organizations']
+
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
@@ -30,6 +33,9 @@ class IntakeDataTestCase(AuthIntegrationTestCase):
 
     @classmethod
     def have_some_submissions(cls):
+        organizations = auth_models.Organization.objects.all()
+        for org in organizations:
+            setattr(cls, org.slug, org)
         counties = models.County.objects.all()
         for county in counties:
             if county.slug == constants.Counties.SAN_FRANCISCO:
@@ -38,16 +44,13 @@ class IntakeDataTestCase(AuthIntegrationTestCase):
                 cls.cccounty = county
         cls.sf_submissions = list(
             mock.FormSubmissionFactory.create_batch(
-                2, counties=[
-                    cls.sfcounty]))
+                2, organizations=[cls.sf_pubdef]))
         cls.cc_submissions = list(
             mock.FormSubmissionFactory.create_batch(
-                2, counties=[
-                    cls.cccounty]))
+                2, organizations=[cls.cc_pubdef]))
         cls.combo_submissions = list(
             mock.FormSubmissionFactory.create_batch(
-                2, counties=[
-                    cls.sfcounty, cls.cccounty]))
+                2, organizations=[cls.sf_pubdef, cls.cc_pubdef]))
         cls.submissions = [
             *cls.sf_submissions,
             *cls.cc_submissions,

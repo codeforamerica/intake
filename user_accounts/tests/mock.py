@@ -1,4 +1,5 @@
 import factory
+import random
 from faker import Factory as FakerFactory
 from pytz import timezone
 from user_accounts import models
@@ -32,11 +33,32 @@ def fake_user_data(**kwargs):
     return data
 
 
-class OrganizationFactory(factory.DjangoModelFactory):
-    name = factory.LazyFunction(fake.company)
+class PrepopulatedModelFactory:
 
-    class Meta:
-        model = models.Organization
+    def __init__(self, model):
+        self.model = model
+        self.row_count = None
+
+    def ensure_county_count(self):
+        self.objects = list(self.model.objects.all())
+        self.row_count = len(self.objects)
+        if not self.row_count:
+            raise Exception(
+                "`{}` table is not yet populated.".format(self.model.__name__))
+
+    def choice(self):
+        self.ensure_county_count()
+        return random.choice(self.objects)
+
+    def sample(self, size=None, zero_is_okay=False):
+        self.ensure_county_count()
+        if not size:
+            lower_limit = 0 if zero_is_okay else 1
+            size = random.randint(lower_limit, self.row_count)
+        return random.sample(self.objects, size)
+
+OrganizationFactory = PrepopulatedModelFactory(models.Organization)
+
 
 
 def create_user(**attributes):

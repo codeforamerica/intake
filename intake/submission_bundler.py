@@ -95,8 +95,7 @@ class SubmissionBundler:
         appropriate OrganizationBundle
         """
         for submission in self.queryset:
-            for county in submission.counties.all():
-                receiving_org = county.get_receiving_agency()
+            for receiving_org in submission.organizations.all():
                 bundle = self.get_org_referral(receiving_org)
                 bundle.add_submission(submission)
 

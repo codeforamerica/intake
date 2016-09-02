@@ -1,17 +1,15 @@
 import uuid
 import os
 import factory
-import random
 from pytz import timezone
 from faker import Factory as FakerFactory
 from django.core.files import File
 from django.core.management import call_command
-from django.db.utils import IntegrityError
 from django.conf import settings
 from django.utils.datastructures import MultiValueDict
 
 from intake import models
-from intake.management.commands import load_initial_data
+from user_accounts.tests.mock import OrganizationFactory
 from unittest.mock import Mock
 Pacific = timezone('US/Pacific')
 
@@ -98,33 +96,6 @@ def fake_typeseam_submission_dicts(uuids):
     } for uuid in uuids]
 
 
-class PrepopulatedModelFactory:
-
-    def __init__(self, model):
-        self.model = model
-        self.row_count = None
-
-    def ensure_county_count(self):
-        self.objects = list(self.model.objects.all())
-        self.row_count = len(self.objects)
-        if not self.row_count:
-            raise Exception(
-                "`{}` table is not yet populated.".format(self.model.__name__))
-
-    def choice(self):
-        self.ensure_county_count()
-        return random.choice(self.objects)
-
-    def sample(self, size=None, zero_is_okay=False):
-        self.ensure_county_count()
-        if not size:
-            lower_limit = 0 if zero_is_okay else 1
-            size = random.randint(lower_limit, self.row_count)
-        return random.sample(self.objects, size)
-
-
-CountyFactory = PrepopulatedModelFactory(models.County)
-
 
 class FormSubmissionFactory(factory.DjangoModelFactory):
     date_received = factory.LazyFunction(
@@ -136,18 +107,18 @@ class FormSubmissionFactory(factory.DjangoModelFactory):
         model = models.FormSubmission
 
     @factory.post_generation
-    def counties(self, create, extracted, **kwargs):
+    def organizations(self, create, extracted, **kwargs):
         if not create:
             return
         if extracted:
-            self.counties.add(*[
-                county.id for county in extracted
+            self.organizations.add(*[
+                organization.id for organization in extracted
             ])
 
     @classmethod
     def create(cls, *args, **kwargs):
-        if 'counties' not in kwargs:
-            kwargs['counties'] = CountyFactory.sample()
+        if 'organizations' not in kwargs:
+            kwargs['organizations'] = OrganizationFactory.sample()
         return super().create(*args, **kwargs)
 
 
