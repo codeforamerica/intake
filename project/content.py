@@ -33,13 +33,6 @@ class constants:
         "For example, if you apply in San Francisco and Contra Costa County, you "
         "will hear from both San Francisco Public Defender and Contra Costa Public "
         "Defender separately.")
-
-    if SCOPE_TO_LIVE_COUNTIES:
-        gov_service_description_1 = str(
-            "Applications to Clear My Record will go to the San Francisco "
-            "Public Defender’s Office. Once they receive your application, "
-            "they will send you a letter with next steps."
-            )
         
     journey_headline = "Apply to Clear My Record in 3 easy steps:"
     step_1_headline = "1. Apply online"
