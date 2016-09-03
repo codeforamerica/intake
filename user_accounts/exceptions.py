@@ -3,6 +3,7 @@ class MissingInvitationError(Exception):
     '''
     pass
 
+
 class UnacceptedInviteError(Exception):
     '''The user has not yet accepted this invite
     '''

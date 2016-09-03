@@ -151,7 +151,7 @@
               <span class="partner_list-partners">{{
                 linkify(
                   oxford_comma(
-                    county.organizations.all().values_list(
+                    county.organizations.order_by('name').values_list(
                       'name', flat=True
                     )))
               }}</span>

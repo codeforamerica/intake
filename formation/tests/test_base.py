@@ -26,7 +26,8 @@ class TestBindParseValidate(TestCase):
         self.assertDictEqual(bound.errors, {})
 
     @patch('formation.base.BindParseValidate.parse_and_validate')
-    def test_doesnt_run_parse_and_validate_until_is_valid_is_called(self, parse_and_validate):
+    def test_doesnt_run_parse_and_validate_until_is_valid_is_called(
+            self, parse_and_validate):
         input_data = {}
         # set input during init
         bound = base.BindParseValidate(input_data)
@@ -106,7 +107,7 @@ class TestBindParseValidate(TestCase):
         error_msg = 'Enter a valid email address.'
         form = mock.form_for_validator(
             EmailValidator(error_msg), mock.bad_email
-            )
+        )
         self.assertEqual(form.is_valid(), False)
         expected_errors = {
             base.DEFAULT_CONTEXT_KEY: [
@@ -120,5 +121,3 @@ class TestBindParseValidate(TestCase):
             context_key = "bar"
         unbound = Scoped(prefix="foo")
         self.assertEqual(unbound.context_key, "foobar")
-
-

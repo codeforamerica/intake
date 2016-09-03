@@ -11,7 +11,7 @@ from user_accounts.forms import InviteForm
 from user_accounts.models import (
     Organization, Invitation, UserProfile,
     get_user_display
-    )
+)
 
 from user_accounts.tests import mock, clients
 
@@ -37,16 +37,16 @@ class AuthIntegrationTestCase(TestCase):
     send_invite_view = 'invitations:send-invite'
 
     example_superuser = dict(
-            username="super",
-            email="super@codeforamerica.org",
-            password=mock.fake_password
-        )
+        username="super",
+        email="super@codeforamerica.org",
+        password=mock.fake_password
+    )
 
     example_user = dict(
         email="Andrew.Strawberry@legalaid.org",
         password="5up3r S3cr3tZ!",
         name="Andrew Strawberry"
-        )
+    )
 
     @classmethod
     def setUpTestData(cls):
@@ -59,9 +59,9 @@ class AuthIntegrationTestCase(TestCase):
             elif org.name == "Code for America":
                 cls.cfa = org
         cls.superuser = mock.fake_superuser(
-            **cls.example_superuser )
+            **cls.example_superuser)
         UserProfile.objects.create(user=cls.superuser,
-            organization=cls.cfa)
+                                   organization=cls.cfa)
         cls.invitations = []
         for org in cls.orgs:
             for i in range(2):  # 2 per org
@@ -112,8 +112,6 @@ class AuthIntegrationTestCase(TestCase):
         return link
 
 
-
-
 class TestUserAccounts(AuthIntegrationTestCase):
 
     def test_invite_form_has_the_right_fields(self):
@@ -130,13 +128,13 @@ class TestUserAccounts(AuthIntegrationTestCase):
         form = InviteForm(dict(
             email="someone@example.com",
             organization=self.orgs[0].id
-            ))
+        ))
         self.assertTrue(form.is_valid())
         invite = form.save()
         qset = Invitation.objects.filter(
             email="someone@example.com",
             organization=self.orgs[0]
-            )
+        )
         self.assertEqual(qset.first(), invite)
 
     def test_uninvited_signups_are_redirected_to_home(self):
@@ -144,7 +142,7 @@ class TestUserAccounts(AuthIntegrationTestCase):
         # try to go to signup page
         response = self.client.get(
             reverse(self.signup_view)
-            )
+        )
         # get redirected to splash page
         self.assertRedirects(response, reverse('intake-home'))
 
@@ -153,10 +151,11 @@ class TestUserAccounts(AuthIntegrationTestCase):
         # add an organization
         response = self.client.fill_form(
             reverse('admin:user_accounts_organization_add'),
-            name='Magical Lawyers Guild'
-            )
+            name='Magical Lawyers Guild',
+            slug="mlg",
+        )
         self.assertRedirects(response,
-            reverse('admin:user_accounts_organization_changelist'))
+                             reverse('admin:user_accounts_organization_changelist'))
         result = self.client.get(response.url)
         self.assertContains(result, 'Magical Lawyers Guild')
 
@@ -167,7 +166,7 @@ class TestUserAccounts(AuthIntegrationTestCase):
             email=self.example_user['email'],
             organization=self.orgs[0].id,
             follow=True,
-            )
+        )
         last_email = mail.outbox[-1]
         self.assertEqual(self.example_user['email'], last_email.to[0])
         self.assertIn(
@@ -181,7 +180,7 @@ class TestUserAccounts(AuthIntegrationTestCase):
             email=self.example_user['email'],
             organization=self.orgs[0].id,
             follow=True,
-            )
+        )
         # be anonymous
         self.be_anonymous()
         last_email = mail.outbox[-1]
@@ -191,27 +190,31 @@ class TestUserAccounts(AuthIntegrationTestCase):
         # should go to /accounts/signup/
         self.assertRedirects(response, reverse(self.signup_view))
         response = self.client.fill_form(response.url,
-            email=self.example_user['email'],
-            password1=self.example_user['password']
-            )
+                                         email=self.example_user['email'],
+                                         password1=self.example_user[
+                                             'password']
+                                         )
         self.assertRedirects(response, reverse("user_accounts-profile"))
         # make sure the user exists and that they are authenticated
         users = User.objects.filter(email=self.example_user['email'])
         self.assertEqual(len(users), 1)
         self.assertTrue(users[0].is_authenticated)
-        self.assertEqual(get_user_display(users[0]), self.example_user['email'])
+        self.assertEqual(
+            get_user_display(
+                users[0]),
+            self.example_user['email'])
 
     def test_user_can_add_info_in_profile_view(self):
         user = self.be_sfpubdef_user()
         # find link to profile
         response = self.client.get(reverse("user_accounts-profile"))
-        self.assertContains(response, 
-            html_utils.escape(user.profile.name))
+        self.assertContains(response,
+                            html_utils.escape(user.profile.name))
         result = self.client.fill_form(
             reverse("user_accounts-profile"),
             name=self.example_user['name'],
             follow=True
-            )
+        )
         self.assertContains(result, self.example_user['name'])
         users = User.objects.filter(profile__name=self.example_user['name'])
         self.assertEqual(len(users), 1)
@@ -223,7 +226,7 @@ class TestUserAccounts(AuthIntegrationTestCase):
             reverse(self.login_view),
             login=self.users[0].email,
             password='incorrect'
-            )
+        )
         # should be storing the login email for the reset page
         session = response.wsgi_request.session
         self.assertEqual(
@@ -231,11 +234,11 @@ class TestUserAccounts(AuthIntegrationTestCase):
             self.users[0].email)
         form = response.context['form']
         self.assertIn(expected_error_message,
-            form.errors['__all__'])
+                      form.errors['__all__'])
         self.assertContains(
             response,
             reverse(self.reset_password_view)
-            )
+        )
 
     def test_can_reset_password_from_login_page(self):
         self.be_anonymous()
@@ -244,10 +247,10 @@ class TestUserAccounts(AuthIntegrationTestCase):
             reverse(self.login_view),
             login=self.users[0].email,
             password='forgot'
-            )
+        )
         # find a link to reset password
         self.assertContains(wrong_password,
-            reverse(self.reset_password_view))
+                            reverse(self.reset_password_view))
         # hit "reset password"
         reset = self.client.get(
             reverse(self.reset_password_view))
@@ -256,13 +259,13 @@ class TestUserAccounts(AuthIntegrationTestCase):
         reset_sent = self.client.fill_form(
             reverse(self.reset_password_view),
             email=self.users[0].email,
-            )
+        )
         # get an email to reset password
         reset_email = mail.outbox[-1]
         self.assertEqual(
             'Password Reset for Clear My Record',
             reset_email.subject
-            )
+        )
         # follow the link in the email
         reset_link = self.get_link_from_email(reset_email)
         reset_page = self.client.get(reset_link)
@@ -272,11 +275,11 @@ class TestUserAccounts(AuthIntegrationTestCase):
         csrf = self.client.get_csrf_token(reset_page)
         new_password = "FR35H H0T s3cr3tZ!1"
         reset_done = self.client.fill_form(
-                reset_link, csrf_token=csrf,
-                password=new_password)
+            reset_link, csrf_token=csrf,
+            password=new_password)
         # we should be redirected to the profile
         self.assertRedirects(reset_done,
-            reverse("user_accounts-profile"))
+                             reverse("user_accounts-profile"))
         # make sure we are logged in
         self.assertLoggedInAs(self.users[0])
         # make sure we can login with the new password
@@ -284,7 +287,7 @@ class TestUserAccounts(AuthIntegrationTestCase):
         self.client.login(
             email=self.users[0].email,
             password=new_password
-            )
+        )
         self.assertLoggedInAs(self.users[0])
 
     def test_can_reset_password_while_logged_in(self):
@@ -294,13 +297,13 @@ class TestUserAccounts(AuthIntegrationTestCase):
             reverse("user_accounts-profile"))
         # make sure there's a link to change password
         self.assertContains(profile,
-            reverse(self.change_password_view))
+                            reverse(self.change_password_view))
         change_password = self.client.get(
             reverse(self.change_password_view))
         # make sure the change password page
         # knows who we are
         self.assertContains(change_password,
-            user.email)
+                            user.email)
         # set a new password
         new_password = "FR35H H0T s3cr3tZ!1"
         reset_done = self.client.fill_form(
@@ -308,7 +311,7 @@ class TestUserAccounts(AuthIntegrationTestCase):
             password=new_password
         )
         self.assertRedirects(reset_done,
-            reverse("user_accounts-profile"))
+                             reverse("user_accounts-profile"))
         # make sure we are logged in
         self.assertLoggedInAs(user)
         # make sure we can login with the new password
@@ -316,5 +319,5 @@ class TestUserAccounts(AuthIntegrationTestCase):
         self.client.login(
             email=user.email,
             password=new_password
-            )
+        )
         self.assertLoggedInAs(user)

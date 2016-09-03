@@ -42,7 +42,7 @@ class CustomSendInvite(SendInvite):
         invite = form.save(inviter=self.request.user)
         invite.send_invitation(self.request)
         messages.success(self.request,
-            'An email invite was sent to {}'.format(invite.email))
+                         'An email invite was sent to {}'.format(invite.email))
         return redirect(self.success_url)
 
 
@@ -64,7 +64,7 @@ class UserProfileView(FormView):
         self.get_user_and_profile()
         return {
             'name': self.profile.name
-            }
+        }
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -99,7 +99,7 @@ class PasswordResetSentView(allauth_views.PasswordResetDoneView):
 
 class PasswordResetFromKeyView(allauth_views.PasswordResetFromKeyView):
     template_name = 'user_accounts/change_password.jinja'
- 
+
     def get_form_class(self):
         return forms.SetPasswordForm
 
@@ -115,5 +115,3 @@ class PasswordChangeView(allauth_views.PasswordChangeView):
 
     def get_form_class(self):
         return forms.SetPasswordForm
-
-

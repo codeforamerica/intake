@@ -5,7 +5,7 @@ from . import views
 urlpatterns = [
     url(r'^accounts/login/$',
         views.CustomLoginView.as_view(),
-        name = 'user_accounts-login'),
+        name='user_accounts-login'),
 
     url(r'^accounts/password/reset/$',
         views.PasswordResetView.as_view(),

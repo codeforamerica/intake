@@ -5,20 +5,21 @@ from intake.forms import form_base
 from intake.forms import fields as F
 from intake.serializer_forms import Form
 
+
 class TestCombinableForm(TestCase):
     sample_full_kwargs = dict(
-            counties=['yolo', 'santacruz'],
-            fields=set([
-                F.dob,
-                F.first_name,
-                F.address
-                ]),
-            required_fields=(
-                F.first_name,
-                F.dob),
-            recommended_fields={F.address},
-            unused_kwarg='anything'
-            )
+        counties=['yolo', 'santacruz'],
+        fields=set([
+            F.dob,
+            F.first_name,
+            F.address
+        ]),
+        required_fields=(
+            F.first_name,
+            F.dob),
+        recommended_fields={F.address},
+        unused_kwarg='anything'
+    )
 
     def setUp(self):
 
@@ -32,7 +33,6 @@ class TestCombinableForm(TestCase):
             required_fields = {
                 F.address
             }
-
 
         class FormB(form_base.CombinableForm):
             counties = {'contracosta'}
@@ -67,7 +67,7 @@ class TestCombinableForm(TestCase):
         form = self.form_class_a()
         self.assertEqual(form.counties, {'sanfrancisco'})
         self.assertEqual(form.fields,
-            {F.contact_preferences, F.us_citizen, F.address})
+                         {F.contact_preferences, F.us_citizen, F.address})
         self.assertEqual(form.required_fields, {F.address})
         self.assertFalse(hasattr(form, 'recommended_fields'))
 
@@ -84,20 +84,20 @@ class TestCombinableForm(TestCase):
         # the right type with the right attributes
         self.assertEqual(type(combined), form_base.CombinableForm)
         self.assertEqual(combined.counties,
-            {'sanfrancisco', 'contracosta'})
+                         {'sanfrancisco', 'contracosta'})
         self.assertEqual(combined.fields, {
             F.first_name,
             F.contact_preferences,
             F.email,
             F.us_citizen,
             F.address
-            })
+        })
         self.assertEqual(combined.required_fields, {
             F.email, F.address
-            })
+        })
         self.assertEqual(combined.recommended_fields, {
             F.first_name
-            })
+        })
 
     def test_can_return_serializer_form_instance(self):
         # instantiate a form

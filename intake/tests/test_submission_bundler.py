@@ -1,47 +1,47 @@
 from django.test import TestCase
-from unittest.mock import patch, Mock, call
+from unittest.mock import patch
 from intake.tests import mock
 from intake import models, submission_bundler
-
-
+from user_accounts import models as auth_models
 
 
 class BundlerTestCase(TestCase):
 
+    fixtures = ['organizations']
+
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
-        counties = models.County.objects.order_by('slug').all()
-        contra_costa = counties[0]
-        san_francisco = counties[1]
+        orgs = auth_models.Organization.objects.all()
+        for org in orgs:
+            setattr(cls, org.slug, org)
         # 6 submissions
         # 3 sf only
         # 2 cc only
         # 1 to sf & cc both
-        county_sets = [
-            [san_francisco],
-            [san_francisco],
-            [san_francisco],
-            [san_francisco, contra_costa],
-            [contra_costa],
-            [contra_costa]]
-        cls.sf = san_francisco
-        cls.cc = contra_costa
+        org_sets = [
+            [cls.sf_pubdef],
+            [cls.sf_pubdef],
+            [cls.sf_pubdef],
+            [cls.sf_pubdef, cls.cc_pubdef],
+            [cls.cc_pubdef],
+            [cls.cc_pubdef]]
         cls.submissions = []
-        for county_set in county_sets:
+        for org_set in org_sets:
             cls.submissions.append(
-                mock.FormSubmissionFactory.create(
-                    counties=county_set))
-
+                models.FormSubmission.create_for_organizations(
+                    organizations=org_set, answers={}
+                    ))
 
     def setUp(self):
         self.get_unopened_patcher = patch('.'.join([
             'intake.submission_bundler',
             'intake_models.FormSubmission',
             'get_unopened_apps',
-            ]))
+        ]))
         self.log_referred_patcher = patch(
-            'intake.submission_bundler.intake_models.ApplicationLogEntry.log_referred')
+            'intake.submission_bundler.intake_models'
+            '.ApplicationLogEntry.log_referred')
         self.notifications_patcher = patch(
             'intake.submission_bundler.notifications')
 
@@ -50,24 +50,28 @@ class BundlerTestCase(TestCase):
 
     def patch_unopened(self, return_value):
         unopened = self.get_unopened_patcher.start()
-        unopened.return_value.prefetch_related.return_value.all.return_value = return_value
+        unopened.return_value.prefetch_related\
+            .return_value.all.return_value = return_value
 
     def restore_unopened(self):
         self.get_unopened_patcher.stop()
 
-    def tearDown(self): 
+    def tearDown(self):
         self.log_referred_patcher.stop()
         self.notifications_patcher.stop()
-
 
 
 class TestOrganizationBundle(BundlerTestCase):
 
     def test_bundle_unopened_apps(self):
-        bundler = submission_bundler.bundle_and_notify()
-        self.assertEqual(self.notifications.front_email_daily_app_bundle.send.call_count, 2)
-        self.assertEqual(self.notifications.slack_app_bundle_sent.send.call_count, 2)
+        submission_bundler.bundle_and_notify()
+        self.assertEqual(
+            self.notifications.front_email_daily_app_bundle.send.call_count, 2)
+        self.assertEqual(
+            self.notifications.slack_app_bundle_sent.send.call_count, 2)
         self.assertEqual(self.log_referred.call_count, 2)
+        bundles = models.ApplicationBundle.objects.all()
+        self.assertEqual(bundles.count(), 2)
 
     def test_bundle_with_no_unopened_apps(self):
         self.patch_unopened([])
@@ -76,7 +80,6 @@ class TestOrganizationBundle(BundlerTestCase):
         self.notifications.slack_app_bundle_sent.assert_not_called()
         self.log_referred.assert_not_called()
         self.restore_unopened()
-
 
 
 class TestSubmissionBundler(BundlerTestCase):
@@ -92,13 +95,9 @@ class TestSubmissionBundler(BundlerTestCase):
         bundler = submission_bundler.bundle_and_notify()
         self.assertEqual(len(bundler.queryset), 6)
         for org_bundle in bundler.organization_bundle_map.values():
-            if org_bundle.organization.county == self.sf:
+            if org_bundle.organization == self.sf_pubdef:
                 self.assertEqual(
                     len(org_bundle.submissions), 4)
-            elif org_bundle.organization.county == self.cc:
+            elif org_bundle.organization == self.cc_pubdef:
                 self.assertEqual(
                     len(org_bundle.submissions), 3)
-
-
-
-

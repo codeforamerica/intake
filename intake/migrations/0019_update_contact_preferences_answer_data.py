@@ -11,12 +11,13 @@ answer_keys = [
     'prefers_voicemail',
 ]
 
+
 def forward(apps, schema_editor):
     db_alias = schema_editor.connection.alias
     FormSubmission = apps.get_model('intake', 'FormSubmission')
     submissions = FormSubmission.objects.using(db_alias).all()
     for submission in submissions:
-        preferences = []
+        preferences = submission.answers.get('contact_preferences', [])
         for key in answer_keys:
             if key in submission.answers:
                 submission.answers.pop(key)

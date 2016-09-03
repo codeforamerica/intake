@@ -20,7 +20,7 @@ class SupplementaryDisplayForm(CombinableCountyFormSpec):
 
     fields = {
         F.DateReceived,
-        F.Counties,       
+        F.Counties,
     }
 
 
@@ -49,7 +49,6 @@ class OtherCountyForm(CombinableCountyFormSpec):
     ]
 
 
-
 class SanFranciscoCountyForm(CombinableCountyFormSpec):
     county = Counties.SAN_FRANCISCO
     fields = {
@@ -74,7 +73,8 @@ class SanFranciscoCountyForm(CombinableCountyFormSpec):
         F.CurrentlyEmployed,
         F.MonthlyIncome,
         F.MonthlyExpenses,
-        F.HowDidYouHear
+        F.HowDidYouHear,
+        F.ConsentNote,
     }
     required_fields = {
         F.FirstName,
@@ -99,6 +99,7 @@ class ContraCostaForm(CombinableCountyFormSpec):
     fields = {
         F.ContactPreferences,
         F.FirstName,
+        F.MiddleName,
         F.LastName,
         F.PhoneNumberField,
         F.EmailField,
@@ -137,6 +138,79 @@ class ContraCostaForm(CombinableCountyFormSpec):
     ]
 
 
+class AlamedaCountyForm(CombinableCountyFormSpec):
+    county = Counties.ALAMEDA
+    fields = {
+        F.ContactPreferences,
+        F.FirstName,
+        F.MiddleName,
+        F.LastName,
+        F.PreferredPronouns,
+        F.PhoneNumberField,
+        F.EmailField,
+        F.AddressField,
+        F.FinancialScreeningNote,
+        F.MonthlyIncome,
+        F.OnPublicBenefits,
+        F.OwnsHome,
+        F.HouseholdSize,
+        F.DateOfBirthField,
+        # F.LastFourOfSSN,
+        F.USCitizen,
+        F.OnProbationParole,
+        F.FinishedHalfProbation,
+        F.ServingSentence,
+        F.BeingCharged,
+        # F.HasExternalRAP,
+        # F.ExternalRAPWhereWhen,
+        F.HowDidYouHear,
+    }
+    required_fields = {
+        F.FirstName,
+        F.LastName,
+        F.AddressField,
+        F.DateOfBirthField,
+        F.MonthlyIncome,
+        F.OnPublicBenefits,
+        F.OwnsHome,
+        F.HouseholdSize,
+        F.OnProbationParole,
+        F.FinishedHalfProbation,
+        F.ServingSentence,
+        F.BeingCharged,
+    }
+    optional_fields = {
+        F.HowDidYouHear,
+    }
+
+
+# class DeclarationLetterForm(CombinableFormSpec):
+#     fields = {
+#         # F.ContactPreferences,
+#         # F.FirstName,
+#         # F.MiddleName,
+#         # F.LastName,
+#         # #F.PreferredPronouns,
+#         # F.PhoneNumberField,
+#         # F.EmailField,
+#         # F.AddressField,
+#         # F.FinancialScreeningNote,
+#         # F.MonthlyIncome,
+#         # #F.OnPublicBenefits,
+#         # #F.HomeOwner,
+#         # #F.HouseholdSize,
+#         # F.DateOfBirthField,
+#         # #F.LastFourOfSSN,
+#         # F.USCitizen,
+#         # F.OnProbationParole,
+#         # #F.FinishedHalfProbation,
+#         # F.ServingSentence,
+#         # F.BeingCharged,
+#         # #F.HasExternalRAP,
+#         # #F.ExternalRAPWhereWhen
+#     }
+
+
 class SelectCountyForm(Form):
     fields = [F.Counties]
     required_fields = [F.Counties]
@@ -145,7 +219,8 @@ class SelectCountyForm(Form):
 INPUT_FORM_SPECS = [
     OtherCountyForm(),
     SanFranciscoCountyForm(),
-    ContraCostaForm()
+    ContraCostaForm(),
+    AlamedaCountyForm(),
 ]
 DISPLAY_FORM_SPECS = INPUT_FORM_SPECS + [
     SupplementaryDisplayForm(),

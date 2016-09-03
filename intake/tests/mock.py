@@ -1,19 +1,20 @@
 import uuid
 import os
 import factory
-import random
 from pytz import timezone
 from faker import Factory as FakerFactory
 from django.core.files import File
-from django.db.utils import IntegrityError
+from django.core.management import call_command
+from django.conf import settings
 from django.utils.datastructures import MultiValueDict
 
 from intake import models
-from intake.management.commands import load_initial_data
+from user_accounts.tests.mock import OrganizationFactory
 from unittest.mock import Mock
 Pacific = timezone('US/Pacific')
 
-fake = FakerFactory.create('en_US', includes=['intake.tests.mock_county_forms'])
+fake = FakerFactory.create(
+    'en_US', includes=['intake.tests.mock_county_forms'])
 
 RAW_FORM_DATA = MultiValueDict({
     'address.city': [''],
@@ -63,15 +64,14 @@ NEW_RAW_FORM_DATA = {
 
 
 def load_counties_and_orgs():
-    command = load_initial_data.Command()
-    command.stdout = Mock()
-    command.handle()
-    
+    fixtures = ['counties', 'organizations']
+    call_command('loaddata', *fixtures)
+
 
 def post_data(**kwargs):
     for key, value in kwargs.items():
         if isinstance(value, str):
-            kwargs[key] = [value] 
+            kwargs[key] = [value]
     return MultiValueDict(kwargs)
 
 
@@ -93,35 +93,8 @@ def fake_typeseam_submission_dicts(uuids):
         'uuid': uuid,
         'date_received': fake.date_time_between('-2w', 'now'),
         'answers': fake.sf_county_form_answers()
-        } for uuid in uuids]
+    } for uuid in uuids]
 
-
-class PrepopulatedModelFactory:
-
-    def __init__(self, model):
-        self.model = model
-        self.row_count = None
-
-    def ensure_county_count(self):
-        self.objects = list(self.model.objects.all())
-        self.row_count = len(self.objects)
-        if not self.row_count:
-            raise Exception(
-                "`{}` table is not yet populated.".format(self.model.__name__))
-
-    def choice(self):
-        self.ensure_county_count()
-        return random.choice(self.objects)
-
-    def sample(self, size=None, zero_is_okay=False):
-        self.ensure_county_count()
-        if not size:
-            lower_limit = 0 if zero_is_okay else 1
-            size = random.randint(lower_limit, self.row_count)
-        return random.sample(self.objects, size)
-
-
-CountyFactory = PrepopulatedModelFactory(models.County)
 
 
 class FormSubmissionFactory(factory.DjangoModelFactory):
@@ -134,51 +107,55 @@ class FormSubmissionFactory(factory.DjangoModelFactory):
         model = models.FormSubmission
 
     @factory.post_generation
-    def counties(self, create, extracted, **kwargs):
+    def organizations(self, create, extracted, **kwargs):
         if not create:
             return
         if extracted:
-            self.counties.add(*[
-                county.id for county in extracted
-                ])
+            self.organizations.add(*[
+                organization.id for organization in extracted
+            ])
 
     @classmethod
     def create(cls, *args, **kwargs):
-        if 'counties' not in kwargs:
-            kwargs['counties'] = CountyFactory.sample()
+        if 'organizations' not in kwargs:
+            kwargs['organizations'] = OrganizationFactory.sample()
         return super().create(*args, **kwargs)
 
 
-
 class FillablePDFFactory(factory.DjangoModelFactory):
+
     class Meta:
         model = models.FillablePDF
 
 
 def fillable_pdf(**kwargs):
     attributes = dict(
-            name = "Sample PDF",
-            pdf = File(open(
-                'tests/sample_pdfs/sample_form.pdf', 'rb')),
-            translator = "tests.sample_translator.translate",
-        )
+        name="Sample PDF",
+        pdf=File(open(
+            'tests/sample_pdfs/sample_form.pdf', 'rb')),
+        translator="tests.sample_translator.translate",
+    )
     attributes.update(kwargs)
     return FillablePDFFactory.create(**attributes)
 
+
 def useable_pdf(org):
-    example_pdf = File(open(os.environ.get('TEST_PDF_PATH'), 'rb'))
+    path = getattr(settings, 'TEST_PDF_PATH', os.environ.get('TEST_PDF_PATH'))
+    example_pdf = File(open(path, 'rb'))
     return FillablePDFFactory.create(
-            name="Clean Slate",
-            pdf=example_pdf,
-            translator = "intake.translators.clean_slate.translator",
-            organization=org,
-        )
+        name="Clean Slate",
+        pdf=example_pdf,
+        translator="intake.translators.clean_slate.translator",
+        organization=org,
+    )
 
 
 class FrontSendMessageResponse:
     SUCCESS_JSON = {'status': 'accepted'}
-    ERROR_JSON = {'errors': [{'title': 'Bad request', 'detail': 'Body did not satisfy requirements', 'status': '400'}]}
-    
+    ERROR_JSON = {'errors': [{'title': 'Bad request',
+                              'detail': 'Body did not satisfy requirements',
+                              'status': '400'}]}
+
     @classmethod
     def _make_response(cls, status_code, json):
         mock_response = Mock(status_code=status_code)
@@ -192,4 +169,3 @@ class FrontSendMessageResponse:
     @classmethod
     def error(cls):
         return cls._make_response(400, cls.ERROR_JSON)
-

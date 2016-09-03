@@ -38,25 +38,25 @@ class TestForm(PatchTranslationTestCase):
     def test_empty_value_is_as_expected(self):
         expected_empty_value = {
             'address': {
-                'city': '', 
-                'state': '', 
-                'street': '', 
+                'city': '',
+                'state': '',
+                'street': '',
                 'zip': ''
-                },
+            },
             'contact_preferences': [],
             'currently_employed': '',
             'dob': {
                 'day': '',
                 'month': '',
                 'year': ''
-                },
+            },
             'email': '',
             'first_name': '',
             'how_did_you_hear': '',
             'last_name': '',
             'middle_name': '',
             'monthly_expenses': '',
-            'monthly_income': '',
+            'monthly_income': None,
             'on_probation_parole': '',
             'phone_number': '',
             'rap_outside_sf': '',
@@ -67,7 +67,7 @@ class TestForm(PatchTranslationTestCase):
             'when_probation_or_parole': '',
             'when_where_outside_sf': '',
             'where_probation_or_parole': ''
-            }
+        }
         form = self.get_sf_form()
         self.assertDictEqual(form.empty_value, expected_empty_value)
         form = self.get_sf_form({})
@@ -89,7 +89,7 @@ class TestForm(PatchTranslationTestCase):
             'last_name': 'Johnson',
             'middle_name': 'Horace',
             'monthly_expenses': '1301',
-            'monthly_income': '2465',
+            'monthly_income': 2465,
             'on_probation_parole': 'yes',
             'phone_number': '590-133-5279',
             'rap_outside_sf': 'no',
@@ -115,22 +115,26 @@ class TestForm(PatchTranslationTestCase):
 
     def test_preferred_contact_methods(self):
         contact_preferences = [
-                "prefers_email",
-                "prefers_sms",
-                "prefers_snailmail",
-                "prefers_voicemail"
+            "prefers_email",
+            "prefers_sms",
+            "prefers_snailmail",
+            "prefers_voicemail"
         ]
         form = self.get_sf_form(dict(contact_preferences=contact_preferences))
         error_messages = [
             validators.gave_preferred_contact_methods.message(k)
             for k in contact_preferences
-            ]
+        ]
         self.assertFalse(form.is_valid())
         errors = form.errors
-        self.assertIn(validators.gave_preferred_contact_methods.message('prefers_sms'), errors['phone_number'])
-        self.assertIn(validators.gave_preferred_contact_methods.message('prefers_voicemail'), errors['phone_number'])
-        self.assertIn(validators.gave_preferred_contact_methods.message('prefers_email'), errors['email'])
-        self.assertIn(validators.gave_preferred_contact_methods.message('prefers_snailmail'), errors['address'])
+        self.assertIn(validators.gave_preferred_contact_methods.message(
+            'prefers_sms'), errors['phone_number'])
+        self.assertIn(validators.gave_preferred_contact_methods.message(
+            'prefers_voicemail'), errors['phone_number'])
+        self.assertIn(validators.gave_preferred_contact_methods.message(
+            'prefers_email'), errors['email'])
+        self.assertIn(validators.gave_preferred_contact_methods.message(
+            'prefers_snailmail'), errors['address'])
         # case: only required errors, no contact info erros
         form = self.get_sf_form(mock.post_data(**{
             'contact_preferences': contact_preferences,
@@ -140,7 +144,7 @@ class TestForm(PatchTranslationTestCase):
             'address.zip': '94609',
             'phone_number': '415-333-4444',
             'email': 'someone@gmail.com'
-            }))
+        }))
         self.assertFalse(form.is_valid())
         self.assertFalse('phone_number' in form.errors)
         self.assertFalse('email' in form.errors)

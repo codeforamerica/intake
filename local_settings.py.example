@@ -24,7 +24,7 @@ DATABASES = {
 }
 
 ALLOWED_HOSTS = []
-DEFAULT_HOST = []
+DEFAULT_HOST = 'https://localhost:8000'
 
 # settings for file uploads
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
@@ -42,3 +42,6 @@ DEFAULT_NOTIFICATION_EMAIL = "user@localhost"
 
 
 DIVERT_REMOTE_CONNECTIONS = True
+
+# specific to intake.translators.clean_slate.translator
+TEST_PDF_PATH = "./CleanSlateCombined.pdf"

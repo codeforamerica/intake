@@ -9,7 +9,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user_accounts', '0006_add_county_model'),
+        ('user_accounts', '0007_add_default_orgs_for_counties'),
     ]
 
     operations = [

@@ -1,0 +1,52 @@
+[
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Code for America",
+    "county": null,
+    "website": "",
+    "blurb": "",
+    "is_receiving_agency": false
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "San Francisco Public Defender",
+    "county": 1,
+    "website": "",
+    "blurb": "",
+    "is_receiving_agency": true
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Contra Costa Public Defender",
+    "county": 2,
+    "website": "",
+    "blurb": "",
+    "is_receiving_agency": true
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "East Bay Community Law Center",
+    "county_id": null,
+    "website": "",
+    "blurb": "",
+    "is_receiving_agency": false
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Alameda Public Defender",
+    "county": 3,
+    "website": "",
+    "blurb": "",
+    "is_receiving_agency": true
+  }
+}
+]

@@ -13,7 +13,6 @@ class FormToPDFTranslator:
         else:
             return data.get(extractor, '')
 
-
     def __call__(self, data):
         result = {}
         for key, extractor in self.config.items():

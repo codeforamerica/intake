@@ -26,6 +26,11 @@
           <li>
             <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_sf) }}
           </li>
+          {%- if not settings.LIVE_COUNTY_CHOICES %}
+          <li>
+            <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_alameda) }}
+          </li>
+          {%- endif %}
           <li>
             <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_cc) }}
           </li>
