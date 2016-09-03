@@ -75,10 +75,9 @@ class SubmissionBundler:
     def __init__(self):
         self.queryset = intake_models.FormSubmission.get_unopened_apps()\
                             .prefetch_related(
-                                'counties',
-                                'counties__organizations',
-                                'counties__organizations__profiles',
-                                'counties__organizations__profiles__user'
+                                'organizations',
+                                'organizations__profiles',
+                                'organizations__profiles__user'
                             ).all()
         self.organization_bundle_map = {}
 
@@ -95,8 +94,7 @@ class SubmissionBundler:
         appropriate OrganizationBundle
         """
         for submission in self.queryset:
-            for county in submission.counties.all():
-                receiving_org = county.get_receiving_agency()
+            for receiving_org in submission.organizations.all():
                 bundle = self.get_org_referral(receiving_org)
                 bundle.add_submission(submission)
 

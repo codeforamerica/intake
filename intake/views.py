@@ -158,9 +158,8 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
         submission = models.FormSubmission(answers=form.cleaned_data)
         submission.save()
         counties = self.get_counties()
-        submission.counties = counties
         orgs = [
-            county.get_receiving_agency(submission)
+            county.get_receiving_agency(submission.answers)
             for county in counties]
         submission.organizations = orgs
         # TODO: check for cerrect org in view tests
@@ -339,7 +338,7 @@ class Stats(TemplateView):
         for county in counties:
             county_totals.append(dict(
                 count=models.FormSubmission.objects.filter(
-                    counties=county).count(),
+                    organizations__county=county).count(),
                 county_name=county.name))
         context['stats'] = {
             'total_all_counties': models.FormSubmission.objects.count(),

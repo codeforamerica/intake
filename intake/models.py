@@ -20,6 +20,10 @@ from intake import (
 from formation.forms import display_form_selector
 
 
+class MissingAnswersError(Exception):
+    pass
+
+
 def gen_uuid():
     return uuid.uuid4().hex
 
@@ -44,7 +48,7 @@ class County(models.Model):
     name = models.TextField()
     description = models.TextField()
 
-    def get_receiving_agency(self, submission=None):
+    def get_receiving_agency(self, answers):
         """Returns the appropriate receiving agency
         for this county. Currently there is only one per county,
         but in the future this can be used to make eligibility
@@ -53,8 +57,8 @@ class County(models.Model):
         # if alameda
         if self.slug == constants.Counties.ALAMEDA:
             # if under 3000 and not owns home
-            income = submission.answers.get('monthly_income')
-            owns_home = submission.answers.get('owns_home')
+            income = answers.get('monthly_income')
+            owns_home = answers.get('owns_home')
             if income < 3000 and not owns_home:
                 # return alameda pub def
                 return self.organizations.get(
@@ -75,8 +79,6 @@ class County(models.Model):
 
 class FormSubmission(models.Model):
 
-    counties = models.ManyToManyField(County,
-                                      related_name="submissions")
     organizations = models.ManyToManyField('user_accounts.Organization',
                                            related_name="submissions")
     answers = JSONField()
@@ -89,6 +91,25 @@ class FormSubmission(models.Model):
 
     class Meta:
         ordering = ['-date_received']
+
+    @classmethod
+    def create_for_organizations(cls, organizations, **kwargs):
+        submission = cls(**kwargs)
+        submission.save()
+        submission.organizations.add(*organizations)
+        return submission
+
+    @classmethod
+    def create_for_counties(cls, counties, **kwargs):
+        if 'answers' not in kwargs:
+            msg = ("'answers' are needed to infer organizations "
+                   "for a form submission")
+            raise MissingAnswersError(msg)
+        organizations = [
+            county.get_receiving_agency(kwargs['answers'])
+            for county in counties
+        ]
+        return cls.create_for_organizations(organizations=organizations, **kwargs)
 
     @classmethod
     def mark_viewed(cls, submissions, user):
@@ -117,14 +138,13 @@ class FormSubmission(models.Model):
         query = cls.objects
         if related_objects:
             query = query.prefetch_related(
-                'logs__user__profile__organization',
-                'counties')
+                'logs__user__profile__organization')
         if ids:
             query = query.filter(pk__in=ids)
         if user.is_staff:
-            return query
-        county = user.profile.organization.county
-        return query.filter(counties=county)
+            return query.all()
+        org = user.profile.organization
+        return query.filter(organizations=org)
 
     @classmethod
     def all_plus_related_objects(cls):
@@ -177,8 +197,12 @@ class FormSubmission(models.Model):
             in constants.CONTACT_METHOD_CHOICES
             if key in preferences]
 
+    def get_counties(self):
+        county_ids = self.organizations.values('county_id')
+        return County.objects.filter(pk__in=county_ids)
+
     def get_nice_counties(self):
-        return self.counties.all().values_list('name', flat=True)
+        return self.get_counties().values_list('name', flat=True)
 
     def get_display_form_for_user(self, user):
         """
@@ -196,7 +220,9 @@ class FormSubmission(models.Model):
                 ])
         init_data = dict(
             date_received=self.get_local_date_received(),
-            counties=list(self.counties.all().values_list('slug', flat=True))
+            counties=list(self.get_counties().values_list('slug', flat=True)),
+            organizations=list(
+                self.organizations.values_list('name', flat=True))
         )
         init_data.update(self.answers)
         display_form = DisplayFormClass(init_data)
@@ -243,15 +269,12 @@ class FormSubmission(models.Model):
     def send_confirmation_notifications(self):
         contact_info = self.get_contact_info()
         errors = {}
-        counties = self.counties.all()
-        county_names = [name + " County" for name in self.get_nice_counties()]
-        next_steps = [
-            constants.CONFIRMATION_MESSAGES[county.slug]
-            for county in counties]
+        next_steps = self.organizations.values_list(
+            'new_submission_confirmation_message', flat=True)
         context = dict(
             staff_name=random.choice(constants.STAFF_NAME_CHOICES),
             name=self.answers['first_name'],
-            county_names=county_names,
+            county_names=self.get_nice_counties(),
             organizations=self.organizations.all(),
             next_steps=next_steps)
         notify_map = {

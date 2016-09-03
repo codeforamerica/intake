@@ -37,11 +37,11 @@ class TestModels(TestCase):
         self.assertEqual(
             models.FormSubmission.objects.get(id=submission.id), submission)
 
-    def test_all_submissions_have_counties(self):
+    def test_all_submissions_have_organizations(self):
         all_submissions = models.FormSubmission.all_plus_related_objects()
         for submission in all_submissions:
-            counties = submission.counties.all()
-            self.assertTrue(list(counties))
+            organizations = submission.organizations.all()
+            self.assertTrue(list(organizations))
 
     def test_applicationlogentry(self):
         submission = mock.FormSubmissionFactory.create()
@@ -363,17 +363,74 @@ class TestModels(TestCase):
             submission=submission,
             errors={'sms': sms_error, 'email': email_error})
 
-    def test_can_get_counties_from_submissions(self):
-        submission = mock.FormSubmissionFactory.create()
-        counties = list(submission.counties.all())
-        mock_field = Mock(
-            choices=constants.COUNTY_CHOICES,
-            required=True
-        )
-        slugs = [county.slug for county in counties]
-        are_valid_choices.set_context(mock_field)
-        are_valid_choices(slugs)
-        mock_field.add_error.assert_not_called()
+
+class TestFormSubmission(TestCase):
+
+    fixtures = ['organizations']
+
+    def test_create_for_counties(self):
+        counties = models.County.objects.exclude(
+            slug=constants.Counties.ALAMEDA)
+        submission = models.FormSubmission.create_for_counties(
+            counties, answers={})
+        # one and only one org for each county
+        for county in counties:
+            self.assertEqual(
+                submission.organizations.filter(county=county).count(), 1)
+
+    def test_create_for_counties_fails_without_answers(self):
+        counties = models.County.objects.all()
+        with self.assertRaises(models.MissingAnswersError):
+            models.FormSubmission.create_for_counties(counties)
+
+    def test_create_for_organizations(self):
+        organizations = auth_models.Organization.objects.all()
+        submission = models.FormSubmission.create_for_organizations(
+            organizations, answers={})
+        orgs_of_sub = submission.organizations.all()
+        for org in organizations:
+            self.assertIn(org, orgs_of_sub)
+
+    def test_get_counties(self):
+        organizations = auth_models.Organization.objects.all()
+        # a submission for all organizations
+        submission = models.FormSubmission.create_for_organizations(
+            organizations, answers={})
+        # it should be desitned for all counties
+        counties = models.County.objects.order_by('slug').all()
+        counties_from_sub = submission.get_counties().order_by('slug').all()
+        self.assertListEqual(list(counties), list(counties_from_sub))
+
+    def test_get_permitted_submissions_when_permitted(self):
+        cc_pubdef = auth_models.Organization.objects.get(
+            slug=constants.Organizations.COCO_PUBDEF)
+        submission = models.FormSubmission.create_for_organizations(
+            [cc_pubdef], answers={})
+        mock_user = Mock(is_staff=False, **{'profile.organization': cc_pubdef})
+        result = models.FormSubmission.get_permitted_submissions(mock_user)
+        self.assertListEqual(list(result), [submission])
+
+    def test_get_permitted_submisstions_when_not_permitted(self):
+        cc_pubdef = auth_models.Organization.objects.get(
+            slug=constants.Organizations.COCO_PUBDEF)
+        sf_pubdef = auth_models.Organization.objects.get(
+            slug=constants.Organizations.SF_PUBDEF)
+        submission = models.FormSubmission.create_for_organizations(
+            [cc_pubdef], answers={})
+        mock_user = Mock(is_staff=False, **{'profile.organization': sf_pubdef})
+        result = models.FormSubmission.get_permitted_submissions(
+            mock_user, [submission.id])
+        self.assertListEqual(list(result), [])
+
+    def test_get_permitted_submissions_when_staff(self):
+        orgs = auth_models.Organization.objects.all()
+        subs = set()
+        for org in orgs:
+            subs.add(models.FormSubmission.create_for_organizations(
+                [org], answers={}))
+        mock_user = Mock(is_staff=True)
+        result = models.FormSubmission.get_permitted_submissions(mock_user)
+        self.assertEqual(set(result), subs)
 
 
 class TestCounty(TestCase):
@@ -390,16 +447,16 @@ class TestCounty(TestCase):
             (constants.Counties.SAN_FRANCISCO, "San Francisco Public Defender"),
             (constants.Counties.CONTRA_COSTA, "Contra Costa Public Defender"))
         counties = models.County.objects.all()
+        answers = {}
         for county_slug, agency_name in expected_matches:
             county = counties.filter(slug=county_slug).first()
-            organization = county.get_receiving_agency()
+            organization = county.get_receiving_agency(answers)
             self.assertEqual(organization.name, agency_name)
 
     def test_get_receiving_agency_alameda_eligible_for_apd(self):
         alameda = models.County.objects.get(slug=constants.Counties.ALAMEDA)
         eligible_for_apd = dict(monthly_income=2999, owns_home=False)
-        submission = Mock(answers=eligible_for_apd)
-        result = alameda.get_receiving_agency(submission)
+        result = alameda.get_receiving_agency(eligible_for_apd)
         alameda_pubdef = auth_models.Organization.objects.get(
             slug=constants.Organizations.ALAMEDA_PUBDEF)
         self.assertEqual(result, alameda_pubdef)
@@ -407,8 +464,7 @@ class TestCounty(TestCase):
     def test_get_receiving_agency_high_income_alameda_gets_ebclc(self):
         alameda = models.County.objects.get(slug=constants.Counties.ALAMEDA)
         ebclc_high_income = dict(monthly_income=3000, owns_home=False)
-        submission = Mock(answers=ebclc_high_income)
-        result = alameda.get_receiving_agency(submission)
+        result = alameda.get_receiving_agency(ebclc_high_income)
         ebclc = auth_models.Organization.objects.get(
             slug=constants.Organizations.EBCLC)
         self.assertEqual(result, ebclc)
@@ -416,8 +472,7 @@ class TestCounty(TestCase):
     def test_get_receiving_agency_owns_home_alameda_gets_ebclc(self):
         alameda = models.County.objects.get(slug=constants.Counties.ALAMEDA)
         ebclc_owns_home = dict(monthly_income=2999, owns_home=True)
-        submission = Mock(answers=ebclc_owns_home)
-        result = alameda.get_receiving_agency(submission)
+        result = alameda.get_receiving_agency(ebclc_owns_home)
         ebclc = auth_models.Organization.objects.get(
             slug=constants.Organizations.EBCLC)
         self.assertEqual(result, ebclc)
