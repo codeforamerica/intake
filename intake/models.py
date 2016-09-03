@@ -198,8 +198,8 @@ class FormSubmission(models.Model):
             if key in preferences]
 
     def get_counties(self):
-        county_ids = self.organizations.values('county_id')
-        return County.objects.filter(pk__in=county_ids)
+        return County.objects.filter(
+            organizations__submissions=self).distinct()
 
     def get_nice_counties(self):
         return self.get_counties().values_list('name', flat=True)
