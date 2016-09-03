@@ -27,26 +27,34 @@ class TestWorkflows(base.ScreenSequenceTestCase):
         super().setUp()
         for key, instances in auth_mock.create_fake_auth_models().items():
             setattr(self, key, instances)
+        orgs = accounts_models.Organization.objects.all()
+        for org in orgs:
+            setattr(self, org.slug, org)
+            setattr(self, org.slug+'_submissions', [])
+        org_sets = [
+            [self.sf_pubdef],
+            [self.sf_pubdef],
+            [self.sf_pubdef],
+            [self.sf_pubdef, self.cc_pubdef],
+            [self.cc_pubdef],
+            [self.cc_pubdef]]
         counties = models.County.objects.all()
         for county in counties:
             if county.slug == constants.Counties.SAN_FRANCISCO:
                 self.sfcounty = county
             elif county.slug == constants.Counties.CONTRA_COSTA:
                 self.cccounty = county
-        self.sf_submissions = list(
-            intake_mock.FormSubmissionFactory.create_batch(
-                2, counties=[
-                    self.sfcounty]))
-        self.cc_submissions = list(
-            intake_mock.FormSubmissionFactory.create_batch(
-                2, counties=[
-                    self.cccounty]))
-        self.combo_submissions = list(
-            intake_mock.FormSubmissionFactory.create_batch(
-                2, counties=[
-                    self.sfcounty, self.cccounty]))
-        self.submissions = self.sf_submissions + \
-            self.cc_submissions + self.combo_submissions
+        self.submissions = []
+        for org_set in org_sets:
+            answers = intake_mock.fake.cleaned_sf_county_form_answers()
+            sub = models.FormSubmission.create_for_organizations(
+                    organizations=org_set, answers=answers)
+            self.submissions.append(sub)
+            for org in org_set:
+                attr_name = org.slug+'_submissions'
+                org_subs = getattr(self, attr_name)
+                org_subs.append(sub)
+                setattr(self, attr_name, org_subs)
         self.pdf = intake_mock.useable_pdf(self.sfpubdef)
         self.superuser = auth_mock.fake_superuser()
         accounts_models.UserProfile.objects.create(
@@ -157,7 +165,7 @@ class TestWorkflows(base.ScreenSequenceTestCase):
 
     def test_look_at_app_detail_with_pdf(self):
         user = self.sfpubdef_users[0]
-        submission = random.choice(self.sf_submissions)
+        submission = random.choice(self.sf_pubdef_submissions)
         self.run_sequence(
             "Look at app with pdf",
             [
@@ -171,7 +179,7 @@ class TestWorkflows(base.ScreenSequenceTestCase):
 
     def test_look_at_app_detail_without_pdf(self):
         user = self.ccpubdef_users[0]
-        submission = random.choice(self.cc_submissions)
+        submission = random.choice(self.cc_pubdef_submissions)
         self.run_sequence(
             "Look at app detail",
             [
@@ -185,7 +193,7 @@ class TestWorkflows(base.ScreenSequenceTestCase):
     def test_look_at_app_bundle_with_pdf(self):
         user = self.sfpubdef_users[0]
         bundle = models.ApplicationBundle.create_with_submissions(
-            submissions=self.sf_submissions,
+            submissions=self.sf_pubdef_submissions,
             organization=self.sfpubdef)
         self.run_sequence(
             "Look at app pdf bundle",
@@ -201,7 +209,7 @@ class TestWorkflows(base.ScreenSequenceTestCase):
     def test_look_at_app_bundle_without_pdf(self):
         user = self.ccpubdef_users[0]
         bundle = models.ApplicationBundle.create_with_submissions(
-            submissions=self.cc_submissions,
+            submissions=self.cc_pubdef_submissions,
             organization=self.ccpubdef)
         self.run_sequence(
             "Look at app bundle",
@@ -216,7 +224,7 @@ class TestWorkflows(base.ScreenSequenceTestCase):
     def test_look_at_app_bundle_of_another_org(self):
         user = self.ccpubdef_users[0]
         bundle = models.ApplicationBundle.create_with_submissions(
-            submissions=self.sf_submissions,
+            submissions=self.sf_pubdef_submissions,
             organization=self.sfpubdef)
         self.run_sequence(
             "Look at bundle of another org",

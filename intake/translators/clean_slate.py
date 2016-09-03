@@ -65,13 +65,13 @@ translator = ClearMyRecordFormToPDFTranslator({
     'Dates arrested outside SF': 'when_where_outside_sf',
     'Email Address': 'email',
     'Employed': lambda s: yesno(s, 'currently_employed'),
-    'First Name': lambda s: namify(s.answers['first_name']),
+    'First Name': lambda s: namify(s.answers.get('first_name', '')),
     'Home phone number': '',
     'How did you hear about the Clean Slate Program': 'how_did_you_hear',
     'If probation where and when?': lambda s: '{} {}'.format(
         s.answers.get('where_probation_or_parole'),
         s.answers.get('when_probation_or_parole')),
-    'Last Name': lambda s: namify(s.answers['last_name']),
+    'Last Name': lambda s: namify(s.answers.get('last_name', '')),
     'MI': lambda s: s.answers.get('middle_name', '')[:1],
     'May we leave voicemail': lambda s: yesno(s),
     'May we send mail here': lambda s: yesno(s),
@@ -85,6 +85,6 @@ translator = ClearMyRecordFormToPDFTranslator({
     'Work phone number': '',
     'DOB': get_formatted_dob,
     'SSN': fmt_ssn,
-    'FirstName': lambda s: namify(s.answers['first_name']),
-    'LastName': lambda s: namify(s.answers['last_name'])
+    'FirstName': lambda s: namify(s.answers.get('first_name', '')),
+    'LastName': lambda s: namify(s.answers.get('last_name', ''))
 }, att_object_extractor='answers')
