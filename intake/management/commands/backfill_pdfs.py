@@ -12,21 +12,11 @@ class Command(BaseCommand):
         results = models.FilledPDF.objects.all().delete()
         self.stdout.write(str(results))
         for submission in models.FormSubmission.objects.all():
-            counties = submission.counties.values_list('pk', flat=True)
+            organizations = submission.organizations.values('pk')
             for fillable in models.FillablePDF.objects.filter(
-                    organization__county__in=counties).all():
-                pdf_bytes = fillable.fill(submission)
-                filename = 'filled_{0:0>4}-{1:0>6}.pdf'.format(
-                    fillable.id, submission.id)
-                pdf_file = SimpleUploadedFile(filename, pdf_bytes,
-                                              content_type='application/pdf')
-                filled_pdf = models.FilledPDF(
-                    pdf=pdf_file,
-                    original_pdf=fillable,
-                    submission=submission,
-                )
-                filled_pdf.save()
+                    organization__in=organizations).all():
+                filled_pdf = fillable.fill_for_submission(submission)
                 self.stdout.write(
                     "filled pdf {} for {}".format(
-                        filename, submission)
+                        filled_pdf.pdf, submission)
                     )

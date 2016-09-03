@@ -447,7 +447,9 @@ class FillablePDF(models.Model):
         used when retrieving a filled pdf if it doesn't
         """
         filled_pdf_bytes = self.fill(submission)
-        pdf_file = SimpleUploadedFile('filled.pdf', filled_pdf_bytes,
+        filename = 'filled_{0:0>4}-{1:0>6}.pdf'.format(
+            self.id, submission.id)
+        pdf_file = SimpleUploadedFile(filename, filled_pdf_bytes,
                                       content_type='application/pdf')
         pdf = FilledPDF(
             pdf=pdf_file,

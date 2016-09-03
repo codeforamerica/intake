@@ -1,4 +1,5 @@
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.utils import timezone
 
 from intake import (
     notifications,
@@ -36,7 +37,10 @@ class OrganizationBundle:
             pdf_objects = [filled.pdf for filled in filled_pdfs]
             bundled_pdf_bytes = intake_models.get_parser().join_pdfs(
                 pdf_objects)
-            pdf_file = SimpleUploadedFile('filled.pdf', bundled_pdf_bytes,
+            now_str = timezone.now().strftime('%Y-%m-%d_%H:%M')
+            filename = "submission_bundle_{0:0>4}-{1}.pdf".format(
+                self.organization.pk, now_str)
+            pdf_file = SimpleUploadedFile(filename, bundled_pdf_bytes,
                                           content_type='application/pdf')
             bundle.bundled_pdf = pdf_file
         bundle.save()
