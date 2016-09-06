@@ -481,9 +481,6 @@ class TestCounty(TestCase):
 class TestFilledPDF(TestCase):
 
     def test_get_absolute_url(self):
-        # make a submission
-        # make a filledpdf
-        # ensure that the url makes sense
         org = auth_models.Organization.objects.get(
             slug=constants.Organizations.SF_PUBDEF)
         sub = models.FormSubmission.create_for_organizations([org], answers={})

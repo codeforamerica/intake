@@ -730,6 +730,26 @@ class TestApplicationIndex(IntakeDataTestCase):
         response = self.client.get(reverse('intake-app_index'))
         self.assertContains(response, user.profile.organization.name)
 
+    def test_pdf_users_see_pdf_link(self):
+        self.be_sfpubdef_user()
+        # look for the pdf link of each app
+        response = self.client.get(reverse('intake-app_index'))
+        self.assertEqual(response.context['show_pdf'], True)
+        for sub in self.sf_submissions:
+            pdf_url = reverse('intake-filled_pdf', kwargs=dict(
+                submission_id=sub.id))
+            self.assertContains(response, pdf_url)
+
+    def test_non_pdf_users_dont_see_pdf_link(self):
+        self.be_ccpubdef_user()
+        # look for the pdf link of each app
+        response = self.client.get(reverse('intake-app_index'))
+        self.assertEqual(response.context['show_pdf'], False)
+        for sub in self.combo_submissions:
+            pdf_url = reverse('intake-filled_pdf', kwargs=dict(
+                submission_id=sub.id))
+            self.assertNotContains(response, pdf_url)
+
 
 class TestStats(IntakeDataTestCase):
 

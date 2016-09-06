@@ -322,6 +322,7 @@ class ApplicationIndex(TemplateView):
         context['submissions'] = list(
             models.FormSubmission.get_permitted_submissions(
                 self.request.user, related_objects=True))
+        context['show_pdf'] = self.request.user.profile.should_see_pdf()
         context['body_class'] = 'admin'
         return context
 
