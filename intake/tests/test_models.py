@@ -478,6 +478,17 @@ class TestCounty(TestCase):
         self.assertEqual(result, ebclc)
 
 
+class TestFilledPDF(TestCase):
+
+    def test_get_absolute_url(self):
+        org = auth_models.Organization.objects.get(
+            slug=constants.Organizations.SF_PUBDEF)
+        sub = models.FormSubmission.create_for_organizations([org], answers={})
+        expected_url = "/application/{}/pdf/".format(sub.id)
+        filled = models.FilledPDF(submission=sub)
+        self.assertEqual(filled.get_absolute_url(), expected_url)
+
+
 class TestApplicationBundle(TestCase):
 
     def test_get_absolute_url(self):

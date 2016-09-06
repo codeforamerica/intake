@@ -657,7 +657,7 @@ class TestApplicationBundle(IntakeDataTestCase):
 
     @patch('intake.models.notifications.slack_submissions_viewed.send')
     def test_user_can_get_app_bundle_without_pdf(self, slack):
-        user = self.be_ccpubdef_user()
+        self.be_ccpubdef_user()
         response = self.get_submissions(self.cc_submissions)
         self.assert_called_once_with_types(
             slack, submissions='list', user='User')
@@ -665,12 +665,12 @@ class TestApplicationBundle(IntakeDataTestCase):
         self.assertHasDisplayData(response, self.cc_submissions)
 
     @patch('intake.models.notifications.slack_submissions_viewed.send')
-    def test_staff_user_can_get_app_bundle_without_pdf(self, slack):
-        user = self.be_cfa_user()
+    def test_staff_user_can_get_app_bundle_with_pdf(self, slack):
+        self.be_cfa_user()
         response = self.get_submissions(self.combo_submissions)
         self.assert_called_once_with_types(
             slack, submissions='list', user='User')
-        self.assertNotContains(response, 'iframe class="pdf_inset"')
+        self.assertContains(response, 'iframe class="pdf_inset"')
         self.assertHasDisplayData(response, self.combo_submissions)
 
     @patch('intake.models.notifications.slack_submissions_viewed.send')
@@ -729,6 +729,36 @@ class TestApplicationIndex(IntakeDataTestCase):
         user = self.be_ccpubdef_user()
         response = self.client.get(reverse('intake-app_index'))
         self.assertContains(response, user.profile.organization.name)
+
+    def test_pdf_users_see_pdf_link(self):
+        self.be_sfpubdef_user()
+        # look for the pdf link of each app
+        response = self.client.get(reverse('intake-app_index'))
+        self.assertEqual(response.context['show_pdf'], True)
+        for sub in self.sf_submissions:
+            pdf_url = reverse('intake-filled_pdf', kwargs=dict(
+                submission_id=sub.id))
+            self.assertContains(response, pdf_url)
+
+    def test_non_pdf_users_dont_see_pdf_link(self):
+        self.be_ccpubdef_user()
+        # look for the pdf link of each app
+        response = self.client.get(reverse('intake-app_index'))
+        self.assertEqual(response.context['show_pdf'], False)
+        for sub in self.combo_submissions:
+            pdf_url = reverse('intake-filled_pdf', kwargs=dict(
+                submission_id=sub.id))
+            self.assertNotContains(response, pdf_url)
+
+    def test_cfa_users_see_pdf_link(self):
+        self.be_cfa_user()
+        # look for the pdf link of each app
+        response = self.client.get(reverse('intake-app_index'))
+        self.assertEqual(response.context['show_pdf'], True)
+        for sub in self.sf_submissions:
+            pdf_url = reverse('intake-filled_pdf', kwargs=dict(
+                submission_id=sub.id))
+            self.assertContains(response, pdf_url)
 
 
 class TestStats(IntakeDataTestCase):
