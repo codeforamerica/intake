@@ -269,7 +269,7 @@ class ApplicationDetail(View):
         models.FormSubmission.mark_viewed(submissions, request.user)
 
     def get(self, request, submission_id):
-        if request.user.profile.should_see_pdf():
+        if request.user.profile.should_see_pdf() and not request.user.is_staff:
             return redirect(
                 reverse_lazy('intake-filled_pdf',
                              kwargs=dict(submission_id=submission_id)))
@@ -294,17 +294,19 @@ class FilledPDF(ApplicationDetail):
     def get(self, request, submission_id):
         submission = get_object_or_404(
             models.FormSubmission, pk=int(submission_id))
-        if not submission.organizations.filter(
-            pk=request.user.profile.organization.id).count():
-            return self.not_allowed(request)
+        if not request.user.profile.should_have_access_to(submission):
+            return self.not_allowed()
         pdf = submission.filled_pdfs.first()
         if not pdf:
             no_pdf_str = \
                 "No prefilled pdf was made for submission: %s" % submission.pk
             notifications.slack_simple.send(no_pdf_str)
-            org = request.user.profile.organization
-            fillable_pdf = models.FillablePDF.objects.filter(
-                organization=org).first()
+            fillables = models.FillablePDF.objects
+            if not request.user.is_staff:
+                org = request.user.profile.organization
+                fillables = fillables.filter(
+                    organization=org)
+            fillable_pdf = fillables.first()
             pdf = fillable_pdf.fill_for_submission(submission)
         self.mark_viewed(request, submission)
         response = HttpResponse(pdf.pdf,

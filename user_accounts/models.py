@@ -171,7 +171,13 @@ class UserProfile(models.Model):
     def should_see_pdf(self):
         """This should be based on whether or not this user's org has a pdf
         """
-        return self.organization.has_a_pdf()
+        return self.organization.has_a_pdf() or self.user.is_staff
+
+    def should_have_access_to(self, submission):
+        """Whether or not this user should be able to view the input submission
+        """
+        return self.user.is_staff or bool(
+            submission.organizations.filter(pk=self.organization_id).count())
 
 
 def get_user_display(user):
