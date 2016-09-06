@@ -109,7 +109,8 @@ class FormSubmission(models.Model):
             county.get_receiving_agency(kwargs['answers'])
             for county in counties
         ]
-        return cls.create_for_organizations(organizations=organizations, **kwargs)
+        return cls.create_for_organizations(
+            organizations=organizations, **kwargs)
 
     @classmethod
     def mark_viewed(cls, submissions, user):
@@ -488,6 +489,16 @@ class FilledPDF(models.Model):
         FormSubmission,
         on_delete=models.CASCADE,
         related_name='filled_pdfs')
+
+    def get_absolute_url(self):
+        """This is unique _to each submission_.
+
+        URLs will need to be changed when multiple pdfs can pertain to one
+        submission
+        """
+        return reverse(
+            'intake-filled_pdf',
+            kwargs=dict(submission_id=self.submission.id))
 
 
 class ApplicationBundle(models.Model):
