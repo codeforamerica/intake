@@ -376,7 +376,7 @@ class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
         if not request.user.is_staff:
             submissions = submissions.filter(
                 organizations__profiles=request.user.profile)
-        if not submissions:
+        if len(submissions) < len(submission_ids):
             raise Http404(
                 "Either those applications have been deleted or you don't "
                 "have permission to view those applications")
