@@ -158,20 +158,17 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
         submission = models.FormSubmission(answers=form.cleaned_data)
         submission.save()
         counties = self.get_counties()
-        orgs = [
+        orgs = (
             county.get_receiving_agency(submission.answers)
-            for county in counties]
-        submission.organizations = orgs
+            for county in counties)
+        submission.organizations.add(*orgs)
         # TODO: check for cerrect org in view tests
         number = models.FormSubmission.objects.count()
         # TODO: say which orgs this is going to in notification
         notifications.slack_new_submission.send(
             submission=submission, request=self.request,
             submission_count=number)
-        fillable_pdfs = models.FillablePDF.objects.filter(
-            organization__in=orgs).all()
-        for fillable_pdf in fillable_pdfs:
-            fillable_pdf.fill_for_submission(submission)
+        submission.fill_pdfs()
         self.create_confirmations_for_user(submission)
 
     def form_valid(self, form):
@@ -385,7 +382,7 @@ class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
 
 
 class ApplicationBundleDetail(ApplicationDetail):
-    """New aplication bundle view which uses prerendered bundles
+    """New application bundle view which uses prerendered bundles
 
     Given a bundle id it returns a detail page for ApplicationBundle
     """

@@ -4,7 +4,7 @@ python:
   - "3.5"
 install: pip install -r requirements/ci.txt
 env:
-  - DJANGO_SETTINGS_MODULE='project.settings.dev'
+  - DJANGO_SETTINGS_MODULE='project.settings.dev' DELUXE_TEST=1
 addons:
   postgresql: "9.4"
 before_script: python ./manage.py collectstatic --noinput
