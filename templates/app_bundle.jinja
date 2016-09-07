@@ -9,7 +9,7 @@
       <div class="bundle-metadata col-xs-12 col-md-10 col_centered">
         <h1 class="bundle-count">{{ count }} applications</h1>
 
-    {%- if show_pdf %}
+    {%- if show_pdf and not request.user.profile.organization.show_pdf_only %}
         <p><a href="#bundle-pdf">Scroll to PDF</a></p>
     {%- endif %}
 
@@ -17,10 +17,15 @@
           {% for submission in submissions %}
             {%- set form = submission.get_display_form_for_user(request.user) %}
             <li>
+              {%- if not request.user.profile.organization.show_pdf_only %}
               <a href="#application-{{ loop.index }}" class="bundle_list_name">
                 {{ form.last_name.get_display_value() }},
                 {{ form.first_name.get_display_value() }}
               </a>
+              {%- else %}
+                {{ form.last_name.get_display_value() }},
+                {{ form.first_name.get_display_value() }}
+              {%- endif %}
             </li>
           {% endfor %}
         </ol>
@@ -28,6 +33,7 @@
       </div> 
     </div>
 
+    {%- if not request.user.profile.organization.show_pdf_only %}
     {%- for submission in submissions %}
     <div id="application-{{ loop.index }}" class="row">
       <div class="application-data_display col-xs-12 col-md-10 col_centered">
@@ -37,6 +43,7 @@
       </div>
     </div>
     {%- endfor %}
+    {%- endif %}
 
     {%- if show_pdf %}
     <div id="bundle-pdf" class="row">

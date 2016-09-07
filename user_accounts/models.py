@@ -30,6 +30,7 @@ class Organization(models.Model):
     is_receiving_agency = models.BooleanField(default=False)
     requires_rap_sheet = models.BooleanField(default=False)
     requires_declaration_letter = models.BooleanField(default=False)
+    show_pdf_only = models.BooleanField(default=False)
     new_submission_confirmation_message = models.TextField(blank=True)
     address = models.TextField(blank=True)
     phone_number = models.TextField(blank=True)

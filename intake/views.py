@@ -30,7 +30,6 @@ from django.utils.translation import ugettext as _
 from django.utils.datastructures import MultiValueDict
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse_lazy
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib import messages
 
 from django.http import HttpResponse

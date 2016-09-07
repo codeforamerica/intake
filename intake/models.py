@@ -5,7 +5,6 @@ from urllib.parse import urljoin
 import random
 from django.conf import settings
 from django.db import models
-from django import apps
 from pytz import timezone
 from django.utils import timezone as timezone_utils
 from django.utils.translation import ugettext_lazy as _
@@ -531,7 +530,7 @@ class ApplicationBundle(models.Model):
         instance.save()
         if submissions:
             instance.submissions.add(*submissions)
-        if not skip_pdf:
+        if not skip_pdf and not instance.bundled_pdf:
             instance.build_bundled_pdf_if_necessary()
         return instance
 
