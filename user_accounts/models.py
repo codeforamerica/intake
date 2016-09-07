@@ -10,6 +10,10 @@ from formation.forms import county_form_selector, display_form_selector
 from . import exceptions
 
 
+class NoEmailsForOrgError(Exception):
+    pass
+
+
 class OrganizationManager(models.Manager):
 
     def get_by_natural_key(self, name):
@@ -46,8 +50,19 @@ class Organization(models.Model):
         This is not an efficient query and assumes that profiles and
         users have been prefetched in a previous query.
         """
-        profiles = self.profiles.filter(should_get_notifications=True)
-        return [profile.user.email for profile in profiles]
+        emails = [
+            profile.user.email
+            for profile
+            in self.profiles.filter(should_get_notifications=True)]
+        if not emails:
+            # this assumes that any existing invitations are valid emails
+            # to use for notification
+            emails = list(Invitation.objects.filter(
+                organization=self).values_list('email', flat=True))
+        if not emails:
+            msg = "{} has no invites or users".format(self)
+            raise NoEmailsForOrgError(msg)
+        return emails
 
     def has_a_pdf(self):
         """Checks for any linked intake.models.FillablePDF objects
