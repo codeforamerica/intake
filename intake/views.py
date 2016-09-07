@@ -52,7 +52,9 @@ class Home(TemplateView):
         context = super().get_context_data(*args, **kwargs)
         if constants.SCOPE_TO_LIVE_COUNTIES:
             counties = models.County.objects.prefetch_related(
-                'organizations').filter(slug=constants.Counties.SAN_FRANCISCO)
+                'organizations').filter(slug__in=[
+                constants.Counties.SAN_FRANCISCO,
+                constants.Counties.CONTRA_COSTA])
         else:
             counties = models.County.objects.prefetch_related(
                 'organizations').all()
