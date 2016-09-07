@@ -63,6 +63,8 @@ class BundlerTestCase(TestCase):
 
 class TestOrganizationBundle(BundlerTestCase):
 
+    fixtures = ['organizations', 'mock_profiles']
+
     def test_bundle_unopened_apps(self):
         submission_bundler.bundle_and_notify()
         self.assertEqual(
@@ -83,6 +85,8 @@ class TestOrganizationBundle(BundlerTestCase):
 
 
 class TestSubmissionBundler(BundlerTestCase):
+
+    fixtures = ['organizations', 'mock_profiles']
 
     def test_organization_bundle_map_with_no_referrals(self):
         self.patch_unopened([])
