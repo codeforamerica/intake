@@ -44,10 +44,6 @@ class FunctionalTestCase(StaticLiveServerTestCase):
             cls.dimensions['width'],
             cls.dimensions['height'])
 
-    def setUp(self, *args, **kwargs):
-        super().setUp(*args, **kwargs)
-        self.browser.delete_all_cookies()
-
     def build_url(self, url):
         return self.host + url
 
@@ -65,6 +61,7 @@ class FunctionalTestCase(StaticLiveServerTestCase):
         self.host = os.environ.get(
             'ACCEPTANCE_TEST_HOST',
             self.live_server_url)
+        self.browser.delete_all_cookies()
 
     def click_on(self, text):
         self.browser.find_element_by_link_text(text).click()
