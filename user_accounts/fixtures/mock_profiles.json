@@ -1,0 +1,126 @@
+[
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$24000$kjrOnsbc7CXa$n18RR7fygcp5Fx4lX4mRy5KRl8mAouteXpa5W5oblRM=",
+    "last_login": "2016-09-07T22:23:37Z",
+    "is_superuser": true,
+    "username": "cfa_user",
+    "first_name": "Fake",
+    "last_name": "CFA",
+    "email": "bgolder+demo+cfa_user@codeforamerica.org",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2016-06-13T22:47:38Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$24000$ce8phUfGngu0$6jk9hPHOXdymtFSa5N7GVJekvoveoqYxxyKWQPny1XU=",
+    "last_login": "2016-09-06T23:44:08Z",
+    "is_superuser": false,
+    "username": "sf_pubdef_user",
+    "first_name": "Fake",
+    "last_name": "SFPubDef",
+    "email": "bgolder+demo+sf_pubdef@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2016-06-13T23:12:25Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$24000$vHlGpVwG7BaY$63mMLLMDHBs2kQ9Ygp3o7d2WSWz9afuQ7335Vbes+IY=",
+    "last_login": "2016-09-07T22:41:26Z",
+    "is_superuser": false,
+    "username": "a_pubdef_user",
+    "first_name": "Fake",
+    "last_name": "AlamedaPubDef",
+    "email": "bgolder+demo+a_pubdef_user@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2016-08-17T10:45:11Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$24000$7JQu9N8NpkUC$WAKRRjIUrVGzB2JE8FRRvMSNY1XeYicTfhvelNUqbJU=",
+    "last_login": "2016-08-30T21:32:52Z",
+    "is_superuser": false,
+    "username": "cc_pubdef_user",
+    "first_name": "Fake",
+    "last_name": "CoCoPubDef",
+    "email": "bgolder+demo+cc_pubdef_user@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2016-08-30T21:30:07Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 1,
+  "fields": {
+    "name": "Fake San Francisco",
+    "user": [
+      "sf_pubdef_user"
+    ],
+    "organization": [
+      "San Francisco Public Defender"
+    ],
+    "should_get_notifications": true
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 2,
+  "fields": {
+    "name": "Fake CFA",
+    "user": [
+      "cfa_user"
+    ],
+    "organization": [
+      "Code for America"
+    ],
+    "should_get_notifications": false
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 6,
+  "fields": {
+    "name": "Fake Alameda",
+    "user": [
+      "a_pubdef_user"
+    ],
+    "organization": [
+      "Alameda Public Defender"
+    ],
+    "should_get_notifications": true
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 8,
+  "fields": {
+    "name": "Fake Contra Costa",
+    "user": [
+      "cc_pubdef_user"
+    ],
+    "organization": [
+      "Contra Costa Public Defender"
+    ],
+    "should_get_notifications": true
+  }
+}
+]
