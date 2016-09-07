@@ -1,9 +1,11 @@
 import importlib
+import logging
 import uuid
 from urllib.parse import urljoin
 import random
 from django.conf import settings
 from django.db import models
+from django import apps
 from pytz import timezone
 from django.utils import timezone as timezone_utils
 from django.utils.translation import ugettext_lazy as _
@@ -19,8 +21,14 @@ from intake import (
 
 from formation.forms import display_form_selector
 
+logger = logging.getLogger(__name__)
+
 
 class MissingAnswersError(Exception):
+    pass
+
+
+class MissingPDFsError(Exception):
     pass
 
 
@@ -153,6 +161,13 @@ class FormSubmission(models.Model):
             'logs__user__profile__organization',
             'counties'
         ).all()
+
+    def fill_pdfs(self):
+        """Checks for and creates any needed `FilledPDF` objects
+        """
+        fillables = FillablePDF.objects.filter(organization__submissions=self)
+        for fillable in fillables:
+            fillable.fill_for_submission(self)
 
     def agency_event_logs(self, event_type):
         '''assumes that self.logs and self.logs.user are prefetched'''
@@ -511,13 +526,58 @@ class ApplicationBundle(models.Model):
                                    blank=True)
 
     @classmethod
-    def create_with_submissions(cls, **kwargs):
-        submissions = kwargs.pop('submissions', [])
+    def create_with_submissions(cls, submissions, skip_pdf=False, **kwargs):
         instance = cls(**kwargs)
         instance.save()
         if submissions:
             instance.submissions.add(*submissions)
+        if not skip_pdf:
+            instance.build_bundled_pdf_if_necessary()
         return instance
+
+    def should_have_a_pdf(self):
+        """Returns `True` if `self.organization` has any `FillablePDF`
+        """
+        return bool(
+            FillablePDF.objects.filter(organization__bundles=self).count())
+
+    def get_individual_filled_pdfs(self):
+        """Gets FilledPDFs from this bundle's submissions and target_org
+        """
+        return FilledPDF.objects.filter(
+            submission__bundles=self,
+            original_pdf__organization__bundles=self)
+
+    def build_bundled_pdf_if_necessary(self):
+        """Populates `self.bundled_pdf` attribute if needed
+
+        First checks whether or not there should be a pdf. If so,
+        - tries to grab filled pdfs for this bundles submissionts
+        - if it needs a pdf but there weren't any pdfs, it logs an error and
+          creates the necessary filled pdfs.
+        - makes a filename based on the organization and current time.
+        - adds the file data and saves itself.
+        """
+        needs_pdf = self.should_have_a_pdf()
+        if not needs_pdf:
+            return
+        filled_pdfs = self.get_individual_filled_pdfs()
+        if needs_pdf and not filled_pdfs:
+            msg = "submissions for ApplicationBundle(pk={}) lack pdfs".format(
+                self.pk)
+            logger.error(msg)
+            for submission in self.submissions.all():
+                submission.fill_pdfs()
+            filled_pdfs = self.get_individual_filled_pdfs()
+        now_str = timezone_utils.now().strftime('%Y-%m-%d_%H:%M')
+        filename = "submission_bundle_{0:0>4}-{1}.pdf".format(
+            self.organization.pk, now_str)
+        bundled_pdf_bytes = get_parser().join_pdfs(
+            filled.pdf for filled in filled_pdfs)
+        pdf_file = SimpleUploadedFile(filename, bundled_pdf_bytes,
+                                      content_type='application/pdf')
+        self.bundled_pdf = pdf_file
+        self.save()
 
     def get_pdf_bundle_url(self):
         return reverse(

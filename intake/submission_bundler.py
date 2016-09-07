@@ -1,6 +1,3 @@
-from django.core.files.uploadedfile import SimpleUploadedFile
-from django.utils import timezone
-
 from intake import (
     notifications,
     models as intake_models
@@ -27,25 +24,10 @@ class OrganizationBundle:
         return [submission.id for submission in self.submissions]
 
     def create_app_bundle(self):
-        filled_pdfs = intake_models.FilledPDF.objects.filter(
-            submission__in=self.submissions)
-        bundle = intake_models.ApplicationBundle(
+        return intake_models.ApplicationBundle.create_with_submissions(
+            submissions=self.submissions,
             organization=self.organization,
         )
-        if filled_pdfs:
-            # TODO: test that the pdf is made properly
-            pdf_objects = [filled.pdf for filled in filled_pdfs]
-            bundled_pdf_bytes = intake_models.get_parser().join_pdfs(
-                pdf_objects)
-            now_str = timezone.now().strftime('%Y-%m-%d_%H:%M')
-            filename = "submission_bundle_{0:0>4}-{1}.pdf".format(
-                self.organization.pk, now_str)
-            pdf_file = SimpleUploadedFile(filename, bundled_pdf_bytes,
-                                          content_type='application/pdf')
-            bundle.bundled_pdf = pdf_file
-        bundle.save()
-        bundle.submissions.add(*self.submissions)
-        return bundle
 
     def make_referrals(self):
         """Send notifications to self.organization users
