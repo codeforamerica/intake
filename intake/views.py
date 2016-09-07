@@ -29,6 +29,7 @@ new applications.
 from django.utils.translation import ugettext as _
 from django.utils.datastructures import MultiValueDict
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import Http404
 from django.core.urlresolvers import reverse_lazy
 from django.contrib import messages
 
@@ -258,11 +259,11 @@ class ApplicationDetail(View):
         messages.error(request, self.not_allowed_message)
         return redirect('intake-app_index')
 
-    def mark_viewed(self, request, submissions):
-        # TODO: doesn't ned to be here
-        if not isinstance(submissions, list):
-            submissions = [submissions]
-        models.FormSubmission.mark_viewed(submissions, request.user)
+    def mark_viewed(self, request, submission):
+        models.ApplicationLogEntry.log_opened([submission.id], request.user)
+        notifications.slack_submissions_viewed.send(
+            submissions=[submission], user=request.user,
+            bundle_url=submission.get_external_url())
 
     def get(self, request, submission_id):
         if request.user.profile.should_see_pdf() and not request.user.is_staff:
@@ -362,21 +363,41 @@ class MultiSubmissionMixin:
 
 
 class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
-    """Displays a set of submissions for an org user. These are typically
+    """A legacy view that should be deprecated
+
+    Displays a set of submissions for an org user. These are typically
     new submissions, and the org user has followed a link from their email.
     """
 
     def get(self, request):
-        submissions = self.get_submissions_from_params(request)
+        submission_ids = self.get_ids_from_params(request)
+        submissions = models.FormSubmission.objects.filter(
+            pk__in=submission_ids)
+        if not request.user.is_staff:
+            submissions = submissions.filter(
+                organizations__profiles=request.user.profile)
         if not submissions:
-            return self.not_allowed(request)
+            raise Http404(
+                "Either those applications have been deleted or you don't "
+                "have permission to view those applications")
+        # make bundle
+        bundle = models.ApplicationBundle.objects.filter(
+            submissions__pk__in=submission_ids,
+            organization=request.user.profile.organization).first()
+        if not bundle:
+            bundle = models.ApplicationBundle.create_with_submissions(
+                submissions,
+                organization=request.user.profile.organization)
         context = dict(
             submissions=submissions,
             count=len(submissions),
             show_pdf=request.user.profile.should_see_pdf(),
             app_ids=[sub.id for sub in submissions]
         )
-        self.mark_viewed(request, submissions)
+        models.ApplicationLogEntry.log_bundle_opened(bundle, request.user)
+        notifications.slack_submissions_viewed.send(
+            submissions=submissions, user=request.user,
+            bundle_url=bundle.get_external_url())
         return render(request, "app_bundle.jinja", context)
 
 

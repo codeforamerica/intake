@@ -330,6 +330,12 @@ class FormSubmission(models.Model):
     def get_anonymous_display(self):
         return self.anonymous_name
 
+    def get_absolute_url(self):
+        return reverse('intake-app_detail', kwargs=dict(submission_id=self.id))
+
+    def get_external_url(self):
+        return urljoin(settings.DEFAULT_HOST, self.get_absolute_url())
+
     def __str__(self):
         return self.get_anonymous_display()
 
