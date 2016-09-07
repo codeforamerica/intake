@@ -31,7 +31,7 @@ test.screenshots:
 deploy.demo:
 	git push -f demo HEAD:master
 	heroku run --app cmr-demo python manage.py migrate
-	heroku run --app cmr-demo python manage.py loaddata organizations
+	heroku run --app cmr-demo python manage.py loaddata organizations mock_profiles
 
 deploy.prod:
 	git push prod master
