@@ -545,7 +545,7 @@ class TestApplicationBundle(TestCase):
         result = bundle.get_absolute_url()
         self.assertEqual(result, expected_url)
 
-    @skipUnless(DELUXE_TEST, "Extraordinarily slow, set `DELUXE_TEST` to run")
+    @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
     def test_calls_pdfparser_correctly(self):
         sf_pubdef = auth_models.Organization.objects.get(
             slug=constants.Organizations.SF_PUBDEF)

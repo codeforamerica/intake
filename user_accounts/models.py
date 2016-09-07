@@ -8,7 +8,6 @@ from invitations.models import Invitation as BaseInvitation
 from intake import models as intake_models
 from formation.forms import county_form_selector, display_form_selector
 from . import exceptions
-from intake.constants import Organizations, ORG_NAMES
 
 
 class OrganizationManager(models.Manager):
@@ -30,6 +29,7 @@ class Organization(models.Model):
     is_receiving_agency = models.BooleanField(default=False)
     requires_rap_sheet = models.BooleanField(default=False)
     requires_declaration_letter = models.BooleanField(default=False)
+    show_pdf_only = models.BooleanField(default=False)
     new_submission_confirmation_message = models.TextField(blank=True)
     address = models.TextField(blank=True)
     phone_number = models.TextField(blank=True)
