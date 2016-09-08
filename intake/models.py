@@ -462,23 +462,16 @@ class FillablePDF(models.Model):
         return self.name
 
     def fill_for_submission(self, submission):
-        """Fills out a pdf and saves it to FilledPDF
+        """Fills out a pdf and saves it as a FilledPDF instance
 
         used when saving a new submission
         used when retrieving a filled pdf if it doesn't
         """
-        filled_pdf_bytes = self.fill(submission)
-        filename = 'filled_{0:0>4}-{1:0>6}.pdf'.format(
-            self.id, submission.id)
-        pdf_file = SimpleUploadedFile(filename, filled_pdf_bytes,
-                                      content_type='application/pdf')
-        pdf = FilledPDF(
-            pdf=pdf_file,
+        return FilledPDF.create_with_pdf_bytes(
+            pdf_bytes=self.fill(submission),
             original_pdf=self,
-            submission=submission,
-        )
-        pdf.save()
-        return pdf
+            submission=submission
+            )
 
     def fill(self, *args, **kwargs):
         parser = get_parser()
@@ -509,6 +502,21 @@ class FilledPDF(models.Model):
         FormSubmission,
         on_delete=models.CASCADE,
         related_name='filled_pdfs')
+
+    @classmethod
+    def create_with_pdf_bytes(cls, pdf_bytes, original_pdf, submission):
+        """Sets the contents of `self.pdf` to `bytes_`.
+        """
+        filename = 'filled_{0:0>4}-{1:0>6}.pdf'.format(
+            original_pdf.id, submission.id)
+        file_obj = SimpleUploadedFile(
+            filename, pdf_bytes, content_type='application/pdf')
+        instance = cls(
+            pdf=file_obj,
+            original_pdf=original_pdf,
+            submission=submission)
+        instance.save()
+        return instance
 
     def get_absolute_url(self):
         """This is unique _to each submission_.
@@ -553,6 +561,15 @@ class ApplicationBundle(models.Model):
             submission__bundles=self,
             original_pdf__organization__bundles=self)
 
+    def set_bundled_pdf_to_bytes(self, bytes_):
+        """Sets the content of `self.pdf` to `bytes_`.
+        """
+        now_str = timezone_utils.now().strftime('%Y-%m-%d_%H:%M')
+        filename = "submission_bundle_{0:0>4}-{1}.pdf".format(
+            self.organization.pk, now_str)
+        self.bundled_pdf = SimpleUploadedFile(
+            filename, bytes_, content_type='application/pdf')
+
     def build_bundled_pdf_if_necessary(self):
         """Populates `self.bundled_pdf` attribute if needed
 
@@ -574,14 +591,12 @@ class ApplicationBundle(models.Model):
             for submission in self.submissions.all():
                 submission.fill_pdfs()
             filled_pdfs = self.get_individual_filled_pdfs()
-        now_str = timezone_utils.now().strftime('%Y-%m-%d_%H:%M')
-        filename = "submission_bundle_{0:0>4}-{1}.pdf".format(
-            self.organization.pk, now_str)
-        bundled_pdf_bytes = get_parser().join_pdfs(
-            filled.pdf for filled in filled_pdfs)
-        pdf_file = SimpleUploadedFile(filename, bundled_pdf_bytes,
-                                      content_type='application/pdf')
-        self.bundled_pdf = pdf_file
+        if len(filled_pdfs) == 1:
+            self.set_bundled_pdf_to_bytes(filled_pdfs[0].pdf.read())
+        else:
+            self.set_bundled_pdf_to_bytes(
+                get_parser().join_pdfs(
+                    filled.pdf for filled in filled_pdfs))
         self.save()
 
     def get_pdf_bundle_url(self):

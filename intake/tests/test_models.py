@@ -1,16 +1,18 @@
 import os
-from django.test import TestCase, override_settings
-from django.core.exceptions import ValidationError
 from datetime import datetime
-
 from unittest import skipUnless
 from unittest.mock import patch, Mock
+
+from django.test import TestCase
+from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from intake.tests import mock
 from user_accounts.tests.mock import create_fake_auth_models
 from user_accounts import models as auth_models
-from intake import models, model_fields, anonymous_names, validators, notifications, constants
-from formation.validators import are_valid_choices
+from intake import (
+    models, model_fields, anonymous_names, validators, notifications,
+    constants)
 
 
 DELUXE_TEST = os.environ.get('DELUXE_TEST', False)
@@ -493,6 +495,19 @@ class TestFilledPDF(TestCase):
         filled = models.FilledPDF(submission=sub)
         self.assertEqual(filled.get_absolute_url(), expected_url)
 
+    def test_save_binary_data_to_pdf(self):
+        org = auth_models.Organization.objects.get(
+            slug=constants.Organizations.SF_PUBDEF)
+        sub = models.FormSubmission.create_for_organizations([org], answers={})
+        data = b'content'
+        fob = SimpleUploadedFile(
+            content=data, name="content.pdf", content_type="application/pdf")
+        filled = models.FilledPDF(submission=sub, pdf=fob)
+        filled.save()
+        self.assertEqual(filled.pdf.read(), data)
+        self.assertIn("content", filled.pdf.name)
+        self.assertIn(".pdf", filled.pdf.name)
+
 
 class TestApplicationBundle(TestCase):
 
@@ -571,6 +586,37 @@ class TestApplicationBundle(TestCase):
         bundle.get_individual_filled_pdfs = get_pdfs_mock
         bundle.build_bundled_pdf_if_necessary()
         get_pdfs_mock.assert_not_called()
+
+    @patch('intake.models.get_parser')
+    @patch('intake.models.logger')
+    def test_build_bundled_pdf_with_one_pdf(self, logger, get_parser):
+        # set up associated data
+        sf_pubdef = auth_models.Organization.objects.get(
+            slug=constants.Organizations.SF_PUBDEF)
+        sub = models.FormSubmission.create_for_organizations(
+                [sf_pubdef], answers={})
+        fillable = mock.fillable_pdf(organization=sf_pubdef)
+        data = b'content'
+        filled = models.FilledPDF.create_with_pdf_bytes(
+            pdf_bytes=data, submission=sub, original_pdf=fillable)
+        bundle = models.ApplicationBundle.create_with_submissions(
+            organization=sf_pubdef, submissions=[sub], skip_pdf=True)
+
+        # set up mocks
+        should_have_a_pdf = Mock(return_value=True)
+        get_individual_filled_pdfs = Mock(
+            return_value=[filled])
+        bundle.should_have_a_pdf = should_have_a_pdf
+        bundle.get_individual_filled_pdfs = get_individual_filled_pdfs
+
+        # run method
+        bundle.build_bundled_pdf_if_necessary()
+
+        # check results
+        get_parser.assert_not_called()
+        logger.assert_not_called()
+        get_individual_filled_pdfs.assert_called_once_with()
+        self.assertEqual(bundle.bundled_pdf.read(), data)
 
     @patch('intake.models.get_parser')
     @patch('intake.models.logger')

@@ -20,6 +20,11 @@ test.coverage:
 		--verbosity 2
 	coverage report -m
 
+test.deluxe:
+	DELUXE_TEST=1 \
+	./manage.py test $(SCOPE) \
+		--verbosity 2
+
 test.acceptance:
 	python ./manage.py test tests.acceptance
 
