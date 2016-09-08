@@ -14,6 +14,8 @@ from intake import (
     models, model_fields, anonymous_names, validators, notifications,
     constants)
 
+from formation import field_types
+
 
 DELUXE_TEST = os.environ.get('DELUXE_TEST', False)
 
@@ -462,7 +464,7 @@ class TestCounty(TestCase):
 
     def test_get_receiving_agency_alameda_eligible_for_apd(self):
         alameda = models.County.objects.get(slug=constants.Counties.ALAMEDA)
-        eligible_for_apd = dict(monthly_income=2999, owns_home=False)
+        eligible_for_apd = dict(monthly_income=2999, owns_home=field_types.NO)
         result = alameda.get_receiving_agency(eligible_for_apd)
         alameda_pubdef = auth_models.Organization.objects.get(
             slug=constants.Organizations.ALAMEDA_PUBDEF)
@@ -470,7 +472,7 @@ class TestCounty(TestCase):
 
     def test_get_receiving_agency_high_income_alameda_gets_ebclc(self):
         alameda = models.County.objects.get(slug=constants.Counties.ALAMEDA)
-        ebclc_high_income = dict(monthly_income=3000, owns_home=False)
+        ebclc_high_income = dict(monthly_income=3000, owns_home=field_types.NO)
         result = alameda.get_receiving_agency(ebclc_high_income)
         ebclc = auth_models.Organization.objects.get(
             slug=constants.Organizations.EBCLC)
@@ -478,7 +480,7 @@ class TestCounty(TestCase):
 
     def test_get_receiving_agency_owns_home_alameda_gets_ebclc(self):
         alameda = models.County.objects.get(slug=constants.Counties.ALAMEDA)
-        ebclc_owns_home = dict(monthly_income=2999, owns_home=True)
+        ebclc_owns_home = dict(monthly_income=2999, owns_home=field_types.YES)
         result = alameda.get_receiving_agency(ebclc_owns_home)
         ebclc = auth_models.Organization.objects.get(
             slug=constants.Organizations.EBCLC)
