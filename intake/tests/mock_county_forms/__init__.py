@@ -111,7 +111,12 @@ class Provider(BaseProvider):
             'on_public_benefits': self.maybe(0.7),
             'owns_home': self.maybe(0.1),
             'household_size': str(random.randint(0, 4)),
-            'how_did_you_hear': ''
+            'how_did_you_hear': '',
+            'declaration_letter_intro':'some text',
+            'declaration_letter_life_changes':'some text',
+            'declaration_letter_activities':'some text',
+            'declaration_letter_goals':'some text',
+            'declaration_letter_why':'some text',
         }
         data.update(overrides)
         return data
@@ -166,3 +171,16 @@ class Provider(BaseProvider):
         }
         data.update(overrides)
         return data
+
+    def ebclc_answers(self, **overrides):
+        data = self.alameda_county_form_answers(**overrides)
+        data['monthly_income'] = 3001
+        data['owns_home'] = "yes"
+        return data
+
+    def alameda_pubdef_answers(self, **overrides):
+        data = self.alameda_county_form_answers(**overrides)
+        data['monthly_income'] = 2999
+        data['owns_home'] = "no"
+        return data
+

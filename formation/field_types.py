@@ -50,6 +50,10 @@ class CharField(Field):
         return mark_safe(Field.get_current_value(self))
 
 
+class MultilineCharField(CharField):
+    template_name = "formation/textarea_field.jinja"
+
+
 class WholeDollarField(CharField):
     empty_value = None
     # https://regex101.com/r/dP5wX1/1

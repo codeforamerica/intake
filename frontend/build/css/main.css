@@ -1022,7 +1022,6 @@ a:focus {
   text-decoration: underline;
 }
 a:focus {
-  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -2395,7 +2394,6 @@ select[size] {
 input[type="file"]:focus,
 input[type="radio"]:focus,
 input[type="checkbox"]:focus {
-  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -2886,7 +2884,6 @@ select[multiple].input-lg {
 .btn.focus,
 .btn:active.focus,
 .btn.active.focus {
-  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -3621,8 +3618,10 @@ section.content.application_form {
 .note ol {
   padding-left: 1.5em;
 }
-.field input {
+.field input,
+.field textarea {
   font-weight: 400;
+  font-size: 1.25em;
 }
 .field input[type="text"],
 .field input[type="email"],
@@ -3646,6 +3645,11 @@ section.content.application_form {
   font-size: 1em;
   border: 0;
   margin: 0;
+}
+.field textarea {
+  width: 100%;
+  max-width: 100%;
+  height: 6em;
 }
 .field + .field {
   margin-top: 1.5em;

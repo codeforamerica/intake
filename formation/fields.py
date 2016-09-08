@@ -3,7 +3,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import EmailValidator
 from formation.field_types import (
-    CharField, WholeDollarField, ChoiceField, YesNoField,
+    CharField, MultilineCharField, WholeDollarField, ChoiceField, YesNoField,
     MultipleChoiceField, MultiValueField,
     FormNote, DateTimeField, YES_NO_CHOICES
 )
@@ -117,8 +117,9 @@ class DateOfBirthField(MultiValueField):
     context_key = "dob"
     label = _("What is your date of birth?")
     help_text = _("For example: 4/28/1986")
-    is_required_error_message = _(
-        "The public defender may not be able to check your RAP sheet without a full date of birth.")
+    is_required_error_message = _("The public defender may not be able to "
+                                  "check your RAP sheet without a full date "
+                                  "of birth.")
     is_recommended_error_message = is_required_error_message
     subfields = [
         Month,
@@ -134,10 +135,12 @@ class DateOfBirthField(MultiValueField):
 class SocialSecurityNumberField(CharField):
     context_key = "ssn"
     label = _('What is your Social Security Number?')
-    help_text = help_text = _(
-        "The public defender's office will use this to get your San Francisco RAP sheet and find any convictions that can be reduced or dismissed.")
-    is_required_error_message = _(
-        "The public defender may not be able to check your RAP sheet without a social security number.")
+    help_text = help_text = _("The public defender's office will use this to "
+                              "get your San Francisco RAP sheet and find any "
+                              "convictions that can be reduced or dismissed.")
+    is_required_error_message = _("The public defender may not be able to "
+                                  "check your RAP sheet without a social "
+                                  "security number.")
     is_recommended_error_message = is_required_error_message
     display_label = "SSN"
 
@@ -150,8 +153,8 @@ class ContactPreferences(MultipleChoiceField):
     context_key = "contact_preferences"
     choices = CONTACT_PREFERENCE_CHOICES
     label = _('How would you like us to contact you?')
-    help_text = _(
-        'Code for America will use this to update you about your application.')
+    help_text = _('Code for America will use this to update you about '
+                  'your application.')
     display_label = "Prefers contact via"
 
     def get_display_value(self):
@@ -203,8 +206,9 @@ class AddressField(MultiValueField):
     label = _("What is your mailing address?")
     help_text = _("")
     template_name = "formation/multivalue_address.jinja"
-    is_required_error_message = _(
-        "The public defender needs a mailing address to send you a letter with the next steps.")
+    is_required_error_message = _("The public defender needs a mailing "
+                                  "address to send you a letter with the next "
+                                  "steps.")
     is_recommended_error_message = is_required_error_message
     subfields = [
         Street,
@@ -226,8 +230,8 @@ class AddressField(MultiValueField):
 class USCitizen(YesNoField):
     context_key = "us_citizen"
     label = _("Are you a U.S. citizen?")
-    help_text = _(
-        "The public defender handles non-citizen cases differently and has staff who can help with citizenship issues.")
+    help_text = _("The public defender handles non-citizen cases differently "
+                  "and has staff who can help with citizenship issues.")
     display_label = "Is a citizen"
 
 
@@ -267,22 +271,23 @@ class WhenProbationParole(CharField):
 class FinishedHalfProbation(ChoiceField):
     context_key = "finished_half_probation"
     choices = YES_NO_CHOICES + (('not_applicable', _("Not on probation")),)
-    label = _(
-        "If you're on probation, have you finished half of your probation time?")
+    label = _("If you're on probation, have you finished half of your "
+              "probation time?")
     display_label = "Past half probation"
 
 
 class RAPOutsideSF(YesNoField):
     context_key = "rap_outside_sf"
-    label = _("Have you ever been arrested or convicted outside of San Francisco?")
+    label = _("Have you ever been arrested or convicted outside of San "
+              "Francisco?")
     display_label = "Has RAP outside SF"
     flip_display_choice_order = True
 
 
 class WhenWhereOutsideSF(CharField):
     context_key = "when_where_outside_sf"
-    label = _(
-        "When and where were you arrested or convicted outside of San Francisco?")
+    label = _("When and where were you arrested or convicted outside of San "
+              "Francisco?")
     display_label = "Where/when"
 
 
@@ -293,7 +298,9 @@ class WhenWhereOutsideSF(CharField):
 
 class FinancialScreeningNote(FormNote):
     context_key = "financial_screening_note"
-    content = _("The Clean Slate program is free for you, but the public defender uses this information to get money from government programs.")
+    content = _("The Clean Slate program is free for you, but the public "
+                "defender uses this information to get money from government "
+                "programs.")
 
 
 class CurrentlyEmployed(YesNoField):
@@ -351,13 +358,54 @@ class OwnsHome(YesNoField):
 
 class MonthlyExpenses(CharField):
     context_key = "monthly_expenses"
-    label = _("How much do you spend each month on things like rent, groceries, utilities, medical expenses, or childcare expenses?")
+    label = _("How much do you spend each month on things like rent, "
+              "groceries, utilities, medical expenses, or childcare expenses?")
 
 
 class HouseholdSize(CharField):
     context_key = "household_size"
     label = _("How many people live with you?")
     help_text = _('For example: "3"')
+
+
+###
+# Declaration Letter
+###
+
+class AlamedaDeclarationLetterNote(FormNote):
+    context_key = "alameda_declaration_letter_note"
+    content = _("Create your letter for the Alameda County Judge. This is "
+                "required to complete your appication in Alameda County.")
+
+
+class DeclarationLetterIntro(MultilineCharField):
+    context_key = "declaration_letter_intro"
+    label = _("Introduce yourself. What has been going on in your life?")
+    help_text = _("Write your answer in 3-5 sentences. The judge will read "
+                  "this when deciding whether to clear your record.")
+
+
+class DeclarationLetterLifeChanges(DeclarationLetterIntro):
+    context_key = "declaration_letter_life_changes"
+    label = _("How is your life different now, since your last conviction?")
+
+
+class DeclarationLetterActivities(DeclarationLetterIntro):
+    context_key = "declaration_letter_activities"
+    label = _("Have you been involved in jobs, programs, activities, or "
+              "community service? What were they and what did you do?")
+
+
+class DeclarationLetterGoals(DeclarationLetterIntro):
+    context_key = "declaration_letter_goals"
+    label = _("What goals are you working on achieving in your life right "
+              "now? How are you working on them?")
+
+
+class DeclarationLetterWhy(DeclarationLetterIntro):
+    context_key = "declaration_letter_why"
+    label = _("Why do you want to clear your record? How will this change or "
+              "help your life?")
 
 
 INTAKE_FIELDS = [
@@ -400,6 +448,13 @@ INTAKE_FIELDS = [
     HowDidYouHear,
     AdditionalInformation,
     ConsentNote,
+
+    AlamedaDeclarationLetterNote,
+    DeclarationLetterIntro,
+    DeclarationLetterLifeChanges,
+    DeclarationLetterActivities,
+    DeclarationLetterGoals,
+    DeclarationLetterWhy
 ]
 
 
