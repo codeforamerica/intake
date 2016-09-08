@@ -164,6 +164,13 @@ class AlamedaCountyForm(CombinableCountyFormSpec):
         # F.HasExternalRAP,
         # F.ExternalRAPWhereWhen,
         F.HowDidYouHear,
+        F.AlamedaDeclarationLetterNote,
+        F.DeclarationLetterIntro,
+        F.DeclarationLetterLifeChanges,
+        F.DeclarationLetterActivities,
+        F.DeclarationLetterGoals,
+        F.DeclarationLetterWhy,
+        F.AdditionalInformation,
     }
     required_fields = {
         F.FirstName,
@@ -178,37 +185,17 @@ class AlamedaCountyForm(CombinableCountyFormSpec):
         F.FinishedHalfProbation,
         F.ServingSentence,
         F.BeingCharged,
+        F.AlamedaDeclarationLetterNote,
+        F.DeclarationLetterIntro,
+        F.DeclarationLetterLifeChanges,
+        F.DeclarationLetterActivities,
+        F.DeclarationLetterGoals,
+        F.DeclarationLetterWhy
     }
     optional_fields = {
         F.HowDidYouHear,
+        F.AdditionalInformation
     }
-
-
-# class DeclarationLetterForm(CombinableFormSpec):
-#     fields = {
-#         # F.ContactPreferences,
-#         # F.FirstName,
-#         # F.MiddleName,
-#         # F.LastName,
-#         # #F.PreferredPronouns,
-#         # F.PhoneNumberField,
-#         # F.EmailField,
-#         # F.AddressField,
-#         # F.FinancialScreeningNote,
-#         # F.MonthlyIncome,
-#         # #F.OnPublicBenefits,
-#         # #F.HomeOwner,
-#         # #F.HouseholdSize,
-#         # F.DateOfBirthField,
-#         # #F.LastFourOfSSN,
-#         # F.USCitizen,
-#         # F.OnProbationParole,
-#         # #F.FinishedHalfProbation,
-#         # F.ServingSentence,
-#         # F.BeingCharged,
-#         # #F.HasExternalRAP,
-#         # #F.ExternalRAPWhereWhen
-#     }
 
 
 class SelectCountyForm(Form):

@@ -30,8 +30,10 @@ section.content.application_form {
 	ol { padding-left: 1.5em; }
 }
 .field {
-	input {
-		font-weight: 400; }
+	input, textarea {
+		font-weight: 400;
+		font-size: 1.25em;
+	}
 	input[type="text"], input[type="email"], input[type="password"] { 
 		display: inline-block; width: 100%;
 		font-size: 1.25em;
@@ -48,6 +50,11 @@ section.content.application_form {
 		font-weight: 700;
 		font-size: 1em;
 		border: 0; margin: 0; }
+	textarea {
+		width: 100%;
+		max-width: 100%;
+		height: 6em;
+	}
 }
 .field + .field { margin-top: 1.5em; }
 .field + .note { margin-top: 1.5em; }
