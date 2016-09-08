@@ -516,7 +516,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
     def test_can_apply_to_alameda_alone(self, slack, send_confirmation):
         self.be_anonymous()
         alameda = constants.Counties.ALAMEDA
-        answers = mock.fake.alameda_county_form_answers()
+        answers = mock.fake.alameda_pubdef_answers()
         result = self.client.fill_form(
             reverse('intake-apply'), counties=[alameda])
         self.assertRedirects(result, reverse('intake-county_application'))
@@ -536,10 +536,19 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
             answers__contains=lookup).first()
         county_slugs = [county.slug for county in submission.get_counties()]
         self.assertListEqual(county_slugs, [alameda])
+        self.assertIn(self.apubdef, submission.organizations.all())
         self.assertEqual(submission.organizations.count(), 1)
         self.assertEqual(submission.organizations.first().county.slug, alameda)
         filled_pdf_count = models.FilledPDF.objects.count()
         self.assertEqual(filled_pdf_count, 0)
+        self.be_apubdef_user()
+        resp = self.client.get(reverse("intake-app_index"))
+        url = reverse(
+            "intake-app_detail", 
+            kwargs={'submission_id':submission.id})
+
+        self.assertContains(resp, url)
+
 
     def test_can_go_back_and_reset_counties(self):
         self.be_anonymous()
@@ -559,6 +568,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
             reverse('intake-apply'),
             counties=second_choices,
             follow=True)
+
         form = result.context['form']
         self.assertEqual(form.counties, second_choices)
         county_setting = self.client.session['form_in_progress']['counties']

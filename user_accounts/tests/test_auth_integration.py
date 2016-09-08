@@ -58,6 +58,8 @@ class AuthIntegrationTestCase(TestCase):
                 cls.ccpubdef = org
             elif org.name == "Code for America":
                 cls.cfa = org
+            elif org.name == "Alameda Public Defender":
+                cls.apubdef = org
         cls.superuser = mock.fake_superuser(
             **cls.example_superuser)
         UserProfile.objects.create(user=cls.superuser,
@@ -76,6 +78,7 @@ class AuthIntegrationTestCase(TestCase):
         cls.cfa_user = cls.cfa.profiles.first().user
         cls.sfpubdef_user = cls.sfpubdef.profiles.first().user
         cls.ccpubdef_user = cls.ccpubdef.profiles.first().user
+        cls.apubdef_user = cls.apubdef.profiles.first().user
 
     def be_superuser(self):
         self.client.login(**self.example_superuser)
@@ -91,6 +94,9 @@ class AuthIntegrationTestCase(TestCase):
 
     def be_ccpubdef_user(self):
         return self.be_user(self.ccpubdef_user)
+
+    def be_apubdef_user(self):
+        return self.be_user(self.apubdef_user)
 
     def be_cfa_user(self):
         return self.be_user(self.cfa_user)

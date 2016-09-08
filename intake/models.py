@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.urlresolvers import reverse
+from formation import field_types
 
 from intake import (
     pdfparser, anonymous_names, notifications, model_fields,
@@ -66,7 +67,7 @@ class County(models.Model):
             # if under 3000 and not owns home
             income = answers.get('monthly_income')
             owns_home = answers.get('owns_home')
-            if income < 3000 and not owns_home:
+            if income < 3000 and owns_home == field_types.NO:
                 # return alameda pub def
                 return self.organizations.get(
                     slug=constants.Organizations.ALAMEDA_PUBDEF)
