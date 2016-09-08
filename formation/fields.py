@@ -235,8 +235,9 @@ class AddressField(MultiValueField):
 class USCitizen(YesNoField):
     context_key = "us_citizen"
     label = _("Are you a U.S. citizen?")
-    help_text = _("The public defender handles non-citizen cases differently "
-                  "and has staff who can help with citizenship issues.")
+    help_text = _(
+        "It is important for your attorney to know if you are a "
+        "U.S citizen so they can find the best ways to help you.")
     display_label = "Is a citizen"
 
 
