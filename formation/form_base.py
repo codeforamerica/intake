@@ -51,6 +51,15 @@ class Form(base.BindParseValidate):
     def iter_fields(self):
         return self.fields.values()
 
+    def get_field_by_input_name(self, input_name):
+        """Returns field based on the html name attribute key.
+
+        For MultiValueFields, the key for a subfield, will return the parent
+        field
+        """
+        key_parts = input_name.split('.')
+        return self.fields[key_parts.pop(0)]
+
     def build_field(self, field_class):
         # get init args (required, optional, recommended)
         init_kwargs = dict(form=self)

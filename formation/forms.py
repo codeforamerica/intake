@@ -147,6 +147,7 @@ class AlamedaCountyForm(CombinableCountyFormSpec):
         F.LastName,
         F.PreferredPronouns,
         F.PhoneNumberField,
+        F.AlternatePhoneNumberField,
         F.EmailField,
         F.AddressField,
         F.FinancialScreeningNote,
@@ -190,11 +191,12 @@ class AlamedaCountyForm(CombinableCountyFormSpec):
         F.DeclarationLetterLifeChanges,
         F.DeclarationLetterActivities,
         F.DeclarationLetterGoals,
-        F.DeclarationLetterWhy
+        F.DeclarationLetterWhy,
     }
     optional_fields = {
+        F.AlternatePhoneNumberField,
         F.HowDidYouHear,
-        F.AdditionalInformation
+        F.AdditionalInformation,
     }
 
 

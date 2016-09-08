@@ -173,6 +173,11 @@ class PhoneNumberField(CharField):
     label = _('What is your phone number?')
 
 
+class AlternatePhoneNumberField(CharField):
+    context_key = "alternate_phone_number"
+    label = _('Do you have another phone number we can try?')
+
+
 class EmailField(CharField):
     context_key = "email"
     label = _('What is your email?')
@@ -421,6 +426,7 @@ INTAKE_FIELDS = [
     PreferredPronouns,
 
     PhoneNumberField,
+    AlternatePhoneNumberField,
     EmailField,
     AddressField,
     DateOfBirthField,
