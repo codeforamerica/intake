@@ -66,7 +66,8 @@ class TestForm(PatchTranslationTestCase):
             'us_citizen': '',
             'when_probation_or_parole': '',
             'when_where_outside_sf': '',
-            'where_probation_or_parole': ''
+            'where_probation_or_parole': '',
+            'additional_information': '',
         }
         form = self.get_sf_form()
         self.assertDictEqual(form.empty_value, expected_empty_value)
@@ -80,7 +81,10 @@ class TestForm(PatchTranslationTestCase):
                 'state': 'HI',
                 'street': '220 Lynch Walk',
                 'zip': '46885'},
-            'contact_preferences': ['prefers_voicemail', 'prefers_sms', 'prefers_email'],
+            'contact_preferences': [
+                'prefers_voicemail',
+                'prefers_sms',
+                'prefers_email'],
             'currently_employed': 'yes',
             'dob': {'day': '2', 'month': '12', 'year': '1998'},
             'email': 'shaun68@yahoo.com',
@@ -99,7 +103,9 @@ class TestForm(PatchTranslationTestCase):
             'us_citizen': 'yes',
             'when_probation_or_parole': '',
             'when_where_outside_sf': '',
-            'where_probation_or_parole': ''}
+            'where_probation_or_parole': '',
+            'additional_information': 'foo bar',
+        }
         form = self.get_sf_form(preparsed)
         self.assertTrue(form.is_valid())
         self.assertDictEqual(form.cleaned_data, preparsed)

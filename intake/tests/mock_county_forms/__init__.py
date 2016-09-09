@@ -56,6 +56,7 @@ class Provider(BaseProvider):
             'when_where_outside_sf': '',
             'where_probation_or_parole': '',
             'how_did_you_hear': '',
+            'additional_information': 'I want help',
         }
         data.update(overrides)
         return data
@@ -172,6 +173,7 @@ class Provider(BaseProvider):
             'when_where_outside_sf': '',
             'where_probation_or_parole': '',
             'how_did_you_hear': '',
+            'additional_information': 'I want help',
         }
         data.update(overrides)
         return data

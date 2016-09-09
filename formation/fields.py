@@ -351,7 +351,7 @@ class IsReasonableMonthsWages:
 
 class MonthlyIncome(WholeDollarField):
     context_key = "monthly_income"
-    label = _("What is your monthly income?")
+    label = _("What is your monthly household income?")
     help_text = _("Enter '0' if you have no income. "
                   "Your best estimate is okay.")
     validators = [
