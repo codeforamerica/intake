@@ -794,6 +794,16 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
                     kwargs=dict(bundle_id=bundle.id)))
         self.assertEqual(result.status_code, 200)
 
+    @patch('intake.views.notifications.slack_submissions_viewed.send')
+    def test_staff_user_gets_200(self):
+        bundle = models.ApplicationBundle.create_with_submissions(
+            organization=self.ccpubdef, submissions=self.submissions)
+        self.be_cfa_user()
+        result = self.client.get(reverse(
+                    'intake-app_bundle_detail',
+                    kwargs=dict(bundle_id=bundle.id)))
+        self.assertEqual(result.status_code, 200)
+
     def test_returns_404_on_nonexisting_bundle_id(self):
         """ApplicationBundleDetailView return 404 if not found
 
@@ -806,15 +816,6 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
                     'intake-app_bundle_detail',
                     kwargs=dict(bundle_id=20909872435)))
         self.assertEqual(result.status_code, 404)
-
-    def test_staff_user_gets_200(self):
-        bundle = models.ApplicationBundle.create_with_submissions(
-            organization=self.ccpubdef, submissions=self.submissions)
-        self.be_cfa_user()
-        result = self.client.get(reverse(
-                    'intake-app_bundle_detail',
-                    kwargs=dict(bundle_id=bundle.id)))
-        self.assertEqual(result.status_code, 200)
 
     def test_user_from_wrong_org_is_redirected_to_app_index(self):
         """ApplicationBundleDetailView redirects unpermitted users
