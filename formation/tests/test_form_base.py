@@ -5,10 +5,14 @@ from formation.tests import mock
 from formation.forms import county_form_selector
 from formation import fields as F
 from formation.field_base import Field
-from formation.forms import SelectCountyForm
 from formation.form_base import Form
 from intake.constants import Counties
 from formation import validators
+
+
+class ExampleForm(Form):
+    fields = [F.FirstName]
+    required_fields = [F.FirstName]
 
 
 class TestForm(PatchTranslationTestCase):
@@ -20,10 +24,10 @@ class TestForm(PatchTranslationTestCase):
 
     def test_does_not_alter_class_attributes_after_instantiation(self):
             # make sure we have a class
-            form = SelectCountyForm({})
+            form = ExampleForm({})
             self.assertFalse(form.is_valid())
-            form = SelectCountyForm({})
-            self.assertEqual(SelectCountyForm.required_fields[0], F.Counties)
+            form = ExampleForm({})
+            self.assertEqual(ExampleForm.required_fields[0], F.FirstName)
 
     def test_can_be_instantiated_with_multivalue_dict(self):
         form = self.get_sf_form(mock.RAW_FORM_DATA)
