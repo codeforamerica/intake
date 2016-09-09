@@ -279,7 +279,14 @@ class FinishedHalfProbation(ChoiceField):
     choices = YES_NO_CHOICES + (('not_applicable', _("Not on probation")),)
     label = _("If you're on probation, have you finished half of your "
               "probation time?")
-    display_label = "Past half probation"
+    display_label = "Finished half probation"
+
+
+class ReducedProbation(FinishedHalfProbation):
+    context_key = "reduced_probation"
+    label = _("If you're on probation, has the judge promised to reduce your "
+              "probation time or end your probation early?")
+    display_label = "Reduced probation"
 
 
 class RAPOutsideSF(YesNoField):
@@ -440,6 +447,7 @@ INTAKE_FIELDS = [
     WhereProbationParole,
     WhenProbationParole,
     FinishedHalfProbation,
+    ReducedProbation,
     RAPOutsideSF,
     WhenWhereOutsideSF,
 

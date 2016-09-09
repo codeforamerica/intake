@@ -107,6 +107,7 @@ class Provider(BaseProvider):
             'address.zip': self.generator.zipcode(),
             'on_probation_parole': self.maybe(0.1),
             'finished_half_probation': 'not_applicable',
+            'reduced_probation': 'not_applicable',
             'being_charged': self.maybe(0.05),
             'serving_sentence': self.maybe(0.05),
             'monthly_income': str(random.randint(0, 7000)),
