@@ -410,8 +410,9 @@ class ApplicationBundleDetail(ApplicationDetail):
     """
     def get(self, request, bundle_id):
         bundle = get_object_or_404(models.ApplicationBundle, pk=int(bundle_id))
-        if bundle.organization != request.user.profile.organization:
-            return self.not_allowed(request)
+        if not request.user.is_staff:
+            if bundle.organization != request.user.profile.organization:
+                return self.not_allowed(request)
         submissions = list(bundle.submissions.all())
         context = dict(
             submissions=submissions,
