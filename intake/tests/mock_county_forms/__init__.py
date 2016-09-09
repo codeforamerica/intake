@@ -20,13 +20,13 @@ class Provider(BaseProvider):
             "no": 1.0 - chance_of_yes})
 
     def generate_contact_preferences(self):
-        methods = {
-            'prefers_email': self.maybe(0.2),
-            'prefers_sms': self.maybe(0.7),
-            'prefers_snailmail': self.maybe(0.02),
-            'prefers_voicemail': self.maybe(0.3),
-        }
-        return [k for k, v in methods.items() if v == 'yes']
+        preferences = random.randint(1,4)
+        return random.sample([ 
+            'prefers_email',
+            'prefers_sms',
+            'prefers_snailmail',
+            'prefers_voicemail',
+            ], preferences)
 
     def sf_county_form_answers(self, **overrides):
         data = {
