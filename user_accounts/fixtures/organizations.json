@@ -31,7 +31,7 @@
     "requires_rap_sheet": false,
     "requires_declaration_letter": false,
     "show_pdf_only": true,
-    "new_submission_confirmation_message": "",
+    "new_submission_confirmation_message": "You will get a letter in the mail from the San Francisco Public Defender in 2-4 weeks.",
     "address": "",
     "phone_number": "",
     "email": ""
@@ -51,7 +51,7 @@
     "requires_rap_sheet": false,
     "requires_declaration_letter": false,
     "show_pdf_only": false,
-    "new_submission_confirmation_message": "",
+    "new_submission_confirmation_message": "The Contra Costa Public Defender will follow up with you if they need any other information.",
     "address": "",
     "phone_number": "",
     "email": ""
@@ -68,10 +68,10 @@
     "website": "",
     "blurb": "",
     "is_receiving_agency": true,
-    "requires_rap_sheet": false,
+    "requires_rap_sheet": true,
     "requires_declaration_letter": false,
     "show_pdf_only": false,
-    "new_submission_confirmation_message": "",
+    "new_submission_confirmation_message": "Your application is not yet compete. If you do not have your California criminal record (RAP sheet), please follow these instructions to request it. Once you have your RAP sheet, please submit it to East Bay Community Law Center so your application can be processed.",
     "address": "",
     "phone_number": "",
     "email": ""
@@ -89,9 +89,9 @@
     "blurb": "",
     "is_receiving_agency": true,
     "requires_rap_sheet": false,
-    "requires_declaration_letter": false,
+    "requires_declaration_letter": true,
     "show_pdf_only": false,
-    "new_submission_confirmation_message": "",
+    "new_submission_confirmation_message": "The Alameda Public Defender will follow up with you if they need any other information.",
     "address": "",
     "phone_number": "",
     "email": ""
