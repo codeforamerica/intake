@@ -57,8 +57,14 @@ class ConsentNote(FormNote):
       By clicking "Apply",  you are:
     </p>
     <ol>
-      <li>Giving the San Francisco Public Defender's office permission to get your San Francisco RAP Sheet.</li>
-      <li>Acknowledging that filling out this form is not a guarantee that a public defender will represent you.</li>
+      <li>
+        Giving attorneys in the county you are applying in the permission to
+        request your criminal record (RAP sheet).
+      </li>
+      <li>
+        Acknowledging that filling out this form is not a guarantee that an
+        attorney will represent you.
+      </li>
     </ol>""")
 
 
@@ -70,7 +76,7 @@ class HowDidYouHear(CharField):
 
 class AdditionalInformation(CharField):
     context_key = "additional_information"
-    label = _("Is there anything else you want to say?")
+    label = _("Is there anything else you would like us to know?")
 
 
 ###
@@ -311,9 +317,9 @@ class WhenWhereOutsideSF(CharField):
 
 class FinancialScreeningNote(FormNote):
     context_key = "financial_screening_note"
-    content = _("The Clean Slate program is free for you, but the public "
-                "defender uses this information to get money from government "
-                "programs.")
+    content = _("Clean Slate uses information about your income to "
+                "give low income applicants special help and get help from "
+                "government programs.")
 
 
 class CurrentlyEmployed(YesNoField):
@@ -469,7 +475,7 @@ INTAKE_FIELDS = [
     DeclarationLetterLifeChanges,
     DeclarationLetterActivities,
     DeclarationLetterGoals,
-    DeclarationLetterWhy
+    DeclarationLetterWhy,
 ]
 
 

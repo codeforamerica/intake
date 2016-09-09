@@ -74,6 +74,7 @@ class SanFranciscoCountyForm(CombinableCountyFormSpec):
         F.MonthlyIncome,
         F.MonthlyExpenses,
         F.HowDidYouHear,
+        F.AdditionalInformation,
         F.ConsentNote,
     }
     required_fields = {
@@ -87,7 +88,8 @@ class SanFranciscoCountyForm(CombinableCountyFormSpec):
     }
     optional_fields = {
         F.HowDidYouHear,
-        F.MiddleName
+        F.MiddleName,
+        F.AdditionalInformation,
     }
     validators = [
         gave_preferred_contact_methods
