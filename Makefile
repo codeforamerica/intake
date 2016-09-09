@@ -10,10 +10,6 @@ test:
 	./manage.py test $(SCOPE) \
 		--verbosity 2
 
-test.unit:
-	python -m unittest $(SCOPE) \
-		-v
-
 test.coverage:
 	coverage run \
 		./manage.py test $(SCOPE) \

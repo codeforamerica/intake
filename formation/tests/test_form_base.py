@@ -1,10 +1,12 @@
-from unittest import TestCase
+import inspect
 from formation.tests.utils import PatchTranslationTestCase, django_only
-from unittest.mock import Mock, patch
 from formation.tests import mock
 
 from formation.forms import county_form_selector
+from formation import fields as F
 from formation.field_base import Field
+from formation.forms import SelectCountyForm
+from formation.form_base import Form
 from intake.constants import Counties
 from formation import validators
 
@@ -15,6 +17,13 @@ class TestForm(PatchTranslationTestCase):
         form_class = county_form_selector.get_combined_form_class(
             counties=[Counties.SAN_FRANCISCO])
         return form_class(*args)
+
+    def test_does_not_alter_class_attributes_after_instantiation(self):
+            # make sure we have a class
+            form = SelectCountyForm({})
+            self.assertFalse(form.is_valid())
+            form = SelectCountyForm({})
+            self.assertEqual(SelectCountyForm.required_fields[0], F.Counties)
 
     def test_can_be_instantiated_with_multivalue_dict(self):
         form = self.get_sf_form(mock.RAW_FORM_DATA)

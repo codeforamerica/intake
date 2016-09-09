@@ -421,6 +421,15 @@ class TestSelectCountyView(AuthIntegrationTestCase):
             counties=['contracosta'])
         self.assertRedirects(result, reverse('intake-county_application'))
 
+    def test_anonymous_user_cannot_submit_empty_county_selection(self):
+        self.be_anonymous()
+        result = self.client.fill_form(
+            reverse('intake-apply'))
+        self.assertEqual(result.status_code, 200)
+        form = result.context['form']
+        self.assertFalse(form.is_valid())
+        self.assertTrue(form.errors)
+
 
 class TestMultiCountyApplication(AuthIntegrationTestCase):
 

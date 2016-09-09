@@ -19,6 +19,7 @@ class Form(base.BindParseValidate):
         self.fields = OrderedDict([
             (field_class.context_key, self.build_field(field_class))
             for field_class in self.fields])
+        self._update_field_attributes_with_instances()
         self.empty_value = {
             field.context_key: field.empty_value
             for field in self.get_usable_fields()}
@@ -36,6 +37,11 @@ class Form(base.BindParseValidate):
     def get_field_keys(cls):
         for field_class in cls.fields:
             yield field_class.context_key
+
+    def _iter_field_attribute_keys(self):
+        for attribute_name in self.field_attributes:
+            key = attribute_name.replace('_fields', '')
+            yield attribute_name, key
 
     def get_initial(self):
         return self.parsed_data
@@ -63,25 +69,32 @@ class Form(base.BindParseValidate):
     def build_field(self, field_class):
         # get init args (required, optional, recommended)
         init_kwargs = dict(form=self)
-        for attribute_name in self.field_attributes:
-            arg_key = attribute_name.replace('_fields', '')
-            init_kwargs[arg_key] = field_class in getattr(
+        for attribute_name, key in self._iter_field_attribute_keys():
+            init_kwargs[key] = field_class in getattr(
                 self, attribute_name, [])
         init_args = []
         if self.raw_input_data is not base.UNSET:
             init_args.append(self.raw_input_data)
         field = field_class(*init_args, **init_kwargs)
-        # replace class with instance in attributes
-        for att_name in self.field_attributes:
-            field_attribute = getattr(self, att_name, [])
-            if field_class in field_attribute:
-                index = field_attribute.index(field_class)
-                field_attribute[index] = field
         # this might error if a context_key is not a valid
         # python variable name or if the field is named after
         # an attribute on this object
         setattr(self, field.context_key, field)
         return field
+
+    def _update_field_attributes_with_instances(self):
+        """Sets required, optional, and recommended lists of field instances
+
+        For each of `required_fields`, `optional_fields`, and
+        `recommended_fields`, this sets the corresponding attribute for each
+        to a list of field instances whose relevant attribute (`required`,
+        `optional`, `recommended`) is `True`.
+        """
+        for field_attribute, key in self._iter_field_attribute_keys():
+            setattr(self, field_attribute, [
+                field for field in self.iter_fields()
+                if getattr(field, key, False)
+                ])
 
     def non_field_errors(self):
         return self.get_errors_list()
