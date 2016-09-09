@@ -47,3 +47,24 @@ deploy.prod:
 db.pull.demo:
 	dropdb intake --if-exists
 	heroku pg:pull --app cmr-demo DATABASE_URL intake
+
+db.dump_fixtures:
+	python ./manage.py dumpdata \
+	    auth.User \
+	    user_accounts.UserProfile \
+	    -o user_accounts/fixtures/mock_profiles.json \
+	    --natural-foreign --natural-primary \
+	    --indent 2
+	python ./manage.py dumpdata \
+	    user_accounts.Organization \
+	    -o user_accounts/fixtures/organizations.json \
+	    --natural-foreign --natural-primary \
+	    --indent 2
+	python ./manage.py dumpdata \
+	    intake.County \
+	    -o intake/fixtures/counties.json \
+	    --indent 2 \
+	    --format json
+
+db.load_fixtures:
+	python ./manage.py loaddata counties organizations mock_profiles
