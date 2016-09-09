@@ -1,5 +1,7 @@
-from unittest.mock import patch
+import os
 import random
+from unittest import skipUnless
+from unittest.mock import patch
 from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase
 from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -11,6 +13,8 @@ from user_accounts import models as auth_models
 from formation import fields, forms
 
 from project.jinja2 import url_with_ids
+
+DELUXE_TEST = os.environ.get('DELUXE_TEST', False)
 
 
 class IntakeDataTestCase(AuthIntegrationTestCase):
@@ -228,6 +232,7 @@ class TestViews(IntakeDataTestCase):
         self.assertContains(
             result, fields.DateOfBirthField.is_recommended_error_message)
 
+    @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
     @patch('intake.models.notifications.slack_submissions_viewed.send')
     def test_authenticated_user_can_see_filled_pdf(self, slack):
         self.be_sfpubdef_user()
@@ -301,6 +306,7 @@ class TestViews(IntakeDataTestCase):
                              )
                              )
 
+    @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
     def test_authenticated_user_can_see_pdf_bundle(self):
         self.be_sfpubdef_user()
         ids = [s.id for s in self.submissions]
@@ -661,6 +667,7 @@ class TestApplicationBundle(IntakeDataTestCase):
         self.assertContains(response, 'iframe class="pdf_inset"')
         self.assertHasDisplayData(response, self.combo_submissions)
 
+    @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
     @patch('intake.models.notifications.slack_submissions_viewed.send')
     def test_user_can_get_bundle_with_pdf(self, slack):
         self.be_sfpubdef_user()

@@ -166,6 +166,11 @@ class ChoiceField(CharField):
     def get_display_for_choice(self, value):
         return self.choice_display_dict[value]
 
+    def get_display_choices(self):
+        if getattr(self, 'flip_display_choice_order', False):
+            return reversed(self.choices)
+        return self.choices
+
     def is_current_choice(self, choice_option):
         return self.get_current_value() == choice_option
 
@@ -211,11 +216,6 @@ class MultipleChoiceField(ChoiceField):
 class YesNoField(ChoiceField):
     choices = YES_NO_CHOICES
     display_template_name = "formation/option_set_display.jinja"
-
-    def get_display_choices(self):
-        if getattr(self, 'flip_display_choice_order', False):
-            return reversed(self.choices)
-        return self.choices
 
     def get_display_value(self):
         return self.get_current_value().capitalize()

@@ -69,6 +69,7 @@ class TestModels(TestCase):
         self.assertIn(' '.join(last_names),
                       anonymous_names.fake_last_names)
 
+    @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
     def test_fillablepdf(self):
         submission = mock.FormSubmissionFactory.create()
         from django.core.files import File
