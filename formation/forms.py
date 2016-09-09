@@ -147,7 +147,7 @@ class AlamedaCountyForm(CombinableCountyFormSpec):
         F.FirstName,
         F.MiddleName,
         F.LastName,
-        F.PreferredPronouns,
+        # F.PreferredPronouns,
         F.PhoneNumberField,
         F.AlternatePhoneNumberField,
         F.EmailField,

@@ -91,7 +91,7 @@ class Provider(BaseProvider):
     def alameda_county_form_answers(self, **overrides):
         data = {
             'contact_preferences': self.generate_contact_preferences(),
-            'preferred_pronouns': self.some_choice(GENDER_PRONOUN_CHOICES),
+            # 'preferred_pronouns': self.some_choice(GENDER_PRONOUN_CHOICES),
             'first_name': self.generator.first_name(),
             'middle_name': self.generator.first_name(),
             'last_name': self.generator.last_name(),
@@ -106,7 +106,7 @@ class Provider(BaseProvider):
             'address.city': self.generator.city(),
             'address.state': self.generator.state_abbr(),
             'address.zip': self.generator.zipcode(),
-            'on_probation_parole': self.maybe(0.1),
+            'on_probation_parole': 'yes',
             'finished_half_probation': 'not_applicable',
             'reduced_probation': 'not_applicable',
             'being_charged': self.maybe(0.05),

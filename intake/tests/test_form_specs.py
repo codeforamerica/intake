@@ -23,7 +23,8 @@ class TestAlamedaCountyForm(TestCase):
         self.assertTrue(output_form.is_valid())
         for key in data:
             field = output_form.get_field_by_input_name(key)
-            self.assertFalse(field.is_empty(), field.context_key)
+            self.assertFalse(
+                field.is_empty(), "couldn't find" + field.context_key)
 
     def test_displays_all_fields(self):
         data = mock.fake.alameda_pubdef_answers()
@@ -39,8 +40,6 @@ class TestAlamedaCountyForm(TestCase):
         page_data = str(display_form)
         for key in data:
             field = display_form.get_field_by_input_name(key)
-            self.assertIn(field.get_html_class_name(), page_data,
+            self.assertIn(
+                field.get_html_class_name(), page_data,
                 "couldn't find " + field.get_html_class_name())
-
-
-        

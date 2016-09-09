@@ -30,6 +30,9 @@
     </div>
     <div class="data_display-row devices">
       {{ form.phone_number }}
+      {%- if 'alternate_phone_number' in form.fields %}
+      {{ form.alternate_phone_number }}
+      {%- endif %}
       {{ form.email }}
     </div>
     <div class="data_display-row mailing">
@@ -84,8 +87,14 @@
         {{ form.income_source }}
       {%- endif %}
       {{ form.monthly_expenses }}
-      {%- if 'income_source' in form.fields %}
-        {{ form.income_source }}
+      {%- if 'household_size' in form.fields %}
+        {{ form.household_size }}
+      {%- endif %}
+      {%- if 'owns_home' in form.fields %}
+        {{ form.owns_home }}
+      {%- endif %}
+      {%- if 'on_public_benefits' in form.fields %}
+        {{ form.on_public_benefits }}
       {%- endif %}
     </div>
   </div>
