@@ -795,7 +795,7 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
         self.assertEqual(result.status_code, 200)
 
     @patch('intake.views.notifications.slack_submissions_viewed.send')
-    def test_staff_user_gets_200(self):
+    def test_staff_user_gets_200(self, slack):
         bundle = models.ApplicationBundle.create_with_submissions(
             organization=self.ccpubdef, submissions=self.submissions)
         self.be_cfa_user()
