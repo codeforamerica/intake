@@ -225,6 +225,7 @@ class FormSubmission(models.Model):
         based on user information, get the correct Form class and return it
         instantiated with the data for self
         """
+        # TODO: get rid of this method, and put it elsewhere and make it right
         if not user.is_staff:
             DisplayFormClass = user.profile.get_submission_display_form()
         else:
@@ -242,6 +243,8 @@ class FormSubmission(models.Model):
         )
         init_data.update(self.answers)
         display_form = DisplayFormClass(init_data)
+        display_form.display_only = True
+        display_form.display_template_name = "formation/intake_display.jinja"
         # initiate parsing
         display_form.is_valid()
         return display_form
