@@ -38,6 +38,21 @@ class Form(base.BindParseValidate):
         for field_class in cls.fields:
             yield field_class.context_key
 
+    def get_possible_display(self, field_key):
+        """Returns the display string of field_key, else an empty string
+        """
+        if field_key in self.fields:
+            return self.fields[field_key].render(display=True)
+        else:
+            return ""
+
+    def __getattr__(self, attribute):
+        if attribute[-8:] == '_display':
+            field_key = attribute[:-8]
+            return self.get_possible_display(field_key)
+        msg = "`{}` has no attribute `{}`".format(self.__repr__(), attribute)
+        raise AttributeError(msg)
+
     def _iter_field_attribute_keys(self):
         for attribute_name in self.field_attributes:
             key = attribute_name.replace('_fields', '')

@@ -140,10 +140,6 @@ class TestForm(PatchTranslationTestCase):
             "prefers_voicemail"
         ]
         form = self.get_sf_form(dict(contact_preferences=contact_preferences))
-        error_messages = [
-            validators.gave_preferred_contact_methods.message(k)
-            for k in contact_preferences
-        ]
         self.assertFalse(form.is_valid())
         errors = form.errors
         self.assertIn(validators.gave_preferred_contact_methods.message(
@@ -175,3 +171,24 @@ class TestForm(PatchTranslationTestCase):
         form = self.get_sf_form(fake_answers)
         self.assertTrue(form.is_valid())
         self.assertTrue(hasattr(form.display(), '__html__'))
+
+    @django_only
+    def test_dynamic_field_display_with_existing_field(self):
+        fake_answers = mock.FILLED_SF_DATA
+        form = self.get_sf_form(fake_answers)
+        self.assertEqual(
+            form.first_name_display, form.first_name.render(display=True))
+
+    @django_only
+    def test_dynamic_field_display_with_nonexistent_field(self):
+        fake_answers = mock.FILLED_SF_DATA
+        form = self.get_sf_form(fake_answers)
+        self.assertEqual(
+            form.random_field_display, "")
+
+    @django_only
+    def test_dynamic_field_display_raises_error_for_unknown_attribute(self):
+        fake_answers = mock.FILLED_SF_DATA
+        form = self.get_sf_form(fake_answers)
+        with self.assertRaises(AttributeError):
+            str(form.foobar)

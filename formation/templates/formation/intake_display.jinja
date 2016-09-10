@@ -10,16 +10,12 @@
   <div class="data_display-section identification">
     <div class="data_display-row name">
       {{ form.first_name }}
-      {%- if 'middle_name' in form.fields %}
-      {{ form.middle_name }}
-      {%- endif %}
+      {{ form.middle_name_display }}
       {{ form.last_name }}
     </div>
     <div class="data_display-row id_numbers">
-      {{ form.dob }}
-      {%- if 'ssn' in form.fields %}
-      {{ form.ssn }}
-      {%- endif %}
+      {{ form.dob_display }}
+      {{ form.ssn_display }}
     </div>
   </div>
 
@@ -30,9 +26,7 @@
     </div>
     <div class="data_display-row devices">
       {{ form.phone_number }}
-      {%- if 'alternate_phone_number' in form.fields %}
-      {{ form.alternate_phone_number }}
-      {%- endif %}
+      {{ form.alternate_phone_number_display }}
       {{ form.email }}
     </div>
     <div class="data_display-row mailing">
@@ -48,19 +42,15 @@
     <div class="data_display-stack probation_parole">
       {{ form.on_probation_parole }}
       {%- if form.on_probation_parole %}
-        {{ form.where_probation_or_parole }}
-        {{ form.when_probation_or_parole }}
-        {%- if 'finished_half_probation' in form.fields %}
-        {{ form.finished_half_probation }}
-        {%- endif %}
-        {%- if 'reduced_probation' in form.fields %}
-        {{ form.reduced_probation }}
-        {%- endif %}
+        {{ form.where_probation_or_parole_display }}
+        {{ form.when_probation_or_parole_display }}
+        {{ form.finished_half_probation_display }}
+        {{ form.reduced_probation_display }}
       {%- endif %}
     </div>
     {%- if 'being_charged' in form.fields %}
     <div class="data_display-stack">
-        {{ form.being_charged }}
+        {{ form.being_charged_display }}
     </div>
     {%- endif %}
     <div class="data_display-stack">
@@ -70,7 +60,7 @@
     <div class="data_display-stack external_rap">
         {{ form.rap_outside_sf }}
         {%- if form.rap_outside_sf %}
-        {{ form.when_where_outside_sf }}
+        {{ form.when_where_outside_sf_display }}
         {%- endif %}
     </div>
     {%- endif %}
@@ -79,26 +69,18 @@
   <div class="data_display-section financial">
     <h3 class="data_display-section_header">Financial Information</h3>
     <div class="data_display-row employment">
-      {{ form.currently_employed }}
+      {{ form.currently_employed_display }}
     </div>
     <div class="data_display-row income">
-      {{ form.monthly_income }}
-      {%- if 'income_source' in form.fields %}
-        {{ form.income_source }}
-      {%- endif %}
-      {{ form.monthly_expenses }}
+      {{ form.monthly_income_display }}
+      {{ form.income_source_display }}
+      {{ form.monthly_expenses_display }}
     </div>
 
     <div class="data_display-row household_and_benefits">
-      {%- if 'household_size' in form.fields %}
-        {{ form.household_size }}
-      {%- endif %}
-      {%- if 'owns_home' in form.fields %}
-        {{ form.owns_home }}
-      {%- endif %}
-      {%- if 'on_public_benefits' in form.fields %}
-        {{ form.on_public_benefits }}
-      {%- endif %}
+      {{ form.household_size_display }}
+      {{ form.owns_home_display }}
+      {{ form.on_public_benefits_display }}
     </div>
   </div>
 
