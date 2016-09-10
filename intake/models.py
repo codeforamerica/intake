@@ -552,6 +552,20 @@ class ApplicationBundle(models.Model):
             instance.build_bundled_pdf_if_necessary()
         return instance
 
+    @classmethod
+    def get_or_create_for_submissions_and_user(cls, submissions, user):
+        query = cls.objects.all()
+        for sub in submissions:
+            query = query.filter(submissions=sub)
+        if not user.is_staff:
+            query = query.filter(organization=user.profile.organization)
+        query = query.first()
+        if not query:
+            query = cls.create_with_submissions(
+                submissions,
+                organization=user.profile.organization)
+        return query
+
     def should_have_a_pdf(self):
         """Returns `True` if `self.organization` has any `FillablePDF`
         """

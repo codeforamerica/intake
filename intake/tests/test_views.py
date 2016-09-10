@@ -309,10 +309,23 @@ class TestViews(IntakeDataTestCase):
     @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
     def test_authenticated_user_can_see_pdf_bundle(self):
         self.be_sfpubdef_user()
-        ids = [s.id for s in self.submissions]
+        ids = [s.id for s in self.sf_submissions]
         url = url_with_ids('intake-pdf_bundle', ids)
-        bundle = self.client.get(url)
+        bundle = self.client.get(url, follow=True)
         self.assertEqual(bundle.status_code, 200)
+
+    @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
+    def test_staff_user_can_see_pdf_bundle(self):
+        self.be_cfa_user()
+        bundle = models.ApplicationBundle.create_with_submissions(
+            submissions=self.sf_submissions,
+            organization=self.sfpubdef)
+        ids = [s.id for s in self.sf_submissions]
+        url = url_with_ids('intake-pdf_bundle', ids)
+        response = self.client.get(url)
+        self.assertRedirects(response, bundle.get_pdf_bundle_url())
+        pdf_response = self.client.get(response.url)
+        self.assertEqual(pdf_response.status_code, 200)
 
     @patch('intake.models.notifications.slack_submissions_viewed.send')
     def test_authenticated_user_can_see_app_bundle(self, slack):
@@ -853,3 +866,37 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
                     'intake-app_bundle_detail',
                     kwargs=dict(bundle_id=bundle.id)))
         self.assertContains(result, url)
+
+
+@skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
+class TestApplicationBundleDetailPDFView(IntakeDataTestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.bundle = models.ApplicationBundle.create_with_submissions(
+            organization=cls.sfpubdef, submissions=cls.sf_submissions)
+
+    def test_staff_user_gets_200(self):
+        self.be_cfa_user()
+        response = self.client.get(self.bundle.get_pdf_bundle_url())
+        self.assertEqual(response.status_code, 200)
+
+    def test_user_from_same_org_gets_200(self):
+        self.be_sfpubdef_user()
+        response = self.client.get(self.bundle.get_pdf_bundle_url())
+        self.assertEqual(response.status_code, 200)
+
+    def test_user_from_other_org_gets_404(self):
+        self.be_ccpubdef_user()
+        response = self.client.get(self.bundle.get_pdf_bundle_url())
+        self.assertEqual(response.status_code, 404)
+
+    def test_nonexistent_pdf_returns_404(self):
+        self.be_cfa_user()
+        bundle = models.ApplicationBundle.create_with_submissions(
+                    organization=self.sfpubdef,
+                    submissions=self.sf_submissions,
+                    skip_pdf=True)
+        response = self.client.get(bundle.get_pdf_bundle_url())
+        self.assertEqual(response.status_code, 404)

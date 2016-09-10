@@ -14,6 +14,10 @@ class NoEmailsForOrgError(Exception):
     pass
 
 
+class UndefinedResourceAccessError(Exception):
+    pass
+
+
 class OrganizationManager(models.Manager):
 
     def get_by_natural_key(self, name):
@@ -188,11 +192,21 @@ class UserProfile(models.Model):
         """
         return self.organization.has_a_pdf() or self.user.is_staff
 
-    def should_have_access_to(self, submission):
-        """Whether or not this user should be able to view the input submission
+    def should_have_access_to(self, resource):
+        """Returns True if user is staff or shares one org with resource
+
+        Raises an error for resources that don't have an `organization` or
+        `organizations` attribute.
         """
-        return self.user.is_staff or bool(
-            submission.organizations.filter(pk=self.organization_id).count())
+        if self.user.is_staff:
+            return True
+        if hasattr(resource, 'organization'):
+            return self.organization == resource.organization
+        elif hasattr(resource, 'organizations'):
+            return bool(resource.organizations.filter(
+                pk=self.organization_id).count())
+        msg = "`{}` doesn't have a way to define UserProfile access"
+        raise UndefinedResourceAccessError(msg.format(resource))
 
 
 def get_user_display(user):

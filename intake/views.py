@@ -382,14 +382,8 @@ class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
             raise Http404(
                 "Either those applications have been deleted or you don't "
                 "have permission to view those applications")
-        # make bundle
-        bundle = models.ApplicationBundle.objects.filter(
-            submissions__pk__in=submission_ids,
-            organization=request.user.profile.organization).first()
-        if not bundle:
-            bundle = models.ApplicationBundle.create_with_submissions(
-                submissions,
-                organization=request.user.profile.organization)
+        bundle = models.ApplicationBundle\
+            .get_or_create_for_submissions_and_user(submissions, request.user)
         context = dict(
             submissions=submissions,
             count=len(submissions),
@@ -410,9 +404,9 @@ class ApplicationBundleDetail(ApplicationDetail):
     """
     def get(self, request, bundle_id):
         bundle = get_object_or_404(models.ApplicationBundle, pk=int(bundle_id))
-        if not request.user.is_staff:
-            if bundle.organization != request.user.profile.organization:
-                return self.not_allowed(request)
+        has_access = request.user.profile.should_have_access_to(bundle)
+        if not has_access:
+            return self.not_allowed(request)
         submissions = list(bundle.submissions.all())
         context = dict(
             submissions=submissions,
@@ -434,8 +428,12 @@ class ApplicationBundleDetailPDFView(View):
     """
     def get(self, request, bundle_id):
         bundle = get_object_or_404(models.ApplicationBundle, pk=int(bundle_id))
-        if bundle.organization != request.user.profile.organization:
-            return self.not_allowed(request)
+        has_access = request.user.profile.should_have_access_to(bundle)
+        if not bundle.bundled_pdf or not has_access:
+            raise Http404(
+                "There doesn't seem to be a PDF associated with these "
+                "applications. If you think this is an error, please contact "
+                "Code for America.")
         return HttpResponse(bundle.bundled_pdf, content_type="application/pdf")
 
 
@@ -458,12 +456,19 @@ class FilledPDFBundle(FilledPDF, MultiSubmissionMixin):
     """
 
     def get(self, request):
-        submissions = self.get_submissions_from_params(request)
-        if not submissions:
-            return self.not_allowed(request)
-        # TODO: get from FilledPDFs and update cronjob
-        pdf = get_pdf_for_user(request.user, list(submissions))
-        return HttpResponse(pdf, content_type="application/pdf")
+        submission_ids = self.get_ids_from_params(request)
+        submissions = models.FormSubmission.objects.filter(
+            pk__in=submission_ids)
+        if not request.user.is_staff:
+            submissions = submissions.filter(
+                organizations__profiles=request.user.profile)
+        if len(submissions) < len(submission_ids):
+            raise Http404(
+                "Either those applications have been deleted or you don't "
+                "have permission to view those applications")
+        bundle = models.ApplicationBundle\
+            .get_or_create_for_submissions_and_user(submissions, request.user)
+        return redirect(bundle.get_pdf_bundle_url())
 
 
 class Delete(View):

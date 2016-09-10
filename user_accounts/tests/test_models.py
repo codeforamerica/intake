@@ -1,6 +1,6 @@
-from django.test import TestCase
 from intake.tests.test_views import IntakeDataTestCase
 from user_accounts import models
+from intake import models as intake_models
 from user_accounts.tests import mock
 
 
@@ -11,9 +11,11 @@ class TestUserProfile(IntakeDataTestCase):
         self.assertTrue(self.cfa_user.profile.should_see_pdf())
         self.assertFalse(self.ccpubdef_user.profile.should_see_pdf())
 
-    def test_should_have_access_to(self):
+    def test_should_have_access_to_allows_staff_submission_access(self):
         for sub in self.submissions:
             self.assertTrue(self.cfa_user.profile.should_have_access_to(sub))
+
+    def test_should_have_access_to_limits_submission_access_same_org(self):
         for sub in self.sf_submissions:
             self.assertTrue(
                 self.sfpubdef_user.profile.should_have_access_to(sub))
@@ -24,6 +26,27 @@ class TestUserProfile(IntakeDataTestCase):
                 self.sfpubdef_user.profile.should_have_access_to(sub))
             self.assertTrue(
                 self.ccpubdef_user.profile.should_have_access_to(sub))
+        for sub in self.combo_submissions:
+            self.assertTrue(
+                self.ccpubdef_user.profile.should_have_access_to(sub))
+            self.assertTrue(
+                self.sfpubdef_user.profile.should_have_access_to(sub))
+
+    def should_have_access_to_allows_staff_submission_access(self):
+        bundle = intake_models.ApplicationBundle.create_with_submissions(
+            submissions=self.cc_submissions,
+            organization=self.cc_pubdef,
+            skip_pdf=True
+            )
+        self.assertTrue(self.cfa_user.profile.should_have_access_to(bundle))
+        self.assertTrue(
+            self.ccpubdef_user.profile.should_have_access_to(bundle))
+        self.assertFalse(
+            self.sfpubdef_user.profile.should_have_access_to(bundle))
+
+    def should_have_access_to_raises_error_for_other_objects(self):
+        with self.assertRaises(models.UndefinedResourceAccessError):
+            self.cfa_user.profile.should_have_access_to({})
 
 
 class TestOrganization(IntakeDataTestCase):
