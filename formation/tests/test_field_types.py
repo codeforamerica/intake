@@ -1,6 +1,8 @@
 import inspect
 import datetime
 from unittest import TestCase
+
+from django.utils.safestring import mark_safe
 from formation.tests import mock
 from formation.tests import sample_income_answers
 
@@ -94,6 +96,27 @@ class TestCharField(PatchTranslationTestCase):
         self.assertTrue(field.is_valid())
         self.assertFalse(field.is_empty())
         self.assertEqual(field.get_current_value(), "\n \t\r")
+
+    def test_escapes_html(self):
+        field = NameField({'name': "T'Pring"})
+        escaped = 'T&#39;Pring'
+        field.is_valid()
+        self.assertEqual(field.get_current_value(), escaped)
+        self.assertIn(escaped, field.display())
+
+    def test_escapes_escaped_html(self):
+        escaped = 'T&#39;Pring'
+        field = NameField({'name': escaped})
+        field.is_valid()
+        self.assertNotEqual(field.get_current_value(), escaped)
+        self.assertNotIn(escaped, field.display())
+
+    def test_doesnt_escape_safe_strings(self):
+        escaped = 'T&#39;Pring'
+        field = NameField({'name': mark_safe(escaped)})
+        field.is_valid()
+        self.assertEqual(field.get_current_value(), escaped)
+        self.assertIn(escaped, field.display())
 
 
 def get_validated_monthly_income_field_with(input_value):

@@ -178,6 +178,7 @@ class TestForm(PatchTranslationTestCase):
         form = self.get_sf_form(fake_answers)
         self.assertEqual(
             form.first_name_display, form.first_name.render(display=True))
+        self.assertTrue(hasattr(form.first_name_display, '__html__'))
 
     @django_only
     def test_dynamic_field_display_with_nonexistent_field(self):

@@ -8,6 +8,7 @@ from django.db import models
 from pytz import timezone
 from django.utils import timezone as timezone_utils
 from django.utils.translation import ugettext_lazy as _
+from django.utils.safestring import mark_safe
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -242,6 +243,9 @@ class FormSubmission(models.Model):
                 self.organizations.values_list('name', flat=True))
         )
         init_data.update(self.answers)
+        for key, value in init_data.items():
+            if isinstance(value, str):
+                init_data[key] = mark_safe(value)
         display_form = DisplayFormClass(init_data)
         display_form.display_only = True
         display_form.display_template_name = "formation/intake_display.jinja"

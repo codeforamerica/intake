@@ -619,7 +619,7 @@ class TestApplicationDetail(IntakeDataTestCase):
 
     @patch('intake.models.notifications.slack_submissions_viewed.send')
     def test_logged_in_user_can_get_submission_display(self, slack):
-        user = self.be_ccpubdef_user()
+        self.be_ccpubdef_user()
         submission = self.cc_submissions[0]
         result = self.get_detail(submission)
         self.assertEqual(result.context['submission'], submission)
@@ -627,7 +627,7 @@ class TestApplicationDetail(IntakeDataTestCase):
 
     @patch('intake.models.notifications.slack_submissions_viewed.send')
     def test_staff_user_can_get_submission_display(self, slack):
-        user = self.be_cfa_user()
+        self.be_cfa_user()
         submission = self.combo_submissions[0]
         result = self.get_detail(submission)
         self.assertEqual(result.context['submission'], submission)
@@ -639,10 +639,12 @@ class TestApplicationDetail(IntakeDataTestCase):
         self.be_sfpubdef_user()
         submission = self.sf_submissions[0]
         result = self.get_detail(submission)
-        self.assertRedirects(result, reverse('intake-filled_pdf',
-                                             kwargs=dict(submission_id=submission.id)),
-                             fetch_redirect_response=False)
-        slack.assert_not_called()  # notification should be deferred to pdf view
+        self.assertRedirects(
+            result,
+            reverse(
+                'intake-filled_pdf', kwargs=dict(submission_id=submission.id)),
+            fetch_redirect_response=False)
+        slack.assert_not_called()  # notification should be handled by pdf view
         FillablePDF.assert_not_called()
 
     @patch('intake.models.notifications.slack_submissions_viewed.send')
@@ -652,6 +654,13 @@ class TestApplicationDetail(IntakeDataTestCase):
         response = self.get_detail(submission)
         self.assertRedirects(response, reverse('intake-app_index'))
         slack.assert_not_called()
+
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_user_can_see_app_detail_for_multi_county(self, slack):
+        self.be_ccpubdef_user()
+        submission = self.combo_submissions[0]
+        response = self.get_detail(submission)
+        self.assertHasDisplayData(response, submission)
 
     @patch('intake.models.notifications.slack_submissions_viewed.send')
     def test_user_can_see_app_detail_for_multi_county(self, slack):

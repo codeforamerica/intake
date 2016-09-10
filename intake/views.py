@@ -279,7 +279,8 @@ class ApplicationDetail(View):
         submission = submissions[0]
         context = dict(submission=submission)
         self.mark_viewed(request, submission)
-        return render(request, self.template_name, context)
+        response = render(request, self.template_name, context)
+        return response
 
 
 class FilledPDF(ApplicationDetail):
