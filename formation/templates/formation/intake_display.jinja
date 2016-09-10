@@ -26,8 +26,10 @@
     </div>
     <div class="data_display-row devices">
       {{ form.phone_number }}
-      {{ form.alternate_phone_number_display }}
       {{ form.email }}
+    </div>
+    <div class="data_display-row alt_devices">
+      {{ form.alternate_phone_number_display }}
     </div>
     <div class="data_display-row mailing">
       {{ form.address }}
@@ -98,6 +100,7 @@
   
   {%- if 'declaration_letter_intro' in form.fields %}
   <div class="data_display-section declaration_letter">
+    <h3>Letter of Declaration</h3>
     <div class="data_display-row">
       {{ form.declaration_letter_intro }}
     </div>

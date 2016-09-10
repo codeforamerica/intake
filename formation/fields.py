@@ -5,7 +5,7 @@ from django.core.validators import EmailValidator
 from formation.field_types import (
     CharField, MultilineCharField, WholeDollarField, ChoiceField, YesNoField,
     MultipleChoiceField, MultiValueField,
-    FormNote, DateTimeField, YES_NO_CHOICES
+    FormNote, DateTimeField, YES_NO_CHOICES, NOT_APPLICABLE
 )
 from intake.constants import (
     COUNTY_CHOICES, CONTACT_PREFERENCE_CHOICES,
@@ -282,10 +282,18 @@ class WhenProbationParole(CharField):
 
 class FinishedHalfProbation(ChoiceField):
     context_key = "finished_half_probation"
-    choices = YES_NO_CHOICES + (('not_applicable', _("Not on probation")),)
+    choices = YES_NO_CHOICES + ((NOT_APPLICABLE, _("Not on probation")),)
     label = _("If you're on probation, have you finished half of your "
               "probation time?")
     display_label = "Finished half probation"
+
+    def render(self, display=False, **extra_context):
+        if self.get_current_value() != NOT_APPLICABLE:
+            self.display_template_name = "formation/option_set_display.jinja"
+        return super().render(display, **extra_context)
+
+    def get_display_choices(self):
+        return YES_NO_CHOICES
 
 
 class ReducedProbation(FinishedHalfProbation):

@@ -1,7 +1,5 @@
 import re
 import random
-from unittest import skipIf
-from unittest.mock import Mock, patch
 
 from django.test import override_settings
 from django.core import mail
@@ -21,23 +19,30 @@ fake_password = auth_mock.fake_password
 @override_settings(DIVERT_REMOTE_CONNECTIONS=True)
 class TestWorkflows(base.ScreenSequenceTestCase):
 
-    fixtures = ['counties', 'organizations']
+    fixtures = ['counties', 'organizations', 'mock_profiles']
 
     def setUp(self):
         super().setUp()
-        for key, instances in auth_mock.create_fake_auth_models().items():
-            setattr(self, key, instances)
         orgs = accounts_models.Organization.objects.all()
         for org in orgs:
             setattr(self, org.slug, org)
             setattr(self, org.slug+'_submissions', [])
+            user = auth_models.User.objects.filter(
+                profile__organization=org, email__contains='+').first()
+            setattr(self, org.slug+'_user', user)
         org_sets = [
             [self.sf_pubdef],
             [self.sf_pubdef],
             [self.sf_pubdef],
             [self.sf_pubdef, self.cc_pubdef],
             [self.cc_pubdef],
-            [self.cc_pubdef]]
+            [self.cc_pubdef],
+            [self.a_pubdef],
+            [self.a_pubdef],
+            [self.a_pubdef, self.cc_pubdef],
+            [self.a_pubdef, self.sf_pubdef],
+            [self.a_pubdef, self.sf_pubdef, self.cc_pubdef],
+        ]
         counties = models.County.objects.all()
         for county in counties:
             if county.slug == constants.Counties.SAN_FRANCISCO:
@@ -46,16 +51,21 @@ class TestWorkflows(base.ScreenSequenceTestCase):
                 self.cccounty = county
         self.submissions = []
         for org_set in org_sets:
-            answers = intake_mock.fake.cleaned_sf_county_form_answers()
+            answers = {
+                **intake_mock.fake.cleaned_sf_county_form_answers(),
+                **intake_mock.fake.contra_costa_county_form_answers(),
+                **intake_mock.fake.alameda_county_form_answers(),
+            }
             sub = models.FormSubmission.create_for_organizations(
                     organizations=org_set, answers=answers)
             self.submissions.append(sub)
             for org in org_set:
-                attr_name = org.slug+'_submissions'
-                org_subs = getattr(self, attr_name)
-                org_subs.append(sub)
-                setattr(self, attr_name, org_subs)
-        self.pdf = intake_mock.useable_pdf(self.sfpubdef)
+                if org.slug != 'cfa':
+                    attr_name = org.slug+'_submissions'
+                    org_subs = getattr(self, attr_name)
+                    org_subs.append(sub)
+                    setattr(self, attr_name, org_subs)
+        self.pdf = intake_mock.useable_pdf(self.sf_pubdef)
         self.superuser = auth_mock.fake_superuser()
         accounts_models.UserProfile.objects.create(
             user=self.superuser,
@@ -101,7 +111,8 @@ class TestWorkflows(base.ScreenSequenceTestCase):
 
     def test_application_submission_failure(self):
         address_fields = {
-            key: value for key, value in intake_mock.fake.sf_county_form_answers().items()
+            key: value
+            for key, value in intake_mock.fake.sf_county_form_answers().items()
             if 'address' in key
         }
         sequence = [
@@ -114,10 +125,12 @@ class TestWorkflows(base.ScreenSequenceTestCase):
                         'prefers_snailmail'], **address_fields)
         ]
         self.run_sequence(
-            "Applying without enough information", sequence, size=base.COMMON_MOBILE)
+            "Applying without enough information",
+            sequence,
+            size=base.COMMON_MOBILE)
 
     def test_login_and_password_reset_workflow(self):
-        user = self.ccpubdef_users[0]
+        user = self.cc_pubdef_user
         self.run_sequence(
             "Fail login and reset password",
             [
@@ -134,8 +147,8 @@ class TestWorkflows(base.ScreenSequenceTestCase):
             ], base.SMALL_DESKTOP)
 
     def test_invite_user_workflow(self):
-        superuser = self.superuser
-        organization = self.sfpubdef
+        superuser = self.cfa_user
+        organization = self.sf_pubdef
         new_user = auth_mock.fake_user_data()
         self.run_sequence(
             "Invitation and signup",
@@ -164,7 +177,7 @@ class TestWorkflows(base.ScreenSequenceTestCase):
             ], base.SMALL_DESKTOP)
 
     def test_look_at_app_detail_with_pdf(self):
-        user = self.sfpubdef_users[0]
+        user = self.sf_pubdef_user
         submission = random.choice(self.sf_pubdef_submissions)
         self.run_sequence(
             "Look at app with pdf",
@@ -178,7 +191,7 @@ class TestWorkflows(base.ScreenSequenceTestCase):
             ], base.SMALL_DESKTOP)
 
     def test_look_at_app_detail_without_pdf(self):
-        user = self.ccpubdef_users[0]
+        user = self.cc_pubdef_user
         submission = random.choice(self.cc_pubdef_submissions)
         self.run_sequence(
             "Look at app detail",
@@ -190,11 +203,24 @@ class TestWorkflows(base.ScreenSequenceTestCase):
                             login=user.email, password=fake_password)
             ], base.SMALL_DESKTOP)
 
+    def test_look_at_alameda_app_detail(self):
+        user = self.a_pubdef_user
+        submission = random.choice(self.a_pubdef_submissions)
+        self.run_sequence(
+            "Look at alameda app detail",
+            [
+                S.get('tried to go to app detail',
+                      reverse('intake-app_detail',
+                              kwargs={'submission_id': submission.id})),
+                S.fill_form('entered login info',
+                            login=user.email, password=fake_password)
+            ], base.SMALL_DESKTOP)
+
     def test_look_at_app_bundle_with_pdf(self):
-        user = self.sfpubdef_users[0]
+        user = self.sf_pubdef_user
         bundle = models.ApplicationBundle.create_with_submissions(
             submissions=self.sf_pubdef_submissions,
-            organization=self.sfpubdef)
+            organization=self.sf_pubdef)
         self.run_sequence(
             "Look at app pdf bundle",
             [
@@ -207,27 +233,12 @@ class TestWorkflows(base.ScreenSequenceTestCase):
             ], base.SMALL_DESKTOP)
 
     def test_look_at_app_bundle_without_pdf(self):
-        user = self.ccpubdef_users[0]
+        user = self.cc_pubdef_user
         bundle = models.ApplicationBundle.create_with_submissions(
             submissions=self.cc_pubdef_submissions,
-            organization=self.ccpubdef)
+            organization=self.cc_pubdef)
         self.run_sequence(
             "Look at app bundle",
-            [
-                S.get('tried to go to app bundle',
-                      reverse('intake-app_bundle_detail',
-                              kwargs=dict(bundle_id=bundle.id))),
-                S.fill_form('entered login info',
-                            login=user.email, password=fake_password)
-            ], base.SMALL_DESKTOP)
-
-    def test_look_at_app_bundle_of_another_org(self):
-        user = self.ccpubdef_users[0]
-        bundle = models.ApplicationBundle.create_with_submissions(
-            submissions=self.sf_pubdef_submissions,
-            organization=self.sfpubdef)
-        self.run_sequence(
-            "Look at bundle of another org",
             [
                 S.get('tried to go to app bundle',
                       reverse('intake-app_bundle_detail',

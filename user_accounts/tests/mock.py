@@ -9,7 +9,7 @@ from django.utils.text import slugify
 
 fake = FakerFactory.create('en_US')
 
-fake_password = 's0m3th1ng'
+fake_password = 'cmr-demo'
 Pacific = timezone('US/Pacific')
 
 

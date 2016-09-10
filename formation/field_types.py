@@ -12,6 +12,7 @@ from datetime import datetime
 
 YES = 'yes'
 NO = 'no'
+NOT_APPLICABLE = 'not_applicable'
 
 YES_NO_CHOICES = (
     (YES, _('Yes')),
@@ -163,6 +164,11 @@ class ChoiceField(CharField):
                 for key, display in self.choices
             }
 
+    def get_display_value(self):
+        return self.get_display_for_choice(
+            self.get_current_value()
+            )
+
     def get_display_for_choice(self, value):
         return self.choice_display_dict[value]
 
@@ -216,9 +222,6 @@ class MultipleChoiceField(ChoiceField):
 class YesNoField(ChoiceField):
     choices = YES_NO_CHOICES
     display_template_name = "formation/option_set_display.jinja"
-
-    def get_display_value(self):
-        return self.get_current_value().capitalize()
 
     def __bool__(self):
         return self.get_current_value() == YES
