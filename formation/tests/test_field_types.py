@@ -4,7 +4,7 @@ from unittest import TestCase
 
 from django.utils.safestring import mark_safe
 from formation.tests import mock
-from formation.tests import sample_income_answers
+from formation.tests import sample_answers
 
 from formation.tests.utils import PatchTranslationTestCase, django_only
 
@@ -29,6 +29,10 @@ class SingleFruit(field_types.ChoiceField):
     choices = (
         ('apples', 'Apples'),
         ('oranges', 'Oranges'))
+
+
+class Ducks(field_types.IntegerField):
+    context_key = "ducks"
 
 
 class MultipleFruit(field_types.MultipleChoiceField):
@@ -126,6 +130,33 @@ def get_validated_monthly_income_field_with(input_value):
     return field
 
 
+class TestIntegerField(PatchTranslationTestCase):
+
+    def test_is_okay_with_unset_raw_value(self):
+        field = Ducks({})
+        field.is_valid()
+        self.assertIsNone(field.get_current_value())
+
+    def test_parse_monthly_income(self):
+        test_data = sample_answers.number_pairs
+        for sample_input, expected_result in test_data.items():
+            data = {'ducks': sample_input}
+            field = Ducks(data)
+            field.is_valid()
+            self.assertEqual(field.parsed_data, expected_result)
+
+    def test_get_current_value_none_if_empty(self):
+        field = Ducks()
+        self.assertIsNone(field.get_current_value())
+
+    def test_adds_parse_error_if_given_misc_string(self):
+        field = Ducks({'ducks': 'Not sure'})
+        self.assertFalse(field.is_valid())
+        expected_error = ("You entered 'Not sure', which doesn't "
+                          "look like a number")
+        self.assertIn(expected_error, field.get_errors_list())
+
+
 class TestWholeDollarField(PatchTranslationTestCase):
 
     def test_is_okay_with_unset_raw_value(self):
@@ -134,7 +165,7 @@ class TestWholeDollarField(PatchTranslationTestCase):
         self.assertIsNone(field.get_current_value())
 
     def test_parse_monthly_income(self):
-        test_data = sample_income_answers.test_pairs
+        test_data = sample_answers.dollar_answer_pairs
         for sample_input, expected_result in test_data.items():
             data = {'monthly_income': sample_input}
             field = fields.MonthlyIncome(data)

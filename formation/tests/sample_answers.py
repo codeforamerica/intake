@@ -1,5 +1,27 @@
-test_pairs = {
+number_pairs = {
+    '': None,
+    'O.': None,
+    '\n \t ': None,
+    'None': 0,
+    'n/a': 0,
+    'N/A': 0,
+    '0.00': 0,
+    '0': 0,
+    '0 ': 0,
 
+    '3e': 3,
+    '3 people': 3,
+    '-10': 10,
+
+    '1': 1,
+    ' 5 ': 5,
+    '839': 839,
+    '1700': 1700,
+    '3160': 3160,
+    '55,000': 55000,
+}
+
+dollar_answer_pairs = {
     '': None,
     'public assistance  welfare': None,
     'Incarcerated at CCWF Chowchilla': None,
@@ -13,12 +35,12 @@ test_pairs = {
     'boyfriends income': None,
     'self employed': None,
     'O.': None,
+    'No Income/ Unemployed': None,
+    'MNo income': None,
 
     'N/A (Student)': 0,
-    'No Income/ Unemployed': 0,
     '$0.00': 0,
     '0.00': 0,
-    'MNo income': 0,
     '$0': 0,
     '0': 0,
     'None': 0,

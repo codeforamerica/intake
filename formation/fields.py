@@ -3,8 +3,8 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import EmailValidator
 from formation.field_types import (
-    CharField, MultilineCharField, WholeDollarField, ChoiceField, YesNoField,
-    MultipleChoiceField, MultiValueField,
+    CharField, MultilineCharField, IntegerField, WholeDollarField, ChoiceField,
+    YesNoField, MultipleChoiceField, MultiValueField,
     FormNote, DateTimeField, YES_NO_CHOICES, NOT_APPLICABLE
 )
 from intake.constants import (
@@ -390,10 +390,19 @@ class MonthlyExpenses(WholeDollarField):
               "groceries, utilities, medical expenses, or childcare expenses?")
 
 
-class HouseholdSize(CharField):
+class HouseholdSize(IntegerField):
     context_key = "household_size"
     label = _("How many people live with you?")
-    help_text = _('For example: "3"')
+    help_text = _('For example: "3" or "0"')
+
+    def get_display_value(self):
+        """The question asks for people in addition to the applicant but
+        reviewers typically want to see the applicant included in the number.
+        """
+        value = self.get_current_value()
+        if value is not None:
+            value += 1
+        return value
 
 
 ###

@@ -3829,6 +3829,16 @@ button[type="submit"] .badge {
 .monthly_expenses input[type="text"] {
   width: 7em;
 }
+.household_size input[type="text"] {
+  width: 3em;
+}
+.household_size .field-input_wrapper::after {
+  content: "people";
+  width: 1em;
+  font-size: 1.25em;
+  padding: .25em .5em .25em .5em;
+  font-weight: 400;
+}
 .monthly_income .field-input_wrapper::before,
 .monthly_expenses .field-input_wrapper::before {
   content: "$";

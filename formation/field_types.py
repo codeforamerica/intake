@@ -1,4 +1,5 @@
 import re
+import string
 from formation.field_base import Field
 from formation.base import UNSET
 from formation import exceptions, validators
@@ -55,15 +56,26 @@ class MultilineCharField(CharField):
     template_name = "formation/textarea_field.jinja"
 
 
-class WholeDollarField(CharField):
+class IntegerField(CharField):
     empty_value = None
-    # https://regex101.com/r/dP5wX1/1
-    dollars_pattern = re.compile(r"(?P<dollars>[\d,]+)(?P<cents>[\.]\d\d?)?")
-    # https://regex101.com/r/iM0xY3/1
-    special_zero_pattern = re.compile(r"n\/a|no income|none",
-                                      flags=re.IGNORECASE)
     parse_error_message = _("You entered '{}', which "
-                            "doesn't look like a dollar amount")
+                            "doesn't look like a number")
+    # https://regex101.com/r/iM0xY3/1
+    special_zero_pattern = re.compile(r"n\/a|none",
+                                      flags=re.IGNORECASE)
+
+    def parse_numeric_string(self, raw_value):
+        special_zero = re.search(self.special_zero_pattern, raw_value)
+        antedecimal, *postdecimal = raw_value.split('.')
+        number = "".join(
+            char for char in antedecimal if char in string.digits)
+        if number:
+            return int(number)
+        elif special_zero:
+            return 0
+        else:
+            self.add_error(self.parse_error_message.format(raw_value))
+        return None
 
     def parse(self, raw_value):
         value = self.empty_value
@@ -76,17 +88,32 @@ class WholeDollarField(CharField):
         self.assert_parse_received_correct_type(raw_value, str)
         raw_value = self.parse_as_text(raw_value)
         if raw_value:
-            # does not check for multiple separate dollar amounts
-            possible_amount = re.search(self.dollars_pattern, raw_value)
-            special_zero = re.search(self.special_zero_pattern, raw_value)
-            if possible_amount:
-                dollars = possible_amount.group('dollars')
-                value = int(dollars.replace(",", ""))
-            elif special_zero:
-                value = 0
-            else:
-                self.add_error(self.parse_error_message.format(raw_value))
+            value = self.parse_numeric_string(raw_value)
         return value
+
+    def get_current_value(self):
+        return Field.get_current_value(self)
+
+
+class WholeDollarField(IntegerField):
+    empty_value = None
+    # https://regex101.com/r/dP5wX1/2
+    dollars_pattern = re.compile(r"(?P<dollars>[\d,]+)(?P<cents>[\.]\d\d?)?")
+    parse_error_message = _("You entered '{}', which "
+                            "doesn't look like a dollar amount")
+
+    def parse_numeric_string(self, raw_value):
+        # does not check for multiple separate dollar amounts
+        possible_amount = re.search(self.dollars_pattern, raw_value)
+        special_zero = re.search(self.special_zero_pattern, raw_value)
+        if possible_amount:
+            dollars = possible_amount.group('dollars')
+            return int(dollars.replace(",", ""))
+        elif special_zero:
+            return 0
+        else:
+            self.add_error(self.parse_error_message.format(raw_value))
+        return None
 
     def get_display_value(self):
         """should return $100.00
@@ -95,9 +122,6 @@ class WholeDollarField(CharField):
         if value is None:
             return ''
         return "${}.00".format(intcomma(value))
-
-    def get_current_value(self):
-        return Field.get_current_value(self)
 
 
 class DateTimeField(CharField):

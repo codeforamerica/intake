@@ -128,6 +128,18 @@ button[type="submit"] { .btn-primary; .btn-lg; }
 .monthly_income input[type="text"], .monthly_expenses input[type="text"] {
 	width: 7em;
 }
+.household_size input[type="text"] {
+	width: 3em;
+}
+.household_size .field-input_wrapper {
+	&::after {
+		content: "people";
+		width: 1em;
+		font-size: 1.25em;
+		padding: .25em .5em .25em .5em;
+		font-weight: 400;
+	}
+}
 
 .monthly_income .field-input_wrapper, .monthly_expenses .field-input_wrapper {
 	&::before {
