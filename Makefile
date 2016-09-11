@@ -1,6 +1,7 @@
 
 install:
 	pip install -r requirements/dev.txt
+	npm install
 
 serve:
 	gulp
