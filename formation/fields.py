@@ -383,8 +383,9 @@ class OwnsHome(YesNoField):
     label = _("Do you own your home?")
 
 
-class MonthlyExpenses(CharField):
+class MonthlyExpenses(WholeDollarField):
     context_key = "monthly_expenses"
+    help_text = _("Your best estimate is okay.")
     label = _("How much do you spend each month on things like rent, "
               "groceries, utilities, medical expenses, or childcare expenses?")
 

@@ -3829,21 +3829,24 @@ button[type="submit"] .badge {
 .monthly_expenses input[type="text"] {
   width: 7em;
 }
-.monthly_income .field-input_wrapper::before {
+.monthly_income .field-input_wrapper::before,
+.monthly_expenses .field-input_wrapper::before {
   content: "$";
   width: 1em;
   font-size: 1.25em;
   padding: .25em 0;
   font-weight: 400;
 }
-.monthly_income .field-input_wrapper::after {
+.monthly_income .field-input_wrapper::after,
+.monthly_expenses .field-input_wrapper::after {
   content: ".00 / month";
   width: 1em;
   font-size: 1.25em;
   padding: .25em .5em .25em 0;
   font-weight: 400;
 }
-.monthly_income .field-input_wrapper input {
+.monthly_income .field-input_wrapper input,
+.monthly_expenses .field-input_wrapper input {
   text-align: right;
 }
 h1.bundle-count {

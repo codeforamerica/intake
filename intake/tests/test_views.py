@@ -24,7 +24,6 @@ class IntakeDataTestCase(AuthIntegrationTestCase):
         'last_name',
         'phone_number',
         'email',
-        'monthly_expenses'
     ]
 
     fixtures = ['organizations']
@@ -491,10 +490,11 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         lookup = {
             key: answers[key]
             for key in [
-                'email', 'phone_number', 'monthly_expenses']}
+                'email', 'phone_number', 'first_name', 'last_name']}
 
         submission = models.FormSubmission.objects.filter(
             answers__contains=lookup).first()
+        self.assertTrue(submission)
         county_slugs = [county.slug for county in submission.get_counties()]
         self.assertListEqual(county_slugs, [contracosta])
         org_slugs = [org.slug for org in submission.organizations.all()]
