@@ -129,10 +129,12 @@ class TestViews(IntakeDataTestCase):
             response,
             fields.DateOfBirthField.is_recommended_error_message)
 
+    @patch('intake.models.get_parser')
     @patch('intake.views.models.FormSubmission.send_confirmation_notifications')
     @patch('intake.views.notifications.slack_new_submission.send')
     def test_anonymous_user_can_fill_out_app_and_reach_thanks_page(
-            self, slack, send_confirmation):
+            self, slack, send_confirmation, get_parser):
+        get_parser.return_value.fill_pdf.return_value = b'a pdf'
         self.be_anonymous()
         result = self.client.fill_form(
             reverse('intake-apply'),
@@ -171,9 +173,11 @@ class TestViews(IntakeDataTestCase):
             submission_count='int')
         send_confirmation.assert_called_once_with()
 
+    @patch('intake.models.get_parser')
     @patch('intake.views.models.FormSubmission.send_confirmation_notifications')
     @patch('intake.views.notifications.slack_new_submission.send')
-    def test_apply_with_name_only(self, slack, send_confirmation):
+    def test_apply_with_name_only(self, slack, send_confirmation, get_parser):
+        get_parser.return_value.fill_pdf.return_value = b'a pdf'
         self.be_anonymous()
         result = self.client.fill_form(
             reverse('intake-apply'),
@@ -572,7 +576,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         self.be_apubdef_user()
         resp = self.client.get(reverse("intake-app_index"))
         url = reverse(
-            "intake-app_detail", 
+            "intake-app_detail",
             kwargs={'submission_id':submission.id})
 
         self.assertContains(resp, url)
