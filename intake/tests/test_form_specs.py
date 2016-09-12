@@ -1,7 +1,8 @@
 from unittest import TestCase as BaseTestCase
 from django.test import TestCase
 from django.contrib.auth.models import User
-from formation.forms import county_form_selector, SelectCountyForm
+from formation.forms import (
+        county_form_selector, SelectCountyForm, DeclarationLetterForm)
 
 from intake.tests import mock
 from intake import constants, models
@@ -41,6 +42,37 @@ class TestAlamedaCountyForm(TestCase):
         page_data = str(display_form)
         for key in data:
             field = display_form.get_field_by_input_name(key)
+            self.assertIn(
+                field.get_html_class_name(), page_data,
+                "couldn't find " + field.get_html_class_name())
+
+
+class TestDeclarationLetterForm(TestCase):
+
+    def test_records_all_fields(self):
+        data = mock.fake.declaration_letter_answers()
+        input_form = DeclarationLetterForm(data)
+        self.assertTrue(input_form.is_valid())
+        submission = models.FormSubmission(answers=input_form.cleaned_data)
+        submission.save()
+        output_form = DeclarationLetterForm(submission.answers)
+        self.assertTrue(output_form.is_valid())
+        for key in data:
+            field = output_form.get_field_by_input_name(key)
+            self.assertFalse(
+                field.is_empty(), "couldn't find" + field.context_key)
+
+    def test_displays_all_fields(self):
+        data = mock.fake.declaration_letter_answers()
+        input_form = DeclarationLetterForm(data)
+        self.assertTrue(input_form.is_valid())
+        submission = models.FormSubmission(answers=input_form.cleaned_data)
+        submission.save()
+        output_form = DeclarationLetterForm(submission.answers)
+        self.assertTrue(output_form.is_valid())
+        page_data = output_form.display()
+        for key in data:
+            field = output_form.get_field_by_input_name(key)
             self.assertIn(
                 field.get_html_class_name(), page_data,
                 "couldn't find " + field.get_html_class_name())

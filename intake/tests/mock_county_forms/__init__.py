@@ -116,12 +116,18 @@ class Provider(BaseProvider):
             'owns_home': self.maybe(0.1),
             'household_size': str(random.randint(0, 4)),
             'how_did_you_hear': 'from work',
+            'additional_information': 'I want help',
+        }
+        data.update(overrides)
+        return data
+
+    def declaration_letter_answers(self, **overrides):
+        data = {
             'declaration_letter_intro': 'some text',
             'declaration_letter_life_changes': 'some text',
             'declaration_letter_activities': 'some text',
             'declaration_letter_goals': 'some text',
             'declaration_letter_why': 'some text',
-            'additional_information': 'I want help',
         }
         data.update(overrides)
         return data
@@ -189,4 +195,3 @@ class Provider(BaseProvider):
         data['monthly_income'] = 2999
         data['owns_home'] = "no"
         return data
-

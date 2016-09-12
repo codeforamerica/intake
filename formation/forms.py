@@ -168,12 +168,6 @@ class AlamedaCountyForm(CombinableCountyFormSpec):
         # F.HasExternalRAP,
         # F.ExternalRAPWhereWhen,
         F.HowDidYouHear,
-        F.AlamedaDeclarationLetterNote,
-        F.DeclarationLetterIntro,
-        F.DeclarationLetterLifeChanges,
-        F.DeclarationLetterActivities,
-        F.DeclarationLetterGoals,
-        F.DeclarationLetterWhy,
         F.AdditionalInformation,
     }
     required_fields = {
@@ -190,18 +184,30 @@ class AlamedaCountyForm(CombinableCountyFormSpec):
         F.ReducedProbation,
         F.ServingSentence,
         F.BeingCharged,
-        F.AlamedaDeclarationLetterNote,
-        F.DeclarationLetterIntro,
-        F.DeclarationLetterLifeChanges,
-        F.DeclarationLetterActivities,
-        F.DeclarationLetterGoals,
-        F.DeclarationLetterWhy,
     }
     optional_fields = {
         F.AlternatePhoneNumberField,
         F.HowDidYouHear,
         F.AdditionalInformation,
     }
+
+
+class DeclarationLetterForm(Form):
+    fields = [
+        F.AlamedaDeclarationLetterNote,
+        F.DeclarationLetterIntro,
+        F.DeclarationLetterLifeChanges,
+        F.DeclarationLetterActivities,
+        F.DeclarationLetterGoals,
+        F.DeclarationLetterWhy,
+    ]
+    required_fields = [
+        F.DeclarationLetterIntro,
+        F.DeclarationLetterLifeChanges,
+        F.DeclarationLetterActivities,
+        F.DeclarationLetterGoals,
+        F.DeclarationLetterWhy,
+    ]
 
 
 class SelectCountyForm(Form):
