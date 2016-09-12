@@ -1,5 +1,6 @@
 import os
 import random
+import logging
 from unittest import skipUnless
 from unittest.mock import patch
 from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase
@@ -80,7 +81,6 @@ class IntakeDataTestCase(AuthIntegrationTestCase):
 
 
 class TestViews(IntakeDataTestCase):
-
 
     def setUp(self):
         super().setUp()
@@ -545,7 +545,9 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
     @patch(
         'intake.views.models.FormSubmission.send_confirmation_notifications')
     @patch('intake.views.notifications.slack_new_submission.send')
-    def test_can_apply_to_alameda_alone(self, slack, send_confirmation):
+    def test_alameda_application_redirects_to_declaration_letter(
+            self, slack, send_confirmation):
+
         self.be_anonymous()
         alameda = constants.Counties.ALAMEDA
         answers = mock.fake.alameda_pubdef_answers()
@@ -559,28 +561,30 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         result = self.client.fill_form(
             reverse('intake-county_application'),
             **answers)
-        lookup = {
-            key: answers[key]
-            for key in [
-                'email', 'phone_number', 'first_name']}
 
-        submission = models.FormSubmission.objects.filter(
-            answers__contains=lookup).first()
-        county_slugs = [county.slug for county in submission.get_counties()]
-        self.assertListEqual(county_slugs, [alameda])
-        self.assertIn(self.apubdef, submission.organizations.all())
-        self.assertEqual(submission.organizations.count(), 1)
-        self.assertEqual(submission.organizations.first().county.slug, alameda)
-        filled_pdf_count = models.FilledPDF.objects.count()
-        self.assertEqual(filled_pdf_count, 0)
-        self.be_apubdef_user()
-        resp = self.client.get(reverse("intake-app_index"))
-        url = reverse(
-            "intake-app_detail",
-            kwargs={'submission_id':submission.id})
+        self.assertRedirects(result, reverse("intake-write_letter"))
+        slack.assert_not_called()
+        send_confirmation.assert_not_called()
 
-        self.assertContains(resp, url)
+    def test_invalid_alameda_application_returns_same_page(self):
+        self.be_anonymous()
+        alameda = constants.Counties.ALAMEDA
+        answers = mock.fake.alameda_pubdef_answers(monthly_income="")
+        result = self.client.fill_form(
+            reverse('intake-apply'), counties=[alameda])
+        self.assertRedirects(result, reverse('intake-county_application'))
+        result = self.client.get(reverse('intake-county_application'))
+        form = result.context['form']
+        self.assertListEqual(form.counties, [alameda])
 
+        result = self.client.fill_form(
+            reverse('intake-county_application'),
+            **answers)
+
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.wsgi_request.path,
+                         reverse('intake-county_application'))
+        self.assertTrue(result.context['form'].errors)
 
     def test_can_go_back_and_reset_counties(self):
         self.be_anonymous()
@@ -605,6 +609,72 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         self.assertEqual(form.counties, second_choices)
         county_setting = self.client.session['form_in_progress']['counties']
         self.assertEqual(county_setting, second_choices)
+
+
+class TestDeclarationLetterView(AuthIntegrationTestCase):
+
+    @patch('intake.views.models.FormSubmission.send_confirmation_notifications')
+    @patch('intake.views.notifications.slack_new_submission.send')
+    def test_expected_success(self, slack, send_confirmation):
+        self.be_anonymous()
+        alameda = constants.Counties.ALAMEDA
+        self.client.fill_form(
+            reverse('intake-apply'), counties=[alameda], follow=True)
+        answers = mock.fake.alameda_pubdef_answers(first_name="RandomName")
+        self.client.fill_form(
+            reverse('intake-county_application'), follow=True, **answers)
+
+        declaration_answers = mock.fake.declaration_letter_answers()
+        result = self.client.fill_form(
+            reverse('intake-write_letter'), **declaration_answers)
+
+        self.assertRedirects(result, reverse('intake-thanks'))
+
+        submission = models.FormSubmission.objects.filter(
+            answers__first_name="FirstName").first()
+
+        self.assertTrue(submission)
+        county_slugs = [county.slug for county in submission.get_counties()]
+        self.assertListEqual(county_slugs, [alameda])
+        self.assertIn(self.apubdef, submission.organizations.all())
+        self.assertEqual(submission.organizations.count(), 1)
+        self.assertEqual(submission.organizations.first().county.slug, alameda)
+        filled_pdf_count = models.FilledPDF.objects.count()
+        self.assertEqual(filled_pdf_count, 0)
+        self.be_apubdef_user()
+        resp = self.client.get(reverse("intake-app_index"))
+        url = reverse(
+            "intake-app_detail",
+            kwargs={'submission_id': submission.id})
+
+        self.assertContains(resp, url)
+
+    def test_invalid_letter_returns_same_page(self):
+        self.be_anonymous()
+        alameda = constants.Counties.ALAMEDA
+        self.client.fill_form(
+            reverse('intake-apply'), counties=[alameda], follow=True)
+        answers = mock.fake.alameda_pubdef_answers(first_name="RandomName")
+        self.client.fill_form(
+            reverse('intake-county_application'), follow=True, **answers)
+
+        declaration_answers = mock.fake.declaration_letter_answers(
+            declaration_letter_why="")
+
+        result = self.client.fill_form(
+            reverse('intake-write_letter'), **declaration_answers)
+
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.wsgi_request.path,
+                         reverse('intake-write_letter'))
+
+        self.assertTrue(result.context['form'].errors)
+
+    def test_no_existing_data(self):
+        self.be_anonymous()
+        with self.assertLogs('intake.views', level=logging.WARN) as cm:
+            result = self.client.get(reverse('intake-write_letter'))
+            self.assertRedirects(result, reverse('intake-apply'))
 
 
 class TestApplicationDetail(IntakeDataTestCase):
