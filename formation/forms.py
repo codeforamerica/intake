@@ -24,7 +24,7 @@ class SupplementaryDisplayForm(CombinableCountyFormSpec):
     }
 
 
-class OtherCountyForm(CombinableCountyFormSpec):
+class OtherCountyFormSpec(CombinableCountyFormSpec):
     """This could be used by Code for America to send applicants
     information on clean slate services in other counties or states.
     """
@@ -49,7 +49,7 @@ class OtherCountyForm(CombinableCountyFormSpec):
     ]
 
 
-class SanFranciscoCountyForm(CombinableCountyFormSpec):
+class SanFranciscoCountyFormSpec(CombinableCountyFormSpec):
     county = Counties.SAN_FRANCISCO
     fields = {
         F.ContactPreferences,
@@ -96,7 +96,7 @@ class SanFranciscoCountyForm(CombinableCountyFormSpec):
     ]
 
 
-class ContraCostaForm(CombinableCountyFormSpec):
+class ContraCostaFormSpec(CombinableCountyFormSpec):
     county = Counties.CONTRA_COSTA
     fields = {
         F.ContactPreferences,
@@ -140,7 +140,7 @@ class ContraCostaForm(CombinableCountyFormSpec):
     ]
 
 
-class AlamedaCountyForm(CombinableCountyFormSpec):
+class AlamedaCountyFormSpec(CombinableCountyFormSpec):
     county = Counties.ALAMEDA
     fields = {
         F.ContactPreferences,
@@ -192,22 +192,22 @@ class AlamedaCountyForm(CombinableCountyFormSpec):
     }
 
 
-class DeclarationLetterForm(Form):
-    fields = [
+class DeclarationLetterFormSpec(CombinableFormSpec):
+    fields = {
         F.AlamedaDeclarationLetterNote,
         F.DeclarationLetterIntro,
         F.DeclarationLetterLifeChanges,
         F.DeclarationLetterActivities,
         F.DeclarationLetterGoals,
         F.DeclarationLetterWhy,
-    ]
-    required_fields = [
+    }
+    required_fields = {
         F.DeclarationLetterIntro,
         F.DeclarationLetterLifeChanges,
         F.DeclarationLetterActivities,
         F.DeclarationLetterGoals,
         F.DeclarationLetterWhy,
-    ]
+    }
 
 
 class SelectCountyForm(Form):
@@ -216,10 +216,10 @@ class SelectCountyForm(Form):
 
 
 INPUT_FORM_SPECS = [
-    OtherCountyForm(),
-    SanFranciscoCountyForm(),
-    ContraCostaForm(),
-    AlamedaCountyForm(),
+    OtherCountyFormSpec(),
+    SanFranciscoCountyFormSpec(),
+    ContraCostaFormSpec(),
+    AlamedaCountyFormSpec(),
 ]
 DISPLAY_FORM_SPECS = INPUT_FORM_SPECS + [
     SupplementaryDisplayForm(),

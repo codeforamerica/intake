@@ -25,12 +25,12 @@ new applications.
     access links to `ApplicationDetail` and `FilledPDF` for each app.
 * `ApplicationDetail` - This shows the detail of one particular FormSubmission
 """
-
+import logging
 from django.utils.translation import ugettext as _
 from django.utils.datastructures import MultiValueDict
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib import messages
 
 from django.http import HttpResponse
@@ -39,8 +39,12 @@ from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 
 from intake import models, notifications, constants
-from formation.forms import county_form_selector, SelectCountyForm
+from formation.forms import (
+    county_form_selector, DeclarationLetterFormSpec, SelectCountyForm)
 from project.jinja2 import url_with_ids, oxford_comma
+
+
+logger = logging.getLogger(__name__)
 
 
 class Home(TemplateView):
@@ -53,8 +57,8 @@ class Home(TemplateView):
         if constants.SCOPE_TO_LIVE_COUNTIES:
             counties = models.County.objects.prefetch_related(
                 'organizations').filter(slug__in=[
-                constants.Counties.SAN_FRANCISCO,
-                constants.Counties.CONTRA_COSTA])
+                    constants.Counties.SAN_FRANCISCO,
+                    constants.Counties.CONTRA_COSTA])
         else:
             counties = models.County.objects.prefetch_related(
                 'organizations').all()
@@ -133,13 +137,17 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
                 'data': self.request.POST})
         return kwargs
 
+    def get_form_specs(self):
+        session_data = self.get_session_data()
+        counties = session_data.getlist('counties')
+        return county_form_selector.get_combined_form_spec(counties=counties)
+
     def get_form_class(self):
         """Builds a form class dynamically, based on a list of county slugs
         stored in the session.
         """
-        session_data = self.get_session_data()
-        counties = session_data.getlist('counties')
-        return county_form_selector.get_combined_form_class(counties=counties)
+        spec = self.get_form_specs()
+        return spec.build_form_class()
 
     def create_confirmations_for_user(self, submission):
         """Sends texts/emails to user and adds flash messages
@@ -160,9 +168,9 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
         submission = models.FormSubmission(answers=form.cleaned_data)
         submission.save()
         counties = self.get_counties()
-        orgs = (
+        orgs = [
             county.get_receiving_agency(submission.answers)
-            for county in counties)
+            for county in counties]
         submission.organizations.add(*orgs)
         # TODO: check for cerrect org in view tests
         number = models.FormSubmission.objects.count()
@@ -174,6 +182,12 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
         self.create_confirmations_for_user(submission)
 
     def form_valid(self, form):
+        # if for alameda, send to declaration letter
+        session_data = self.get_session_data()
+        county_slugs = session_data.getlist('counties')
+        if constants.Counties.ALAMEDA in county_slugs:
+            self.update_session_data()
+            return redirect(reverse('intake-write_letter'))
         self.save_submission_and_send_notifications(form)
         return super().form_valid(form)
 
@@ -216,6 +230,36 @@ class CountyApplication(MultiCountyApplicationBase):
             return redirect(self.confirmation_url)
         else:
             return super().form_valid(form)
+
+
+class DeclarationLetterView(MultiCountyApplicationBase):
+
+    form_spec = DeclarationLetterFormSpec()
+
+    def get(self, request):
+        # TODO: refactor to not check form validity twice, don't grab the
+        # session data too many times
+        data = self.get_session_data()
+        if not data:
+            logger.warn(
+                "DeclarationLetterView hit with no existing session data")
+            return redirect(reverse('intake-apply'))
+        return super().get(request)
+
+    def get_form_class(self):
+        return self.form_spec.build_form_class()
+
+    def form_valid(self, declaration_letter_form):
+        BaseCountyFormSpec = super().get_form_specs()
+        Form = (
+            self.form_spec | BaseCountyFormSpec
+        ).build_form_class()
+        data = self.get_session_data()
+        data.update(declaration_letter_form.cleaned_data)
+        form = Form(data)
+        form.is_valid()
+        self.save_submission_and_send_notifications(form)
+        return MultiStepFormViewBase.form_valid(self, form)
 
 
 class SelectCounty(MultiStepFormViewBase):
@@ -526,6 +570,7 @@ class MarkProcessed(MarkSubmissionStepView):
 
 home = Home.as_view()
 county_application = CountyApplication.as_view()
+write_letter = DeclarationLetterView.as_view()
 select_county = SelectCounty.as_view()
 confirm = Confirm.as_view()
 thanks = Thanks.as_view()
