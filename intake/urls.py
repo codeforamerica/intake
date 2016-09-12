@@ -8,6 +8,8 @@ urlpatterns = [
     url(r'^apply/$', views.select_county, name='intake-apply'),
     url(r'^application/$', views.county_application,
         name='intake-county_application'),
+    url(r'^application/letter/$', views.write_letter,
+        name='intake-write_letter'),
     url(r'^confirm/$', views.confirm, name='intake-confirm'),
     url(r'^thanks/$', views.thanks, name='intake-thanks'),
     url(r'^stats/$', views.stats, name='intake-stats'),
