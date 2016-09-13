@@ -671,9 +671,9 @@ class TestApplicationLogEntry(TestCase):
     fixtures = ['organizations', 'mock_profiles']
 
     def test_can_log_referral_between_orgs(self):
-        from_org = auth_models.Organization.get(
+        from_org = auth_models.Organization.objects.get(
             slug=constants.Organizations.ALAMEDA_PUBDEF)
-        to_org = auth_models.Organization.get(
+        to_org = auth_models.Organization.objects.get(
             slug=constants.Organizations.EBCLC)
         from_org_user = from_org.profiles.first().user
         answers = mock.fake.alameda_pubdef_answers()

@@ -362,6 +362,7 @@ class ApplicationLogEntry(models.Model):
         (PROCESSED, "processed"),
         (DELETED, "deleted"),
         (CONFIRMATION_SENT, "sent confirmation"),
+        (REFERRED_BETWEEN_ORGS, "referred to another org"),
     )
 
     time = models.DateTimeField(default=timezone_utils.now)
@@ -429,6 +430,19 @@ class ApplicationLogEntry(models.Model):
             event_type=cls.CONFIRMATION_SENT,
             contact_info=contact_info,
             message_sent=message_sent)
+
+    @classmethod
+    def log_referred_from_one_org_to_another(cls, submission_id,
+                                             to_organization, user):
+        return cls.log_multiple(
+            cls.REFERRED_BETWEEN_ORGS, [submission_id], user,
+            organization=to_organization)[0]
+
+    def to_org(self):
+        return self.organization
+
+    def from_org(self):
+        return self.user.profile.organization
 
 
 class ApplicantContactedLogEntry(ApplicationLogEntry):
