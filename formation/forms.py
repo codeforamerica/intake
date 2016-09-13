@@ -2,7 +2,7 @@ from formation.combinable_base import CombinableFormSpec, FormSpecSelector
 from formation.form_base import Form
 from formation.display_form_base import DisplayForm
 from formation import fields as F
-from intake.constants import Counties
+from intake.constants import Counties, Organizations
 from formation.validators import gave_preferred_contact_methods
 
 
@@ -11,6 +11,13 @@ class CombinableCountyFormSpec(CombinableFormSpec):
     def is_correct_spec(self, *args, **kwargs):
         counties = kwargs.get('counties', [])
         return self.county in counties
+
+
+class CombinableOrganizationFormSpec(CombinableFormSpec):
+
+    def is_correct_spec(self, *args, **kwargs):
+        organizations = kwargs.get('organizations', [])
+        return self.organization in organizations
 
 
 class SupplementaryDisplayForm(CombinableCountyFormSpec):
@@ -147,7 +154,105 @@ class AlamedaCountyFormSpec(CombinableCountyFormSpec):
         F.FirstName,
         F.MiddleName,
         F.LastName,
-        # F.PreferredPronouns,
+        F.PreferredPronouns,
+        F.PhoneNumberField,
+        F.AlternatePhoneNumberField,
+        F.EmailField,
+        F.AddressField,
+        F.FinancialScreeningNote,
+        F.MonthlyIncome,
+        F.OnPublicBenefits,
+        F.OwnsHome,
+        F.HouseholdSize,
+        F.DateOfBirthField,
+        # F.LastFourOfSSN,
+        F.USCitizen,
+        F.OnProbationParole,
+        F.FinishedHalfProbation,
+        F.ReducedProbation,
+        F.ServingSentence,
+        F.BeingCharged,
+        # F.HasExternalRAP,
+        # F.ExternalRAPWhereWhen,
+        F.HowDidYouHear,
+        F.AdditionalInformation,
+    }
+    required_fields = {
+        F.FirstName,
+        F.LastName,
+        F.AddressField,
+        F.DateOfBirthField,
+        F.MonthlyIncome,
+        F.OnPublicBenefits,
+        F.OwnsHome,
+        F.HouseholdSize,
+        F.OnProbationParole,
+        F.FinishedHalfProbation,
+        F.ReducedProbation,
+        F.ServingSentence,
+        F.BeingCharged,
+    }
+    optional_fields = {
+        F.AlternatePhoneNumberField,
+        F.HowDidYouHear,
+        F.AdditionalInformation,
+    }
+
+
+class AlamedaPublicDefenderFormSpec(CombinableOrganizationFormSpec):
+    organization = Organizations.ALAMEDA_PUBDEF
+    fields = {
+        F.ContactPreferences,
+        F.FirstName,
+        F.MiddleName,
+        F.LastName,
+        F.PhoneNumberField,
+        F.AlternatePhoneNumberField,
+        F.EmailField,
+        F.AddressField,
+        F.FinancialScreeningNote,
+        F.MonthlyIncome,
+        F.OwnsHome,
+        F.HouseholdSize,
+        F.DateOfBirthField,
+        F.USCitizen,
+        F.OnProbationParole,
+        F.FinishedHalfProbation,
+        F.ReducedProbation,
+        F.ServingSentence,
+        F.BeingCharged,
+        F.HowDidYouHear,
+        F.AdditionalInformation,
+    }
+    required_fields = {
+        F.FirstName,
+        F.LastName,
+        F.AddressField,
+        F.DateOfBirthField,
+        F.MonthlyIncome,
+        F.OwnsHome,
+        F.HouseholdSize,
+        F.OnProbationParole,
+        F.FinishedHalfProbation,
+        F.ReducedProbation,
+        F.ServingSentence,
+        F.BeingCharged,
+    }
+    optional_fields = {
+        F.AlternatePhoneNumberField,
+        F.HowDidYouHear,
+        F.AdditionalInformation,
+    }
+
+
+class EBCLCIntakeFormSpec(CombinableOrganizationFormSpec):
+    organization = Organizations.EBCLC
+    fields = {
+        F.ContactPreferences,
+        F.FirstName,
+        F.MiddleName,
+        F.LastName,
+        F.PreferredPronouns,
         F.PhoneNumberField,
         F.AlternatePhoneNumberField,
         F.EmailField,
@@ -225,5 +330,11 @@ DISPLAY_FORM_SPECS = INPUT_FORM_SPECS + [
     SupplementaryDisplayForm(),
 ]
 
-county_form_selector = FormSpecSelector(INPUT_FORM_SPECS, Form)
+ORG_FORM_SPECS = [
+    AlamedaPublicDefenderFormSpec(),
+    EBCLCIntakeFormSpec(),
+]
+
 display_form_selector = FormSpecSelector(DISPLAY_FORM_SPECS, DisplayForm)
+county_form_selector = FormSpecSelector(INPUT_FORM_SPECS, Form)
+organization_form_selector = FormSpecSelector(ORG_FORM_SPECS, Form)
