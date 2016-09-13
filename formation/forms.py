@@ -225,5 +225,6 @@ DISPLAY_FORM_SPECS = INPUT_FORM_SPECS + [
     SupplementaryDisplayForm(),
 ]
 
-county_form_selector = FormSpecSelector(INPUT_FORM_SPECS, Form)
+
 display_form_selector = FormSpecSelector(DISPLAY_FORM_SPECS, DisplayForm)
+county_form_selector = FormSpecSelector(INPUT_FORM_SPECS, Form)
