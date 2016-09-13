@@ -971,3 +971,26 @@ class TestApplicationBundleDetailPDFView(IntakeDataTestCase):
                     skip_pdf=True)
         response = self.client.get(bundle.get_pdf_bundle_url())
         self.assertEqual(response.status_code, 404)
+
+
+class TestReferToAnotherOrgView(IntakeDataTestCase):
+
+    def url(self, sub_id, org_id):
+        return reverse(
+            'intake-refer_to_other_org',
+            kwargs=dict(
+                submission_id=sub_id,
+                organization_id=org_id
+                ))
+
+    def test_anon_is_rejected(self):
+        self.be_anonymous()
+        result = self.client.get(self.url(
+            1, 1))
+        self.assertRedirects(result, reverse('user_accounts-login'))
+
+    def test_org_user_with_no_next_goes_to_app_index(self):
+        self.be_apubdef_user()
+        pass
+    # 2. from org user hits it with no next param
+    # 3. from org user hits it with a next param

@@ -1,6 +1,7 @@
 import uuid
 import os
 import factory
+import random
 from pytz import timezone
 from faker import Factory as FakerFactory
 from django.core.files import File
@@ -169,3 +170,63 @@ class FrontSendMessageResponse:
     @classmethod
     def error(cls):
         return cls._make_response(400, cls.ERROR_JSON)
+
+def build_seed_submissions():
+    from user_accounts.models import Organization
+    from formation.forms import county_form_selector
+    orgs = Organization.objects.all()
+    counties = list(models.County.objects.all())
+    answer_pairs = {
+        'sf_pubdef': fake.sf_county_form_answers,
+        'cc_pubdef': fake.contra_costa_county_form_answers,
+        'ebclc': fake.ebclc_answers,
+        'a_pubdef': fake.alameda_pubdef_answers
+    }
+    form_pairs = {
+        'sf_pubdef': county_form_selector.get_combined_form_class(
+            counties=['sanfrancisco']),
+        'cc_pubdef': county_form_selector.get_combined_form_class(
+            counties=['contracosta']),
+        'ebclc': county_form_selector.get_combined_form_class(
+            counties=['alameda']),
+        'a_pubdef': county_form_selector.get_combined_form_class(
+            counties=['alameda'])
+    }
+    subs = []
+    for org in orgs:
+        if org.slug in answer_pairs:
+            for i in range(4):
+                answers = answer_pairs[org.slug]()
+                Form = form_pairs[org.slug]
+                form = Form(answers)
+                form.is_valid()
+                sub = models.FormSubmission.create_for_organizations(
+                    organizations=[org],
+                    answers=form.cleaned_data)
+                subs.append(sub)
+    # make combos
+    for i in range(6):
+        num_counties = random.randint(2, 3)
+        answers = fake.all_county_answers()
+        these_counties = random.sample(counties, num_counties)
+        Form = county_form_selector.get_combined_form_class(
+            counties=[c.slug for c in these_counties])
+        form = Form(answers)
+        form.is_valid()
+        sub = models.FormSubmission.create_for_counties(
+            counties=these_counties,
+            answers=form.cleaned_data)
+        subs.append(sub)
+
+    read_subs = random.sample(subs, 5)
+    for sub in read_subs:
+        org_user = sub.organizations.first().profiles.first().user
+        models.ApplicationLogEntry.log_opened(
+            [sub.id], org_user)
+    # make bundles
+    from intake.submission_bundler import SubmissionBundler
+    bundler = SubmissionBundler()
+    bundler.map_submissions_to_orgs()
+    for bundle in bundler.organization_bundle_map.values():
+        bundle.create_app_bundle()
+    return subs
