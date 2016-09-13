@@ -665,3 +665,23 @@ class TestApplicationBundle(TestCase):
             "submissions for ApplicationBundle(pk=2) lack pdfs")
         self.assertEqual(len(get_individual_filled_pdfs.mock_calls), 2)
         mock_bundle.save.assert_called_once_with()
+
+
+class TestApplicationLogEntry(TestCase):
+    fixtures = ['organizations', 'mock_profiles']
+
+    def test_can_log_referral_between_orgs(self):
+        from_org = auth_models.Organization.get(
+            slug=constants.Organizations.ALAMEDA_PUBDEF)
+        to_org = auth_models.Organization.get(
+            slug=constants.Organizations.EBCLC)
+        from_org_user = from_org.profiles.first().user
+        answers = mock.fake.alameda_pubdef_answers()
+        submission = models.FormSubmission.create_for_organizations(
+            organizations=[from_org], answers=answers)
+        log = models.ApplicationLogEntry.log_referred_from_one_org_to_another(
+            submission.id, to_organization=to_org, user=from_org_user
+            )
+        self.assertEqual(log.from_org(), from_org)
+        self.assertEqual(log.user, from_org_user)
+        self.assertEqual(log.to_org(), to_org)

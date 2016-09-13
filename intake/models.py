@@ -354,6 +354,7 @@ class ApplicationLogEntry(models.Model):
     PROCESSED = 3
     DELETED = 4
     CONFIRMATION_SENT = 5
+    REFERRED_BETWEEN_ORGS = 6
 
     EVENT_TYPES = (
         (OPENED, "opened"),
