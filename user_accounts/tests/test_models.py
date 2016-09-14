@@ -1,6 +1,7 @@
 from intake.tests.test_views import IntakeDataTestCase
 from user_accounts import models
 from intake import models as intake_models
+from intake import constants
 from user_accounts.tests import mock
 
 
@@ -51,6 +52,8 @@ class TestUserProfile(IntakeDataTestCase):
 
 class TestOrganization(IntakeDataTestCase):
 
+    fixtures = ['organizations']
+
     def test_has_a_pdf(self):
         self.assertTrue(self.sfpubdef.has_a_pdf())
         self.assertFalse(self.ccpubdef.has_a_pdf())
@@ -73,3 +76,21 @@ class TestOrganization(IntakeDataTestCase):
         org.save()
         with self.assertRaises(models.NoEmailsForOrgError):
             org.get_referral_emails()
+
+    def test_get_transfer_org_returns_correct_org(self):
+        ebclc = models.Organization.objects.get(
+            slug=constants.Organizations.EBCLC)
+        a_pubdef = models.Organization.objects.get(
+            slug=constants.Organizations.ALAMEDA_PUBDEF)
+        self.assertEqual(ebclc.get_transfer_org(), a_pubdef)
+        self.assertEqual(a_pubdef.get_transfer_org(), ebclc)
+
+    def test_get_transfer_org_returns_none(self):
+        sf_pubdef = models.Organization.objects.get(
+            slug=constants.Organizations.SF_PUBDEF)
+        cc_pubdef = models.Organization.objects.get(
+            slug=constants.Organizations.COCO_PUBDEF)
+        self.assertIsNone(sf_pubdef.get_transfer_org())
+        self.assertIsNone(cc_pubdef.get_transfer_org())
+
+
