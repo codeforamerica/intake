@@ -242,6 +242,11 @@ slack_submissions_deleted = SlackTemplateNotification(
     {'action': 'deleted'},
     message_template_path="slack/bundle_action.jinja")
 
+# submission, user
+slack_submission_transferred = SlackTemplateNotification(
+    {'action': 'transferred'},
+    message_template_path="slack/submission_action.jinja")
+
 # count, submission_ids
 front_email_daily_app_bundle = FrontEmailNotification(
     subject_template=_(

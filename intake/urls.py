@@ -52,9 +52,9 @@ urlpatterns = [
         login_required(views.mark_processed),
         name='intake-mark_processed'),
 
-    url(r'^applications/mark/referred/$',
-        login_required(views.mark_processed),
-        name='intake-mark_referred_to_other_org'),
+    url(r'^applications/mark/transferred/$',
+        login_required(views.mark_transferred_to_other_org),
+        name='intake-mark_transferred_to_other_org'),
 
 ]
 

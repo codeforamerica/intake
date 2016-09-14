@@ -39,6 +39,7 @@ from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 
 from intake import models, notifications, constants
+from user_accounts.models import Organization
 from formation.forms import (
     county_form_selector, DeclarationLetterFormSpec, SelectCountyForm)
 from project.jinja2 import url_with_ids, oxford_comma
@@ -426,9 +427,7 @@ class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
         submission_ids = self.get_ids_from_params(request)
         submissions = models.FormSubmission.objects.filter(
             pk__in=submission_ids)
-        if not request.user.is_staff:
-            submissions = submissions.filter(
-                organizations__profiles=request.user.profile)
+        submissions = request.user.profile.filter_submissions(submissions)
         if len(submissions) < len(submission_ids):
             raise Http404(
                 "Either those applications have been deleted or you don't "
@@ -458,7 +457,8 @@ class ApplicationBundleDetail(ApplicationDetail):
         has_access = request.user.profile.should_have_access_to(bundle)
         if not has_access:
             return self.not_allowed(request)
-        submissions = list(bundle.submissions.all())
+        submissions = list(
+            request.user.profile.filter_submissions(bundle.submissions.all()))
         context = dict(
             submissions=submissions,
             count=len(submissions),
@@ -553,15 +553,28 @@ class MarkSubmissionStepView(View, MultiSubmissionMixin):
     def modify_submissions(self):
         pass
 
-    def log(self):
-        models.ApplicationLogEntry.log_multiple(
-            self.process_step, self.submission_ids, self.request.user,
-            organization=self.get_organization(self.request.user))
-
-    def get_organization(self, user):
+    def get_organization_id(self):
         """Get the organization for logging this step.
         """
-        return user.profile.organization
+        return self.request.user.profile.organization.id
+
+    def get_notification_context(self):
+        return dict(
+            submissions=self.submissions,
+            user=self.request.user)
+
+    def notify(self):
+        pass
+
+    def add_message(self):
+        pass
+
+    def log(self):
+        models.ApplicationLogEntry.log_multiple(
+            self.process_step,
+            self.submission_ids,
+            user=self.request.user,
+            organization_id=self.get_organization_id())
 
     def get(self, request):
         self.request = request
@@ -574,24 +587,39 @@ class MarkSubmissionStepView(View, MultiSubmissionMixin):
                                           reverse_lazy('intake-app_index'))
         self.log()
         self.modify_submissions()
-        if hasattr(self, 'notification_function'):
-            self.notification_function(
-                submissions=self.submissions, user=request.user)
+        self.add_message()
+        self.notify()
         return redirect(self.next_param)
 
 
 class MarkProcessed(MarkSubmissionStepView):
     process_step = models.ApplicationLogEntry.PROCESSED
-    notification_function = notifications.slack_submissions_processed.send
+
+    def notify(self):
+        notifications.slack_submissions_processed.send(
+            **self.get_notification_context())
 
 
 class ReferToAnotherOrgView(MarkSubmissionStepView):
-    notification_function = notifications.slack_submissions_processed.send
+
+    transfer_message_template = str(
+        "You successfully transferred {applicant_name}'s application "
+        "to {org_name}. You will no longer see their application."
+    )
+
+    def get_organization_id(self):
+        return int(self.request.GET.get('to_organization_id'))
 
     def log(self):
         models.ApplicationLogEntry.log_referred_from_one_org_to_another(
             self.submission_ids[0],
-            int(self.request.GET.get('to_organization_id')), self.request.user)
+            to_organization_id=self.get_organization_id(),
+            user=self.request.user)
+
+    def get_notification_context(self):
+        return dict(
+            submission=self.submissions[0],
+            user=self.request.user)
 
     def modify_submissions(self):
         submission = self.submissions[0]
@@ -599,6 +627,17 @@ class ReferToAnotherOrgView(MarkSubmissionStepView):
         submission.organizations.remove(
             self.request.user.profile.organization)
         submission.organizations.add(to_organization_id)
+
+    def notify(self):
+        notifications.slack_submission_transferred.send(
+            **self.get_notification_context())
+
+    def add_message(self):
+        org = Organization.objects.get(pk=self.get_organization_id())
+        message = self.transfer_message_template.format(
+            org_name=org.name,
+            applicant_name=self.submissions[0].get_full_name())
+        messages.success(self.request, message)
 
 
 home = Home.as_view()
@@ -615,7 +654,7 @@ app_index = ApplicationIndex.as_view()
 app_bundle = ApplicationBundle.as_view()
 app_detail = ApplicationDetail.as_view()
 mark_processed = MarkProcessed.as_view()
-mark_transfer_to_other_org = ReferToAnotherOrgView.as_view()
+mark_transferred_to_other_org = ReferToAnotherOrgView.as_view()
 delete_page = Delete.as_view()
 app_bundle_detail = ApplicationBundleDetail.as_view()
 app_bundle_detail_pdf = ApplicationBundleDetailPDFView.as_view()

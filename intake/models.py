@@ -13,6 +13,9 @@ from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.urlresolvers import reverse
+
+from project.jinja2 import namify
+
 from formation import field_types
 
 from intake import (
@@ -253,6 +256,13 @@ class FormSubmission(models.Model):
         display_form.is_valid()
         return display_form
 
+    def get_full_name(self):
+        return '{first_name} {last_name}'.format(
+            **{
+                key: namify(self.answers.get(key))
+                for key in ['first_name', 'last_name']
+            })
+
     def get_formatted_address(self):
         address = self.answers.get('address', {})
         if not address:
@@ -384,20 +394,24 @@ class ApplicationLogEntry(models.Model):
 
     @classmethod
     def log_multiple(cls, event_type, submission_ids,
-                     user, time=None, organization=None):
+                     user, time=None, organization=None,
+                     organization_id=None):
         if not time:
             time = timezone_utils.now()
-        if event_type in [cls.PROCESSED, cls.OPENED,
-                          cls.DELETED] and not organization:
-            organization = user.profile.organization
+        org_kwarg = dict(organization=organization)
+        if not organization:
+            if organization_id:
+                org_kwarg = dict(organization_id=organization_id)
+            elif event_type in [cls.PROCESSED, cls.OPENED, cls.DELETED]:
+                org_kwarg = dict(organization=user.profile.organization)
         logs = []
         for submission_id in submission_ids:
             log = cls(
                 time=time,
                 user=user,
-                organization=organization,
                 submission_id=submission_id,
-                event_type=event_type
+                event_type=event_type,
+                **org_kwarg
             )
             logs.append(log)
         ApplicationLogEntry.objects.bulk_create(logs)
@@ -433,10 +447,10 @@ class ApplicationLogEntry(models.Model):
 
     @classmethod
     def log_referred_from_one_org_to_another(cls, submission_id,
-                                             to_organization, user):
+                                             to_organization_id, user):
         return cls.log_multiple(
             cls.REFERRED_BETWEEN_ORGS, [submission_id], user,
-            organization=to_organization)[0]
+            organization_id=to_organization_id)[0]
 
     def to_org(self):
         return self.organization

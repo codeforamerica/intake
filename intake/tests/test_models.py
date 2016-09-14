@@ -680,7 +680,7 @@ class TestApplicationLogEntry(TestCase):
         submission = models.FormSubmission.create_for_organizations(
             organizations=[from_org], answers=answers)
         log = models.ApplicationLogEntry.log_referred_from_one_org_to_another(
-            submission.id, to_organization=to_org, user=from_org_user
+            submission.id, to_organization_id=to_org.id, user=from_org_user
             )
         self.assertEqual(log.from_org(), from_org)
         self.assertEqual(log.user, from_org_user)

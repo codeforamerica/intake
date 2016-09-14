@@ -208,6 +208,11 @@ class UserProfile(models.Model):
         msg = "`{}` doesn't have a way to define UserProfile access"
         raise UndefinedResourceAccessError(msg.format(resource))
 
+    def filter_submissions(self, submissions_qset):
+        if self.user.is_staff:
+            return submissions_qset
+        return submissions_qset.filter(organizations__profiles=self)
+
 
 def get_user_display(user):
     return user.profile.get_display_name()

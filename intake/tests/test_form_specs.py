@@ -7,7 +7,6 @@ from formation.forms import (
 
 from intake.tests import mock
 from intake import constants, models
-from user_accounts.models import Organization
 
 
 class TestAlamedaCountyForm(TestCase):
