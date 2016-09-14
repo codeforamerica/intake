@@ -72,6 +72,13 @@ db.dump_fixtures:
 		--indent 2 \
 		--natural-foreign \
 		--format json
+	python ./manage.py dumpdata \
+		intake.ApplicationBundle \
+		-o intake/fixtures/mock_bundles.json \
+		--indent 2 \
+		--natural-foreign \
+		--format json
+
 
 db.load_fixtures:
 	python ./manage.py loaddata counties organizations mock_profiles

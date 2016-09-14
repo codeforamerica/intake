@@ -1,0 +1,237 @@
+[
+{
+  "model": "intake.applicationbundle",
+  "pk": 1,
+  "fields": {
+    "organization": [
+      "San Francisco Public Defender"
+    ],
+    "bundled_pdf": "pdf_bundles/submission_bundle_0003-2016-09-03_0033.pdf",
+    "submissions": []
+  }
+},
+{
+  "model": "intake.applicationbundle",
+  "pk": 2,
+  "fields": {
+    "organization": [
+      "Contra Costa Public Defender"
+    ],
+    "bundled_pdf": "",
+    "submissions": []
+  }
+},
+{
+  "model": "intake.applicationbundle",
+  "pk": 3,
+  "fields": {
+    "organization": [
+      "Alameda Public Defender"
+    ],
+    "bundled_pdf": "",
+    "submissions": []
+  }
+},
+{
+  "model": "intake.applicationbundle",
+  "pk": 4,
+  "fields": {
+    "organization": [
+      "San Francisco Public Defender"
+    ],
+    "bundled_pdf": "pdf_bundles/submission_bundle_0003-2016-09-06_2337.pdf",
+    "submissions": []
+  }
+},
+{
+  "model": "intake.applicationbundle",
+  "pk": 5,
+  "fields": {
+    "organization": [
+      "San Francisco Public Defender"
+    ],
+    "bundled_pdf": "",
+    "submissions": []
+  }
+},
+{
+  "model": "intake.applicationbundle",
+  "pk": 6,
+  "fields": {
+    "organization": [
+      "Code for America"
+    ],
+    "bundled_pdf": "",
+    "submissions": []
+  }
+},
+{
+  "model": "intake.applicationbundle",
+  "pk": 7,
+  "fields": {
+    "organization": [
+      "San Francisco Public Defender"
+    ],
+    "bundled_pdf": "pdf_bundles/submission_bundle_0003-2016-09-13_2311.pdf",
+    "submissions": []
+  }
+},
+{
+  "model": "intake.applicationbundle",
+  "pk": 8,
+  "fields": {
+    "organization": [
+      "Contra Costa Public Defender"
+    ],
+    "bundled_pdf": "",
+    "submissions": []
+  }
+},
+{
+  "model": "intake.applicationbundle",
+  "pk": 9,
+  "fields": {
+    "organization": [
+      "East Bay Community Law Center"
+    ],
+    "bundled_pdf": "",
+    "submissions": []
+  }
+},
+{
+  "model": "intake.applicationbundle",
+  "pk": 10,
+  "fields": {
+    "organization": [
+      "Alameda Public Defender"
+    ],
+    "bundled_pdf": "",
+    "submissions": []
+  }
+},
+{
+  "model": "intake.applicationbundle",
+  "pk": 11,
+  "fields": {
+    "organization": [
+      "San Francisco Public Defender"
+    ],
+    "bundled_pdf": "pdf_bundles/submission_bundle_0003-2016-09-14_1816.pdf",
+    "submissions": [
+      538,
+      537,
+      536,
+      520,
+      518,
+      515,
+      514,
+      513,
+      512,
+      511,
+      498,
+      497,
+      496,
+      495,
+      494,
+      493,
+      490,
+      489,
+      476,
+      475,
+      474,
+      473
+    ]
+  }
+},
+{
+  "model": "intake.applicationbundle",
+  "pk": 12,
+  "fields": {
+    "organization": [
+      "Contra Costa Public Defender"
+    ],
+    "bundled_pdf": "",
+    "submissions": [
+      538,
+      537,
+      536,
+      523,
+      516,
+      515,
+      514,
+      511,
+      502,
+      501,
+      500,
+      499,
+      494,
+      493,
+      492,
+      491,
+      489,
+      480,
+      479,
+      478,
+      477
+    ]
+  }
+},
+{
+  "model": "intake.applicationbundle",
+  "pk": 13,
+  "fields": {
+    "organization": [
+      "East Bay Community Law Center"
+    ],
+    "bundled_pdf": "",
+    "submissions": [
+      526,
+      525,
+      516,
+      514,
+      513,
+      512,
+      506,
+      505,
+      504,
+      503,
+      494,
+      492,
+      490,
+      489,
+      484,
+      483,
+      482,
+      481
+    ]
+  }
+},
+{
+  "model": "intake.applicationbundle",
+  "pk": 14,
+  "fields": {
+    "organization": [
+      "Alameda Public Defender"
+    ],
+    "bundled_pdf": "",
+    "submissions": [
+      538,
+      537,
+      536,
+      532,
+      530,
+      529,
+      515,
+      510,
+      509,
+      508,
+      507,
+      491,
+      488,
+      487,
+      486,
+      485
+    ]
+  }
+}
+]

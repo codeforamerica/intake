@@ -975,22 +975,55 @@ class TestApplicationBundleDetailPDFView(IntakeDataTestCase):
 
 class TestReferToAnotherOrgView(IntakeDataTestCase):
 
-    def url(self, sub_id, org_id):
-        return reverse(
+    fixtures = [
+        'organizations',
+        'mock_submission_to_alameda_pubdef',
+        'mock_bundle_to_alameda_pubdef']
+    mock_sub_id = 485
+    mock_bundle_id = 14
+
+    def url(self, org_id, sub_id=485, next=None):
+        base = reverse(
             'intake-refer_to_other_org',
             kwargs=dict(
                 submission_id=sub_id,
                 organization_id=org_id
                 ))
+        if next:
+            base += "?next={}".format(next)
+        return base
 
     def test_anon_is_rejected(self):
         self.be_anonymous()
-        result = self.client.get(self.url(
-            1, 1))
-        self.assertRedirects(result, reverse('user_accounts-login'))
+        response = self.client.get(self.url(
+            1))
+        self.assertRedirects(response, reverse('user_accounts-login'))
 
-    def test_org_user_with_no_next_goes_to_app_index(self):
+    def test_org_user_with_no_next_is_redirected_to_app_index(self):
         self.be_apubdef_user()
-        pass
-    # 2. from org user hits it with no next param
-    # 3. from org user hits it with a next param
+        sub = models.FormSubmission.objects.get(pk=self.mock_sub_id)
+        ebclc = auth_models.Organization.objects.get(
+            slug=constants.Organizations.EBCLC)
+        response = self.client.get(self.url(
+            org_id=ebclc.id))
+        self.assertRedirects(response, reverse('intake-app_index'))
+        sub_url = sub.get_absolute_url()
+        index = self.client.get(response.url)
+        self.assertNotContains(index, sub_url)
+        self.assertContains(index, "was sent to")
+
+    def test_org_user_with_next_goes_back_to_next(self):
+        self.be_apubdef_user()
+        sub = models.FormSubmission.objects.get(pk=self.mock_sub_id)
+        bundle = models.ApplicationBundle.objects.get(pk=self.mock_bundle_id)
+        ebclc = auth_models.Organization.objects.get(
+            slug=constants.Organizations.EBCLC)
+        response = self.client.get(self.url(
+            org_id=ebclc.id), next=bundle.get_absolute_url())
+        self.assertRedirects(response, bundle.get_absolute_url())
+        bundle_page = self.client.get(response.url)
+        self.assertNotContains(
+            bundle_page,
+            "formsubmission-{}".format(sub.id),
+        )
+        self.assertContains(bundle_page, "was sent to")

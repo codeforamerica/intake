@@ -1,0 +1,15 @@
+[
+{
+  "model": "intake.applicationbundle",
+  "pk": 14,
+  "fields": {
+    "organization": [
+      "Alameda Public Defender"
+    ],
+    "bundled_pdf": "",
+    "submissions": [
+      485
+    ]
+  }
+}
+]
