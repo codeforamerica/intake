@@ -89,7 +89,6 @@ class TestModels(TestCase):
         self.validate_anonymous_name(fake_name)
 
     def test_get_contact_preferences(self):
-        base_answers = mock.fake.sf_county_form_answers()
         prefers_everything = {
             'prefers_email': 'yes',
             'prefers_sms': 'yes',
@@ -376,7 +375,10 @@ class TestModels(TestCase):
 
 class TestFormSubmission(TestCase):
 
-    fixtures = ['organizations']
+    fixtures = ['organizations', 'mock_submission_to_alameda_pubdef']
+
+    def get_a_sample_sub(self):
+        return models.FormSubmission.objects.get(pk=485)
 
     def test_create_for_counties(self):
         counties = models.County.objects.exclude(
@@ -434,13 +436,42 @@ class TestFormSubmission(TestCase):
 
     def test_get_permitted_submissions_when_staff(self):
         orgs = auth_models.Organization.objects.all()
-        subs = set()
         for org in orgs:
-            subs.add(models.FormSubmission.create_for_organizations(
-                [org], answers={}))
+            models.FormSubmission.create_for_organizations([org], answers={})
+        subs = set(models.FormSubmission.objects.all())
         mock_user = Mock(is_staff=True)
         result = models.FormSubmission.get_permitted_submissions(mock_user)
         self.assertEqual(set(result), subs)
+
+    def test_get_transfer_action_returns_dict(self):
+        org = Mock(id=1)
+
+        def name(*args):
+            return "Other Public Defender"
+
+        org.__str__ = name
+        request = Mock()
+        request.path = '/applications/bundle/2/'
+        request.user.profile.organization.get_transfer_org.return_value = org
+        submission = self.get_a_sample_sub()
+        expected_result = {
+            'url': str(
+                "/applications/mark/transferred/"
+                "?ids=485"
+                "&to_organization_id=1"
+                "&next=/applications/bundle/2/"),
+            'display': 'Transfer to Other Public Defender'
+        }
+        self.assertDictEqual(
+            submission.get_transfer_action(request),
+            expected_result)
+
+    def test_get_transfer_action_returns_none(self):
+        request = Mock()
+        request.user.profile.organization.get_transfer_org.return_value = None
+        submission = self.get_a_sample_sub()
+        self.assertIsNone(
+            submission.get_transfer_action(request))
 
 
 class TestCounty(TestCase):
