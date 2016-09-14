@@ -62,6 +62,13 @@ db.dump_fixtures:
 	    -o intake/fixtures/counties.json \
 	    --indent 2 \
 	    --format json
+	python ./manage.py dumpdata \
+		intake.FormSubmission \
+		intake.ApplicationLogEntry \
+		-o intake/fixtures/mock_submissions.json \
+		--indent 2 \
+		--natural-foreign \
+		--format json
 
 db.load_fixtures:
 	python ./manage.py loaddata counties organizations mock_profiles

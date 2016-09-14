@@ -171,6 +171,7 @@ class FrontSendMessageResponse:
     def error(cls):
         return cls._make_response(400, cls.ERROR_JSON)
 
+
 def build_seed_submissions():
     from user_accounts.models import Organization
     from formation.forms import county_form_selector
@@ -218,7 +219,7 @@ def build_seed_submissions():
             answers=form.cleaned_data)
         subs.append(sub)
 
-    read_subs = random.sample(subs, 5)
+    read_subs = random.sample(subs, int(len(subs)/2))
     for sub in read_subs:
         org_user = sub.organizations.first().profiles.first().user
         models.ApplicationLogEntry.log_opened(
