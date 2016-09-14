@@ -984,20 +984,19 @@ class TestReferToAnotherOrgView(IntakeDataTestCase):
 
     def url(self, org_id, sub_id=485, next=None):
         base = reverse(
-            'intake-refer_to_other_org',
-            kwargs=dict(
-                submission_id=sub_id,
-                organization_id=org_id
-                ))
+            'intake-mark_referred_to_other_org')
+        base += "?ids={sub_id}&to_organization_id={org_id}".format(
+            sub_id=sub_id, org_id=org_id)
         if next:
-            base += "?next={}".format(next)
+            base += "&next={}".format(next)
         return base
 
     def test_anon_is_rejected(self):
         self.be_anonymous()
         response = self.client.get(self.url(
             1))
-        self.assertRedirects(response, reverse('user_accounts-login'))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(reverse('user_accounts-login'), response.url)
 
     def test_org_user_with_no_next_is_redirected_to_app_index(self):
         self.be_apubdef_user()
@@ -1019,7 +1018,7 @@ class TestReferToAnotherOrgView(IntakeDataTestCase):
         ebclc = auth_models.Organization.objects.get(
             slug=constants.Organizations.EBCLC)
         response = self.client.get(self.url(
-            org_id=ebclc.id), next=bundle.get_absolute_url())
+            org_id=ebclc.id, next=bundle.get_absolute_url()))
         self.assertRedirects(response, bundle.get_absolute_url())
         bundle_page = self.client.get(response.url)
         self.assertNotContains(

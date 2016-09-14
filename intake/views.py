@@ -46,6 +46,16 @@ from project.jinja2 import url_with_ids, oxford_comma
 
 logger = logging.getLogger(__name__)
 
+NOT_ALLOWED_MESSAGE = str(
+    "Sorry, you are not allowed to access that client information. "
+    "If you have any questions, please contact us at "
+    "clearmyrecord@codeforamerica.org")
+
+
+def not_allowed(request):
+    messages.error(request, NOT_ALLOWED_MESSAGE)
+    return redirect('intake-app_index')
+
 
 class Home(TemplateView):
     """Homepage view which shows information about the service
@@ -296,13 +306,9 @@ class ApplicationDetail(View):
     """Displays detailed information for an org user.
     """
     template_name = "app_detail.jinja"
-    not_allowed_message = str(
-        "Sorry, you are not allowed to access that client information. "
-        "If you have any questions, please contact us at "
-        "clearmyrecord@codeforamerica.org")
 
     def not_allowed(self, request):
-        messages.error(request, self.not_allowed_message)
+        messages.error(request, NOT_ALLOWED_MESSAGE)
         return redirect('intake-app_index')
 
     def mark_viewed(self, request, submission):
@@ -544,28 +550,55 @@ class Delete(View):
 
 class MarkSubmissionStepView(View, MultiSubmissionMixin):
 
+    def modify_submissions(self):
+        pass
+
+    def log(self):
+        models.ApplicationLogEntry.log_multiple(
+            self.process_step, self.submission_ids, self.request.user,
+            organization=self.get_organization(self.request.user))
+
     def get_organization(self, user):
         """Get the organization for logging this step.
         """
         return user.profile.organization
 
     def get(self, request):
-        submissions = self.get_submissions_from_params(request)
-        submission_ids = [sub.id for sub in submissions]
-        next_param = request.GET.get('next',
-                                     reverse_lazy('intake-app_index'))
-        models.ApplicationLogEntry.log_multiple(
-            self.process_step, submission_ids, request.user,
-            organization=self.get_organization(request.user))
+        self.request = request
+        self.submissions = self.get_submissions_from_params(request)
+        if not self.submissions:
+            return not_allowed(request)
+
+        self.submission_ids = [sub.id for sub in self.submissions]
+        self.next_param = request.GET.get('next',
+                                          reverse_lazy('intake-app_index'))
+        self.log()
+        self.modify_submissions()
         if hasattr(self, 'notification_function'):
             self.notification_function(
-                submissions=submissions, user=request.user)
-        return redirect(next_param)
+                submissions=self.submissions, user=request.user)
+        return redirect(self.next_param)
 
 
 class MarkProcessed(MarkSubmissionStepView):
     process_step = models.ApplicationLogEntry.PROCESSED
     notification_function = notifications.slack_submissions_processed.send
+
+
+class ReferToAnotherOrgView(MarkSubmissionStepView):
+    notification_function = notifications.slack_submissions_processed.send
+
+    def log(self):
+        models.ApplicationLogEntry.log_referred_from_one_org_to_another(
+            self.submission_ids[0],
+            int(self.request.GET.get('to_organization_id')), self.request.user)
+
+    def modify_submissions(self):
+        submission = self.submissions[0]
+        to_organization_id = int(self.request.GET.get('to_organization_id'))
+        submission.organizations.remove(
+            self.request.user.profile.organization)
+        submission.organizations.add(to_organization_id)
 
 
 home = Home.as_view()
@@ -582,6 +615,7 @@ app_index = ApplicationIndex.as_view()
 app_bundle = ApplicationBundle.as_view()
 app_detail = ApplicationDetail.as_view()
 mark_processed = MarkProcessed.as_view()
+mark_transfer_to_other_org = ReferToAnotherOrgView.as_view()
 delete_page = Delete.as_view()
 app_bundle_detail = ApplicationBundleDetail.as_view()
 app_bundle_detail_pdf = ApplicationBundleDetailPDFView.as_view()
