@@ -1,5 +1,4 @@
 import re
-from unittest import skipIf
 from django.test import TestCase
 from django.core import mail
 from django.core.urlresolvers import reverse
@@ -51,34 +50,18 @@ class AuthIntegrationTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.orgs = Organization.objects.all()
+        profiles = UserProfile.objects.all()
+        # set orgs by slug
         for org in cls.orgs:
-            if org.name == "San Francisco Public Defender":
-                cls.sfpubdef = org
-            elif org.name == "Contra Costa Public Defender":
-                cls.ccpubdef = org
-            elif org.name == "Code for America":
-                cls.cfa = org
-            elif org.name == "Alameda Public Defender":
-                cls.apubdef = org
+            setattr(cls, org.slug, org)
+        if profiles:
+            for org in cls.orgs:
+                user_att = org.slug + "_user"
+                setattr(cls, user_att, org.profiles.first().user)
         cls.superuser = mock.fake_superuser(
             **cls.example_superuser)
         UserProfile.objects.create(user=cls.superuser,
                                    organization=cls.cfa)
-        cls.invitations = []
-        for org in cls.orgs:
-            for i in range(2):  # 2 per org
-                cls.invitations.append(
-                    mock.fake_invitation(org, inviter=cls.superuser))
-        cls.users = []
-        for invite in cls.invitations:
-            user = invite.create_user_from_invite(
-                password=mock.fake_password,
-                name=mock.fake.name())
-            cls.users.append(user)
-        cls.cfa_user = cls.cfa.profiles.first().user
-        cls.sfpubdef_user = cls.sfpubdef.profiles.first().user
-        cls.ccpubdef_user = cls.ccpubdef.profiles.first().user
-        cls.apubdef_user = cls.apubdef.profiles.first().user
 
     def be_superuser(self):
         self.client.login(**self.example_superuser)
@@ -90,13 +73,13 @@ class AuthIntegrationTestCase(TestCase):
         return user
 
     def be_sfpubdef_user(self):
-        return self.be_user(self.sfpubdef_user)
+        return self.be_user(self.sf_pubdef_user)
 
     def be_ccpubdef_user(self):
-        return self.be_user(self.ccpubdef_user)
+        return self.be_user(self.cc_pubdef_user)
 
     def be_apubdef_user(self):
-        return self.be_user(self.apubdef_user)
+        return self.be_user(self.a_pubdef_user)
 
     def be_cfa_user(self):
         return self.be_user(self.cfa_user)
@@ -122,8 +105,8 @@ class TestUserAccounts(AuthIntegrationTestCase):
 
     def test_invite_form_has_the_right_fields(self):
         form = InviteForm()
-        email_field = form.fields['email']
-        org_field = form.fields['organization']
+        # email_field = form.fields['email']
+        # org_field = form.fields['organization']
         form_html = form.as_p()
         for org in self.orgs:
             self.assertIn(
@@ -160,14 +143,15 @@ class TestUserAccounts(AuthIntegrationTestCase):
             name='Magical Lawyers Guild',
             slug="mlg",
         )
-        self.assertRedirects(response,
-                             reverse('admin:user_accounts_organization_changelist'))
+        self.assertRedirects(
+            response,
+            reverse('admin:user_accounts_organization_changelist'))
         result = self.client.get(response.url)
         self.assertContains(result, 'Magical Lawyers Guild')
 
     def test_superuser_can_invite_people(self):
         self.be_superuser()
-        response = self.client.fill_form(
+        self.client.fill_form(
             reverse(self.send_invite_view),
             email=self.example_user['email'],
             organization=self.orgs[0].id,
@@ -227,7 +211,8 @@ class TestUserAccounts(AuthIntegrationTestCase):
 
     def test_failed_login_gets_reasonable_error_message(self):
         self.be_anonymous()
-        expected_error_message = "Sorry, that email and password do not work together"
+        expected_error_message = str(
+            "Sorry, that email and password do not work together")
         response = self.client.fill_form(
             reverse(self.login_view),
             login=self.users[0].email,
@@ -262,7 +247,7 @@ class TestUserAccounts(AuthIntegrationTestCase):
             reverse(self.reset_password_view))
         self.assertContains(reset, self.users[0].email)
         # enter email to request password reset
-        reset_sent = self.client.fill_form(
+        self.client.fill_form(
             reverse(self.reset_password_view),
             email=self.users[0].email,
         )

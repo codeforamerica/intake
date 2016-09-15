@@ -1,0 +1,12 @@
+{%- if submission %}
+<ul class="data_display-action_menu">
+  {%- set transfer = submission.get_transfer_action(request) %}
+  {%- if transfer %}
+    <li class="action_menu-item">
+      <a href="{{ transfer.url }}" class="action_menu-item_link">
+        {{ transfer.display }}
+      </a>
+    </li>
+  {%- endif %}
+</ul>
+{%- endif %}

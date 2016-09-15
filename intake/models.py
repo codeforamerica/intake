@@ -352,7 +352,8 @@ class FormSubmission(models.Model):
                 'intake-mark_transferred_to_other_org')
             url += "?ids={sub_id}&to_organization_id={org_id}".format(
                 sub_id=self.id, org_id=other_org.id)
-            url += "&next={}".format(request.path)
+            if request.path != self.get_absolute_url():
+                url += "&next={}".format(request.path)
             return dict(
                 url=url,
                 display="Transfer to {}".format(other_org))
