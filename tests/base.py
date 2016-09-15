@@ -5,7 +5,7 @@ import os
 import time
 from django.core import mail
 from django.conf import settings
-from django.test import LiveServerTestCase, override_settings
+from django.test import override_settings
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 
@@ -23,7 +23,8 @@ class ElementDoesNotExistError(Exception):
 
 # needs the basic static file storage to properly serve files
 @override_settings(
-    STATICFILES_STORAGE='django.contrib.staticfiles.storage.StaticFilesStorage',
+    STATICFILES_STORAGE=str(
+        'django.contrib.staticfiles.storage.StaticFilesStorage'),
     INSIDE_A_TEST=True)
 class FunctionalTestCase(StaticLiveServerTestCase):
     device = None

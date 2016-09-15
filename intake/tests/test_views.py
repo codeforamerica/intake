@@ -27,42 +27,14 @@ class IntakeDataTestCase(AuthIntegrationTestCase):
         'email',
     ]
 
-    fixtures = ['organizations']
-
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
-        cls.have_some_submissions()
         cls.have_a_fillable_pdf()
 
     @classmethod
-    def have_some_submissions(cls):
-        organizations = auth_models.Organization.objects.all()
-        for org in organizations:
-            setattr(cls, org.slug, org)
-        counties = models.County.objects.all()
-        for county in counties:
-            if county.slug == constants.Counties.SAN_FRANCISCO:
-                cls.sfcounty = county
-            elif county.slug == constants.Counties.CONTRA_COSTA:
-                cls.cccounty = county
-        cls.sf_submissions = list(
-            mock.FormSubmissionFactory.create_batch(
-                2, organizations=[cls.sf_pubdef]))
-        cls.cc_submissions = list(
-            mock.FormSubmissionFactory.create_batch(
-                2, organizations=[cls.cc_pubdef]))
-        cls.combo_submissions = list(
-            mock.FormSubmissionFactory.create_batch(
-                2, organizations=[cls.sf_pubdef, cls.cc_pubdef]))
-        cls.submissions = [
-            *cls.sf_submissions,
-            *cls.cc_submissions,
-            *cls.combo_submissions]
-
-    @classmethod
     def have_a_fillable_pdf(cls):
-        cls.fillable = mock.fillable_pdf(organization=cls.sfpubdef)
+        cls.fillable = mock.fillable_pdf(organization=cls.sf_pubdef)
 
     def assert_called_once_with_types(
             self, mock_obj, *arg_types, **kwarg_types):
@@ -81,6 +53,11 @@ class IntakeDataTestCase(AuthIntegrationTestCase):
 
 
 class TestViews(IntakeDataTestCase):
+
+    fixtures = [
+        'organizations',
+        'mock_profiles',
+        'mock_2_submissions_to_sf_pubdef']
 
     def setUp(self):
         super().setUp()
@@ -239,7 +216,8 @@ class TestViews(IntakeDataTestCase):
     @patch('intake.models.notifications.slack_submissions_viewed.send')
     def test_authenticated_user_can_see_filled_pdf(self, slack):
         self.be_sfpubdef_user()
-        submission = self.submissions[0]
+        submission = models.FormSubmission.objects.filter(
+            organizations=self.sf_pubdef).first()
 
         filled_pdf_bytes = self.fillable.fill(submission)
         pdf_file = SimpleUploadedFile('filled.pdf', filled_pdf_bytes,
@@ -267,37 +245,36 @@ class TestViews(IntakeDataTestCase):
         this tests that a pdf will be served even if not pregenerated
         """
         self.be_sfpubdef_user()
-        submission = self.submissions[0]
-
-        filled_pdf_bytes = self.fillable.fill(submission)
-        pdf_file = SimpleUploadedFile('filled.pdf', filled_pdf_bytes,
-                                      content_type='application/pdf')
+        submission = models.FormSubmission.objects.filter(
+            organizations=self.sf_pubdef).first()
         pdf = self.client.get(reverse('intake-filled_pdf',
                                       kwargs=dict(
                                           submission_id=submission.id
                                       )))
+        self.assertTrue(len(pdf.content) > 69000)
         self.assertEqual(type(pdf.content), bytes)
 
     def test_authenticated_user_can_see_list_of_submitted_apps(self):
         self.be_cfa_user()
         index = self.client.get(reverse('intake-app_index'))
-        for submission in self.submissions:
+        for submission in models.FormSubmission.objects.all():
             self.assertContains(
                 index,
-                html_utils.escape(submission.answers['last_name'])
-            )
+                submission.get_absolute_url())
 
     def test_anonymous_user_cannot_see_filled_pdfs(self):
         self.be_anonymous()
         pdf = self.client.get(reverse('intake-filled_pdf',
                                       kwargs=dict(
-                                          submission_id=self.submissions[0].id
+                                          submission_id=1
                                       )))
-        self.assertRedirects(pdf,
-                             "{}?next={}".format(
-                                 reverse('user_accounts-login'),
-                                 reverse('intake-filled_pdf', kwargs={
-                                     'submission_id': self.submissions[0].id})))
+        self.assertRedirects(
+            pdf,
+            "{}?next={}".format(
+                 reverse('user_accounts-login'),
+                 reverse('intake-filled_pdf', kwargs={'submission_id': 1})),
+            fetch_redirect_response=False
+            )
 
     def test_anonymous_user_cannot_see_submitted_apps(self):
         self.be_anonymous()
@@ -312,7 +289,8 @@ class TestViews(IntakeDataTestCase):
     @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
     def test_authenticated_user_can_see_pdf_bundle(self):
         self.be_sfpubdef_user()
-        ids = [s.id for s in self.sf_submissions]
+        ids = models.FormSubmission.objects.filter(
+            organizations=self.sf_pubdef).values_list('pk', flat=True)
         url = url_with_ids('intake-pdf_bundle', ids)
         bundle = self.client.get(url, follow=True)
         self.assertEqual(bundle.status_code, 200)
@@ -320,10 +298,12 @@ class TestViews(IntakeDataTestCase):
     @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
     def test_staff_user_can_see_pdf_bundle(self):
         self.be_cfa_user()
+        submissions = models.FormSubmission.objects.filter(
+                organizations=self.sf_pubdef)
         bundle = models.ApplicationBundle.create_with_submissions(
-            submissions=self.sf_submissions,
-            organization=self.sfpubdef)
-        ids = [s.id for s in self.sf_submissions]
+            submissions=submissions,
+            organization=self.sf_pubdef)
+        ids = [s.id for s in submissions]
         url = url_with_ids('intake-pdf_bundle', ids)
         response = self.client.get(url)
         self.assertRedirects(response, bundle.get_pdf_bundle_url())
@@ -333,8 +313,8 @@ class TestViews(IntakeDataTestCase):
     @patch('intake.models.notifications.slack_submissions_viewed.send')
     def test_authenticated_user_can_see_app_bundle(self, slack):
         self.be_cfa_user()
-        # we need a pdf for this users organization
-        ids = [s.id for s in self.submissions]
+        submissions = models.FormSubmission.objects.all()
+        ids = [s.id for s in submissions]
         url = url_with_ids('intake-app_bundle', ids)
         bundle = self.client.get(url)
         self.assertEqual(bundle.status_code, 200)
@@ -342,7 +322,7 @@ class TestViews(IntakeDataTestCase):
     @patch('intake.views.notifications.slack_submissions_deleted.send')
     def test_authenticated_user_can_delete_apps(self, slack):
         self.be_cfa_user()
-        submission = self.submissions[-1]
+        submission = models.FormSubmission.objects.first()
         pdf_link = reverse('intake-filled_pdf',
                            kwargs={'submission_id': submission.id})
         url = reverse('intake-delete_page',
@@ -357,7 +337,8 @@ class TestViews(IntakeDataTestCase):
     @patch('intake.views.notifications.slack_submissions_processed.send')
     def test_agency_user_can_mark_apps_as_processed(self, slack):
         self.be_sfpubdef_user()
-        submissions = self.submissions[:2]
+        submissions = models.FormSubmission.objects.filter(
+                organizations=self.sf_pubdef)
         ids = [s.id for s in submissions]
         mark_link = url_with_ids('intake-mark_processed', ids)
         marked = self.client.get(mark_link)
@@ -400,8 +381,9 @@ class TestViews(IntakeDataTestCase):
 
         for old, new in redirects.items():
             response = self.client.get(old)
-            self.assertRedirects(response, new,
-                                 status_code=301, fetch_redirect_response=False)
+            self.assertRedirects(
+                response, new,
+                status_code=301, fetch_redirect_response=False)
 
         for old_template, new_view in id_redirects.items():
             old = old_template.format(old_uuids[2])
@@ -409,18 +391,22 @@ class TestViews(IntakeDataTestCase):
             new = reverse(
                 new_view, kwargs=dict(
                     submission_id=ported_models[2].id))
-            self.assertRedirects(response, new,
-                                 status_code=301, fetch_redirect_response=False)
+            self.assertRedirects(
+                response, new,
+                status_code=301, fetch_redirect_response=False)
 
         for old_template, new_view in multi_id_redirects.items():
             old = old_template.format(key_params)
             response = self.client.get(old)
             new = url_with_ids(new_view, [s.id for s in ported_models_query])
-            self.assertRedirects(response, new,
-                                 status_code=301, fetch_redirect_response=False)
+            self.assertRedirects(
+                response, new,
+                status_code=301, fetch_redirect_response=False)
 
 
 class TestSelectCountyView(AuthIntegrationTestCase):
+
+    # fixtures = ['organizations', 'mock_profiles']
 
     def test_anonymous_user_can_access_county_view(self):
         self.be_anonymous()
@@ -449,9 +435,10 @@ class TestSelectCountyView(AuthIntegrationTestCase):
 
 class TestMultiCountyApplication(AuthIntegrationTestCase):
 
-    fixtures = ['organizations']
+    fixtures = ['organizations', 'mock_profiles']
 
-    @patch('intake.views.models.FormSubmission.send_confirmation_notifications')
+    @patch(
+        'intake.views.models.FormSubmission.send_confirmation_notifications')
     @patch('intake.views.notifications.slack_new_submission.send')
     def test_can_apply_to_contra_costa_alone(self, slack, send_confirmation):
         self.be_anonymous()
@@ -461,7 +448,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
 
         county_fields = forms.ContraCostaFormSpec.fields
         other_county_fields = \
-            forms.SanFranciscoCountyFormSpec.fields | forms.OtherCountyFormSpec.fields
+            forms.SanFranciscoCountyFormSpec.fields \
+            | forms.OtherCountyFormSpec.fields
         county_specific_fields = county_fields - other_county_fields
         county_specific_field_names = [
             Field.context_key for Field in county_specific_fields]
@@ -603,7 +591,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
 
 class TestDeclarationLetterView(AuthIntegrationTestCase):
 
-    @patch('intake.views.models.FormSubmission.send_confirmation_notifications')
+    @patch(
+        'intake.views.models.FormSubmission.send_confirmation_notifications')
     @patch('intake.views.notifications.slack_new_submission.send')
     def test_expected_success(self, slack, send_confirmation):
         self.be_anonymous()
@@ -639,7 +628,8 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
 
         self.assertContains(resp, url)
 
-    @patch('intake.views.models.FormSubmission.send_confirmation_notifications')
+    @patch(
+        'intake.views.models.FormSubmission.send_confirmation_notifications')
     @patch('intake.views.notifications.slack_new_submission.send')
     def test_invalid_letter_returns_same_page(self, slack, send_confirmation):
         self.be_anonymous()
@@ -731,6 +721,13 @@ class TestApplicationDetail(IntakeDataTestCase):
         response = self.get_detail(submission)
         self.assertHasDisplayData(response, submission)
 
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_agency_user_can_see_transfer_action_link(self, slack):
+        self.be_apubdef_user()
+        submission = self.combo_submissions[0]
+        response = self.get_detail(submission)
+        self.assertHasDisplayData(response, submission)
+
 
 class TestApplicationBundle(IntakeDataTestCase):
 
@@ -780,6 +777,13 @@ class TestApplicationBundle(IntakeDataTestCase):
         response = self.get_submissions(self.combo_submissions)
         self.assertNotContains(response, 'iframe class="pdf_inset"')
         self.assertHasDisplayData(response, self.combo_submissions)
+
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_agency_user_can_see_transfer_action_link(self, slack):
+        self.be_apubdef_user()
+        submission = self.combo_submissions[0]
+        response = self.get_detail(submission)
+        self.assertHasDisplayData(response, submission)
 
 
 class TestApplicationIndex(IntakeDataTestCase):
