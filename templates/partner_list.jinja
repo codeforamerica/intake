@@ -1,0 +1,14 @@
+{% extends "public_base_single_column.jinja" %}
+
+
+{%- block header_title -%}
+{{ _("Our Partners") }}
+{%- endblock header_title -%}
+
+{%- block section_class %}partners{% endblock section_class -%}
+
+{% block column_content %}
+  {%- for county in counties %}
+
+  {%- endfor %}
+{% endblock column_content %}

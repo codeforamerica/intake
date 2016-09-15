@@ -311,6 +311,31 @@ class PrivacyPolicy(TemplateView):
     template_name = "privacy_policy.jinja"
 
 
+class PartnerListView(TemplateView):
+    template_name = "partners.jinja"
+
+    def get_context_data(self, *args, **kwargs):
+        return dict(
+            counties=models.County.objects.prefetch_related(
+                'organizations').all())
+
+
+class PartnerDetailView(TemplateView):
+    template_name = "partner_detail.jinja"
+
+    def get(self, request, organization_slug):
+        self.organization_slug = organization_slug
+        return super().get(request)
+
+    def get_context_data(self, *args, **kwargs):
+        query = Organization.objects.filter(
+            is_receiving_agency=True
+            ).prefetch_related('county')
+        return dict(
+            organization=get_object_or_404(
+                query, slug=self.organization_slug))
+
+
 class ApplicationDetail(View):
     """Displays detailed information for an org user.
     """
@@ -655,6 +680,8 @@ select_county = SelectCounty.as_view()
 confirm = Confirm.as_view()
 thanks = Thanks.as_view()
 rap_sheet_info = RAPSheetInstructions.as_view()
+partner_list = PartnerListView.as_view()
+partner_detail = PartnerDetailView.as_view()
 privacy = PrivacyPolicy.as_view()
 stats = Stats.as_view()
 filled_pdf = FilledPDF.as_view()
