@@ -36,7 +36,13 @@ deploy.demo:
 	heroku run --app cmr-demo python manage.py loaddata \
 		organizations \
 		mock_profiles \
-		mock_submissions
+		mock_2_submissions_to_alameda_pubdef \
+		mock_2_submissions_to_sf_pubdef \
+		mock_2_submissions_to_cc_pubdef \
+		mock_1_submission_to_multiple_orgs \
+		mock_1_bundle_to_alameda_pubdef \
+		mock_1_bundle_to_sf_pubdef \
+		mock_1_bundle_to_cc_pubdef
 
 deploy.prod:
 	git push prod master
@@ -81,4 +87,14 @@ db.dump_fixtures:
 
 
 db.load_fixtures:
-	python ./manage.py loaddata counties organizations mock_profiles
+	python ./manage.py loaddata \
+		counties \
+		organizations \
+		mock_profiles \
+		mock_2_submissions_to_alameda_pubdef \
+		mock_2_submissions_to_sf_pubdef \
+		mock_2_submissions_to_cc_pubdef \
+		mock_1_submission_to_multiple_orgs \
+		mock_1_bundle_to_alameda_pubdef \
+		mock_1_bundle_to_sf_pubdef \
+		mock_1_bundle_to_cc_pubdef
