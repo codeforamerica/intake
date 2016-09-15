@@ -299,6 +299,14 @@ class Thanks(TemplateView, GetFormSessionDataMixin):
         return context
 
 
+class RAPSheetInstructions(TemplateView, GetFormSessionDataMixin):
+    template_name = "rap_sheet_instructions.jinja"
+
+    def get_context_data(self, *args, **kwargs):
+        context = self.get_county_context()
+        return context
+
+
 class PrivacyPolicy(TemplateView):
     template_name = "privacy_policy.jinja"
 
@@ -646,6 +654,7 @@ write_letter = DeclarationLetterView.as_view()
 select_county = SelectCounty.as_view()
 confirm = Confirm.as_view()
 thanks = Thanks.as_view()
+rap_sheet_info = RAPSheetInstructions.as_view()
 privacy = PrivacyPolicy.as_view()
 stats = Stats.as_view()
 filled_pdf = FilledPDF.as_view()

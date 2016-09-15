@@ -12,6 +12,7 @@ urlpatterns = [
         name='intake-write_letter'),
     url(r'^confirm/$', views.confirm, name='intake-confirm'),
     url(r'^thanks/$', views.thanks, name='intake-thanks'),
+    url(r'^getting_your_rap/$', views.rap_sheet_info, name='intake-rap_sheet'),
     url(r'^stats/$', views.stats, name='intake-stats'),
     url(r'^privacy/$', views.privacy, name='intake-privacy'),
 
