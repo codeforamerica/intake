@@ -460,7 +460,7 @@ class TestFormSubmission(TestCase):
                 "?ids=485"
                 "&to_organization_id=1"
                 "&next=/applications/bundle/2/"),
-            'display': 'Transfer to Other Public Defender'
+            'display': 'Other Public Defender'
         }
         self.assertDictEqual(
             submission.get_transfer_action(request),

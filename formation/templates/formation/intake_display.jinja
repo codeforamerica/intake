@@ -3,8 +3,6 @@
  data-submission-id="formsubmission-{{ submission.id }}"
 {%- endif %} class="data_display-dataset">
 
-{%- include "includes/submission_display_actions.jinja" %}
-
   <div class="data_display-section time_place">
     <div class="data_display-row">
       {{ form.date_received }}
@@ -102,6 +100,9 @@
     </div>
     {%- endif %}
   </div>
+
+  
+  {%- include "includes/submission_display_actions.jinja" %}
   
   {%- if 'declaration_letter_intro' in form.fields %}
   <div class="data_display-section declaration_letter">

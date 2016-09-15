@@ -3,8 +3,9 @@
   {%- set transfer = submission.get_transfer_action(request) %}
   {%- if transfer %}
     <li class="action_menu-item">
-      <a href="{{ transfer.url }}" class="action_menu-item_link">
-        {{ transfer.display }}
+      <a title="If this application should not be handled by your organization, you can transfer it to {{ transfer.display }}. You will no longer see this application." href="{{ transfer.url }}" class="action_menu-item_link">
+        Transfer this application to {{ transfer.display }}
+        <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>
       </a>
     </li>
   {%- endif %}

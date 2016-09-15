@@ -356,7 +356,7 @@ class FormSubmission(models.Model):
                 url += "&next={}".format(request.path)
             return dict(
                 url=url,
-                display="Transfer to {}".format(other_org))
+                display=str(other_org))
         return None
 
     def get_anonymous_display(self):

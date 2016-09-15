@@ -3890,6 +3890,127 @@ div.application-data_display {
   position: relative;
   width: 48em;
 }
+ul.data_display-action_menu {
+  padding: 0;
+  margin: 1.5em 0;
+}
+li.action_menu-item > a {
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 6px 12px;
+  font-size: 16px;
+  border-radius: 4px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  padding: 5px 10px;
+  font-size: 14px;
+  line-height: 1.5;
+  border-radius: 3px;
+  color: #004A6C;
+  background-color: #E5E5E5;
+  border-color: #ccc;
+}
+li.action_menu-item > a:focus,
+li.action_menu-item > a:active:focus,
+li.action_menu-item > a.active:focus,
+li.action_menu-item > a.focus,
+li.action_menu-item > a:active.focus,
+li.action_menu-item > a.active.focus {
+  outline: thin dotted;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+li.action_menu-item > a:hover,
+li.action_menu-item > a:focus,
+li.action_menu-item > a.focus {
+  color: #004A6C;
+  text-decoration: none;
+}
+li.action_menu-item > a:active,
+li.action_menu-item > a.active {
+  outline: 0;
+  background-image: none;
+  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+li.action_menu-item > a.disabled,
+li.action_menu-item > a[disabled],
+fieldset[disabled] li.action_menu-item > a {
+  cursor: not-allowed;
+  opacity: 0.65;
+  filter: alpha(opacity=65);
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+ali.action_menu-item > a.disabled,
+fieldset[disabled] ali.action_menu-item > a {
+  pointer-events: none;
+}
+li.action_menu-item > a:focus,
+li.action_menu-item > a.focus {
+  color: #004A6C;
+  background-color: #cccccc;
+  border-color: #8c8c8c;
+}
+li.action_menu-item > a:hover {
+  color: #004A6C;
+  background-color: #cccccc;
+  border-color: #adadad;
+}
+li.action_menu-item > a:active,
+li.action_menu-item > a.active,
+.open > .dropdown-toggleli.action_menu-item > a {
+  color: #004A6C;
+  background-color: #cccccc;
+  border-color: #adadad;
+}
+li.action_menu-item > a:active:hover,
+li.action_menu-item > a.active:hover,
+.open > .dropdown-toggleli.action_menu-item > a:hover,
+li.action_menu-item > a:active:focus,
+li.action_menu-item > a.active:focus,
+.open > .dropdown-toggleli.action_menu-item > a:focus,
+li.action_menu-item > a:active.focus,
+li.action_menu-item > a.active.focus,
+.open > .dropdown-toggleli.action_menu-item > a.focus {
+  color: #004A6C;
+  background-color: #bababa;
+  border-color: #8c8c8c;
+}
+li.action_menu-item > a:active,
+li.action_menu-item > a.active,
+.open > .dropdown-toggleli.action_menu-item > a {
+  background-image: none;
+}
+li.action_menu-item > a.disabled:hover,
+li.action_menu-item > a[disabled]:hover,
+fieldset[disabled] li.action_menu-item > a:hover,
+li.action_menu-item > a.disabled:focus,
+li.action_menu-item > a[disabled]:focus,
+fieldset[disabled] li.action_menu-item > a:focus,
+li.action_menu-item > a.disabled.focus,
+li.action_menu-item > a[disabled].focus,
+fieldset[disabled] li.action_menu-item > a.focus {
+  background-color: #E5E5E5;
+  border-color: #ccc;
+}
+li.action_menu-item > a .badge {
+  color: #E5E5E5;
+  background-color: #004A6C;
+}
+li.action_menu-item > a .glyphicon {
+  margin: 0 0.3em;
+}
 .data_display-label {
   color: #aaaaaa;
   font-size: .9em;
