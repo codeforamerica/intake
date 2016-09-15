@@ -33,7 +33,16 @@ test.screenshots:
 deploy.demo:
 	git push -f demo HEAD:master
 	heroku run --app cmr-demo python manage.py migrate
-	heroku run --app cmr-demo python manage.py loaddata organizations mock_profiles
+	heroku run --app cmr-demo python manage.py loaddata \
+		organizations \
+		mock_profiles \
+		mock_2_submissions_to_alameda_pubdef \
+		mock_2_submissions_to_sf_pubdef \
+		mock_2_submissions_to_cc_pubdef \
+		mock_1_submission_to_multiple_orgs \
+		mock_1_bundle_to_alameda_pubdef \
+		mock_1_bundle_to_sf_pubdef \
+		mock_1_bundle_to_cc_pubdef
 
 deploy.prod:
 	git push prod master
@@ -62,6 +71,30 @@ db.dump_fixtures:
 	    -o intake/fixtures/counties.json \
 	    --indent 2 \
 	    --format json
+	python ./manage.py dumpdata \
+		intake.FormSubmission \
+		intake.ApplicationLogEntry \
+		-o intake/fixtures/mock_submissions.json \
+		--indent 2 \
+		--natural-foreign \
+		--format json
+	python ./manage.py dumpdata \
+		intake.ApplicationBundle \
+		-o intake/fixtures/mock_bundles.json \
+		--indent 2 \
+		--natural-foreign \
+		--format json
+
 
 db.load_fixtures:
-	python ./manage.py loaddata counties organizations mock_profiles
+	python ./manage.py loaddata \
+		counties \
+		organizations \
+		mock_profiles \
+		mock_2_submissions_to_alameda_pubdef \
+		mock_2_submissions_to_sf_pubdef \
+		mock_2_submissions_to_cc_pubdef \
+		mock_1_submission_to_multiple_orgs \
+		mock_1_bundle_to_alameda_pubdef \
+		mock_1_bundle_to_sf_pubdef \
+		mock_1_bundle_to_cc_pubdef

@@ -6,6 +6,7 @@ from allauth.account.adapter import get_adapter
 from allauth.account import utils as allauth_account_utils
 from invitations.models import Invitation as BaseInvitation
 from intake import models as intake_models
+from intake import constants
 from formation.forms import county_form_selector, display_form_selector
 from . import exceptions
 
@@ -48,6 +49,19 @@ class Organization(models.Model):
 
     def natural_key(self):
         return (self.__str__(), )
+
+    def get_transfer_org(self):
+        """If this organization is allowed to transfer to another
+        organization, this shoud return the other organization they are
+        allowed to transfer submissions to.
+        """
+        if self.slug == constants.Organizations.ALAMEDA_PUBDEF:
+            return self.__class__.objects.get(
+                slug=constants.Organizations.EBCLC)
+        elif self.slug == constants.Organizations.EBCLC:
+            return self.__class__.objects.get(
+                slug=constants.Organizations.ALAMEDA_PUBDEF)
+        return None
 
     def get_referral_emails(self):
         """Get the emails of users who get notifications for this agency.
@@ -207,6 +221,11 @@ class UserProfile(models.Model):
                 pk=self.organization_id).count())
         msg = "`{}` doesn't have a way to define UserProfile access"
         raise UndefinedResourceAccessError(msg.format(resource))
+
+    def filter_submissions(self, submissions_qset):
+        if self.user.is_staff:
+            return submissions_qset
+        return submissions_qset.filter(organizations__profiles=self)
 
 
 def get_user_display(user):

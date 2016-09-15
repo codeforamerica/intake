@@ -89,7 +89,6 @@ class TestModels(TestCase):
         self.validate_anonymous_name(fake_name)
 
     def test_get_contact_preferences(self):
-        base_answers = mock.fake.sf_county_form_answers()
         prefers_everything = {
             'prefers_email': 'yes',
             'prefers_sms': 'yes',
@@ -376,7 +375,10 @@ class TestModels(TestCase):
 
 class TestFormSubmission(TestCase):
 
-    fixtures = ['organizations']
+    fixtures = ['organizations', 'mock_2_submissions_to_alameda_pubdef']
+
+    def get_a_sample_sub(self):
+        return models.FormSubmission.objects.get(pk=485)
 
     def test_create_for_counties(self):
         counties = models.County.objects.exclude(
@@ -434,13 +436,42 @@ class TestFormSubmission(TestCase):
 
     def test_get_permitted_submissions_when_staff(self):
         orgs = auth_models.Organization.objects.all()
-        subs = set()
         for org in orgs:
-            subs.add(models.FormSubmission.create_for_organizations(
-                [org], answers={}))
+            models.FormSubmission.create_for_organizations([org], answers={})
+        subs = set(models.FormSubmission.objects.all())
         mock_user = Mock(is_staff=True)
         result = models.FormSubmission.get_permitted_submissions(mock_user)
         self.assertEqual(set(result), subs)
+
+    def test_get_transfer_action_returns_dict(self):
+        org = Mock(id=1)
+
+        def name(*args):
+            return "Other Public Defender"
+
+        org.__str__ = name
+        request = Mock()
+        request.path = '/applications/bundle/2/'
+        request.user.profile.organization.get_transfer_org.return_value = org
+        submission = self.get_a_sample_sub()
+        expected_result = {
+            'url': str(
+                "/applications/mark/transferred/"
+                "?ids=485"
+                "&to_organization_id=1"
+                "&next=/applications/bundle/2/"),
+            'display': 'Other Public Defender'
+        }
+        self.assertDictEqual(
+            submission.get_transfer_action(request),
+            expected_result)
+
+    def test_get_transfer_action_returns_none(self):
+        request = Mock()
+        request.user.profile.organization.get_transfer_org.return_value = None
+        submission = self.get_a_sample_sub()
+        self.assertIsNone(
+            submission.get_transfer_action(request))
 
 
 class TestCounty(TestCase):
@@ -454,7 +485,8 @@ class TestCounty(TestCase):
 
     def test_get_receiving_agency_with_no_criteria(self):
         expected_matches = (
-            (constants.Counties.SAN_FRANCISCO, "San Francisco Public Defender"),
+            (constants.Counties.SAN_FRANCISCO,
+                "San Francisco Public Defender"),
             (constants.Counties.CONTRA_COSTA, "Contra Costa Public Defender"))
         counties = models.County.objects.all()
         answers = {}
@@ -665,3 +697,23 @@ class TestApplicationBundle(TestCase):
             "submissions for ApplicationBundle(pk=2) lack pdfs")
         self.assertEqual(len(get_individual_filled_pdfs.mock_calls), 2)
         mock_bundle.save.assert_called_once_with()
+
+
+class TestApplicationLogEntry(TestCase):
+    fixtures = ['organizations', 'mock_profiles']
+
+    def test_can_log_referral_between_orgs(self):
+        from_org = auth_models.Organization.objects.get(
+            slug=constants.Organizations.ALAMEDA_PUBDEF)
+        to_org = auth_models.Organization.objects.get(
+            slug=constants.Organizations.EBCLC)
+        from_org_user = from_org.profiles.first().user
+        answers = mock.fake.alameda_pubdef_answers()
+        submission = models.FormSubmission.create_for_organizations(
+            organizations=[from_org], answers=answers)
+        log = models.ApplicationLogEntry.log_referred_from_one_org_to_another(
+            submission.id, to_organization_id=to_org.id, user=from_org_user
+            )
+        self.assertEqual(log.from_org(), from_org)
+        self.assertEqual(log.user, from_org_user)
+        self.assertEqual(log.to_org(), to_org)

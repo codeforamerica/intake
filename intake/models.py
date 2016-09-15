@@ -13,6 +13,9 @@ from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.urlresolvers import reverse
+
+from project.jinja2 import namify
+
 from formation import field_types
 
 from intake import (
@@ -253,6 +256,13 @@ class FormSubmission(models.Model):
         display_form.is_valid()
         return display_form
 
+    def get_full_name(self):
+        return '{first_name} {last_name}'.format(
+            **{
+                key: namify(self.answers.get(key))
+                for key in ['first_name', 'last_name']
+            })
+
     def get_formatted_address(self):
         address = self.answers.get('address', {})
         if not address:
@@ -335,6 +345,20 @@ class FormSubmission(models.Model):
                 messages.append(sent_sms_message.format(contact_info['sms']))
         return messages
 
+    def get_transfer_action(self, request):
+        other_org = request.user.profile.organization.get_transfer_org()
+        if other_org:
+            url = reverse(
+                'intake-mark_transferred_to_other_org')
+            url += "?ids={sub_id}&to_organization_id={org_id}".format(
+                sub_id=self.id, org_id=other_org.id)
+            if request.path != self.get_absolute_url():
+                url += "&next={}".format(request.path)
+            return dict(
+                url=url,
+                display=str(other_org))
+        return None
+
     def get_anonymous_display(self):
         return self.anonymous_name
 
@@ -354,6 +378,7 @@ class ApplicationLogEntry(models.Model):
     PROCESSED = 3
     DELETED = 4
     CONFIRMATION_SENT = 5
+    REFERRED_BETWEEN_ORGS = 6
 
     EVENT_TYPES = (
         (OPENED, "opened"),
@@ -361,6 +386,7 @@ class ApplicationLogEntry(models.Model):
         (PROCESSED, "processed"),
         (DELETED, "deleted"),
         (CONFIRMATION_SENT, "sent confirmation"),
+        (REFERRED_BETWEEN_ORGS, "referred to another org"),
     )
 
     time = models.DateTimeField(default=timezone_utils.now)
@@ -382,20 +408,24 @@ class ApplicationLogEntry(models.Model):
 
     @classmethod
     def log_multiple(cls, event_type, submission_ids,
-                     user, time=None, organization=None):
+                     user, time=None, organization=None,
+                     organization_id=None):
         if not time:
             time = timezone_utils.now()
-        if event_type in [cls.PROCESSED, cls.OPENED,
-                          cls.DELETED] and not organization:
-            organization = user.profile.organization
+        org_kwarg = dict(organization=organization)
+        if not organization:
+            if organization_id:
+                org_kwarg = dict(organization_id=organization_id)
+            elif event_type in [cls.PROCESSED, cls.OPENED, cls.DELETED]:
+                org_kwarg = dict(organization=user.profile.organization)
         logs = []
         for submission_id in submission_ids:
             log = cls(
                 time=time,
                 user=user,
-                organization=organization,
                 submission_id=submission_id,
-                event_type=event_type
+                event_type=event_type,
+                **org_kwarg
             )
             logs.append(log)
         ApplicationLogEntry.objects.bulk_create(logs)
@@ -428,6 +458,19 @@ class ApplicationLogEntry(models.Model):
             event_type=cls.CONFIRMATION_SENT,
             contact_info=contact_info,
             message_sent=message_sent)
+
+    @classmethod
+    def log_referred_from_one_org_to_another(cls, submission_id,
+                                             to_organization_id, user):
+        return cls.log_multiple(
+            cls.REFERRED_BETWEEN_ORGS, [submission_id], user,
+            organization_id=to_organization_id)[0]
+
+    def to_org(self):
+        return self.organization
+
+    def from_org(self):
+        return self.user.profile.organization
 
 
 class ApplicantContactedLogEntry(ApplicationLogEntry):

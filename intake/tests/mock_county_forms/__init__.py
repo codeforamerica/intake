@@ -195,3 +195,12 @@ class Provider(BaseProvider):
         data['monthly_income'] = 2999
         data['owns_home'] = "no"
         return data
+
+    def all_county_answers(self, **overrides):
+        data = {
+            **self.sf_county_form_answers(),
+            **self.alameda_county_form_answers(),
+            **self.contra_costa_county_form_answers()
+        }
+        data.update(overrides)
+        return data

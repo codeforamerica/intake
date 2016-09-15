@@ -51,6 +51,11 @@ urlpatterns = [
     url(r'^applications/mark/processed/$',
         login_required(views.mark_processed),
         name='intake-mark_processed'),
+
+    url(r'^applications/mark/transferred/$',
+        login_required(views.mark_transferred_to_other_org),
+        name='intake-mark_transferred_to_other_org'),
+
 ]
 
 redirects = [
