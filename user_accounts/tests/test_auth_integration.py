@@ -103,6 +103,8 @@ class AuthIntegrationTestCase(TestCase):
 
 class TestUserAccounts(AuthIntegrationTestCase):
 
+    fixtures = ['organizations', 'mock_profiles']
+
     def test_invite_form_has_the_right_fields(self):
         form = InviteForm()
         # email_field = form.fields['email']
@@ -211,18 +213,19 @@ class TestUserAccounts(AuthIntegrationTestCase):
 
     def test_failed_login_gets_reasonable_error_message(self):
         self.be_anonymous()
+        user = User.objects.first()
         expected_error_message = str(
             "Sorry, that email and password do not work together")
         response = self.client.fill_form(
             reverse(self.login_view),
-            login=self.users[0].email,
+            login=user.email,
             password='incorrect'
         )
         # should be storing the login email for the reset page
         session = response.wsgi_request.session
         self.assertEqual(
             session['failed_login_email'],
-            self.users[0].email)
+            user.email)
         form = response.context['form']
         self.assertIn(expected_error_message,
                       form.errors['__all__'])
@@ -233,10 +236,11 @@ class TestUserAccounts(AuthIntegrationTestCase):
 
     def test_can_reset_password_from_login_page(self):
         self.be_anonymous()
+        user = User.objects.first()
         # forget password
         wrong_password = self.client.fill_form(
             reverse(self.login_view),
-            login=self.users[0].email,
+            login=user.email,
             password='forgot'
         )
         # find a link to reset password
@@ -245,11 +249,11 @@ class TestUserAccounts(AuthIntegrationTestCase):
         # hit "reset password"
         reset = self.client.get(
             reverse(self.reset_password_view))
-        self.assertContains(reset, self.users[0].email)
+        self.assertContains(reset, user.email)
         # enter email to request password reset
         self.client.fill_form(
             reverse(self.reset_password_view),
-            email=self.users[0].email,
+            email=user.email,
         )
         # get an email to reset password
         reset_email = mail.outbox[-1]
@@ -261,7 +265,7 @@ class TestUserAccounts(AuthIntegrationTestCase):
         reset_link = self.get_link_from_email(reset_email)
         reset_page = self.client.get(reset_link)
         # make sure it shows who it thinks we are
-        self.assertContains(reset_page, self.users[0].email)
+        self.assertContains(reset_page, user.email)
         # enter a new password
         csrf = self.client.get_csrf_token(reset_page)
         new_password = "FR35H H0T s3cr3tZ!1"
@@ -272,14 +276,14 @@ class TestUserAccounts(AuthIntegrationTestCase):
         self.assertRedirects(reset_done,
                              reverse("user_accounts-profile"))
         # make sure we are logged in
-        self.assertLoggedInAs(self.users[0])
+        self.assertLoggedInAs(user)
         # make sure we can login with the new password
         self.client.logout()
         self.client.login(
-            email=self.users[0].email,
+            email=user.email,
             password=new_password
         )
-        self.assertLoggedInAs(self.users[0])
+        self.assertLoggedInAs(user)
 
     def test_can_reset_password_while_logged_in(self):
         user = self.be_sfpubdef_user()

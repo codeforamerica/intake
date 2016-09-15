@@ -375,7 +375,7 @@ class TestModels(TestCase):
 
 class TestFormSubmission(TestCase):
 
-    fixtures = ['organizations', 'mock_submission_to_alameda_pubdef']
+    fixtures = ['organizations', 'mock_2_submissions_to_alameda_pubdef']
 
     def get_a_sample_sub(self):
         return models.FormSubmission.objects.get(pk=485)
@@ -485,7 +485,8 @@ class TestCounty(TestCase):
 
     def test_get_receiving_agency_with_no_criteria(self):
         expected_matches = (
-            (constants.Counties.SAN_FRANCISCO, "San Francisco Public Defender"),
+            (constants.Counties.SAN_FRANCISCO,
+                "San Francisco Public Defender"),
             (constants.Counties.CONTRA_COSTA, "Contra Costa Public Defender"))
         counties = models.County.objects.all()
         answers = {}

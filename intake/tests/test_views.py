@@ -917,7 +917,7 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
         'mock_2_submissions_to_sf_pubdef',
         'mock_1_submission_to_multiple_orgs',
         'mock_1_bundle_to_alameda_pubdef',
-        ]
+    ]
 
     @patch('intake.views.notifications.slack_submissions_viewed.send')
     def test_returns_200_on_existing_bundle_id(self, slack):
