@@ -312,7 +312,7 @@ class PrivacyPolicy(TemplateView):
 
 
 class PartnerListView(TemplateView):
-    template_name = "partners.jinja"
+    template_name = "partner_list.jinja"
 
     def get_context_data(self, *args, **kwargs):
         return dict(

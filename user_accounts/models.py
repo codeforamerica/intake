@@ -1,5 +1,6 @@
 from collections import namedtuple
 from django.db import models
+from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
 from allauth.account.adapter import get_adapter
@@ -97,6 +98,11 @@ class Organization(models.Model):
 
     def get_display_form(self):
         return self.get_default_form(display=True)
+
+    def get_absolute_url(self):
+        return reverse(
+            'intake-partner_detail',
+            kwargs=dict(organization_slug=self.slug))
 
 
 class Invitation(BaseInvitation):
