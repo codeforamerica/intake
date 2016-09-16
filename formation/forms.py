@@ -272,6 +272,8 @@ class EBCLCIntakeFormSpec(CombinableOrganizationFormSpec):
         F.BeingCharged,
         # F.HasExternalRAP,
         # F.ExternalRAPWhereWhen,
+        # Fines & Fees
+        # urgency
         F.HowDidYouHear,
         F.AdditionalInformation,
     }

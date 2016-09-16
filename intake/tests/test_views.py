@@ -3,6 +3,7 @@ import random
 import logging
 from unittest import skipUnless
 from unittest.mock import patch
+from django.test import TestCase
 from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase
 from django.db.models import Count
 from django.core.urlresolvers import reverse
@@ -17,6 +18,7 @@ from formation import fields, forms
 from project.jinja2 import url_with_ids
 
 DELUXE_TEST = os.environ.get('DELUXE_TEST', False)
+
 
 
 class IntakeDataTestCase(AuthIntegrationTestCase):
@@ -421,6 +423,34 @@ class TestViews(IntakeDataTestCase):
                 status_code=301, fetch_redirect_response=False)
 
 
+class TestPartnerListView(TestCase):
+    fixtures = ['organizations']
+
+    def test_returns_200_with_org_name_list(self):
+        response = self.client.get(reverse('intake-partner_list'))
+        orgs = auth_models.Organization.objects.filter(
+            is_receiving_agency=True)
+        self.assertEqual(response.status_code, 200)
+        for org in orgs:
+            self.assertContains(response, org.name)
+
+
+class TestPartnerDetailView(TestCase):
+    fixtures = ['organizations']
+
+    def test_returns_200_with_org_details(self):
+        sf_pubdef = auth_models.Organization.objects.get(
+            slug=constants.Organizations.SF_PUBDEF)
+        response = self.client.get(
+            reverse('intake-partner_list'),
+            kwargs=dict(organization_slug=sf_pubdef.slug))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, sf_pubdef.address)
+        self.assertContains(response, sf_pubdef.phone_number)
+        self.assertContains(response, sf_pubdef.blurb)
+        self.assertContains(response, sf_pubdef.name)
+
+
 class TestSelectCountyView(AuthIntegrationTestCase):
 
     def test_anonymous_user_can_access_county_view(self):
@@ -565,7 +595,11 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         slack.assert_not_called()
         send_confirmation.assert_not_called()
 
-    def test_invalid_alameda_application_returns_same_page(self):
+    @patch(
+        'intake.views.models.FormSubmission.send_confirmation_notifications')
+    @patch('intake.views.notifications.slack_new_submission.send')
+    def test_invalid_alameda_application_returns_same_page_with_error(
+            self, slack, send_confirmation):
         self.be_anonymous()
         alameda = constants.Counties.ALAMEDA
         answers = mock.fake.alameda_pubdef_answers()
@@ -583,6 +617,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         self.assertEqual(result.wsgi_request.path,
                          reverse('intake-county_application'))
         self.assertTrue(result.context['form'].errors)
+        slack.assert_not_called()
+        send_confirmation.assert_not_called()
 
     def test_can_go_back_and_reset_counties(self):
         self.be_anonymous()
