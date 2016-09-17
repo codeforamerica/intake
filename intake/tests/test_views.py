@@ -572,11 +572,13 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
             reverse('intake-county_application'),
             **answers)
         self.assertRedirects(result, reverse('intake-thanks'))
+        self.assertTrue(slack.called)
+        self.assertTrue(send_confirmation.called)
 
     @patch(
         'intake.views.models.FormSubmission.send_confirmation_notifications')
     @patch('intake.views.notifications.slack_new_submission.send')
-    def test_alameda_application_redirects_to_declaration_letter(
+    def test_alameda_pubdef_application_redirects_to_declaration_letter(
             self, slack, send_confirmation):
 
         self.be_anonymous()
@@ -603,6 +605,52 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         self.be_anonymous()
         alameda = constants.Counties.ALAMEDA
         answers = mock.fake.alameda_pubdef_answers()
+        answers['monthly_income'] = ""
+        result = self.client.fill_form(
+            reverse('intake-apply'), counties=[alameda])
+        self.assertRedirects(result, reverse('intake-county_application'))
+        result = self.client.get(reverse('intake-county_application'))
+
+        result = self.client.fill_form(
+            reverse('intake-county_application'),
+            **answers)
+
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.wsgi_request.path,
+                         reverse('intake-county_application'))
+        self.assertTrue(result.context['form'].errors)
+        slack.assert_not_called()
+        send_confirmation.assert_not_called()
+
+    @patch(
+        'intake.views.models.FormSubmission.send_confirmation_notifications')
+    @patch('intake.views.notifications.slack_new_submission.send')
+    def test_valid_ebclc_application_returns_rap_sheet_page(
+            self, slack, send_confirmation):
+        self.be_anonymous()
+        alameda = constants.Counties.ALAMEDA
+        answers = mock.fake.ebclc_answers()
+        result = self.client.fill_form(
+            reverse('intake-apply'), counties=[alameda])
+        self.assertRedirects(result, reverse('intake-county_application'))
+        result = self.client.get(reverse('intake-county_application'))
+
+        result = self.client.fill_form(
+            reverse('intake-county_application'),
+            **answers)
+        self.assertRedirects(
+            result, reverse("intake-rap_sheet"))
+        self.assertTrue(slack.called)
+        self.assertTrue(send_confirmation.called)
+
+    @patch(
+        'intake.views.models.FormSubmission.send_confirmation_notifications')
+    @patch('intake.views.notifications.slack_new_submission.send')
+    def test_invalid_ebclc_application_returns_same_page_with_error(
+            self, slack, send_confirmation):
+        self.be_anonymous()
+        alameda = constants.Counties.ALAMEDA
+        answers = mock.fake.ebclc_answers()
         answers['monthly_income'] = ""
         result = self.client.fill_form(
             reverse('intake-apply'), counties=[alameda])
