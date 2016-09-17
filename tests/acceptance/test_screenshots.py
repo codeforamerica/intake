@@ -260,8 +260,25 @@ class TestWorkflows(base.ScreenSequenceTestCase):
             sequence,
             size=base.COMMON_MOBILE)
 
-    def test_apply_to_alameda(self):
-        answers = intake_mock.fake.alameda_county_form_answers()
+    def test_apply_to_alameda_pubdef(self):
+        answers = intake_mock.fake.alameda_pubdef_answers()
+        declaration_letter_answers = \
+            intake_mock.fake.declaration_letter_answers()
+        sequence = [
+            S.get('went to splash page', '/'),
+            S.click_on('clicked apply now', 'Apply now'),
+            S.fill_form('picked alameda', counties=['alameda']),
+            S.fill_form('submitted form', **answers),
+            S.fill_form(
+                'submitted declaration letter', **declaration_letter_answers),
+        ]
+        self.run_sequence(
+            'Apply to Alameda Public Defender',
+            sequence,
+            size=base.COMMON_MOBILE)
+
+    def test_apply_to_ebclc(self):
+        answers = intake_mock.fake.ebclc_answers()
         sequence = [
             S.get('went to splash page', '/'),
             S.click_on('clicked apply now', 'Apply now'),
@@ -269,6 +286,6 @@ class TestWorkflows(base.ScreenSequenceTestCase):
             S.fill_form('submitted form', **answers),
         ]
         self.run_sequence(
-            'Apply to Alameda',
+            'Apply to EBCLC in Alameda',
             sequence,
             size=base.COMMON_MOBILE)
