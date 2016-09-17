@@ -93,6 +93,11 @@ class GetFormSessionDataMixin:
         county_slugs = session_data.getlist('counties')
         return models.County.objects.filter(slug__in=county_slugs).all()
 
+    def get_organizations(self):
+        session_data = self.get_session_data()
+        org_slugs = session_data.getlist('organizations')
+        return Organization.objects.filter(slug__in=org_slugs)
+
     def get_county_context(self):
         counties = self.get_counties()
         return dict(
@@ -108,10 +113,12 @@ class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
         "There were some problems with your application. "
         "Please check the errors below."))
 
-    def update_session_data(self):
+    def update_session_data(self, **extra_data):
         form_data = self.request.session.get(self.session_storage_key, {})
         post_data = dict(self.request.POST.lists())
         form_data.update(post_data)
+        if extra_data:
+            form_data.update(extra_data)
         self.request.session[self.session_storage_key] = form_data
         return form_data
 
@@ -173,33 +180,46 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
         for message in sent_confirmations:
             messages.success(self.request, message)
 
-    def save_submission_and_send_notifications(self, form):
-        """Save the submission data, confirm for CfA and the user
+    def get_orgs_for_answers(self, answers):
+        counties = self.get_counties()
+        return [
+            county.get_receiving_agency(answers)
+            for county in counties]
+
+    def save_submission(self, form, organizations):
+        """Save the submission data
         """
         submission = models.FormSubmission(answers=form.cleaned_data)
         submission.save()
-        counties = self.get_counties()
-        orgs = [
-            county.get_receiving_agency(submission.answers)
-            for county in counties]
-        submission.organizations.add(*orgs)
+        submission.organizations.add(*organizations)
         # TODO: check for cerrect org in view tests
+        return submission
+
+    def send_notifications(self, submission):
         number = models.FormSubmission.objects.count()
         # TODO: say which orgs this is going to in notification
         notifications.slack_new_submission.send(
             submission=submission, request=self.request,
             submission_count=number)
-        submission.fill_pdfs()
         self.create_confirmations_for_user(submission)
+
+    def save_submission_and_send_notifications(self, form):
+        organizations = self.get_orgs_for_answers(form.cleaned_data)
+        submission = self.save_submission(form, organizations)
+        self.send_notifications(submission)
 
     def form_valid(self, form):
         # if for alameda, send to declaration letter
-        session_data = self.get_session_data()
-        county_slugs = session_data.getlist('counties')
-        if constants.Counties.ALAMEDA in county_slugs:
-            self.update_session_data()
+        organizations = self.get_orgs_for_answers(form.cleaned_data)
+        self.update_session_data(
+            organizations=[org.slug for org in organizations])
+        if any([org.requires_declaration_letter for org in organizations]):
             return redirect(reverse('intake-write_letter'))
-        self.save_submission_and_send_notifications(form)
+        submission = self.save_submission(form, organizations)
+        self.send_notifications(submission)
+        submission.fill_pdfs()
+        if any([org.requires_rap_sheet for org in organizations]):
+            return redirect(reverse('intake-rap_sheet'))
         return super().form_valid(form)
 
 
