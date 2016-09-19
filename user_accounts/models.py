@@ -105,6 +105,15 @@ class Organization(models.Model):
             kwargs=dict(organization_slug=self.slug))
 
 
+class Address(models.Model):
+    organization = models.ForeignKey(
+                    'Organization',
+                    on_delete=models.CASCADE,
+                    related_name='addresses')
+    text = models.TextField()
+    walk_in_hours = models.TextField(blank=True)
+
+
 class Invitation(BaseInvitation):
     organization = models.ForeignKey(
         'Organization',

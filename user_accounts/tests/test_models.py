@@ -1,3 +1,4 @@
+from django.test import TestCase
 from intake.tests.test_views import IntakeDataTestCase
 from user_accounts import models
 from intake import models as intake_models
@@ -92,3 +93,38 @@ class TestOrganization(IntakeDataTestCase):
         cc_pubdef = self.cc_pubdef
         self.assertIsNone(sf_pubdef.get_transfer_org())
         self.assertIsNone(cc_pubdef.get_transfer_org())
+
+
+class TestAddress(TestCase):
+
+    def test_can_create_without_walk_in_hours(self):
+        a_pubdef = models.Organization.objects.get(
+            slug=constants.Organizations.ALAMEDA_PUBDEF)
+        address = models.Address(
+            organization=a_pubdef,
+            text="545 4th St\nOakland, CA\n94607")
+        address.save()
+        self.assertTrue(address.id)
+
+    def test_can_create_with_walk_in_hours(self):
+        a_pubdef = models.Organization.objects.get(
+            slug=constants.Organizations.ALAMEDA_PUBDEF)
+        address = models.Address(
+            organization=a_pubdef,
+            walk_in_hours="Every Tuesday, from 2pm to 4pm",
+            text="545 4th St\nOakland, CA\n94607")
+        address.save()
+        self.assertTrue(address.id)
+
+    def can_get_addresses_of_organization(self):
+        a_pubdef = models.Organization.objects.get(
+            slug=constants.Organizations.ALAMEDA_PUBDEF)
+        address = models.Address(
+            organization=a_pubdef,
+            walk_in_hours="Every Tuesday, from 2pm to 4pm",
+            text="545 4th St\nOakland, CA\n94607")
+        address.save()
+        self.assertEqual(address.organization, a_pubdef)
+        self.assertListEqual(
+            list(a_pubdef.addresses.all()),
+            [address])
