@@ -111,6 +111,8 @@ class Provider(BaseProvider):
             'reduced_probation': 'not_applicable',
             'being_charged': self.maybe(0.05),
             'serving_sentence': self.maybe(0.05),
+            'has_suspended_license': self.maybe(0.3),
+            'owes_court_fees': self.maybe(0.4),
             'monthly_income': str(random.randint(0, 7000)),
             'on_public_benefits': self.maybe(0.7),
             'owns_home': self.maybe(0.1),

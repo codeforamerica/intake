@@ -172,6 +172,8 @@ class AlamedaCountyFormSpec(CombinableCountyFormSpec):
         F.ReducedProbation,
         F.ServingSentence,
         F.BeingCharged,
+        F.HasSuspendedLicense,
+        F.OwesCourtFees,
         # F.HasExternalRAP,
         # F.ExternalRAPWhereWhen,
         F.HowDidYouHear,

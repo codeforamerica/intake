@@ -319,6 +319,20 @@ class WhenWhereOutsideSF(CharField):
     display_label = "Where/when"
 
 
+class HasSuspendedLicense(YesNoField):
+    context_key = "has_suspended_license"
+    label = _("Is your driver's license suspended?")
+    display_label = "Has suspended license"
+    flip_display_choice_order = True
+
+
+class OwesCourtFees(YesNoField):
+    context_key = "owes_court_fees"
+    label = _("Do you owe any court fines or fees?")
+    display_label = "Owes court fines/fees"
+    flip_display_choice_order = True
+
+
 ###
 # Financial Questions
 ###
@@ -475,6 +489,8 @@ INTAKE_FIELDS = [
     ReducedProbation,
     RAPOutsideSF,
     WhenWhereOutsideSF,
+    HasSuspendedLicense,
+    OwesCourtFees,
 
     FinancialScreeningNote,
     CurrentlyEmployed,
