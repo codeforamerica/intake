@@ -1022,7 +1022,6 @@ a:focus {
   text-decoration: underline;
 }
 a:focus {
-  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -2395,7 +2394,6 @@ select[size] {
 input[type="file"]:focus,
 input[type="radio"]:focus,
 input[type="checkbox"]:focus {
-  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -2886,7 +2884,6 @@ select[multiple].input-lg {
 .btn.focus,
 .btn:active.focus,
 .btn.active.focus {
-  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -3926,7 +3923,6 @@ li.action_menu-item > a.active:focus,
 li.action_menu-item > a.focus,
 li.action_menu-item > a:active.focus,
 li.action_menu-item > a.active.focus {
-  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -4461,6 +4457,11 @@ body.admin .top_bar {
 }
 .btn .glyphicon {
   margin-right: .5em;
+}
+@media (max-width: 767px) {
+  a.btn.btn-primary.btn-lg.call_to_action_button {
+    margin-top: 15px;
+  }
 }
 @media (min-width: 768px) {
   .splash.above_the_fold h1 {
