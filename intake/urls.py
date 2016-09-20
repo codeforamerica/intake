@@ -18,6 +18,8 @@ urlpatterns = [
     url(r'^partners/(?P<organization_slug>[\w-]+)/$',
         views.partner_detail, name='intake-partner_detail'),
     url(r'^stats/$', views.stats, name='intake-stats'),
+    url(r'^stats/daily_totals/$',
+        views.daily_totals, name='intake-daily_totals'),
     url(r'^privacy/$', views.privacy, name='intake-privacy'),
 
     # protected views

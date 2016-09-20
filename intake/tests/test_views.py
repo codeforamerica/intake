@@ -20,7 +20,6 @@ from project.jinja2 import url_with_ids
 DELUXE_TEST = os.environ.get('DELUXE_TEST', False)
 
 
-
 class IntakeDataTestCase(AuthIntegrationTestCase):
 
     display_field_checks = [
@@ -993,6 +992,17 @@ class TestStats(IntakeDataTestCase):
         response = self.client.get(reverse('intake-stats'))
         for search_term in [total, sf_string, cc_string]:
             self.assertContains(response, search_term)
+
+
+class TestDailyTotals(TestCase):
+
+    fixtures = [
+        'organizations',
+        'mock_2_submissions_to_alameda_pubdef']
+
+    def test_returns_200(self):
+        response = self.client.get(reverse('intake-daily_totals'))
+        self.assertEqual(response.status_code, 200)
 
 
 class TestApplicationBundleDetail(IntakeDataTestCase):

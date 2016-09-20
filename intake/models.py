@@ -1,6 +1,7 @@
 import importlib
 import logging
 import uuid
+import datetime
 from urllib.parse import urljoin
 import random
 from django.conf import settings
@@ -59,6 +60,7 @@ class County(models.Model):
     slug = models.SlugField()
     name = models.TextField()
     description = models.TextField()
+
 
     def get_receiving_agency(self, answers):
         """Returns the appropriate receiving agency
@@ -165,6 +167,32 @@ class FormSubmission(models.Model):
             'logs__user__profile__organization',
             'counties'
         ).all()
+
+    @classmethod
+    def get_daily_totals(cls):
+        county_names = County.objects.all().values_list('name', flat=True)
+        submissions = cls.objects.prefetch_related(
+            'organizations', 'organizations__county').all()
+        first_sub = min(submissions, key=lambda x: x.date_received)
+        time_counter = timezone_utils.now()
+        day_strings = []
+        day_fmt = '%Y-%m-%d'
+        a_day = datetime.timedelta(days=1)
+        while time_counter > (first_sub.get_local_date_received() - a_day):
+            day_strings.append(time_counter.strftime(day_fmt))
+            time_counter -= a_day
+        county_totals = {
+            name: 0 for name in county_names}
+        county_totals['All'] = 0
+        day_totals = {day_str: county_totals.copy() for day_str in day_strings}
+        for sub in submissions:
+            day = sub.get_local_date_received(fmt=day_fmt)
+            day_totals[day]['All'] += 1
+            for org in sub.organizations.all():
+                county_name = org.county.name
+                day_totals[day][county_name] += 1
+        for day, counts in sorted(day_totals.items(), key=lambda x: x[0]):
+            yield dict(Day=day, **counts)
 
     def fill_pdfs(self):
         """Checks for and creates any needed `FilledPDF` objects

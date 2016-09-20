@@ -26,6 +26,7 @@ new applications.
 * `ApplicationDetail` - This shows the detail of one particular FormSubmission
 """
 import logging
+import csv
 from django.utils.translation import ugettext as _
 from django.utils.datastructures import MultiValueDict
 from django.shortcuts import render, redirect, get_object_or_404
@@ -454,6 +455,30 @@ class Stats(TemplateView):
         return context
 
 
+class DailyTotals(View):
+
+    def get(self, request):
+        totals = list(models.FormSubmission.get_daily_totals())
+        response = HttpResponse(content_type='text/csv')
+        filename = 'daily_totals.csv'
+        content_disposition = 'attachment; filename="{}"'.format(filename)
+        response['Content-Disposition'] = content_disposition
+        keys = [
+            "Day", "All",
+            constants.CountyNames.SAN_FRANCISCO,
+            constants.CountyNames.CONTRA_COSTA,
+            constants.CountyNames.ALAMEDA,
+        ]
+        writer = csv.DictWriter(
+            response,
+            fieldnames=keys,
+            quoting=csv.QUOTE_ALL)
+        writer.writeheader()
+        for item in totals:
+            writer.writerow(item)
+        return response
+
+
 class MultiSubmissionMixin:
     """A mixin for pulling multiple submission ids
     out of request query params.
@@ -704,6 +729,7 @@ partner_list = PartnerListView.as_view()
 partner_detail = PartnerDetailView.as_view()
 privacy = PrivacyPolicy.as_view()
 stats = Stats.as_view()
+daily_totals = DailyTotals.as_view()
 filled_pdf = FilledPDF.as_view()
 pdf_bundle = FilledPDFBundle.as_view()
 app_index = ApplicationIndex.as_view()
