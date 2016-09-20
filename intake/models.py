@@ -303,7 +303,7 @@ class FormSubmission(models.Model):
         contact_info = self.get_contact_info()
         errors = {}
         next_steps = self.organizations.values_list(
-            'new_submission_confirmation_message', flat=True)
+            'long_confirmation_message', flat=True)
         context = dict(
             staff_name=random.choice(constants.STAFF_NAME_CHOICES),
             name=self.answers['first_name'],

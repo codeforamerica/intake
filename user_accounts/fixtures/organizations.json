@@ -11,7 +11,8 @@
     "requires_rap_sheet": false,
     "requires_declaration_letter": false,
     "show_pdf_only": false,
-    "new_submission_confirmation_message": "",
+    "short_confirmation_message": "",
+    "long_confirmation_message": "",
     "address": "",
     "phone_number": "",
     "email": ""
@@ -31,7 +32,8 @@
     "requires_rap_sheet": false,
     "requires_declaration_letter": false,
     "show_pdf_only": true,
-    "new_submission_confirmation_message": "You will get a letter in the mail from the San Francisco Public Defender in 2-4 weeks.",
+    "short_confirmation_message": "",
+    "long_confirmation_message": "You will get a letter in the mail from the San Francisco Public Defender in 2-4 weeks.",
     "address": "San Francisco Public Defender\r\n555 7th Street, 2nd Floor\r\nSan Francisco, CA\r\n94103",
     "phone_number": "4155539337",
     "email": ""
@@ -51,7 +53,8 @@
     "requires_rap_sheet": false,
     "requires_declaration_letter": false,
     "show_pdf_only": false,
-    "new_submission_confirmation_message": "The Contra Costa Public Defender will follow up with you if they need any other information.",
+    "short_confirmation_message": "",
+    "long_confirmation_message": "The Contra Costa Public Defender will follow up with you if they need any other information.",
     "address": "Contra Costa Public Defender\r\n800 Ferry Street\r\nMartinez, CA\r\n94553",
     "phone_number": "9253358000",
     "email": "cleanslate@pd.cccounty.us"
@@ -71,7 +74,8 @@
     "requires_rap_sheet": true,
     "requires_declaration_letter": false,
     "show_pdf_only": false,
-    "new_submission_confirmation_message": "Your application is not yet compete. If you do not have your California criminal record (RAP sheet), please follow these instructions to request it. Once you have your RAP sheet, please submit it to East Bay Community Law Center so your application can be processed.",
+    "short_confirmation_message": "",
+    "long_confirmation_message": "Your application is not yet compete. If you do not have your California criminal record (RAP sheet), please follow these instructions to request it. Once you have your RAP sheet, please submit it to East Bay Community Law Center so your application can be processed.",
     "address": "East Bay Community Law Center\r\n2921 Adeline St\r\nBerkeley, CA\r\n94703",
     "phone_number": "5105484040",
     "email": "crimrecordshelp@ebclc.org"
@@ -91,7 +95,8 @@
     "requires_rap_sheet": false,
     "requires_declaration_letter": true,
     "show_pdf_only": false,
-    "new_submission_confirmation_message": "The Alameda Public Defender will follow up with you if they need any other information.",
+    "short_confirmation_message": "",
+    "long_confirmation_message": "The Alameda Public Defender will follow up with you if they need any other information.",
     "address": "",
     "phone_number": "5102726600",
     "email": "cleanslate@acgov.org"
