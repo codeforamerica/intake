@@ -146,7 +146,7 @@ class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
         self.request.session['applicant_id'] = applicant.id
         return applicant
 
-    def log_application_event(self, name, data=None):
+    def log_application_event(self, name, **data):
         applicant_id = self.get_applicant_id()
         event = models.ApplicationEvent(
             name=name,
@@ -331,7 +331,8 @@ class SelectCounty(MultiStepFormViewBase):
         self.update_session_data()
         self.create_applicant()
         self.log_application_event(
-            constants.ApplicationEventTypes.APPLICATION_STARTED)
+            constants.ApplicationEventTypes.APPLICATION_STARTED,
+            referrer=self.request.session.get('referrer'))
         return super().form_valid(form)
 
 
