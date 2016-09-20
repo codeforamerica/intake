@@ -462,12 +462,24 @@ class TestSelectCountyView(AuthIntegrationTestCase):
             self.assertContains(county_view, slug)
             self.assertContains(county_view, html_utils.escape(description))
 
+        applicant_id = self.client.session.get('applicant_id')
+        self.assertIsNone(applicant_id)
+
     def test_anonymous_user_can_submit_county_selection(self):
         self.be_anonymous()
         result = self.client.fill_form(
             reverse('intake-apply'),
             counties=['contracosta'])
         self.assertRedirects(result, reverse('intake-county_application'))
+        applicant_id = self.client.session.get('applicant_id')
+        self.assertTrue(applicant_id)
+        applicant = models.Applicant.objects.get(id=applicant_id)
+        self.assertTrue(applicant)
+        events = list(applicant.events.all())
+        self.assertEqual(len(events), 1)
+        event = events[0]
+        self.assertEqual(event.name,
+                         constants.ApplicationEventTypes.APPLICATION_STARTED)
 
     def test_anonymous_user_cannot_submit_empty_county_selection(self):
         self.be_anonymous()
@@ -519,18 +531,23 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
             reverse('intake-county_application'),
             **answers)
         self.assertRedirects(result, reverse('intake-thanks'))
-        lookup = {
-            key: answers[key]
-            for key in [
-                'email', 'phone_number', 'first_name', 'last_name']}
+        applicant_id = self.client.session.get('applicant_id')
+        self.assertTrue(applicant_id)
+        applicant = models.Applicant.objects.get(id=applicant_id)
 
-        submission = models.FormSubmission.objects.filter(
-            answers__contains=lookup).first()
-        self.assertTrue(submission)
+        submissions = list(applicant.form_submissions.all())
+        self.assertEqual(1, len(submissions))
+        submission = submissions[0]
+
         county_slugs = [county.slug for county in submission.get_counties()]
         self.assertListEqual(county_slugs, [contracosta])
         org_slugs = [org.slug for org in submission.organizations.all()]
         self.assertListEqual(org_slugs, [cc_pubdef])
+
+        submitted_event_count = applicant.events.filter(
+            name=constants.ApplicationEventTypes.APPLICATION_SUBMITTED).count()
+
+        self.assertEqual(1, submitted_event_count)
 
     @patch(
         'intake.views.models.FormSubmission.send_confirmation_notifications')

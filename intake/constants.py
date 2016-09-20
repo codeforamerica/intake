@@ -51,7 +51,6 @@ ORG_NAMES = {
     Organizations.EBCLC: _("East Bay Community Law Center"),
 }
 
-
 class Counties:
     CONTRA_COSTA = 'contracosta'
     SAN_FRANCISCO = 'sanfrancisco'
@@ -64,6 +63,12 @@ class CountyNames:
     CONTRA_COSTA = 'Contra Costa'
     ALAMEDA = 'Alameda'
     ALL = 'San Francisco, Alameda, and Contra Costa Counties'
+
+
+class ApplicationEventTypes:
+
+    APPLICATION_STARTED = 'application_started'
+    APPLICATION_SUBMITTED = 'application_submitted'
 
 if SCOPE_TO_LIVE_COUNTIES:
     CountyNames.ALL = 'San Francisco and Contra Costa Counties'

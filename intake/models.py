@@ -95,6 +95,9 @@ class FormSubmission(models.Model):
 
     organizations = models.ManyToManyField('user_accounts.Organization',
                                            related_name="submissions")
+    applicant = models.ForeignKey('Applicant',
+                                  on_delete=models.PROTECT, null=True,
+                                  related_name='form_submissions')
     answers = JSONField()
     # old_uuid is only used for porting legacy applications
     old_uuid = models.CharField(max_length=34, unique=True,
@@ -398,6 +401,28 @@ class FormSubmission(models.Model):
 
     def __str__(self):
         return self.get_anonymous_display()
+
+
+class Applicant(models.Model):
+
+    def log_event(self, name, data=None):
+        event = ApplicationEvent(
+            name=name,
+            applicant=self,
+            data=data or {}
+        )
+        event.save()
+        return event
+
+
+class ApplicationEvent(models.Model):
+
+    time = models.DateTimeField(default=timezone_utils.now)
+    name = models.TextField()
+    applicant = models.ForeignKey(Applicant,
+                                  on_delete=models.PROTECT, null=False,
+                                  related_name='events')
+    data = JSONField()
 
 
 class ApplicationLogEntry(models.Model):

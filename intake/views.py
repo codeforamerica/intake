@@ -137,6 +137,25 @@ class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
         context.update(self.get_county_context())
         return context
 
+    def get_applicant_id(self):
+        return self.request.session['applicant_id']
+
+    def create_applicant(self):
+        applicant = models.Applicant()
+        applicant.save()
+        self.request.session['applicant_id'] = applicant.id
+        return applicant
+
+    def log_application_event(self, name, data=None):
+        applicant_id = self.get_applicant_id()
+        event = models.ApplicationEvent(
+            name=name,
+            applicant_id=applicant_id,
+            data=data or {}
+        )
+        event.save()
+        return event
+
 
 class MultiCountyApplicationBase(MultiStepFormViewBase):
     """A multi-page dynamic form view based on data stored in the session.
@@ -190,9 +209,14 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
     def save_submission(self, form, organizations):
         """Save the submission data
         """
-        submission = models.FormSubmission(answers=form.cleaned_data)
+        applicant_id = self.get_applicant_id()
+        submission = models.FormSubmission(
+            answers=form.cleaned_data,
+            applicant_id=applicant_id)
         submission.save()
         submission.organizations.add(*organizations)
+        self.log_application_event(
+            constants.ApplicationEventTypes.APPLICATION_SUBMITTED)
         # TODO: check for cerrect org in view tests
         return submission
 
@@ -305,6 +329,9 @@ class SelectCounty(MultiStepFormViewBase):
 
     def form_valid(self, form):
         self.update_session_data()
+        self.create_applicant()
+        self.log_application_event(
+            constants.ApplicationEventTypes.APPLICATION_STARTED)
         return super().form_valid(form)
 
 
