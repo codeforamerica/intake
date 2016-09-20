@@ -33,10 +33,10 @@ test.screenshots:
 deploy.demo:
 	git push -f demo HEAD:master
 	heroku run --app cmr-demo python manage.py migrate
-	heroku run --app cmr-demo python manage.py loaddata organizations
-	heroku run --app cmr-demo python manage.py loaddata mock_profiles
 	heroku run --app cmr-demo python manage.py loaddata \
+		organizations \
 		addresses \
+		mock_profiles \
 		mock_2_submissions_to_alameda_pubdef \
 		mock_2_submissions_to_sf_pubdef \
 		mock_2_submissions_to_cc_pubdef \
