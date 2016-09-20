@@ -110,8 +110,15 @@ class Address(models.Model):
                     'Organization',
                     on_delete=models.CASCADE,
                     related_name='addresses')
+    name = models.TextField()
     text = models.TextField()
     walk_in_hours = models.TextField(blank=True)
+
+    class Meta:
+        verbose_name_plural = "Addresses"
+
+    def __str__(self):
+        return self.text
 
 
 class Invitation(BaseInvitation):

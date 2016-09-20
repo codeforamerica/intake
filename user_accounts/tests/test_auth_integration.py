@@ -137,20 +137,6 @@ class TestUserAccounts(AuthIntegrationTestCase):
         # get redirected to splash page
         self.assertRedirects(response, reverse('intake-home'))
 
-    def test_superuser_can_add_organization(self):
-        self.be_superuser()
-        # add an organization
-        response = self.client.fill_form(
-            reverse('admin:user_accounts_organization_add'),
-            name='Magical Lawyers Guild',
-            slug="mlg",
-        )
-        self.assertRedirects(
-            response,
-            reverse('admin:user_accounts_organization_changelist'))
-        result = self.client.get(response.url)
-        self.assertContains(result, 'Magical Lawyers Guild')
-
     def test_superuser_can_invite_people(self):
         self.be_superuser()
         self.client.fill_form(

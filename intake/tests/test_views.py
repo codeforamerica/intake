@@ -442,12 +442,14 @@ class TestPartnerDetailView(TestCase):
         sf_pubdef = auth_models.Organization.objects.get(
             slug=constants.Organizations.SF_PUBDEF)
         response = self.client.get(
-            reverse('intake-partner_list'),
-            kwargs=dict(organization_slug=sf_pubdef.slug))
+            reverse(
+                'intake-partner_detail',
+                kwargs=dict(organization_slug=sf_pubdef.slug)
+            )
+        )
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, sf_pubdef.address)
         self.assertContains(response, sf_pubdef.phone_number)
-        self.assertContains(response, sf_pubdef.blurb)
+        self.assertContains(response, html_utils.escape(sf_pubdef.blurb))
         self.assertContains(response, sf_pubdef.name)
 
 

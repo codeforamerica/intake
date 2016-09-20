@@ -102,6 +102,7 @@ class TestAddress(TestCase):
             slug=constants.Organizations.ALAMEDA_PUBDEF)
         address = models.Address(
             organization=a_pubdef,
+            name='Oakland Office',
             text="545 4th St\nOakland, CA\n94607")
         address.save()
         self.assertTrue(address.id)
@@ -111,6 +112,7 @@ class TestAddress(TestCase):
             slug=constants.Organizations.ALAMEDA_PUBDEF)
         address = models.Address(
             organization=a_pubdef,
+            name='Oakland Office',
             walk_in_hours="Every Tuesday, from 2pm to 4pm",
             text="545 4th St\nOakland, CA\n94607")
         address.save()
@@ -121,6 +123,7 @@ class TestAddress(TestCase):
             slug=constants.Organizations.ALAMEDA_PUBDEF)
         address = models.Address(
             organization=a_pubdef,
+            name='Oakland Office',
             walk_in_hours="Every Tuesday, from 2pm to 4pm",
             text="545 4th St\nOakland, CA\n94607")
         address.save()

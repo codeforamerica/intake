@@ -25,15 +25,15 @@
     "county": [
       "sanfrancisco"
     ],
-    "website": "",
-    "blurb": "",
+    "website": "http://sfpublicdefender.org/services/clean-slate/",
+    "blurb": "The San Francisco Public Defender's Clean Slate program helps people with arrests or convictions in San Francisco.",
     "is_receiving_agency": true,
     "requires_rap_sheet": false,
     "requires_declaration_letter": false,
     "show_pdf_only": true,
     "new_submission_confirmation_message": "You will get a letter in the mail from the San Francisco Public Defender in 2-4 weeks.",
-    "address": "",
-    "phone_number": "",
+    "address": "San Francisco Public Defender\r\n555 7th Street, 2nd Floor\r\nSan Francisco, CA\r\n94103",
+    "phone_number": "4155539337",
     "email": ""
   }
 },
@@ -45,16 +45,16 @@
     "county": [
       "contracosta"
     ],
-    "website": "",
-    "blurb": "",
+    "website": "http://www.co.contra-costa.ca.us/1555/Public-Defender",
+    "blurb": "The Contra Costa Public Defender's Clean Slate Program helps people with arrests or convictions in Conta Costa County.",
     "is_receiving_agency": true,
     "requires_rap_sheet": false,
     "requires_declaration_letter": false,
     "show_pdf_only": false,
     "new_submission_confirmation_message": "The Contra Costa Public Defender will follow up with you if they need any other information.",
-    "address": "",
-    "phone_number": "",
-    "email": ""
+    "address": "Contra Costa Public Defender\r\n800 Ferry Street\r\nMartinez, CA\r\n94553",
+    "phone_number": "9253358000",
+    "email": "cleanslate@pd.cccounty.us"
   }
 },
 {
@@ -65,16 +65,16 @@
     "county": [
       "alameda"
     ],
-    "website": "",
-    "blurb": "",
+    "website": "http://ebclc.org/need-services/clean-slate-services/",
+    "blurb": "The East Bay Community Law Center offers legal services to low-income communities in the East Bay. EBCLC's Clean Slate Program helps people with arrests or convictions in Alameda County.",
     "is_receiving_agency": true,
     "requires_rap_sheet": true,
     "requires_declaration_letter": false,
     "show_pdf_only": false,
     "new_submission_confirmation_message": "Your application is not yet compete. If you do not have your California criminal record (RAP sheet), please follow these instructions to request it. Once you have your RAP sheet, please submit it to East Bay Community Law Center so your application can be processed.",
-    "address": "",
-    "phone_number": "",
-    "email": ""
+    "address": "East Bay Community Law Center\r\n2921 Adeline St\r\nBerkeley, CA\r\n94703",
+    "phone_number": "5105484040",
+    "email": "crimrecordshelp@ebclc.org"
   }
 },
 {
@@ -85,16 +85,16 @@
     "county": [
       "alameda"
     ],
-    "website": "",
-    "blurb": "",
+    "website": "http://www.co.alameda.ca.us/defender/services/cleanslate.htm",
+    "blurb": "The Alameda Public Defender's Clean Slate program helps people with arrests or convictions in Alameda County.",
     "is_receiving_agency": true,
     "requires_rap_sheet": false,
     "requires_declaration_letter": true,
     "show_pdf_only": false,
     "new_submission_confirmation_message": "The Alameda Public Defender will follow up with you if they need any other information.",
     "address": "",
-    "phone_number": "",
-    "email": ""
+    "phone_number": "5102726600",
+    "email": "cleanslate@acgov.org"
   }
 }
 ]

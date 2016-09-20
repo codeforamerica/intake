@@ -67,29 +67,22 @@ db.dump_fixtures:
 	    --natural-foreign --natural-primary \
 	    --indent 2
 	python ./manage.py dumpdata \
+	    user_accounts.Address \
+	    -o user_accounts/fixtures/addresses.json \
+	    --natural-foreign \
+	    --indent 2
+	python ./manage.py dumpdata \
 	    intake.County \
 	    -o intake/fixtures/counties.json \
 	    --indent 2 \
 	    --format json
-	python ./manage.py dumpdata \
-		intake.FormSubmission \
-		intake.ApplicationLogEntry \
-		-o intake/fixtures/mock_submissions.json \
-		--indent 2 \
-		--natural-foreign \
-		--format json
-	python ./manage.py dumpdata \
-		intake.ApplicationBundle \
-		-o intake/fixtures/mock_bundles.json \
-		--indent 2 \
-		--natural-foreign \
-		--format json
 
 
 db.load_fixtures:
 	python ./manage.py loaddata \
 		counties \
 		organizations \
+		addresses \
 		mock_profiles \
 		mock_2_submissions_to_alameda_pubdef \
 		mock_2_submissions_to_sf_pubdef \
