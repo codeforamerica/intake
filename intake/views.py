@@ -42,7 +42,8 @@ from django.views.generic.edit import FormView
 from intake import models, notifications, constants
 from user_accounts.models import Organization
 from formation.forms import (
-    county_form_selector, DeclarationLetterFormSpec, SelectCountyForm)
+    county_form_selector, DeclarationLetterFormSpec,
+    DeclarationLetterDisplay, SelectCountyForm)
 from project.jinja2 import url_with_ids, oxford_comma
 
 
@@ -293,7 +294,7 @@ class DeclarationLetterView(MultiCountyApplicationBase):
 
     form_spec = DeclarationLetterFormSpec()
 
-    def get(self, request):
+    def redirect_if_no_session_data(self):
         # TODO: refactor to not check form validity twice, don't grab the
         # session data too many times
         data = self.get_session_data()
@@ -301,7 +302,14 @@ class DeclarationLetterView(MultiCountyApplicationBase):
             logger.warn(
                 "{} hit with no existing session data".format(
                     self.__class__.__name__))
-            return redirect(reverse('intake-apply'))
+            return True, data, redirect(reverse('intake-apply'))
+        else:
+            return False, data, None
+
+    def get(self, request):
+        should_redirect, data, response = self.redirect_if_no_session_data()
+        if should_redirect:
+            return response
         return super().get(request)
 
     def get_form_class(self):
@@ -325,6 +333,10 @@ class DeclarationLetterReviewPage(DeclarationLetterView):
     # display_form_spec = DeclarationLetterFormDisplaySpec()
 
     def get(self, request):
+        should_redirect, data, response = self.redirect_if_no_session_data()
+        if should_redirect:
+            return response
+        display_form = DeclarationLetterDisplay(data)
         # get the session data
         # put it in the display form spec
         # render the template with the instantiated display form
