@@ -42,6 +42,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'intake.middleware.PersistReferrerMiddleware',
+    'intake.middleware.GetCleanIpAddressMiddleware',
 ]
 
 ROOT_URLCONF = 'project.urls'

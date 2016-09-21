@@ -478,7 +478,8 @@ class TestSelectCountyView(AuthIntegrationTestCase):
         self.be_anonymous()
         result = self.client.fill_form(
             reverse('intake-apply'),
-            counties=['contracosta'])
+            counties=['contracosta'],
+            headers={'HTTP_USER_AGENT': 'tester'})
         self.assertRedirects(result, reverse('intake-county_application'))
         applicant_id = self.client.session.get('applicant_id')
         self.assertTrue(applicant_id)
@@ -489,6 +490,11 @@ class TestSelectCountyView(AuthIntegrationTestCase):
         event = events[0]
         self.assertEqual(event.name,
                          constants.ApplicationEventTypes.APPLICATION_STARTED)
+
+        self.assertIn('ip', event.data)
+        self.assertIn('user_agent', event.data)
+        self.assertEqual(event.data['user_agent'], 'tester')
+        self.assertIn('referrer', event.data)
 
     def test_anonymous_user_cannot_submit_empty_county_selection(self):
         self.be_anonymous()

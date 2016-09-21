@@ -332,7 +332,10 @@ class SelectCounty(MultiStepFormViewBase):
         self.create_applicant()
         self.log_application_event(
             constants.ApplicationEventTypes.APPLICATION_STARTED,
-            referrer=self.request.session.get('referrer'))
+            referrer=self.request.session.get('referrer'),
+            ip=self.request.ip_address,
+            user_agent=self.request.META.get('HTTP_USER_AGENT'),
+        )
         return super().form_valid(form)
 
 

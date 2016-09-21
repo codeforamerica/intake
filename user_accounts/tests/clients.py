@@ -9,10 +9,11 @@ class CsrfClient(Client):
     def get_csrf_token(self, response):
         return response.cookies['csrftoken'].value
 
-    def fill_form(self, url, csrf_token=None, **data):
+    def fill_form(self, url, csrf_token=None, headers=None, **data):
         if not csrf_token:
             response = self.get(url)
             csrf_token = self.get_csrf_token(response)
         follow = data.pop('follow', False)
         data.update(csrfmiddlewaretoken=csrf_token)
-        return self.post(url, data, follow=follow)
+        headers = headers or {}
+        return self.post(url, data, follow=follow, **headers)
