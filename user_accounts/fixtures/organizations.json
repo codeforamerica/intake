@@ -74,8 +74,8 @@
     "requires_rap_sheet": true,
     "requires_declaration_letter": false,
     "show_pdf_only": false,
-    "short_confirmation_message": "",
-    "long_confirmation_message": "Your application is not yet compete. If you do not have your California criminal record (RAP sheet), please follow these instructions to request it. Once you have your RAP sheet, please submit it to East Bay Community Law Center so your application can be processed.",
+    "short_confirmation_message": "Next step in Alameda is to get your CA RAP sheet and send it to EBCLC. More info http://c4a.me/rap",
+    "long_confirmation_message": "Your application for Alameda is not yet compete. If you do not have your California criminal record (RAP sheet), please follow these instructions to request it.\r\nhttp://c4a.me/rap",
     "address": "East Bay Community Law Center\r\n2921 Adeline St\r\nBerkeley, CA\r\n94703",
     "phone_number": "5105484040",
     "email": "crimrecordshelp@ebclc.org"
