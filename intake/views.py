@@ -27,6 +27,7 @@ new applications.
 """
 import logging
 import csv
+from django.utils import timezone
 from django.utils.translation import ugettext as _
 from django.utils.datastructures import MultiValueDict
 from django.shortcuts import render, redirect, get_object_or_404
@@ -87,17 +88,15 @@ class GetFormSessionDataMixin:
     session_storage_key = "form_in_progress"
 
     def get_session_data(self):
-        data = self.request.session.get(self.session_storage_key, {})
-        return MultiValueDict(data)
+        return self.request.session.get(self.session_storage_key, {})
 
     def get_counties(self):
         session_data = self.get_session_data()
-        county_slugs = session_data.getlist('counties')
+        county_slugs = session_data.get('counties', [])
         return models.County.objects.filter(slug__in=county_slugs).all()
 
     def get_organizations(self):
-        session_data = self.get_session_data()
-        org_slugs = session_data.getlist('organizations')
+        org_slugs = self.get_session_data().get('organizations', [])
         return Organization.objects.filter(slug__in=org_slugs)
 
     def get_county_context(self):
@@ -118,12 +117,10 @@ class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
         "There were some problems with your application. "
         "Please check the errors below."))
 
-    def update_session_data(self, **extra_data):
+    def update_session_data(self, **data):
         form_data = self.request.session.get(self.session_storage_key, {})
-        post_data = dict(self.request.POST.lists())
-        form_data.update(post_data)
-        if extra_data:
-            form_data.update(extra_data)
+        if data:
+            form_data.update(data)
         self.request.session[self.session_storage_key] = form_data
         return form_data
 
@@ -177,8 +174,7 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
         return kwargs
 
     def get_form_specs(self):
-        session_data = self.get_session_data()
-        counties = session_data.getlist('counties')
+        counties = self.get_session_data().get('counties', [])
         return county_form_selector.get_combined_form_spec(counties=counties)
 
     def get_form_class(self):
@@ -238,7 +234,8 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
         # if for alameda, send to declaration letter
         organizations = self.get_orgs_for_answers(form.cleaned_data)
         self.update_session_data(
-            organizations=[org.slug for org in organizations])
+            organizations=[org.slug for org in organizations],
+            **form.parsed_data)
         if any([org.requires_declaration_letter for org in organizations]):
             return redirect(reverse('intake-write_letter'))
         submission = self.save_submission(form, organizations)
@@ -283,7 +280,7 @@ class CountyApplication(MultiCountyApplicationBase):
         """
         if form.warnings:
             # save the post data and move them to confirmation step
-            self.update_session_data()
+            self.update_session_data(**form.parsed_data)
             return redirect(self.confirmation_url)
         else:
             return super().form_valid(form)
@@ -316,40 +313,51 @@ class DeclarationLetterView(MultiCountyApplicationBase):
         return self.form_spec.build_form_class()
 
     def form_valid(self, declaration_letter_form):
-        BaseCountyFormSpec = super().get_form_specs()
-        Form = (
-            self.form_spec | BaseCountyFormSpec
-        ).build_form_class()
-        data = self.get_session_data()
-        data.update(declaration_letter_form.cleaned_data)
-        form = Form(data)
-        form.is_valid()
-        self.save_submission_and_send_notifications(form)
-        return MultiStepFormViewBase.form_valid(self, form)
+        """If valid, redirect to a page to review the letter
+        """
+        self.update_session_data(
+            **declaration_letter_form.cleaned_data)
+        return redirect(reverse('intake-review_letter'))
 
 
 class DeclarationLetterReviewPage(DeclarationLetterView):
     template_name = "forms/declaration_letter_review.jinja"
-    # display_form_spec = DeclarationLetterFormDisplaySpec()
 
     def get(self, request):
+        """Diverts from super().get() to return a display only form
+        rather than the declaration letter form
+        """
         should_redirect, data, response = self.redirect_if_no_session_data()
         if should_redirect:
             return response
+        data['date_received'] = timezone.now()
         display_form = DeclarationLetterDisplay(data)
-        # get the session data
-        # put it in the display form spec
-        # render the template with the instantiated display form
-        return super().get(request)
+        display_form.display_only = True
+        display_form.is_valid()
+        context = dict(form=display_form)
+        return render(request, self.template_name, context)
+
+    def get_form_kwargs(self):
+        """Pull in form data from the session
+        """
+        return dict(data=self.get_session_data())
 
     def post(self, request):
-        # skip form validity checks
-        # this is a read only form
-        # if  'edit_letter'
-            # return redirect to DeclarationLetterView
-        # if  'finish_letter'
-            # save submission and redirect to thanks
-        return super().post(request)
+        should_redirect, data, response = self.redirect_if_no_session_data()
+        if should_redirect:
+            return response
+        decision = request.POST.get("submit_action")
+        if decision == "edit_letter":
+            return redirect(reverse('intake-write_letter'))
+        elif decision == "approve_letter":
+            BaseCountyFormSpec = super().get_form_specs()
+        Form = (
+            self.form_spec | BaseCountyFormSpec
+        ).build_form_class()
+        form = Form(data)
+        form.is_valid()
+        self.save_submission_and_send_notifications(form)
+        return MultiStepFormViewBase.form_valid(self, form)
 
 
 class SelectCounty(MultiStepFormViewBase):
@@ -362,7 +370,7 @@ class SelectCounty(MultiStepFormViewBase):
     success_url = reverse_lazy('intake-county_application')
 
     def form_valid(self, form):
-        self.update_session_data()
+        self.update_session_data(**form.parsed_data)
         self.create_applicant()
         self.log_application_event(
             constants.ApplicationEventTypes.APPLICATION_STARTED,

@@ -78,16 +78,11 @@ class TestViews(IntakeDataTestCase):
         'mock_profiles',
         'mock_2_submissions_to_sf_pubdef']
 
-    def setUp(self):
-        super().setUp()
-        self.session = self.client.session
-
     def set_session_counties(self, counties=None):
         if not counties:
             counties = [constants.Counties.SAN_FRANCISCO]
-        self.session['form_in_progress'] = {
-            'counties': counties}
-        self.session.save()
+        self.set_session(form_in_progress={
+            'counties': counties})
 
     def test_home_view(self):
         response = self.client.get(reverse('intake-home'))
@@ -105,12 +100,11 @@ class TestViews(IntakeDataTestCase):
 
     def test_confirm_view(self):
         self.be_anonymous()
-        base_data = mock.post_data(
+        base_data = dict(
             counties=['sanfrancisco'],
             **mock.NEW_RAW_FORM_DATA)
-        session = self.client.session
-        session['form_in_progress'] = dict(base_data.lists())
-        session.save()
+        self.set_session(
+            form_in_progress=base_data)
         response = self.client.get(reverse('intake-confirm'))
         self.assertContains(response, base_data['first_name'][0])
         self.assertContains(response, base_data['last_name'][0])
@@ -187,7 +181,8 @@ class TestViews(IntakeDataTestCase):
             first_name="Foo",
             last_name="Bar"
         )
-        self.assertRedirects(result, reverse('intake-confirm'))
+        self.assertRedirects(
+            result, reverse('intake-confirm'), fetch_redirect_response=False)
         result = self.client.get(result.url)
         self.assertContains(result, "Foo")
         self.assertContains(result, "Bar")
@@ -746,8 +741,11 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
         form_data = self.client.session.get('form_in_progress')
         for key, value in declaration_answers.items():
             self.assertIn(key, form_data)
-            session_value = form_data[key][0]
+            session_value = form_data[key]
             self.assertEqual(session_value, value)
+
+        slack.assert_not_called()
+        send_confirmation.assert_not_called()
 
 
     @patch(
@@ -793,14 +791,16 @@ class TestDeclarationLetterReviewPage(AuthIntegrationTestCase):
         mock_letter = mock.fake.declaration_letter_answers()
         mock_answers = mock.fake.alameda_pubdef_answers(
             first_name="foo", last_name="bar")
-        self.client.session['form_in_progress'] = {
-            **mock_answers, **mock_letter}
+        counties = {'counties': constants.Counties.ALAMEDA}
+        self.set_session(
+            form_in_progress={**counties, **mock_answers, **mock_letter})
         response = self.client.get(reverse('intake-review_letter'))
         self.assertContains(response, 'To Whom It May Concern')
         for portion in mock_letter.values():
             self.assertContains(response, html_utils.escape(portion))
         self.assertContains(response, 'Sincerely,')
-        self.assertContains(response, 'Foo Bar')
+        self.assertContains(response, 'Foo')
+        self.assertContains(response, 'Bar')
         self.assertContains(
             response, 'name="submit_action" value="approve_letter"')
         self.assertContains(
@@ -812,12 +812,35 @@ class TestDeclarationLetterReviewPage(AuthIntegrationTestCase):
             result = self.client.get(reverse('intake-review_letter'))
             self.assertRedirects(result, reverse('intake-apply'))
 
-    def test_post_approve_letter(self):
+    def test_post_edit_letter(self):
         self.be_anonymous()
         mock_letter = mock.fake.declaration_letter_answers()
         mock_answers = mock.fake.alameda_pubdef_answers()
-        self.client.session['form_in_progress'] = {
-            **mock_answers, **mock_letter}
+        counties = {'counties': constants.Counties.ALAMEDA}
+        self.set_session(
+            form_in_progress={**counties, **mock_answers, **mock_letter},
+            applicant_id=2)
+        response = self.client.fill_form(
+            reverse('intake-review_letter'),
+            submit_action="edit_letter")
+        self.assertRedirects(response, reverse('intake-write_letter'))
+        applicant_id = self.client.session.get('applicant_id')
+        self.assertTrue(applicant_id)
+        self.assertEqual(models.FormSubmission.objects.filter(
+            applicant_id=applicant_id).count(), 0)
+
+    @patch(
+        'intake.views.models.FormSubmission.send_confirmation_notifications')
+    @patch('intake.views.notifications.slack_new_submission.send')
+    def test_post_approve_letter(self, slack, send_confirmation):
+        self.be_anonymous()
+        alameda = constants.Counties.ALAMEDA
+        mock_letter = mock.fake.declaration_letter_answers()
+        mock_answers = mock.fake.alameda_pubdef_answers()
+        counties = {'counties': [alameda]}
+        self.set_session(
+            form_in_progress={**counties, **mock_answers, **mock_letter},
+            applicant_id=2)
         response = self.client.fill_form(
             reverse('intake-review_letter'),
             submit_action="approve_letter")
@@ -843,21 +866,9 @@ class TestDeclarationLetterReviewPage(AuthIntegrationTestCase):
             "intake-app_detail",
             kwargs={'submission_id': submission.id})
         self.assertContains(resp, url)
+        self.assertTrue(slack.called)
+        self.assertTrue(send_confirmation.called)
 
-    def test_post_edit_letter(self):
-        self.be_anonymous()
-        mock_letter = mock.fake.declaration_letter_answers()
-        mock_answers = mock.fake.alameda_pubdef_answers()
-        self.client.session['form_in_progress'] = {
-            **mock_answers, **mock_letter}
-        response = self.client.fill_form(
-            reverse('intake-review_letter'),
-            submit_action="edit_letter")
-        self.assertRedirects(response, reverse('intake-write_letter'))
-        applicant_id = self.client.session.get('applicant_id')
-        self.assertTrue(applicant_id)
-        self.assertEqual(models.FormSubmission.objects.filter(
-            applicant_id=applicant_id).count(), 0)
 
 
 class TestApplicationDetail(IntakeDataTestCase):

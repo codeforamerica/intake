@@ -5,7 +5,37 @@
 Review Your Letter
 {%- endblock header_title -%}
 
+{% block content %}
+<section class="application_form content">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-8 col-md-6 col_centered">
 
-{%- block submit_button_label -%}
-  Review your letter
-{%- endblock submit_button_label -%}
+<form class="county_form" action="" method="POST" accept-charset="utf-8">
+  {#
+    Non field errors are not included here because they will be
+    displayed as flash messages in the header.
+  #}
+  
+  {% include "includes/csrf_field.jinja" %}
+  
+  {{ form.display() }}
+
+  <div class="form-submit_choices">
+  <button type="submit" name="submit_action" value="edit_letter">
+    {{ _("Edit") }}
+  </button>
+  <button type="submit" name="submit_action" value="approve_letter">
+    {{ _("Finish") }}
+  </button>
+
+
+  </div>
+</form>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}
