@@ -33,7 +33,7 @@ class constants:
         "For example, if you apply in San Francisco and Contra Costa County, you "
         "will hear from both San Francisco Public Defender and Contra Costa Public "
         "Defender separately.")
-        
+
     journey_headline = "Apply to Clear My Record in 3 easy steps:"
     step_1_headline = "1. Apply online"
     step_1_paragraph = "Fill out the pre-screener to help the attorney understand your history."
@@ -63,18 +63,14 @@ class constants:
     opportunity_3 = "Hold a record that better represents who you are today"
 
     footer_website_description = str(
-        "Learn more about "
         "Code for America")
-    footer_legal = "Read our Privacy Policy"
+    footer_legal = "Privacy Policy"
     footer_sf = str(
-        "Learn more about "
-        "the San Francisco Public Defender")
+        "San Francisco Public Defender")
     footer_cc = str(
-        "Learn more about "
-        "the Contra Costa Public Defender")
+        "Contra Costa Public Defender")
     footer_alameda = str(
-        "Learn more about "
-        "the Alameda Public Defender")
+        "Alameda Public Defender")
     back_home_btn = "Go back to main page"
 
     metadata_title = topbar
