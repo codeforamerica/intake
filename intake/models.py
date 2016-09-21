@@ -333,20 +333,22 @@ class FormSubmission(models.Model):
     def send_confirmation_notifications(self):
         contact_info = self.get_contact_info()
         errors = {}
-        next_steps = self.organizations.values_list(
-            'long_confirmation_message', flat=True)
         context = dict(
             staff_name=random.choice(constants.STAFF_NAME_CHOICES),
             name=self.answers['first_name'],
             county_names=self.get_nice_counties(),
-            organizations=self.organizations.all(),
-            next_steps=next_steps)
-        notify_map = {
-            'email': notifications.email_confirmation,
-            'sms': notifications.sms_confirmation
-        }
-        for key, notification in notify_map.items():
+            organizations=self.organizations.all())
+        notification_settings = [
+            ('email', notifications.email_confirmation,
+                'long_confirmation_message'),
+            ('sms', notifications.sms_confirmation,
+                'short_confirmation_message')
+        ]
+        for key, notification, step_query_att in notification_settings:
             if key in contact_info:
+                context.update(
+                    next_steps=self.organizations.values_list(
+                        step_query_att, flat=True))
                 try:
                     self.send_notification(
                         notification, key, **context)

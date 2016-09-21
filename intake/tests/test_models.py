@@ -312,7 +312,8 @@ class TestModels(TestCase):
 
         # case: all methods all good
         submission.answers['contact_preferences'] = [
-            'prefers_email', 'prefers_sms', 'prefers_snailmail', 'prefers_voicemail']
+            'prefers_email', 'prefers_sms',
+            'prefers_snailmail', 'prefers_voicemail']
         submission.answers['email'] = 'someone@gmail.com'
         submission.answers['phone_number'] = '+19993334444'
 
@@ -325,7 +326,8 @@ class TestModels(TestCase):
         self.assertWasCalledOnce(email_notification)
         self.assertWasCalledOnce(sms_notification)
         sent_notification.assert_called_once_with(
-            submission=submission, methods=['email', 'sms', 'snailmail', 'voicemail'])
+            submission=submission,
+            methods=['email', 'sms', 'snailmail', 'voicemail'])
         slack_failed_notification.assert_not_called()
 
         # case: sms fails, email works
