@@ -10,6 +10,8 @@ urlpatterns = [
         views.county_application, name='intake-county_application'),
     url(r'^application/letter/$',
         views.write_letter, name='intake-write_letter'),
+    url(r'^application/letter/review/$',
+        views.review_letter, name='intake-review_letter'),
     url(r'^confirm/$', views.confirm, name='intake-confirm'),
     url(r'^thanks/$', views.thanks, name='intake-thanks'),
     url(r'^getting_your_rap/$',

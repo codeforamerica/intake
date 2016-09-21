@@ -741,26 +741,14 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
         result = self.client.fill_form(
             reverse('intake-write_letter'), **declaration_answers)
 
-        self.assertRedirects(result, reverse('intake-thanks'))
+        self.assertRedirects(result, reverse('intake-review_letter'))
 
-        submission = models.FormSubmission.objects.filter(
-            answers__first_name="RandomName").first()
+        form_data = self.client.session.get('form_in_progress')
+        for key, value in declaration_answers.items():
+            self.assertIn(key, form_data)
+            session_value = form_data[key][0]
+            self.assertEqual(session_value, value)
 
-        self.assertTrue(submission)
-        county_slugs = [county.slug for county in submission.get_counties()]
-        self.assertListEqual(county_slugs, [alameda])
-        self.assertIn(self.a_pubdef, submission.organizations.all())
-        self.assertEqual(submission.organizations.count(), 1)
-        self.assertEqual(submission.organizations.first().county.slug, alameda)
-        filled_pdf_count = models.FilledPDF.objects.count()
-        self.assertEqual(filled_pdf_count, 0)
-        self.be_apubdef_user()
-        resp = self.client.get(reverse("intake-app_index"))
-        url = reverse(
-            "intake-app_detail",
-            kwargs={'submission_id': submission.id})
-
-        self.assertContains(resp, url)
 
     @patch(
         'intake.views.models.FormSubmission.send_confirmation_notifications')
@@ -794,6 +782,82 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
         with self.assertLogs('intake.views', level=logging.WARN):
             result = self.client.get(reverse('intake-write_letter'))
             self.assertRedirects(result, reverse('intake-apply'))
+
+
+class TestDeclarationLetterReviewPage(AuthIntegrationTestCase):
+
+    fixtures = ['organizations', 'mock_profiles']
+
+    def test_get_with_expected_data(self):
+        self.be_anonymous()
+        mock_letter = mock.fake.declaration_letter_answers()
+        mock_answers = mock.fake.alameda_pubdef_answers(
+            first_name="foo", last_name="bar")
+        self.client.session['form_in_progress'] = {
+            **mock_answers, **mock_letter}
+        response = self.client.get(reverse('intake-review_letter'))
+        self.assertContains(response, 'To Whom It May Concern')
+        for portion in mock_letter.values():
+            self.assertContains(response, html_utils.escape(portion))
+        self.assertContains(response, 'Sincerely,')
+        self.assertContains(response, 'Foo Bar')
+        self.assertContains(
+            response, 'name="submit_action" value="approve_letter"')
+        self.assertContains(
+            response, 'name="submit_action" value="edit_letter"')
+
+    def test_get_with_no_existing_data(self):
+        self.be_anonymous()
+        with self.assertLogs('intake.views', level=logging.WARN):
+            result = self.client.get(reverse('intake-review_letter'))
+            self.assertRedirects(result, reverse('intake-apply'))
+
+    def test_post_approve_letter(self):
+        self.be_anonymous()
+        mock_letter = mock.fake.declaration_letter_answers()
+        mock_answers = mock.fake.alameda_pubdef_answers()
+        self.client.session['form_in_progress'] = {
+            **mock_answers, **mock_letter}
+        response = self.client.fill_form(
+            reverse('intake-review_letter'),
+            submit_action="approve_letter")
+        self.assertRedirects(response, reverse('intake-thanks'))
+
+        applicant_id = self.client.session.get('applicant_id')
+        self.assertTrue(applicant_id)
+
+        submissions = list(models.FormSubmission.objects.filter(
+            applicant_id=applicant_id))
+        self.assertEqual(len(submissions), 1)
+        submission = submissions[0]
+        county_slugs = [county.slug for county in submission.get_counties()]
+        self.assertListEqual(county_slugs, [alameda])
+        self.assertIn(self.a_pubdef, submission.organizations.all())
+        self.assertEqual(submission.organizations.count(), 1)
+        self.assertEqual(submission.organizations.first().county.slug, alameda)
+        filled_pdf_count = models.FilledPDF.objects.count()
+        self.assertEqual(filled_pdf_count, 0)
+        self.be_apubdef_user()
+        resp = self.client.get(reverse("intake-app_index"))
+        url = reverse(
+            "intake-app_detail",
+            kwargs={'submission_id': submission.id})
+        self.assertContains(resp, url)
+
+    def test_post_edit_letter(self):
+        self.be_anonymous()
+        mock_letter = mock.fake.declaration_letter_answers()
+        mock_answers = mock.fake.alameda_pubdef_answers()
+        self.client.session['form_in_progress'] = {
+            **mock_answers, **mock_letter}
+        response = self.client.fill_form(
+            reverse('intake-review_letter'),
+            submit_action="edit_letter")
+        self.assertRedirects(response, reverse('intake-write_letter'))
+        applicant_id = self.client.session.get('applicant_id')
+        self.assertTrue(applicant_id)
+        self.assertEqual(models.FormSubmission.objects.filter(
+            applicant_id=applicant_id).count(), 0)
 
 
 class TestApplicationDetail(IntakeDataTestCase):

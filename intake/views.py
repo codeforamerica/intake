@@ -289,6 +289,7 @@ class CountyApplication(MultiCountyApplicationBase):
 
 
 class DeclarationLetterView(MultiCountyApplicationBase):
+    template_name = "forms/declaration_letter_form.jinja"
 
     form_spec = DeclarationLetterFormSpec()
 
@@ -298,7 +299,8 @@ class DeclarationLetterView(MultiCountyApplicationBase):
         data = self.get_session_data()
         if not data:
             logger.warn(
-                "DeclarationLetterView hit with no existing session data")
+                "{} hit with no existing session data".format(
+                    self.__class__.__name__))
             return redirect(reverse('intake-apply'))
         return super().get(request)
 
@@ -316,6 +318,26 @@ class DeclarationLetterView(MultiCountyApplicationBase):
         form.is_valid()
         self.save_submission_and_send_notifications(form)
         return MultiStepFormViewBase.form_valid(self, form)
+
+
+class DeclarationLetterReviewPage(DeclarationLetterView):
+    template_name = "forms/declaration_letter_review.jinja"
+    # display_form_spec = DeclarationLetterFormDisplaySpec()
+
+    def get(self, request):
+        # get the session data
+        # put it in the display form spec
+        # render the template with the instantiated display form
+        return super().get(request)
+
+    def post(self, request):
+        # skip form validity checks
+        # this is a read only form
+        # if  'edit_letter'
+            # return redirect to DeclarationLetterView
+        # if  'finish_letter'
+            # save submission and redirect to thanks
+        return super().post(request)
 
 
 class SelectCounty(MultiStepFormViewBase):
@@ -755,10 +777,11 @@ class ReferToAnotherOrgView(MarkSubmissionStepView):
 
 
 home = Home.as_view()
-county_application = CountyApplication.as_view()
-write_letter = DeclarationLetterView.as_view()
 select_county = SelectCounty.as_view()
+county_application = CountyApplication.as_view()
 confirm = Confirm.as_view()
+write_letter = DeclarationLetterView.as_view()
+review_letter = DeclarationLetterReviewPage.as_view()
 thanks = Thanks.as_view()
 rap_sheet_info = RAPSheetInstructions.as_view()
 partner_list = PartnerListView.as_view()
