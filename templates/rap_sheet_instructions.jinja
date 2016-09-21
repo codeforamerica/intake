@@ -14,7 +14,10 @@
   </p>
   {%- endfor %}
 
-<h2>{{ _("Follow these steps to get your RAP sheet") }}</h2>
+<h2>{{ _("Not done yet! You need to get your RAP sheet.") }}</h2>
+<p>{{ _("East Bay Community Law Center needs your California criminal record (RAP sheet) to check what you qualify for. Follow the steps below to get your RAP sheet and send it to East Bay Community Law Center to complete your application.") }}</[]>
+
+<h2>{{ _("Follow these steps to get your RAP sheet:") }}</h2>
 
 <ol class="rap_sheet_instructions">
   <li>
@@ -55,19 +58,20 @@
       {{- rap_sheet_receiving_address -}}
       {%- else %}
 East Bay Community Law Center
-2921 Adeline St 
+2921 Adeline St
 Berkeley CA, 94703
       {%- endif %}
       </pre>
   </li>
   <li>
     {{ _("Once East Bay Community Law Center has received your RAP sheet, you "
-      "will receive a message from them confirming that your "
+      "will receive a message telling you that your "
       "application is complete!") }}
   </li>
 </ol>
 
+
   {%- include "includes/cmr_contact_info.jinja" %}
   {%- include "includes/back_to_home_button.jinja" %}
-  
+
 {% endblock column_content %}
