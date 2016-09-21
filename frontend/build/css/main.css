@@ -4133,6 +4133,9 @@ h4 {
 .new_section {
   padding-top: 24px;
 }
+.content {
+  padding-bottom: 60px;
+}
 .container {
   margin: 0 auto;
 }
