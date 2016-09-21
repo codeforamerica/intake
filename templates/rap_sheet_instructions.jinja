@@ -14,7 +14,7 @@
   </p>
   {%- endfor %}
 
-<p>{{ _("East Bay Community Law Center needs your California criminal record (RAP sheet) to check what you qualify for. Follow the steps below to get your RAP sheet and send it to East Bay Community Law Center to complete your application.") }}</p>
+<p>{{ _("Some legal aid organizations, like the East Bay Community Law Center, need your California criminal record (RAP sheet) to check what you qualify for. Follow the steps below to get your RAP sheet and send it to East Bay Community Law Center to complete your application.") }}</p>
 
 <h2>{{ _("Follow these steps to get your RAP sheet:") }}</h2>
 
@@ -33,11 +33,11 @@
       "the Department of Justice, you will still have to pay Live Scan fee.") }}
   </li>
   <li>
-    {{ _("Fill out the Request for Live Scan Service form with your "
-      "information.") }}
+    {{ _('Print and fill out the '
+    '<a href="https://oag.ca.gov/sites/all/files/agweb/pdfs/fingerprints/forms/bcia_8016RR.pdf">Request for Live Scan Service form</a> with your information.') }}
   </li>
   <li>
-    {{ _("Go to the Live Scan location and give them your Request for "
+    {{ _("Go to the Live Scan location and give them your filled Request for "
       "Live Scan Service form. They will collect your payment, roll your "
       "fingerprints, and send them to the Department of Justice.") }}
   </li>
@@ -55,11 +55,11 @@
       <pre class="address">
       {%- if rap_sheet_receiving_address -%}
       {{- rap_sheet_receiving_address -}}
-      {%- else %}
+      {%- else -%}
 East Bay Community Law Center
 2921 Adeline St
 Berkeley CA, 94703
-      {%- endif %}
+      {%- endif -%}
       </pre>
   </li>
   <li>

@@ -452,6 +452,15 @@ class TestPartnerDetailView(TestCase):
         self.assertContains(response, sf_pubdef.name)
 
 
+class TestRAPSheetInstructions(TestCase):
+
+    def test_renders_with_no_session_data(self):
+        response = self.client.get(reverse('intake-rap_sheet'))
+        # make sure it has a link to the pdf
+        # make sure there aren't any unrendered variables
+        self.assertNotContains(response, "{{")
+
+
 class TestSelectCountyView(AuthIntegrationTestCase):
 
     def test_anonymous_user_can_access_county_view(self):

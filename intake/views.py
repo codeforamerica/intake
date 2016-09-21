@@ -106,6 +106,9 @@ class GetFormSessionDataMixin:
             county_list=[county.name + " County" for county in counties]
         )
 
+    def get_applicant_id(self):
+        return self.request.session.get('applicant_id')
+
 
 class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
     """A FormView saves form data in a session for persistence between URLs.
@@ -136,9 +139,6 @@ class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
         context = super().get_context_data(*args, **kwargs)
         context.update(self.get_county_context())
         return context
-
-    def get_applicant_id(self):
-        return self.request.session['applicant_id']
 
     def create_applicant(self):
         applicant = models.Applicant()
@@ -352,7 +352,12 @@ class RAPSheetInstructions(TemplateView, GetFormSessionDataMixin):
     template_name = "rap_sheet_instructions.jinja"
 
     def get_context_data(self, *args, **kwargs):
-        context = self.get_county_context()
+        context = {}
+        applicant_id = self.get_applicant_id()
+        if applicant_id:
+            organizations = Organization.objects.filter(
+                submissions__applicant_id=applicant_id)
+            context['organizations'] = organizations
         return context
 
 
