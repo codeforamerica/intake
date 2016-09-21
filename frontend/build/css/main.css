@@ -4458,17 +4458,6 @@ body.admin .top_bar {
 .btn .glyphicon {
   margin-right: .5em;
 }
-.rap_sheet_instructions li {
-  margin-bottom: 20px;
-}
-.rap_sheet_instructions .address {
-  height: 80px;
-}
-@media (max-width: 767px) {
-  a.btn.btn-primary.btn-lg.call_to_action_button {
-    margin-top: 15px;
-  }
-}
 @media (min-width: 768px) {
   .splash.above_the_fold h1 {
     font-size: 54px;
