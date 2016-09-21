@@ -4303,6 +4303,9 @@ h2.time_expectation {
 .journey_headline {
   text-align: center;
 }
+.field-form_note li {
+  margin-bottom: 20px;
+}
 /**Thanks and Privacy Page**/
 section.content.thanks,
 section.content.privacy {
