@@ -1,4 +1,4 @@
-EMAIL to krystal-ruiz@hotmail.com
+EMAIL to antonio-lewis@gmail.com
 
 ----------------------------
 
@@ -11,4 +11,4 @@ Hello,
 You've been invited to create an account on Clear My Record.
 
 If you'd like to join, please follow this link:
-http://localhost:8081/invitations/accept-invite/ox7cbb3dzfo9pkmg29dro590sgiffuhxjjotagv6xospt25gcjldxpanccgh8tpc
+http://localhost:8081/invitations/accept-invite/nnkdyqoqvptnjsuawyek2p6xjekhncwp3uehgrkjcczpiazimdsjhlwngxn1sw9p
