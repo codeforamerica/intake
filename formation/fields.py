@@ -86,8 +86,8 @@ class AdditionalInformation(CharField):
 
 class NameField(CharField):
 
-    def display_value(self):
-        return namify(self.get_current_value())
+    def get_display_value(self):
+        return mark_safe(namify(self.get_current_value()))
 
 
 class FirstName(NameField):
