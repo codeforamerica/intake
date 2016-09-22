@@ -10,6 +10,11 @@ Review Your Letter
   <div class="container">
     <div class="row">
       <div class="col-xs-12 col-sm-8 col-md-6 col_centered">
+        <p><strong>This is your letter for the judge. Does it look okay?</strong></p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-8 col-md-6 col_centered">
 
 <form class="county_form" action="" method="POST" accept-charset="utf-8">
   {#
@@ -22,11 +27,13 @@ Review Your Letter
   {{ form.display() }}
 
   <div class="form-submit_choices">
-  <button type="submit" name="submit_action" value="edit_letter">
-    {{ _("Edit") }}
+  <button class="btn-default" type="submit" name="submit_action" value="edit_letter">
+    <span class="glyphicon glyphicon-arrow-left"></span>
+    {{ _("Edit Letter") }}
   </button>
-  <button type="submit" name="submit_action" value="approve_letter">
-    {{ _("Finish") }}
+  <button class="btn-success" type="submit" name="submit_action" value="approve_letter">
+    <span class="glyphicon glyphicon-ok"></span>
+    {{ _("Finish Application") }}
   </button>
 
 
