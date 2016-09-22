@@ -15,7 +15,7 @@
 
 <p>{{ _("Some legal aid organizations, like the East Bay Community Law Center, need your California criminal record (RAP sheet) to check what you qualify for. Follow the steps below to get your RAP sheet and send it to East Bay Community Law Center to complete your Alameda County application.") }}</p>
 
-<h2>{{ _("Follow these steps to get your RAP sheet:") }}</h2>
+<h2>{{ _("If you live in California, follow these steps to get your RAP sheet:") }}</h2>
 
 <ol class="rap_sheet_instructions">
   <li>
@@ -68,6 +68,94 @@ Berkeley CA, 94703
   </li>
 </ol>
 
+<h2>{{ _("If you do not live in California, follow these steps to get your RAP sheet:") }}</h2>
+
+<ol class="rap_sheet_instructions">
+  <li>
+    {{ _("You have to get your fingerprints taken. Call the police or sheriff's "
+      "department near you and ask them for fingerprinting services. Tell them "
+      "you need to send your fingerprints to the California Department of Justice. "
+      "Ask them how much this will cost.") }}
+  </li>
+  <li>
+    {{ _("Print and fill out this form with your information: "
+      "Application for California RAP sheet.") }}
+  </li>
+  <li>
+    {{ _("Go to the police or sheriff's department to get fingerprinted on a "
+      "10-print fingerprint card. Your fingerprint card must have: ") }}
+      <ul>
+        <li>
+          {{ _("Your full name ") }}
+        </li>
+        <li>
+          {{ _("Your date of birth ") }}
+        </li>
+        <li>
+          {{ _("Your sex ") }}
+        </li>
+        <li>
+          {{ _("Your mailing address ") }}
+        </li>
+        <li>
+          {{ _("Your fingerprints ") }}
+        </li>
+      </ul>
+  </li>
+  <li>
+    {{ _("It costs $25 to process your fingerprints. Here are the ways you can pay: ") }}
+    <ul>
+      <li>
+        {{ _("Write a personal check (must be from a bank in the U.S) ") }}
+      </li>
+      <li>
+        {{ _("Get a money order from the post office ") }}
+      </li>
+      <li>
+        {{ _("Get a certified check from your bank ") }}
+      </li>
+    </ul>
+  </li>
+  <li>
+    {{ _("Write the check or money order to the “Califoria Department of Justice”. ") }}
+  </li>
+  <li>
+    {{ _("Mail your completed fingerprint card, application form, and $25 check "
+      "or money order to this address: ") }}
+      <pre class="address">
+California Department of Justice
+Record Review Unit
+P.O Box 903417
+Sacramento, CA 94203-4170
+      </pre>
+  </li>
+  <li>
+    {{ _("Wait for a letter in the mail from the Department of Justice with your "
+      "RAP sheet. ") }}
+  </li>
+  <li>
+    {{ _("When you get your RAP sheet in the mail, you are ready to complete your "
+      "Clear My Record application.  ") }}
+  </li>
+  <li>
+    {{ _("Complete your Clear My Record application by dropping off your RAP "
+      "sheet or mailing your RAP sheet to this address:") }}
+      <pre class="address">
+      {%- if rap_sheet_receiving_address -%}
+      {{- rap_sheet_receiving_address -}}
+      {%- else -%}
+East Bay Community Law Center
+2921 Adeline St
+Berkeley CA, 94703
+      {%- endif -%}
+      </pre>
+  </li>
+  <li>
+    {{ _("Once East Bay Community Law Center has received your RAP sheet, you "
+      "will receive a message telling you that your "
+      "application is complete!") }}
+  </li>
+</ol>
 
   {%- include "includes/cmr_contact_info.jinja" %}
   {%- include "includes/back_to_home_button.jinja" %}
