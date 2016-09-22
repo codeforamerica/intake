@@ -24,8 +24,8 @@ class DateReceived(DateTimeField):
     default_display_format = "%b %-d, %Y"
     display_label = "Applied on"
 
-    def get_display_value(self):
-        value = super().get_display_value()
+    def get_display_value(self, strftime_format=None):
+        value = super().get_display_value(strftime_format=strftime_format)
         if value:
             local_now = timezone.now()
             time_delta = local_now - self.get_current_value()
@@ -37,7 +37,7 @@ class DateReceived(DateTimeField):
                     n_days,
                     's' if n_days != 1 else '')
             value = value + note
-        return value
+        return mark_safe(value)
 
 
 class Counties(MultipleChoiceField):
