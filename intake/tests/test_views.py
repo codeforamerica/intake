@@ -870,7 +870,6 @@ class TestDeclarationLetterReviewPage(AuthIntegrationTestCase):
         self.assertTrue(send_confirmation.called)
 
 
-
 class TestApplicationDetail(IntakeDataTestCase):
 
     fixtures = [
@@ -897,7 +896,7 @@ class TestApplicationDetail(IntakeDataTestCase):
         self.be_apubdef_user()
         submission = self.a_pubdef_submissions[0]
         result = self.get_detail(submission)
-        self.assertEqual(result.context['submission'], submission)
+        self.assertEqual(result.context['form'].submission, submission)
         self.assertHasDisplayData(result, submission)
 
     @patch('intake.models.notifications.slack_submissions_viewed.send')
@@ -905,7 +904,7 @@ class TestApplicationDetail(IntakeDataTestCase):
         self.be_cfa_user()
         submission = self.a_pubdef_submissions[0]
         result = self.get_detail(submission)
-        self.assertEqual(result.context['submission'], submission)
+        self.assertEqual(result.context['form'].submission, submission)
         self.assertHasDisplayData(result, submission)
 
     @patch('intake.models.FillablePDF')

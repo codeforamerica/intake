@@ -14,8 +14,7 @@
     {%- endif %}
 
         <ol class="app_bundle_list">
-          {% for submission in submissions %}
-            {%- set form = submission.get_display_form_for_user(request.user) %}
+          {% for form, letter in forms %}
             <li>
               {%- if not request.user.profile.organization.show_pdf_only %}
               <a href="#application-{{ loop.index }}" class="bundle_list_name">
@@ -34,11 +33,11 @@
     </div>
 
     {%- if not request.user.profile.organization.show_pdf_only %}
-    {%- for submission in submissions %}
+
+    {% for form, declaration_form in forms %}
     <div id="application-{{ loop.index }}" class="row">
       <div class="application-data_display col-xs-12 col-md-10 col_centered">
         <div class="application-loop-id">{{ loop.index }}</div>
-        {%- set form = submission.get_display_form_for_user(request.user) %}
         {% include "formation/intake_display.jinja" %}
       </div>
     </div>

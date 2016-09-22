@@ -1,6 +1,6 @@
 <div 
-{%- if submission %}
- data-submission-id="formsubmission-{{ submission.id }}"
+{%- if form.submission %}
+ data-submission-id="formsubmission-{{ form.submission.id }}"
 {%- endif %} class="data_display-dataset">
 
   <div class="data_display-section time_place">
@@ -110,25 +110,29 @@
   
   {%- include "includes/submission_display_actions.jinja" %}
   
-  {%- if 'declaration_letter_intro' in form.fields %}
-  <div class="data_display-section declaration_letter">
-    <h3>Letter of Declaration</h3>
-    <div class="data_display-row">
-      {{ form.declaration_letter_intro }}
+  {%- if declaration_form %}
+  {{ declaration_form.display() }}
+  {%- else %}
+    {%- if 'declaration_letter_intro' in form.fields %}
+    <div class="data_display-section declaration_letter">
+      <h3>Letter of Declaration</h3>
+      <div class="data_display-row">
+        {{ form.declaration_letter_intro }}
+      </div>
+      <div class="data_display-row">
+        {{ form.declaration_letter_life_changes }}
+      </div>
+      <div class="data_display-row">
+        {{ form.declaration_letter_activities }}
+      </div>
+      <div class="data_display-row">
+        {{ form.declaration_letter_goals }}
+      </div>
+      <div class="data_display-row">
+        {{ form.declaration_letter_why }}
+      </div>
     </div>
-    <div class="data_display-row">
-      {{ form.declaration_letter_life_changes }}
-    </div>
-    <div class="data_display-row">
-      {{ form.declaration_letter_activities }}
-    </div>
-    <div class="data_display-row">
-      {{ form.declaration_letter_goals }}
-    </div>
-    <div class="data_display-row">
-      {{ form.declaration_letter_why }}
-    </div>
-  </div>
+    {%- endif %}
   {%- endif %}
   
 </div>

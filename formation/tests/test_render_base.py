@@ -3,7 +3,6 @@ from formation.tests.utils import django_only
 
 from formation import render_base
 import django
-from django.utils.html import escape, conditional_escape
 
 
 class TestRenderable(TestCase):

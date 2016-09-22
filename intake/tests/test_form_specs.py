@@ -39,8 +39,9 @@ class TestAlamedaCountyForm(TestCase):
         submission = models.FormSubmission.create_for_counties(
             counties=[alameda], answers=input_form.cleaned_data)
         user = User.objects.get(username="a_pubdef_user")
-        display_form = submission.get_display_form_for_user(user)
-        page_data = str(display_form)
+        display_form, letter_display = \
+            submission.get_display_form_for_user(user)
+        page_data = str(display_form) + str(letter_display)
         for key in data:
             field = display_form.get_field_by_input_name(key)
             self.assertIn(

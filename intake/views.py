@@ -460,8 +460,13 @@ class ApplicationDetail(View):
         if not submissions:
             return self.not_allowed(request)
         submission = submissions[0]
-        context = dict(submission=submission)
         self.mark_viewed(request, submission)
+        display_form, letter_display = submission.get_display_form_for_user(
+            request.user)
+        context = dict(
+            form=display_form,
+            declaration_form=letter_display
+            )
         response = render(request, self.template_name, context)
         return response
 
@@ -590,8 +595,11 @@ class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
                 "have permission to view those applications")
         bundle = models.ApplicationBundle\
             .get_or_create_for_submissions_and_user(submissions, request.user)
+        forms = [
+            submission.get_display_form_for_user(request.user)
+            for submission in submissions]
         context = dict(
-            submissions=submissions,
+            forms=forms,
             count=len(submissions),
             show_pdf=request.user.profile.should_see_pdf(),
             app_ids=[sub.id for sub in submissions]
@@ -615,8 +623,11 @@ class ApplicationBundleDetail(ApplicationDetail):
             return self.not_allowed(request)
         submissions = list(
             request.user.profile.filter_submissions(bundle.submissions.all()))
+        forms = [
+            submission.get_display_form_for_user(request.user)
+            for submission in submissions]
         context = dict(
-            submissions=submissions,
+            forms=forms,
             count=len(submissions),
             show_pdf=bool(bundle.bundled_pdf),
             app_ids=[sub.id for sub in submissions],
