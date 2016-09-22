@@ -28,7 +28,7 @@ CONTACT_PREFERENCE_CHECKS = {
 GENDER_PRONOUN_CHOICES = (
     ('he', _('He/Him/His')),
     ('she', _('She/Her/Hers')),
-    ('they', _('They/Them/Theirs')),
+    ('they', _('They/Them/Their')),
     ('none', _('Prefer not to answer')),
 )
 
