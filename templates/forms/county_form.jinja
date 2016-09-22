@@ -32,7 +32,11 @@ public apply
 
   {{ form.render()|safe }}
   
-  <button type="submit">Apply</button>
+  <button type="submit">
+  {%- block submit_button_label -%}
+    Next
+  {%- endblock submit_button_label -%}
+  </button>
   {% endblock form_content %}
 
 </form>

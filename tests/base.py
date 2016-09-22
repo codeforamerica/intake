@@ -96,10 +96,12 @@ class FunctionalTestCase(StaticLiveServerTestCase):
         input_type = elements[0].get_attribute('type')
         if input_type == 'checkbox':
             self.handle_checkbox_input(elements, value)
-        elif input_type == 'radio':
+        elif input_type in ['radio', 'submit']:
             for element in elements:
                 if element.get_attribute('value') == value:
                     element.click()
+            if input_type == 'submit':
+                return True
         elif elements[0].tag_name == 'select':
             select = self.driver.support.ui.Select(elements[0])
             select.select_by_value(value)
@@ -109,9 +111,10 @@ class FunctionalTestCase(StaticLiveServerTestCase):
 
     def fill_form(self, **answers):
         for name, value in answers.items():
-            self.handle_input(name, value)
-        form = self.browser.find_element_by_tag_name('form')
-        form.submit()
+            hit_submit = self.handle_input(name, value)
+        if not hit_submit:
+            form = self.browser.find_element_by_tag_name('form')
+            form.submit()
 
     def wait(self, seconds):
         time.sleep(seconds)

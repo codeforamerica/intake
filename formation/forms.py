@@ -319,6 +319,21 @@ class DeclarationLetterFormSpec(CombinableFormSpec):
     }
 
 
+class DeclarationLetterDisplay(Form):
+    display_template_name = "forms/declaration_letter_display.jinja"
+    fields = [
+        F.DateReceived,
+        F.DeclarationLetterIntro,
+        F.DeclarationLetterLifeChanges,
+        F.DeclarationLetterActivities,
+        F.DeclarationLetterGoals,
+        F.DeclarationLetterWhy,
+        F.FirstName,
+        F.MiddleName,
+        F.LastName,
+    ]
+
+
 class SelectCountyForm(Form):
     fields = [F.Counties]
     required_fields = [F.Counties]

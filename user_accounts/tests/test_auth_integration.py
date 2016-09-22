@@ -63,6 +63,12 @@ class AuthIntegrationTestCase(TestCase):
         UserProfile.objects.create(user=cls.superuser,
                                    organization=cls.cfa)
 
+    def set_session(self, **data):
+        session = self.client.session
+        for key, value in data.items():
+            session[key] = value
+        session.save()
+
     def be_superuser(self):
         self.client.login(**self.example_superuser)
 

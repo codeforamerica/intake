@@ -18,6 +18,7 @@ from django.core.urlresolvers import reverse
 from project.jinja2 import namify
 
 from formation import field_types
+from formation.forms import DeclarationLetterDisplay
 
 from intake import (
     pdfparser, anonymous_names, notifications, model_fields,
@@ -60,7 +61,6 @@ class County(models.Model):
     slug = models.SlugField()
     name = models.TextField()
     description = models.TextField()
-
 
     def get_receiving_agency(self, answers):
         """Returns the appropriate receiving agency
@@ -285,7 +285,17 @@ class FormSubmission(models.Model):
         display_form.display_template_name = "formation/intake_display.jinja"
         # initiate parsing
         display_form.is_valid()
-        return display_form
+        display_form.submission = self
+        show_declaration = \
+            user.profile.organization.requires_declaration_letter or \
+            (user.is_staff and any(self.organizations.all().values_list(
+                'requires_declaration_letter', flat=True)))
+        if show_declaration:
+            declaration_letter_form = DeclarationLetterDisplay(init_data)
+            declaration_letter_form.display_only = True
+            declaration_letter_form.is_valid()
+            return display_form, declaration_letter_form
+        return display_form, None
 
     def get_full_name(self):
         return '{first_name} {last_name}'.format(
