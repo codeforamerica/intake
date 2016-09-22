@@ -280,11 +280,9 @@ class FormSubmission(models.Model):
         for key, value in init_data.items():
             if isinstance(value, str):
                 init_data[key] = mark_safe(value)
-        display_form = DisplayFormClass(init_data)
+        display_form = DisplayFormClass(init_data, validate=True)
         display_form.display_only = True
         display_form.display_template_name = "formation/intake_display.jinja"
-        # initiate parsing
-        display_form.is_valid()
         display_form.submission = self
         show_declaration = \
             user.profile.organization.requires_declaration_letter or \
@@ -292,8 +290,6 @@ class FormSubmission(models.Model):
                 'requires_declaration_letter', flat=True)))
         if show_declaration:
             declaration_letter_form = DeclarationLetterDisplay(init_data)
-            declaration_letter_form.display_only = True
-            declaration_letter_form.is_valid()
             return display_form, declaration_letter_form
         return display_form, None
 
