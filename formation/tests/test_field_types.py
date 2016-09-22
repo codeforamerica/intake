@@ -260,6 +260,33 @@ class TestDateTimeField(PatchTranslationTestCase):
         self.assertEqual(field.get_display_value(), '2016-04-18')
 
 
+class TestPhoneNumberField(PatchTranslationTestCase):
+
+    def test_is_okay_with_unset_raw_value(self):
+        field = fields.PhoneNumberField({})
+        field.is_valid()
+        self.assertIsNone(field.get_current_value())
+
+    def test_parse_phone_number(self):
+        test_data = sample_answers.phone_number_answer_pairs
+        for sample_input, expected_result in test_data.items():
+            data = {'phone_number': sample_input}
+            field = fields.PhoneNumberField(data)
+            field.is_valid()
+            self.assertEqual(field.parsed_data, expected_result)
+
+    def test_get_current_value_none_if_empty(self):
+        field = fields.PhoneNumberField()
+        self.assertIsNone(field.get_current_value())
+
+    def test_adds_parse_error_if_given_misc_string(self):
+        field = fields.PhoneNumberField({'ducks': 'Not sure'})
+        self.assertFalse(field.is_valid())
+        expected_error = ("You entered 'Not sure', which doesn't "
+                          "look like a number")
+        self.assertIn(expected_error, field.get_errors_list())
+
+
 class TestChoiceField(PatchTranslationTestCase):
 
     def test_handles_multivaluedict_properly(self):

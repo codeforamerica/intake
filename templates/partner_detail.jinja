@@ -8,17 +8,8 @@
 {%- block section_class %}partners{% endblock section_class -%}
 
 {% block column_content %}
-<p>
-  The
-  {{ organization.name }}
-  {{ _("takes applications in") }}
-  {{ organization.county.name }}
-  {{ _("County") }}
-</p>
 
 <p>{{ organization.blurb }}</p>
-
-<h3>Get in touch with the {{ organization.name }}</h3>
 
 <h4>Website</h4>
 <p>
@@ -27,25 +18,12 @@
   </a>
 </p>
 
-<h4>Email</h4>
-<p>
-  <a href="mailto:{{ organization.email }}">
-    {{ organization.email }}
-  </a>
-</p>
+  <div class="data_display-row">
+      {{ display_form.email_display }}
+  </div>
 
-<h4>Phone Number</h4>
-<p>
-  <a href="tel:{{ organization.phone_number }}">
-    {{ organization.phone_number }}
-  </a>
-</p>
-
-<h4>Address</h4>
-<p>
-  <pre class="address">{{ organization.address }}</pre>
-</p>
-
-
+  <div class="data_display-row">
+      {{ display_form.phone_number_display }}
+  </div>
 
 {% endblock column_content %}

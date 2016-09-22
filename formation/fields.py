@@ -1,3 +1,4 @@
+import phonenumbers
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
@@ -178,6 +179,20 @@ class PreferredPronouns(ChoiceField):
 class PhoneNumberField(CharField):
     context_key = "phone_number"
     label = _('What is your phone number?')
+
+    def parse_phone_number(self):
+        return phonenumbers.parse(self.get_current_value(), "US")
+
+    def get_display_value(self):
+        number = self.parse_phone_number()
+        return phonenumbers.format_number(
+            number, phonenumbers.PhoneNumberFormat.NATIONAL)
+
+    def get_tel_href(self):
+        number = phonenumbers.parse(self.get_current_value(), "US")
+        return phonenumbers.format_number(
+            number, phonenumbers.PhoneNumberFormat.NATIONAL)
+
 
 
 class AlternatePhoneNumberField(CharField):

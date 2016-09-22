@@ -42,6 +42,7 @@ from django.views.generic.edit import FormView
 
 from intake import models, notifications, constants
 from user_accounts.models import Organization
+from user_accounts.forms import OrganizationDetailsDisplayForm
 from formation.forms import (
     county_form_selector, DeclarationLetterFormSpec,
     DeclarationLetterDisplay, SelectCountyForm)
@@ -427,12 +428,16 @@ class PartnerDetailView(TemplateView):
         return super().get(request)
 
     def get_context_data(self, *args, **kwargs):
-        query = Organization.objects.filter(
+        query = Organization.objects.prefetch_related(
+            'addresses'
+            ).filter(
             is_receiving_agency=True
-            ).prefetch_related('county')
+            )
+        organization = get_object_or_404(
+                query, slug=self.organization_slug)
         return dict(
-            organization=get_object_or_404(
-                query, slug=self.organization_slug))
+            organization=organization,
+            display_form=OrganizationDetailsDisplayForm(organization))
 
 
 class ApplicationDetail(View):

@@ -1,5 +1,7 @@
 import re
 import string
+import phonenumbers
+from phonenumbers.phonenumberutil import NumberParseException
 from formation.field_base import Field
 from formation.base import UNSET
 from formation import exceptions, validators
@@ -19,6 +21,10 @@ YES_NO_CHOICES = (
     (YES, _('Yes')),
     (NO, _('No')),
 )
+
+
+def extract_digit_chars(input_string):
+    return "".join(char for char in input_string if char in string.digits)
 
 
 class CharField(Field):
@@ -63,8 +69,7 @@ class IntegerField(CharField):
     def parse_numeric_string(self, raw_value):
         special_zero = re.search(self.special_zero_pattern, raw_value)
         antedecimal, *postdecimal = raw_value.split('.')
-        number = "".join(
-            char for char in antedecimal if char in string.digits)
+        number = extract_digit_chars(antedecimal)
         if number:
             return int(number)
         elif special_zero:
@@ -158,6 +163,49 @@ class DateTimeField(CharField):
         else:
             value = ''
         return value
+
+
+class PhoneNumberField(CharField):
+
+    empty_value = ''
+    parse_error_message = _("'{}' does not look like a valid phone number")
+
+    def parse(self, raw_value):
+        """CharFields check that input values are string types before
+        stripping them of leading and trailing whitespace
+        """
+        value = self.empty_value
+        if raw_value is not UNSET:
+            self.assert_parse_received_correct_type(raw_value, str)
+            raw_value = self.parse_as_text(raw_value)
+        if raw_value:
+            value = extract_digit_chars(raw_value)
+            if not value:
+                self.add_error(
+                    self.parse_error_message.format(raw_value))
+            try:
+                value = self.parse_phone_number(value).national_number
+            except NumberParseException as error:
+                self.add_error(
+                    self.parse_error_message.format(raw_value))
+        return value
+
+    def get_parsed_value(self, value=None):
+        return self.parse_phone_number(self.get_current_value())
+
+    def parse_phone_number(self, raw_string=None, country="US"):
+        raw_string = raw_string or self.get_current_value()
+        if raw_string:
+            return phonenumbers.parse(raw_string, country)
+        return self.empty_value
+
+    def get_display_value(self):
+        return phonenumbers.format_number(
+            self.parse_phone_number(),
+            phonenumbers.PhoneNumberFormat.NATIONAL)
+
+    def get_tel_href(self):
+        return "1" + self.get_parsed_value().national_number
 
 
 class ChoiceField(CharField):
@@ -324,15 +372,24 @@ class FormNote:
     """
     content = ""
     template_string = '<div class="note field-form_note"><p>{}</p></div>'
+    escape_content = False
 
     def __init__(self, *args, **kwargs):
         pass
 
+    def escape(self):
+        return conditional_escape(self.content)
+
+    def get_content(self):
+        if self.escape_content:
+            return self.escape(self.content)
+        return self.content
+
     def render(self):
-        return mark_safe(self.template_string.format(self.content))
+        return mark_safe(self.template_string.format(self.get_content()))
 
     def __repr__(self):
-        return 'FormNote(content="{}")'.format(self.content)
+        return 'FormNote(content="{}")'.format(self.get_content())
 
     def __str__(self):
         return self.render()
