@@ -111,11 +111,12 @@
   {%- include "includes/submission_display_actions.jinja" %}
   
   {%- if declaration_form %}
+  <h3>Letter to Judge</h3>
   {{ declaration_form.display() }}
   {%- else %}
     {%- if 'declaration_letter_intro' in form.fields %}
+    <h3>Letter of Declaration</h3>
     <div class="data_display-section declaration_letter">
-      <h3>Letter of Declaration</h3>
       <div class="data_display-row">
         {{ form.declaration_letter_intro }}
       </div>

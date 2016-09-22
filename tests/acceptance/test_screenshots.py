@@ -55,6 +55,7 @@ class TestWorkflows(base.ScreenSequenceTestCase):
                 **intake_mock.fake.cleaned_sf_county_form_answers(),
                 **intake_mock.fake.contra_costa_county_form_answers(),
                 **intake_mock.fake.alameda_county_form_answers(),
+                **intake_mock.fake.declaration_letter_answers(),
             }
             sub = models.FormSubmission.create_for_organizations(
                     organizations=org_set, answers=answers)

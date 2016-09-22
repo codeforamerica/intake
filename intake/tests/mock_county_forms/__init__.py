@@ -125,11 +125,12 @@ class Provider(BaseProvider):
 
     def declaration_letter_answers(self, **overrides):
         data = {
-            'declaration_letter_intro': 'some text',
-            'declaration_letter_life_changes': 'some text',
-            'declaration_letter_activities': 'some text',
-            'declaration_letter_goals': 'some text',
-            'declaration_letter_why': 'some text',
+            'declaration_letter_intro': self.generator.paragraph(4, True),
+            'declaration_letter_life_changes': self.generator.paragraph(
+                4, True),
+            'declaration_letter_activities': self.generator.paragraph(4, True),
+            'declaration_letter_goals': self.generator.paragraph(4, True),
+            'declaration_letter_why': self.generator.paragraph(4, True),
         }
         data.update(overrides)
         return data
