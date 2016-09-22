@@ -271,6 +271,8 @@ class TestWorkflows(base.ScreenSequenceTestCase):
             S.fill_form('submitted form', **answers),
             S.fill_form(
                 'submitted declaration letter', **declaration_letter_answers),
+            S.fill_form(
+                'approved declaration letter', submit_action='approve_letter'),
         ]
         self.run_sequence(
             'Apply to Alameda Public Defender',
