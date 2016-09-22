@@ -39,7 +39,7 @@ class TestRenderable(TestCase):
     def test_escape(self):
         from formation.fields import FirstName
         bad_string = '<script src="malicious.js">'
-        escaped_bad_string = "&lt;script src=&quot;malicious.js&quot;&gt;"
+        escaped_bad_string = "&lt;script src=&#34;malicious.js&#34;&gt;"
         first_name = FirstName(dict(first_name=bad_string))
         first_name.is_valid()
         render_result = first_name.render()

@@ -32,7 +32,6 @@ class CharField(Field):
         safety check. Strip the input based on `.should_strip_input`
         """
         self.assert_parse_received_correct_type(raw_value, str)
-        raw_value = conditional_escape(raw_value)
         if self.should_strip_input:
             return raw_value.strip()
         return raw_value
@@ -47,9 +46,6 @@ class CharField(Field):
         if raw_value:
             value = raw_value
         return value
-
-    def get_current_value(self):
-        return mark_safe(Field.get_current_value(self))
 
 
 class MultilineCharField(CharField):
@@ -90,9 +86,6 @@ class IntegerField(CharField):
         if raw_value:
             value = self.parse_numeric_string(raw_value)
         return value
-
-    def get_current_value(self):
-        return Field.get_current_value(self)
 
 
 class WholeDollarField(IntegerField):
@@ -164,10 +157,7 @@ class DateTimeField(CharField):
             value = value.strftime(strftime_format)
         else:
             value = ''
-        return mark_safe(value)
-
-    def get_current_value(self):
-        return Field.get_current_value(self)
+        return value
 
 
 class ChoiceField(CharField):
@@ -233,12 +223,9 @@ class MultipleChoiceField(ChoiceField):
                 values.append(value)
         return values
 
-    def get_current_value(self):
-        return Field.get_current_value(self)
-
     def get_display_value(self, use_or=False):
         return oxford_comma([
-            mark_safe(self.get_display_for_choice(choice))
+            self.get_display_for_choice(choice)
             for choice in self.get_current_value()
         ], use_or)
 
