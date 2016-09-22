@@ -4095,6 +4095,12 @@ h3.data_display-section_header {
   color: black;
   border: 2px solid black;
 }
+.data_display-section.declaration_letter {
+  padding: 1em;
+  background-color: #fbfbfb;
+  border: 1px solid #eeeeee;
+  border-radius: .5em;
+}
 .top_bar a {
   color: inherit;
   text-decoration: none;
