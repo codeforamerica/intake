@@ -80,8 +80,14 @@ button {
 		border: 1px solid #ddd;
 		border-radius: .25em;
 		margin: 0.5em 0.25em;
-		background-color: inherit; }
+		background-color: inherit;
+		span.glyphicon {
+			margin-right: 0.5em;
+		}
+	}
 button[type="submit"] { .btn-primary; .btn-lg; }
+button[type="submit"].action-forward { .btn-success; .btn-lg; }
+button[type="submit"].action-back { .btn-default; .btn-lg; }
 
 
 .warnings, .errors {
