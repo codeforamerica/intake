@@ -595,6 +595,14 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         self.assertTrue(result.context['form'].email.errors)
         self.assertTrue(result.context['form'].phone_number.errors)
 
+        event = models.ApplicationEvent.objects.filter(
+            applicant_id=self.client.session['applicant_id'],
+            name=constants.ApplicationEventTypes.APPLICATION_ERRORS).first()
+
+        self.assertDictEqual(
+            result.context['form'].get_serialized_errors(),
+            event.data['errors'])
+
         result = self.client.fill_form(
             reverse('intake-county_application'),
             **answers)
@@ -649,6 +657,14 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         slack.assert_not_called()
         send_confirmation.assert_not_called()
 
+        event = models.ApplicationEvent.objects.filter(
+            applicant_id=self.client.session['applicant_id'],
+            name=constants.ApplicationEventTypes.APPLICATION_ERRORS).first()
+
+        self.assertDictEqual(
+            result.context['form'].get_serialized_errors(),
+            event.data['errors'])
+
     @patch(
         'intake.views.models.FormSubmission.send_confirmation_notifications')
     @patch('intake.views.notifications.slack_new_submission.send')
@@ -694,6 +710,14 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         self.assertTrue(result.context['form'].errors)
         slack.assert_not_called()
         send_confirmation.assert_not_called()
+
+        event = models.ApplicationEvent.objects.filter(
+            applicant_id=self.client.session['applicant_id'],
+            name=constants.ApplicationEventTypes.APPLICATION_ERRORS).first()
+
+        self.assertDictEqual(
+            result.context['form'].get_serialized_errors(),
+            event.data['errors'])
 
     def test_can_go_back_and_reset_counties(self):
         self.be_anonymous()
@@ -773,6 +797,14 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
                          reverse('intake-write_letter'))
 
         self.assertTrue(result.context['form'].errors)
+
+        event = models.ApplicationEvent.objects.filter(
+            applicant_id=self.client.session['applicant_id'],
+            name=constants.ApplicationEventTypes.APPLICATION_ERRORS).first()
+
+        self.assertDictEqual(
+            result.context['form'].get_serialized_errors(),
+            event.data['errors'])
 
     def test_no_existing_data(self):
         self.be_anonymous()
