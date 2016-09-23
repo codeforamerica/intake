@@ -3,6 +3,8 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
+from django.utils.safestring import mark_safe
+from django.utils.html import conditional_escape
 from allauth.account.adapter import get_adapter
 from allauth.account import utils as allauth_account_utils
 from invitations.models import Invitation as BaseInvitation
@@ -104,6 +106,11 @@ class Organization(models.Model):
         return reverse(
             'intake-partner_detail',
             kwargs=dict(organization_slug=self.slug))
+
+    def get_url_anchor_tag(self):
+        return mark_safe('<a href="{url}">{name}</a>'.format(
+            url=self.get_absolute_url(),
+            name=conditional_escape(self.name)))
 
 
 class Address(models.Model):

@@ -1022,6 +1022,7 @@ a:focus {
   text-decoration: underline;
 }
 a:focus {
+  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -2394,6 +2395,7 @@ select[size] {
 input[type="file"]:focus,
 input[type="radio"]:focus,
 input[type="checkbox"]:focus {
+  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -2884,6 +2886,7 @@ select[multiple].input-lg {
 .btn.focus,
 .btn:active.focus,
 .btn.active.focus {
+  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -4048,6 +4051,7 @@ li.action_menu-item > a.active:focus,
 li.action_menu-item > a.focus,
 li.action_menu-item > a:active.focus,
 li.action_menu-item > a.active.focus {
+  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -4135,6 +4139,13 @@ li.action_menu-item > a .glyphicon {
 .data_display-label {
   color: #aaaaaa;
   font-size: .9em;
+}
+.public .data_display-label {
+  color: inherit;
+  font-size: 18px;
+}
+.public .data_display .address-name {
+  font-weight: 600;
 }
 .data_display-value {
   color: black;
@@ -4252,6 +4263,21 @@ h3 {
 h3.subheadline {
   margin-top: 0;
   margin-bottom: 40px;
+}
+h2.header-breadcrumb {
+  margin: 0;
+  margin-top: 1em;
+  font-weight: 400;
+}
+h2.header-breadcrumb a {
+  color: inherit;
+}
+h2.header-breadcrumb + h1 {
+  margin-top: 0;
+}
+.breadcrumb-sep {
+  color: #48cafa;
+  font-size: .8em;
 }
 h2.time_expectation {
   font-weight: 700;

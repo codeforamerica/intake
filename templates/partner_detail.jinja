@@ -1,6 +1,16 @@
 {% extends "public_base_single_column.jinja" %}
 
 
+{%- block header_content %}
+<h2 class="header-breadcrumb">
+  <a href="{{ url('intake-partner_list') }}">
+    {{- _("Our Partners") -}}
+  </a>
+  <span class="breadcrumb-sep glyphicon glyphicon-chevron-right"></span>
+  <!-- <span class="breadcrumb-sep">&rsaquo;</span> -->
+</h2>
+<h1>{{ organization.name }}</h1>
+{%- endblock header_content %}
 {%- block header_title -%}
 {{ organization.name }}
 {%- endblock header_title -%}
@@ -8,44 +18,42 @@
 {%- block section_class %}partners{% endblock section_class -%}
 
 {% block column_content %}
-<p>
-  The
-  {{ organization.name }}
-  {{ _("takes applications in") }}
-  {{ organization.county.name }}
-  {{ _("County") }}
-</p>
+
 
 <p>{{ organization.blurb }}</p>
 
-<h3>Get in touch with the {{ organization.name }}</h3>
+{%- if organization.website %}
+  <div class="data_display-row">
+      {{ display_form.website_display }}
+  </div>
+{%- endif %}
 
-<h4>Website</h4>
-<p>
-  <a href="{{ organization.website }}">
-    {{ organization.website }}
-  </a>
-</p>
+{%- if organization.email %}
+  <div class="data_display-row">
+      {{ display_form.email_display }}
+  </div>
+{%- endif %}
 
-<h4>Email</h4>
-<p>
-  <a href="mailto:{{ organization.email }}">
-    {{ organization.email }}
-  </a>
-</p>
+{%- if organization.phone_number %}
+  <div class="data_display-row">
+      {{ display_form.phone_number_display }}
+  </div>
+{%- endif %}
 
-<h4>Phone Number</h4>
-<p>
-  <a href="tel:{{ organization.phone_number }}">
-    {{ organization.phone_number }}
-  </a>
-</p>
-
-<h4>Address</h4>
-<p>
-  <pre class="address">{{ organization.address }}</pre>
-</p>
-
-
+{%- for location in organization.addresses.all() %}
+<div class="data_display-row">
+  <div class="data_display address">
+    <div class="data_display-label address-name">
+      {{ location.name }}
+    </div>
+    <div class="data_display-label address-walk_in_hours">
+      {{ location.walk_in_hours }}
+    </div>
+    <pre class="data_display-value">
+      {{- location.text -}}
+    </pre>
+  </div>
+</div>
+{%- endfor %}
 
 {% endblock column_content %}

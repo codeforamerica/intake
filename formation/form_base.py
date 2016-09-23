@@ -14,7 +14,7 @@ class Form(base.BindParseValidate):
         'optional_fields'
     ]
 
-    def __init__(self, *args, files=None, **kwargs):
+    def __init__(self, *args, files=None, validate=False, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields = OrderedDict([
             (field_class.context_key, self.build_field(field_class))
@@ -24,6 +24,8 @@ class Form(base.BindParseValidate):
             field.context_key: field.empty_value
             for field in self.get_usable_fields()}
         self.cleaned_data = base.UNSET
+        if validate and self.is_bound():
+            self.parse_and_validate(self.raw_input_data)
 
     def _add_message(self, message_type, message, key=None):
         """For adding errors or warnings, they are added both to

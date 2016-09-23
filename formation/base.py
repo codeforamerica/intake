@@ -34,8 +34,7 @@ class BindParseValidate(Renderable):
         By default it is `UNSET`.
         """
         super().__init__()
-        self.raw_input_data = data
-
+        self.bind(data)
         self.parsed_data = UNSET
         self.errors = {}
         self.warnings = {}
@@ -43,10 +42,13 @@ class BindParseValidate(Renderable):
         if prefix:
             self.context_key = prefix + self.context_key
 
+    def preprocess_raw_input_data(self, data):
+        return data
+
     def bind(self, data):
         """Sets or overwrites the raw input for this object
         """
-        self.raw_input_data = data
+        self.raw_input_data = self.preprocess_raw_input_data(data)
 
     def is_bound(self):
         """Checks whether or not any raw_input_data was passed to

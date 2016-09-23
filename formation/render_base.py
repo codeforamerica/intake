@@ -9,12 +9,12 @@ class Renderable:
     """
     template_name = ""
     display_template_name = ""
+    display_only = False
 
     def __init__(self, default_context=None):
         self.default_context = default_context or {}
         self._template = None
         self._display_template = None
-        self.display_only = False
 
     def render(self, display=False, **extra_context):
         """Uses self and extra_context to render the compiled template

@@ -319,7 +319,7 @@ class DeclarationLetterFormSpec(CombinableFormSpec):
     }
 
 
-class DeclarationLetterDisplay(Form):
+class DeclarationLetterDisplay(DisplayForm):
     display_template_name = "forms/declaration_letter_display.jinja"
     fields = [
         F.DateReceived,

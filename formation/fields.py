@@ -1,10 +1,10 @@
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from django.core.validators import EmailValidator
+from django.core.validators import EmailValidator, URLValidator
 from formation.field_types import (
     CharField, MultilineCharField, IntegerField, WholeDollarField, ChoiceField,
-    YesNoField, MultipleChoiceField, MultiValueField,
+    YesNoField, MultipleChoiceField, MultiValueField, PhoneField,
     FormNote, DateTimeField, YES_NO_CHOICES, NOT_APPLICABLE
 )
 from intake.constants import (
@@ -175,12 +175,12 @@ class PreferredPronouns(ChoiceField):
     display_label = "Preferred pronouns"
 
 
-class PhoneNumberField(CharField):
+class PhoneNumberField(PhoneField):
     context_key = "phone_number"
     label = _('What is your phone number?')
 
 
-class AlternatePhoneNumberField(CharField):
+class AlternatePhoneNumberField(PhoneField):
     context_key = "alternate_phone_number"
     label = _('Do you have another phone number we can try?')
 
@@ -192,6 +192,17 @@ class EmailField(CharField):
     validators = [
         EmailValidator(_("Please enter a valid email")),
     ]
+    display_template_name = "formation/email_display.jinja"
+
+
+class WebsiteField(CharField):
+    context_key = "website"
+    label = _("What is your website?")
+    help_text = _('Like "example.com"')
+    validators = [
+        URLValidator(_("Please enter a valid URL")),
+    ]
+    display_template_name = "formation/url_display.jinja"
 
 
 class Street(CharField):

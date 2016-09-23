@@ -108,7 +108,7 @@ class TestForm(PatchTranslationTestCase):
             'monthly_expenses': 1301,
             'monthly_income': 2465,
             'on_probation_parole': 'yes',
-            'phone_number': '590-133-5279',
+            'phone_number': '5901335279',
             'rap_outside_sf': 'no',
             'serving_sentence': 'yes',
             'being_charged': 'no',

@@ -63,10 +63,10 @@ def current_local_time(fmt):
 linkify_links = {
     "Code for America": "https://codeforamerica.org",
     "Privacy Policy": reverse_lazy("intake-privacy"),
-    "San Francisco Public Defender": "http://sfpublicdefender.org/services/clean-slate/",
-    "Contra Costa Public Defender": "http://co.contra-costa.ca.us/1555/Public-Defender",
-    "Alameda Public Defender": "http://www.co.alameda.ca.us/defender/services/cleanslate.htm",
-    "East Bay Community Law Center": "http://ebclc.org/need-services/clean-slate-services/",
+    "San Francisco Public Defender": "/partners/sf_pubdef/",
+    "Contra Costa Public Defender": "/partners/cc_pubdef/",
+    "Alameda Public Defender": "/partners/a_pubdef/",
+    "East Bay Community Law Center": "/partners/ebclc/",
     "clearmyrecord@codeforamerica.org": "mailto:clearmyrecord@codeforamerica.org",
     "(415) 301-6005": "tel:14153016005"
 }
