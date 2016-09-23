@@ -25,7 +25,6 @@ class IntakeDataTestCase(AuthIntegrationTestCase):
     display_field_checks = [
         'first_name',
         'last_name',
-        'phone_number',
         'email',
     ]
 

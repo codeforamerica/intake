@@ -67,13 +67,16 @@ class SetPasswordForm(forms.Form):
 
 
 class OrganizationDetailsDisplayForm(DisplayForm):
+
+    display_template_name = "forms/organization_detail_display.jinja"
+
     fields = [
         F.EmailField,
         F.PhoneNumberField,
+        F.WebsiteField,
     ]
 
     def preprocess_raw_input_data(self, organization):
         data = model_to_dict(
             organization, fields=list(self.get_field_keys()))
-        import ipdb; ipdb.set_trace()
         return data

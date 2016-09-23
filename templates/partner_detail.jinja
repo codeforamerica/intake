@@ -11,12 +11,10 @@
 
 <p>{{ organization.blurb }}</p>
 
-<h4>Website</h4>
-<p>
-  <a href="{{ organization.website }}">
-    {{ organization.website }}
-  </a>
-</p>
+<div class="data_display-row">
+    {{ display_form.website_display }}
+</div>
+
 
   <div class="data_display-row">
       {{ display_form.email_display }}
