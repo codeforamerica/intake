@@ -71,6 +71,8 @@ class constants:
         "Contra Costa Public Defender")
     footer_alameda = str(
         "Alameda Public Defender")
+    footer_ebclc = str(
+        "East Bay Community Law Center")
     back_home_btn = "Go back to main page"
 
     metadata_title = topbar
