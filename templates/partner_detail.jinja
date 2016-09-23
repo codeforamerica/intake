@@ -1,6 +1,16 @@
 {% extends "public_base_single_column.jinja" %}
 
 
+{%- block header_content %}
+<h2 class="header-breadcrumb">
+  <a href="{{ url('intake-partner_list') }}">
+    {{- _("Our Partners") -}}
+  </a>
+  <span class="breadcrumb-sep glyphicon glyphicon-chevron-right"></span>
+  <!-- <span class="breadcrumb-sep">&rsaquo;</span> -->
+</h2>
+<h1>{{ organization.name }}</h1>
+{%- endblock header_content %}
 {%- block header_title -%}
 {{ organization.name }}
 {%- endblock header_title -%}
@@ -9,19 +19,41 @@
 
 {% block column_content %}
 
+
 <p>{{ organization.blurb }}</p>
 
-<div class="data_display-row">
-    {{ display_form.website_display }}
-</div>
+{%- if organization.website %}
+  <div class="data_display-row">
+      {{ display_form.website_display }}
+  </div>
+{%- endif %}
 
-
+{%- if organization.email %}
   <div class="data_display-row">
       {{ display_form.email_display }}
   </div>
+{%- endif %}
 
+{%- if organization.phone_number %}
   <div class="data_display-row">
       {{ display_form.phone_number_display }}
   </div>
+{%- endif %}
+
+{%- for location in organization.addresses.all() %}
+<div class="data_display-row">
+  <div class="data_display address">
+    <div class="data_display-label address-name">
+      {{ location.name }}
+    </div>
+    <div class="data_display-label address-walk_in_hours">
+      {{ location.walk_in_hours }}
+    </div>
+    <pre class="data_display-value">
+      {{- location.text -}}
+    </pre>
+  </div>
+</div>
+{%- endfor %}
 
 {% endblock column_content %}

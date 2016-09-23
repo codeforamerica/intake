@@ -19,6 +19,20 @@ h2 {
 h3 { font-size:22px; }
 h3.subheadline { margin-top:0; margin-bottom:40px; }
 
+h2.header-breadcrumb {
+  a { color: inherit; }
+  margin: 0;
+  margin-top: 1em;
+  font-weight: 400;
+}
+h2.header-breadcrumb + h1 {
+  margin-top: 0;
+}
+.breadcrumb-sep {
+  color: lighten(@brand-note, 20%);
+  font-size: .8em;
+}
+
 h2.time_expectation{
   font-weight: 700;
   text-align: center;

@@ -4136,6 +4136,13 @@ li.action_menu-item > a .glyphicon {
   color: #aaaaaa;
   font-size: .9em;
 }
+.public .data_display-label {
+  color: inherit;
+  font-size: 18px;
+}
+.public .data_display .address-name {
+  font-weight: 600;
+}
 .data_display-value {
   color: black;
   font-size: 1.2em;
@@ -4252,6 +4259,21 @@ h3 {
 h3.subheadline {
   margin-top: 0;
   margin-bottom: 40px;
+}
+h2.header-breadcrumb {
+  margin: 0;
+  margin-top: 1em;
+  font-weight: 400;
+}
+h2.header-breadcrumb a {
+  color: inherit;
+}
+h2.header-breadcrumb + h1 {
+  margin-top: 0;
+}
+.breadcrumb-sep {
+  color: #48cafa;
+  font-size: .8em;
 }
 h2.time_expectation {
   font-weight: 700;
