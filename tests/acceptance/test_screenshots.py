@@ -91,6 +91,9 @@ class TestWorkflows(base.ScreenSequenceTestCase):
                 S.get("thanks page", '/thanks/'),
                 S.get("privacy policy", '/privacy/'),
                 S.get("stats", '/stats/'),
+                S.get("partners", '/partners/'),
+                S.get("EBCLC partner page", '/partners/ebclc/'),
+                S.get("SF partner page", '/partners/sf_pubdef/'),
             ],
             size=base.SMALL_DESKTOP
         )
