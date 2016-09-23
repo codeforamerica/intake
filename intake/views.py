@@ -389,8 +389,13 @@ class Thanks(TemplateView, GetFormSessionDataMixin):
     template_name = "thanks.jinja"
 
     def get_context_data(self, *args, **kwargs):
-        context = self.get_county_context()
-        context['intake_constants'] = constants
+        applicant_id = self.get_applicant_id()
+        organizations = Organization.objects.prefetch_related(
+                'addresses', 'county').filter(
+                submissions__applicant_id=applicant_id)
+        context = dict(
+            organizations=organizations
+            )
         return context
 
 

@@ -8,11 +8,14 @@
 {%- block section_class %}thanks{% endblock section_class -%}
 
 {% block column_content %}
-  {%- for county in counties %}
-  <p class="next_step {{ county.slug }}">
-    {{ linkify(intake_constants.CONFIRMATION_MESSAGES[county.slug]) }}
+  {%- for organization in organizations %}
+  <p class="next_step {{ organization.slug }}">
+    To help you with {{ organization.county.name }} County, we sent your application to the {{ linkify(organization.name) }}.
+    {{ organization.long_confirmation_message }}
   </p>
   {%- endfor %}
+
+  <p>{{ _("We will follow up with you in about 4 weeks to make sure things are going okay.") }}</p>
 
   <p>
     {{_("If you have any questions or concerns, please email us at")}}
