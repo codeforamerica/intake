@@ -165,10 +165,12 @@ class DateTimeField(CharField):
         return value
 
 
-class PhoneNumberField(CharField):
+class PhoneField(CharField):
 
     empty_value = ''
-    parse_error_message = _("'{}' does not look like a valid phone number")
+    parse_error_message = _("You entered '{}', which "
+                            "doesn't look like a phone number")
+    display_template_name = "formation/phone_display.jinja"
 
     def parse(self, raw_value):
         """CharFields check that input values are string types before
@@ -183,14 +185,15 @@ class PhoneNumberField(CharField):
             if not value:
                 self.add_error(
                     self.parse_error_message.format(raw_value))
-            try:
-                value = self.parse_phone_number(value).national_number
-            except NumberParseException as error:
-                self.add_error(
-                    self.parse_error_message.format(raw_value))
+            else:
+                try:
+                    value = str(self.parse_phone_number(value).national_number)
+                except NumberParseException as error:
+                    self.add_error(
+                        self.parse_error_message.format(raw_value))
         return value
 
-    def get_parsed_value(self, value=None):
+    def get_current_value_parsed(self):
         return self.parse_phone_number(self.get_current_value())
 
     def parse_phone_number(self, raw_string=None, country="US"):
@@ -201,11 +204,11 @@ class PhoneNumberField(CharField):
 
     def get_display_value(self):
         return phonenumbers.format_number(
-            self.parse_phone_number(),
+            self.get_current_value_parsed(),
             phonenumbers.PhoneNumberFormat.NATIONAL)
 
-    def get_tel_href(self):
-        return "1" + self.get_parsed_value().national_number
+    def get_tel_href_number(self):
+        return "1" + str(self.get_current_value_parsed().national_number)
 
 
 class ChoiceField(CharField):

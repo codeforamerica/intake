@@ -265,7 +265,7 @@ class TestPhoneNumberField(PatchTranslationTestCase):
     def test_is_okay_with_unset_raw_value(self):
         field = fields.PhoneNumberField({})
         field.is_valid()
-        self.assertIsNone(field.get_current_value())
+        self.assertEqual(field.get_current_value(), '')
 
     def test_parse_phone_number(self):
         test_data = sample_answers.phone_number_answer_pairs
@@ -275,16 +275,17 @@ class TestPhoneNumberField(PatchTranslationTestCase):
             field.is_valid()
             self.assertEqual(field.parsed_data, expected_result)
 
-    def test_get_current_value_none_if_empty(self):
+    def test_get_current_value_is_empty_string_if_empty(self):
         field = fields.PhoneNumberField()
-        self.assertIsNone(field.get_current_value())
+        self.assertEqual(field.get_current_value(), '')
 
     def test_adds_parse_error_if_given_misc_string(self):
-        field = fields.PhoneNumberField({'ducks': 'Not sure'})
+        field = fields.PhoneNumberField({'phone_number': 'Not sure'})
         self.assertFalse(field.is_valid())
         expected_error = ("You entered 'Not sure', which doesn't "
-                          "look like a number")
-        self.assertIn(expected_error, field.get_errors_list())
+                          "look like a phone number")
+        self.assertIn(
+            expected_error, [str(e) for e in field.get_errors_list()])
 
 
 class TestChoiceField(PatchTranslationTestCase):
