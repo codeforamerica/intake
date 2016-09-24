@@ -42,7 +42,7 @@
 {
   "model": "user_accounts.organization",
   "fields": {
-    "name": "Alameda Public Defender",
+    "name": "Alameda County Public Defender's Office",
     "county": 3,
     "website": "",
     "blurb": "",
