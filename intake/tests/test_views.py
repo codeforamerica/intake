@@ -425,7 +425,8 @@ class TestPartnerListView(TestCase):
             is_receiving_agency=True)
         self.assertEqual(response.status_code, 200)
         for org in orgs:
-            self.assertContains(response, org.name)
+            self.assertContains(
+            response, html_utils.conditional_escape(org.name))
 
 
 class TestPartnerDetailView(TestCase):
