@@ -177,12 +177,13 @@ class PreferredPronouns(ChoiceField):
 
 class PhoneNumberField(PhoneField):
     context_key = "phone_number"
+    help_text = _('For example, (415) 301-6005')
     label = _('What is your phone number?')
 
 
-class AlternatePhoneNumberField(PhoneField):
+class AlternatePhoneNumberField(PhoneNumberField):
     context_key = "alternate_phone_number"
-    label = _('Do you have another phone number we can try?')
+    label = _('What is another phone number we can reach you at?')
 
 
 class EmailField(CharField):

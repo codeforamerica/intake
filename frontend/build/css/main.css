@@ -3950,6 +3950,9 @@ button[type="submit"].action-back .badge {
 .phone_number input[name="phone_number"] {
   width: 9em;
 }
+.alternate_phone_number input[name="alternate_phone_number"] {
+  width: 9em;
+}
 .monthly_income input[type="text"],
 .monthly_expenses input[type="text"] {
   width: 7em;
