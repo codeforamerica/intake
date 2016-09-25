@@ -177,7 +177,7 @@ class PreferredPronouns(ChoiceField):
 
 class PhoneNumberField(PhoneField):
     context_key = "phone_number"
-    help_text = _('For example, (415) 301-6005')
+    help_text = _('For example, (555) 555-5555')
     label = _('What is your phone number?')
 
 
