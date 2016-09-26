@@ -208,26 +208,6 @@ class TestViews(IntakeDataTestCase):
             submission_count='int')
         send_confirmation.assert_called_once_with()
 
-    def test_apply_with_insufficient_form(self):
-        # should return the same page, with the partially filled form
-        self.set_session_counties()
-        result = self.client.fill_form(
-            reverse('intake-county_application'),
-            first_name="Foooo"
-        )
-        self.assertContains(result, "Foooo")
-        self.assertEqual(
-            result.wsgi_request.path,
-            reverse('intake-county_application'))
-        self.assertContains(result, "This field is required.")
-        self.assertContains(
-            result, fields.AddressField.is_recommended_error_message)
-        self.assertContains(
-            result,
-            fields.SocialSecurityNumberField.is_recommended_error_message)
-        self.assertContains(
-            result, fields.DateOfBirthField.is_recommended_error_message)
-
     @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
     @patch('intake.models.notifications.slack_submissions_viewed.send')
     def test_authenticated_user_can_see_filled_pdf(self, slack):
@@ -426,7 +406,7 @@ class TestPartnerListView(TestCase):
         self.assertEqual(response.status_code, 200)
         for org in orgs:
             self.assertContains(
-            response, html_utils.conditional_escape(org.name))
+                response, html_utils.conditional_escape(org.name))
 
 
 class TestPartnerDetailView(TestCase):
@@ -504,6 +484,39 @@ class TestSelectCountyView(AuthIntegrationTestCase):
 class TestMultiCountyApplication(AuthIntegrationTestCase):
 
     fixtures = ['organizations']
+
+    @patch(
+        'intake.views.models.FormSubmission.send_confirmation_notifications')
+    @patch('intake.views.notifications.slack_new_submission.send')
+    def test_sf_application_redirects_if_missing_recommended_fields(
+            self, slack, send_confirmation):
+        self.be_anonymous()
+        applicant = models.Applicant()
+        applicant.save()
+        sanfrancisco = constants.Counties.SAN_FRANCISCO
+        sf_pubdef = constants.Organizations.SF_PUBDEF
+        answers = mock.fake.sf_county_form_answers()
+        answers['ssn'] = ''
+        self.set_session(
+            form_in_progress=dict(counties=[sanfrancisco]),
+            applicant_id=applicant.id
+            )
+        response = self.client.fill_form(
+            reverse('intake-county_application'),
+            follow=True,
+            **answers
+            )
+        self.assertEqual(
+            response.wsgi_request.path, reverse('intake-confirm'))
+        form = response.context['form']
+        self.assertTrue(form.warnings)
+        self.assertFalse(form.errors)
+        self.assertIn('ssn', form.warnings)
+        slack.assert_not_called()
+        send_confirmation.assert_not_called()
+        submitted_event_count = applicant.events.filter(
+            name=constants.ApplicationEventTypes.APPLICATION_SUBMITTED).count()
+        self.assertEqual(0, submitted_event_count)
 
     @patch(
         'intake.views.models.FormSubmission.send_confirmation_notifications')
@@ -596,6 +609,14 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         self.assertTrue(result.context['form'].email.errors)
         self.assertTrue(result.context['form'].phone_number.errors)
 
+        event = models.ApplicationEvent.objects.filter(
+            applicant_id=self.client.session['applicant_id'],
+            name=constants.ApplicationEventTypes.APPLICATION_ERRORS).first()
+
+        self.assertDictEqual(
+            result.context['form'].get_serialized_errors(),
+            event.data['errors'])
+
         result = self.client.fill_form(
             reverse('intake-county_application'),
             **answers)
@@ -650,6 +671,14 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         slack.assert_not_called()
         send_confirmation.assert_not_called()
 
+        event = models.ApplicationEvent.objects.filter(
+            applicant_id=self.client.session['applicant_id'],
+            name=constants.ApplicationEventTypes.APPLICATION_ERRORS).first()
+
+        self.assertDictEqual(
+            result.context['form'].get_serialized_errors(),
+            event.data['errors'])
+
     @patch(
         'intake.views.models.FormSubmission.send_confirmation_notifications')
     @patch('intake.views.notifications.slack_new_submission.send')
@@ -695,6 +724,14 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         self.assertTrue(result.context['form'].errors)
         slack.assert_not_called()
         send_confirmation.assert_not_called()
+
+        event = models.ApplicationEvent.objects.filter(
+            applicant_id=self.client.session['applicant_id'],
+            name=constants.ApplicationEventTypes.APPLICATION_ERRORS).first()
+
+        self.assertDictEqual(
+            result.context['form'].get_serialized_errors(),
+            event.data['errors'])
 
     def test_can_go_back_and_reset_counties(self):
         self.be_anonymous()
@@ -747,7 +784,6 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
         slack.assert_not_called()
         send_confirmation.assert_not_called()
 
-
     @patch(
         'intake.views.models.FormSubmission.send_confirmation_notifications')
     @patch('intake.views.notifications.slack_new_submission.send')
@@ -774,6 +810,14 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
                          reverse('intake-write_letter'))
 
         self.assertTrue(result.context['form'].errors)
+
+        event = models.ApplicationEvent.objects.filter(
+            applicant_id=self.client.session['applicant_id'],
+            name=constants.ApplicationEventTypes.APPLICATION_ERRORS).first()
+
+        self.assertDictEqual(
+            result.context['form'].get_serialized_errors(),
+            event.data['errors'])
 
     def test_no_existing_data(self):
         self.be_anonymous()

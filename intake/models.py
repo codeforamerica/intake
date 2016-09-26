@@ -432,6 +432,13 @@ class ApplicationEvent(models.Model):
                                   related_name='events')
     data = JSONField()
 
+    class Meta:
+        ordering = ['-time']
+
+    def __str__(self):
+        return "ApplicationEvent(applicant_id={},name={},data={})".format(
+            self.applicant_id, self.name, str(self.data))
+
 
 class ApplicationLogEntry(models.Model):
     OPENED = 1

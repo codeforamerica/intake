@@ -113,13 +113,16 @@ class BindParseValidate(Renderable):
             # set the error on the fields
             self._get_messages_att(message_type).update(messages_dict)
 
-    def _get_messages_list(self, message_type, key=None):
+    def _get_messages_list(self, message_type, key=None, serialized=False):
         """gets warnings/errors, possibly scoped by a key
         """
         key = key or self.context_key
         # pull from fields
         messages_dict = self._get_messages_att(message_type)
-        return messages_dict.get(key, [])
+        messages_list = messages_dict.get(key, [])
+        if serialized:
+            return [str(message) for message in messages_list]
+        return messages_list
 
     def add_error(self, error_message, key=None):
         """Adds an error to this object's error dictionary
@@ -139,19 +142,26 @@ class BindParseValidate(Renderable):
         for message in error_messages:
             self.add_error(message, key)
 
-    def get_errors_list(self, key=None):
+    def get_errors_list(self, key=None, serialized=False):
         """Returns a list of error messages, scoped by `key`.
         If no key is given, it will return messages based on
         this objects `.context_key`
         """
-        return self._get_messages_list('errors', key)
+        return self._get_messages_list(
+            'errors', key=key, serialized=serialized)
 
-    def get_warnings_list(self, key=None):
+    def get_warnings_list(self, key=None, serialized=False):
         """Returns a list of warning messages, scoped by `key`.
         If no key is given, it will return messages based on
         this objects `.context_key`
         """
-        return self._get_messages_list('warnings', key)
+        return self._get_messages_list(
+            'warnings', key=key, serialized=serialized)
+
+    def get_serialized_errors(self):
+        return {
+            key: self.get_errors_list(key=key, serialized=True)
+            for key in self.errors}
 
     def handle_django_validation_error(self, error):
         """Django's ValidationError can include lists of errors,

@@ -29,7 +29,6 @@ import logging
 import csv
 from django.utils import timezone
 from django.utils.translation import ugettext as _
-from django.utils.datastructures import MultiValueDict
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -132,6 +131,9 @@ class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
     def form_invalid(self, form, *args, **kwargs):
         messages.error(self.request, self.ERROR_MESSAGE)
         self.put_errors_in_flash_messages(form)
+        self.log_application_event(
+            constants.ApplicationEventTypes.APPLICATION_ERRORS,
+            errors=form.get_serialized_errors())
         return super().form_invalid(form, *args, **kwargs)
 
     def get_context_data(self, *args, **kwargs):
@@ -139,14 +141,18 @@ class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
         context.update(self.get_county_context())
         return context
 
-    def create_applicant(self):
-        applicant = models.Applicant()
-        applicant.save()
-        self.request.session['applicant_id'] = applicant.id
-        return applicant
+    def get_or_create_applicant_id(self):
+        applicant_id = self.get_applicant_id()
+        if not applicant_id:
+            applicant = models.Applicant()
+            applicant.save()
+            applicant_id = applicant.id
+            self.request.session['applicant_id'] = applicant.id
+        return applicant_id
 
     def log_application_event(self, name, **data):
-        applicant_id = self.get_applicant_id()
+        applicant_id = getattr(self, 'applicant_id', None) \
+            or self.get_applicant_id()
         event = models.ApplicationEvent(
             name=name,
             applicant_id=applicant_id,
@@ -246,6 +252,11 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
             return redirect(reverse('intake-rap_sheet'))
         return super().form_valid(form)
 
+    def log_page_complete(self):
+        return self.log_application_event(
+            constants.ApplicationEventTypes.APPLICATION_PAGE_COMPLETE,
+            page_name=self.__class__.__name__)
+
 
 class Confirm(MultiCountyApplicationBase):
     """Intended to provide a final acceptance of a form,
@@ -269,6 +280,10 @@ class Confirm(MultiCountyApplicationBase):
             context['form'] = form
         return context
 
+    def form_valid(self, form):
+        self.log_page_complete()
+        return super().form_valid(form)
+
 
 class CountyApplication(MultiCountyApplicationBase):
     """The initial application page.
@@ -279,6 +294,7 @@ class CountyApplication(MultiCountyApplicationBase):
     def form_valid(self, form):
         """If no errors, check for warnings, redirect to confirmation if needed
         """
+        self.log_page_complete()
         if form.warnings:
             # save the post data and move them to confirmation step
             self.update_session_data(**form.parsed_data)
@@ -316,6 +332,7 @@ class DeclarationLetterView(MultiCountyApplicationBase):
     def form_valid(self, declaration_letter_form):
         """If valid, redirect to a page to review the letter
         """
+        self.log_page_complete()
         self.update_session_data(
             **declaration_letter_form.cleaned_data)
         return redirect(reverse('intake-review_letter'))
@@ -357,6 +374,7 @@ class DeclarationLetterReviewPage(DeclarationLetterView):
         ).build_form_class()
         form = Form(data)
         form.is_valid()
+        self.log_page_complete()
         self.save_submission_and_send_notifications(form)
         return MultiStepFormViewBase.form_valid(self, form)
 
@@ -370,9 +388,12 @@ class SelectCounty(MultiStepFormViewBase):
     template_name = "forms/county_selection.jinja"
     success_url = reverse_lazy('intake-county_application')
 
+    def post(self, request):
+        self.applicant_id = self.get_or_create_applicant_id()
+        return super().post(request)
+
     def form_valid(self, form):
         self.update_session_data(**form.parsed_data)
-        self.create_applicant()
         self.log_application_event(
             constants.ApplicationEventTypes.APPLICATION_STARTED,
             referrer=self.request.session.get('referrer'),
