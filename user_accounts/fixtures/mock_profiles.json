@@ -3,7 +3,7 @@
   "model": "auth.user",
   "fields": {
     "password": "pbkdf2_sha256$24000$kjrOnsbc7CXa$n18RR7fygcp5Fx4lX4mRy5KRl8mAouteXpa5W5oblRM=",
-    "last_login": "2016-09-15T23:43:33.791Z",
+    "last_login": "2016-09-21T07:08:21.661Z",
     "is_superuser": true,
     "username": "cfa_user",
     "first_name": "Fake",
@@ -121,7 +121,7 @@
       "a_pubdef_user"
     ],
     "organization": [
-      "Alameda Public Defender"
+      "Alameda County Public Defender's Office"
     ],
     "should_get_notifications": true
   }

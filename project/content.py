@@ -70,7 +70,7 @@ class constants:
     footer_cc = str(
         "Contra Costa Public Defender")
     footer_alameda = str(
-        "Alameda Public Defender")
+        "Alameda County Public Defender's Office")
     footer_ebclc = str(
         "East Bay Community Law Center")
     back_home_btn = "Go back to main page"
