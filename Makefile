@@ -46,7 +46,6 @@ deploy.demo:
 
 deploy.prod:
 	git push prod master
-	heroku run --app cmr-prod python manage.py migrate
 	heroku run --app cmr-prod python manage.py loaddata organizations
 
 
