@@ -4635,6 +4635,9 @@ body.admin .top_bar {
 .rap_instructions_details li {
   list-style: circle;
 }
+.rap_contact_info {
+  font-weight: 500;
+}
 li.rap_detail {
   margin-bottom: 10px;
 }
