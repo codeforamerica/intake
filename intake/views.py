@@ -29,7 +29,6 @@ import logging
 import csv
 from django.utils import timezone
 from django.utils.translation import ugettext as _
-from django.utils.datastructures import MultiValueDict
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -142,14 +141,18 @@ class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
         context.update(self.get_county_context())
         return context
 
-    def create_applicant(self):
-        applicant = models.Applicant()
-        applicant.save()
-        self.request.session['applicant_id'] = applicant.id
-        return applicant
+    def get_or_create_applicant_id(self):
+        applicant_id = self.get_applicant_id()
+        if not applicant_id:
+            applicant = models.Applicant()
+            applicant.save()
+            applicant_id = applicant.id
+            self.request.session['applicant_id'] = applicant.id
+        return applicant_id
 
     def log_application_event(self, name, **data):
-        applicant_id = self.get_applicant_id()
+        applicant_id = getattr(self, 'applicant_id', None) \
+            or self.get_applicant_id()
         event = models.ApplicationEvent(
             name=name,
             applicant_id=applicant_id,
@@ -385,9 +388,12 @@ class SelectCounty(MultiStepFormViewBase):
     template_name = "forms/county_selection.jinja"
     success_url = reverse_lazy('intake-county_application')
 
+    def post(self, request):
+        self.applicant_id = self.get_or_create_applicant_id()
+        return super().post(request)
+
     def form_valid(self, form):
         self.update_session_data(**form.parsed_data)
-        self.create_applicant()
         self.log_application_event(
             constants.ApplicationEventTypes.APPLICATION_STARTED,
             referrer=self.request.session.get('referrer'),
