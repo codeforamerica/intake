@@ -16,6 +16,7 @@ sendgrid-django~=2.0
 django-jinja~=2.1
 django-debug-toolbar==1.4
 djangorestframework~=3.3
+newrelic==2.70.0.51
 # for debugging in production
 ipdb~=0.8
 ipython~=5.0
