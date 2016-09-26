@@ -88,7 +88,6 @@ class TestWorkflows(base.ScreenSequenceTestCase):
             [
                 S.get("splash page", '/'),
                 S.get("application form", '/apply/'),
-                S.get("thanks page", '/thanks/'),
                 S.get("privacy policy", '/privacy/'),
                 S.get("stats", '/stats/'),
                 S.get("partners", '/partners/'),

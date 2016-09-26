@@ -388,11 +388,16 @@ class Thanks(TemplateView, GetFormSessionDataMixin):
     """
     template_name = "thanks.jinja"
 
+    def get(self, request):
+        self.applicant_id = self.get_applicant_id()
+        if not self.applicant_id:
+            return redirect(reverse('intake-home'))
+        return super().get(request)
+
     def get_context_data(self, *args, **kwargs):
-        applicant_id = self.get_applicant_id()
         organizations = Organization.objects.prefetch_related(
                 'addresses', 'county').filter(
-                submissions__applicant_id=applicant_id)
+                submissions__applicant_id=self.applicant_id)
         context = dict(
             organizations=organizations
             )

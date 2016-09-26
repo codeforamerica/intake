@@ -1308,3 +1308,28 @@ class TestReferToAnotherOrgView(IntakeDataTestCase):
         self.assertContains(bundle_page, "You successfully transferred")
         self.assertEqual(len(list(slack_action.mock_calls)), 1)
         self.assertEqual(len(list(slack_viewed.mock_calls)), 1)
+
+
+class TestThanks(IntakeDataTestCase):
+
+    fixtures = [
+        'organizations',
+        'mock_profiles',
+        'mock_2_submissions_to_cc_pubdef']
+
+    def test_anonymous_with_no_application_redirected_to_home(self):
+        self.be_anonymous()
+        response = self.client.get(reverse('intake-thanks'))
+        self.assertRedirects(
+            response, reverse('intake-home'), fetch_redirect_response=False)
+
+    def test_existing_application_has_org_data(self):
+        self.be_anonymous()
+        app = models.Applicant()
+        app.save()
+        sub = models.FormSubmission.objects.all().first()
+        sub.applicant_id = app.id
+        self.set_session(applicant_id=app.id)
+        response = self.client.get(reverse('intake-thanks'))
+        for org in sub.organizations.all():
+            self.assertContains(response, html_utils.escape(org.name))
