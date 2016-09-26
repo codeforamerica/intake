@@ -65,7 +65,7 @@ linkify_links = {
     "Privacy Policy": reverse_lazy("intake-privacy"),
     "San Francisco Public Defender": "/partners/sf_pubdef/",
     "Contra Costa Public Defender": "/partners/cc_pubdef/",
-    "Alameda Public Defender": "/partners/a_pubdef/",
+    "Alameda County Public Defender's Office": "/partners/a_pubdef/",
     "East Bay Community Law Center": "/partners/ebclc/",
     "clearmyrecord@codeforamerica.org": "mailto:clearmyrecord@codeforamerica.org",
     "(415) 301-6005": "tel:14153016005"

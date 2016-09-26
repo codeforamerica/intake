@@ -47,7 +47,7 @@ ORG_NAMES = {
     Organizations.CFA: _("Code for America"),
     Organizations.SF_PUBDEF: _("San Francisco Public Defender"),
     Organizations.COCO_PUBDEF: _("Contra Costa Public Defender"),
-    Organizations.ALAMEDA_PUBDEF: _("Alameda Public Defender"),
+    Organizations.ALAMEDA_PUBDEF: _("Alameda County Public Defender's Office"),
     Organizations.EBCLC: _("East Bay Community Law Center"),
 }
 

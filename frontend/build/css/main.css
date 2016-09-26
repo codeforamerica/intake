@@ -1022,7 +1022,6 @@ a:focus {
   text-decoration: underline;
 }
 a:focus {
-  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -2395,7 +2394,6 @@ select[size] {
 input[type="file"]:focus,
 input[type="radio"]:focus,
 input[type="checkbox"]:focus {
-  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -2886,7 +2884,6 @@ select[multiple].input-lg {
 .btn.focus,
 .btn:active.focus,
 .btn.active.focus {
-  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -3950,6 +3947,9 @@ button[type="submit"].action-back .badge {
 .phone_number input[name="phone_number"] {
   width: 9em;
 }
+.alternate_phone_number input[name="alternate_phone_number"] {
+  width: 9em;
+}
 .monthly_income input[type="text"],
 .monthly_expenses input[type="text"] {
   width: 7em;
@@ -4051,7 +4051,6 @@ li.action_menu-item > a.active:focus,
 li.action_menu-item > a.focus,
 li.action_menu-item > a:active.focus,
 li.action_menu-item > a.active.focus {
-  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -4196,6 +4195,10 @@ h3.data_display-section_header {
 }
 .data_display-row.name .data_display-value {
   font-size: 1.5em;
+}
+pre.address {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-weight: 500;
 }
 .data_display.address pre {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
@@ -4631,6 +4634,9 @@ body.admin .top_bar {
 }
 .rap_instructions_details li {
   list-style: circle;
+}
+.rap_contact_info {
+  font-weight: 500;
 }
 li.rap_detail {
   margin-bottom: 10px;
