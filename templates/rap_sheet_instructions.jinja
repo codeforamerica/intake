@@ -49,17 +49,18 @@
       "your Clear My Record application.") }}
   </li>
   <li>
-    {{ _("Complete your Clear My Record application by dropping off your RAP "
-      "sheet or mailing your RAP sheet to this address:") }}
+    {{ _("Complete your Clear My Record application by emailing, faxing, mailing, or dropping off "
+      "your RAP sheet here:") }}
       <pre class="address">
       {%- if rap_sheet_receiving_address -%}
       {{- rap_sheet_receiving_address -}}
       {%- else -%}
 East Bay Community Law Center
-2921 Adeline St
-Berkeley CA, 94703
+Clean Slate
+3130 Shattuck Ave
+Berkeley CA, 94705
       {%- endif -%}
-      </pre>
+      </pre>  
   </li>
   <li>
     {{ _("Once East Bay Community Law Center has received your RAP sheet, you "
