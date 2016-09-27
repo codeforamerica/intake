@@ -582,7 +582,7 @@ class Stats(TemplateView):
                 applicants.filter(form_submissions__organizations=org)
             json = JSONRenderer().render(
                 serializers.ApplicantSerializer(applicants, many=True).data)
-            context['applications_json'] = mark_safe(json)
+            context['applications_json'] = mark_safe(json.decode('utf-8'))
         return context
 
 

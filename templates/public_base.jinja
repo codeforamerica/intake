@@ -39,6 +39,9 @@
   {% include "includes/footer.jinja" %}
 {% endblock body %}
 {% block scripts %}
+  {% block jsons %}{% endblock jsons %}
+  
   {% include "includes/google_analytics.jinja" %}
   {% include "includes/intercom.jinja" %}
+  <script src="{{ static('js/main.js')}}"></script>
 {% endblock scripts %}

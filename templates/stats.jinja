@@ -12,3 +12,8 @@ Current Stats for Clear My Record
   <h3>{{ county_total.count }} applications for {{ county_total.county_name }} County</h3>
   {%- endfor %}
 {% endblock column_content %}
+{% block jsons %}
+    <script type="text/json" name="applications_json">
+        {{ applications_json }}
+    </script>
+{% endblock jsons %}
