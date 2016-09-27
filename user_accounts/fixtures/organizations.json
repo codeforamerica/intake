@@ -1,0 +1,105 @@
+[
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Code for America",
+    "slug": "cfa",
+    "county": null,
+    "website": "",
+    "blurb": "",
+    "is_receiving_agency": false,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": false,
+    "show_pdf_only": false,
+    "short_confirmation_message": "",
+    "long_confirmation_message": "",
+    "address": "",
+    "phone_number": "",
+    "email": ""
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "San Francisco Public Defender",
+    "slug": "sf_pubdef",
+    "county": [
+      "sanfrancisco"
+    ],
+    "website": "http://sfpublicdefender.org/services/clean-slate/",
+    "blurb": "The San Francisco Public Defender's Clean Slate program helps people with arrests or convictions in San Francisco.",
+    "is_receiving_agency": true,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": false,
+    "show_pdf_only": true,
+    "short_confirmation_message": "",
+    "long_confirmation_message": "You will get a letter in the mail from the San Francisco Public Defender in 2-4 weeks.",
+    "address": "San Francisco Public Defender\r\n555 7th Street, 2nd Floor\r\nSan Francisco, CA\r\n94103",
+    "phone_number": "4155539337",
+    "email": ""
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Contra Costa Public Defender",
+    "slug": "cc_pubdef",
+    "county": [
+      "contracosta"
+    ],
+    "website": "http://www.co.contra-costa.ca.us/1555/Public-Defender",
+    "blurb": "The Contra Costa Public Defender's Clean Slate Program helps people with arrests or convictions in Conta Costa County.",
+    "is_receiving_agency": true,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": false,
+    "show_pdf_only": false,
+    "short_confirmation_message": "",
+    "long_confirmation_message": "The Contra Costa Public Defender will follow up with you if they need any other information.",
+    "address": "Contra Costa Public Defender\r\n800 Ferry Street\r\nMartinez, CA\r\n94553",
+    "phone_number": "9253358000",
+    "email": "cleanslate@pd.cccounty.us"
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "East Bay Community Law Center",
+    "slug": "ebclc",
+    "county": [
+      "alameda"
+    ],
+    "website": "http://ebclc.org/need-services/clean-slate-services/",
+    "blurb": "The East Bay Community Law Center offers legal services to low-income communities in the East Bay. EBCLC's Clean Slate Program helps people with arrests or convictions in Alameda County.",
+    "is_receiving_agency": true,
+    "requires_rap_sheet": true,
+    "requires_declaration_letter": false,
+    "show_pdf_only": false,
+    "short_confirmation_message": "Next step in Alameda is to get your CA RAP sheet and send it to EBCLC. More info http://c4a.me/rap",
+    "long_confirmation_message": "Your application for Alameda is not yet compete. If you do not have your California criminal record (RAP sheet), please follow these instructions to request it.\r\nhttp://c4a.me/rap",
+    "address": "East Bay Community Law Center\r\n2921 Adeline St\r\nBerkeley, CA\r\n94703",
+    "phone_number": "5105484064",
+    "email": "crimrecordshelp@ebclc.org"
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Alameda County Public Defender's Office",
+    "slug": "a_pubdef",
+    "county": [
+      "alameda"
+    ],
+    "website": "http://www.acgov.org/defender/services/cleanslate.htm",
+    "blurb": "The Clean Slate program of the Alameda County Public Defender's Office helps people with arrests or convictions in Alameda County.",
+    "is_receiving_agency": true,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": true,
+    "show_pdf_only": false,
+    "short_confirmation_message": "",
+    "long_confirmation_message": "The Alameda Public Defender will follow up with you if they need any other information.",
+    "address": "",
+    "phone_number": "5102726600",
+    "email": "cleanslate@acgov.org"
+  }
+}
+]

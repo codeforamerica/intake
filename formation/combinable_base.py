@@ -1,15 +1,15 @@
-import copy
+from formation.form_base import Form
 from formation.fields import get_field_index
 
 
 class CombinableFormSpec:
 
     union_attributes = [
-            'fields',
-            'required_fields',
-            'recommended_fields',
-            'validators'
-        ]
+        'fields',
+        'required_fields',
+        'recommended_fields',
+        'validators'
+    ]
     difference_attributes = [
         'optional_fields'
     ]
@@ -22,9 +22,9 @@ class CombinableFormSpec:
                 setattr(self, attribute_key, set(init_value))
 
     def get_att_sets(self, other, att):
-            self_set = getattr(self, att, set())
-            other_set = getattr(other, att, set())
-            return set(self_set), set(other_set)
+        self_set = getattr(self, att, set())
+        other_set = getattr(other, att, set())
+        return set(self_set), set(other_set)
 
     def __or__(self, other):
         """Combines this spec with another spec
@@ -65,13 +65,13 @@ class CombinableFormSpec:
         class_attributes_dictionary = self.build_form_class_attributes()
         class_attributes_dictionary.update(extra_class_attributes or {})
         if not ParentClass:
-            ParentClass = object
+            ParentClass = Form
         parent_classes_tuple = (ParentClass,)
         return type(
             'CombinedForm',
             parent_classes_tuple,
             class_attributes_dictionary
-            )
+        )
 
 
 class FormSpecSelector:
@@ -82,7 +82,7 @@ class FormSpecSelector:
         self.form_specs = form_specs
         self.form_parent_class = form_parent_class
 
-    def get_combined_form_class(self, **criteria):
+    def get_combined_form_spec(self, **criteria):
         combined_spec = None
         specs = filter(
             lambda spec: spec.is_correct_spec(**criteria),
@@ -92,4 +92,8 @@ class FormSpecSelector:
                 combined_spec = spec
             else:
                 combined_spec |= spec
+        return combined_spec
+
+    def get_combined_form_class(self, **criteria):
+        combined_spec = self.get_combined_form_spec(**criteria)
         return combined_spec.build_form_class(criteria, self.form_parent_class)

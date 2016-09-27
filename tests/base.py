@@ -5,16 +5,17 @@ import os
 import time
 from django.core import mail
 from django.conf import settings
-from django.test import LiveServerTestCase, override_settings
+from django.test import override_settings
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 
 # device sizes
-SMALL_MOBILE  = {'width':  320, 'height':  570}
-COMMON_MOBILE = {'width':  360, 'height':  640}
-BIG_MOBILE =    {'width':  720, 'height': 1280}
-SMALL_DESKTOP = {'width': 1280, 'height':  800}
-LARGE_DESKTOP = {'width': 1440, 'height':  900}
+SMALL_MOBILE = {'width': 320, 'height': 570}
+COMMON_MOBILE = {'width': 360, 'height': 640}
+BIG_MOBILE = {'width': 720, 'height': 1280}
+SMALL_DESKTOP = {'width': 1280, 'height': 800}
+LARGE_DESKTOP = {'width': 1440, 'height': 900}
+
 
 class ElementDoesNotExistError(Exception):
     pass
@@ -22,15 +23,16 @@ class ElementDoesNotExistError(Exception):
 
 # needs the basic static file storage to properly serve files
 @override_settings(
-            STATICFILES_STORAGE='django.contrib.staticfiles.storage.StaticFilesStorage',
-            INSIDE_A_TEST=True)
+    STATICFILES_STORAGE=str(
+        'django.contrib.staticfiles.storage.StaticFilesStorage'),
+    INSIDE_A_TEST=True)
 class FunctionalTestCase(StaticLiveServerTestCase):
     device = None
     dimensions = COMMON_MOBILE
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if settings.DEBUG == False:
+        if not settings.DEBUG:
             settings.DEBUG = True
 
     @classmethod
@@ -39,11 +41,9 @@ class FunctionalTestCase(StaticLiveServerTestCase):
         from selenium import webdriver
         cls.driver = webdriver
         cls.browser = webdriver.Firefox()
-        cls.browser.set_window_size(cls.dimensions['width'], cls.dimensions['height'])
-
-    def setUp(self, *args, **kwargs):
-        super().setUp(*args, **kwargs)
-        self.browser.delete_all_cookies()
+        cls.browser.set_window_size(
+            cls.dimensions['width'],
+            cls.dimensions['height'])
 
     def build_url(self, url):
         return self.host + url
@@ -59,7 +59,10 @@ class FunctionalTestCase(StaticLiveServerTestCase):
 
     def setUp(self, *args, **kwargs):
         super().setUp(*args, **kwargs)
-        self.host = os.environ.get('ACCEPTANCE_TEST_HOST', self.live_server_url)
+        self.host = os.environ.get(
+            'ACCEPTANCE_TEST_HOST',
+            self.live_server_url)
+        self.browser.delete_all_cookies()
 
     def click_on(self, text):
         self.browser.find_element_by_link_text(text).click()
@@ -76,9 +79,11 @@ class FunctionalTestCase(StaticLiveServerTestCase):
     def handle_checkbox_input(self, inputs, value):
         if not isinstance(value, str) and hasattr(value, "__iter__"):
             # there are multiple values
-            should_click = lambda x: x in value
+            def should_click(x):
+                return x in value
         else:
-            should_click = lambda x: x == value
+            def should_click(x):
+                return x == value
         for element in inputs:
             if should_click(element.get_attribute('value')):
                 element.click()
@@ -91,10 +96,12 @@ class FunctionalTestCase(StaticLiveServerTestCase):
         input_type = elements[0].get_attribute('type')
         if input_type == 'checkbox':
             self.handle_checkbox_input(elements, value)
-        elif input_type == 'radio':
+        elif input_type in ['radio', 'submit']:
             for element in elements:
                 if element.get_attribute('value') == value:
                     element.click()
+            if input_type == 'submit':
+                return True
         elif elements[0].tag_name == 'select':
             select = self.driver.support.ui.Select(elements[0])
             select.select_by_value(value)
@@ -104,21 +111,25 @@ class FunctionalTestCase(StaticLiveServerTestCase):
 
     def fill_form(self, **answers):
         for name, value in answers.items():
-            self.handle_input(name, value)
-        form = self.browser.find_element_by_tag_name('form')
-        form.submit()
+            hit_submit = self.handle_input(name, value)
+        if not hit_submit:
+            form = self.browser.find_element_by_tag_name('form')
+            form.submit()
 
     def wait(self, seconds):
         time.sleep(seconds)
 
-# relevant: http://selenium-python.readthedocs.io/faq.html#how-to-scroll-down-to-the-bottom-of-a-page
+# relevant:
+# http://selenium-python.readthedocs.io/faq.html#how-to-scroll-down-to-the-bottom-of-a-page
+
+
 class ScreenSequenceTestCase(FunctionalTestCase):
 
     def handle_callable_args(self, args_list, kwargs_dict):
         new_args = []
         for arg in args_list:
             if hasattr(arg, '__call__'):
-               new_args.append(arg())
+                new_args.append(arg())
             else:
                 new_args.append(arg)
         new_kwargs = {}
@@ -140,31 +151,35 @@ class ScreenSequenceTestCase(FunctionalTestCase):
         filepath = os.path.join('tests/screenshots', filepath)
         email = mail.outbox[-1]
         contents = '\n'.join([
-                    "EMAIL to " + ', '.join(email.to),
-                    "\n----------------------------\n",
-                    email.subject,
-                    "\n----------------------------\n",
-                    email.body
-                ])
+            "EMAIL to " + ', '.join(email.to),
+            "\n----------------------------\n",
+            email.subject,
+            "\n----------------------------\n",
+            email.body
+        ])
         with open(filepath, 'w') as outfile:
             outfile.write(contents)
 
-    def run_sequence(self, prefix, sequence, size=COMMON_MOBILE, full_height=True):
+    def run_sequence(self, prefix, sequence,
+                     size=COMMON_MOBILE, full_height=True):
         self.set_size(size)
         for i, step in enumerate(sequence):
             step_name, att_name, args, kwargs = step
             if att_name == 'print_email':
-                self.print_email(self.build_filepath(prefix, i, step_name, ext='.txt'))
+                self.print_email(
+                    self.build_filepath(
+                        prefix, i, step_name, ext='.txt'))
                 continue
             method = getattr(self, att_name)
             args, kwargs = self.handle_callable_args(args, kwargs)
             method(*args, **kwargs)
             if full_height:
                 body = self.browser.find_element_by_tag_name('body')
-                height = max(size['height'], int(body.get_attribute('scrollHeight')))
+                height = max(
+                    size['height'], int(
+                        body.get_attribute('scrollHeight')))
                 self.set_size(dict(width=size['width'], height=height))
             self.screenshot(self.build_filepath(prefix, i, step_name))
-
 
 
 class TimeProfileTestMixin:
@@ -208,7 +223,7 @@ class DEVICES:
     HTC_Sensation_Evo_3D = "HTC Sensation, Evo 3D"
     LG_Optimus_2X_Optimus_3D_Optimus_Black = "LG Optimus 2X, Optimus 3D, Optimus Black"
     LG_Optimus_G = "LG Optimus G"
-    LG_Optimus_LTE_Optimus_4X_HD = "LG Optimus LTE, Optimus 4X HD" 
+    LG_Optimus_LTE_Optimus_4X_HD = "LG Optimus LTE, Optimus 4X HD"
     LG_Optimus_One = "LG Optimus One"
     Motorola_Defy_Droid_Droid_X_Milestone = "Motorola Defy, Droid, Droid X, Milestone"
     Motorola_Droid_3_Droid_4_Droid_Razr_Atrix_4G_Atrix_2 = "Motorola Droid 3, Droid 4, Droid Razr, Atrix 4G, Atrix 2"
@@ -237,7 +252,3 @@ class DEVICES:
     Samsung_Galaxy_Tab_7_7_8_9_10_1 = "Samsung Galaxy Tab 7.7, 8.9, 10.1"
     Samsung_Galaxy_Tab = "Samsung Galaxy Tab"
     Notebook_with_touch = "Notebook with touch"
-
-
-
-

@@ -12,12 +12,12 @@ class ValidChoiceValidator:
     reporting the invalid input.
     """
 
-    not_found_error = _("'{}' is not a valid choice.")
+    not_found_error = _("{} is not a valid choice.")
 
     def set_context(self, field):
         if not hasattr(field, 'choices'):
             raise exceptions.NoChoicesGivenError(str(
-        "`{}` doesn't have a `choices` attribute.".format(
+                "`{}` doesn't have a `choices` attribute.".format(
                     field
                 )))
         self.field = field
@@ -36,14 +36,14 @@ class ValidChoiceValidator:
 class MultipleValidChoiceValidator(ValidChoiceValidator):
     """Checks that each item in the input data is
     a valid choice. Calls `.add_error()` on the context
-    with a message reporting which items were invalid. 
+    with a message reporting which items were invalid.
     """
 
     multiple_not_found_error = _(
         "{} are not valid choices.")
 
     def format_error_message(self, missing_values):
-        things = ["'{}'".format(val) for val in missing_values]
+        things = ["{}".format(val) for val in missing_values]
         if len(things) == 1:
             fragment = things[0]
             template = self.not_found_error
@@ -68,7 +68,8 @@ class GavePreferredContactMethods:
         - receives the parent form through the `set_context(form)` method
         - if it finds errors, it should raise a ValidationError to return them
     """
-    message_template = _("You said you preferred to be contacted through {medium}, but you didn't enter {datum}.")
+    message_template = _(
+        "You said you preferred to be contacted through {medium}, but you didn't enter {datum}.")
 
     def message(self, preference):
         attributes, medium, datum = CONTACT_PREFERENCE_CHECKS[preference]

@@ -14,10 +14,24 @@ h2 {
 }
 
 .caveat {
-  
+
 }
 h3 { font-size:22px; }
 h3.subheadline { margin-top:0; margin-bottom:40px; }
+
+h2.header-breadcrumb {
+  a { color: inherit; }
+  margin: 0;
+  margin-top: 1em;
+  font-weight: 400;
+}
+h2.header-breadcrumb + h1 {
+  margin-top: 0;
+}
+.breadcrumb-sep {
+  color: lighten(@brand-note, 20%);
+  font-size: .8em;
+}
 
 h2.time_expectation{
   font-weight: 700;
@@ -31,6 +45,10 @@ h4 {
 
 .new_section{
   padding-top:24px;
+}
+
+.content{
+  padding-bottom:60px;
 }
 
 .container {
@@ -75,6 +93,7 @@ h4 {
   color: @brand-note;
   font-weight: bold;
 }
+
 
 
 // for all above the fold sections
@@ -223,6 +242,10 @@ h2.time_expectation{
   text-align: center;
 }
 
+.field-form_note li{
+  margin-bottom:20px;
+}
+
 
 /**Thanks and Privacy Page**/
 
@@ -351,6 +374,9 @@ body.admin header .btn {
     background-color: #fff;
   }
 }
+body.admin h1 {
+  font-size: 1.8em;
+}
 
 table.applications_list .btn {
   background: inherit;
@@ -407,6 +433,37 @@ body.admin .top_bar {
   margin-right: .5em;
 }
 
+/***Rap Sheet Instructions***/
+
+.rap_sheet_instructions li{
+  margin-bottom:25px;
+}
+
+.rap_instructions_details{
+  font-size: 16px;
+  margin-top:10px;
+}
+
+.rap_instructions_details li{
+  list-style: circle;
+}
+
+.rap_contact_info{
+  font-weight: 500;
+}
+
+li.rap_detail{
+  margin-bottom: 10px;
+}
+
+
+/***Media Queries***/
+
+@media (max-width: @screen-xs-max){
+  a.btn.btn-primary.btn-lg.call_to_action_button{
+    margin-top:15px;
+  }
+}
 
 @media (min-width: @screen-sm-min) {
 
@@ -436,7 +493,7 @@ body.admin .top_bar {
     background-size: cover;
     min-height: 30em;
   }
-
+  .counties .option-display_text { width: 17em; }
 }
 
 @media (min-width: @screen-md-min) {

@@ -27,7 +27,6 @@ class TestValidChoiceValidator(PatchTranslationTestCase):
         pass
 
 
-
 class TestMultipleValidChoiceValidator(PatchTranslationTestCase):
 
     def test_creates_expected_error_message(self):

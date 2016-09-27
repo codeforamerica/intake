@@ -1,0 +1,26 @@
+{% extends "public_base_single_column.jinja" %}
+
+
+{%- block header_title -%}
+{{ _("Our Partners") }}
+{%- endblock header_title -%}
+
+{%- block section_class %}partners{% endblock section_class -%}
+
+{% block column_content %}
+  {%- for county in counties %}
+  <h2>{{ county.name }} County</h2>
+  <ul class="partner_list {{ county.slug }}">
+    {%- for organization in county.organizations.all() %}
+    {%- if organization.is_receiving_agency %}
+    <li class="partner_list-organization">
+      <a href="{{ organization.get_absolute_url() }}" class="organization-link">
+        {{ organization.name }}
+      </a>
+    </li>
+    {%- endif %}
+    {%- endfor %}
+  </ul>
+
+  {%- endfor %}
+{% endblock column_content %}

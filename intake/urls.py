@@ -6,21 +6,33 @@ urlpatterns = [
     # public views
     url(r'^$', views.home, name='intake-home'),
     url(r'^apply/$', views.select_county, name='intake-apply'),
-    url(r'^application/$', views.county_application, name='intake-county_application'),
+    url(r'^application/$',
+        views.county_application, name='intake-county_application'),
+    url(r'^application/letter/$',
+        views.write_letter, name='intake-write_letter'),
+    url(r'^application/letter/review/$',
+        views.review_letter, name='intake-review_letter'),
     url(r'^confirm/$', views.confirm, name='intake-confirm'),
     url(r'^thanks/$', views.thanks, name='intake-thanks'),
+    url(r'^getting_your_rap/$',
+        views.rap_sheet_info, name='intake-rap_sheet'),
+    url(r'^partners/$', views.partner_list, name='intake-partner_list'),
+    url(r'^partners/(?P<organization_slug>[\w-]+)/$',
+        views.partner_detail, name='intake-partner_detail'),
     url(r'^stats/$', views.stats, name='intake-stats'),
+    url(r'^stats/daily_totals/$',
+        views.daily_totals, name='intake-daily_totals'),
     url(r'^privacy/$', views.privacy, name='intake-privacy'),
 
     # protected views
-    url(r'^application/(?P<submission_id>[0-9]+)/$', 
+    url(r'^application/(?P<submission_id>[0-9]+)/$',
         login_required(views.app_detail),
         name='intake-app_detail'),
 
-    url(r'^application/(?P<submission_id>[0-9]+)/pdf/$', 
+    url(r'^application/(?P<submission_id>[0-9]+)/pdf/$',
         login_required(views.filled_pdf),
         name='intake-filled_pdf'),
-    
+
     url(r'^applications/$',
         login_required(views.app_index),
         name='intake-app_index'),
@@ -29,6 +41,14 @@ urlpatterns = [
         login_required(views.app_bundle),
         name='intake-app_bundle'),
 
+    url(r'^applications/bundle/(?P<bundle_id>[0-9]+)/$',
+        login_required(views.app_bundle_detail),
+        name='intake-app_bundle_detail'),
+
+    url(r'^applications/bundle/(?P<bundle_id>[0-9]+)/pdf/$',
+        login_required(views.app_bundle_detail_pdf),
+        name='intake-app_bundle_detail_pdf'),
+
     url(r'^applications/pdfs/$',
         login_required(views.pdf_bundle),
         name='intake-pdf_bundle'),
@@ -36,17 +56,23 @@ urlpatterns = [
     url(r'^application/(?P<submission_id>[0-9]+)/delete/$',
         login_required(views.delete_page),
         name='intake-delete_page'),
-    
+
     url(r'^applications/mark/processed/$',
         login_required(views.mark_processed),
         name='intake-mark_processed'),
+
     url(r'^applications/excel/$',
         login_required(views.excel_download),
         name='intake-excel_download'),
+
+    url(r'^applications/mark/transferred/$',
+        login_required(views.mark_transferred_to_other_org),
+        name='intake-mark_transferred_to_other_org'),
+
 ]
 
 redirects = [
-    url(r'^sanfrancisco/$', 
+    url(r'^sanfrancisco/$',
         views.PermanentRedirectView.as_view(
             redirect_view_name='intake-apply')),
     url(r'^sanfrancisco/applications/$',

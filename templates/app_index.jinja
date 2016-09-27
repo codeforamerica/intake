@@ -4,7 +4,11 @@
 
 <div class="container">
   <div class="row">
-    <h1>All Clean Slate Applications</h1>
+    {%- if request.user.is_staff %}
+    <h1>All Applications</h1>
+    {%- else %}
+    <h1>All Applications to {{ request.user.profile.organization.name }}</h1>
+    {%- endif %}
   </div>
   <div class="row">
     <table class="table applications_list">
@@ -12,8 +16,10 @@
       <th>Date</th>
       <th>Last Name</th>
       <th>First Name</th>
+      {%- if show_pdf %}
       <th>Intake PDF</th>
-      <th>Opened by SF Pub Defender</th>
+      {%- endif %}
+      <th>Last Opened</th>
       <th>Added to DB</th>
       <th>Delete?</th>
     </tr>
@@ -26,6 +32,7 @@
       </td>
       <td>{{ namify(app.answers.get("last_name", "")) }}</td>
       <td>{{ namify(app.answers.get("first_name", "")) }}</td>
+      {%- if show_pdf %}
       <td>
         <a href="{{ 
           url('intake-filled_pdf',
@@ -35,6 +42,7 @@
             PDF
             </a>
       </td> 
+      {%- endif %}
       <td>
       {% if app.last_opened_by_agency() %}
       {{ humanize.naturaltime(app.last_opened_by_agency()) }}

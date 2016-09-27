@@ -3,13 +3,21 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
+from intake.constants import Organizations, ORG_NAMES
+
+SFPUB_DEF_NAME = ORG_NAMES[Organizations.SF_PUBDEF]
+ORG_BASED_EVENT_TYPES = [
+    1,  # OPENED
+    2,  # REFERRED
+    3,  # PROCESSED
+]
 
 
 def add_sf_to_pdfs_and_logs(apps, schema_editor):
     db_alias = schema_editor.connection.alias
     Organization = apps.get_model('user_accounts', 'Organization')
     san_francisco_pub_def = Organization.objects.using(db_alias).filter(
-        name="San Francisco Public Defender").first()
+        name=SFPUB_DEF_NAME).first()
     FillablePDF = apps.get_model('intake', 'FillablePDF')
     pdfs = FillablePDF.objects.using(db_alias).all()
     for pdf in pdfs:
@@ -18,7 +26,7 @@ def add_sf_to_pdfs_and_logs(apps, schema_editor):
             pdf.save()
     ApplicationLogEntry = apps.get_model('intake', 'ApplicationLogEntry')
     logs = ApplicationLogEntry.objects.using(db_alias).filter(
-        event_type__in=[1, 2, 3])
+        event_type__in=ORG_BASED_EVENT_TYPES)
     for log in logs:
         if not log.organization:
             log.organization = san_francisco_pub_def
@@ -28,8 +36,10 @@ def add_sf_to_pdfs_and_logs(apps, schema_editor):
 def remove_sf_from_pdfs_and_logs(apps, schema_editor):
     db_alias = schema_editor.connection.alias
     Organization = apps.get_model('user_accounts', 'Organization')
+    # error on line below during reverse migrations
+    # says column user_accounts_organization.slug does not exist
     san_francisco_pub_def = Organization.objects.using(db_alias).filter(
-        name="San Francisco Public Defender").first()
+        name=SFPUB_DEF_NAME).first()
     FillablePDF = apps.get_model('intake', 'FillablePDF')
     pdfs = FillablePDF.objects.using(db_alias).all()
     for pdf in pdfs:
@@ -38,7 +48,7 @@ def remove_sf_from_pdfs_and_logs(apps, schema_editor):
             pdf.save()
     ApplicationLogEntry = apps.get_model('intake', 'ApplicationLogEntry')
     logs = ApplicationLogEntry.objects.using(db_alias).filter(
-        event_type__in=[1, 2, 3])
+        event_type__in=ORG_BASED_EVENT_TYPES)
     for log in logs:
         if log.organization == san_francisco_pub_def:
             log.organization = None
@@ -49,7 +59,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('intake', '0017_fillablepdf_organization'),
-        ('user_accounts', '0007_add_profiles_related_name_to_organization'),
+        ('user_accounts', '0009_organization_slug'),
     ]
 
     operations = [

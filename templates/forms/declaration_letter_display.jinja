@@ -1,0 +1,31 @@
+
+  <div class="data_display-section declaration_letter">
+    <p class="data_display-value">
+      {{ form.date_received.get_current_value().strftime("%B %-d, %Y") }}
+    </p>
+    <p class="data_display-value">
+      To Whom It May Concern,
+    </p>
+    <p class="data_display-value">
+      {{ form.declaration_letter_intro.get_display_value() }}
+    </p>
+    <p class="data_display-value">
+      {{ form.declaration_letter_life_changes.get_display_value()|safe }}
+    </p>
+    <p class="data_display-value">
+      {{ form.declaration_letter_activities.get_display_value()|safe }}
+    </p>
+    <p class="data_display-value">
+      {{ form.declaration_letter_goals.get_display_value()|safe }}
+    </p>
+    <p class="data_display-value">
+      {{ form.declaration_letter_why.get_display_value()|safe }}
+    </p>
+    <p class="data_display-value">
+      Sincerely,
+    </p>
+    <p class="data_display-value">
+      {{ form.first_name.get_display_value() }}
+      {{ form.last_name.get_display_value() }}
+    </p>
+  </div>

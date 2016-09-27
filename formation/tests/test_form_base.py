@@ -1,12 +1,18 @@
-from unittest import TestCase
+import inspect
 from formation.tests.utils import PatchTranslationTestCase, django_only
-from unittest.mock import Mock, patch
 from formation.tests import mock
 
 from formation.forms import county_form_selector
+from formation import fields as F
 from formation.field_base import Field
+from formation.form_base import Form
 from intake.constants import Counties
 from formation import validators
+
+
+class ExampleForm(Form):
+    fields = [F.FirstName]
+    required_fields = [F.FirstName]
 
 
 class TestForm(PatchTranslationTestCase):
@@ -15,6 +21,13 @@ class TestForm(PatchTranslationTestCase):
         form_class = county_form_selector.get_combined_form_class(
             counties=[Counties.SAN_FRANCISCO])
         return form_class(*args)
+
+    def test_does_not_alter_class_attributes_after_instantiation(self):
+            # make sure we have a class
+            form = ExampleForm({})
+            self.assertFalse(form.is_valid())
+            form = ExampleForm({})
+            self.assertEqual(ExampleForm.required_fields[0], F.FirstName)
 
     def test_can_be_instantiated_with_multivalue_dict(self):
         form = self.get_sf_form(mock.RAW_FORM_DATA)
@@ -38,25 +51,25 @@ class TestForm(PatchTranslationTestCase):
     def test_empty_value_is_as_expected(self):
         expected_empty_value = {
             'address': {
-                'city': '', 
-                'state': '', 
-                'street': '', 
+                'city': '',
+                'state': '',
+                'street': '',
                 'zip': ''
-                },
+            },
             'contact_preferences': [],
             'currently_employed': '',
             'dob': {
                 'day': '',
                 'month': '',
                 'year': ''
-                },
+            },
             'email': '',
             'first_name': '',
             'how_did_you_hear': '',
             'last_name': '',
             'middle_name': '',
-            'monthly_expenses': '',
-            'monthly_income': '',
+            'monthly_expenses': None,
+            'monthly_income': None,
             'on_probation_parole': '',
             'phone_number': '',
             'rap_outside_sf': '',
@@ -66,8 +79,9 @@ class TestForm(PatchTranslationTestCase):
             'us_citizen': '',
             'when_probation_or_parole': '',
             'when_where_outside_sf': '',
-            'where_probation_or_parole': ''
-            }
+            'where_probation_or_parole': '',
+            'additional_information': '',
+        }
         form = self.get_sf_form()
         self.assertDictEqual(form.empty_value, expected_empty_value)
         form = self.get_sf_form({})
@@ -80,7 +94,10 @@ class TestForm(PatchTranslationTestCase):
                 'state': 'HI',
                 'street': '220 Lynch Walk',
                 'zip': '46885'},
-            'contact_preferences': ['prefers_voicemail', 'prefers_sms', 'prefers_email'],
+            'contact_preferences': [
+                'prefers_voicemail',
+                'prefers_sms',
+                'prefers_email'],
             'currently_employed': 'yes',
             'dob': {'day': '2', 'month': '12', 'year': '1998'},
             'email': 'shaun68@yahoo.com',
@@ -88,10 +105,10 @@ class TestForm(PatchTranslationTestCase):
             'how_did_you_hear': '',
             'last_name': 'Johnson',
             'middle_name': 'Horace',
-            'monthly_expenses': '1301',
-            'monthly_income': '2465',
+            'monthly_expenses': 1301,
+            'monthly_income': 2465,
             'on_probation_parole': 'yes',
-            'phone_number': '590-133-5279',
+            'phone_number': '5901335279',
             'rap_outside_sf': 'no',
             'serving_sentence': 'yes',
             'being_charged': 'no',
@@ -99,7 +116,9 @@ class TestForm(PatchTranslationTestCase):
             'us_citizen': 'yes',
             'when_probation_or_parole': '',
             'when_where_outside_sf': '',
-            'where_probation_or_parole': ''}
+            'where_probation_or_parole': '',
+            'additional_information': 'foo bar',
+        }
         form = self.get_sf_form(preparsed)
         self.assertTrue(form.is_valid())
         self.assertDictEqual(form.cleaned_data, preparsed)
@@ -115,22 +134,22 @@ class TestForm(PatchTranslationTestCase):
 
     def test_preferred_contact_methods(self):
         contact_preferences = [
-                "prefers_email",
-                "prefers_sms",
-                "prefers_snailmail",
-                "prefers_voicemail"
+            "prefers_email",
+            "prefers_sms",
+            "prefers_snailmail",
+            "prefers_voicemail"
         ]
         form = self.get_sf_form(dict(contact_preferences=contact_preferences))
-        error_messages = [
-            validators.gave_preferred_contact_methods.message(k)
-            for k in contact_preferences
-            ]
         self.assertFalse(form.is_valid())
         errors = form.errors
-        self.assertIn(validators.gave_preferred_contact_methods.message('prefers_sms'), errors['phone_number'])
-        self.assertIn(validators.gave_preferred_contact_methods.message('prefers_voicemail'), errors['phone_number'])
-        self.assertIn(validators.gave_preferred_contact_methods.message('prefers_email'), errors['email'])
-        self.assertIn(validators.gave_preferred_contact_methods.message('prefers_snailmail'), errors['address'])
+        self.assertIn(validators.gave_preferred_contact_methods.message(
+            'prefers_sms'), errors['phone_number'])
+        self.assertIn(validators.gave_preferred_contact_methods.message(
+            'prefers_voicemail'), errors['phone_number'])
+        self.assertIn(validators.gave_preferred_contact_methods.message(
+            'prefers_email'), errors['email'])
+        self.assertIn(validators.gave_preferred_contact_methods.message(
+            'prefers_snailmail'), errors['address'])
         # case: only required errors, no contact info erros
         form = self.get_sf_form(mock.post_data(**{
             'contact_preferences': contact_preferences,
@@ -140,7 +159,7 @@ class TestForm(PatchTranslationTestCase):
             'address.zip': '94609',
             'phone_number': '415-333-4444',
             'email': 'someone@gmail.com'
-            }))
+        }))
         self.assertFalse(form.is_valid())
         self.assertFalse('phone_number' in form.errors)
         self.assertFalse('email' in form.errors)
@@ -152,3 +171,25 @@ class TestForm(PatchTranslationTestCase):
         form = self.get_sf_form(fake_answers)
         self.assertTrue(form.is_valid())
         self.assertTrue(hasattr(form.display(), '__html__'))
+
+    @django_only
+    def test_dynamic_field_display_with_existing_field(self):
+        fake_answers = mock.FILLED_SF_DATA
+        form = self.get_sf_form(fake_answers)
+        self.assertEqual(
+            form.first_name_display, form.first_name.render(display=True))
+        self.assertTrue(hasattr(form.first_name_display, '__html__'))
+
+    @django_only
+    def test_dynamic_field_display_with_nonexistent_field(self):
+        fake_answers = mock.FILLED_SF_DATA
+        form = self.get_sf_form(fake_answers)
+        self.assertEqual(
+            form.random_field_display, "")
+
+    @django_only
+    def test_dynamic_field_display_raises_error_for_unknown_attribute(self):
+        fake_answers = mock.FILLED_SF_DATA
+        form = self.get_sf_form(fake_answers)
+        with self.assertRaises(AttributeError):
+            str(form.foobar)

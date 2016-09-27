@@ -102,7 +102,7 @@ class PDFParser:
                         raise InvalidOptionError(
                             "''{}' is not a valid option for '{}'. Choices: {}".format(
                                 v, k, option_check[k]
-                                ))
+                            ))
             answer_fields['fields'].append({k: v})
         self.run_command([
             'set_fields',
@@ -152,6 +152,4 @@ class PDFParser:
             self._fill(pdf_path, output_path, option_check, answers)
             tmp_filled_pdf_paths.append(output_path)
         self.clean_up = _clean_up_setting
-        return self.join_pdfs(tmp_filled_pdf_paths)       
-
-
+        return self.join_pdfs(tmp_filled_pdf_paths)

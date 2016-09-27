@@ -2,7 +2,7 @@ from formation.combinable_base import CombinableFormSpec, FormSpecSelector
 from formation.form_base import Form
 from formation.display_form_base import DisplayForm
 from formation import fields as F
-from intake.constants import Counties
+from intake.constants import Counties, Organizations
 from formation.validators import gave_preferred_contact_methods
 
 
@@ -13,6 +13,13 @@ class CombinableCountyFormSpec(CombinableFormSpec):
         return self.county in counties
 
 
+class CombinableOrganizationFormSpec(CombinableFormSpec):
+
+    def is_correct_spec(self, *args, **kwargs):
+        organizations = kwargs.get('organizations', [])
+        return self.organization in organizations
+
+
 class SupplementaryDisplayForm(CombinableCountyFormSpec):
 
     def is_correct_spec(self, *args, **kwargs):
@@ -20,11 +27,11 @@ class SupplementaryDisplayForm(CombinableCountyFormSpec):
 
     fields = {
         F.DateReceived,
-        F.Counties,       
+        F.Counties,
     }
 
 
-class OtherCountyForm(CombinableCountyFormSpec):
+class OtherCountyFormSpec(CombinableCountyFormSpec):
     """This could be used by Code for America to send applicants
     information on clean slate services in other counties or states.
     """
@@ -49,8 +56,7 @@ class OtherCountyForm(CombinableCountyFormSpec):
     ]
 
 
-
-class SanFranciscoCountyForm(CombinableCountyFormSpec):
+class SanFranciscoCountyFormSpec(CombinableCountyFormSpec):
     county = Counties.SAN_FRANCISCO
     fields = {
         F.ContactPreferences,
@@ -74,7 +80,9 @@ class SanFranciscoCountyForm(CombinableCountyFormSpec):
         F.CurrentlyEmployed,
         F.MonthlyIncome,
         F.MonthlyExpenses,
-        F.HowDidYouHear
+        F.HowDidYouHear,
+        F.AdditionalInformation,
+        F.ConsentNote,
     }
     required_fields = {
         F.FirstName,
@@ -87,18 +95,20 @@ class SanFranciscoCountyForm(CombinableCountyFormSpec):
     }
     optional_fields = {
         F.HowDidYouHear,
-        F.MiddleName
+        F.MiddleName,
+        F.AdditionalInformation,
     }
     validators = [
         gave_preferred_contact_methods
     ]
 
 
-class ContraCostaForm(CombinableCountyFormSpec):
+class ContraCostaFormSpec(CombinableCountyFormSpec):
     county = Counties.CONTRA_COSTA
     fields = {
         F.ContactPreferences,
         F.FirstName,
+        F.MiddleName,
         F.LastName,
         F.PhoneNumberField,
         F.EmailField,
@@ -137,19 +147,213 @@ class ContraCostaForm(CombinableCountyFormSpec):
     ]
 
 
+class AlamedaCountyFormSpec(CombinableCountyFormSpec):
+    county = Counties.ALAMEDA
+    fields = {
+        F.ContactPreferences,
+        F.FirstName,
+        F.MiddleName,
+        F.LastName,
+        F.PreferredPronouns,
+        F.PhoneNumberField,
+        F.AlternatePhoneNumberField,
+        F.EmailField,
+        F.AddressField,
+        F.FinancialScreeningNote,
+        F.MonthlyIncome,
+        F.OnPublicBenefits,
+        F.OwnsHome,
+        F.HouseholdSize,
+        F.DateOfBirthField,
+        # F.LastFourOfSSN,
+        F.USCitizen,
+        F.OnProbationParole,
+        F.FinishedHalfProbation,
+        F.ReducedProbation,
+        F.ServingSentence,
+        F.BeingCharged,
+        F.HasSuspendedLicense,
+        F.OwesCourtFees,
+        # F.HasExternalRAP,
+        # F.ExternalRAPWhereWhen,
+        F.HowDidYouHear,
+        F.AdditionalInformation,
+    }
+    required_fields = {
+        F.FirstName,
+        F.LastName,
+        F.AddressField,
+        F.DateOfBirthField,
+        F.MonthlyIncome,
+        F.OnPublicBenefits,
+        F.OwnsHome,
+        F.HouseholdSize,
+        F.OnProbationParole,
+        F.FinishedHalfProbation,
+        F.ReducedProbation,
+        F.ServingSentence,
+        F.BeingCharged,
+    }
+    optional_fields = {
+        F.AlternatePhoneNumberField,
+        F.HowDidYouHear,
+        F.AdditionalInformation,
+    }
+
+
+class AlamedaPublicDefenderFormSpec(CombinableOrganizationFormSpec):
+    organization = Organizations.ALAMEDA_PUBDEF
+    fields = {
+        F.ContactPreferences,
+        F.FirstName,
+        F.MiddleName,
+        F.LastName,
+        F.PhoneNumberField,
+        F.AlternatePhoneNumberField,
+        F.EmailField,
+        F.AddressField,
+        F.FinancialScreeningNote,
+        F.MonthlyIncome,
+        F.OwnsHome,
+        F.HouseholdSize,
+        F.DateOfBirthField,
+        F.USCitizen,
+        F.OnProbationParole,
+        F.FinishedHalfProbation,
+        F.ReducedProbation,
+        F.ServingSentence,
+        F.BeingCharged,
+        F.HowDidYouHear,
+        F.AdditionalInformation,
+    }
+    required_fields = {
+        F.FirstName,
+        F.LastName,
+        F.AddressField,
+        F.DateOfBirthField,
+        F.MonthlyIncome,
+        F.OwnsHome,
+        F.HouseholdSize,
+        F.OnProbationParole,
+        F.FinishedHalfProbation,
+        F.ReducedProbation,
+        F.ServingSentence,
+        F.BeingCharged,
+    }
+    optional_fields = {
+        F.AlternatePhoneNumberField,
+        F.HowDidYouHear,
+        F.AdditionalInformation,
+    }
+
+
+class EBCLCIntakeFormSpec(CombinableOrganizationFormSpec):
+    organization = Organizations.EBCLC
+    fields = {
+        F.ContactPreferences,
+        F.FirstName,
+        F.MiddleName,
+        F.LastName,
+        F.PreferredPronouns,
+        F.PhoneNumberField,
+        F.AlternatePhoneNumberField,
+        F.EmailField,
+        F.AddressField,
+        F.FinancialScreeningNote,
+        F.MonthlyIncome,
+        F.OnPublicBenefits,
+        F.OwnsHome,
+        F.HouseholdSize,
+        F.DateOfBirthField,
+        # F.LastFourOfSSN,
+        F.USCitizen,
+        F.OnProbationParole,
+        F.FinishedHalfProbation,
+        F.ReducedProbation,
+        F.ServingSentence,
+        F.BeingCharged,
+        # F.HasExternalRAP,
+        # F.ExternalRAPWhereWhen,
+        # Fines & Fees
+        # urgency
+        F.HowDidYouHear,
+        F.AdditionalInformation,
+    }
+    required_fields = {
+        F.FirstName,
+        F.LastName,
+        F.AddressField,
+        F.DateOfBirthField,
+        F.MonthlyIncome,
+        F.OnPublicBenefits,
+        F.OwnsHome,
+        F.HouseholdSize,
+        F.OnProbationParole,
+        F.FinishedHalfProbation,
+        F.ReducedProbation,
+        F.ServingSentence,
+        F.BeingCharged,
+    }
+    optional_fields = {
+        F.AlternatePhoneNumberField,
+        F.HowDidYouHear,
+        F.AdditionalInformation,
+    }
+
+
+class DeclarationLetterFormSpec(CombinableFormSpec):
+    fields = {
+        F.AlamedaDeclarationLetterNote,
+        F.DeclarationLetterIntro,
+        F.DeclarationLetterLifeChanges,
+        F.DeclarationLetterActivities,
+        F.DeclarationLetterGoals,
+        F.DeclarationLetterWhy,
+    }
+    required_fields = {
+        F.DeclarationLetterIntro,
+        F.DeclarationLetterLifeChanges,
+        F.DeclarationLetterActivities,
+        F.DeclarationLetterGoals,
+        F.DeclarationLetterWhy,
+    }
+
+
+class DeclarationLetterDisplay(DisplayForm):
+    display_template_name = "forms/declaration_letter_display.jinja"
+    fields = [
+        F.DateReceived,
+        F.DeclarationLetterIntro,
+        F.DeclarationLetterLifeChanges,
+        F.DeclarationLetterActivities,
+        F.DeclarationLetterGoals,
+        F.DeclarationLetterWhy,
+        F.FirstName,
+        F.MiddleName,
+        F.LastName,
+    ]
+
+
 class SelectCountyForm(Form):
     fields = [F.Counties]
     required_fields = [F.Counties]
 
 
 INPUT_FORM_SPECS = [
-    OtherCountyForm(),
-    SanFranciscoCountyForm(),
-    ContraCostaForm()
+    OtherCountyFormSpec(),
+    SanFranciscoCountyFormSpec(),
+    ContraCostaFormSpec(),
+    AlamedaCountyFormSpec(),
 ]
 DISPLAY_FORM_SPECS = INPUT_FORM_SPECS + [
     SupplementaryDisplayForm(),
 ]
 
-county_form_selector = FormSpecSelector(INPUT_FORM_SPECS, Form)
+ORG_FORM_SPECS = [
+    AlamedaPublicDefenderFormSpec(),
+    EBCLCIntakeFormSpec(),
+]
+
 display_form_selector = FormSpecSelector(DISPLAY_FORM_SPECS, DisplayForm)
+county_form_selector = FormSpecSelector(INPUT_FORM_SPECS, Form)
+organization_form_selector = FormSpecSelector(ORG_FORM_SPECS, Form)

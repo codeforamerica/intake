@@ -30,14 +30,16 @@ section.content.application_form {
 	ol { padding-left: 1.5em; }
 }
 .field {
-	input {
-		font-weight: 400; }
+	input, textarea {
+		font-weight: 400;
+		font-size: 1.25em;
+	}
 	input[type="text"], input[type="email"], input[type="password"] { 
-		display: block; width: 100%;
+		display: inline-block; width: 100%;
 		font-size: 1.25em;
 		padding: .25em .5em; }
 	input[type="number"] {
-		display: block;
+		display: inline-block;
 		font-size: 1.25em;
 		padding: .25em .5em; }
 	input[type="checkbox"] + span.field-display_text {
@@ -48,6 +50,11 @@ section.content.application_form {
 		font-weight: 700;
 		font-size: 1em;
 		border: 0; margin: 0; }
+	textarea {
+		width: 100%;
+		max-width: 100%;
+		height: 6em;
+	}
 }
 .field + .field { margin-top: 1.5em; }
 .field + .note { margin-top: 1.5em; }
@@ -73,8 +80,14 @@ button {
 		border: 1px solid #ddd;
 		border-radius: .25em;
 		margin: 0.5em 0.25em;
-		background-color: inherit; }
+		background-color: inherit;
+		span.glyphicon {
+			margin-right: 0.5em;
+		}
+	}
 button[type="submit"] { .btn-primary; .btn-lg; }
+button[type="submit"].action-forward { .btn-success; .btn-lg; }
+button[type="submit"].action-back { .btn-default; .btn-lg; }
 
 
 .warnings, .errors {
@@ -105,6 +118,9 @@ button[type="submit"] { .btn-primary; .btn-lg; }
 	background-color: @brand-danger-background;
 }
 
+.counties label > * { vertical-align: text-top; display: inline-block; }
+.counties input { width: 1em; }
+.counties .option-display_text { width: 13em; line-height: 1.3em; }
 .subfield-row > .subfield { display: inline-block; }
 .dob_month, .dob_day { width: 3em; }
 .dob_year { width: 5em; }
@@ -115,4 +131,40 @@ button[type="submit"] { .btn-primary; .btn-lg; }
 .drivers_license_number input[name="drivers_license_number"] { width: 8em; }
 .ssn input[name="ssn"] { width: 8em; }
 .phone_number input[name="phone_number"] { width: 9em; }
+.alternate_phone_number input[name="alternate_phone_number"] { width: 9em; }
+.monthly_income input[type="text"], .monthly_expenses input[type="text"] {
+	width: 7em;
+}
+.household_size input[type="text"] {
+	width: 3em;
+}
+.household_size .field-input_wrapper {
+	&::after {
+		content: "people";
+		width: 1em;
+		font-size: 1.25em;
+		padding: .25em .5em .25em .5em;
+		font-weight: 400;
+	}
+}
+
+.monthly_income .field-input_wrapper, .monthly_expenses .field-input_wrapper {
+	&::before {
+		content: "$";
+		width: 1em;
+		font-size: 1.25em;
+		padding: .25em 0;
+		font-weight: 400;
+	}
+	&::after {
+		content: ".00 / month";
+		width: 1em;
+		font-size: 1.25em;
+		padding: .25em .5em .25em 0;
+		font-weight: 400;
+	}
+	input {
+		text-align: right;
+	}
+}
 

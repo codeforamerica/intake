@@ -3,8 +3,6 @@ from formation.tests.utils import django_only
 
 from formation import render_base
 import django
-from django.utils.html import escape, conditional_escape
-
 
 
 class TestRenderable(TestCase):
@@ -40,7 +38,7 @@ class TestRenderable(TestCase):
     def test_escape(self):
         from formation.fields import FirstName
         bad_string = '<script src="malicious.js">'
-        escaped_bad_string = "&lt;script src=&quot;malicious.js&quot;&gt;"
+        escaped_bad_string = "&lt;script src=&#34;malicious.js&#34;&gt;"
         first_name = FirstName(dict(first_name=bad_string))
         first_name.is_valid()
         render_result = first_name.render()
@@ -49,6 +47,3 @@ class TestRenderable(TestCase):
         display_result = first_name.display()
         self.assertNotIn(bad_string, display_result)
         self.assertIn(escaped_bad_string, display_result)
-
-
-

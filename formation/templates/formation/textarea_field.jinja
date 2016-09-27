@@ -1,0 +1,8 @@
+{% extends "formation/text_input.jinja" -%}
+      {%- block input_widget %}
+      <textarea name="{{ field.get_input_name() }}">
+        {%- if field.get_current_value() != None -%}
+          {{ field.get_current_value() }}
+        {%- endif -%}
+      </textarea>
+      {%- endblock input_widget %}

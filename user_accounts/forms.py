@@ -1,7 +1,11 @@
 from django import forms
+from django.forms.models import model_to_dict
 from invitations.forms import InviteForm as BaseInviteForm
 from allauth.account import forms as allauth_forms
-from . import models, exceptions
+from . import models
+from formation.form_base import Form as BaseForm
+from formation.display_form_base import DisplayForm
+from formation import fields as F
 
 
 class LoginForm(allauth_forms.LoginForm):
@@ -59,9 +63,20 @@ class SetPasswordForm(forms.Form):
     def save(self):
         allauth_forms.get_adapter().set_password(
             self.user, self.cleaned_data['password']
-            )
+        )
 
 
+class OrganizationDetailsDisplayForm(DisplayForm):
 
+    display_template_name = "forms/organization_detail_display.jinja"
 
+    fields = [
+        F.EmailField,
+        F.PhoneNumberField,
+        F.WebsiteField,
+    ]
 
+    def preprocess_raw_input_data(self, organization):
+        data = model_to_dict(
+            organization, fields=list(self.get_field_keys()))
+        return data

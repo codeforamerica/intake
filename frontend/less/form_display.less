@@ -32,9 +32,29 @@ div.application-data_display {
 	width: 48em;
 }
 
+ul.data_display-action_menu {
+	padding: 0;
+	margin: 1.5em 0;
+}
+li.action_menu-item > a {
+	.btn;
+	.btn-sm;
+	.btn-default;
+	.glyphicon {
+		margin: 0 0.3em;
+	}
+}
+
 .data_display-label {
 	color: lighten(@gray-light, 20%);
 	font-size: .9em;
+}
+.public .data_display-label {
+	color: inherit;
+	font-size: 18px;
+}
+.public .data_display .address-name {
+	font-weight: 600;
 }
 .data_display-value {
 	color: black;
@@ -93,6 +113,10 @@ h3.data_display-section_header {
 	font-size: 1.5em;
 }
 
+pre.address {
+	font-family: @font-family-sans-serif;
+	font-weight: 500;
+}
 .data_display.address pre {
 	font-family: @font-family-sans-serif;
 	margin: 0;
@@ -128,4 +152,12 @@ h3.data_display-section_header {
 .data_display-value.chosen {
 	color: black;
 	border: 2px solid black;
+}
+.data_display-section.declaration_letter {
+
+	padding: 1em;
+	background-color: lighten(@gray-lighter, 5%);
+	border: 1px solid @gray-lighter;
+	border-radius: .5em;
+
 }

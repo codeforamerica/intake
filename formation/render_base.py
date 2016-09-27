@@ -1,6 +1,7 @@
 from django.template import loader
 from django.utils.safestring import mark_safe
 
+
 class Renderable:
     """A class that implements rendering functionality
         Can be used by forms, fields, or anything else
@@ -8,12 +9,12 @@ class Renderable:
     """
     template_name = ""
     display_template_name = ""
+    display_only = False
 
     def __init__(self, default_context=None):
         self.default_context = default_context or {}
         self._template = None
         self._display_template = None
-        self.display_only = False
 
     def render(self, display=False, **extra_context):
         """Uses self and extra_context to render the compiled template
@@ -41,12 +42,10 @@ class Renderable:
         """
         name_attr = template_attr[1:] + "_name"
         setattr(self, template_attr,
-            loader.get_template(
-                getattr(self, name_attr)
+                loader.get_template(
+                    getattr(self, name_attr)
                 )
-            )
+                )
 
     def __html__(self):
         return self.render()
-
-

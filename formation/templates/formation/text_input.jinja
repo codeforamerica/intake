@@ -14,6 +14,14 @@
       {{ field.help_text }}
     </span>
     {%- endif %}
-    <input type="text" name="{{ field.get_input_name() }}" value="{{ field.get_current_value() }}">
+    <span class="field-input_wrapper">
+      {%- block input_widget %}
+      <input type="text" name="{{ field.get_input_name() }}" value="
+        {%- if field.get_current_value() != None -%}
+          {{ field.get_current_value() }}
+        {%- endif -%}
+      ">
+      {%- endblock input_widget %}
+    </span>
   </label>
 </div>
