@@ -470,6 +470,7 @@ class TestSelectCountyView(AuthIntegrationTestCase):
         self.assertIn('user_agent', event.data)
         self.assertEqual(event.data['user_agent'], 'tester')
         self.assertIn('referrer', event.data)
+        self.assertEqual(event.data['counties'], ['contracosta'])
 
     def test_anonymous_user_cannot_submit_empty_county_selection(self):
         self.be_anonymous()
@@ -1142,6 +1143,16 @@ class TestStats(IntakeDataTestCase):
         response = self.client.get(reverse('intake-stats'))
         for search_term in [total, sf_string, cc_string]:
             self.assertContains(response, search_term)
+
+    def test_anonymous_user_doesnt_get_json(self):
+        self.be_anonymous()
+        response = self.client.get(reverse('intake-stats'))
+        self.assertNotIn('applications_json', response.context)
+
+    def test_logged_in_user_gets_json(self):
+        self.be_ccpubdef_user()
+        response = self.client.get(reverse('intake-stats'))
+        self.assertIn('applications_json', response.context)
 
 
 class TestDailyTotals(TestCase):

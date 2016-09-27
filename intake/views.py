@@ -29,6 +29,7 @@ import logging
 import csv
 from django.utils import timezone
 from django.utils.translation import ugettext as _
+from django.utils.safestring import mark_safe
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -39,7 +40,9 @@ from django.views.generic import View
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 
-from intake import models, notifications, constants
+from rest_framework.renderers import JSONRenderer
+
+from intake import models, notifications, constants, serializers
 from user_accounts.models import Organization
 from user_accounts.forms import OrganizationDetailsDisplayForm
 from formation.forms import (
@@ -399,6 +402,7 @@ class SelectCounty(MultiStepFormViewBase):
             referrer=self.request.session.get('referrer'),
             ip=self.request.ip_address,
             user_agent=self.request.META.get('HTTP_USER_AGENT'),
+            **form.parsed_data
         )
         return super().form_valid(form)
 
@@ -571,6 +575,14 @@ class Stats(TemplateView):
             'total_all_counties': models.FormSubmission.objects.count(),
             'county_totals': county_totals
         }
+        if self.request.user.is_authenticated():
+            applicants = models.Applicant.objects.all()
+            if not self.request.user.is_staff:
+                org = self.request.user.profile.organization
+                applicants.filter(form_submissions__organizations=org)
+            json = JSONRenderer().render(
+                serializers.ApplicantSerializer(applicants, many=True).data)
+            context['applications_json'] = mark_safe(json)
         return context
 
 
