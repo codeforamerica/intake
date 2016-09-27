@@ -464,7 +464,7 @@ class TestSelectCountyView(AuthIntegrationTestCase):
         self.assertEqual(len(events), 1)
         event = events[0]
         self.assertEqual(event.name,
-                         constants.ApplicationEventTypes.APPLICATION_STARTED)
+                         models.ApplicationEvent.APPLICATION_STARTED)
 
         self.assertIn('ip', event.data)
         self.assertIn('user_agent', event.data)
@@ -515,7 +515,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         slack.assert_not_called()
         send_confirmation.assert_not_called()
         submitted_event_count = applicant.events.filter(
-            name=constants.ApplicationEventTypes.APPLICATION_SUBMITTED).count()
+            name=models.ApplicationEvent.APPLICATION_SUBMITTED).count()
         self.assertEqual(0, submitted_event_count)
 
     @patch(
@@ -568,7 +568,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         self.assertListEqual(org_slugs, [cc_pubdef])
 
         submitted_event_count = applicant.events.filter(
-            name=constants.ApplicationEventTypes.APPLICATION_SUBMITTED).count()
+            name=models.ApplicationEvent.APPLICATION_SUBMITTED).count()
 
         self.assertEqual(1, submitted_event_count)
 
@@ -611,7 +611,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
 
         event = models.ApplicationEvent.objects.filter(
             applicant_id=self.client.session['applicant_id'],
-            name=constants.ApplicationEventTypes.APPLICATION_ERRORS).first()
+            name=models.ApplicationEvent.APPLICATION_ERRORS).first()
 
         self.assertDictEqual(
             result.context['form'].get_serialized_errors(),
@@ -673,7 +673,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
 
         event = models.ApplicationEvent.objects.filter(
             applicant_id=self.client.session['applicant_id'],
-            name=constants.ApplicationEventTypes.APPLICATION_ERRORS).first()
+            name=models.ApplicationEvent.APPLICATION_ERRORS).first()
 
         self.assertDictEqual(
             result.context['form'].get_serialized_errors(),
@@ -727,7 +727,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
 
         event = models.ApplicationEvent.objects.filter(
             applicant_id=self.client.session['applicant_id'],
-            name=constants.ApplicationEventTypes.APPLICATION_ERRORS).first()
+            name=models.ApplicationEvent.APPLICATION_ERRORS).first()
 
         self.assertDictEqual(
             result.context['form'].get_serialized_errors(),
@@ -813,7 +813,7 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
 
         event = models.ApplicationEvent.objects.filter(
             applicant_id=self.client.session['applicant_id'],
-            name=constants.ApplicationEventTypes.APPLICATION_ERRORS).first()
+            name=models.ApplicationEvent.APPLICATION_ERRORS).first()
 
         self.assertDictEqual(
             result.context['form'].get_serialized_errors(),

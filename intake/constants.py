@@ -66,13 +66,6 @@ class CountyNames:
     ALL = 'San Francisco, Alameda, and Contra Costa Counties'
 
 
-class ApplicationEventTypes:
-
-    APPLICATION_STARTED = 'application_started'
-    APPLICATION_SUBMITTED = 'application_submitted'
-    APPLICATION_ERRORS = 'application_errors'
-    APPLICATION_PAGE_COMPLETE = 'application_page_complete'
-
 if SCOPE_TO_LIVE_COUNTIES:
     CountyNames.ALL = 'San Francisco and Contra Costa Counties'
 
@@ -82,7 +75,6 @@ CONFIRMATION_MESSAGES = {
     Counties.CONTRA_COSTA: _("The Contra Costa Public Defender will follow up with you if they need any other information."),
     Counties.ALAMEDA: _("In # weeks, you will get a phone call from the Alameda Public Defender with an update on your case.")
 }
-
 
 
 if SCOPE_TO_LIVE_COUNTIES:
