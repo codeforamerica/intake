@@ -36,11 +36,13 @@ deploy.demo:
 		organizations \
 		addresses \
 		mock_profiles \
-		mock_2_submissions_to_alameda_pubdef \
+		mock_2_submissions_to_a_pubdef \
+		mock_2_submissions_to_ebclc \
 		mock_2_submissions_to_sf_pubdef \
 		mock_2_submissions_to_cc_pubdef \
 		mock_1_submission_to_multiple_orgs \
-		mock_1_bundle_to_alameda_pubdef \
+		mock_1_bundle_to_a_pubdef \
+		mock_1_bundle_to_ebclc \
 		mock_1_bundle_to_sf_pubdef \
 		mock_1_bundle_to_cc_pubdef
 
@@ -83,10 +85,10 @@ db.load_fixtures:
 		organizations \
 		addresses \
 		mock_profiles \
-		mock_2_submissions_to_alameda_pubdef \
+		mock_2_submissions_to_a_pubdef \
 		mock_2_submissions_to_sf_pubdef \
 		mock_2_submissions_to_cc_pubdef \
 		mock_1_submission_to_multiple_orgs \
-		mock_1_bundle_to_alameda_pubdef \
+		mock_1_bundle_to_a_pubdef \
 		mock_1_bundle_to_sf_pubdef \
 		mock_1_bundle_to_cc_pubdef

@@ -132,7 +132,7 @@ class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
         messages.error(self.request, self.ERROR_MESSAGE)
         self.put_errors_in_flash_messages(form)
         self.log_application_event(
-            constants.ApplicationEventTypes.APPLICATION_ERRORS,
+            models.ApplicationEvent.APPLICATION_ERRORS,
             errors=form.get_serialized_errors())
         return super().form_invalid(form, *args, **kwargs)
 
@@ -220,7 +220,7 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
         submission.save()
         submission.organizations.add(*organizations)
         self.log_application_event(
-            constants.ApplicationEventTypes.APPLICATION_SUBMITTED)
+            models.ApplicationEvent.APPLICATION_SUBMITTED)
         # TODO: check for cerrect org in view tests
         return submission
 
@@ -254,7 +254,7 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
 
     def log_page_complete(self):
         return self.log_application_event(
-            constants.ApplicationEventTypes.APPLICATION_PAGE_COMPLETE,
+            models.ApplicationEvent.APPLICATION_PAGE_COMPLETE,
             page_name=self.__class__.__name__)
 
 
@@ -395,7 +395,7 @@ class SelectCounty(MultiStepFormViewBase):
     def form_valid(self, form):
         self.update_session_data(**form.parsed_data)
         self.log_application_event(
-            constants.ApplicationEventTypes.APPLICATION_STARTED,
+            models.ApplicationEvent.APPLICATION_STARTED,
             referrer=self.request.session.get('referrer'),
             ip=self.request.ip_address,
             user_agent=self.request.META.get('HTTP_USER_AGENT'),

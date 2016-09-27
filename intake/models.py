@@ -432,8 +432,54 @@ class ApplicationEvent(models.Model):
                                   related_name='events')
     data = JSONField()
 
+    APPLICATION_STARTED = 'application_started'
+    APPLICATION_SUBMITTED = 'application_submitted'
+    APPLICATION_ERRORS = 'application_errors'
+    APPLICATION_PAGE_COMPLETE = 'application_page_complete'
+    OPENED = "opened"
+    REFERRED = "referred"
+    PROCESSED = "processed"
+    DELETED = "deleted"
+    CONFIRMATION_SENT = "sent_confirmation"
+    REFERRED_BETWEEN_ORGS = "referred_to_another_org"
+
     class Meta:
         ordering = ['-time']
+
+    @classmethod
+    def from_logs(cls, logs):
+
+        applicationLogEntryReference = {
+            ApplicationLogEntry.OPENED: cls.OPENED,
+            ApplicationLogEntry.REFERRED: cls.REFERRED,
+            ApplicationLogEntry.PROCESSED: cls.PROCESSED,
+            ApplicationLogEntry.DELETED: cls.DELETED,
+            ApplicationLogEntry.CONFIRMATION_SENT: cls.CONFIRMATION_SENT,
+            ApplicationLogEntry.REFERRED_BETWEEN_ORGS: cls.REFERRED_BETWEEN_ORGS,
+        }
+
+        events = []
+
+        applicant_ids = dict(FormSubmission.objects.filter(
+            pk__in=[log.submission_id for log in logs]
+        ).values_list('id', 'applicant_id'))
+        for log in logs:
+            applicant_id = applicant_ids[log.submission_id]
+            if applicant_id:
+                event = cls(
+                    name=applicationLogEntryReference[log.event_type],
+                    applicant_id=applicant_id,
+                    data={
+                        key: value for key, value in vars(log).items()
+                        if key in [
+                            'submission_id', 'user_id',
+                            'organization_id', 'event_type',
+                            'id']
+                    }
+                )
+                events.append(event)
+        cls.objects.bulk_create(events)
+        return events
 
     def __str__(self):
         return "ApplicationEvent(applicant_id={},name={},data={})".format(
@@ -497,6 +543,7 @@ class ApplicationLogEntry(models.Model):
             )
             logs.append(log)
         ApplicationLogEntry.objects.bulk_create(logs)
+        ApplicationEvent.from_logs(logs)
         return logs
 
     @classmethod

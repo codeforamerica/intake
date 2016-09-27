@@ -1,15 +1,16 @@
 import uuid
 import os
 import factory
-import random
+import json
 from pytz import timezone
 from faker import Factory as FakerFactory
 from django.core.files import File
+from django.core import serializers
 from django.core.management import call_command
 from django.conf import settings
 from django.utils.datastructures import MultiValueDict
 
-from intake import models
+from intake import models, constants
 from user_accounts.tests.mock import OrganizationFactory
 from unittest.mock import Mock
 Pacific = timezone('US/Pacific')
@@ -175,59 +176,104 @@ class FrontSendMessageResponse:
 def build_seed_submissions():
     from user_accounts.models import Organization
     from formation.forms import county_form_selector
-    orgs = Organization.objects.all()
-    counties = list(models.County.objects.all())
+    cc_pubdef = Organization.objects.get(
+        slug=constants.Organizations.COCO_PUBDEF)
+    a_pubdef = Organization.objects.get(
+        slug=constants.Organizations.ALAMEDA_PUBDEF)
+    ebclc = Organization.objects.get(
+        slug=constants.Organizations.EBCLC)
+    sf_pubdef = Organization.objects.get(
+        slug=constants.Organizations.SF_PUBDEF)
+    receiving_orgs = [cc_pubdef, a_pubdef, ebclc, sf_pubdef]
     answer_pairs = {
-        'sf_pubdef': fake.sf_county_form_answers,
-        'cc_pubdef': fake.contra_costa_county_form_answers,
-        'ebclc': fake.ebclc_answers,
-        'a_pubdef': fake.alameda_pubdef_answers
+        sf_pubdef.slug: fake.sf_county_form_answers,
+        cc_pubdef.slug: fake.contra_costa_county_form_answers,
+        ebclc.slug: fake.ebclc_answers,
+        a_pubdef.slug: fake.alameda_pubdef_answers
     }
     form_pairs = {
-        'sf_pubdef': county_form_selector.get_combined_form_class(
-            counties=['sanfrancisco']),
-        'cc_pubdef': county_form_selector.get_combined_form_class(
-            counties=['contracosta']),
-        'ebclc': county_form_selector.get_combined_form_class(
-            counties=['alameda']),
-        'a_pubdef': county_form_selector.get_combined_form_class(
-            counties=['alameda'])
+        org.slug: county_form_selector.get_combined_form_class(
+            counties=[org.county.slug])
+        for org in receiving_orgs
     }
+    # make 2 submissions to each org
+    applicants = []
     subs = []
-    for org in orgs:
-        if org.slug in answer_pairs:
-            for i in range(4):
-                answers = answer_pairs[org.slug]()
-                Form = form_pairs[org.slug]
-                form = Form(answers)
-                form.is_valid()
-                sub = models.FormSubmission.create_for_organizations(
-                    organizations=[org],
-                    answers=form.cleaned_data)
-                subs.append(sub)
-    # make combos
-    for i in range(6):
-        num_counties = random.randint(2, 3)
-        answers = fake.all_county_answers()
-        these_counties = random.sample(counties, num_counties)
-        Form = county_form_selector.get_combined_form_class(
-            counties=[c.slug for c in these_counties])
-        form = Form(answers)
-        form.is_valid()
-        sub = models.FormSubmission.create_for_counties(
-            counties=these_counties,
-            answers=form.cleaned_data)
-        subs.append(sub)
+    for org in receiving_orgs:
+        for i in range(2):
 
-    read_subs = random.sample(subs, int(len(subs)/2))
-    for sub in read_subs:
-        org_user = sub.organizations.first().profiles.first().user
-        models.ApplicationLogEntry.log_opened(
-            [sub.id], org_user)
-    # make bundles
-    from intake.submission_bundler import SubmissionBundler
-    bundler = SubmissionBundler()
-    bundler.map_submissions_to_orgs()
-    for bundle in bundler.organization_bundle_map.values():
-        bundle.create_app_bundle()
-    return subs
+            raw_answers = answer_pairs[org.slug]()
+            Form = form_pairs[org.slug]
+            form = Form(raw_answers, validate=True)
+            applicant = models.Applicant()
+            applicant.save()
+            applicants.append(applicant)
+            sub = models.FormSubmission(
+                applicant=applicant,
+                answers=form.cleaned_data
+                )
+            if org == a_pubdef:
+                letter = fake.declaration_letter_answers()
+                sub.answers.update(letter)
+            sub.save()
+            sub.organizations.add(org)
+            subs.append(sub)
+    # make 1 submission to multiple orgs
+    target_orgs = [a_pubdef, cc_pubdef, sf_pubdef]
+    answers = fake.all_county_answers()
+    Form = county_form_selector.get_combined_form_class(
+        counties=[org.county.slug for org in target_orgs])
+    form = Form(answers, validate=True)
+    applicant = models.Applicant()
+    applicant.save()
+    applicants.append(applicant)
+    multi_org_sub = models.FormSubmission(
+            applicant=applicant, answers=form.cleaned_data)
+    multi_org_sub.save()
+    multi_org_sub.organizations.add(*target_orgs)
+    subs.append(multi_org_sub)
+    # fake the date received for each sub
+    for sub in subs:
+        sub.date_received = local(fake.date_time_between('-2w', 'now'))
+        sub.save()
+    # make a bundle for each org
+    for org in receiving_orgs:
+        org_subs = [
+            sub for sub in subs
+            if (org in sub.organizations.all()) and (
+                sub != multi_org_sub)]
+        bundle = models.ApplicationBundle.create_with_submissions(
+            organization=org,
+            submissions=org_subs,
+            skip_pdf=True)
+        # save bundle
+        filename = 'mock_1_bundle_to_' + org.slug + ".json"
+        dump_as_json([bundle], fixture_path(filename))
+        filename = 'mock_{}_submissions_to_{}.json'.format(
+            len(org_subs), org.slug)
+        serialize_subs(org_subs, fixture_path(filename))
+    serialize_subs(
+        [multi_org_sub],
+        fixture_path('mock_1_submission_to_multiple_orgs.json'))
+
+
+def fixture_path(filename):
+    return os.path.join('intake', 'fixtures', filename)
+
+
+def dump_as_json(objs, filepath):
+    data = serializers.serialize(
+        "json", objs, indent=2, use_natural_foreign_keys=True)
+    with open(filepath, 'w') as f:
+        f.write(data)
+
+
+def serialize_subs(subs, filepath):
+    applicants = [
+        models.Applicant.objects.get(id=sub.applicant_id)
+        for sub in subs
+        ]
+    with open(filepath, 'w') as f:
+        data = [*applicants, *subs]
+        f.write(serializers.serialize(
+            'json', data, indent=2, use_natural_foreign_keys=True))

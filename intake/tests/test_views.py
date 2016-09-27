@@ -464,7 +464,7 @@ class TestSelectCountyView(AuthIntegrationTestCase):
         self.assertEqual(len(events), 1)
         event = events[0]
         self.assertEqual(event.name,
-                         constants.ApplicationEventTypes.APPLICATION_STARTED)
+                         models.ApplicationEvent.APPLICATION_STARTED)
 
         self.assertIn('ip', event.data)
         self.assertIn('user_agent', event.data)
@@ -515,7 +515,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         slack.assert_not_called()
         send_confirmation.assert_not_called()
         submitted_event_count = applicant.events.filter(
-            name=constants.ApplicationEventTypes.APPLICATION_SUBMITTED).count()
+            name=models.ApplicationEvent.APPLICATION_SUBMITTED).count()
         self.assertEqual(0, submitted_event_count)
 
     @patch(
@@ -568,7 +568,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         self.assertListEqual(org_slugs, [cc_pubdef])
 
         submitted_event_count = applicant.events.filter(
-            name=constants.ApplicationEventTypes.APPLICATION_SUBMITTED).count()
+            name=models.ApplicationEvent.APPLICATION_SUBMITTED).count()
 
         self.assertEqual(1, submitted_event_count)
 
@@ -611,7 +611,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
 
         event = models.ApplicationEvent.objects.filter(
             applicant_id=self.client.session['applicant_id'],
-            name=constants.ApplicationEventTypes.APPLICATION_ERRORS).first()
+            name=models.ApplicationEvent.APPLICATION_ERRORS).first()
 
         self.assertDictEqual(
             result.context['form'].get_serialized_errors(),
@@ -673,7 +673,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
 
         event = models.ApplicationEvent.objects.filter(
             applicant_id=self.client.session['applicant_id'],
-            name=constants.ApplicationEventTypes.APPLICATION_ERRORS).first()
+            name=models.ApplicationEvent.APPLICATION_ERRORS).first()
 
         self.assertDictEqual(
             result.context['form'].get_serialized_errors(),
@@ -727,7 +727,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
 
         event = models.ApplicationEvent.objects.filter(
             applicant_id=self.client.session['applicant_id'],
-            name=constants.ApplicationEventTypes.APPLICATION_ERRORS).first()
+            name=models.ApplicationEvent.APPLICATION_ERRORS).first()
 
         self.assertDictEqual(
             result.context['form'].get_serialized_errors(),
@@ -813,7 +813,7 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
 
         event = models.ApplicationEvent.objects.filter(
             applicant_id=self.client.session['applicant_id'],
-            name=constants.ApplicationEventTypes.APPLICATION_ERRORS).first()
+            name=models.ApplicationEvent.APPLICATION_ERRORS).first()
 
         self.assertDictEqual(
             result.context['form'].get_serialized_errors(),
@@ -918,7 +918,7 @@ class TestApplicationDetail(IntakeDataTestCase):
 
     fixtures = [
         'organizations', 'mock_profiles',
-        'mock_2_submissions_to_alameda_pubdef',
+        'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
         'mock_1_submission_to_multiple_orgs'
         ]
@@ -994,11 +994,11 @@ class TestApplicationBundle(IntakeDataTestCase):
 
     fixtures = [
         'organizations', 'mock_profiles',
-        'mock_2_submissions_to_alameda_pubdef',
+        'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
         'mock_1_submission_to_multiple_orgs',
         'mock_1_bundle_to_sf_pubdef',
-        'mock_1_bundle_to_alameda_pubdef',
+        'mock_1_bundle_to_a_pubdef',
         ]
 
     def get_submissions(self, group):
@@ -1053,11 +1053,11 @@ class TestApplicationIndex(IntakeDataTestCase):
 
     fixtures = [
         'organizations', 'mock_profiles',
-        'mock_2_submissions_to_alameda_pubdef',
+        'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
         'mock_1_submission_to_multiple_orgs',
         'mock_1_bundle_to_sf_pubdef',
-        'mock_1_bundle_to_alameda_pubdef',
+        'mock_1_bundle_to_a_pubdef',
         ]
 
     def assertContainsSubmissions(self, response, submissions):
@@ -1124,7 +1124,7 @@ class TestStats(IntakeDataTestCase):
 
     fixtures = [
         'organizations', 'mock_profiles',
-        'mock_2_submissions_to_alameda_pubdef',
+        'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
         'mock_2_submissions_to_cc_pubdef',
         'mock_1_submission_to_multiple_orgs',
@@ -1148,7 +1148,7 @@ class TestDailyTotals(TestCase):
 
     fixtures = [
         'organizations',
-        'mock_2_submissions_to_alameda_pubdef']
+        'mock_2_submissions_to_a_pubdef']
 
     def test_returns_200(self):
         response = self.client.get(reverse('intake-daily_totals'))
@@ -1159,10 +1159,10 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
 
     fixtures = [
         'organizations', 'mock_profiles',
-        'mock_2_submissions_to_alameda_pubdef',
+        'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
         'mock_1_submission_to_multiple_orgs',
-        'mock_1_bundle_to_alameda_pubdef',
+        'mock_1_bundle_to_a_pubdef',
     ]
 
     @patch('intake.views.notifications.slack_submissions_viewed.send')
@@ -1288,12 +1288,16 @@ class TestReferToAnotherOrgView(IntakeDataTestCase):
 
     fixtures = [
         'organizations', 'mock_profiles',
-        'mock_2_submissions_to_alameda_pubdef',
-        'mock_1_bundle_to_alameda_pubdef']
-    mock_sub_id = 485
-    mock_bundle_id = 14
+        'mock_2_submissions_to_a_pubdef',
+        'mock_1_bundle_to_a_pubdef']
 
-    def url(self, org_id, sub_id=485, next=None):
+    def setUp(self):
+        super().setUp()
+        self.mock_sub_id = self.a_pubdef_submissions[0].id
+        self.mock_bundle_id = self.a_pubdef_bundle.id
+
+    def url(self, org_id, sub_id=None, next=None):
+        sub_id = sub_id or self.mock_sub_id
         base = reverse(
             'intake-mark_transferred_to_other_org')
         base += "?ids={sub_id}&to_organization_id={org_id}".format(
