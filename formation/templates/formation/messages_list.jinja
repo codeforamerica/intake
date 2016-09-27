@@ -1,0 +1,18 @@
+  {%- if field.get_errors_list() -%}
+  <ul class="errorlist">
+  {%- for error in field.get_errors_list() %}
+    <li class="error">
+      {{ error }}
+    </li>
+  {%- endfor -%}
+  </ul>
+  {%- endif -%}
+  {%- if field.get_warnings_list() -%}
+  <ul class="warninglist">
+  {%- for warning in field.get_warnings_list() %}
+    <li class="warning">
+      {{ warning }}
+    </li>
+  {%- endfor -%}
+  </ul>
+  {%- endif -%}

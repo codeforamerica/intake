@@ -14,32 +14,52 @@ from django.views.generic.edit import FormView
 
 from django.core import mail
 
-from intake import models, notifications, forms
-from project.jinja2 import url_with_ids
+from intake import models, notifications, constants
+from formation.forms import county_form_selector, SelectCountyForm
+from project.jinja2 import url_with_ids, oxford_comma
 
+from io import StringIO
+import xlsxwriter
 
 
 class Home(TemplateView):
     template_name = "main_splash.jinja"
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        counties = models.County.objects.prefetch_related('organizations').all()
+        context['counties'] = counties
+        return context
 
-class MultiStepFormViewBase(FormView):
+
+class GetFormSessionDataMixin:
     session_storage_key = "form_in_progress"
 
-    def dump_post_data_to_session(self):
-        post_data = dict(self.request.POST.lists())
-        self.request.session[self.session_storage_key] = post_data
-
-    def load_post_data_from_session(self):
+    def get_session_data(self):
         data = self.request.session.get(self.session_storage_key, {})
         return MultiValueDict(data)
 
+    def get_counties(self):
+        session_data = self.get_session_data()
+        county_slugs = session_data.getlist('counties')
+        return models.County.objects.filter(slug__in=county_slugs)
 
-class MultiStepApplicationView(MultiStepFormViewBase):
-    template_name = "apply_page.jinja"
-    form_class = forms.FormSubmissionSerializer
-    success_url = reverse_lazy('intake-thanks')
-    error_message = _("There were some problems with your application. Please check the errors below.")
+    def get_county_context(self):
+        counties = self.get_counties()
+        return dict(
+            counties=counties,
+            county_list=[county.name + " County" for county in counties]
+            )
+
+
+class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
+
+    def update_session_data(self):
+        form_data = self.request.session.get(self.session_storage_key, {})
+        post_data = dict(self.request.POST.lists())
+        form_data.update(post_data)
+        self.request.session[self.session_storage_key] = form_data
+        return form_data
 
     def put_errors_in_flash_messages(self, form):
         for error in form.non_field_errors():
@@ -50,14 +70,29 @@ class MultiStepApplicationView(MultiStepFormViewBase):
         self.put_errors_in_flash_messages(form)
         return super().form_invalid(form, *args, **kwargs)
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context.update(self.get_county_context())
+        return context
+
+
+class MultiStepApplicationView(MultiStepFormViewBase):
+    template_name = "forms/county_form.jinja"
+    success_url = reverse_lazy('intake-thanks')
+    error_message = _("There were some problems with your application. Please check the errors below.")
+
     def confirmation(self, submission):
+        county_list = [name + " County" for name in submission.get_nice_counties()]
+        messages.success(self.request,
+            _("You have applied for help in ") + oxford_comma(county_list))
         flash_messages = submission.send_confirmation_notifications()
         for message in flash_messages:
             messages.success(self.request, message)
 
     def save_submission_and_send_notifications(self, form):
-        submission = models.FormSubmission(answers=form.data)
+        submission = models.FormSubmission(answers=form.cleaned_data)
         submission.save()
+        submission.counties = self.get_counties()
         number = models.FormSubmission.objects.count()
         notifications.slack_new_submission.send(
             submission=submission, request=self.request, submission_count=number)
@@ -68,7 +103,22 @@ class MultiStepApplicationView(MultiStepFormViewBase):
         return super().form_valid(form)
 
 
-class Confirm(MultiStepApplicationView):
+class MultiCountyApplicationView(MultiStepApplicationView):
+
+    def get_form_kwargs(self):
+        kwargs = {}
+        if self.request.method in ('POST', 'PUT'):
+            kwargs.update({
+                'data': self.request.POST})
+        return kwargs
+
+    def get_form_class(self):
+        session_data = self.get_session_data()
+        counties = session_data.getlist('counties')
+        return county_form_selector.get_combined_form_class(counties=counties)
+
+
+class Confirm(MultiCountyApplicationView):
     '''Intended to provide a final acceptance of a form,
     after any necessary warnings have been raised.
     It follows the `Apply` view, which checks for warnings.
@@ -77,9 +127,9 @@ class Confirm(MultiStepApplicationView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        form_data = self.load_post_data_from_session()
+        form_data = self.get_session_data()
         if form_data:
-            form = self.form_class(data=form_data)
+            form = self.get_form_class()(data=form_data)
             # make sure the form has warnings.
             # trigger data cleaning
             form.is_valid()
@@ -89,8 +139,7 @@ class Confirm(MultiStepApplicationView):
         return context
 
 
-
-class Apply(MultiStepApplicationView):
+class CountyApplication(MultiCountyApplicationView):
     '''The initial application page.
     Checks for warnings, and if they exist, redirects to a confirmation page.
     '''
@@ -101,32 +150,82 @@ class Apply(MultiStepApplicationView):
         """
         if form.warnings:
             # save the post data and move them to confirmation step
-            self.dump_post_data_to_session()
+            self.update_session_data()
             return redirect(self.confirmation_url)
         else:
             return super().form_valid(form)
 
 
-class Thanks(TemplateView):
+class SelectCounty(MultiStepFormViewBase):
+    form_class = SelectCountyForm
+    template_name = "forms/county_selection.jinja"
+    success_url = reverse_lazy('intake-county_application')
+
+    def form_valid(self, form):
+        form_data = self.update_session_data()
+        return super().form_valid(form)
+
+
+class Thanks(TemplateView, GetFormSessionDataMixin):
     template_name = "thanks.jinja"
+
+    def get_context_data(self, *args, **kwargs):
+        context = self.get_county_context()
+        context['intake_constants'] = constants
+        return context
 
 
 class PrivacyPolicy(TemplateView):
     template_name = "privacy_policy.jinja"
 
 
-class FilledPDF(View):
+class ApplicationDetail(View):
+    template_name = "app_detail.jinja"
+    not_allowed_message = str(
+        "Sorry, you are not allowed to access that client information. "
+        "If you have any questions, please contact us at "
+        "clearmyrecord@codeforamerica.org")
+
+    def not_allowed(self, request):
+        messages.error(request, self.not_allowed_message)
+        return redirect('intake-app_index')
+
+    def mark_viewed(self, request, submissions):
+        if not isinstance(submissions, list):
+            submissions = [submissions]
+        models.FormSubmission.mark_viewed(submissions, request.user)
 
     def get(self, request, submission_id):
-        submission = models.FormSubmission.objects.get(id=int(submission_id))
-        fillable = models.FillablePDF.get_default_instance()
-        pdf = fillable.fill(submission)
-        # wrapper = FileWrapper(file(filename))
-        # response = HttpResponse(wrapper, content_type='text/plain')
-        # response['Content-Disposition'] = 'attachment; filename="%s"' % os.path.basename(filename)
-        # response['Content-Length'] = os.path.getsize(filename)
-        # return response
-        models.FormSubmission.mark_viewed([submission], request.user)
+        if request.user.profile.should_see_pdf():
+            return redirect(reverse_lazy('intake-filled_pdf',
+                kwargs=dict(submission_id=submission_id)))
+        submissions = list(models.FormSubmission.get_permitted_submissions(
+            request.user, [submission_id]))
+        if not submissions:
+            return self.not_allowed(request)
+        submission = submissions[0]
+        context = dict(submission=submission)
+        self.mark_viewed(request, submission)
+        return render(request, self.template_name, context)
+
+
+class FilledPDF(ApplicationDetail):
+
+    def get_pdf_for_user(self, request, submission_data):
+        organization = request.user.profile.organization
+        fillable = models.FillablePDF.objects.filter(organization=organization).first()
+        if isinstance(submission_data, list):
+            return fillable.fill_many(submission_data)
+        return fillable.fill(submission_data)
+
+    def get(self, request, submission_id):
+        submissions = list(models.FormSubmission.get_permitted_submissions(
+            request.user, [submission_id]))
+        if not submissions:
+            return self.not_allowed(request)
+        submission = submissions[0]
+        pdf = self.get_pdf_for_user(request, submission)
+        self.mark_viewed(request, submission)
         return HttpResponse(pdf,
             content_type="application/pdf")
 
@@ -135,7 +234,8 @@ class ApplicationIndex(TemplateView):
     template_name = "app_index.jinja"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['submissions'] = models.FormSubmission.all_plus_related_objects()
+        context['submissions'] = list(models.FormSubmission.get_permitted_submissions(
+            self.request.user, related_objects=True))
         context['body_class'] = 'admin'
         return context
 
@@ -144,45 +244,56 @@ class Stats(TemplateView):
     template_name = "stats.jinja"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        county_totals = []
+        counties = models.County.objects.all()
+        for county in counties:
+            county_totals.append(dict(
+                count=models.FormSubmission.objects.filter(counties=county).count(),
+                county_name=county.name))
         context['stats'] = {
-            'received': models.FormSubmission.objects.count(),
-            'opened': models.FormSubmission.get_opened_apps().count()
+            'total_all_counties': models.FormSubmission.objects.count(),
+            'county_totals': county_totals
         }
         return context
 
 
 
 class MultiSubmissionMixin:
-
+    """A mixin for pulling multiple submission ids
+    out of request query params.
+    """
     def get_ids_from_params(self, request):
         id_set = request.GET.get('ids')
         return [int(i) for i in id_set.split(',')]
 
+    def get_submissions_from_params(self, request):
+        ids = self.get_ids_from_params(request)
+        return list(models.FormSubmission.get_permitted_submissions(
+            request.user, ids))
 
-class ApplicationBundle(View, MultiSubmissionMixin):
+
+class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
     def get(self, request):
-        submission_ids = self.get_ids_from_params(request)
-        submissions = list(models.FormSubmission.objects.filter(
-            pk__in=submission_ids))
-        models.FormSubmission.mark_viewed(submissions, request.user)
-        return render(
-            request,
-            "app_bundle.jinja", {
-                'submissions': submissions,
-                'count': len(submissions),
-                'app_ids': submission_ids
-             })
+        submissions = self.get_submissions_from_params(request)
+        if not submissions:
+            return self.not_allowed(request)
+        context = dict(
+            submissions=submissions,
+            count=len(submissions),
+            show_pdf=request.user.profile.should_see_pdf(),
+            app_ids=[sub.id for sub in submissions]
+            )
+        self.mark_viewed(request, submissions)
+        return render(request, "app_bundle.jinja", context)
 
 
-class FilledPDFBundle(View, MultiSubmissionMixin):
+class FilledPDFBundle(FilledPDF, MultiSubmissionMixin):
     def get(self, request):
-        submission_ids = self.get_ids_from_params(request)
-        submissions = models.FormSubmission.objects.filter(
-            pk__in=submission_ids)
-        fillable = models.FillablePDF.get_default_instance()
-        pdf = fillable.fill_many(submissions)
-        return HttpResponse(pdf,
-            content_type="application/pdf")
+        submissions = self.get_submissions_from_params(request)
+        if not submissions:
+            return self.not_allowed(request)
+        pdf = self.get_pdf_for_user(request, list(submissions))
+        return HttpResponse(pdf, content_type="application/pdf")
 
 
 class Delete(View):
@@ -198,6 +309,7 @@ class Delete(View):
         models.ApplicationLogEntry.objects.create(
             user=request.user,
             submission_id=submission_id,
+            organization=request.user.profile.organization,
             event_type=models.ApplicationLogEntry.DELETED
             )
         submission.delete()
@@ -206,19 +318,52 @@ class Delete(View):
             user=request.user)
         return redirect(reverse_lazy('intake-app_index'))
 
+class ExcelDownload(ApplicationDetail):
+
+    def build_xlsx(self, request):
+        output = StringIO()
+        workbook = xlsxwriter.Workbook(output)
+
+        # Here we will adding the code to add data
+        organization = request.user.profile.organization
+        # TODO: Add more filters
+        applications = models.FormSubmission.objects
+
+        fields = [
+        ]
+        import pdb; pdb.set_trace()
+        worksheet_s.write(4, 0, ugettext("No"), header)
+
+        workbook.close()
+        xlsx_file = output.getvalue()
+        return xlsx_file
+
+    def get(self, request):
+        response = HttpResponse(content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename=Report.xlsx'
+        xlsx_file = self.build_xlsx(request)
+        response.write(xlsx_file)
+        return response
+
 
 class MarkSubmissionStepView(View, MultiSubmissionMixin):
 
+    def get_organization(self, user):
+        """Get the organization for logging this step.
+        """
+        return user.profile.organization
+
     def get(self, request):
-        submission_ids = self.get_ids_from_params(request)
+        submissions = self.get_submissions_from_params(request)
+        submission_ids = [sub.id for sub in submissions]
         next_param = request.GET.get('next',
             reverse_lazy('intake-app_index'))
         models.ApplicationLogEntry.log_multiple(
-            self.process_step, submission_ids, request.user)
-        submissions = models.FormSubmission.objects.filter(pk__in=submission_ids)
+            self.process_step, submission_ids, request.user,
+            organization=self.get_organization(request.user))
         if hasattr(self, 'notification_function'):
             self.notification_function(
-                submissions=list(submissions), user=request.user)
+                submissions=submissions, user=request.user)
         return redirect(next_param)
 
 
@@ -228,7 +373,8 @@ class MarkProcessed(MarkSubmissionStepView):
 
 
 home = Home.as_view()
-apply_form = Apply.as_view()
+county_application = CountyApplication.as_view()
+select_county = SelectCounty.as_view()
 confirm = Confirm.as_view()
 thanks = Thanks.as_view()
 privacy = PrivacyPolicy.as_view()
@@ -237,6 +383,8 @@ filled_pdf = FilledPDF.as_view()
 pdf_bundle = FilledPDFBundle.as_view()
 app_index = ApplicationIndex.as_view()
 app_bundle = ApplicationBundle.as_view()
+app_detail = ApplicationDetail.as_view()
+excel_download = ExcelDownload.as_view()
 mark_processed = MarkProcessed.as_view()
 delete_page = Delete.as_view()
 
@@ -262,7 +410,7 @@ class PermanentRedirectView(View):
 
 
 class SingleIdPermanentRedirect(PermanentRedirectView):
-    '''Redirects from 
+    '''Redirects from
         sanfrancisco/0efd75e8721c4308a8f3247a8c63305d/
     to
         application/3/

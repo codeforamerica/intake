@@ -1,31 +1,54 @@
 from unittest import skipIf
 from unittest.mock import patch, Mock
+import cProfile
+from pstats import Stats
 import inspect
+import random
 from django.test import TestCase, override_settings
 from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase
 from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
 
 from intake.tests import mock
-from intake import models, forms, views
+from intake.tests.test_models import TestModels
+from intake import models, views, constants
+from formation import fields, forms
 
 from project.jinja2 import url_with_ids
 
-class TestCoreViews(AuthIntegrationTestCase):
+
+class IntakeDataTestCase(AuthIntegrationTestCase):
+    
+    display_field_checks = [
+        'first_name',
+        'last_name',
+        'phone_number',
+        'email',
+        'monthly_income'
+    ]
 
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
-        cls.have_four_submissions()
+        cls.have_some_submissions()
         cls.have_a_fillable_pdf()
 
     @classmethod
-    def have_four_submissions(cls):
-        cls.submissions = mock.FormSubmissionFactory.create_batch(4)
+    def have_some_submissions(cls):
+        counties = models.County.objects.all()
+        for county in counties:
+            if county.slug == constants.Counties.SAN_FRANCISCO:
+                cls.sfcounty = county
+            elif county.slug == constants.Counties.CONTRA_COSTA:
+                cls.cccounty = county
+        cls.sf_submissions = list(mock.FormSubmissionFactory.create_batch(2, counties=[cls.sfcounty]))
+        cls.cc_submissions = list(mock.FormSubmissionFactory.create_batch(2, counties=[cls.cccounty]))
+        cls.combo_submissions = list(mock.FormSubmissionFactory.create_batch(2, counties=[cls.sfcounty, cls.cccounty]))
+        cls.submissions = [*cls.sf_submissions, *cls.cc_submissions, *cls.combo_submissions]
 
     @classmethod
     def have_a_fillable_pdf(cls):
-        cls.fillable = mock.fillable_pdf()
+        cls.fillable = mock.fillable_pdf(organization=cls.sfpubdef)
 
     def assert_called_once_with_types(self, mock_obj, *arg_types, **kwarg_types):
         self.assertEqual(mock_obj.call_count, 1)
@@ -41,46 +64,48 @@ class TestCoreViews(AuthIntegrationTestCase):
                 )
         self.assertDictEqual(keyword_argument_classes, dict(kwarg_types))
 
+
+class TestViews(IntakeDataTestCase):
+
+    def setUp(self):
+        super().setUp()
+        self.session = self.client.session
+
+    def set_session_counties(self, counties=None):
+        if not counties:
+            counties = [constants.Counties.SAN_FRANCISCO]
+        self.session['form_in_progress'] = {
+            'counties': counties }
+        self.session.save()
+
     def test_home_view(self):
         response = self.client.get(reverse('intake-home'))
         self.assertEqual(response.status_code, 200)
         self.assertIn('Clear My Record', response.content.decode('utf-8'))
 
     def test_apply_view(self):
-        self.be_anonymous()
-        response = self.client.get(reverse('intake-apply'))
+        self.set_session_counties()
+        response = self.client.get(reverse('intake-county_application'))
         self.assertEqual(response.status_code, 200)
         self.assertIn('Apply to Clear My Record',
             response.content.decode('utf-8'))
         self.assertNotContains(response, "This field is required.")
-        self.assertNotContains(response, forms.Warnings.ADDRESS)
-        self.assertNotContains(response, forms.Warnings.SSN)
-        self.assertNotContains(response, forms.Warnings.DOB)
+        self.assertNotContains(response, "warninglist")
 
     def test_confirm_view(self):
         self.be_anonymous()
-        base_data = mock.post_data(**mock.NEW_RAW_FORM_DATA)
+        base_data = mock.post_data(
+            counties=['sanfrancisco'],
+            **mock.NEW_RAW_FORM_DATA)
         session = self.client.session
         session['form_in_progress'] = dict(base_data.lists())
         session.save()
         response = self.client.get(reverse('intake-confirm'))
         self.assertContains(response, base_data['first_name'][0])
         self.assertContains(response, base_data['last_name'][0])
-        self.assertContains(response, forms.Warnings.ADDRESS)
-        self.assertContains(response, forms.Warnings.SSN)
-        self.assertContains(response, forms.Warnings.DOB)
-
-    def test_stats_view(self):
-        submissions = list(models.FormSubmission.objects.all())
-        total = len(submissions)
-        with override_settings(
-                DEFAULT_AGENCY_USER_EMAIL=self.users[0].email):
-            # mark all but the last of them as opened
-            models.ApplicationLogEntry.log_opened(
-                [s.id for s in submissions[:-1]], self.users[0])
-            response = self.client.get(reverse('intake-stats'))
-            self.assertContains(response, str(total))
-            self.assertContains(response, str(total - 1))
+        self.assertContains(response, fields.AddressField.is_recommended_error_message)
+        self.assertContains(response, fields.SocialSecurityNumberField.is_recommended_error_message)
+        self.assertContains(response, fields.DateOfBirthField.is_recommended_error_message)
 
     @patch('intake.views.models.FormSubmission.send_confirmation_notifications')
     @patch('intake.views.notifications.slack_new_submission.send')
@@ -88,6 +113,11 @@ class TestCoreViews(AuthIntegrationTestCase):
         self.be_anonymous()
         result = self.client.fill_form(
             reverse('intake-apply'),
+            counties=['sanfrancisco']
+            )
+        self.assertRedirects(result, reverse('intake-county_application'))
+        result = self.client.fill_form(
+            reverse('intake-county_application'),
             first_name="Anonymous",
             last_name="Anderson",
             ssn='123091203',
@@ -100,8 +130,7 @@ class TestCoreViews(AuthIntegrationTestCase):
             'address.state': 'CA',
             'address.zip': '99999',
             })
-        self.assertRedirects(result, 
-            reverse('intake-thanks'))
+        self.assertRedirects(result, reverse('intake-thanks'))
         thanks_page = self.client.get(result.url)
         self.assertContains(thanks_page, "Thank")
         self.assert_called_once_with_types(
@@ -115,19 +144,24 @@ class TestCoreViews(AuthIntegrationTestCase):
     @patch('intake.views.notifications.slack_new_submission.send')
     def test_apply_with_name_only(self, slack, send_confirmation):
         self.be_anonymous()
-        # this should raise warnings
         result = self.client.fill_form(
             reverse('intake-apply'),
-            first_name="Foo",
-            last_name="Bar",
+            counties=['sanfrancisco'],
             follow=True
             )
-        self.assertEqual(result.wsgi_request.path, reverse('intake-confirm'))
+        # this should raise warnings
+        result = self.client.fill_form(
+            reverse('intake-county_application'),
+            first_name="Foo",
+            last_name="Bar"
+            )
+        self.assertRedirects(result, reverse('intake-confirm'))
+        result = self.client.get(result.url)
         self.assertContains(result, "Foo")
         self.assertContains(result, "Bar")
-        self.assertContains(result, forms.Warnings.ADDRESS)
-        self.assertContains(result, forms.Warnings.SSN)
-        self.assertContains(result, forms.Warnings.DOB)
+        self.assertContains(result, fields.AddressField.is_recommended_error_message)
+        self.assertContains(result, fields.SocialSecurityNumberField.is_recommended_error_message)
+        self.assertContains(result, fields.DateOfBirthField.is_recommended_error_message)
         self.assertContains(result, views.Confirm.incoming_message)
         slack.assert_not_called()
         result = self.client.fill_form(
@@ -146,21 +180,21 @@ class TestCoreViews(AuthIntegrationTestCase):
 
     def test_apply_with_insufficient_form(self):
         # should return the same page, with the partially filled form
+        self.set_session_counties()
         result = self.client.fill_form(
-            reverse('intake-apply'),
+            reverse('intake-county_application'),
             first_name="Foooo"
             )
         self.assertContains(result, "Foooo")
-        self.assertEqual(result.wsgi_request.path, reverse('intake-apply'))
-        self.assertContains(result, "This field may not be blank.")
-        self.assertContains(result, forms.Warnings.ADDRESS)
-        self.assertContains(result, forms.Warnings.SSN)
-        self.assertContains(result, forms.Warnings.DOB)
-
+        self.assertEqual(result.wsgi_request.path, reverse('intake-county_application'))
+        self.assertContains(result, "This field is required.")
+        self.assertContains(result, fields.AddressField.is_recommended_error_message)
+        self.assertContains(result, fields.SocialSecurityNumberField.is_recommended_error_message)
+        self.assertContains(result, fields.DateOfBirthField.is_recommended_error_message)
 
     @patch('intake.models.notifications.slack_submissions_viewed.send')
     def test_authenticated_user_can_see_filled_pdf(self, slack):
-        self.be_non_agency_user()
+        self.be_sfpubdef_user()
         pdf = self.client.get(reverse('intake-filled_pdf',
             kwargs=dict(
                 submission_id=self.submissions[0].id
@@ -168,12 +202,10 @@ class TestCoreViews(AuthIntegrationTestCase):
         self.assertTrue(len(pdf.content) > 69000)
         self.assertEqual(type(pdf.content), bytes)
         self.assert_called_once_with_types(
-            slack,
-            submissions='list',
-            user='User')
+            slack, submissions='list', user='User')
 
     def test_authenticated_user_can_see_list_of_submitted_apps(self):
-        self.be_non_agency_user()
+        self.be_cfa_user()
         index = self.client.get(reverse('intake-app_index'))
         for submission in self.submissions:
             self.assertContains(index,
@@ -202,7 +234,7 @@ class TestCoreViews(AuthIntegrationTestCase):
             )
 
     def test_authenticated_user_can_see_pdf_bundle(self):
-        self.be_non_agency_user()
+        self.be_sfpubdef_user()
         ids = [s.id for s in self.submissions]
         url = url_with_ids('intake-pdf_bundle', ids)
         bundle = self.client.get(url)
@@ -210,7 +242,8 @@ class TestCoreViews(AuthIntegrationTestCase):
 
     @patch('intake.models.notifications.slack_submissions_viewed.send')
     def test_authenticated_user_can_see_app_bundle(self, slack):
-        self.be_non_agency_user()
+        self.be_cfa_user()
+        # we need a pdf for this users organization
         ids = [s.id for s in self.submissions]
         url = url_with_ids('intake-app_bundle', ids)
         bundle = self.client.get(url)
@@ -222,7 +255,7 @@ class TestCoreViews(AuthIntegrationTestCase):
 
     @patch('intake.views.notifications.slack_submissions_deleted.send')
     def test_authenticated_user_can_delete_apps(self, slack):
-        self.be_non_agency_user()
+        self.be_cfa_user()
         submission = self.submissions[-1]
         pdf_link = reverse('intake-filled_pdf',
             kwargs={'submission_id':submission.id})
@@ -241,7 +274,7 @@ class TestCoreViews(AuthIntegrationTestCase):
 
     @patch('intake.views.MarkProcessed.notification_function')
     def test_agency_user_can_mark_apps_as_processed(self, slack):
-        self.be_agency_user()
+        self.be_sfpubdef_user()
         submissions = self.submissions[:2]
         ids = [s.id for s in submissions]
         mark_link = url_with_ids('intake-mark_processed', ids)
@@ -303,15 +336,305 @@ class TestCoreViews(AuthIntegrationTestCase):
                 status_code=301, fetch_redirect_response=False)
 
 
-    @skipIf(True, "not yet implemented")
-    def test_authenticated_user_cannot_see_apps_to_other_org(self):
-        pass
 
+<<<<<<< HEAD
 
 
 class TestExcelDownloadView(TestCoreViews):
 
     view_name = 'intake-xls-download'
+=======
+class TestSelectCountyView(AuthIntegrationTestCase):
+
+    def test_anonymous_user_can_access_county_view(self):
+        self.be_anonymous()
+        county_view = self.client.get(
+            reverse('intake-apply'))
+        for slug, description in constants.COUNTY_CHOICES:
+            self.assertContains(county_view, slug)
+            self.assertContains(county_view, html_utils.escape(description))
+
+    def test_anonymous_user_can_submit_county_selection(self):
+        self.be_anonymous()
+        result = self.client.fill_form(
+            reverse('intake-apply'),
+            counties=['contracosta'])
+        self.assertRedirects(result, reverse('intake-county_application'))
+
+
+class TestMultiCountyApplication(AuthIntegrationTestCase):
+
+    @patch('intake.views.models.FormSubmission.send_confirmation_notifications')
+    @patch('intake.views.notifications.slack_new_submission.send')
+    def test_can_apply_to_contra_costa_alone(self, slack, send_confirmation):
+        self.be_anonymous()
+        contracosta = constants.Counties.CONTRA_COSTA
+        answers = mock.fake.contra_costa_county_form_answers()
+        
+
+        county_fields = forms.ContraCostaForm.fields
+        other_county_fields = forms.SanFranciscoCountyForm.fields | forms.OtherCountyForm.fields
+        county_specific_fields = county_fields - other_county_fields
+        county_specific_field_names = [Field.context_key for Field in county_specific_fields]
+        other_county_fields = other_county_fields - county_fields
+        other_county_field_names = [Field.context_key for Field in other_county_fields]
+
+        result = self.client.fill_form(reverse('intake-apply'), counties=[contracosta])
+        self.assertRedirects(result, reverse('intake-county_application'))
+        result = self.client.get(reverse('intake-county_application'))
+        form = result.context['form']
+        self.assertListEqual(form.counties, [contracosta])
+
+        for field_name in county_specific_field_names:
+            self.assertContains(result, field_name)
+
+        for field_name in other_county_field_names:
+            self.assertNotContains(result, field_name)
+
+        result = self.client.fill_form(
+            reverse('intake-county_application'),
+            **answers)
+        self.assertRedirects(result, reverse('intake-thanks'))
+        lookup = {
+            key: answers[key]
+            for key in [
+                'email', 'first_name', 'last_name', 'phone_number'
+                ]
+            }
+
+        submission = models.FormSubmission.objects.filter(
+            answers__contains=lookup).first()
+        county_slugs = [county.slug for county in submission.counties.all()]
+        self.assertListEqual(county_slugs, [contracosta])
+
+    @patch('intake.views.models.FormSubmission.send_confirmation_notifications')
+    @patch('intake.views.notifications.slack_new_submission.send')
+    def test_contra_costa_errors_properly(self, slack, send_confirmation):
+        self.be_anonymous()
+        contracosta = constants.Counties.CONTRA_COSTA
+        answers = mock.fake.contra_costa_county_form_answers()
+        result = self.client.fill_form(reverse('intake-apply'), counties=[contracosta])
+        required_fields = forms.ContraCostaForm.required_fields
+
+        # check that leaving out any required field returns an error on that field
+        for required_field in required_fields:
+            if hasattr(required_field, 'subfields'):
+                continue
+            field_key = required_field.context_key
+            bad_data = answers.copy()
+            bad_data[field_key] = ''
+            result = self.client.fill_form(
+                reverse('intake-county_application'),
+                **bad_data)
+            self.assertContains(result, required_field.is_required_error_message)
+
+        # check for the preferred contact methods validator
+        bad_data = answers.copy()
+        bad_data['contact_preferences'] = ['prefers_email', 'prefers_sms']
+        bad_data['email'] = ''
+        bad_data['phone_number'] = ''
+        result = self.client.fill_form(
+            reverse('intake-county_application'),
+            **bad_data)
+        self.assertTrue(result.context['form'].email.errors)
+        self.assertTrue(result.context['form'].phone_number.errors)
+
+        result = self.client.fill_form(
+                reverse('intake-county_application'),
+                **answers)
+        self.assertRedirects(result, reverse('intake-thanks'))
+
+    def test_can_go_back_and_reset_counties(self):
+        self.be_anonymous()
+        county_slugs = [slug for slug, text in constants.COUNTY_CHOICES]
+        first_choices = random.sample(county_slugs, 2)
+        second_choices = [random.choice(county_slugs)]
+        result = self.client.fill_form(reverse('intake-apply'), counties=first_choices, follow=True)
+        form = result.context['form']
+        self.assertEqual(form.counties, first_choices)
+        county_setting = self.client.session['form_in_progress']['counties']
+        self.assertEqual(county_setting, first_choices)
+
+        result = self.client.fill_form(reverse('intake-apply'), counties=second_choices, follow=True)
+        form = result.context['form']
+        self.assertEqual(form.counties, second_choices)
+        county_setting = self.client.session['form_in_progress']['counties']
+        self.assertEqual(county_setting, second_choices)
+
+
+
+class TestApplicationDetail(IntakeDataTestCase):
+
+    def get_detail(self, submission):
+        result = self.client.get(
+            reverse('intake-app_detail',
+                kwargs=dict(submission_id=submission.id)))
+        return result
+
+    def assertHasDisplayData(self, response, submission):
+        for field, value in submission.answers.items():
+            if field in self.display_field_checks:
+                escaped_value = html_utils.conditional_escape(value)
+                self.assertContains(response, escaped_value)
+
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_logged_in_user_can_get_submission_display(self, slack):
+        user = self.be_ccpubdef_user()
+        submission = self.cc_submissions[0]
+        result = self.get_detail(submission)
+        self.assertEqual(result.context['submission'], submission)
+        self.assert_called_once_with_types(
+            slack, submissions='list', user='User')
+        self.assertHasDisplayData(result, submission)
+
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_staff_user_can_get_submission_display(self, slack):
+        user = self.be_cfa_user()
+        submission = self.combo_submissions[0]
+        result = self.get_detail(submission)
+        self.assertEqual(result.context['submission'], submission)
+        self.assert_called_once_with_types(
+            slack, submissions='list', user='User')
+        self.assertHasDisplayData(result, submission)
+
+    @patch('intake.models.FillablePDF')
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_user_with_pdf_redirected_to_pdf(self, slack, FillablePDF):
+        self.be_sfpubdef_user()
+        submission = self.sf_submissions[0]
+        result = self.get_detail(submission)
+        self.assertRedirects(result, reverse('intake-filled_pdf', 
+            kwargs=dict(submission_id=submission.id)),
+            fetch_redirect_response=False)
+        slack.assert_not_called() # notification should be deferred to pdf view
+        FillablePDF.assert_not_called()
+
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_user_cant_see_app_detail_for_other_county(self, slack):
+        self.be_ccpubdef_user()
+        submission = self.sf_submissions[0]
+        response = self.get_detail(submission)
+        self.assertRedirects(response, reverse('intake-app_index')) 
+        slack.assert_not_called()
+
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_user_can_see_app_detail_for_multi_county(self, slack):
+        self.be_ccpubdef_user()
+        submission = self.combo_submissions[0]
+        response = self.get_detail(submission)
+        self.assert_called_once_with_types(
+            slack, submissions='list', user='User')
+        self.assertHasDisplayData(response, submission)
+
+
+class TestApplicationBundle(IntakeDataTestCase):
+
+    def get_submissions(self, group):
+        ids = [s.id for s in group]
+        url = url_with_ids('intake-app_bundle', ids)
+        return self.client.get(url)
+
+    def assertHasDisplayData(self, response, submissions):
+        for submission in submissions:
+            for field, value in submission.answers.items():
+                if field in self.display_field_checks:
+                    escaped_value = html_utils.conditional_escape(value)
+                    self.assertContains(response, escaped_value)
+
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_user_can_get_app_bundle_without_pdf(self, slack):
+        user = self.be_ccpubdef_user()
+        response = self.get_submissions(self.cc_submissions)
+        self.assert_called_once_with_types(
+            slack, submissions='list', user='User')
+        self.assertNotContains(response, 'iframe class="pdf_inset"')
+        self.assertHasDisplayData(response, self.cc_submissions)
+
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_staff_user_can_get_app_bundle_without_pdf(self, slack):
+        user = self.be_cfa_user()
+        response = self.get_submissions(self.combo_submissions)
+        self.assert_called_once_with_types(
+            slack, submissions='list', user='User')
+        self.assertNotContains(response, 'iframe class="pdf_inset"')
+        self.assertHasDisplayData(response, self.combo_submissions)
+
+
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_user_can_get_bundle_with_pdf(self, slack):
+        self.be_sfpubdef_user()
+        response = self.get_submissions(self.sf_submissions)
+        self.assertContains(response, 'iframe class="pdf_inset"')
+        self.assert_called_once_with_types(
+            slack, submissions='list', user='User')
+
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_user_cant_see_app_bundle_for_other_county(self, slack):
+        self.be_sfpubdef_user()
+        response = self.get_submissions(self.cc_submissions)
+        self.assertRedirects(response, reverse('intake-app_index'))
+        response = self.client.get(response.url)
+        slack.assert_not_called()
+
+
+    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    def test_user_can_see_app_bundle_for_multi_county(self, slack):
+        self.be_ccpubdef_user()
+        response = self.get_submissions(self.combo_submissions)
+        self.assert_called_once_with_types(
+            slack, submissions='list', user='User')
+        self.assertNotContains(response, 'iframe class="pdf_inset"')
+        self.assertHasDisplayData(response, self.combo_submissions)
+
+
+
+class TestApplicationIndex(IntakeDataTestCase):
+
+    def assertContainsSubmissions(self, response, submissions):
+        for submission in submissions:
+            detail_url_link = reverse('intake-app_detail',
+                kwargs=dict(submission_id=submission.id))
+            self.assertContains(response, detail_url_link)
+
+    def assertNotContainsSubmissions(self, response, submissions):
+        for submission in submissions:
+            detail_url_link = reverse('intake-app_detail',
+                kwargs=dict(submission_id=submission.id))
+            self.assertNotContains(response, detail_url_link)
+
+    def test_that_org_user_can_only_see_apps_to_own_org(self):
+        self.be_ccpubdef_user()
+        response = self.client.get(reverse('intake-app_index'))
+        self.assertContainsSubmissions(response, self.cc_submissions)
+        self.assertContainsSubmissions(response, self.combo_submissions)
+        self.assertNotContainsSubmissions(response, self.sf_submissions)
+
+    def test_that_cfa_user_can_see_apps_to_all_orgs(self):
+        self.be_cfa_user()
+        response = self.client.get(reverse('intake-app_index'))
+        self.assertContainsSubmissions(response, self.cc_submissions)
+
+
+
+class TestStats(IntakeDataTestCase):
+
+    def test_that_page_shows_counts_by_county(self):
+        # get numbers
+        all_any = len(self.submissions)
+        all_sf = len(self.sf_submissions) + len(self.combo_submissions)
+        all_cc = len(self.cc_submissions) + len(self.combo_submissions)
+        total = "{} total applications".format(all_any)
+        sf_string = "{} applications for San Francisco County".format(all_sf)
+        cc_string = "{} applications for Contra Costa County".format(all_cc)
+        self.be_anonymous()
+        response = self.client.get(reverse('intake-stats'))
+        for search_term in [total, sf_string, cc_string]:
+            self.assertContains(response, search_term)
+
+
+class TestExcelDownloadView(IntakeDataTestCase):
+
+    view_name = 'intake-excel_download'
 
     def test_anonymous_user_is_redirected_to_splash_page(self):
         self.be_anonymous()
@@ -320,7 +643,6 @@ class TestExcelDownloadView(TestCoreViews):
 
     def test_agency_user_can_download_xls(self):
         self.be_agency_user()
+        self.be_sfpubdef_user()
         response = self.client.get(reverse(self.view_name))
         # assert that we got an xls file and the http response is as expected
-
-    

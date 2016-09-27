@@ -12,6 +12,14 @@ from intake.tests import mock
 from intake import notifications
 
 
+notification_mock_settings = dict(
+    FRONT_API_TOKEN='mytoken',
+    FRONT_EMAIL_CHANNEL_ID='email_ch',
+    FRONT_PHONE_CHANNEL_ID='phone_ch',
+    SLACK_WEBHOOK_URL='slack',
+    )
+
+
 class TestNotifications(TestCase):
 
     def setUp(self):
@@ -38,7 +46,7 @@ class TestNotifications(TestCase):
 
     @patch('intake.notifications.requests.post')
     @patch('intake.notifications.loader.get_template')
-    @override_settings(FRONT_API_TOKEN='mytoken', ADMIN_PHONE_NUMBER='+19993336666')
+    @override_settings(DIVERT_REMOTE_CONNECTIONS=False, **notification_mock_settings)
     def test_front_notifications(self, get_template, mock_post):
         # check all the basics using an SMS example
         mock_post.return_value = mock.FrontSendMessageResponse.success()
@@ -69,8 +77,7 @@ class TestNotifications(TestCase):
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         }
-
-        post_args, post_kwargs = mock_post.call_args
+        post_args, post_kwargs = [*mock_post.call_args]
         posted_data = json.loads(post_kwargs['data'])
         self.assertDictEqual(posted_data, expected_data)
         self.assertDictEqual(post_kwargs['headers'], expected_headers)
@@ -106,7 +113,7 @@ class TestNotifications(TestCase):
             'text': 'Hi this is an email message body.',
             })
 
-        post_args, post_kwargs = mock_post.call_args
+        post_args, post_kwargs = [*mock_post.call_args]
         posted_data = json.loads(post_kwargs['data'])
         self.assertDictEqual(posted_data, expected_data)
         self.assertDictEqual(post_kwargs['headers'], expected_headers)
@@ -125,6 +132,8 @@ class TestSlackAndFront(BaseTestCase):
                 return self.get_anonymous_display()
             def get_nice_contact_preferences(self):
                 return ["text message", "email"]
+            def get_nice_counties(self):
+                return ['San Francisco', 'Contra Costa']
         cls.sub = MockSub()
         cls.user = Mock(email='staff@org.org')
         cls.request = Mock()
@@ -133,7 +142,7 @@ class TestSlackAndFront(BaseTestCase):
 
     def test_render_new_submission(self):
         expected_new_submission_text = str(
-"""New submission #101!
+"""New submission #101 to San Francisco and Contra Costa!
 <http://filled_pdf/|Shining Koala>
 They want to be contacted via text message and email
 """)
@@ -174,28 +183,30 @@ They want to be contacted via text message and email
         self.assertEqual(deleted, expected_submission_deleted_text)
 
     @patch('intake.notifications.requests.post')
+    @override_settings(DIVERT_REMOTE_CONNECTIONS=False, **notification_mock_settings)
     def test_slack_simple(self, mock_post):
         mock_post.return_value = "HTTP response"
         expected_json = '{"text": "Hello slack <&>"}'
         expected_headers = {'Content-type': 'application/json'}
         notifications.slack_simple.send("Hello slack <&>")
-        called_args, called_kwargs = mock_post.call_args
+        called_args, called_kwargs = [*mock_post.call_args]
         self.assertEqual(
             called_kwargs['data'], expected_json)
         self.assertDictEqual(
             called_kwargs['headers'], expected_headers)
 
     @patch('intake.notifications.requests.post')
+    @override_settings(DIVERT_REMOTE_CONNECTIONS=False, **notification_mock_settings)
     def test_slack_send(self, mock_post):
         mock_post.return_value = "HTTP response"
-        expected_json = '{"text": "New submission #101!\\n<http://filled_pdf/|Shining Koala>\\nThey want to be contacted via text message and email\\n"}'
+        expected_json = '{"text": "New submission #101 to San Francisco and Contra Costa!\\n<http://filled_pdf/|Shining Koala>\\nThey want to be contacted via text message and email\\n"}'
         expected_headers = {'Content-type': 'application/json'}
         response = notifications.slack_new_submission.send(
             submission=self.sub,
             submission_count=self.submission_count,
             request=self.request
             )
-        called_args, called_kwargs = mock_post.call_args
+        called_args, called_kwargs = [*mock_post.call_args]
         self.assertEqual(
             called_kwargs['data'], expected_json)
         self.assertDictEqual(

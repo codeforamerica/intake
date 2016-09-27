@@ -1,12 +1,15 @@
 import uuid
 import os
 import factory
+import random
 from pytz import timezone
 from faker import Factory as FakerFactory
 from django.core.files import File
+from django.db.utils import IntegrityError
 from django.utils.datastructures import MultiValueDict
 
 from intake import models
+from intake.management.commands import load_initial_data
 from unittest.mock import Mock
 Pacific = timezone('US/Pacific')
 
@@ -37,7 +40,7 @@ RAW_FORM_DATA = MultiValueDict({
 
 NEW_RAW_FORM_DATA = {
     'address.city': '',
-    'address.state': 'CA',
+    'address.state': '',
     'address.street': '',
     'address.zip': '',
     'contact_preferences': ['prefers_email'],
@@ -59,10 +62,11 @@ NEW_RAW_FORM_DATA = {
 }
 
 
-
-
-
-
+def load_counties_and_orgs():
+    command = load_initial_data.Command()
+    command.stdout = Mock()
+    command.handle()
+    
 
 def post_data(**kwargs):
     for key, value in kwargs.items():
@@ -70,15 +74,19 @@ def post_data(**kwargs):
             kwargs[key] = [value] 
     return MultiValueDict(kwargs)
 
+
 def form_answers(**kwargs):
     data = fake.sf_county_form_answers(**kwargs)
     return post_data(**data)
 
+
 def local(datetime):
     return Pacific.localize(datetime)
 
+
 def uuids(count):
     return [uuid.uuid4().hex for i in range(count)]
+
 
 def fake_typeseam_submission_dicts(uuids):
     return [{
@@ -86,6 +94,34 @@ def fake_typeseam_submission_dicts(uuids):
         'date_received': fake.date_time_between('-2w', 'now'),
         'answers': fake.sf_county_form_answers()
         } for uuid in uuids]
+
+
+class PrepopulatedModelFactory:
+
+    def __init__(self, model):
+        self.model = model
+        self.row_count = None
+
+    def ensure_county_count(self):
+        self.objects = list(self.model.objects.all())
+        self.row_count = len(self.objects)
+        if not self.row_count:
+            raise Exception(
+                "`{}` table is not yet populated.".format(self.model.__name__))
+
+    def choice(self):
+        self.ensure_county_count()
+        return random.choice(self.objects)
+
+    def sample(self, size=None, zero_is_okay=False):
+        self.ensure_county_count()
+        if not size:
+            lower_limit = 0 if zero_is_okay else 1
+            size = random.randint(lower_limit, self.row_count)
+        return random.sample(self.objects, size)
+
+
+CountyFactory = PrepopulatedModelFactory(models.County)
 
 
 class FormSubmissionFactory(factory.DjangoModelFactory):
@@ -97,26 +133,45 @@ class FormSubmissionFactory(factory.DjangoModelFactory):
     class Meta:
         model = models.FormSubmission
 
+    @factory.post_generation
+    def counties(self, create, extracted, **kwargs):
+        if not create:
+            return
+        if extracted:
+            self.counties.add(*[
+                county.id for county in extracted
+                ])
+
+    @classmethod
+    def create(cls, *args, **kwargs):
+        if 'counties' not in kwargs:
+            kwargs['counties'] = CountyFactory.sample()
+        return super().create(*args, **kwargs)
+
+
 
 class FillablePDFFactory(factory.DjangoModelFactory):
     class Meta:
         model = models.FillablePDF
 
 
-def fillable_pdf():
-    return FillablePDFFactory.create(
+def fillable_pdf(**kwargs):
+    attributes = dict(
             name = "Sample PDF",
             pdf = File(open(
                 'tests/sample_pdfs/sample_form.pdf', 'rb')),
-            translator = "tests.sample_translator.translate"
+            translator = "tests.sample_translator.translate",
         )
+    attributes.update(kwargs)
+    return FillablePDFFactory.create(**attributes)
 
-def useable_pdf():
+def useable_pdf(org):
     example_pdf = File(open(os.environ.get('TEST_PDF_PATH'), 'rb'))
     return FillablePDFFactory.create(
             name="Clean Slate",
             pdf=example_pdf,
-            translator = "intake.translators.clean_slate.translator"
+            translator = "intake.translators.clean_slate.translator",
+            organization=org,
         )
 
 

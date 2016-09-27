@@ -1,0 +1,96 @@
+<div class="data_display-dataset">
+
+  <div class="data_display-section time_place">
+    <div class="data_display-row">
+      {{ form.date_received }}
+      {{ form.counties }}
+    </div>
+  </div>
+
+  <div class="data_display-section identification">
+    <div class="data_display-row name">
+      {{ form.first_name }}
+      {%- if 'middle_name' in form.fields %}
+      {{ form.middle_name }}
+      {%- endif %}
+      {{ form.last_name }}
+    </div>
+    <div class="data_display-row id_numbers">
+      {{ form.dob }}
+      {%- if 'ssn' in form.fields %}
+      {{ form.ssn }}
+      {%- endif %}
+    </div>
+  </div>
+
+  <div class="data_display-section contact_info">
+    <h3 class="data_display-section_header">Contact Information</h3>
+    <div class="data_display-row">
+      {{ form.contact_preferences }}
+    </div>
+    <div class="data_display-row devices">
+      {{ form.phone_number }}
+      {{ form.email }}
+    </div>
+    <div class="data_display-row mailing">
+      {{ form.address }}
+    </div>
+  </div>
+
+  <div class="data_display-section case_status">
+    <h3 class="data_display-section_header">Case Information</h3>
+    <div class="data_display-stack">
+      {{ form.us_citizen }}
+    </div>
+    <div class="data_display-stack probation_parole">
+      {{ form.on_probation_parole }}
+      {%- if form.on_probation_parole %}
+      {{ form.where_probation_or_parole }}
+      {{ form.when_probation_or_parole }}
+      {%- endif %}
+    </div>
+    {%- if 'being_charged' in form.fields %}
+    <div class="data_display-stack">
+        {{ form.being_charged }}
+    </div>
+    {%- endif %}
+    <div class="data_display-stack">
+      {{ form.serving_sentence }}
+    </div>
+    {%- if 'rap_outside_sf' in form.fields %}
+    <div class="data_display-stack external_rap">
+        {{ form.rap_outside_sf }}
+        {%- if form.rap_outside_sf %}
+        {{ form.when_where_outside_sf }}
+        {%- endif %}
+    </div>
+    {%- endif %}
+  </div>
+
+  <div class="data_display-section financial">
+    <h3 class="data_display-section_header">Financial Information</h3>
+    <div class="data_display-row employment">
+      {{ form.currently_employed }}
+    </div>
+    <div class="data_display-row income">
+      {{ form.monthly_income }}
+      {%- if 'income_source' in form.fields %}
+        {{ form.income_source }}
+      {%- endif %}
+      {{ form.monthly_expenses }}
+    </div>
+  </div>
+
+  <div class="data_display-section meta">
+    <div class="data_display-row">
+      {{ form.how_did_you_hear }}
+    </div>
+
+    {%- if 'additional_information' in form.fields %}
+    <div class="data_display-row">
+      {{ form.additional_information }}
+    </div>
+    {%- endif %}
+  </div>
+  
+</div>

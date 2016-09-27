@@ -3,6 +3,12 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
 
+if settings.DEBUG and settings.USE_DEBUG_TOOLBAR:
+    import debug_toolbar
+    urlpatterns += [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ]
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
@@ -15,3 +21,10 @@ urlpatterns += [
     url(r'^accounts/', include('allauth.urls')),
     url(r'^invitations/', include('invitations.urls', namespace='invitations')),
 ]
+
+# django debug toolbar
+if settings.DEBUG and settings.USE_DEBUG_TOOLBAR:
+    import debug_toolbar
+    urlpatterns += [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ]

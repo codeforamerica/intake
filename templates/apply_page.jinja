@@ -23,7 +23,8 @@ public apply
   #}
   
   {% include "includes/csrf_field.jinja" %}
-
+  
+  {% block form_content %}
   {{ macros.checkbox_options_field(form.fields.contact_preferences) }}
   {{ macros.basic_field(form.fields.first_name) }}
   {{ macros.basic_field(form.fields.middle_name, optional=True) }}
@@ -64,6 +65,7 @@ public apply
   </div>
   
   <button type="submit">Apply</button>
+  {% endblock form_content %}
 
 </form>
 

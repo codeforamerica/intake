@@ -1,0 +1,16 @@
+// Function borrowed from getbootstrap.com/css/#mixins
+// Generate the medium columns
+.make-md-column(@columns, @gutter: @grid-gutter-width) {
+  position: relative;
+  // Prevent columns from collapsing when empty
+  min-height: 1px;
+  // Inner gutter via padding
+  padding-left:  (@gutter / 2);
+  padding-right: (@gutter / 2);
+
+  // Calculate width based on number of columns available
+  @media (min-width: @screen-md-min) {
+    float: left;
+    width: percentage((@columns / @grid-columns));
+  }
+}
