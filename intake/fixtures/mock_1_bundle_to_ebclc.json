@@ -1,0 +1,16 @@
+[
+{
+  "model": "intake.applicationbundle",
+  "pk": 44,
+  "fields": {
+    "organization": [
+      "East Bay Community Law Center"
+    ],
+    "bundled_pdf": "",
+    "submissions": [
+      568,
+      569
+    ]
+  }
+}
+]
