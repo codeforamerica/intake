@@ -918,7 +918,7 @@ class TestApplicationDetail(IntakeDataTestCase):
 
     fixtures = [
         'organizations', 'mock_profiles',
-        'mock_2_submissions_to_alameda_pubdef',
+        'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
         'mock_1_submission_to_multiple_orgs'
         ]
@@ -994,11 +994,11 @@ class TestApplicationBundle(IntakeDataTestCase):
 
     fixtures = [
         'organizations', 'mock_profiles',
-        'mock_2_submissions_to_alameda_pubdef',
+        'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
         'mock_1_submission_to_multiple_orgs',
         'mock_1_bundle_to_sf_pubdef',
-        'mock_1_bundle_to_alameda_pubdef',
+        'mock_1_bundle_to_a_pubdef',
         ]
 
     def get_submissions(self, group):
@@ -1053,11 +1053,11 @@ class TestApplicationIndex(IntakeDataTestCase):
 
     fixtures = [
         'organizations', 'mock_profiles',
-        'mock_2_submissions_to_alameda_pubdef',
+        'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
         'mock_1_submission_to_multiple_orgs',
         'mock_1_bundle_to_sf_pubdef',
-        'mock_1_bundle_to_alameda_pubdef',
+        'mock_1_bundle_to_a_pubdef',
         ]
 
     def assertContainsSubmissions(self, response, submissions):
@@ -1124,7 +1124,7 @@ class TestStats(IntakeDataTestCase):
 
     fixtures = [
         'organizations', 'mock_profiles',
-        'mock_2_submissions_to_alameda_pubdef',
+        'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
         'mock_2_submissions_to_cc_pubdef',
         'mock_1_submission_to_multiple_orgs',
@@ -1148,7 +1148,7 @@ class TestDailyTotals(TestCase):
 
     fixtures = [
         'organizations',
-        'mock_2_submissions_to_alameda_pubdef']
+        'mock_2_submissions_to_a_pubdef']
 
     def test_returns_200(self):
         response = self.client.get(reverse('intake-daily_totals'))
@@ -1159,10 +1159,10 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
 
     fixtures = [
         'organizations', 'mock_profiles',
-        'mock_2_submissions_to_alameda_pubdef',
+        'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
         'mock_1_submission_to_multiple_orgs',
-        'mock_1_bundle_to_alameda_pubdef',
+        'mock_1_bundle_to_a_pubdef',
     ]
 
     @patch('intake.views.notifications.slack_submissions_viewed.send')
@@ -1288,12 +1288,16 @@ class TestReferToAnotherOrgView(IntakeDataTestCase):
 
     fixtures = [
         'organizations', 'mock_profiles',
-        'mock_2_submissions_to_alameda_pubdef',
-        'mock_1_bundle_to_alameda_pubdef']
-    mock_sub_id = 485
-    mock_bundle_id = 14
+        'mock_2_submissions_to_a_pubdef',
+        'mock_1_bundle_to_a_pubdef']
 
-    def url(self, org_id, sub_id=485, next=None):
+    def setUp(self):
+        super().setUp()
+        self.mock_sub_id = self.a_pubdef_submissions[0].id
+        self.mock_bundle_id = self.a_pubdef_bundle.id
+
+    def url(self, org_id, sub_id=None, next=None):
+        sub_id = sub_id or self.mock_sub_id
         base = reverse(
             'intake-mark_transferred_to_other_org')
         base += "?ids={sub_id}&to_organization_id={org_id}".format(

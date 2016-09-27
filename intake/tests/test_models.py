@@ -377,10 +377,11 @@ class TestModels(TestCase):
 
 class TestFormSubmission(TestCase):
 
-    fixtures = ['organizations', 'mock_2_submissions_to_alameda_pubdef']
+    fixtures = ['organizations', 'mock_2_submissions_to_a_pubdef']
 
     def get_a_sample_sub(self):
-        return models.FormSubmission.objects.get(pk=485)
+        return models.FormSubmission.objects.filter(
+            organizations__slug='a_pubdef').first()
 
     def test_create_for_counties(self):
         counties = models.County.objects.exclude(
@@ -459,9 +460,9 @@ class TestFormSubmission(TestCase):
         expected_result = {
             'url': str(
                 "/applications/mark/transferred/"
-                "?ids=485"
+                "?ids={}"
                 "&to_organization_id=1"
-                "&next=/applications/bundle/2/"),
+                "&next=/applications/bundle/2/".format(submission.id)),
             'display': 'Other Public Defender'
         }
         self.assertDictEqual(
@@ -702,7 +703,11 @@ class TestApplicationBundle(TestCase):
 
 
 class TestApplicationLogEntry(TestCase):
-    fixtures = ['organizations', 'mock_profiles']
+    fixtures = [
+        'organizations',
+        'mock_profiles',
+        'mock_2_submissions_to_cc_pubdef',
+        ]
 
     def test_can_log_referral_between_orgs(self):
         from_org = auth_models.Organization.objects.get(
