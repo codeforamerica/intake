@@ -725,6 +725,25 @@ class TestApplicationLogEntry(TestCase):
         self.assertEqual(log.user, from_org_user)
         self.assertEqual(log.to_org(), to_org)
 
+    def test_log_multiple_creates_application_events_by_default(self):
+        # log submissions read
+        submissions = models.FormSubmission.objects.all()
+        user = auth_models.Organization.objects.get(
+            slug=constants.Organizations.COCO_PUBDEF).profiles.first().user
+        applicant_ids = [sub.applicant_id for sub in submissions]
+        event_count_before = models.ApplicationEvent.objects.filter(
+            applicant_id__in=applicant_ids).count()
+        logs = models.ApplicationLogEntry.log_opened(
+            [sub.id for sub in submissions],
+            user
+            )
+        expected_difference = len(logs)
+        event_count_after = models.ApplicationEvent.objects.filter(
+            applicant_id__in=applicant_ids).count()
+        self.assertEqual(
+            event_count_after - event_count_before,
+            expected_difference)
+
 
 class TestApplicant(TestCase):
 
