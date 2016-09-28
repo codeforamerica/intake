@@ -17,12 +17,17 @@ class TestApplicantSerializer(TestCase):
             applicant=applicant,
             name=models.ApplicationEvent.APPLICATION_STARTED,
             data={
-                'referrer': 'google.com'
+                'referrer': 'google.com',
+                'ip': '127.0.0.1',
             })
         event.save()
 
         data = serializers.ApplicantSerializer(applicant).data
-        top_keys = ['id', 'events', 'form_submissions']
+        top_keys = [
+            'id', 'events',
+            'started', 'finished', 'had_errors',
+            'ip', 'referrer', 'events'
+            ]
         event_keys = ['id', 'name', 'data']
         for key in top_keys:
             self.assertIn(key, data)
