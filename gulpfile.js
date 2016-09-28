@@ -1,6 +1,10 @@
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var less = require('gulp-less');
+var browserify = require('browserify');
+var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
+var gutil = require('gulp-util');
 var process = require('child_process');
 
 gulp.task('fonts', function(){
@@ -18,6 +22,19 @@ gulp.task('voicemail', function(){
     .pipe(gulp.dest('./frontend/build/voicemail/'))
 });
 
+gulp.task('js', function(){
+  return browserify({
+    entries: './frontend/js/main.js',
+    debug: true,
+    // defining transforms here will avoid crashing your stream
+    transform: []
+  }).bundle()
+    .pipe(source('main.js'))
+    .pipe(buffer())
+    .on('error', gutil.log)
+    .pipe(gulp.dest('./frontend/build/js/'));
+});
+
 gulp.task('less_dev', function(){
   return gulp.src('./frontend/less/main.less')
     .pipe(less())
@@ -26,6 +43,7 @@ gulp.task('less_dev', function(){
 
 gulp.task('watch', function(){
   gulp.watch('./frontend/less/**/*.less', ['less_dev']);
+  gulp.watch('./frontend/js/**/*.js', ['js']);
 })
 
 gulp.task('django', function(){
@@ -35,5 +53,5 @@ gulp.task('django', function(){
 });
 
 
-gulp.task('build', ['fonts', 'img', 'voicemail', 'less_dev'])
+gulp.task('build', ['fonts', 'img', 'voicemail', 'less_dev', 'js'])
 gulp.task('default', ['django', 'build', 'watch'])
