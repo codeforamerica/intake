@@ -74,6 +74,13 @@ class EventTypeField(serializers.Field):
     event_name = None
     reducer = len
 
+    def __init__(self, *args, **kwargs):
+        base_kwargs = {
+            'source': 'events'
+        }
+        base_kwargs.update(kwargs)
+        super().__init__(*args, **base_kwargs)
+
     def filter(self, events):
         return events.filter(name=self.event_name)
 

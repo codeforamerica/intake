@@ -54,11 +54,11 @@ class FormSubmissionSerializer(serializers.ModelSerializer):
 
 
 class ApplicantSerializer(serializers.ModelSerializer):
-    started = serializer_fields.Started(source='events')
-    finished = serializer_fields.Finished(source='events')
-    had_errors = serializer_fields.HadErrors(source='events')
-    ip = serializer_fields.IPAddress(source='events')
-    referrer = serializer_fields.Referrer(source='events')
+    started = serializer_fields.Started()
+    finished = serializer_fields.Finished()
+    had_errors = serializer_fields.HadErrors()
+    ip = serializer_fields.IPAddress()
+    referrer = serializer_fields.Referrer()
     events = ApplicationEventSerializer(many=True)
     form_submissions = FormSubmissionSerializer(many=True)
 
