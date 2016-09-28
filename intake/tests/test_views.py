@@ -879,13 +879,15 @@ class TestDeclarationLetterReviewPage(AuthIntegrationTestCase):
     @patch('intake.views.notifications.slack_new_submission.send')
     def test_post_approve_letter(self, slack, send_confirmation):
         self.be_anonymous()
+        applicant = models.Applicant()
+        applicant.save()
         alameda = constants.Counties.ALAMEDA
         mock_letter = mock.fake.declaration_letter_answers()
         mock_answers = mock.fake.alameda_pubdef_answers()
         counties = {'counties': [alameda]}
         self.set_session(
             form_in_progress={**counties, **mock_answers, **mock_letter},
-            applicant_id=2)
+            applicant_id=applicant.id)
         response = self.client.fill_form(
             reverse('intake-review_letter'),
             submit_action="approve_letter")
