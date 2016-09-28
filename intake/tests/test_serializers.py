@@ -26,7 +26,8 @@ class TestApplicantSerializer(TestCase):
         top_keys = [
             'id', 'events',
             'started', 'finished', 'had_errors',
-            'ip', 'referrer', 'events'
+            'ip', 'referrer', 'events',
+            'tried_to_apply'
             ]
         event_keys = ['id', 'name', 'data']
         for key in top_keys:

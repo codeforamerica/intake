@@ -61,6 +61,8 @@ class ApplicantSerializer(serializers.ModelSerializer):
     referrer = serializer_fields.Referrer()
     events = ApplicationEventSerializer(many=True)
     form_submissions = FormSubmissionSerializer(many=True)
+    tried_to_apply = serializers.SerializerMethodField(
+        method_name='check_if_they_actually_tried_to_apply')
 
     class Meta:
         model = models.Applicant
@@ -72,3 +74,6 @@ class ApplicantSerializer(serializers.ModelSerializer):
         sub_data['submission_id'] = sub_data.pop('id', None)
         data.update(sub_data)
         return data
+
+    def check_if_they_actually_tried_to_apply(self, obj):
+        return serializer_fields.made_a_meaningful_attempt_to_apply(obj)

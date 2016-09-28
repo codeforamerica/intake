@@ -138,3 +138,30 @@ class IPAddress(EventDataKeyField):
 class Referrer(EventDataKeyField):
     event_name = models.ApplicationEvent.APPLICATION_STARTED
     key = 'referrer'
+
+
+def made_a_meaningful_attempt_to_apply(applicant):
+    """Some started applications are empty submissions, in which it appears
+    that someone is exploring the interface, rather than starting a meaningful
+    application. This checks whether an applicant has indeed made a meaningful
+    attempt to fill a form. There are two situations that would return True:
+        1. The user successfully submitted the CountyApplication page.
+        2. In the absence of 1, the user got errors indicating at least one
+           attempt beyond submitting an empty form.
+    """
+    completed_county_page = bool(
+        applicant.events.filter(
+            name=models.ApplicationEvent.APPLICATION_PAGE_COMPLETE,
+            data__page_name='CountyApplication').count())
+    if completed_county_page:
+        return True
+    meaningful_errors = []
+    for data in applicant.events.filter(
+                name=models.ApplicationEvent.APPLICATION_ERRORS
+            ).values_list('data', flat=True):
+        filter_keys = ['counties', 'first_name']
+        errors = data.get('errors', {})
+        free_of_errors_indicating_frivolity = all(
+            [key not in errors for key in filter_keys])
+        meaningful_errors.append(free_of_errors_indicating_frivolity)
+    return any(meaningful_errors)
