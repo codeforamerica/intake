@@ -34,6 +34,15 @@ class TestApplicantSerializer(TestCase):
         for key in event_keys:
             self.assertIn(key, data['events'][0])
 
+    def test_works_without_data(self):
+        applicant = models.Applicant.objects.first()
+        submission = models.FormSubmission.objects.filter(
+            applicant=applicant).first()
+        submission.applicant = None
+        submission.save()
+        data = serializers.ApplicantSerializer(applicant).data
+        self.assertTrue(data)
+
 
 class TestFormSubmissionSerializer(TestCase):
 

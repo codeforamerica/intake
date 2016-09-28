@@ -67,8 +67,8 @@ class ApplicantSerializer(serializers.ModelSerializer):
 
     def to_representation(self, obj):
         data = super().to_representation(obj)
-        subs = data.pop('form_submissions')
+        subs = data.pop('form_submissions', [])
         sub_data = next(iter(subs), {})
-        sub_data['submission_id'] = sub_data.pop('id')
+        sub_data['submission_id'] = sub_data.pop('id', None)
         data.update(sub_data)
         return data
