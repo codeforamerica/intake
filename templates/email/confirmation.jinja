@@ -1,12 +1,12 @@
-Hi {{ name }},
+Hi {{ name|safe }},
 
-Thanks for applying online to Clear My Record. Since you applied for help in {{ oxford_comma(county_names) }}, we are sending your application to {{ oxford_comma(organizations) }}
+Thanks for applying online to Clear My Record. Since you applied for help in {{ oxford_comma(county_names)|safe }}, we are sending your application to {{ oxford_comma(organizations)|safe }}
 
-{% for step in next_steps %}{{ step }}
+{% for step in next_steps %}{{ step|safe }}
 
 {% endfor -%}
 We’ll follow up with you in about 4 weeks to make sure things are going okay.
 
 Take care,
 
-{{ staff_name }} at Clear My Record
+{{ staff_name|safe }} at Clear My Record

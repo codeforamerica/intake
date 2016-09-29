@@ -1,2 +1,2 @@
-Hi {{ name }}, we got your application and sent it to {{ oxford_comma(organizations) }}. {% for step in next_steps %}{{ step }} {% endfor -%}
+Hi {{ name|safe }}, we got your application and sent it to {{ oxford_comma(organizations)|safe }}. {% for step in next_steps %}{{ step|safe }} {% endfor -%}
 - {{ staff_name }} at Clear My Record
