@@ -447,6 +447,40 @@ class ApplicationEvent(models.Model):
         ordering = ['-time']
 
     @classmethod
+    def create(cls, name, applicant_id, **data):
+        event = cls(
+            name=name,
+            applicant_id=applicant_id,
+            data=data or {}
+        )
+        event.save()
+        return event
+
+    @classmethod
+    def log_app_started(
+            cls, applicant_id, counties,
+            referrer=None, ip=None, user_agent=None):
+        return cls.create(
+            cls.APPLICATION_STARTED, applicant_id,
+            counties=counties,
+            referrer=referrer,
+            ip=ip,
+            user_agent=user_agent)
+
+    @classmethod
+    def log_app_errors(cls, applicant_id, errors=None):
+        return cls.create(cls.APPLICATION_ERRORS, applicant_id, errors=errors)
+
+    @classmethod
+    def log_page_complete(cls, applicant_id, page_name=None):
+        return cls.create(
+            cls.APPLICATION_PAGE_COMPLETE, applicant_id, page_name=page_name)
+
+    @classmethod
+    def log_app_submitted(cls, applicant_id):
+        return cls.create(cls.APPLICATION_SUBMITTED, applicant_id)
+
+    @classmethod
     def from_logs(cls, logs):
 
         applicationLogEntryReference = {

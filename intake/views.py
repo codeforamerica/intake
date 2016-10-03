@@ -110,7 +110,8 @@ class GetFormSessionDataMixin:
         )
 
     def get_applicant_id(self):
-        return self.request.session.get('applicant_id')
+        return getattr(self, 'applicant_id', None) \
+                    or self.request.session.get('applicant_id')
 
 
 class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
@@ -134,8 +135,8 @@ class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
     def form_invalid(self, form, *args, **kwargs):
         messages.error(self.request, self.ERROR_MESSAGE)
         self.put_errors_in_flash_messages(form)
-        self.log_application_event(
-            models.ApplicationEvent.APPLICATION_ERRORS,
+        models.ApplicationEvent.log_app_errors(
+            self.get_applicant_id(),
             errors=form.get_serialized_errors())
         return super().form_invalid(form, *args, **kwargs)
 
@@ -151,18 +152,8 @@ class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
             applicant.save()
             applicant_id = applicant.id
             self.request.session['applicant_id'] = applicant.id
+        self.applicant_id = applicant_id
         return applicant_id
-
-    def log_application_event(self, name, **data):
-        applicant_id = getattr(self, 'applicant_id', None) \
-            or self.get_applicant_id()
-        event = models.ApplicationEvent(
-            name=name,
-            applicant_id=applicant_id,
-            data=data or {}
-        )
-        event.save()
-        return event
 
 
 class MultiCountyApplicationBase(MultiStepFormViewBase):
@@ -222,8 +213,7 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
             applicant_id=applicant_id)
         submission.save()
         submission.organizations.add(*organizations)
-        self.log_application_event(
-            models.ApplicationEvent.APPLICATION_SUBMITTED)
+        models.ApplicationEvent.log_app_submitted(applicant_id)
         # TODO: check for cerrect org in view tests
         return submission
 
@@ -256,8 +246,8 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
         return super().form_valid(form)
 
     def log_page_complete(self):
-        return self.log_application_event(
-            models.ApplicationEvent.APPLICATION_PAGE_COMPLETE,
+        return models.ApplicationEvent.log_page_complete(
+            applicant_id=self.get_applicant_id(),
             page_name=self.__class__.__name__)
 
 
@@ -397,13 +387,13 @@ class SelectCounty(MultiStepFormViewBase):
 
     def form_valid(self, form):
         self.update_session_data(**form.parsed_data)
-        self.log_application_event(
-            models.ApplicationEvent.APPLICATION_STARTED,
+        models.ApplicationEvent.log_app_started(
+            self.get_applicant_id(),
+            counties=form.parsed_data['counties'],
             referrer=self.request.session.get('referrer'),
             ip=self.request.ip_address,
             user_agent=self.request.META.get('HTTP_USER_AGENT'),
-            **form.parsed_data
-        )
+            )
         return super().form_valid(form)
 
 
@@ -587,6 +577,8 @@ class Stats(TemplateView):
 
 
 class DailyTotals(View):
+    """A Downloadable CSV with daily totals for each county
+    """
 
     def get(self, request):
         totals = list(models.FormSubmission.get_daily_totals())
