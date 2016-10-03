@@ -31,7 +31,10 @@ gulp.task('admin_js', function(){
   }).bundle()
     .pipe(source('admin.js'))
     .pipe(buffer())
-    .on('error', gutil.log)
+    .on('error', function(e) {
+        gutil.log(e.stack);
+        this.emit('end');
+    })
     .pipe(gulp.dest('./frontend/build/js/'));
 });
 

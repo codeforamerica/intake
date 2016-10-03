@@ -4240,6 +4240,14 @@ pre.address {
   border: 1px solid #eeeeee;
   border-radius: .5em;
 }
+svg g.axis text {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+}
+rect.day_bar {
+  stroke: #fff;
+  stroke-width: 0.5px;
+  fill: #069ED6;
+}
 .top_bar a {
   color: inherit;
   text-decoration: none;

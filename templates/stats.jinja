@@ -16,10 +16,14 @@ Current Stats for Clear My Record
   </div>
 {% endblock column_content %}
 {% block jsons %}
+{% if applications_json %}
     <script type="text/json" name="applications_json">
         {{ applications_json }}
     </script>
+{% endif %}
 {% endblock jsons %}
 {% block main_script %}
+{% if applications_json %}
 <script src="{{ static('js/admin.js')}}"></script>
+{% endif %}
 {% endblock main_script %}
