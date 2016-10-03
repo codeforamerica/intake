@@ -1,7 +1,8 @@
 import uuid
 import os
+import random
 import factory
-import json
+import datetime as dt
 from pytz import timezone
 from faker import Factory as FakerFactory
 from django.core.files import File
@@ -11,6 +12,7 @@ from django.conf import settings
 from django.utils.datastructures import MultiValueDict
 
 from intake import models, constants
+from intake.tests import mock_user_agents, mock_referrers
 from user_accounts.tests.mock import OrganizationFactory
 from unittest.mock import Mock
 Pacific = timezone('US/Pacific')
@@ -98,7 +100,6 @@ def fake_typeseam_submission_dicts(uuids):
     } for uuid in uuids]
 
 
-
 class FormSubmissionFactory(factory.DjangoModelFactory):
     date_received = factory.LazyFunction(
         lambda: local(fake.date_time_between('-2w', 'now')))
@@ -173,6 +174,106 @@ class FrontSendMessageResponse:
         return cls._make_response(400, cls.ERROR_JSON)
 
 
+def fake_user_agent():
+    return random.choice(mock_user_agents.choices)
+
+
+def fake_referrer():
+    return random.choice(mock_referrers.choices)
+
+
+def completion_time(spread=9, shift=3):
+    """Returns a random timedelta between 3 and 12 minutes
+    """
+    base = random.random()
+    minutes = (base * spread) + shift
+    return dt.timedelta(minutes=minutes)
+
+
+def random_interpolate_minutes_between(timedelta, points=1, segment_limit=0.6):
+    full_span = timedelta / dt.timedelta(minutes=1)  # minutes as float
+    denominator = points + 1
+    full_segment = full_span / denominator
+    segment_length = full_segment * segment_limit
+    starting_points = []
+    resulting_points = []
+    starting_point = 0.0
+    for i in range(points):
+        starting_point = starting_point + full_segment
+        starting_points.append(starting_point)
+    for starting_point in starting_points:
+        shift = starting_point - (segment_length * 0.5)
+        resulting_points.append(completion_time(segment_length, shift))
+    return resulting_points
+
+
+def fake_app_started(
+        applicant, counties, referrer=None, ip=None, user_agent=None,
+        time=None):
+    if not referrer:
+        referrer = fake_referrer()
+    if not user_agent:
+        user_agent = fake_user_agent()
+    if not ip:
+        ip = fake.ipv4()
+    event = models.ApplicationEvent(
+        name=models.ApplicationEvent.APPLICATION_STARTED,
+        applicant_id=applicant.id,
+        data=dict(
+            counties=counties, referrer=referrer, ip=ip, user_agent=user_agent)
+        )
+    if time:
+        event.time = time
+    event.save()
+    return event
+
+
+def fake_page_complete(applicant, page_name, time=None):
+    event = models.ApplicationEvent(
+        name=models.ApplicationEvent.APPLICATION_PAGE_COMPLETE,
+        applicant_id=applicant.id,
+        data=dict(page_name=page_name))
+    if time:
+        event.time = time
+    event.save()
+    return event
+
+
+def fake_app_submitted(applicant, time=None):
+    event = models.ApplicationEvent(
+        name=models.ApplicationEvent.APPLICATION_SUBMITTED,
+        applicant_id=applicant.id,
+        data=dict())
+    if time:
+        event.time = time
+    event.save()
+    return event
+
+
+def make_mock_submission_event_sequence(applicant):
+    sub = models.FormSubmission.objects.get(applicant_id=applicant.id)
+    events = []
+    time_to_complete = completion_time()
+    sub_finish = sub.date_received
+    start_time = sub_finish - time_to_complete
+    page_sequences = [
+        constants.PAGE_COMPLETE_SEQUENCES[org.slug]
+        for org in sub.organizations.all()]
+    counties = [org.county.slug for org in sub.organizations.all()]
+    longest_sequence = max(page_sequences, key=lambda seq: len(seq))
+    intermediate_pages = longest_sequence[1:-1]
+    intermediate_times = [
+        start_time + timeshift
+        for timeshift in random_interpolate_minutes_between(
+            time_to_complete, len(intermediate_pages))]
+    times = [start_time, *intermediate_times, sub_finish]
+    events.append(fake_app_started(applicant, counties, time=start_time))
+    for time, page_name in zip(times, longest_sequence):
+        events.append(fake_page_complete(applicant, page_name, time=time))
+    events.append(fake_app_submitted(applicant, sub_finish))
+    return events
+
+
 def build_seed_submissions():
     from user_accounts.models import Organization
     from formation.forms import county_form_selector
@@ -201,7 +302,6 @@ def build_seed_submissions():
     subs = []
     for org in receiving_orgs:
         for i in range(2):
-
             raw_answers = answer_pairs[org.slug]()
             Form = form_pairs[org.slug]
             form = Form(raw_answers, validate=True)
@@ -255,6 +355,11 @@ def build_seed_submissions():
     serialize_subs(
         [multi_org_sub],
         fixture_path('mock_1_submission_to_multiple_orgs.json'))
+    events = []
+    for applicant in applicants:
+        events.extend(
+            make_mock_submission_event_sequence(applicant))
+    dump_as_json(events, fixture_path('mock_application_events.json'))
 
 
 def fixture_path(filename):
@@ -271,8 +376,7 @@ def dump_as_json(objs, filepath):
 def serialize_subs(subs, filepath):
     applicants = [
         models.Applicant.objects.get(id=sub.applicant_id)
-        for sub in subs
-        ]
+        for sub in subs]
     with open(filepath, 'w') as f:
         data = [*applicants, *subs]
         f.write(serializers.serialize(
