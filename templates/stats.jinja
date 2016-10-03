@@ -11,9 +11,15 @@ Current Stats for Clear My Record
   {%- for county_total in stats.county_totals %}
   <h3>{{ county_total.count }} applications for {{ county_total.county_name }} County</h3>
   {%- endfor %}
+  <div class="performance_chart">
+    
+  </div>
 {% endblock column_content %}
 {% block jsons %}
     <script type="text/json" name="applications_json">
         {{ applications_json }}
     </script>
 {% endblock jsons %}
+{% block main_script %}
+<script src="{{ static('js/admin.js')}}"></script>
+{% endblock main_script %}

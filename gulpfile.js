@@ -22,14 +22,14 @@ gulp.task('voicemail', function(){
     .pipe(gulp.dest('./frontend/build/voicemail/'))
 });
 
-gulp.task('js', function(){
+gulp.task('admin_js', function(){
   return browserify({
-    entries: './frontend/js/main.js',
+    entries: './frontend/js/admin_entry.js',
     debug: true,
     // defining transforms here will avoid crashing your stream
     transform: []
   }).bundle()
-    .pipe(source('main.js'))
+    .pipe(source('admin.js'))
     .pipe(buffer())
     .on('error', gutil.log)
     .pipe(gulp.dest('./frontend/build/js/'));
@@ -43,7 +43,7 @@ gulp.task('less_dev', function(){
 
 gulp.task('watch', function(){
   gulp.watch('./frontend/less/**/*.less', ['less_dev']);
-  gulp.watch('./frontend/js/**/*.js', ['js']);
+  gulp.watch('./frontend/js/**/*.js', ['admin_js']);
 })
 
 gulp.task('django', function(){
@@ -53,5 +53,5 @@ gulp.task('django', function(){
 });
 
 
-gulp.task('build', ['fonts', 'img', 'voicemail', 'less_dev', 'js'])
+gulp.task('build', ['fonts', 'img', 'voicemail', 'less_dev', 'admin_js'])
 gulp.task('default', ['django', 'build', 'watch'])

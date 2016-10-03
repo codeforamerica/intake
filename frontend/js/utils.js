@@ -13,5 +13,10 @@ module.exports = {
                 return console.warn(json);
             }
         }
+    },
+    combineObjs: function(obj1, obj2) {
+        for (var attrName in obj2) {
+            obj1[attrName] = obj2[attrName];
+        }
     }
 }

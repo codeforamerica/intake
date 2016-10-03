@@ -40,8 +40,8 @@
 {% endblock body %}
 {% block scripts %}
   {% block jsons %}{% endblock jsons %}
-  
   {% include "includes/google_analytics.jinja" %}
   {% include "includes/intercom.jinja" %}
-  <script src="{{ static('js/main.js')}}"></script>
+  {% block main_script %}
+  {% endblock main_script %}
 {% endblock scripts %}
