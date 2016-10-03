@@ -51,6 +51,15 @@ ORG_NAMES = {
     Organizations.EBCLC: _("East Bay Community Law Center"),
 }
 
+PAGE_COMPLETE_SEQUENCES = {
+    Organizations.SF_PUBDEF: ["SelectCounty", "CountyApplication"],
+    Organizations.COCO_PUBDEF: ["SelectCounty", "CountyApplication"],
+    Organizations.ALAMEDA_PUBDEF: [
+        "SelectCounty", "CountyApplication",
+        "DeclarationLetterView", "DeclarationLetterReviewPage"],
+    Organizations.EBCLC: ["SelectCounty", "CountyApplication"],
+}
+
 
 class Counties:
     CONTRA_COSTA = 'contracosta'

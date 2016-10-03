@@ -4,13 +4,12 @@ from urllib.parse import urlparse
 class PersistReferrerMiddleware:
 
     def process_request(self, request):
-
         referrer = request.META.get('HTTP_REFERER')
         if referrer:
             referrer_host = urlparse(referrer).netloc
+            # make sure this is not an internal referrer
             if referrer_host != request.get_host():
                 request.session['referrer'] = referrer
-
         return None
 
 
@@ -25,7 +24,5 @@ class GetCleanIpAddressMiddleware:
         return ip
 
     def process_request(self, request):
-
         request.ip_address = self._get_client_ip(request)
-
         return None
