@@ -16,10 +16,12 @@ class Command(BaseCommand):
                 applicant.save()
                 sub.applicant = applicant
                 sub.save()
-                models.ApplicationEvent(
+                event = models.ApplicationEvent(
                     applicant_id=applicant.id,
                     name=models.ApplicationEvent.APPLICATION_SUBMITTED,
-                    time=sub.date_received)
+                    time=sub.date_received,
+                    data={})
+                event.save()
                 backfilled += 1
         self.stdout.write(
             self.style.SUCCESS(
