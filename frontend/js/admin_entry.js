@@ -15,7 +15,7 @@ function drawDailyCountsChart(){
 	var totalHeight = 170;
 	var offset = {left: 20, right: 20, bottom: 40, top: 20};
 	var yearMonthDayFormat = d3.timeFormat("%Y-%m-%d");
-	var niceDateFormat = d3.timeFormat("%a %b %e");
+	var niceDateFormat = d3.timeFormat("%b %e");
 
 	var applications = utils.getJson('applications_json');
 	var div = d3.select(".performance_chart");
@@ -25,13 +25,14 @@ function drawDailyCountsChart(){
 	var chartHeight = totalHeight - (offset.bottom + offset.top);
 
 	var today = new Date();
-	today.setHours(0,0,0,0);
+	tomorrow = d3.timeDay.offset(today, 1);
+	tomorrow.setHours(0,0,0,0);
 	var startDate = d3.timeMonth.offset(today, -2);
-	var allDays = d3.timeDays(startDate, today);
+	var allDays = d3.timeDays(startDate, tomorrow);
 	var barWidth = chartWidth / allDays.length;
 
 	var dayBuckets = d3.nest()
-		.key(function(a){ return yearMonthDayFormat(new Date(a.started)); })
+		.key(function(a){ return yearMonthDayFormat(new Date(a.finished)); })
 		.rollup(function(applications){
 			var finished = applications.filter(function(a){ return a.finished; });
 			return {
@@ -42,8 +43,10 @@ function drawDailyCountsChart(){
 			};
 		}).map(applications, d3.map);
 
+	console.log(dayBuckets.values());
+
 	var xScale = d3.scaleTime()
-		.domain([startDate, today])
+		.domain([startDate, tomorrow])
 		.range([0, chartWidth - barWidth]);
 
 	var yScale = d3.scaleLinear()
@@ -70,7 +73,8 @@ function drawDailyCountsChart(){
 	lines.attr("x1", chartWidth).attr("class", "back-ticks");
 
 	var xAxis = d3.axisBottom(xScale)
-		.ticks(d3.timeWeek);
+		.ticks(d3.utcMonday)
+		.tickFormat(niceDateFormat);
 
 	svg.append("g")
 		.attr("class", "axis x")
@@ -92,7 +96,9 @@ function drawDailyCountsChart(){
 			var height = this.getAttribute("height");
 			return chartHeight - height;
 		}).attr("width", barWidth)
-		.attr("x", xScale);
+		.attr("x", function(d){
+			return xScale(d) + (barWidth * 0.3);
+		});
 
 
 
