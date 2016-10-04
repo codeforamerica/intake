@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.db.models import Count
 from intake.tests.test_views import IntakeDataTestCase
 from user_accounts import models
 from intake import models as intake_models
@@ -57,7 +58,9 @@ class TestUserProfile(IntakeDataTestCase):
 
 class TestOrganization(IntakeDataTestCase):
 
-    fixtures = ['organizations', 'mock_profiles']
+    fixtures = [
+        'organizations', 'mock_profiles',
+        'mock_1_submission_to_multiple_orgs']
 
     def test_has_a_pdf(self):
         self.assertTrue(self.sf_pubdef.has_a_pdf())
@@ -93,6 +96,21 @@ class TestOrganization(IntakeDataTestCase):
         cc_pubdef = self.cc_pubdef
         self.assertIsNone(sf_pubdef.get_transfer_org())
         self.assertIsNone(cc_pubdef.get_transfer_org())
+
+    def test_get_unopened_apps_returns_apps_opened_by_other_org(self):
+        # assume we have a multi-org app opened by a user from one org
+        cc_pubdef = models.Organization.objects.get(
+            slug=constants.Organizations.COCO_PUBDEF)
+        a_pubdef = models.Organization.objects.get(
+            slug=constants.Organizations.ALAMEDA_PUBDEF)
+        cc_pubdef_user = models.UserProfile.objects.filter(
+                organization=cc_pubdef).first().user
+        sub = intake_models.FormSubmission.objects.annotate(
+            org_count=Count('organizations')).filter(org_count=3).first()
+        intake_models.ApplicationLogEntry.log_opened([sub.id], cc_pubdef_user)
+        # assert that it shows up in unopened apps
+        self.assertIn(sub, a_pubdef.get_unopened_apps())
+        self.assertNotIn(sub, cc_pubdef.get_unopened_apps())
 
 
 class TestAddress(TestCase):

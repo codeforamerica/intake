@@ -2,6 +2,7 @@ from intake import (
     notifications,
     models as intake_models
 )
+from user_accounts.models import Organization
 
 
 class OrganizationBundle:
@@ -16,9 +17,6 @@ class OrganizationBundle:
         self.organization = organization
         self.submissions = []
         self.notification_emails = organization.get_referral_emails()
-
-    def add_submission(self, submission):
-        self.submissions.append(submission)
 
     def get_submission_ids(self):
         return [submission.id for submission in self.submissions]
@@ -59,12 +57,6 @@ class SubmissionBundler:
     """
 
     def __init__(self):
-        self.queryset = intake_models.FormSubmission.get_unopened_apps()\
-                            .prefetch_related(
-                                'organizations',
-                                'organizations__profiles',
-                                'organizations__profiles__user'
-                            ).all()
         self.organization_bundle_map = {}
 
     def get_org_referral(self, organization):
@@ -76,13 +68,12 @@ class SubmissionBundler:
         return bundle
 
     def map_submissions_to_orgs(self):
-        """Run through the query set and add each submissions to the
-        appropriate OrganizationBundle
+        """Loop through receiving orgs and get unopened apps for each
         """
-        for submission in self.queryset:
-            for receiving_org in submission.organizations.all():
-                bundle = self.get_org_referral(receiving_org)
-                bundle.add_submission(submission)
+        for receiving_org in Organization.objects.filter(
+                is_receiving_agency=True):
+            bundle = self.get_org_referral(receiving_org)
+            bundle.submissions = receiving_org.get_unopened_apps()
 
     def make_bundled_referrals(self):
         """Make bundles and tell them to send out referrals

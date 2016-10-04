@@ -1,42 +1,25 @@
 from django.test import TestCase
 from unittest.mock import patch
-from intake.tests import mock
+from django.db.models import Count
 from intake import models, submission_bundler
-from user_accounts import models as auth_models
+from user_accounts.models import Organization, UserProfile
 
 
 class BundlerTestCase(TestCase):
 
-    fixtures = ['organizations']
-
-    @classmethod
-    def setUpTestData(cls):
-        super().setUpTestData()
-        orgs = auth_models.Organization.objects.all()
-        for org in orgs:
-            setattr(cls, org.slug, org)
-        # 6 submissions
-        # 3 sf only
-        # 2 cc only
-        # 1 to sf & cc both
-        org_sets = [
-            [cls.sf_pubdef],
-            [cls.sf_pubdef],
-            [cls.sf_pubdef],
-            [cls.sf_pubdef, cls.cc_pubdef],
-            [cls.cc_pubdef],
-            [cls.cc_pubdef]]
-        cls.submissions = []
-        for org_set in org_sets:
-            cls.submissions.append(
-                models.FormSubmission.create_for_organizations(
-                    organizations=org_set, answers={}
-                    ))
+    fixtures = [
+        'organizations', 'mock_profiles',
+        'mock_2_submissions_to_sf_pubdef',
+        'mock_2_submissions_to_a_pubdef',
+        'mock_2_submissions_to_cc_pubdef',
+        'mock_2_submissions_to_ebclc',
+        'mock_1_submission_to_multiple_orgs',
+    ]
 
     def setUp(self):
         self.get_unopened_patcher = patch('.'.join([
             'intake.submission_bundler',
-            'intake_models.FormSubmission',
+            'Organization',
             'get_unopened_apps',
         ]))
         self.log_referred_patcher = patch(
@@ -50,8 +33,7 @@ class BundlerTestCase(TestCase):
 
     def patch_unopened(self, return_value):
         unopened = self.get_unopened_patcher.start()
-        unopened.return_value.prefetch_related\
-            .return_value.all.return_value = return_value
+        unopened.return_value = return_value
 
     def restore_unopened(self):
         self.get_unopened_patcher.stop()
@@ -63,17 +45,15 @@ class BundlerTestCase(TestCase):
 
 class TestOrganizationBundle(BundlerTestCase):
 
-    fixtures = ['organizations', 'mock_profiles']
-
     def test_bundle_unopened_apps(self):
         submission_bundler.bundle_and_notify()
         self.assertEqual(
-            self.notifications.front_email_daily_app_bundle.send.call_count, 2)
+            self.notifications.front_email_daily_app_bundle.send.call_count, 4)
         self.assertEqual(
-            self.notifications.slack_app_bundle_sent.send.call_count, 2)
-        self.assertEqual(self.log_referred.call_count, 2)
+            self.notifications.slack_app_bundle_sent.send.call_count, 4)
+        self.assertEqual(self.log_referred.call_count, 4)
         bundles = models.ApplicationBundle.objects.all()
-        self.assertEqual(bundles.count(), 2)
+        self.assertEqual(bundles.count(), 4)
 
     def test_bundle_with_no_unopened_apps(self):
         self.patch_unopened([])
@@ -86,22 +66,45 @@ class TestOrganizationBundle(BundlerTestCase):
 
 class TestSubmissionBundler(BundlerTestCase):
 
-    fixtures = ['organizations', 'mock_profiles']
-
     def test_organization_bundle_map_with_no_referrals(self):
         self.patch_unopened([])
         bundler = submission_bundler.bundle_and_notify()
-        self.assertEqual(bundler.organization_bundle_map, {})
-        self.assertEqual(bundler.queryset, [])
+        for bundle in bundler.organization_bundle_map.values():
+            self.assertEqual(len(bundle.submissions), 0)
         self.restore_unopened()
 
     def test_organization_bundle_map_with_referrals(self):
+        sf_pubdef = Organization.objects.get(slug='sf_pubdef')
+        cc_pubdef = Organization.objects.get(slug='cc_pubdef')
         bundler = submission_bundler.bundle_and_notify()
-        self.assertEqual(len(bundler.queryset), 6)
         for org_bundle in bundler.organization_bundle_map.values():
-            if org_bundle.organization == self.sf_pubdef:
-                self.assertEqual(
-                    len(org_bundle.submissions), 4)
-            elif org_bundle.organization == self.cc_pubdef:
+            if org_bundle.organization == sf_pubdef:
                 self.assertEqual(
                     len(org_bundle.submissions), 3)
+            elif org_bundle.organization == cc_pubdef:
+                self.assertEqual(
+                    len(org_bundle.submissions), 3)
+
+    def test_opening_multi_org_sub_removes_only_from_org_of_user(self):
+        sf_pubdef = Organization.objects.get(slug='sf_pubdef')
+        cc_pubdef = Organization.objects.get(slug='cc_pubdef')
+        a_pubdef = Organization.objects.get(slug='a_pubdef')
+        ebclc = Organization.objects.get(slug='ebclc')
+        ebclc_user = UserProfile.objects.filter(
+            organization=ebclc).first().user
+        sub = models.FormSubmission.objects.annotate(
+            org_count=Count('organizations')).filter(org_count=3).first()
+        models.ApplicationLogEntry.log_opened([sub.id], ebclc_user)
+        bundler = submission_bundler.bundle_and_notify()
+        a_pubdef_subs = bundler.organization_bundle_map.get(
+            a_pubdef.id).submissions
+        cc_pubdef_subs = bundler.organization_bundle_map.get(
+            cc_pubdef.id).submissions
+        sf_pubdef_subs = bundler.organization_bundle_map.get(
+            sf_pubdef.id).submissions
+        ebclc_subs = bundler.organization_bundle_map.get(
+            ebclc.id).submissions
+        self.assertEqual(len(a_pubdef_subs), 3)
+        self.assertEqual(len(cc_pubdef_subs), 3)
+        self.assertEqual(len(sf_pubdef_subs), 3)
+        self.assertEqual(len(ebclc_subs), 2)

@@ -6,6 +6,7 @@ from unittest.mock import patch, Mock
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.db.models import Count
 
 from intake.tests import mock
 from user_accounts.tests.mock import create_fake_auth_models
@@ -103,23 +104,6 @@ class TestModels(TestCase):
             self.assertIn(label, contact_preferences)
         submission = mock.FormSubmissionFactory.build(answers=prefers_nothing)
         self.assertListEqual([], submission.get_contact_preferences())
-
-    @patch('intake.models.notifications')
-    @patch('intake.models.settings')
-    def test_get_unopened_submissions(self, settings, notifications):
-        submissions = mock.FormSubmissionFactory.create_batch(4)
-        group_a, group_b = submissions[:2], submissions[2:]
-        models.FormSubmission.mark_viewed(group_a, self.users[0])
-        unopened = models.FormSubmission.get_unopened_apps()
-        for sub in group_b:
-            self.assertIn(sub, unopened)
-        for sub in group_a:
-            self.assertNotIn(sub, unopened)
-
-        # make sure we get falsey values if all have been opened
-        models.FormSubmission.mark_viewed(group_b, self.users[0])
-        unopened = models.FormSubmission.get_unopened_apps()
-        self.assertFalse(unopened)
 
     @patch('intake.models.notifications')
     def test_mark_viewed(self, notifications):
@@ -377,7 +361,10 @@ class TestModels(TestCase):
 
 class TestFormSubmission(TestCase):
 
-    fixtures = ['organizations', 'mock_2_submissions_to_a_pubdef']
+    fixtures = [
+        'organizations', 'mock_profiles',
+        'mock_2_submissions_to_a_pubdef',
+        'mock_1_submission_to_multiple_orgs']
 
     def get_a_sample_sub(self):
         return models.FormSubmission.objects.filter(
@@ -419,11 +406,10 @@ class TestFormSubmission(TestCase):
     def test_get_permitted_submissions_when_permitted(self):
         cc_pubdef = auth_models.Organization.objects.get(
             slug=constants.Organizations.COCO_PUBDEF)
-        submission = models.FormSubmission.create_for_organizations(
-            [cc_pubdef], answers={})
+        subs = cc_pubdef.submissions.all()
         mock_user = Mock(is_staff=False, **{'profile.organization': cc_pubdef})
         result = models.FormSubmission.get_permitted_submissions(mock_user)
-        self.assertListEqual(list(result), [submission])
+        self.assertListEqual(list(result), list(subs))
 
     def test_get_permitted_submisstions_when_not_permitted(self):
         cc_pubdef = auth_models.Organization.objects.get(
@@ -734,9 +720,7 @@ class TestApplicationLogEntry(TestCase):
         event_count_before = models.ApplicationEvent.objects.filter(
             applicant_id__in=applicant_ids).count()
         logs = models.ApplicationLogEntry.log_opened(
-            [sub.id for sub in submissions],
-            user
-            )
+            [sub.id for sub in submissions], user)
         expected_difference = len(logs)
         event_count_after = models.ApplicationEvent.objects.filter(
             applicant_id__in=applicant_ids).count()

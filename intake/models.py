@@ -140,12 +140,6 @@ class FormSubmission(models.Model):
         return submissions, logs
 
     @classmethod
-    def get_unopened_apps(cls):
-        return cls.objects.exclude(
-            logs__user__profile__organization__is_receiving_agency=True
-        )
-
-    @classmethod
     def get_opened_apps(cls):
         return cls.objects.filter(
             logs__user__profile__organization__is_receiving_agency=True

@@ -112,6 +112,13 @@ class Organization(models.Model):
             url=self.get_absolute_url(),
             name=conditional_escape(self.name)))
 
+    def get_unopened_apps(self):
+        opened_sub_ids = intake_models.ApplicationLogEntry.objects.filter(
+            event_type=intake_models.ApplicationLogEntry.OPENED,
+            user__profile__organization=self
+        ).values_list('submission_id', flat=True)
+        return self.submissions.exclude(pk__in=opened_sub_ids)
+
 
 class Address(models.Model):
     organization = models.ForeignKey(
