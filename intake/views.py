@@ -27,18 +27,19 @@ new applications.
 """
 import logging
 import csv
+import datetime
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 from django.utils.safestring import mark_safe
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import Http404
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib import messages
 
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
 from django.views.generic import View
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
+from django.db.models import Min
 
 from rest_framework.renderers import JSONRenderer
 
@@ -495,8 +496,7 @@ class ApplicationDetail(View):
             request.user)
         context = dict(
             form=display_form,
-            declaration_form=letter_display
-            )
+            declaration_form=letter_display)
         response = render(request, self.template_name, context)
         return response
 
@@ -566,10 +566,16 @@ class Stats(TemplateView):
             'county_totals': county_totals
         }
         if self.request.user.is_authenticated():
-            applicants = models.Applicant.objects.all()
+            two_months = datetime.timedelta(days=62)
+            two_months_ago = timezone.now() - two_months
+            applicants = models.Applicant.objects\
+                .annotate(first_event=Min('events__time'))\
+                .filter(first_event__gte=two_months_ago)\
+                .order_by('-first_event')
             if not self.request.user.is_staff:
                 org = self.request.user.profile.organization
-                applicants.filter(form_submissions__organizations=org)
+                applicants = applicants.filter(
+                    form_submissions__organizations=org)
             json = JSONRenderer().render(
                 serializers.ApplicantSerializer(applicants, many=True).data)
             context['applications_json'] = mark_safe(json.decode('utf-8'))
