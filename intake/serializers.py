@@ -4,6 +4,11 @@ from user_accounts.models import Organization
 
 
 class ApplicationEventSerializer(serializers.ModelSerializer):
+    time = serializers.SerializerMethodField()
+
+    def get_time(self, event):
+        return event.time.astimezone(serializer_fields.PACIFIC).isoformat()
+
     class Meta:
         model = models.ApplicationEvent
 

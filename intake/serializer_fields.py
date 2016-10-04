@@ -1,9 +1,11 @@
 import datetime
+from pytz import timezone
 from rest_framework import serializers
 from intake import models
 from formation.field_types import YES, NO
 
 THIS_YEAR = datetime.datetime.now().year
+PACIFIC = timezone('US/Pacific')
 
 
 class DictField(serializers.Field):
@@ -103,7 +105,7 @@ class EventTimeField(EventTypeField):
     def reduce(self, events):
         times = events.values_list('time', flat=True)
         if times:
-            return max(times).isoformat()
+            return max(times).astimezone(PACIFIC).isoformat()
 
 
 class EventDataKeyField(EventTypeField):
