@@ -4243,6 +4243,12 @@ pre.address {
 svg g.axis text {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 }
+.axis.y path {
+  stroke-width: 0;
+}
+.axis.y line {
+  stroke: #dfdfdf;
+}
 rect.day_bar {
   stroke: #fff;
   stroke-width: 0.5px;

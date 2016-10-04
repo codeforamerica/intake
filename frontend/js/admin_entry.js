@@ -13,7 +13,7 @@ utils.combineObjs(d3, require('d3-time-format'));
 
 function drawDailyCountsChart(){
 	var totalHeight = 170;
-	var offset = {left: 40, bottom: 40, top: 20};
+	var offset = {left: 20, right: 20, bottom: 40, top: 20};
 	var yearMonthDayFormat = d3.timeFormat("%Y-%m-%d");
 	var niceDateFormat = d3.timeFormat("%a %b %e");
 
@@ -21,7 +21,7 @@ function drawDailyCountsChart(){
 	var div = d3.select(".performance_chart");
 	div.append("h3").text("Daily Totals");
 	var totalWidth = div.property("offsetWidth");
-	var chartWidth = totalWidth - offset.left;
+	var chartWidth = totalWidth - (offset.left + offset.right);
 	var chartHeight = totalHeight - (offset.bottom + offset.top);
 
 	var today = new Date();
@@ -46,7 +46,6 @@ function drawDailyCountsChart(){
 		.domain([startDate, today])
 		.range([0, chartWidth - barWidth]);
 
-
 	var yScale = d3.scaleLinear()
 		.domain([0, d3.max(dayBuckets.values(), function(d){ return d.finished; })])
 		.range([chartHeight, 0]);
@@ -54,6 +53,30 @@ function drawDailyCountsChart(){
 	var svg = div.append("svg")
 		.attr("width", totalWidth)
 		.attr("height", totalHeight);
+
+	var yAxisLeft = d3.axisLeft(yScale)
+		.ticks(5);
+	var yAxisRight = d3.axisRight(yScale)
+		.ticks(5);
+	svg.append("g")
+		.attr("class", "axis y right")
+		.attr("transform", "translate("+(offset.left+chartWidth)+","+offset.top+")")
+		.call(yAxisRight);
+	var leftAxis = svg.append("g")
+		.attr("class", "axis y left")
+		.attr("transform", "translate("+offset.left+","+offset.top+")")
+		.call(yAxisLeft);
+	var lines = leftAxis.selectAll("g.tick line");
+	lines.attr("x1", chartWidth).attr("class", "back-ticks");
+
+	var xAxis = d3.axisBottom(xScale)
+		.ticks(d3.timeWeek);
+
+	svg.append("g")
+		.attr("class", "axis x")
+		.attr("transform", "translate("+offset.left+","+(chartHeight+offset.top)+")")
+		.call(xAxis);
+
 	var chart = svg.append("g")
 		.attr("transform", "translate("+offset.left+","+offset.top+")");
 	var dayBars = chart.selectAll("rect")
@@ -71,20 +94,8 @@ function drawDailyCountsChart(){
 		}).attr("width", barWidth)
 		.attr("x", xScale);
 
-	var xAxis = d3.axisBottom(xScale)
-		.ticks(d3.timeWeek);
 
-	svg.append("g")
-		.attr("class", "axis x")
-		.attr("transform", "translate("+offset.left+","+(chartHeight+offset.top)+")")
-		.call(xAxis);
 
-	var yAxis = d3.axisLeft(yScale)
-		.ticks(5);
-	svg.append("g")
-		.attr("class", "axis y")
-		.attr("transform", "translate("+offset.left+","+offset.top+")")
-		.call(yAxis);
 }
 
 
