@@ -28,6 +28,7 @@ new applications.
 import logging
 import csv
 import datetime
+import json
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 from django.utils.safestring import mark_safe
@@ -54,10 +55,19 @@ from project.jinja2 import url_with_ids, oxford_comma
 
 logger = logging.getLogger(__name__)
 
+
+class NoCountyCookiesError(Exception):
+    pass
+
+
 NOT_ALLOWED_MESSAGE = str(
     "Sorry, you are not allowed to access that client information. "
     "If you have any questions, please contact us at "
     "clearmyrecord@codeforamerica.org")
+
+GENERIC_USER_ERROR_MESSAGE = _(
+    "Oops! Something went wrong. This is embarrassing. If you noticed anything"
+    " unusual, please email us: clearmyrecord@codeforamerica.org")
 
 
 def not_allowed(request):
@@ -90,6 +100,16 @@ class GetFormSessionDataMixin:
     This adds methods for getting session data, but not for setting it
     """
     session_storage_key = "form_in_progress"
+
+    def dispatch(self, request, *args, **kwargs):
+        """Wrap super().dispatch to catch and handle errors
+        """
+        try:
+            return super().dispatch(request, *args, **kwargs)
+        except Exception as err:
+            notifications.slack_simple.send("ApplicationError!\n"+str(err))
+            messages.error(self.request, GENERIC_USER_ERROR_MESSAGE)
+            return redirect(reverse('intake-home'))
 
     def get_session_data(self):
         return self.request.session.get(self.session_storage_key, {})
@@ -177,6 +197,15 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
 
     def get_form_specs(self):
         counties = self.get_session_data().get('counties', [])
+        if not counties:
+            error_data = dict(
+                applicant_id=self.get_applicant_id(),
+                session_key=getattr(self.request.session, 'session_key', None),
+                referrer=self.request.session.get('referrer', None)
+                )
+            error_message = "No Counties in session data: `{}`".format(
+                json.dumps(error_data))
+            raise NoCountyCookiesError(error_message)
         return county_form_selector.get_combined_form_spec(counties=counties)
 
     def get_form_class(self):

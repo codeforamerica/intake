@@ -753,6 +753,18 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         county_setting = self.client.session['form_in_progress']['counties']
         self.assertEqual(county_setting, second_choices)
 
+    @patch('intake.views.notifications.slack_simple.send')
+    def test_no_counties_found_error_sends_slack_and_redirects(self, slack):
+        self.be_anonymous()
+        response = self.client.get(reverse('intake-county_application'))
+        self.assertRedirects(
+            response, reverse('intake-home'), fetch_redirect_response=False)
+        self.assertTrue(slack.called)
+        response = self.client.get(response.url)
+        messages = response.context.get('messages', [])
+        messages = [str(m) for m in messages]
+        self.assertIn(views.GENERIC_USER_ERROR_MESSAGE, messages)
+
 
 class TestDeclarationLetterView(AuthIntegrationTestCase):
 
