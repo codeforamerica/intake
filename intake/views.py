@@ -108,6 +108,7 @@ class GetFormSessionDataMixin:
             return super().dispatch(request, *args, **kwargs)
         except Exception as err:
             notifications.slack_simple.send("ApplicationError!\n"+str(err))
+            logger.error(err)
             messages.error(self.request, GENERIC_USER_ERROR_MESSAGE)
             return redirect(reverse('intake-home'))
 
