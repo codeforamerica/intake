@@ -1,8 +1,15 @@
+from django.utils import timezone
 from intake import (
     notifications,
     models as intake_models
 )
 from user_accounts.models import Organization
+
+
+def is_the_weekend():
+    """datetime.weekday() returns 0 for Monday, 6 for Sunday
+    """
+    return timezone.now().weekday() in [5, 6]
 
 
 class OrganizationBundle:
@@ -21,7 +28,10 @@ class OrganizationBundle:
     def get_submission_ids(self):
         return [submission.id for submission in self.submissions]
 
-    def create_app_bundle(self):
+    def get_or_create_app_bundle_if_needed(self):
+        """If there are new submissions, make a new bundle
+        If the submissions are the same as the last bundle, use the last bundle
+        """
         return intake_models.ApplicationBundle.create_with_submissions(
             submissions=self.submissions,
             organization=self.organization,
@@ -34,7 +44,7 @@ class OrganizationBundle:
         """
         count = len(self.submissions)
         ids = self.get_submission_ids()
-        app_bundle = self.create_app_bundle()
+        app_bundle = self.get_or_create_app_bundle_if_needed()
         bundle_url = app_bundle.get_external_url()
         notifications.front_email_daily_app_bundle.send(
             to=self.notification_emails,
@@ -61,17 +71,23 @@ class SubmissionBundler:
 
     def get_org_referral(self, organization):
         """Get or create an OrganizationBundle, based on org id
+        Ensure that this bundle is would not be the same as previous bundles
         """
         bundle = self.organization_bundle_map.get(
             organization.id, OrganizationBundle(organization))
         self.organization_bundle_map[organization.id] = bundle
         return bundle
 
+    def get_orgs_that_should_get_emails_today(self):
+        orgs = Organization.objects.filter(is_receiving_agency=True)
+        if is_the_weekend():
+            orgs = orgs.filter(notify_on_weekends=True)
+        return orgs
+
     def map_submissions_to_orgs(self):
         """Loop through receiving orgs and get unopened apps for each
         """
-        for receiving_org in Organization.objects.filter(
-                is_receiving_agency=True):
+        for receiving_org in self.get_orgs_that_should_get_emails_today():
             bundle = self.get_org_referral(receiving_org)
             bundle.submissions = receiving_org.get_unopened_apps()
 

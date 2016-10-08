@@ -5,6 +5,14 @@ from intake import models, submission_bundler
 from user_accounts.models import Organization, UserProfile
 
 
+def not_the_weekend():
+    return False
+
+
+def yes_it_is():
+    return True
+
+
 class BundlerTestCase(TestCase):
 
     fixtures = [
@@ -45,7 +53,8 @@ class BundlerTestCase(TestCase):
 
 class TestOrganizationBundle(BundlerTestCase):
 
-    def test_bundle_unopened_apps(self):
+    @patch('intake.submission_bundler.is_the_weekend', not_the_weekend)
+    def test_bundle_unopened_apps(self, *args):
         submission_bundler.bundle_and_notify()
         self.assertEqual(
             self.notifications.front_email_daily_app_bundle.send.call_count, 4)
@@ -55,7 +64,8 @@ class TestOrganizationBundle(BundlerTestCase):
         bundles = models.ApplicationBundle.objects.all()
         self.assertEqual(bundles.count(), 4)
 
-    def test_bundle_with_no_unopened_apps(self):
+    @patch('intake.submission_bundler.is_the_weekend', not_the_weekend)
+    def test_bundle_with_no_unopened_apps(self, *args):
         self.patch_unopened([])
         # mock out submissions
         self.notifications.front_email_daily_app_bundle.assert_not_called()
@@ -66,14 +76,34 @@ class TestOrganizationBundle(BundlerTestCase):
 
 class TestSubmissionBundler(BundlerTestCase):
 
-    def test_organization_bundle_map_with_no_referrals(self):
+    @patch('intake.submission_bundler.is_the_weekend', not_the_weekend)
+    def test_get_orgs_that_should_get_emails_today_on_weekday(self, *args):
+        all_orgs = set(Organization.objects.filter(
+            is_receiving_agency=True))
+        bundler = submission_bundler.SubmissionBundler()
+        todays_orgs = set(bundler.get_orgs_that_should_get_emails_today())
+        self.assertEqual(all_orgs, todays_orgs)
+
+    @patch('intake.submission_bundler.is_the_weekend', yes_it_is)
+    def test_get_orgs_that_should_get_emails_today_on_weekend(self, *args):
+        modified_org = Organization.objects.filter(
+            is_receiving_agency=True).first()
+        modified_org.notify_on_weekends = True
+        modified_org.save()
+        bundler = submission_bundler.SubmissionBundler()
+        todays_orgs = list(bundler.get_orgs_that_should_get_emails_today())
+        self.assertEqual([modified_org], todays_orgs)
+
+    @patch('intake.submission_bundler.is_the_weekend', not_the_weekend)
+    def test_organization_bundle_map_with_no_referrals(self, *args):
         self.patch_unopened([])
         bundler = submission_bundler.bundle_and_notify()
         for bundle in bundler.organization_bundle_map.values():
             self.assertEqual(len(bundle.submissions), 0)
         self.restore_unopened()
 
-    def test_organization_bundle_map_with_referrals(self):
+    @patch('intake.submission_bundler.is_the_weekend', not_the_weekend)
+    def test_organization_bundle_map_with_referrals(self, *args):
         sf_pubdef = Organization.objects.get(slug='sf_pubdef')
         cc_pubdef = Organization.objects.get(slug='cc_pubdef')
         bundler = submission_bundler.bundle_and_notify()
@@ -85,7 +115,8 @@ class TestSubmissionBundler(BundlerTestCase):
                 self.assertEqual(
                     len(org_bundle.submissions), 3)
 
-    def test_opening_multi_org_sub_removes_only_from_org_of_user(self):
+    @patch('intake.submission_bundler.is_the_weekend', not_the_weekend)
+    def test_opening_multi_org_sub_removes_only_from_org_of_user(self, *args):
         sf_pubdef = Organization.objects.get(slug='sf_pubdef')
         cc_pubdef = Organization.objects.get(slug='cc_pubdef')
         a_pubdef = Organization.objects.get(slug='a_pubdef')
