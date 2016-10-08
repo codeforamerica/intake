@@ -47,6 +47,7 @@ class Organization(models.Model):
     address = models.TextField(blank=True)
     phone_number = models.TextField(blank=True)
     email = models.TextField(blank=True)
+    notify_on_weekends = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.name)
@@ -118,6 +119,10 @@ class Organization(models.Model):
             user__profile__organization=self
         ).values_list('submission_id', flat=True)
         return self.submissions.exclude(pk__in=opened_sub_ids)
+
+    def get_last_bundle(self):
+        return intake_models.ApplicationBundle.objects.filter(
+                organization=self).latest('id')
 
 
 class Address(models.Model):
