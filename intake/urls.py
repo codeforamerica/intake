@@ -3,30 +3,36 @@ from django.contrib.auth.decorators import login_required
 from . import views
 from intake.new_views import (
     stats_views,
-    legacy_redirect_views
+    legacy_redirect_views,
+    application_form_views
     )
 
 urlpatterns = [
     # public views
     url(r'^$', views.home, name='intake-home'),
-    url(r'^apply/$', views.select_county, name='intake-apply'),
-    url(r'^application/$',
-        views.county_application, name='intake-county_application'),
-    url(r'^application/letter/$',
-        views.write_letter, name='intake-write_letter'),
-    url(r'^application/letter/review/$',
-        views.review_letter, name='intake-review_letter'),
-    url(r'^confirm/$', views.confirm, name='intake-confirm'),
-    url(r'^thanks/$', views.thanks, name='intake-thanks'),
-    url(r'^getting_your_rap/$',
-        views.rap_sheet_info, name='intake-rap_sheet'),
+    url(r'^privacy/$', views.privacy, name='intake-privacy'),
     url(r'^partners/$', views.partner_list, name='intake-partner_list'),
     url(r'^partners/(?P<organization_slug>[\w-]+)/$',
         views.partner_detail, name='intake-partner_detail'),
+
+    # public form processing views
+    url(r'^apply/$',
+        application_form_views.select_county, name='intake-apply'),
+    url(r'^application/$', application_form_views.county_application,
+        name='intake-county_application'),
+    url(r'^application/letter/$',
+        application_form_views.write_letter, name='intake-write_letter'),
+    url(r'^application/letter/review/$',
+        application_form_views.review_letter, name='intake-review_letter'),
+    url(r'^confirm/$', application_form_views.confirm, name='intake-confirm'),
+    url(r'^thanks/$', application_form_views.thanks, name='intake-thanks'),
+    url(r'^getting_your_rap/$',
+        application_form_views.rap_sheet_info, name='intake-rap_sheet'),
+
+    # stats views
     url(r'^stats/$', stats_views.stats, name='intake-stats'),
     url(r'^stats/daily_totals/$',
         stats_views.daily_totals, name='intake-daily_totals'),
-    url(r'^privacy/$', views.privacy, name='intake-privacy'),
 
     # protected views
     url(r'^application/(?P<submission_id>[0-9]+)/$',

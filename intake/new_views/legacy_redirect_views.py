@@ -1,10 +1,12 @@
+"""
+Views that redirect from old url patterns to new ones
+"""
 from django.views.generic import View
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse_lazy
 
 from project.jinja2 import url_with_ids
 from intake import models
-# REDIRECT VIEWS for backwards compatibility
 
 
 class PermanentRedirectView(View):

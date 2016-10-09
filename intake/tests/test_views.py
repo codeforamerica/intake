@@ -12,6 +12,7 @@ from django.utils import html as html_utils
 
 from intake.tests import mock
 from intake import models, views, constants
+from intake.new_views import application_form_views
 from user_accounts import models as auth_models
 from formation import fields, forms
 
@@ -192,7 +193,8 @@ class TestViews(IntakeDataTestCase):
             fields.SocialSecurityNumberField.is_recommended_error_message)
         self.assertContains(
             result, fields.DateOfBirthField.is_recommended_error_message)
-        self.assertContains(result, views.Confirm.incoming_message)
+        self.assertContains(
+            result, application_form_views.Confirm.incoming_message)
         slack.assert_not_called()
         result = self.client.fill_form(
             reverse('intake-confirm'),
@@ -834,7 +836,8 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
 
     def test_no_existing_data(self):
         self.be_anonymous()
-        with self.assertLogs('intake.views', level=logging.WARN):
+        with self.assertLogs(
+                'intake.new_views.application_form_views', level=logging.WARN):
             result = self.client.get(reverse('intake-write_letter'))
             self.assertRedirects(result, reverse('intake-apply'))
 
@@ -865,7 +868,8 @@ class TestDeclarationLetterReviewPage(AuthIntegrationTestCase):
 
     def test_get_with_no_existing_data(self):
         self.be_anonymous()
-        with self.assertLogs('intake.views', level=logging.WARN):
+        with self.assertLogs(
+                'intake.new_views.application_form_views', level=logging.WARN):
             result = self.client.get(reverse('intake-review_letter'))
             self.assertRedirects(result, reverse('intake-apply'))
 
