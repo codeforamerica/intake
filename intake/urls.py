@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from . import views
+from intake.new_views import stats_views
 
 urlpatterns = [
     # public views
@@ -19,9 +20,9 @@ urlpatterns = [
     url(r'^partners/$', views.partner_list, name='intake-partner_list'),
     url(r'^partners/(?P<organization_slug>[\w-]+)/$',
         views.partner_detail, name='intake-partner_detail'),
-    url(r'^stats/$', views.stats, name='intake-stats'),
+    url(r'^stats/$', stats_views.stats, name='intake-stats'),
     url(r'^stats/daily_totals/$',
-        views.daily_totals, name='intake-daily_totals'),
+        stats_views.daily_totals, name='intake-daily_totals'),
     url(r'^privacy/$', views.privacy, name='intake-privacy'),
 
     # protected views

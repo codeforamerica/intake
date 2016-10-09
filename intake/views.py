@@ -26,31 +26,26 @@ new applications.
 * `ApplicationDetail` - This shows the detail of one particular FormSubmission
 """
 import logging
-import csv
-import datetime
 import json
+
 from django.utils import timezone
 from django.utils.translation import ugettext as _
-from django.utils.safestring import mark_safe
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib import messages
-
 from django.http import Http404, HttpResponse
 from django.views.generic import View
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
-from django.db.models import Min
 
-from rest_framework.renderers import JSONRenderer
 
-from intake import models, notifications, constants, serializers
-from user_accounts.models import Organization
-from user_accounts.forms import OrganizationDetailsDisplayForm
+from project.jinja2 import url_with_ids, oxford_comma
 from formation.forms import (
     county_form_selector, DeclarationLetterFormSpec,
     DeclarationLetterDisplay, SelectCountyForm)
-from project.jinja2 import url_with_ids, oxford_comma
+from intake import models, notifications, constants
+from user_accounts.models import Organization
+from user_accounts.forms import OrganizationDetailsDisplayForm
 
 
 logger = logging.getLogger(__name__)
@@ -577,67 +572,6 @@ class ApplicationIndex(TemplateView):
         return context
 
 
-class Stats(TemplateView):
-    """A view that shows a public summary of service performance.
-    """
-    template_name = "stats.jinja"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        county_totals = []
-        counties = models.County.objects.all()
-        for county in counties:
-            county_totals.append(dict(
-                count=models.FormSubmission.objects.filter(
-                    organizations__county=county).count(),
-                county_name=county.name))
-        context['stats'] = {
-            'total_all_counties': models.FormSubmission.objects.count(),
-            'county_totals': county_totals
-        }
-        if self.request.user.is_authenticated():
-            two_months = datetime.timedelta(days=62)
-            two_months_ago = timezone.now() - two_months
-            applicants = models.Applicant.objects\
-                .annotate(first_event=Min('events__time'))\
-                .filter(first_event__gte=two_months_ago)\
-                .order_by('-first_event')
-            if not self.request.user.is_staff:
-                org = self.request.user.profile.organization
-                applicants = applicants.filter(
-                    form_submissions__organizations=org)
-            json = JSONRenderer().render(
-                serializers.ApplicantSerializer(applicants, many=True).data)
-            context['applications_json'] = mark_safe(json.decode('utf-8'))
-        return context
-
-
-class DailyTotals(View):
-    """A Downloadable CSV with daily totals for each county
-    """
-
-    def get(self, request):
-        totals = list(models.FormSubmission.get_daily_totals())
-        response = HttpResponse(content_type='text/csv')
-        filename = 'daily_totals.csv'
-        content_disposition = 'attachment; filename="{}"'.format(filename)
-        response['Content-Disposition'] = content_disposition
-        keys = [
-            "Day", "All",
-            constants.CountyNames.SAN_FRANCISCO,
-            constants.CountyNames.CONTRA_COSTA,
-            constants.CountyNames.ALAMEDA,
-        ]
-        writer = csv.DictWriter(
-            response,
-            fieldnames=keys,
-            quoting=csv.QUOTE_ALL)
-        writer.writeheader()
-        for item in totals:
-            writer.writerow(item)
-        return response
-
-
 class MultiSubmissionMixin:
     """A mixin for pulling multiple submission ids
     out of request query params.
@@ -894,8 +828,6 @@ rap_sheet_info = RAPSheetInstructions.as_view()
 partner_list = PartnerListView.as_view()
 partner_detail = PartnerDetailView.as_view()
 privacy = PrivacyPolicy.as_view()
-stats = Stats.as_view()
-daily_totals = DailyTotals.as_view()
 filled_pdf = FilledPDF.as_view()
 pdf_bundle = FilledPDFBundle.as_view()
 app_index = ApplicationIndex.as_view()
