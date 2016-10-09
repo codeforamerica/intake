@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
-from . import views
 from intake.new_views import (
+    public_views,
     stats_views,
     legacy_redirect_views,
     application_form_views,
@@ -10,11 +10,11 @@ from intake.new_views import (
 
 urlpatterns = [
     # public views
-    url(r'^$', views.home, name='intake-home'),
-    url(r'^privacy/$', views.privacy, name='intake-privacy'),
-    url(r'^partners/$', views.partner_list, name='intake-partner_list'),
+    url(r'^$', public_views.home, name='intake-home'),
+    url(r'^privacy/$', public_views.privacy, name='intake-privacy'),
+    url(r'^partners/$', public_views.partner_list, name='intake-partner_list'),
     url(r'^partners/(?P<organization_slug>[\w-]+)/$',
-        views.partner_detail, name='intake-partner_detail'),
+        public_views.partner_detail, name='intake-partner_detail'),
 
     # public form processing views
     url(r'^apply/$',
