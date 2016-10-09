@@ -12,6 +12,9 @@ from django.utils import html as html_utils
 
 from intake.tests import mock
 from intake import models, views, constants
+from intake.new_views import (
+    session_view_base
+    )
 from intake.new_views import application_form_views
 from user_accounts import models as auth_models
 from formation import fields, forms
@@ -120,8 +123,8 @@ class TestViews(IntakeDataTestCase):
 
     @patch('intake.models.get_parser')
     @patch(
-        'intake.views.models.FormSubmission.send_confirmation_notifications')
-    @patch('intake.views.notifications.slack_new_submission.send')
+        'intake.new_views.application_form_views.models.FormSubmission.send_confirmation_notifications')
+    @patch('intake.new_views.session_view_base.notifications.slack_new_submission.send')
     def test_anonymous_user_can_fill_out_app_and_reach_thanks_page(
             self, slack, send_confirmation, get_parser):
         get_parser.return_value.fill_pdf.return_value = b'a pdf'
@@ -165,8 +168,8 @@ class TestViews(IntakeDataTestCase):
 
     @patch('intake.models.get_parser')
     @patch(
-        'intake.views.models.FormSubmission.send_confirmation_notifications')
-    @patch('intake.views.notifications.slack_new_submission.send')
+        'intake.new_views.application_form_views.models.FormSubmission.send_confirmation_notifications')
+    @patch('intake.new_views.session_view_base.notifications.slack_new_submission.send')
     def test_apply_with_name_only(self, slack, send_confirmation, get_parser):
         get_parser.return_value.fill_pdf.return_value = b'a pdf'
         self.be_anonymous()
@@ -314,7 +317,7 @@ class TestViews(IntakeDataTestCase):
         bundle = self.client.get(url)
         self.assertEqual(bundle.status_code, 200)
 
-    @patch('intake.views.notifications.slack_submissions_deleted.send')
+    @patch('intake.new_views.session_view_base.notifications.slack_submissions_deleted.send')
     def test_authenticated_user_can_delete_apps(self, slack):
         self.be_cfa_user()
         submission = self.submissions[0]
@@ -329,7 +332,7 @@ class TestViews(IntakeDataTestCase):
         index = self.client.get(after_delete.url)
         self.assertNotContains(index, pdf_link)
 
-    @patch('intake.views.notifications.slack_submissions_processed.send')
+    @patch('intake.new_views.session_view_base.notifications.slack_submissions_processed.send')
     def test_agency_user_can_mark_apps_as_processed(self, slack):
         self.be_sfpubdef_user()
         submissions = self.sf_pubdef_submissions
@@ -489,8 +492,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
     fixtures = ['organizations']
 
     @patch(
-        'intake.views.models.FormSubmission.send_confirmation_notifications')
-    @patch('intake.views.notifications.slack_new_submission.send')
+        'intake.new_views.application_form_views.models.FormSubmission.send_confirmation_notifications')
+    @patch('intake.new_views.session_view_base.notifications.slack_new_submission.send')
     def test_sf_application_redirects_if_missing_recommended_fields(
             self, slack, send_confirmation):
         self.be_anonymous()
@@ -522,8 +525,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         self.assertEqual(0, submitted_event_count)
 
     @patch(
-        'intake.views.models.FormSubmission.send_confirmation_notifications')
-    @patch('intake.views.notifications.slack_new_submission.send')
+        'intake.new_views.application_form_views.models.FormSubmission.send_confirmation_notifications')
+    @patch('intake.new_views.session_view_base.notifications.slack_new_submission.send')
     def test_can_apply_to_contra_costa_alone(self, slack, send_confirmation):
         self.be_anonymous()
         contracosta = constants.Counties.CONTRA_COSTA
@@ -576,8 +579,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         self.assertEqual(1, submitted_event_count)
 
     @patch(
-        'intake.views.models.FormSubmission.send_confirmation_notifications')
-    @patch('intake.views.notifications.slack_new_submission.send')
+        'intake.new_views.application_form_views.models.FormSubmission.send_confirmation_notifications')
+    @patch('intake.new_views.session_view_base.notifications.slack_new_submission.send')
     def test_contra_costa_errors_properly(self, slack, send_confirmation):
         self.be_anonymous()
         contracosta = constants.Counties.CONTRA_COSTA
@@ -628,8 +631,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         self.assertTrue(send_confirmation.called)
 
     @patch(
-        'intake.views.models.FormSubmission.send_confirmation_notifications')
-    @patch('intake.views.notifications.slack_new_submission.send')
+        'intake.new_views.application_form_views.models.FormSubmission.send_confirmation_notifications')
+    @patch('intake.new_views.session_view_base.notifications.slack_new_submission.send')
     def test_alameda_pubdef_application_redirects_to_declaration_letter(
             self, slack, send_confirmation):
 
@@ -650,8 +653,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         send_confirmation.assert_not_called()
 
     @patch(
-        'intake.views.models.FormSubmission.send_confirmation_notifications')
-    @patch('intake.views.notifications.slack_new_submission.send')
+        'intake.new_views.application_form_views.models.FormSubmission.send_confirmation_notifications')
+    @patch('intake.new_views.session_view_base.notifications.slack_new_submission.send')
     def test_invalid_alameda_application_returns_same_page_with_error(
             self, slack, send_confirmation):
         self.be_anonymous()
@@ -683,8 +686,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
             event.data['errors'])
 
     @patch(
-        'intake.views.models.FormSubmission.send_confirmation_notifications')
-    @patch('intake.views.notifications.slack_new_submission.send')
+        'intake.new_views.application_form_views.models.FormSubmission.send_confirmation_notifications')
+    @patch('intake.new_views.session_view_base.notifications.slack_new_submission.send')
     def test_valid_ebclc_application_returns_rap_sheet_page(
             self, slack, send_confirmation):
         self.be_anonymous()
@@ -704,8 +707,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         self.assertTrue(send_confirmation.called)
 
     @patch(
-        'intake.views.models.FormSubmission.send_confirmation_notifications')
-    @patch('intake.views.notifications.slack_new_submission.send')
+        'intake.new_views.application_form_views.models.FormSubmission.send_confirmation_notifications')
+    @patch('intake.new_views.session_view_base.notifications.slack_new_submission.send')
     def test_invalid_ebclc_application_returns_same_page_with_error(
             self, slack, send_confirmation):
         self.be_anonymous()
@@ -755,7 +758,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         county_setting = self.client.session['form_in_progress']['counties']
         self.assertEqual(county_setting, second_choices)
 
-    @patch('intake.views.notifications.slack_simple.send')
+    @patch('intake.new_views.session_view_base.notifications.slack_simple.send')
     def test_no_counties_found_error_sends_slack_and_redirects(self, slack):
         self.be_anonymous()
         response = self.client.get(reverse('intake-county_application'))
@@ -765,7 +768,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         response = self.client.get(response.url)
         messages = response.context.get('messages', [])
         messages = [str(m) for m in messages]
-        self.assertIn(views.GENERIC_USER_ERROR_MESSAGE, messages)
+        self.assertIn(session_view_base.GENERIC_USER_ERROR_MESSAGE, messages)
 
 
 class TestDeclarationLetterView(AuthIntegrationTestCase):
@@ -773,8 +776,8 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
     fixtures = ['organizations', 'mock_profiles']
 
     @patch(
-        'intake.views.models.FormSubmission.send_confirmation_notifications')
-    @patch('intake.views.notifications.slack_new_submission.send')
+        'intake.new_views.application_form_views.models.FormSubmission.send_confirmation_notifications')
+    @patch('intake.new_views.session_view_base.notifications.slack_new_submission.send')
     def test_expected_success(self, slack, send_confirmation):
         self.be_anonymous()
         alameda = constants.Counties.ALAMEDA
@@ -800,8 +803,8 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
         send_confirmation.assert_not_called()
 
     @patch(
-        'intake.views.models.FormSubmission.send_confirmation_notifications')
-    @patch('intake.views.notifications.slack_new_submission.send')
+        'intake.new_views.application_form_views.models.FormSubmission.send_confirmation_notifications')
+    @patch('intake.new_views.session_view_base.notifications.slack_new_submission.send')
     def test_invalid_letter_returns_same_page(self, slack, send_confirmation):
         self.be_anonymous()
         alameda = constants.Counties.ALAMEDA
@@ -891,8 +894,8 @@ class TestDeclarationLetterReviewPage(AuthIntegrationTestCase):
             applicant_id=applicant_id).count(), 0)
 
     @patch(
-        'intake.views.models.FormSubmission.send_confirmation_notifications')
-    @patch('intake.views.notifications.slack_new_submission.send')
+        'intake.new_views.application_form_views.models.FormSubmission.send_confirmation_notifications')
+    @patch('intake.new_views.session_view_base.notifications.slack_new_submission.send')
     def test_post_approve_letter(self, slack, send_confirmation):
         self.be_anonymous()
         applicant = models.Applicant()
@@ -1194,7 +1197,7 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
         'mock_1_bundle_to_a_pubdef',
     ]
 
-    @patch('intake.views.notifications.slack_submissions_viewed.send')
+    @patch('intake.new_views.admin_views.notifications.slack_submissions_viewed.send')
     def test_returns_200_on_existing_bundle_id(self, slack):
         """`ApplicationBundleDetailView` return `OK` for existing bundle
 
@@ -1208,7 +1211,7 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
                     kwargs=dict(bundle_id=self.a_pubdef_bundle.id)))
         self.assertEqual(result.status_code, 200)
 
-    @patch('intake.views.notifications.slack_submissions_viewed.send')
+    @patch('intake.new_views.admin_views.notifications.slack_submissions_viewed.send')
     def test_staff_user_gets_200(self, slack):
         self.be_cfa_user()
         result = self.client.get(reverse(
@@ -1242,7 +1245,7 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
                     kwargs=dict(bundle_id=self.a_pubdef_bundle.id)))
         self.assertRedirects(result, reverse('intake-app_index'))
 
-    @patch('intake.views.notifications.slack_submissions_viewed.send')
+    @patch('intake.new_views.admin_views.notifications.slack_submissions_viewed.send')
     def test_has_pdf_bundle_url_if_needed(self, slack):
         """ApplicationBundleDetailView return pdf url if needed
 
@@ -1335,7 +1338,7 @@ class TestReferToAnotherOrgView(IntakeDataTestCase):
             base += "&next={}".format(next)
         return base
 
-    @patch('intake.views.notifications.slack_submission_transferred.send')
+    @patch('intake.new_views.admin_views.notifications.slack_submission_transferred.send')
     def test_anon_is_rejected(self, slack_action):
         self.be_anonymous()
         response = self.client.get(self.url(
@@ -1344,7 +1347,7 @@ class TestReferToAnotherOrgView(IntakeDataTestCase):
         self.assertIn(reverse('user_accounts-login'), response.url)
         slack_action.assert_not_called()
 
-    @patch('intake.views.notifications.slack_submission_transferred')
+    @patch('intake.new_views.admin_views.notifications.slack_submission_transferred')
     def test_org_user_with_no_next_is_redirected_to_app_index(self,
                                                               slack_action):
         self.be_apubdef_user()
@@ -1362,8 +1365,8 @@ class TestReferToAnotherOrgView(IntakeDataTestCase):
         self.assertContains(index, "You successfully transferred")
         self.assertEqual(len(list(slack_action.mock_calls)), 1)
 
-    @patch('intake.views.notifications.slack_submissions_viewed.send')
-    @patch('intake.views.notifications.slack_submission_transferred')
+    @patch('intake.new_views.admin_views.notifications.slack_submissions_viewed.send')
+    @patch('intake.new_views.admin_views.notifications.slack_submission_transferred')
     def test_org_user_with_next_goes_back_to_next(self,
                                                   slack_action,
                                                   slack_viewed):

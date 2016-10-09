@@ -4,7 +4,8 @@ from . import views
 from intake.new_views import (
     stats_views,
     legacy_redirect_views,
-    application_form_views
+    application_form_views,
+    admin_views
     )
 
 urlpatterns = [
@@ -36,43 +37,43 @@ urlpatterns = [
 
     # protected views
     url(r'^application/(?P<submission_id>[0-9]+)/$',
-        login_required(views.app_detail),
+        login_required(admin_views.app_detail),
         name='intake-app_detail'),
 
     url(r'^application/(?P<submission_id>[0-9]+)/pdf/$',
-        login_required(views.filled_pdf),
+        login_required(admin_views.filled_pdf),
         name='intake-filled_pdf'),
 
     url(r'^applications/$',
-        login_required(views.app_index),
+        login_required(admin_views.app_index),
         name='intake-app_index'),
 
     url(r'^applications/bundle/$',
-        login_required(views.app_bundle),
+        login_required(admin_views.app_bundle),
         name='intake-app_bundle'),
 
     url(r'^applications/bundle/(?P<bundle_id>[0-9]+)/$',
-        login_required(views.app_bundle_detail),
+        login_required(admin_views.app_bundle_detail),
         name='intake-app_bundle_detail'),
 
     url(r'^applications/bundle/(?P<bundle_id>[0-9]+)/pdf/$',
-        login_required(views.app_bundle_detail_pdf),
+        login_required(admin_views.app_bundle_detail_pdf),
         name='intake-app_bundle_detail_pdf'),
 
     url(r'^applications/pdfs/$',
-        login_required(views.pdf_bundle),
+        login_required(admin_views.pdf_bundle),
         name='intake-pdf_bundle'),
 
     url(r'^application/(?P<submission_id>[0-9]+)/delete/$',
-        login_required(views.delete_page),
+        login_required(admin_views.delete_page),
         name='intake-delete_page'),
 
     url(r'^applications/mark/processed/$',
-        login_required(views.mark_processed),
+        login_required(admin_views.mark_processed),
         name='intake-mark_processed'),
 
     url(r'^applications/mark/transferred/$',
-        login_required(views.mark_transferred_to_other_org),
+        login_required(admin_views.mark_transferred_to_other_org),
         name='intake-mark_transferred_to_other_org'),
 
 ]
