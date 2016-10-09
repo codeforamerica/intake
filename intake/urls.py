@@ -1,7 +1,10 @@
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from . import views
-from intake.new_views import stats_views
+from intake.new_views import (
+    stats_views,
+    legacy_redirect_views
+    )
 
 urlpatterns = [
     # public views
@@ -70,20 +73,20 @@ urlpatterns = [
 
 redirects = [
     url(r'^sanfrancisco/$',
-        views.PermanentRedirectView.as_view(
+        legacy_redirect_views.PermanentRedirectView.as_view(
             redirect_view_name='intake-apply')),
     url(r'^sanfrancisco/applications/$',
-        views.PermanentRedirectView.as_view(
+        legacy_redirect_views.PermanentRedirectView.as_view(
             redirect_view_name='intake-app_index')),
     # https://regex101.com/r/wO1pD3/1
     url(r'^sanfrancisco/(?P<submission_id>[0-9a-f]{32})/$',
-        views.SingleIdPermanentRedirect.as_view(
+        legacy_redirect_views.SingleIdPermanentRedirect.as_view(
             redirect_view_name='intake-filled_pdf')),
     url(r'^sanfrancisco/bundle/$',
-        views.MultiIdPermanentRedirect.as_view(
+        legacy_redirect_views.MultiIdPermanentRedirect.as_view(
             redirect_view_name='intake-app_bundle')),
     url(r'^sanfrancisco/pdfs/$',
-        views.MultiIdPermanentRedirect.as_view(
+        legacy_redirect_views.MultiIdPermanentRedirect.as_view(
             redirect_view_name='intake-pdf_bundle')),
 ]
 
