@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib import messages
 from django.views.generic.base import TemplateView
 
-from intake.new_views import session_view_base as base_views
+from intake.views import session_view_base as base_views
 from formation.forms import (
     DeclarationLetterFormSpec, DeclarationLetterDisplay, SelectCountyForm)
 from intake import models

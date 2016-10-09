@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
-from intake.new_views import (
+from intake.views import (
     public_views,
     stats_views,
     legacy_redirect_views,
