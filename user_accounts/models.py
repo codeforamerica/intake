@@ -117,7 +117,8 @@ class Organization(models.Model):
     def get_unopened_apps(self):
         opened_sub_ids = intake_models.ApplicationLogEntry.objects.filter(
             event_type=intake_models.ApplicationLogEntry.OPENED,
-            user__profile__organization=self
+            user__profile__organization=self,
+            submission_id__isnull=False
         ).values_list('submission_id', flat=True)
         return self.submissions.all().exclude(pk__in=opened_sub_ids)
 
