@@ -1,3 +1,4 @@
+from unittest.mock import patch
 from django.test import TestCase
 from django.db.models import Count
 from intake.tests.test_views import IntakeDataTestCase
@@ -60,7 +61,13 @@ class TestOrganization(IntakeDataTestCase):
 
     fixtures = [
         'organizations', 'mock_profiles',
-        'mock_1_submission_to_multiple_orgs']
+        'mock_2_submissions_to_a_pubdef',
+        'mock_2_submissions_to_ebclc',
+        'mock_2_submissions_to_cc_pubdef',
+        'mock_2_submissions_to_sf_pubdef',
+        'mock_1_submission_to_multiple_orgs',
+        'mock_application_events',
+    ]
 
     def test_has_a_pdf(self):
         self.assertTrue(self.sf_pubdef.has_a_pdf())
@@ -97,6 +104,16 @@ class TestOrganization(IntakeDataTestCase):
         self.assertIsNone(sf_pubdef.get_transfer_org())
         self.assertIsNone(cc_pubdef.get_transfer_org())
 
+    def test_get_unopened_apps_returns_all_apps_if_no_open_events(self):
+        ebclc = models.Organization.objects.get(
+            slug=constants.Organizations.EBCLC)
+        for org in models.Organization.objects.filter(
+                is_receiving_agency=True):
+            if org == ebclc:
+                self.assertEqual(org.get_unopened_apps().count(), 2)
+            else:
+                self.assertEqual(org.get_unopened_apps().count(), 3)
+
     def test_get_unopened_apps_returns_apps_opened_by_other_org(self):
         # assume we have a multi-org app opened by a user from one org
         cc_pubdef = models.Organization.objects.get(
@@ -111,6 +128,16 @@ class TestOrganization(IntakeDataTestCase):
         # assert that it shows up in unopened apps
         self.assertIn(sub, a_pubdef.get_unopened_apps())
         self.assertNotIn(sub, cc_pubdef.get_unopened_apps())
+
+    @patch('intake.models.ApplicationEvent.from_logs')
+    def test_get_unopened_apps_with_deleted_opened_app_returns_expected_result(
+            self, from_logs):
+        # https://code.djangoproject.com/ticket/25467?cversion=0&cnum_hist=2
+        logs = intake_models.ApplicationLogEntry.log_opened(
+            [None], user=self.sf_pubdef_user)
+        self.assertTrue(logs[0].id)
+        self.assertIsNone(logs[0].submission_id)
+        self.assertEqual(self.sf_pubdef.get_unopened_apps().count(), 3)
 
 
 class TestAddress(TestCase):

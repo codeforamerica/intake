@@ -96,6 +96,7 @@ class SubmissionBundler:
         """
         self.map_submissions_to_orgs()
         for bundle in self.organization_bundle_map.values():
+            # if bundle.submissions:
             bundle.make_referrals()
 
 

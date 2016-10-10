@@ -67,7 +67,7 @@ class TestOrganizationBundle(BundlerTestCase):
     @patch('intake.submission_bundler.is_the_weekend', not_the_weekend)
     def test_bundle_with_no_unopened_apps(self, *args):
         self.patch_unopened([])
-        # mock out submissions
+        submission_bundler.bundle_and_notify()
         self.notifications.front_email_daily_app_bundle.assert_not_called()
         self.notifications.slack_app_bundle_sent.assert_not_called()
         self.log_referred.assert_not_called()
