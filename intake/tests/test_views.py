@@ -281,7 +281,8 @@ class TestViews(IntakeDataTestCase):
                              )
 
     @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
-    def test_authenticated_user_can_see_pdf_bundle(self):
+    @patch('intake.models.notifications.slack_simple.send')
+    def test_authenticated_user_can_see_pdf_bundle(self, slack):
         self.be_sfpubdef_user()
         ids = models.FormSubmission.objects.filter(
             organizations=self.sf_pubdef).values_list('pk', flat=True)
@@ -290,7 +291,8 @@ class TestViews(IntakeDataTestCase):
         self.assertEqual(bundle.status_code, 200)
 
     @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
-    def test_staff_user_can_see_pdf_bundle(self):
+    @patch('intake.models.notifications.slack_simple.send')
+    def test_staff_user_can_see_pdf_bundle(self, slack):
         self.be_cfa_user()
         submissions = self.sf_pubdef_submissions
         bundle = models.ApplicationBundle.create_with_submissions(
@@ -1236,7 +1238,8 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
         result = self.client.get(reverse(
                     'intake-app_bundle_detail',
                     kwargs=dict(bundle_id=self.a_pubdef_bundle.id)))
-        self.assertRedirects(result, reverse('intake-app_index'))
+        self.assertRedirects(
+            result, reverse('intake-app_index'), fetch_redirect_response=False)
 
     @patch('intake.views.notifications.slack_submissions_viewed.send')
     def test_has_pdf_bundle_url_if_needed(self, slack):
