@@ -791,12 +791,17 @@ class ApplicationBundle(models.Model):
         needs_pdf = self.should_have_a_pdf()
         if not needs_pdf:
             return
+        submissions = self.submissions.all()
         filled_pdfs = self.get_individual_filled_pdfs()
-        if needs_pdf and not filled_pdfs:
-            msg = "submissions for ApplicationBundle(pk={}) lack pdfs".format(
-                self.pk)
+        missing_filled_pdfs = (
+            not filled_pdfs or (len(submissions) > len(filled_pdfs)))
+        if needs_pdf and missing_filled_pdfs:
+            msg = str(
+                "Submissions for ApplicationBundle(pk={}) lack pdfs"
+                ).format(self.pk)
             logger.error(msg)
-            for submission in self.submissions.all():
+            notifications.slack_simple.send(msg)
+            for submission in submissions:
                 submission.fill_pdfs()
             filled_pdfs = self.get_individual_filled_pdfs()
         if len(filled_pdfs) == 1:
