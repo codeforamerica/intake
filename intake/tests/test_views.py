@@ -1284,8 +1284,12 @@ class TestApplicationBundleDetailPDFView(IntakeDataTestCase):
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
+        # patch slack_simple
+        patcher = patch('intake.models.notifications')
+        patcher.start()
         cls.bundle = models.ApplicationBundle.create_with_submissions(
             organization=cls.sf_pubdef, submissions=cls.sf_pubdef_submissions)
+        patcher.stop()
 
     def test_staff_user_gets_200(self):
         self.be_cfa_user()
