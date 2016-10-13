@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.db.models import Count
-from intake.tests.test_views import IntakeDataTestCase
+from intake.tests.base_testcases import IntakeDataTestCase
 from user_accounts import models
 from intake import models as intake_models
 from intake import constants

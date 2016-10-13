@@ -11,67 +11,13 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils import html as html_utils
 
 from intake.tests import mock
+from intake.tests.base_testcases import IntakeDataTestCase, DELUXE_TEST
 from intake import models, constants
-from intake.views import (
-    session_view_base,
-    application_form_views
-    )
+from intake.views import session_view_base, application_form_views
 from user_accounts import models as auth_models
 from formation import fields, forms
 
 from project.jinja2 import url_with_ids
-
-DELUXE_TEST = os.environ.get('DELUXE_TEST', False)
-
-
-class IntakeDataTestCase(AuthIntegrationTestCase):
-
-    display_field_checks = [
-        'first_name',
-        'last_name',
-        'email',
-    ]
-
-    @classmethod
-    def setUpTestData(cls):
-        super().setUpTestData()
-        cls.have_a_fillable_pdf()
-        org_subs = []
-        cls.combo_submissions = list(
-            models.FormSubmission.objects.annotate(
-                orgs_count=Count('organizations')
-            ).filter(orgs_count__gt=1))
-        for org in cls.orgs:
-            subs = models.FormSubmission.objects.filter(organizations=org)
-            subs = list(set(subs) - set(cls.combo_submissions))
-            setattr(cls, org.slug + "_submissions", subs)
-            org_subs += subs
-            setattr(
-                cls, org.slug + "_bundle",
-                models.ApplicationBundle.objects.filter(
-                    organization=org).first())
-        cls.submissions = list(
-            set(org_subs) | set(cls.combo_submissions)
-            )
-
-    @classmethod
-    def have_a_fillable_pdf(cls):
-        cls.fillable = mock.fillable_pdf(organization=cls.sf_pubdef)
-
-    def assert_called_once_with_types(
-            self, mock_obj, *arg_types, **kwarg_types):
-        self.assertEqual(mock_obj.call_count, 1)
-        arguments, keyword_arguments = mock_obj.call_args
-        argument_classes = [getattr(
-            arg, '__qualname__', arg.__class__.__qualname__
-        ) for arg in arguments]
-        self.assertListEqual(argument_classes, list(arg_types))
-        keyword_argument_classes = {}
-        for keyword, arg in keyword_arguments.items():
-            keyword_argument_classes[keyword] = getattr(
-                arg, '__qualname__', arg.__class__.__qualname__
-            )
-        self.assertDictEqual(keyword_argument_classes, dict(kwarg_types))
 
 
 class TestViews(IntakeDataTestCase):
@@ -1140,51 +1086,6 @@ class TestApplicationIndex(IntakeDataTestCase):
             pdf_url = reverse('intake-filled_pdf', kwargs=dict(
                 submission_id=sub.id))
             self.assertContains(response, pdf_url)
-
-
-class TestStats(IntakeDataTestCase):
-
-    fixtures = [
-        'organizations', 'mock_profiles',
-        'mock_2_submissions_to_a_pubdef',
-        'mock_2_submissions_to_sf_pubdef',
-        'mock_2_submissions_to_cc_pubdef',
-        'mock_1_submission_to_multiple_orgs',
-        ]
-
-    def test_that_page_shows_counts_by_county(self):
-        # get numbers
-        all_any = 7
-        all_sf = 3
-        all_cc = 3
-        total = "{} total applications".format(all_any)
-        sf_string = "{} applications for San Francisco County".format(all_sf)
-        cc_string = "{} applications for Contra Costa County".format(all_cc)
-        self.be_anonymous()
-        response = self.client.get(reverse('intake-stats'))
-        for search_term in [total, sf_string, cc_string]:
-            self.assertContains(response, search_term)
-
-    def test_anonymous_user_doesnt_get_json(self):
-        self.be_anonymous()
-        response = self.client.get(reverse('intake-stats'))
-        self.assertNotIn('applications_json', response.context)
-
-    def test_logged_in_user_gets_json(self):
-        self.be_ccpubdef_user()
-        response = self.client.get(reverse('intake-stats'))
-        self.assertIn('applications_json', response.context)
-
-
-class TestDailyTotals(TestCase):
-
-    fixtures = [
-        'organizations',
-        'mock_2_submissions_to_a_pubdef']
-
-    def test_returns_200(self):
-        response = self.client.get(reverse('intake-daily_totals'))
-        self.assertEqual(response.status_code, 200)
 
 
 class TestApplicationBundleDetail(IntakeDataTestCase):

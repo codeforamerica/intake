@@ -6,7 +6,7 @@ from unittest.mock import patch, Mock
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.db.models import Count
+
 
 from intake.tests import mock
 from user_accounts.tests.mock import create_fake_auth_models
