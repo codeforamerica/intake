@@ -11,6 +11,7 @@ class ApplicationEventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.ApplicationEvent
+        fields = ['id', 'name', 'time', 'data']
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
@@ -68,6 +69,8 @@ class ApplicantSerializer(serializers.ModelSerializer):
     form_submissions = FormSubmissionSerializer(many=True)
     tried_to_apply = serializers.SerializerMethodField(
         method_name='check_if_they_actually_tried_to_apply')
+    is_multicounty = serializers.SerializerMethodField(
+        method_name='check_if_they_are_multicounty')
 
     class Meta:
         model = models.Applicant
@@ -82,3 +85,6 @@ class ApplicantSerializer(serializers.ModelSerializer):
 
     def check_if_they_actually_tried_to_apply(self, obj):
         return serializer_fields.made_a_meaningful_attempt_to_apply(obj)
+
+    def check_if_they_are_multicounty(self, obj):
+        return serializer_fields.is_multicounty(obj)

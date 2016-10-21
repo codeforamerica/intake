@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'storages',
     'formation',
     'debug_toolbar',
+    'django_extensions',
 ]
 
 MIDDLEWARE_CLASSES = [

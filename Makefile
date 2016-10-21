@@ -85,7 +85,8 @@ db.load_fixtures:
 		counties \
 		organizations \
 		addresses \
-		mock_profiles \
+		mock_profiles
+	python ./manage.py loaddata \
 		mock_2_submissions_to_a_pubdef \
 		mock_2_submissions_to_sf_pubdef \
 		mock_2_submissions_to_cc_pubdef \

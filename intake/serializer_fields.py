@@ -84,13 +84,13 @@ class EventTypeField(serializers.Field):
         super().__init__(*args, **base_kwargs)
 
     def filter(self, events):
-        return events.filter(name=self.event_name)
+        return list(filter(lambda e: e.name == self.event_name, events))
 
     def reduce(self, events):
         return self.reducer(events)
 
     def to_representation(self, events):
-        return self.reduce(self.filter(events))
+        return self.reduce(self.filter(events.all()))
 
 
 class HasEventField(EventTypeField):
@@ -103,7 +103,7 @@ class EventTimeField(EventTypeField):
     event_name = None
 
     def reduce(self, events):
-        times = events.values_list('time', flat=True)
+        times = [e.time for e in events]
         if times:
             return max(times).astimezone(PACIFIC).isoformat()
 
@@ -112,7 +112,7 @@ class EventDataKeyField(EventTypeField):
     key = None
 
     def reduce(self, events):
-        data = events.values_list('data', flat=True)
+        data = [e.data for e in events]
         values = [
             datum.get(self.key)
             for datum in data
@@ -142,6 +142,14 @@ class Referrer(EventDataKeyField):
     key = 'referrer'
 
 
+def has_completed_county_page(events):
+    for event in events:
+        if event.name == models.ApplicationEvent.APPLICATION_PAGE_COMPLETE:
+            if event.data.get('page_name') == 'CountyApplication':
+                return True
+    return False
+
+
 def made_a_meaningful_attempt_to_apply(applicant):
     """Some started applications are empty submissions, in which it appears
     that someone is exploring the interface, rather than starting a meaningful
@@ -151,19 +159,29 @@ def made_a_meaningful_attempt_to_apply(applicant):
         2. In the absence of 1, the user got errors indicating at least one
            attempt beyond submitting an empty form.
     """
-    completed_county_page = bool(
-        applicant.events.filter(
-            name=models.ApplicationEvent.APPLICATION_PAGE_COMPLETE,
-            data__page_name='CountyApplication').count())
-    if completed_county_page:
+    events = list(applicant.events.all())
+    if has_completed_county_page(events):
         return True
     meaningful_errors = []
-    for data in applicant.events.filter(
-                name=models.ApplicationEvent.APPLICATION_ERRORS
-            ).values_list('data', flat=True):
-        filter_keys = ['counties', 'first_name']
-        errors = data.get('errors', {})
-        free_of_errors_indicating_frivolity = all(
-            [key not in errors for key in filter_keys])
-        meaningful_errors.append(free_of_errors_indicating_frivolity)
+    for event in events:
+        if event.name == models.ApplicationEvent.APPLICATION_ERRORS:
+            filter_keys = ['counties', 'first_name']
+            errors = event.data.get('errors', {})
+            free_of_errors_indicating_frivolity = all(
+                [key not in errors for key in filter_keys])
+            meaningful_errors.append(free_of_errors_indicating_frivolity)
     return any(meaningful_errors)
+
+
+def is_multicounty(applicant):
+    submissions = applicant.form_submissions.all()
+    rap_outside_sf = any([
+        sub.answers.get('rap_outside_sf') == YES
+        for sub in submissions
+        ])
+    if rap_outside_sf:
+        return True
+    for sub in submissions:
+        if len(sub.organizations.all()) > 1:
+            return True
+    return False
