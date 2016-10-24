@@ -95,3 +95,7 @@ db.load_fixtures:
 		mock_1_bundle_to_sf_pubdef \
 		mock_1_bundle_to_cc_pubdef \
 		mock_application_events
+
+
+notebook:
+	python ./manage.py shell_plus --notebook
