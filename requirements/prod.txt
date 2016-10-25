@@ -15,7 +15,7 @@ https://github.com/bee-keeper/django-invitations/archive/master.tar.gz
 sendgrid-django~=2.0
 django-jinja~=2.2
 django-debug-toolbar==1.4
-djangorestframework~=3.4
+djangorestframework~=3.5
 newrelic==2.70.0.51
 # for debugging in production
 ipdb~=0.10
