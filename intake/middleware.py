@@ -1,4 +1,10 @@
+import logging
+from project.external_services import log_to_mixpanel
 from urllib.parse import urlparse
+import uuid
+
+
+logger = logging.getLogger(__name__)
 
 
 class PersistReferrerMiddleware:
@@ -26,3 +32,14 @@ class GetCleanIpAddressMiddleware:
     def process_request(self, request):
         request.ip_address = self._get_client_ip(request)
         return None
+
+
+class TrackPageViewsMiddleware:
+
+    def process_request(self, request):
+        applicant_id = request.session.get(
+            'applicant_id', 'anon_%s' % uuid.uuid4())
+        log_to_mixpanel(applicant_id, "page_view", {
+            'applicant_id': applicant_id,
+            'path': request.path
+        })

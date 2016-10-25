@@ -11,6 +11,7 @@ class ApplicationEventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.ApplicationEvent
+        fields = ['time', 'name', 'data']
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
@@ -71,6 +72,17 @@ class ApplicantSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Applicant
+        fields = [
+            'id',
+            'started',
+            'finished',
+            'had_errors',
+            'ip',
+            'referrer',
+            'events',
+            'form_submissions',
+            'tried_to_apply'
+        ]
 
     def to_representation(self, obj):
         data = super().to_representation(obj)

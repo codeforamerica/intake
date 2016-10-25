@@ -16,6 +16,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.urlresolvers import reverse
 
 from project.jinja2 import namify
+from project.external_services import log_to_mixpanel
 
 from formation import field_types
 from formation.forms import DeclarationLetterDisplay
@@ -408,13 +409,12 @@ class FormSubmission(models.Model):
 class Applicant(models.Model):
 
     def log_event(self, name, data=None):
-        event = ApplicationEvent(
+        data = data or {}
+        return ApplicationEvent.create(
             name=name,
-            applicant=self,
-            data=data or {}
+            applicant_id=self.id,
+            **data
         )
-        event.save()
-        return event
 
 
 class ApplicationEvent(models.Model):
@@ -448,6 +448,8 @@ class ApplicationEvent(models.Model):
             data=data or {}
         )
         event.save()
+        log_to_mixpanel(
+            applicant_id, name, data or {})
         return event
 
     @classmethod
