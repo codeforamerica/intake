@@ -1,8 +1,8 @@
-from django.conf import settings
 import logging
-from mixpanel import Mixpanel
+from project.external_services import log_to_mixpanel
 from urllib.parse import urlparse
 import uuid
+
 
 logger = logging.getLogger(__name__)
 
@@ -36,17 +36,10 @@ class GetCleanIpAddressMiddleware:
 
 class TrackPageViewsMiddleware:
 
-    def __init__(self):
-        super().__init__()
-        mixpanel_key = getattr(settings, 'MIXPANEL_KEY', None)
-        self.mixpanel = None
-        if mixpanel_key:
-            self.mixpanel = Mixpanel(mixpanel_key)
-
     def process_request(self, request):
-        if self.mixpanel is not None:
-            applicant_id = request.session.get('applicant_id', 'anon_%s' % uuid.uuid4())
-            self.mixpanel.track(applicant_id, "page_view", {
-                'applicant_id': applicant_id,
-                'path': request.path
-            })
+        applicant_id = request.session.get(
+            'applicant_id', 'anon_%s' % uuid.uuid4())
+        log_to_mixpanel(applicant_id, "page_view", {
+            'applicant_id': applicant_id,
+            'path': request.path
+        })

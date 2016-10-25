@@ -12,3 +12,12 @@ def get_mixpanel_client():
         if mixpanel_key:
             _mixpanel_client = Mixpanel(mixpanel_key)
     return _mixpanel_client
+
+
+def log_to_mixpanel(user_id, event_name, data):
+    client = get_mixpanel_client()
+    if client:
+        client.track(
+            distinct_id=user_id,
+            event_name=event_name,
+            properties=data)
