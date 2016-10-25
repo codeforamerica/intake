@@ -1,4 +1,10 @@
+from django.conf import settings
+import logging
+from mixpanel import Mixpanel
 from urllib.parse import urlparse
+import uuid
+
+logger = logging.getLogger(__name__)
 
 
 class PersistReferrerMiddleware:
@@ -26,3 +32,18 @@ class GetCleanIpAddressMiddleware:
     def process_request(self, request):
         request.ip_address = self._get_client_ip(request)
         return None
+
+
+class TrackPageViewsMiddleware:
+
+    def __init__(self):
+        super().__init__()
+        mixpanel_key = getattr(settings, 'MIXPANEL_KEY')
+        self.mixpanel = Mixpanel(mixpanel_key)
+
+    def process_request(self, request):
+        applicant_id = request.session.get('applicant_id', 'anon_%s' % uuid.uuid4())
+        self.mixpanel.track(applicant_id, "page_view", {
+            'applicant_id': applicant_id,
+            'path': request.path
+        })

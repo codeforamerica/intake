@@ -7,7 +7,7 @@
 
 ## Requirements
 To get a local version of intake running, you'll need to have the following installed:
-*   [virtualenv](https://github.com/codeforamerica/howto/blob/master/Python-Virtualenv.md)
+*   [virtualenv with python3](https://github.com/codeforamerica/howto/blob/master/Python-Virtualenv.md)
 *   [Node.js and npm](https://github.com/codeforamerica/howto/blob/master/Node.js.md)
 *   [Gulp](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md), simply follow step 1 to enable the `gulp` command from your terminal.
 *   [Local PostreSQL](https://github.com/codeforamerica/howto/blob/master/PostgreSQL.md)
@@ -43,21 +43,33 @@ If this user doesn't exist create them with:
 # CREATE USER postgres PASSWORD '';
 ```
 
+Apply migrations to set up the database schema:
+
+```
+python manage.py migrate
+```
+
 ## Set up environment variables
 To allow Django to deploy onto a localhost, add the following to whatever .__rc file is sourced when you open a terminal (.zshrc, .bashrc, etc.):
 
 ```
-ALLOWED_HOSTS =  "localhost,127.0.0.1"
+export ALLOWED_HOSTS = "localhost,127.0.0.1"
 ```
 
 We're using Sendgrid to handle emails. If you don't have an account it's okay but we still need to set an API_Key. Emails won't work but the app will run. Add the following to the same file as above:
 
 ```
-SENDGRID_API_KEY = ""
+export SENDGRID_API_KEY = ""
 ```
 If you DO have a Sendgrid account, that's your spot for your api key.
 
 ## Run the local server
+
+First, copy local_settings.py.example to local_settings.py and make sure to update your database connection info.
+
+```
+cp local_settings.py.example local_settings.py
+```
 
 The following command will spin up a local server at [http://localhost:8000/](http://localhost:8000/)
 

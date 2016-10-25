@@ -45,6 +45,9 @@ FRONT_API_TOKEN = os.environ.get("FRONT_API_TOKEN")
 FRONT_EMAIL_CHANNEL_ID = os.environ.get("FRONT_EMAIL_CHANNEL_ID")
 FRONT_PHONE_CHANNEL_ID = os.environ.get("FRONT_PHONE_CHANNEL_ID")
 
+# Mixpanel Analytics
+MIXPANEL_KEY = os.environ.get("MIXPANEL_KEY")
+
 # configure django-debug-toolbar
 USE_DEBUG_TOOLBAR = os.environ.get('USE_DEBUG_TOOLBAR', 0)
 
