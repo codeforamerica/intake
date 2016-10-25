@@ -3,7 +3,7 @@ import random
 import logging
 from unittest import skipUnless
 from unittest.mock import patch
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase
 from django.db.models import Count
 from django.core.urlresolvers import reverse
@@ -429,6 +429,7 @@ class TestPartnerDetailView(TestCase):
         self.assertContains(response, sf_pubdef.name)
 
 
+@override_settings(MIXPANEL_KEY='fake_key')
 class TestRAPSheetInstructions(TestCase):
 
     def test_renders_with_no_session_data(self):
