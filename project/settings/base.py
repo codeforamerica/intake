@@ -43,6 +43,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'intake.middleware.PersistReferrerMiddleware',
     'intake.middleware.GetCleanIpAddressMiddleware',
+    'intake.middleware.TrackPageViewsMiddleware'
 ]
 
 ROOT_URLCONF = 'project.urls'
