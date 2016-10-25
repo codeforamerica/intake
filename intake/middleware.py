@@ -38,9 +38,9 @@ class TrackPageViewsMiddleware:
 
     def __init__(self):
         super().__init__()
-        mixpanel_key = getattr(settings, 'MIXPANEL_KEY')
+        mixpanel_key = getattr(settings, 'MIXPANEL_KEY', None)
         self.mixpanel = None
-        if mixpanel_key is not None:
+        if mixpanel_key:
             self.mixpanel = Mixpanel(mixpanel_key)
 
     def process_request(self, request):
