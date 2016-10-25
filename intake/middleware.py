@@ -39,11 +39,14 @@ class TrackPageViewsMiddleware:
     def __init__(self):
         super().__init__()
         mixpanel_key = getattr(settings, 'MIXPANEL_KEY')
-        self.mixpanel = Mixpanel(mixpanel_key)
+        self.mixpanel = None
+        if mixpanel_key is not None:
+            self.mixpanel = Mixpanel(mixpanel_key)
 
     def process_request(self, request):
-        applicant_id = request.session.get('applicant_id', 'anon_%s' % uuid.uuid4())
-        self.mixpanel.track(applicant_id, "page_view", {
-            'applicant_id': applicant_id,
-            'path': request.path
-        })
+        if self.mixpanel is not None:
+            applicant_id = request.session.get('applicant_id', 'anon_%s' % uuid.uuid4())
+            self.mixpanel.track(applicant_id, "page_view", {
+                'applicant_id': applicant_id,
+                'path': request.path
+            })
