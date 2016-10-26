@@ -462,6 +462,33 @@ class TestFormSubmission(TestCase):
         self.assertIsNone(
             submission.get_transfer_action(request))
 
+    def test_qualifies_for_fee_waiver_with_public_benefits(self):
+        sub = models.FormSubmission(
+            answers=mock.fake.ebclc_answers(
+                on_public_benefits=field_types.YES))
+        self.assertEqual(sub.qualifies_for_fee_waiver(), True)
+
+    def test_qualifies_for_fee_waiver_with_no_income(self):
+        sub = models.FormSubmission(
+            answers=mock.fake.ebclc_answers(
+                household_size=0,
+                monthly_income=0))
+        self.assertEqual(sub.qualifies_for_fee_waiver(), True)
+
+    def test_doesnt_qualify_for_fee_waiver_with_income_and_no_benefits(self):
+        sub = models.FormSubmission(
+            answers=mock.fake.ebclc_answers(
+                on_public_benefits=field_types.NO,
+                household_size=11)
+            )
+        sub.answers['monthly_income'] = \
+            (constants.FEE_WAIVER_LEVELS[12] / 12) + 1
+        self.assertEqual(sub.qualifies_for_fee_waiver(), False)
+
+    def test_doesnt_qualify_for_fee_waiver_without_valid_inputs(self):
+        sub = models.FormSubmission(answers={})
+        self.assertEqual(sub.qualifies_for_fee_waiver(), None)
+
 
 class TestCounty(TestCase):
 

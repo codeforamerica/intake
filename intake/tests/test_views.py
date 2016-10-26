@@ -2,7 +2,7 @@ import os
 import random
 import logging
 from unittest import skipUnless
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 from django.test import TestCase, override_settings
 from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase
 from django.db.models import Count
@@ -435,8 +435,22 @@ class TestRAPSheetInstructions(TestCase):
     def test_renders_with_no_session_data(self):
         response = self.client.get(reverse('intake-rap_sheet'))
         # make sure it has a link to the pdf
+        self.assertNotIn('qualifies_for_fee_waiver', response.context)
         # make sure there aren't any unrendered variables
         self.assertNotContains(response, "{{")
+
+    @patch('intake.views.models.FormSubmission')
+    @patch('intake.views.Organization')
+    @patch('intake.views.RAPSheetInstructions.get_applicant_id')
+    def test_pulls_relevant_info_if_session_data(self, get_app_id, Org, Sub):
+        get_app_id.return_value = 1
+        Org.objects.filter.return_value = 'some_orgs'
+        submission_mock = Mock()
+        Sub.objects.filter.return_value.latest.return_value = submission_mock
+        response = self.client.get(reverse('intake-rap_sheet'))
+        self.assertIn('qualifies_for_fee_waiver', response.context)
+        self.assertIn('organizations', response.context)
+        submission_mock.qualifies_for_fee_waiver.assert_called_once_with()
 
 
 class TestSelectCountyView(AuthIntegrationTestCase):

@@ -20,6 +20,7 @@ from project.external_services import log_to_mixpanel
 
 from formation import field_types
 from formation.forms import DeclarationLetterDisplay
+from formation.fields import MonthlyIncome, HouseholdSize, OnPublicBenefits
 
 from intake import (
     pdfparser, anonymous_names, notifications, model_fields,
@@ -172,11 +173,11 @@ class FormSubmission(models.Model):
         submissions = cls.objects.prefetch_related(
             'organizations', 'organizations__county').all()
         first_sub = min(submissions, key=lambda x: x.date_received)
-        time_counter = timezone_utils.now()
+        time_counter = timezone_utils.now().astimezone(timezone('US/Pacific'))
         day_strings = []
         day_fmt = '%Y-%m-%d'
         a_day = datetime.timedelta(days=1)
-        while time_counter > (first_sub.get_local_date_received() - a_day):
+        while time_counter >= (first_sub.get_local_date_received() - a_day):
             day_strings.append(time_counter.strftime(day_fmt))
             time_counter -= a_day
         county_totals = {
@@ -401,6 +402,22 @@ class FormSubmission(models.Model):
 
     def get_external_url(self):
         return urljoin(settings.DEFAULT_HOST, self.get_absolute_url())
+
+    def qualifies_for_fee_waiver(self):
+        on_benefits = OnPublicBenefits(self.answers)
+        if on_benefits.is_valid():
+            if bool(on_benefits):
+                return True
+        is_under_threshold = None
+        hh_size_field = HouseholdSize(self.answers)
+        hh_income_field = MonthlyIncome(self.answers)
+        if (hh_income_field.is_valid() and hh_size_field.is_valid()):
+            hh_size = hh_size_field.get_display_value()
+            annual_income = hh_income_field.get_current_value() * 12
+            threshold = constants.FEE_WAIVER_LEVELS.get(
+                hh_size, constants.FEE_WAIVER_LEVELS[12])
+            is_under_threshold = annual_income <= threshold
+        return is_under_threshold
 
     def __str__(self):
         return self.get_anonymous_display()

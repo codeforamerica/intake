@@ -459,7 +459,12 @@ class RAPSheetInstructions(TemplateView, GetFormSessionDataMixin):
         if applicant_id:
             organizations = Organization.objects.filter(
                 submissions__applicant_id=applicant_id)
+            submission = models.FormSubmission.objects.filter(
+                    applicant_id=applicant_id
+                ).latest('date_received')
             context['organizations'] = organizations
+            context['qualifies_for_fee_waiver'] = \
+                submission.qualifies_for_fee_waiver()
         return context
 
 
