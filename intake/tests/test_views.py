@@ -2,8 +2,8 @@ import os
 import random
 import logging
 from unittest import skipUnless
-from unittest.mock import patch
-from django.test import TestCase
+from unittest.mock import patch, Mock
+from django.test import TestCase, override_settings
 from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase
 from django.db.models import Count
 from django.core.urlresolvers import reverse
@@ -232,7 +232,8 @@ class TestViews(IntakeDataTestCase):
                              )
 
     @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
-    def test_authenticated_user_can_see_pdf_bundle(self):
+    @patch('intake.models.notifications.slack_simple.send')
+    def test_authenticated_user_can_see_pdf_bundle(self, slack):
         self.be_sfpubdef_user()
         ids = models.FormSubmission.objects.filter(
             organizations=self.sf_pubdef).values_list('pk', flat=True)
@@ -241,7 +242,8 @@ class TestViews(IntakeDataTestCase):
         self.assertEqual(bundle.status_code, 200)
 
     @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
-    def test_staff_user_can_see_pdf_bundle(self):
+    @patch('intake.models.notifications.slack_simple.send')
+    def test_staff_user_can_see_pdf_bundle(self, slack):
         self.be_cfa_user()
         submissions = self.sf_pubdef_submissions
         bundle = models.ApplicationBundle.create_with_submissions(
@@ -378,13 +380,29 @@ class TestPartnerDetailView(TestCase):
         self.assertContains(response, sf_pubdef.name)
 
 
+@override_settings(MIXPANEL_KEY='fake_key')
 class TestRAPSheetInstructions(TestCase):
 
     def test_renders_with_no_session_data(self):
         response = self.client.get(reverse('intake-rap_sheet'))
         # make sure it has a link to the pdf
+        self.assertNotIn('qualifies_for_fee_waiver', response.context)
         # make sure there aren't any unrendered variables
         self.assertNotContains(response, "{{")
+
+    @patch('intake.views.application_form_views.models.FormSubmission')
+    @patch('intake.views.application_form_views.Organization')
+    @patch('intake.views.application_form_views'
+           '.RAPSheetInstructions.get_applicant_id')
+    def test_pulls_relevant_info_if_session_data(self, get_app_id, Org, Sub):
+        get_app_id.return_value = 1
+        Org.objects.filter.return_value = 'some_orgs'
+        submission_mock = Mock()
+        Sub.objects.filter.return_value.latest.return_value = submission_mock
+        response = self.client.get(reverse('intake-rap_sheet'))
+        self.assertIn('qualifies_for_fee_waiver', response.context)
+        self.assertIn('organizations', response.context)
+        submission_mock.qualifies_for_fee_waiver.assert_called_once_with()
 
 
 class TestSelectCountyView(AuthIntegrationTestCase):
@@ -1144,7 +1162,8 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
         result = self.client.get(reverse(
                     'intake-app_bundle_detail',
                     kwargs=dict(bundle_id=self.a_pubdef_bundle.id)))
-        self.assertRedirects(result, reverse('intake-app_index'))
+        self.assertRedirects(
+            result, reverse('intake-app_index'), fetch_redirect_response=False)
 
     @patch('intake.views.admin_views.notifications.slack_submissions_viewed.send')
     def test_has_pdf_bundle_url_if_needed(self, slack):
@@ -1189,8 +1208,12 @@ class TestApplicationBundleDetailPDFView(IntakeDataTestCase):
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
+        # patch slack_simple
+        patcher = patch('intake.models.notifications')
+        patcher.start()
         cls.bundle = models.ApplicationBundle.create_with_submissions(
             organization=cls.sf_pubdef, submissions=cls.sf_pubdef_submissions)
+        patcher.stop()
 
     def test_staff_user_gets_200(self):
         self.be_cfa_user()

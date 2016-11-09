@@ -96,7 +96,8 @@ class Organization(models.Model):
         """Get the basic input form for this organization
         For the time being, this is purely based on the county
         """
-        form_selector = display_form_selector if display else county_form_selector
+        form_selector = display_form_selector \
+            if display else county_form_selector
         return form_selector.get_combined_form_class(
             counties=[self.county.slug])
 
@@ -116,9 +117,10 @@ class Organization(models.Model):
     def get_unopened_apps(self):
         opened_sub_ids = intake_models.ApplicationLogEntry.objects.filter(
             event_type=intake_models.ApplicationLogEntry.OPENED,
-            user__profile__organization=self
+            user__profile__organization=self,
+            submission_id__isnull=False
         ).values_list('submission_id', flat=True)
-        return self.submissions.exclude(pk__in=opened_sub_ids)
+        return self.submissions.all().exclude(pk__in=opened_sub_ids)
 
     def get_last_bundle(self):
         return intake_models.ApplicationBundle.objects.filter(

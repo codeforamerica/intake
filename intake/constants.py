@@ -116,3 +116,19 @@ COUNTY_CHOICE_DISPLAY_DICT = {
     Counties.CONTRA_COSTA: CountyNames.CONTRA_COSTA,
     Counties.ALAMEDA: CountyNames.ALAMEDA,
 }
+
+
+FEE_WAIVER_LEVELS = {
+    1: 16395,
+    2: 22108,
+    3: 27821,
+    4: 33534,
+    5: 39248,
+    6: 44962,
+    7: 50688,
+    8: 56429,
+    9: 62169,
+    10: 67910,
+    11: 73651,
+    12: 79392,
+}

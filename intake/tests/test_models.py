@@ -462,6 +462,33 @@ class TestFormSubmission(TestCase):
         self.assertIsNone(
             submission.get_transfer_action(request))
 
+    def test_qualifies_for_fee_waiver_with_public_benefits(self):
+        sub = models.FormSubmission(
+            answers=mock.fake.ebclc_answers(
+                on_public_benefits=field_types.YES))
+        self.assertEqual(sub.qualifies_for_fee_waiver(), True)
+
+    def test_qualifies_for_fee_waiver_with_no_income(self):
+        sub = models.FormSubmission(
+            answers=mock.fake.ebclc_answers(
+                household_size=0,
+                monthly_income=0))
+        self.assertEqual(sub.qualifies_for_fee_waiver(), True)
+
+    def test_doesnt_qualify_for_fee_waiver_with_income_and_no_benefits(self):
+        sub = models.FormSubmission(
+            answers=mock.fake.ebclc_answers(
+                on_public_benefits=field_types.NO,
+                household_size=11)
+            )
+        sub.answers['monthly_income'] = \
+            (constants.FEE_WAIVER_LEVELS[12] / 12) + 1
+        self.assertEqual(sub.qualifies_for_fee_waiver(), False)
+
+    def test_doesnt_qualify_for_fee_waiver_without_valid_inputs(self):
+        sub = models.FormSubmission(answers={})
+        self.assertEqual(sub.qualifies_for_fee_waiver(), None)
+
 
 class TestCounty(TestCase):
 
@@ -611,9 +638,10 @@ class TestApplicationBundle(TestCase):
         bundle.build_bundled_pdf_if_necessary()
         get_pdfs_mock.assert_not_called()
 
+    @patch('intake.models.notifications.slack_simple.send')
     @patch('intake.models.get_parser')
     @patch('intake.models.logger')
-    def test_build_bundled_pdf_with_one_pdf(self, logger, get_parser):
+    def test_build_bundled_pdf_with_one_pdf(self, logger, get_parser, slack):
         # set up associated data
         sf_pubdef = auth_models.Organization.objects.get(
             slug=constants.Organizations.SF_PUBDEF)
@@ -639,12 +667,14 @@ class TestApplicationBundle(TestCase):
         # check results
         get_parser.assert_not_called()
         logger.assert_not_called()
+        slack.assert_not_called()
         get_individual_filled_pdfs.assert_called_once_with()
         self.assertEqual(bundle.bundled_pdf.read(), data)
 
+    @patch('intake.models.notifications.slack_simple.send')
     @patch('intake.models.get_parser')
     @patch('intake.models.logger')
-    def test_build_bundled_pdf_if_has_pdfs(self, logger, get_parser):
+    def test_build_bundled_pdf_if_has_pdfs(self, logger, get_parser, slack):
         sf_pubdef = auth_models.Organization.objects.get(
             slug=constants.Organizations.SF_PUBDEF)
         subs = [
@@ -663,13 +693,15 @@ class TestApplicationBundle(TestCase):
         bundle.get_individual_filled_pdfs = get_individual_filled_pdfs
         bundle.build_bundled_pdf_if_necessary()
         logger.assert_not_called()
+        slack.assert_not_called()
         get_individual_filled_pdfs.assert_called_once_with()
 
+    @patch('intake.models.notifications.slack_simple.send')
     @patch('intake.models.SimpleUploadedFile')
     @patch('intake.models.get_parser')
     @patch('intake.models.logger')
     def test_build_bundled_pdfs_if_not_prefilled(
-            self, logger, get_parser, SimpleUploadedFile):
+            self, logger, get_parser, SimpleUploadedFile, slack):
         should_have_a_pdf = Mock(return_value=True)
         get_individual_filled_pdfs = Mock(return_value=[])
         mock_submissions = Mock(**{'all.return_value': [Mock(), Mock()]})
@@ -682,10 +714,40 @@ class TestApplicationBundle(TestCase):
         mock_bundle.organization.pk = 1
 
         models.ApplicationBundle.build_bundled_pdf_if_necessary(mock_bundle)
-        logger.error.assert_called_once_with(
-            "submissions for ApplicationBundle(pk=2) lack pdfs")
+        error_msg = "Submissions for ApplicationBundle(pk=2) lack pdfs"
+        logger.error.assert_called_once_with(error_msg)
+        slack.assert_called_once_with(error_msg)
         self.assertEqual(len(get_individual_filled_pdfs.mock_calls), 2)
         mock_bundle.save.assert_called_once_with()
+
+    @patch('intake.models.notifications.slack_simple.send')
+    @patch('intake.models.SimpleUploadedFile')
+    @patch('intake.models.get_parser')
+    @patch('intake.models.logger')
+    def test_build_bundled_pdfs_if_some_are_not_prefilled(
+            self, logger, get_parser, SimpleUploadedFile, slack):
+        should_have_a_pdf = Mock(return_value=True)
+        mock_filled_pdf = Mock()
+        # one existing pdf
+        get_individual_filled_pdfs = Mock(return_value=[mock_filled_pdf])
+        # two submissions
+        mock_submissions = [Mock(), Mock()]
+        mock_submissions_field = Mock(**{'all.return_value': mock_submissions})
+        get_parser.return_value.join_pdfs.return_value = b'pdf'
+        mock_bundle = Mock(
+            pk=2,
+            should_have_a_pdf=should_have_a_pdf,
+            get_individual_filled_pdfs=get_individual_filled_pdfs,
+            submissions=mock_submissions_field)
+        mock_bundle.organization.pk = 1
+        models.ApplicationBundle.build_bundled_pdf_if_necessary(mock_bundle)
+        error_msg = "Submissions for ApplicationBundle(pk=2) lack pdfs"
+        logger.error.assert_called_once_with(error_msg)
+        slack.assert_called_once_with(error_msg)
+        self.assertEqual(len(get_individual_filled_pdfs.mock_calls), 2)
+        mock_bundle.save.assert_called_once_with()
+        for mock_sub in mock_submissions:
+            mock_sub.fill_pdfs.assert_called_once_with()
 
 
 class TestApplicationLogEntry(TestCase):

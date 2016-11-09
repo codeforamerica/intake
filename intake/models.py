@@ -16,9 +16,11 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.urlresolvers import reverse
 
 from project.jinja2 import namify
+from project.external_services import log_to_mixpanel
 
 from formation import field_types
 from formation.forms import DeclarationLetterDisplay
+from formation.fields import MonthlyIncome, HouseholdSize, OnPublicBenefits
 
 from intake import (
     pdfparser, anonymous_names, notifications, model_fields,
@@ -171,11 +173,11 @@ class FormSubmission(models.Model):
         submissions = cls.objects.prefetch_related(
             'organizations', 'organizations__county').all()
         first_sub = min(submissions, key=lambda x: x.date_received)
-        time_counter = timezone_utils.now()
+        time_counter = timezone_utils.now().astimezone(timezone('US/Pacific'))
         day_strings = []
         day_fmt = '%Y-%m-%d'
         a_day = datetime.timedelta(days=1)
-        while time_counter > (first_sub.get_local_date_received() - a_day):
+        while time_counter >= (first_sub.get_local_date_received() - a_day):
             day_strings.append(time_counter.strftime(day_fmt))
             time_counter -= a_day
         county_totals = {
@@ -401,6 +403,22 @@ class FormSubmission(models.Model):
     def get_external_url(self):
         return urljoin(settings.DEFAULT_HOST, self.get_absolute_url())
 
+    def qualifies_for_fee_waiver(self):
+        on_benefits = OnPublicBenefits(self.answers)
+        if on_benefits.is_valid():
+            if bool(on_benefits):
+                return True
+        is_under_threshold = None
+        hh_size_field = HouseholdSize(self.answers)
+        hh_income_field = MonthlyIncome(self.answers)
+        if (hh_income_field.is_valid() and hh_size_field.is_valid()):
+            hh_size = hh_size_field.get_display_value()
+            annual_income = hh_income_field.get_current_value() * 12
+            threshold = constants.FEE_WAIVER_LEVELS.get(
+                hh_size, constants.FEE_WAIVER_LEVELS[12])
+            is_under_threshold = annual_income <= threshold
+        return is_under_threshold
+
     def __str__(self):
         return self.get_anonymous_display()
 
@@ -408,13 +426,12 @@ class FormSubmission(models.Model):
 class Applicant(models.Model):
 
     def log_event(self, name, data=None):
-        event = ApplicationEvent(
+        data = data or {}
+        return ApplicationEvent.create(
             name=name,
-            applicant=self,
-            data=data or {}
+            applicant_id=self.id,
+            **data
         )
-        event.save()
-        return event
 
 
 class ApplicationEvent(models.Model):
@@ -448,6 +465,8 @@ class ApplicationEvent(models.Model):
             data=data or {}
         )
         event.save()
+        log_to_mixpanel(
+            applicant_id, name, data or {})
         return event
 
     @classmethod
@@ -791,12 +810,17 @@ class ApplicationBundle(models.Model):
         needs_pdf = self.should_have_a_pdf()
         if not needs_pdf:
             return
+        submissions = self.submissions.all()
         filled_pdfs = self.get_individual_filled_pdfs()
-        if needs_pdf and not filled_pdfs:
-            msg = "submissions for ApplicationBundle(pk={}) lack pdfs".format(
-                self.pk)
+        missing_filled_pdfs = (
+            not filled_pdfs or (len(submissions) > len(filled_pdfs)))
+        if needs_pdf and missing_filled_pdfs:
+            msg = str(
+                "Submissions for ApplicationBundle(pk={}) lack pdfs"
+                ).format(self.pk)
             logger.error(msg)
-            for submission in self.submissions.all():
+            notifications.slack_simple.send(msg)
+            for submission in submissions:
                 submission.fill_pdfs()
             filled_pdfs = self.get_individual_filled_pdfs()
         if len(filled_pdfs) == 1:

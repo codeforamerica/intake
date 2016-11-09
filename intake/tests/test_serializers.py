@@ -29,7 +29,7 @@ class TestApplicantSerializer(TestCase):
             'ip', 'referrer', 'events',
             'tried_to_apply', 'is_multicounty'
             ]
-        event_keys = ['id', 'name', 'data']
+        event_keys = ['time', 'name', 'data']
         for key in top_keys:
             self.assertIn(key, data)
         for key in event_keys:
