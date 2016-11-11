@@ -15,7 +15,7 @@
 
 <p>{{ _("Some legal aid organizations, like the East Bay Community Law Center, need your California criminal record (RAP sheet) to check what services you qualify for. Follow the steps below to get your RAP sheet and send it to East Bay Community Law Center to complete your Alameda County application.") }}</p>
 
-
+{% if qualifies_for_fee_waiver %}
 <h2>{{ _(" Follow these steps to get $25 off of your RAP sheet fees:") }}</h2>
 
 <p>{{ _("You qualify for a fee waiver. This means that the California Department of Justice "
@@ -72,7 +72,7 @@
     {{ _("Follow instructions in the next section to get your RAP sheet. ") }}
   </li>
 </ol>
-
+{% endif %}
 
 <h2>{{ _("If you live in California, follow these steps to get your RAP sheet:") }}</h2>
 
