@@ -7,7 +7,7 @@ class ApplicationEventSerializer(serializers.ModelSerializer):
     time = serializers.SerializerMethodField()
 
     def get_time(self, event):
-        return event.time.astimezone(serializer_fields.PACIFIC).isoformat()
+        return event.time.astimezone(serializer_fields.PACIFIC)
 
     class Meta:
         model = models.ApplicationEvent

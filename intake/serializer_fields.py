@@ -105,7 +105,7 @@ class EventTimeField(EventTypeField):
     def reduce(self, events):
         times = [e.time for e in events]
         if times:
-            return max(times).astimezone(PACIFIC).isoformat()
+            return max(times).astimezone(PACIFIC)
 
 
 class EventDataKeyField(EventTypeField):
