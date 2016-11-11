@@ -5,18 +5,10 @@ import itertools
 from django.http import HttpResponse
 from django.views.generic import View
 from django.views.generic.base import TemplateView
-from django.db.models import Min
 from django.utils import timezone
-from pytz import timezone as tz
-from django.utils.html import mark_safe
-from rest_framework.renderers import JSONRenderer
 
 from intake import models, serializers, constants, aggregate_serializers
 from intake.aggregate_serializer_fields import truthy_values_filter
-
-PACIFIC = tz('US/Pacific')
-
-ALL = 'all'
 
 
 def get_serialized_applications():
@@ -40,8 +32,6 @@ def get_day_data_dict(week_of_apps_grouped_by_day):
 
 def app_date(app):
     dt = app['finished'] if app['finished'] else app['started']
-    if dt is None:
-        import ipdb; ipdb.set_trace()
     return dt.date()
 
 
@@ -58,9 +48,9 @@ def is_valid_app(app):
 
 def breakup_apps_by_org(apps):
     org_buckets = {
-        ALL: {
+        constants.Organizations.ALL: {
             'org': {
-                'slug': ALL,
+                'slug': constants.Organizations.ALL,
                 'name': 'All Organizations'
             },
             'apps': []
@@ -68,7 +58,7 @@ def breakup_apps_by_org(apps):
     }
     for app in apps:
         if is_valid_app(app):
-            org_buckets[ALL]['apps'].append(app)
+            org_buckets[constants.Organizations.ALL]['apps'].append(app)
             for org in app.get('organizations', []):
                 slug = org['slug']
                 if slug not in org_buckets:
@@ -81,7 +71,7 @@ def breakup_apps_by_org(apps):
 
 
 def get_todays_date():
-    return timezone.now().astimezone(PACIFIC).date()
+    return timezone.now().astimezone(constants.PACIFIC_TIME).date()
 
 
 def get_day_lookup_structure():
@@ -130,6 +120,11 @@ def get_aggregate_day_data(apps, private=False):
     }
 
 
+def organization_index(serialized_org):
+    return constants.DEFAULT_ORGANIZATION_ORDER.index(
+        serialized_org['org']['slug'])
+
+
 class Stats(TemplateView):
     """A view that shows a public summary of service performance.
     """
@@ -143,6 +138,7 @@ class Stats(TemplateView):
         for group in apps_by_org:
             org_apps = group.pop('apps', [])
             group.update(get_aggregate_day_data(org_apps, show_private_data))
+        apps_by_org.sort(key=organization_index)
         context['stats'] = {
             'org_stats': apps_by_org,
         }

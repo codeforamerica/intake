@@ -1,6 +1,8 @@
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from pytz import timezone
 
+PACIFIC_TIME = timezone('US/Pacific')
 
 SCOPE_TO_LIVE_COUNTIES = getattr(settings, 'LIVE_COUNTY_CHOICES', False)
 
@@ -41,6 +43,15 @@ class Organizations:
     COCO_PUBDEF = 'cc_pubdef'
     ALAMEDA_PUBDEF = 'a_pubdef'
     EBCLC = 'ebclc'
+    ALL = 'all'
+
+DEFAULT_ORGANIZATION_ORDER = [
+    Organizations.ALL,
+    Organizations.SF_PUBDEF,
+    Organizations.ALAMEDA_PUBDEF,
+    Organizations.EBCLC,
+    Organizations.COCO_PUBDEF,
+]
 
 
 ORG_NAMES = {
