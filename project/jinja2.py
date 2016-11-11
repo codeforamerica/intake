@@ -5,6 +5,12 @@ from jinja2 import Environment
 from datetime import datetime
 from pytz import timezone
 from jinja2 import Markup
+from django.utils.html import mark_safe
+from rest_framework.renderers import JSONRenderer
+
+
+def to_json(data):
+    return mark_safe(JSONRenderer().render(data).decode('utf-8'))
 
 
 def namify(s=''):
