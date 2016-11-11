@@ -1,26 +1,28 @@
 {% extends "public_base_single_column.jinja" %}
 
 {%- block header_title -%}
-Current Stats for Clear My Record
+Numbers for Clear My Record
 {%- endblock header_title -%}
 {%- block section_class %}stats{% endblock section_class -%}
 {% block column_content %}
-	<h2>Since April 18th, 2016:</h2>
-	<h3>{{ stats.total_all_counties }} total applications received</h3>
-  <p class="caveat"><em>(some applications may be for multiple counties)</em></p>
-  {%- for county_total in stats.county_totals %}
-  <h3>{{ county_total.count }} applications for {{ county_total.county_name }} County</h3>
-  {%- endfor %}
-  <div class="performance_chart">
-    
+{% if stats.org_stats %}
+{% for org_data in stats.org_stats %}
+<div class="stats_block {{ org_data.org.slug }}">
+  <h2>{{ org_data.org.name }}</h2>
+  <div class="stats-total">
+    <span class="stats-total-number">{{ org_data.total }}</span>
+    <span class="stats-total-annot">applications</span>
   </div>
+  <div class="stats-chart_container">
+  </div>
+</div>
+{% endfor %}
+{% endif %}
 {% endblock column_content %}
 {% block jsons %}
-{% if applications_json %}
-    <script type="text/json" name="applications_json">
-        {{ applications_json }}
-    </script>
-{% endif %}
+<script type="text/json" name="applications_json">
+{{- to_json(stats.org_stats) -}}
+</script>
 {% endblock jsons %}
 {% block main_script %}
 {% if applications_json %}
