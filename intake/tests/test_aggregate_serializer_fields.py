@@ -1,6 +1,3 @@
-# from copy import deepcopy
-# from datetime import timedelta
-# from unittest import TestCase
 from django.test import TestCase as DjangoTestCase
 
 from intake.tests.mock_serialized_apps import apps as all_apps
@@ -14,6 +11,11 @@ class TestFinishedCountField(DjangoTestCase):
         result = field.to_representation(all_apps)
         self.assertEqual(result, 9)
 
+    def test_returns_zero_for_empty_list(self):
+        field = fields.FinishedCountField()
+        result = field.to_representation([])
+        self.assertEqual(result, 0)
+
 
 class TestMeanCompletionTimeField(DjangoTestCase):
 
@@ -24,6 +26,11 @@ class TestMeanCompletionTimeField(DjangoTestCase):
         difference = abs(expected - result)
         self.assertTrue(difference < 0.00001)
 
+    def test_returns_none_for_empty_list(self):
+        field = fields.MeanCompletionTimeField()
+        result = field.to_representation([])
+        self.assertIsNone(result)
+
 
 class TestMedianCompletionTimeField(DjangoTestCase):
 
@@ -33,6 +40,11 @@ class TestMedianCompletionTimeField(DjangoTestCase):
         expected = 417.204
         difference = abs(expected - result)
         self.assertTrue(difference < 0.00001)
+
+    def test_returns_none_for_empty_list(self):
+        field = fields.MedianCompletionTimeField()
+        result = field.to_representation([])
+        self.assertIsNone(result)
 
 
 class TestMajorSourcesField(DjangoTestCase):
@@ -48,6 +60,11 @@ class TestMajorSourcesField(DjangoTestCase):
             'checkrapplicant.zendesk.com'}
         self.assertEqual(set(result.keys()), expected)
 
+    def test_returns_empty_dict_for_empty_list(self):
+        field = fields.MajorSourcesField()
+        result = field.to_representation([])
+        self.assertEqual(result, {})
+
 
 class TestDropOffField(DjangoTestCase):
 
@@ -56,6 +73,11 @@ class TestDropOffField(DjangoTestCase):
         result = field.to_representation(all_apps)
         self.assertEqual(result, 1.0)
 
+    def test_returns_none_for_empty_list(self):
+        field = fields.DropOffField()
+        result = field.to_representation([])
+        self.assertIsNone(result)
+
 
 class TestMultiCountyField(DjangoTestCase):
 
@@ -63,3 +85,8 @@ class TestMultiCountyField(DjangoTestCase):
         field = fields.MultiCountyField()
         result = field.to_representation(all_apps)
         self.assertEqual(result, 0.1111111111111111)
+
+    def test_returns_none_for_empty_list(self):
+        field = fields.MultiCountyField()
+        result = field.to_representation([])
+        self.assertIsNone(result)

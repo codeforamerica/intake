@@ -1,6 +1,5 @@
 import statistics
 import urllib
-import dateutil
 from collections import Counter
 from rest_framework import serializers
 
@@ -10,7 +9,7 @@ def parse_url_host(full_url):
 
 
 def isostrings_to_duration(start, end):
-    tdelta = dateutil.parser.parse(end) - dateutil.parser.parse(start)
+    tdelta = end - start
     return tdelta.total_seconds()
 
 
@@ -29,6 +28,9 @@ def truthy_values_filter(apps, *keys):
 class ApplicationAggregateField(serializers.Field):
     reducer = len
 
+    def get_default_value(self):
+        return None
+
     def filter(self, applications):
         return applications
 
@@ -36,10 +38,17 @@ class ApplicationAggregateField(serializers.Field):
         return self.reducer(applications)
 
     def to_representation(self, applications):
-        return self.reduce(list(self.filter(applications)))
+        filtered = list(self.filter(applications))
+        if not filtered:
+            return self.get_default_value()
+        return self.reduce(filtered)
 
 
 class FinishedCountField(ApplicationAggregateField):
+
+    def get_default_value(self):
+        return 0
+
     def filter(self, applications):
         return truthy_values_filter(applications, 'finished')
 
@@ -61,6 +70,9 @@ class MedianCompletionTimeField(MeanCompletionTimeField):
 
 
 class MajorSourcesField(ApplicationAggregateField):
+    def get_default_value(self):
+        return {}
+
     def filter(self, applications):
         """Only include applications that have a referrer attribute
         """
@@ -79,6 +91,7 @@ class MajorSourcesField(ApplicationAggregateField):
 
 
 class DropOffField(ApplicationAggregateField):
+
     def filter(self, applications):
         return truthy_values_filter(applications, 'started')
 
