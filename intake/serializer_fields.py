@@ -101,11 +101,12 @@ class HasEventField(EventTypeField):
 
 class EventTimeField(EventTypeField):
     event_name = None
+    time_reducer = max
 
     def reduce(self, events):
         times = [e.time for e in events]
         if times:
-            return max(times).astimezone(PACIFIC)
+            return self.time_reducer(times).astimezone(PACIFIC)
 
 
 class EventDataKeyField(EventTypeField):
@@ -121,6 +122,7 @@ class EventDataKeyField(EventTypeField):
 
 
 class Started(EventTimeField):
+    time_reducer = min
     event_name = models.ApplicationEvent.APPLICATION_STARTED
 
 

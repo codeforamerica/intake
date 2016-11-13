@@ -8,15 +8,19 @@ def parse_url_host(full_url):
     return urllib.parse.urlparse(full_url).netloc
 
 
-def isostrings_to_duration(start, end):
+def get_duration(start, end):
     tdelta = end - start
     return tdelta.total_seconds()
 
 
 def seconds_to_complete(apps):
-    return [
-        isostrings_to_duration(app['started'], app['finished'])
-        for app in apps]
+    durations = [
+            get_duration(app['started'], app['finished'])
+            for app in apps]
+    has_negatives = any([d < 0 for d in durations])
+    if has_negatives:
+        import ipdb; ipdb.set_trace()
+    return durations
 
 
 def truthy_values_filter(apps, *keys):
