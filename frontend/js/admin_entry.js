@@ -1,29 +1,40 @@
 var utils = require('./utils');
+var org_charts = require('./org_charts');
 
 // get all the necessary d3 libraries
-var d3 = require('d3-selection');
-utils.combineObjs(d3, require('d3-array'));
-utils.combineObjs(d3, require('d3-collection'));
-utils.combineObjs(d3, require('d3-axis'));
-utils.combineObjs(d3, require('d3-scale'));
-utils.combineObjs(d3, require('d3-time'));
-utils.combineObjs(d3, require('d3-time-format'));
+var d3 = require('./d3');
 
 
+function readDataAndDrawCharts(){
+	// pull in JSON data
+	var all_applications_data = utils.getJson('applications_json');
+	all_applications_data.forEach(org_charts.makeChartsForOrg);
+	// Loop through orgs, for each org
+}
 
 function drawDailyCountsChart(){
+
+	// set height for chart
 	var totalHeight = 170;
+	// set offsets (these account for axes)
 	var offset = {left: 20, right: 20, bottom: 40, top: 20};
+	// make shared formatters
 	var yearMonthDayFormat = d3.timeFormat("%Y-%m-%d");
 	var niceDateFormat = d3.timeFormat("%b %e");
 
+	// get the data
 	var applications = utils.getJson('applications_json');
+	// select the container
 	var div = d3.select(".performance_chart");
+	// add a title
 	div.append("h3").text("Daily Totals");
+	// read in the width
 	var totalWidth = div.property("offsetWidth");
+	// create useful measures based on offsets and heights
 	var chartWidth = totalWidth - (offset.left + offset.right);
 	var chartHeight = totalHeight - (offset.bottom + offset.top);
 
+	// build buckets for sorting the applications
 	var today = new Date();
 	tomorrow = d3.timeDay.offset(today, 1);
 	tomorrow.setHours(0,0,0,0);
@@ -45,22 +56,30 @@ function drawDailyCountsChart(){
 
 	console.log(dayBuckets.values());
 
+	// create an xScale to share
 	var xScale = d3.scaleTime()
 		.domain([startDate, tomorrow])
 		.range([0, chartWidth - barWidth]);
 
+	// create a y scale for the chart
 	var yScale = d3.scaleLinear()
 		.domain([0, d3.max(dayBuckets.values(), function(d){ return d.finished; })])
 		.range([chartHeight, 0]);
 
+	// create containing svg element
 	var svg = div.append("svg")
 		.attr("width", totalWidth)
 		.attr("height", totalHeight);
 
+	// create axis for chart
 	var yAxisLeft = d3.axisLeft(yScale)
 		.ticks(5);
+
+	// create axis for chart
 	var yAxisRight = d3.axisRight(yScale)
 		.ticks(5);
+
+	// add the chart y axes
 	svg.append("g")
 		.attr("class", "axis y right")
 		.attr("transform", "translate("+(offset.left+chartWidth)+","+offset.top+")")
@@ -69,20 +88,27 @@ function drawDailyCountsChart(){
 		.attr("class", "axis y left")
 		.attr("transform", "translate("+offset.left+","+offset.top+")")
 		.call(yAxisLeft);
+
+	// draw rules across the chart
 	var lines = leftAxis.selectAll("g.tick line");
 	lines.attr("x1", chartWidth).attr("class", "back-ticks");
 
+	// build the xAxis scale
 	var xAxis = d3.axisBottom(xScale)
 		.ticks(d3.utcMonday)
 		.tickFormat(niceDateFormat);
 
+	// add the x axis scale
 	svg.append("g")
 		.attr("class", "axis x")
 		.attr("transform", "translate("+offset.left+","+(chartHeight+offset.top)+")")
 		.call(xAxis);
 
+	// add the main chart element
 	var chart = svg.append("g")
 		.attr("transform", "translate("+offset.left+","+offset.top+")");
+
+	// draw the bars for the chart
 	var dayBars = chart.selectAll("rect")
 		.data(allDays)
 		.enter()
@@ -106,7 +132,7 @@ function drawDailyCountsChart(){
 
 
 
-drawDailyCountsChart();
+readDataAndDrawCharts();
 /* we need:
 	width
 	height

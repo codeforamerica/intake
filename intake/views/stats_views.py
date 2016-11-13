@@ -51,7 +51,7 @@ def breakup_apps_by_org(apps):
         constants.Organizations.ALL: {
             'org': {
                 'slug': constants.Organizations.ALL,
-                'name': 'All Organizations'
+                'name': 'Total (All Organizations)'
             },
             'apps': []
         }
