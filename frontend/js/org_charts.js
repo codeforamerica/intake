@@ -16,7 +16,7 @@ function drawBarChart (chart, config, sizes, data, xScale, yScale) {
 	chart.selectAll("rect")
 		.data(data).enter()
 		.append("rect")
-		.attr("class", "day_bar")
+		.attr("class", "day-bar")
 		.attr("height", function(d){
 			var value = d ? d : 0;
 			return sizes.chartHeight - yScale(value);
@@ -29,7 +29,16 @@ function drawBarChart (chart, config, sizes, data, xScale, yScale) {
 }
 
 function drawLineChart (chart, config, sizes, data, xScale, yScale) {
-
+	var line = d3.line()
+		.x(function (d, i){
+			return xScale(i);
+		}).y(function (d){
+			return yScale(d);
+		});
+	chart.append("path")
+		.datum(data)
+		.attr("class", "day-line")
+		.attr("d", line);
 }
 
 function drawStreamFractionsChart (chart, config, sizes, data, xScale, yScale) {

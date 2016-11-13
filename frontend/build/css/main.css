@@ -4249,10 +4249,15 @@ svg g.axis text {
 .axis.y line {
   stroke: #dfdfdf;
 }
-rect.day_bar {
+rect.day-bar {
   stroke: #fff;
   stroke-width: 0.5px;
   fill: #069ED6;
+}
+path.day-line {
+  stroke: #069ED6;
+  stroke-width: 2px;
+  fill: none;
 }
 .top_bar a {
   color: inherit;

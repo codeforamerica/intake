@@ -4,6 +4,7 @@ utils.combineObjs(d3, require('d3-array'));
 utils.combineObjs(d3, require('d3-collection'));
 utils.combineObjs(d3, require('d3-axis'));
 utils.combineObjs(d3, require('d3-scale'));
+utils.combineObjs(d3, require('d3-shape'));
 utils.combineObjs(d3, require('d3-time'));
 utils.combineObjs(d3, require('d3-time-format'));
 
