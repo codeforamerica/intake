@@ -796,6 +796,19 @@ class Delete(View):
         return redirect(reverse_lazy('intake-app_index'))
 
 
+class ExcelDownload(ApplicationDetail):
+
+    def build_xlsx(self, request):
+        return b'excel bytes'
+
+    def get(self, request):
+        response = HttpResponse(content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename=Report.xlsx'
+        xlsx_file = self.build_xlsx(request)
+        response.write(xlsx_file)
+        return response
+
+
 class MarkSubmissionStepView(View, MultiSubmissionMixin):
 
     def modify_submissions(self):
@@ -906,6 +919,7 @@ pdf_bundle = FilledPDFBundle.as_view()
 app_index = ApplicationIndex.as_view()
 app_bundle = ApplicationBundle.as_view()
 app_detail = ApplicationDetail.as_view()
+excel_download = ExcelDownload.as_view()
 mark_processed = MarkProcessed.as_view()
 mark_transferred_to_other_org = ReferToAnotherOrgView.as_view()
 delete_page = Delete.as_view()

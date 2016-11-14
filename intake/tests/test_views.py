@@ -1186,6 +1186,29 @@ class TestStats(IntakeDataTestCase):
         self.assertIn('applications_json', response.context)
 
 
+class TestExcelDownloadView(IntakeDataTestCase):
+
+    fixtures = [
+        'organizations',
+        'mock_profiles',
+        'mock_2_submissions_to_sf_pubdef'
+    ]
+
+    def test_anonymous_user_is_redirected_to_login(self):
+        self.be_anonymous()
+        response = self.client.get(reverse('intake-excel_download'))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(reverse('user_accounts-login'), response.url)
+
+    @patch('intake.views.ExcelDownload.build_xlsx')
+    def test_agency_user_can_download_xls(self, build_xlsx):
+        self.be_sfpubdef_user()
+        mock_excel_bytes = b'excel_bytes'
+        build_xlsx.return_value = mock_excel_bytes
+        response = self.client.get(reverse('intake-excel_download'))
+        self.assertEqual(response.content, mock_excel_bytes)
+
+
 class TestDailyTotals(TestCase):
 
     fixtures = [

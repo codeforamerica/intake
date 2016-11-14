@@ -61,6 +61,10 @@ urlpatterns = [
         login_required(views.mark_processed),
         name='intake-mark_processed'),
 
+    url(r'^applications/excel/$',
+        login_required(views.excel_download),
+        name='intake-excel_download'),
+
     url(r'^applications/mark/transferred/$',
         login_required(views.mark_transferred_to_other_org),
         name='intake-mark_transferred_to_other_org'),
