@@ -31,6 +31,18 @@ var chartTypeConfigs = [
 	}
 ];
 
+function getDataForChart(chartConfig, orgData) {
+	// take the 'days' or 'apps' attribute and pull out an array
+	// based on the chartConfig key
+	if (orgData.days[0][chartConfig.dataKey] === undefined) {
+		return null;
+	}
+	return orgData.days.map(function(dayDatum){
+		return dayDatum[chartConfig.dataKey];
+	});
+}
+
 module.exports = {
-	orgChartTypes: chartTypeConfigs
+	orgChartTypes: chartTypeConfigs,
+	getDataForChart: getDataForChart,
 }

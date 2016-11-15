@@ -2,7 +2,7 @@ var config = require('./chart_configs');
 var measures = require('./chart_size_measures');
 var d3 = require('./d3');
 var x = require('./x_axis');
-var maxYValues = {};
+var y = require('./y_axis');
 
 
 var chartingFunctions = {
@@ -12,7 +12,7 @@ var chartingFunctions = {
 };
 
 
-function drawBarChart (chart, config, sizes, data, xScale, yScale) {
+function drawBarChart (chart, chartConfig, sizes, data, xScale, yScale) {
 	chart.selectAll("rect")
 		.data(data).enter()
 		.append("rect")
@@ -28,7 +28,7 @@ function drawBarChart (chart, config, sizes, data, xScale, yScale) {
 		});
 }
 
-function drawLineChart (chart, config, sizes, data, xScale, yScale) {
+function drawLineChart (chart, chartConfig, sizes, data, xScale, yScale) {
 	var line = d3.line()
 		.x(function (d, i){
 			return xScale(i);
@@ -41,7 +41,7 @@ function drawLineChart (chart, config, sizes, data, xScale, yScale) {
 		.attr("d", line);
 }
 
-function drawStreamFractionsChart (chart, config, sizes, data, xScale, yScale) {
+function drawStreamFractionsChart (chart, chartConfig, sizes, data, xScale, yScale) {
 
 }
 
@@ -51,76 +51,26 @@ function getParentElementForOrg (orgData) {
 }
 
 
-function getDataForChart(config, orgData) {
-	// take the 'days' or 'apps' attribute and pull out an array
-	// based on the config key
-	if (orgData.days[0][config.dataKey] === undefined) {
-		return null;
-	}
-	return orgData.days.map(function(dayDatum){
-		return dayDatum[config.dataKey];
-	});
-}
-
-function getMaxY(key, data){
-	if (!maxYValues.hasOwnProperty(key)) {
-		maxYValues[key] = d3.max(data);
-	}
-	return maxYValues[key];
-}
-
-function buildYScale(sizes, config, data) {
-	var maxY = getMaxY(config.dataKey, data);
-	return d3.scaleLinear()
-		.domain([0, maxY])
-		.range([sizes.chartHeight, 0]);
-}
-
-function addYAxes(svg, sizes, yScale) {	
-	var yTicks = 4;
-	var yAxisLeft = d3.axisLeft(yScale)
-		.ticks(yTicks );
-	var yAxisRight = d3.axisRight(yScale)
-		.ticks(yTicks);
-	svg.append("g")
-		.attr("class", "axis y right")
-		.attr("transform", 
-			measures.translate(
-				sizes.offset.left + sizes.chartWidth,
-				sizes.offset.top))
-		.call(yAxisRight);
-	var leftAxis = svg.append("g")
-		.attr("class", "axis y left")
-		.attr("transform",
-			measures.translate(sizes.offset.left, sizes.offset.top)
-		).call(yAxisLeft);
-	// draw rules across the chart
-	var lines = leftAxis.selectAll("g.tick line");
-	lines.attr("x1", sizes.chartWidth).attr("class", "back-ticks");
-}
-
-function makeOrgChart (parent, config, orgData) {
-	var dataArray = getDataForChart(config, orgData);
+function makeOrgChart (parent, chartConfig, orgData) {
+	var dataArray = config.getDataForChart(chartConfig, orgData);
 	if (dataArray === null) {
 		// don't buld the chart if there is no data available.
-		console.log(orgData.org.name, "no data for", config.chartName, "!!!");
+		console.log(orgData.org.name, "no data for", chartConfig.chartName, "!!!");
 		return;
 	}
-	console.log(orgData.org.name, "data for", config.chartName, "—");
+	console.log(orgData.org.name, "data for", chartConfig.chartName, "—");
 	console.log(dataArray);
-	var sizes = measures.getSizes(parent, dataArray);
-	console.log("sizes", sizes);
+	var sizes = measures.sizes;
 	// make container
 	var container = parent.append("div").attr("class", "chart_container");
 	// add title
-	container.append('h4').text(config.chartName);
+	container.append('h4').text(chartConfig.chartName);
 	var svg = container.append("svg")
 		.attr("width", sizes.totalWidth)
 		.attr("height", sizes.totalHeight);
 
-	// build y scale
-	var yScale = buildYScale(sizes, config, dataArray);
-	addYAxes(svg, sizes, yScale);
+	var yScale = y.scale(chartConfig.dataKey);
+	y.axes(svg, chartConfig.dataKey);
 
 	// add axes
 	var xScale = x.positionScale(sizes);
@@ -137,8 +87,8 @@ function makeOrgChart (parent, config, orgData) {
 		.attr("transform", measures.translate(
 			sizes.offset.left, sizes.offset.top));
 	// add geometry
-	var chartFunction = chartingFunctions[config.chartType];
-	chartFunction(chartGroup, config, sizes, dataArray, xScale, yScale);
+	var chartFunction = chartingFunctions[chartConfig.chartType];
+	chartFunction(chartGroup, chartConfig, sizes, dataArray, xScale, yScale);
 	// add overlays & highlights if needed
 }
 
@@ -146,8 +96,8 @@ function makeChartsForOrg (orgData) {
 	// pull up org chart parent container
 	var container = getParentElementForOrg(orgData);
 	// draw each chart type for each org
-	config.orgChartTypes.forEach(function(config){
-		makeOrgChart(container, config, orgData);
+	config.orgChartTypes.forEach(function(chartConfig){
+		makeOrgChart(container, chartConfig, orgData);
 	})
 }
 
