@@ -37,6 +37,9 @@
   </div>
 </section>
 
+{# if qualifies_for_fee_waiver == True #}
+{% if True %}
+
 <section class="rap_fee_waiver">
   <div class="row">
     <div class="col-xs-12">
@@ -47,7 +50,7 @@
             "usually between $20 and $50. ") }}
       </p>
       <p>
-      {{ _(" **Applying for a fee waiver could add 2-4 weeks to the process of clearing "
+      {{ _(" Applying for a fee waiver could add 2-4 weeks to the process of clearing "
         "your record and is optional. If you would not like to wait 2-4 weeks to get $25 off "
         "of your RAP sheet, you can skip to the next section on how to get your RAP sheet.") }}
       </p>
@@ -91,13 +94,13 @@
         <li>
           {{ _("Mail your completed Fee Waiver Application form and copies of your government "
             "benefits (if you are receiving benefits) to this address: ") }}
-            <pre class="address">
-      California Department of Justice
-      Bureau of Criminal Information and Analysis
-      Record Review Unit
-      P.O Box 903417
-      Sacramento, CA 94203-4170
-      </pre>
+            <ul class="address">
+              <li>California Department of Justice</li>
+              <li>Bureau of Criminal Information and Analysis</li>
+              <li>Record Review Unit</li>
+              <li>P.O Box 903417</li>
+              <li>Sacramento, CA 94203-4170</li>
+            </ul>
         </li>
         <li>
           {{ _("Wait 2-4 weeks for a letter in the mail from the Department of Justice "
@@ -114,6 +117,8 @@
     </div>
   </div>
 </section>
+<!-- end the section about fee waiver -->
+{% endif %}
 
 <section class="rap_ca_instructions">
   <div class="row">
@@ -164,8 +169,8 @@
   </div>
 </section>
 
-
-<section class="rap_ca_instructions">
+{% if not qualifies_for_fee_waiver %}
+<section class="rap_not_ca_instructions">
   <div class="row">
     <div class="col-xs-12">
       <h4>
@@ -224,12 +229,12 @@
         <li>
           {{ _("Mail your completed fingerprint card, application form, and $25 check "
             "or money order to this address: ") }}
-            <pre class="address">
-      California Department of Justice
-      Record Review Unit
-      P.O Box 903417
-      Sacramento, CA 94203-4170
-      </pre>
+            <ul class="address">
+              <li>California Department of Justice</li>
+              <li>Record Review Unit</li>
+              <li>P.O Box 903417</li>
+              <li>Sacramento, CA 94203-4170</li>
+            </ul>
         </li>
         <li>
           {{ _("Wait for a letter in the mail from the Department of Justice with your "
@@ -242,16 +247,12 @@
         <li>
           {{ _("Complete your Clear My Record application by emailing, faxing, "
             "or mailing your RAP sheet here: ") }}
-            <pre class="address">
-            {%- if rap_sheet_receiving_address -%}
-            {{- rap_sheet_receiving_address -}}
-            {%- else -%}
-      East Bay Community Law Center
-      Clean Slate
-      3130 Shattuck Ave
-      Berkeley, CA 94705
-            {%- endif -%}
-            </pre>
+            <ul class="address">
+              <li>East Bay Community Law Center</li>
+              <li>Clean Slate</li>
+              <li>3130 Shattuck Ave</li>
+              <li>Berkeley, CA 94705</li>
+            </ul>
             <p class="rap_instructions_details rap_contact_info">Fax: (510) 849-1536 - "Attention: Clean Slate"</p>
             <p class="rap_instructions_details rap_contact_info">Email:
               <a href="mailto: crimrecordshelp@ebclc.org">crimrecordshelp@ebclc.org</a> </p>
@@ -265,6 +266,8 @@
     </div>
   </div>
 </section>
+<!-- end of section about out of ca rap sheets -->
+{% endif %}
 
 
 
