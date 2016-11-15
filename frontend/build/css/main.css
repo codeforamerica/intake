@@ -4664,6 +4664,14 @@ body.admin .top_bar {
 li.rap_detail {
   margin-bottom: 10px;
 }
+.address {
+  margin-top: 10px;
+}
+.address li {
+  margin-bottom: 0;
+  font-size: 16px;
+  font-weight: 500;
+}
 /***Media Queries***/
 @media (max-width: 767px) {
   a.btn.btn-primary.btn-lg.call_to_action_button {

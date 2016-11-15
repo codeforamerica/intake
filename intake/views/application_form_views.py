@@ -165,6 +165,11 @@ class SelectCounty(base_views.MultiStepFormViewBase):
         return super().form_valid(form)
 
 
+def get_last_submission_of_applicant(applicant_id):
+    return models.FormSubmission.objects.filter(
+        applicant_id=applicant_id).latest('date_received')
+
+
 class Thanks(TemplateView, base_views.GetFormSessionDataMixin):
     """A confirmation page that shows flash messages and next steps for a
     user.
@@ -178,11 +183,9 @@ class Thanks(TemplateView, base_views.GetFormSessionDataMixin):
         return super().get(request)
 
     def get_context_data(self, *args, **kwargs):
-        organizations = Organization.objects.prefetch_related(
-                'addresses', 'county').filter(
-                submissions__applicant_id=self.applicant_id)
+        sub = get_last_submission_of_applicant(self.applicant_id)
         context = dict(
-            organizations=organizations
+            organizations=sub.organizations.all()
             )
         return context
 
@@ -194,12 +197,8 @@ class RAPSheetInstructions(TemplateView, base_views.GetFormSessionDataMixin):
         context = {}
         applicant_id = self.get_applicant_id()
         if applicant_id:
-            organizations = Organization.objects.filter(
-                submissions__applicant_id=applicant_id)
-            submission = models.FormSubmission.objects.filter(
-                    applicant_id=applicant_id
-                ).latest('date_received')
-            context['organizations'] = organizations
+            submission = get_last_submission_of_applicant(applicant_id)
+            context['organizations'] = submission.organizations.all()
             context['qualifies_for_fee_waiver'] = \
                 submission.qualifies_for_fee_waiver()
         return context

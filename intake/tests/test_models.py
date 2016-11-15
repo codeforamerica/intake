@@ -473,7 +473,7 @@ class TestFormSubmission(TestCase):
             answers=mock.fake.ebclc_answers(
                 household_size=0,
                 monthly_income=0))
-        self.assertEqual(sub.qualifies_for_fee_waiver(), True)
+        self.assertTrue(sub.qualifies_for_fee_waiver())
 
     def test_doesnt_qualify_for_fee_waiver_with_income_and_no_benefits(self):
         sub = models.FormSubmission(

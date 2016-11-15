@@ -39,6 +39,8 @@ class FormSubmissionSerializer(serializers.ModelSerializer):
     city = serializer_fields.CityField(source='answers')
     age = serializer_fields.AgeField(source='answers')
     url = serializers.CharField(source='get_absolute_url', read_only=True)
+    # where_they_heard = serializer_fields.WhereTheyHeardField(
+        # source='answers')
 
     class Meta:
         model = models.FormSubmission
@@ -100,3 +102,20 @@ class ApplicantSerializer(serializers.ModelSerializer):
 
     def check_if_they_are_multicounty(self, obj):
         return serializer_fields.is_multicounty(obj)
+
+
+"""
+class ApplicantSerializer(serializers.ModelSerializer):
+    started = serializer_fields.Started()
+    finished = serializer_fields.Finished()
+    had_errors = serializer_fields.HadErrors()
+    ip = serializer_fields.IPAddress()
+    referrer = serializer_fields.Referrer()
+    events = ApplicationEventSerializer(many=True)
+    form_submissions = FormSubmissionSerializer(many=True)
+    submission_count = serializer_fields.SubmissionCount()
+    tried_to_apply = serializers.SerializerMethodField(
+        method_name='check_if_they_actually_tried_to_apply')
+    is_multicounty = serializers.SerializerMethodField(
+        method_name='check_if_they_are_multicounty')
+"""

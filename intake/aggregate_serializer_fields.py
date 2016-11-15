@@ -17,9 +17,6 @@ def seconds_to_complete(apps):
     durations = [
             get_duration(app['started'], app['finished'])
             for app in apps]
-    has_negatives = any([d < 0 for d in durations])
-    if has_negatives:
-        import ipdb; ipdb.set_trace()
     return durations
 
 
@@ -46,6 +43,17 @@ class ApplicationAggregateField(serializers.Field):
         if not filtered:
             return self.get_default_value()
         return self.reduce(filtered)
+
+    @classmethod
+    def calculate_for_all_apps(cls, qset=None):
+        if not qset:
+            from intake.models import Applicant
+            from intake.serializers import ApplicantSerializer
+            qset = Applicant.objects.all()
+        field = cls()
+        return field.to_representation(
+            ApplicantSerializer(qset, many=True).data
+            )
 
 
 class FinishedCountField(ApplicationAggregateField):
@@ -80,7 +88,7 @@ class MajorSourcesField(ApplicationAggregateField):
     def filter(self, applications):
         """Only include applications that have a referrer attribute
         """
-        return truthy_values_filter(applications, 'finished', 'referrer')
+        return truthy_values_filter(applications, 'started', 'finished')
 
     def reduce(self, applications):
         """return a dictionary of referrer_url: fraction_of_finished_apps
@@ -88,10 +96,16 @@ class MajorSourcesField(ApplicationAggregateField):
         total = len(applications)
         referrer_counts = Counter([
             parse_url_host(app['referrer']) for app in applications])
-        return {
-            referrer: count / total
+        results = {
+            referrer: {
+                'percent': count / total,
+                'count': count
+            }
             for referrer, count in referrer_counts.items()
         }
+        if b'' in results:
+            results['DIRECT'] = results.pop(b'')
+        return results
 
 
 class DropOffField(ApplicationAggregateField):

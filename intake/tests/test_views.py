@@ -390,15 +390,15 @@ class TestRAPSheetInstructions(TestCase):
         # make sure there aren't any unrendered variables
         self.assertNotContains(response, "{{")
 
-    @patch('intake.views.application_form_views.models.FormSubmission')
-    @patch('intake.views.application_form_views.Organization')
-    @patch('intake.views.application_form_views'
-           '.RAPSheetInstructions.get_applicant_id')
-    def test_pulls_relevant_info_if_session_data(self, get_app_id, Org, Sub):
+
+    @patch('intake.views.application_form_views.get_last_submission_of_applicant')
+    @patch('intake.views.application_form_views.RAPSheetInstructions.get_applicant_id')
+    def test_pulls_relevant_info_if_session_data(self, get_app_id, get_sub):
         get_app_id.return_value = 1
-        Org.objects.filter.return_value = 'some_orgs'
         submission_mock = Mock()
-        Sub.objects.filter.return_value.latest.return_value = submission_mock
+        submission_mock.organizations.all.return_value = [
+            'an_org', 'another_org']
+        get_sub.return_value = submission_mock
         response = self.client.get(reverse('intake-rap_sheet'))
         self.assertIn('qualifies_for_fee_waiver', response.context)
         self.assertIn('organizations', response.context)
@@ -1333,6 +1333,7 @@ class TestThanks(IntakeDataTestCase):
         app.save()
         sub = models.FormSubmission.objects.all().first()
         sub.applicant_id = app.id
+        sub.save()
         self.set_session(applicant_id=app.id)
         response = self.client.get(reverse('intake-thanks'))
         for org in sub.organizations.all():
