@@ -20,8 +20,8 @@ class Provider(BaseProvider):
             "no": 1.0 - chance_of_yes})
 
     def generate_contact_preferences(self):
-        preferences = random.randint(1,4)
-        return random.sample([ 
+        preferences = random.randint(1, 4)
+        return random.sample([
             'prefers_email',
             'prefers_sms',
             'prefers_snailmail',
@@ -191,12 +191,14 @@ class Provider(BaseProvider):
         data = self.alameda_county_form_answers(**overrides)
         data['monthly_income'] = 3001
         data['owns_home'] = "yes"
+        data.update(overrides)
         return data
 
     def alameda_pubdef_answers(self, **overrides):
         data = self.alameda_county_form_answers(**overrides)
         data['monthly_income'] = 2999
         data['owns_home'] = "no"
+        data.update(overrides)
         return data
 
     def all_county_answers(self, **overrides):

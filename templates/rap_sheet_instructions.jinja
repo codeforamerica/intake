@@ -13,139 +13,263 @@
     {{ linkify(organization.long_confirmation_message) }} </p>
   {%- endfor %}
 
-<p>{{ _("Some legal aid organizations, like the East Bay Community Law Center, need your California criminal record (RAP sheet) to check what services you qualify for. Follow the steps below to get your RAP sheet and send it to East Bay Community Law Center to complete your Alameda County application.") }}</p>
 
-<h2>{{ _("If you live in California, follow these steps to get your RAP sheet:") }}</h2>
+  {#
+    qualifies_for_fee_waiver can have three different values:
+      True - they qualify, based on their answers
+      False - they don't qualify, based on their answers
+      None - we don't know if they qualify, because we don't have answers
 
-<ol class="rap_sheet_instructions">
-  <li>
-    {{ _("You have to get your fingerprints taken. This is called a “Live "
-      "Scan”. Find a Live Scan location near you at this website:") }}
-      <a href="https://oag.ca.gov/fingerprints/locations" target="_blank">
-        https://oag.ca.gov/fingerprints/locations
-      </a>
-  </li>
-  <li>
-    {{ _("Call the Live Scan location you have selected and make an "
-      "appointment for a “personal record request”. Ask them how much it will cost.") }}
-  </li>
-  <li>
-    {{ _('Print and fill out this '
-    '<a href="https://oag.ca.gov/sites/all/files/agweb/pdfs/fingerprints/forms/bcia_8016RR.pdf">Request for Live Scan Service form</a> with your information.') }}
-  </li>
-  <li>
-    {{ _("Go to the Live Scan location and give them your filled Request for "
-      "Live Scan Service form. They will collect your payment, roll your "
-      "fingerprints, and send them to the Department of Justice.") }}
-  </li>
-  <li>
-    {{ _("Wait for a letter in the mail from the Department of Justice with "
-      "your RAP sheet.") }}
-  </li>
-  <li>
-    {{ _("When you get your RAP sheet in the mail, you must schedule a "
-      "meeting with an attorney to talk about what services you qualify for. To set "
-      "up your appointment, email or text Clear My Record here:") }}
-      <p class="rap_instructions_details rap_contact_info">Text: <a href="tel:14153016005">(415) 301-6005</a> </p>
-      <p class="rap_instructions_details rap_contact_info">Email:
-        <a href="mailto:clearmyrecord@codeforamerica.org">clearmyrecord@codeforamerica.org</a> </p>
-  </li>
-  <li>
-    {{ _("Once you have spoken with East Bay Community Law Center about what services "
-      "you qualify for, your application is complete! ") }}
-  </li>
-</ol>
+      if qualifies_for_fee_waiver != False (everyone expect those who don't qualify)
+      if qualifies_for_fee_waiver == True (everyone to probably qualifies)
+  #}
 
-<h2>{{ _("If you do not live in California, follow these steps to get your RAP sheet:") }}</h2>
+<section class="rap_intro">
+  <div class="row">
+    <div class="col-xs-12">
+      <h2>{{ _("Last step - get your California RAP sheet") }}</h2>
+      <p>{{ _("Some legal aid organizations, like the East Bay Community Law Center, "
+          "need your California criminal record (RAP sheet) to check what services you "
+          "qualify for. Follow the steps below to get your RAP sheet and send it to "
+          "East Bay Community Law Center to complete your Alameda County application.") }}
+      </p>
+    </div>
+  </div>
+</section>
 
-<ol class="rap_sheet_instructions">
-  <li>
-    {{ _("You have to get your fingerprints taken. Call the police or sheriff's "
-      "department near you and ask them for fingerprinting services. Tell them "
-      "you need to send your fingerprints to the California Department of Justice. "
-      "Ask them how much this will cost.") }}
-  </li>
-  <li>
-    {{ _('Print and fill out this '
-    '<a href="https://oag.ca.gov/sites/all/files/agweb/pdfs/fingerprints/forms/BCIA_8705.pdf">Application for California RAP sheet form</a> with your information.') }}
-  </li>
-  <li>
-    {{ _("Go to the police or sheriff's department to get fingerprinted on a "
-      "10-print fingerprint card. Your fingerprint card must have: ") }}
-      <ul class="rap_instructions_details">
-        <li class="rap_detail">
-          {{ _("Your full name ") }}
+{# if qualifies_for_fee_waiver == True #}
+{% if True %}
+
+<section class="rap_fee_waiver">
+  <div class="row">
+    <div class="col-xs-12">
+      <h2>{{ _(" You qualify to get $25 off of your RAP sheet") }}</h2>
+      <p>{{ _("You qualify for a fee waiver. This means that the California Department of Justice "
+            "will cover $25 of your RAP sheet fees. Even though you will get $25 off your RAP "
+            "sheet fees, you will still have to pay the rest. The fee you will have to pay is "
+            "usually between $20 and $50. ") }}
+      </p>
+      <p>
+      {{ _(" Applying for a fee waiver could add 2-4 weeks to the process of clearing "
+        "your record and is optional. If you would not like to wait 2-4 weeks to get $25 off "
+        "of your RAP sheet, you can skip to the next section on how to get your RAP sheet.") }}
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="rap_fee_waiver_instructions">
+  <div class="row">
+    <div class="col-xs-12">
+      <h4>
+        <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
+        {{ _(" Follow these steps to get $25 off of your RAP sheet fees:") }}
+      </h4>
+      <ol class="rap_sheet_instructions">
+        <li>
+          {{ _('Print and fill out this form with your information: '
+          '<a href="https://drive.google.com/open?id=0B3BLnlbsdQ_hQUlELWJKT1hKRVE">Fee Waiver Application Form</a> ') }}
         </li>
-        <li class="rap_detail">
-          {{ _("Your date of birth ") }}
+        <li>
+          {{ _("If you are receiving any government benefits, make a copy of those documents. "
+            "Here are some government benefits that will work: ") }}
+            <ul class="rap_instructions_details">
+              <li class="rap_detail">
+                {{ _("Supplemental Security Income (SSI) ") }}
+              </li>
+              <li class="rap_detail">
+                {{ _("California Work Opportunity and Responsibility to Kids (CalWORKs)  ") }}
+              </li>
+              <li class="rap_detail">
+                {{ _("Unemployment benefits ") }}
+              </li>
+              <li class="rap_detail">
+                {{ _("Disability insurance ") }}
+              </li>
+              <li class="rap_detail">
+                {{ _("EBT benefits card  ") }}
+              </li>
+            </ul>
         </li>
-        <li class="rap_detail">
-          {{ _("Your sex ") }}
+        <li>
+          {{ _("Mail your completed Fee Waiver Application form and copies of your government "
+            "benefits (if you are receiving benefits) to this address: ") }}
+            <ul class="address">
+              <li>California Department of Justice</li>
+              <li>Bureau of Criminal Information and Analysis</li>
+              <li>Record Review Unit</li>
+              <li>P.O Box 903417</li>
+              <li>Sacramento, CA 94203-4170</li>
+            </ul>
         </li>
-        <li class="rap_detail">
-          {{ _("Your mailing address ") }}
+        <li>
+          {{ _("Wait 2-4 weeks for a letter in the mail from the Department of Justice "
+            "containing a 'Request for Live Scan Service' form. ") }}
         </li>
-        <li class="rap_detail">
-          {{ _("Your fingerprints ") }}
+        <li>
+          {{ _("If you received the 'Request for Live Scan Service' form in the mail, you "
+            "are approved to get $25 off of your RAP sheet fees. ") }}
         </li>
-      </ul>
-  </li>
-  <li>
-    {{ _("It costs $25 to process your fingerprints. Here are the ways you can pay: ") }}
-    <ul class="rap_instructions_details">
-      <li class="rap_detail">
-        {{ _("Write a personal check (must be from a bank in the U.S) ") }}
-      </li>
-      <li class="rap_detail">
-        {{ _("Get a money order from the post office ") }}
-      </li>
-      <li class="rap_detail">
-        {{ _("Get a certified check from your bank ") }}
-      </li>
-    </ul>
-  </li>
-  <li>
-    {{ _("Write the check or money order to the “Califoria Department of Justice”. ") }}
-  </li>
-  <li>
-    {{ _("Mail your completed fingerprint card, application form, and $25 check "
-      "or money order to this address: ") }}
-      <pre class="address">California Department of Justice
-Record Review Unit
-P.O Box 903417
-Sacramento, CA 94203-4170</pre>
-  </li>
-  <li>
-    {{ _("Wait for a letter in the mail from the Department of Justice with your "
-      "RAP sheet. ") }}
-  </li>
-  <li>
-    {{ _("When you get your RAP sheet in the mail, you are ready to complete your "
-      "Clear My Record application.  ") }}
-  </li>
-  <li>
-    {{ _("Complete your Clear My Record application by emailing, faxing, "
-      "or mailing your RAP sheet here: ") }}
-      <pre class="address">
-      {%- if rap_sheet_receiving_address -%}
-      {{- rap_sheet_receiving_address -}}
-      {%- else -%}
-East Bay Community Law Center
-Clean Slate
-3130 Shattuck Ave
-Berkeley, CA 94705
-      {%- endif -%}
-      </pre>
-      <p class="rap_instructions_details rap_contact_info">Fax: (510) 849-1536 - "Attention: Clean Slate"</p>
-      <p class="rap_instructions_details rap_contact_info">Email:
-        <a href="mailto: crimrecordshelp@ebclc.org">crimrecordshelp@ebclc.org</a> </p>
-  </li>
-  <li>
-    {{ _("Once East Bay Community Law Center has received your RAP sheet, you "
-      "will receive an email, text message, or voicemail to set up a phone interview "
-      "to talk about what services you qualify for. ") }}
-  </li>
-</ol>
+        <li>
+          {{ _("Follow instructions in the next section to get your RAP sheet. ") }}
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+<!-- end the section about fee waiver -->
+{% endif %}
+
+<section class="rap_ca_instructions">
+  <div class="row">
+    <div class="col-xs-12">
+      <h4>
+        <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
+        {{ _("If you live in California, follow these steps to get your RAP sheet:") }}
+      </h4>
+      <ol class="rap_sheet_instructions">
+        <li>
+          {{ _("You have to get your fingerprints taken. This is called a “Live "
+            "Scan”. Find a Live Scan location near you at this website:") }}
+            <a href="https://oag.ca.gov/fingerprints/locations" target="_blank">
+              https://oag.ca.gov/fingerprints/locations
+            </a>
+        </li>
+        <li>
+          {{ _("Call the Live Scan location you have selected and make an "
+            "appointment for a “personal record request”. Ask them how much it will cost.") }}
+        </li>
+        <li>
+          {{ _('Print and fill out this '
+          '<a href="https://oag.ca.gov/sites/all/files/agweb/pdfs/fingerprints/forms/bcia_8016RR.pdf">Request for Live Scan Service form</a> with your information.') }}
+        </li>
+        <li>
+          {{ _("Go to the Live Scan location and give them your filled Request for "
+            "Live Scan Service form. They will collect your payment, roll your "
+            "fingerprints, and send them to the Department of Justice.") }}
+        </li>
+        <li>
+          {{ _("Wait for a letter in the mail from the Department of Justice with "
+            "your RAP sheet.") }}
+        </li>
+        <li>
+          {{ _("When you get your RAP sheet in the mail, you must schedule a "
+            "meeting with an attorney to talk about what services you qualify for. To set "
+            "up your appointment, email or text Clear My Record here:") }}
+            <p class="rap_instructions_details rap_contact_info">Text: <a href="tel:14153016005">(415) 301-6005</a> </p>
+            <p class="rap_instructions_details rap_contact_info">Email:
+              <a href="mailto:clearmyrecord@codeforamerica.org">clearmyrecord@codeforamerica.org</a> </p>
+        </li>
+        <li>
+          {{ _("Once you have spoken with East Bay Community Law Center about what services "
+            "you qualify for, your application is complete! ") }}
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+{% if not qualifies_for_fee_waiver %}
+<section class="rap_not_ca_instructions">
+  <div class="row">
+    <div class="col-xs-12">
+      <h4>
+        <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
+        {{ _("If you do not live in California, follow these steps to get your RAP sheet:") }}
+      </h4>
+      <ol class="rap_sheet_instructions">
+        <li>
+          {{ _("You have to get your fingerprints taken. Call the police or sheriff's "
+            "department near you and ask them for fingerprinting services. Tell them "
+            "you need to send your fingerprints to the California Department of Justice. "
+            "Ask them how much this will cost.") }}
+        </li>
+        <li>
+          {{ _('Print and fill out this '
+          '<a href="https://oag.ca.gov/sites/all/files/agweb/pdfs/fingerprints/forms/BCIA_8705.pdf">Application for California RAP sheet form</a> with your information.') }}
+        </li>
+        <li>
+          {{ _("Go to the police or sheriff's department to get fingerprinted on a "
+            "10-print fingerprint card. Your fingerprint card must have: ") }}
+            <ul class="rap_instructions_details">
+              <li class="rap_detail">
+                {{ _("Your full name ") }}
+              </li>
+              <li class="rap_detail">
+                {{ _("Your date of birth ") }}
+              </li>
+              <li class="rap_detail">
+                {{ _("Your sex ") }}
+              </li>
+              <li class="rap_detail">
+                {{ _("Your mailing address ") }}
+              </li>
+              <li class="rap_detail">
+                {{ _("Your fingerprints ") }}
+              </li>
+            </ul>
+        </li>
+        <li>
+          {{ _("It costs $25 to process your fingerprints. Here are the ways you can pay: ") }}
+          <ul class="rap_instructions_details">
+            <li class="rap_detail">
+              {{ _("Write a personal check (must be from a bank in the U.S) ") }}
+            </li>
+            <li class="rap_detail">
+              {{ _("Get a money order from the post office ") }}
+            </li>
+            <li class="rap_detail">
+              {{ _("Get a certified check from your bank ") }}
+            </li>
+          </ul>
+        </li>
+        <li>
+          {{ _("Write the check or money order to the “California Department of Justice”. ") }}
+        </li>
+        <li>
+          {{ _("Mail your completed fingerprint card, application form, and $25 check "
+            "or money order to this address: ") }}
+            <ul class="address">
+              <li>California Department of Justice</li>
+              <li>Record Review Unit</li>
+              <li>P.O Box 903417</li>
+              <li>Sacramento, CA 94203-4170</li>
+            </ul>
+        </li>
+        <li>
+          {{ _("Wait for a letter in the mail from the Department of Justice with your "
+            "RAP sheet. ") }}
+        </li>
+        <li>
+          {{ _("When you get your RAP sheet in the mail, you are ready to complete your "
+            "Clear My Record application.  ") }}
+        </li>
+        <li>
+          {{ _("Complete your Clear My Record application by emailing, faxing, "
+            "or mailing your RAP sheet here: ") }}
+            <ul class="address">
+              <li>East Bay Community Law Center</li>
+              <li>Clean Slate</li>
+              <li>3130 Shattuck Ave</li>
+              <li>Berkeley, CA 94705</li>
+            </ul>
+            <p class="rap_instructions_details rap_contact_info">Fax: (510) 849-1536 - "Attention: Clean Slate"</p>
+            <p class="rap_instructions_details rap_contact_info">Email:
+              <a href="mailto: crimrecordshelp@ebclc.org">crimrecordshelp@ebclc.org</a> </p>
+        </li>
+        <li>
+          {{ _("Once East Bay Community Law Center has received your RAP sheet, you "
+            "will receive an email, text message, or voicemail to set up a phone interview "
+            "to talk about what services you qualify for. ") }}
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+<!-- end of section about out of ca rap sheets -->
+{% endif %}
+
+
 
   {%- include "includes/cmr_contact_info.jinja" %}
   {%- include "includes/back_to_home_button.jinja" %}
