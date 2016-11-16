@@ -730,10 +730,9 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
             response, reverse('intake-home'), fetch_redirect_response=False)
         self.assertTrue(slack.called)
         response = self.client.get(response.url)
-        import ipdb; ipdb.set_trace()
-        messages = response.context_data.get('messages', [])
-        messages = [str(m) for m in messages]
-        self.assertIn(session_view_base.GENERIC_USER_ERROR_MESSAGE, messages)
+        expected_flash_message = html_utils.conditional_escape(
+            session_view_base.GENERIC_USER_ERROR_MESSAGE)
+        self.assertContains(response, expected_flash_message)
 
 
 class TestDeclarationLetterView(AuthIntegrationTestCase):
