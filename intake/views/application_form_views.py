@@ -149,7 +149,8 @@ class SelectCounty(base_views.MultiStepFormViewBase):
     success_url = reverse_lazy('intake-county_application')
 
     def post(self, request):
-        self.applicant_id = self.get_or_create_applicant_id()
+        visitor_id = request.session.get('visitor_id')
+        self.applicant_id = self.get_or_create_applicant_id(visitor_id)
         return super().post(request)
 
     def form_valid(self, form):

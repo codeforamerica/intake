@@ -47,7 +47,7 @@ class GetFormSessionDataMixin:
             return redirect(reverse('intake-home'))
 
     def get_session_data(self):
-        return self.request.session.get(self.session_storage_key, {})
+        return dict(**self.request.session.get(self.session_storage_key, {}))
 
     def get_counties(self):
         session_data = self.get_session_data()
@@ -101,10 +101,10 @@ class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
         context.update(self.get_county_context())
         return context
 
-    def get_or_create_applicant_id(self):
+    def get_or_create_applicant_id(self, visitor_id=None):
         applicant_id = self.get_applicant_id()
         if not applicant_id:
-            applicant = models.Applicant()
+            applicant = models.Applicant(visitor_id=visitor_id)
             applicant.save()
             applicant_id = applicant.id
             self.request.session['applicant_id'] = applicant.id

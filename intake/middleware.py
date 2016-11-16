@@ -1,7 +1,5 @@
 import logging
-from project.external_services import log_to_mixpanel
 from urllib.parse import urlparse
-import uuid
 
 from intake.models import Visitor
 

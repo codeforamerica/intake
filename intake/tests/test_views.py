@@ -429,12 +429,14 @@ class TestSelectCountyView(AuthIntegrationTestCase):
         self.assertTrue(applicant_id)
         applicant = models.Applicant.objects.get(id=applicant_id)
         self.assertTrue(applicant)
+        self.assertTrue(applicant.visitor_id)
+        visitor = models.Visitor.objects.get(id=applicant.visitor_id)
+        self.assertTrue(visitor)
         events = list(applicant.events.all())
         self.assertEqual(len(events), 1)
         event = events[0]
         self.assertEqual(event.name,
                          models.ApplicationEvent.APPLICATION_STARTED)
-
         self.assertIn('ip', event.data)
         self.assertIn('user_agent', event.data)
         self.assertEqual(event.data['user_agent'], 'tester')
@@ -819,6 +821,7 @@ class TestDeclarationLetterReviewPage(AuthIntegrationTestCase):
         mock_answers = mock.fake.alameda_pubdef_answers(
             first_name="foo", last_name="bar")
         counties = {'counties': constants.Counties.ALAMEDA}
+        session_data = {**counties, **mock_answers, **mock_letter}
         self.set_session(
             form_in_progress={**counties, **mock_answers, **mock_letter})
         response = self.client.get(reverse('intake-review_letter'))
