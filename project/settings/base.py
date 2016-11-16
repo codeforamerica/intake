@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'storages',
     'formation',
     'debug_toolbar',
+    'django_extensions',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -42,8 +43,9 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'intake.middleware.PersistReferrerMiddleware',
+    'intake.middleware.PersistSourceMiddleware',
     'intake.middleware.GetCleanIpAddressMiddleware',
-    'intake.middleware.TrackPageViewsMiddleware'
+    'intake.middleware.CountUniqueVisitorsMiddleware'
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -75,6 +77,7 @@ TEMPLATES = [
                 "namify": "project.jinja2.namify",
                 "url_with_ids": "project.jinja2.url_with_ids",
                 "oxford_comma": "project.jinja2.oxford_comma",
+                "to_json": "project.jinja2.to_json",
                 "humanize": "project.jinja2.humanize",
                 "settings": "django.conf.settings",
             }

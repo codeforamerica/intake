@@ -1,15 +1,15 @@
 [
 {
   "model": "intake.applicationbundle",
-  "pk": 55,
+  "pk": 2,
   "fields": {
     "organization": [
       "Alameda County Public Defender's Office"
     ],
     "bundled_pdf": "",
     "submissions": [
-      593,
-      594
+      3,
+      4
     ]
   }
 }

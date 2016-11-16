@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 import django.db.models.deletion
-import intake.model_fields
+import intake.models.fields
 
 
 class Migration(migrations.Migration):
@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             name='ConfirmationSentLogEntry',
             fields=[
                 ('applicationlogentry_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='intake.ApplicationLogEntry')),
-                ('contact_info', intake.model_fields.ContactInfoJSONField(default=dict)),
+                ('contact_info', intake.models.fields.ContactInfoJSONField(default=dict)),
             ],
             bases=('intake.applicationlogentry',),
         ),

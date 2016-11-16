@@ -27,7 +27,7 @@ class TestApplicantSerializer(TestCase):
             'id', 'events',
             'started', 'finished', 'had_errors',
             'ip', 'referrer', 'events',
-            'tried_to_apply'
+            'tried_to_apply', 'is_multicounty'
             ]
         event_keys = ['time', 'name', 'data']
         for key in top_keys:
