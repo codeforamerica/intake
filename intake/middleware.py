@@ -19,6 +19,14 @@ class PersistReferrerMiddleware:
         return None
 
 
+class PersistSourceMiddleware:
+
+    def process_request(self, request):
+        source = request.GET.get('source')
+        if source:
+            request.session['source'] = source
+
+
 class GetCleanIpAddressMiddleware:
 
     def _get_client_ip(self, request):

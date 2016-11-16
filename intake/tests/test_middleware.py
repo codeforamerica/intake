@@ -27,6 +27,29 @@ class TestPersistReferrerMiddleware(TestCase):
         self.assertIsNone(self.client.session.get('referrer'))
 
 
+class TestPersistSourceMiddleware(TestCase):
+
+    def test_records_source_if_sent_as_query_param(self):
+        url = reverse('intake-home')
+        url += '?source=test'
+        response = self.client.get(url)
+        source = response.wsgi_request.session.get('source')
+        self.assertEqual(source, 'test')
+
+    def test_source_persists_between_requests(self):
+        url = reverse('intake-home')
+        url += '?source=test'
+        self.client.get(url)
+        response_2 = self.client.get(reverse('intake-apply'))
+        source = response_2.wsgi_request.session.get('source')
+        self.assertEqual(source, 'test')
+
+    def test_records_nothing_if_no_source(self):
+        response = self.client.get(reverse('intake-home'))
+        source = response.wsgi_request.session.get('source')
+        self.assertIsNone(source)
+
+
 class TestGetCleanIpAddressMiddleware(TestCase):
 
     def test_attribute_is_populated_on_ip(self):

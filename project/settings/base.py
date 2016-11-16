@@ -43,6 +43,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'intake.middleware.PersistReferrerMiddleware',
+    'intake.middleware.PersistSourceMiddleware',
     'intake.middleware.GetCleanIpAddressMiddleware',
     'intake.middleware.CountUniqueVisitorsMiddleware'
 ]
