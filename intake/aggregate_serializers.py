@@ -30,6 +30,7 @@ PublicStatsSerializer(serializers.Serializer):
     mean_completion_time = agg_fields.MeanCompletionTimeField()
     median_completion_time = agg_fields.MedianCompletionTimeField()
 
+
 PrivateStatsSerializer(PublicStatsSerializer):
     channels = agg_fields.Channels()
     drop_off = agg_fields.DropOff()

@@ -16,4 +16,4 @@ function readDataAndDrawCharts(){
 
 
 
-readDataAndDrawCharts();
+// readDataAndDrawCharts();
