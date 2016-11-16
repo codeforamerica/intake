@@ -1,5 +1,6 @@
 import os
 from django.db.models import Count
+from django.test.utils import setup_test_environment
 from user_accounts.tests.base_testcases import AuthIntegrationTestCase
 from intake import models
 from intake.tests import mock
@@ -40,6 +41,9 @@ class IntakeDataTestCase(AuthIntegrationTestCase):
     @classmethod
     def have_a_fillable_pdf(cls):
         cls.fillable = mock.fillable_pdf(organization=cls.sf_pubdef)
+
+    def setUp(self):
+        setup_test_environment()
 
     def assert_called_once_with_types(
             self, mock_obj, *arg_types, **kwarg_types):

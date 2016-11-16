@@ -123,7 +123,7 @@ class TestUserAccounts(AuthIntegrationTestCase):
         self.assertEqual(
             session['failed_login_email'],
             user.email)
-        form = response.context['form']
+        form = response.context_data['form']
         self.assertIn(expected_error_message,
                       form.errors['__all__'])
         self.assertContains(

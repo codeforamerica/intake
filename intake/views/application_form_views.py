@@ -14,7 +14,6 @@ from intake.views import session_view_base as base_views
 from formation.forms import (
     DeclarationLetterFormSpec, DeclarationLetterDisplay, SelectCountyForm)
 from intake import models
-from user_accounts.models import Organization
 
 logger = logging.getLogger(__name__)
 

@@ -160,7 +160,7 @@ class TestViews(IntakeDataTestCase):
         send_confirmation.assert_called_once_with()
 
     @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
-    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    @patch('intake.notifications.slack_submissions_viewed.send')
     def test_authenticated_user_can_see_filled_pdf(self, slack):
         self.be_sfpubdef_user()
         submission = self.sf_pubdef_submissions[0]
@@ -181,8 +181,8 @@ class TestViews(IntakeDataTestCase):
         self.assertEqual(type(pdf.content), bytes)
 
     @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
-    @patch('intake.models.notifications.slack_submissions_viewed.send')
-    @patch('intake.models.notifications.slack_simple.send')
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    @patch('intake.notifications.slack_simple.send')
     def test_authenticated_user_can_get_filled_pdf_without_building(
             self, slack_simple, slack_viewed):
         """
@@ -232,7 +232,7 @@ class TestViews(IntakeDataTestCase):
                              )
 
     @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
-    @patch('intake.models.notifications.slack_simple.send')
+    @patch('intake.notifications.slack_simple.send')
     def test_authenticated_user_can_see_pdf_bundle(self, slack):
         self.be_sfpubdef_user()
         ids = models.FormSubmission.objects.filter(
@@ -242,7 +242,7 @@ class TestViews(IntakeDataTestCase):
         self.assertEqual(bundle.status_code, 200)
 
     @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
-    @patch('intake.models.notifications.slack_simple.send')
+    @patch('intake.notifications.slack_simple.send')
     def test_staff_user_can_see_pdf_bundle(self, slack):
         self.be_cfa_user()
         submissions = self.sf_pubdef_submissions
@@ -256,7 +256,7 @@ class TestViews(IntakeDataTestCase):
         pdf_response = self.client.get(response.url)
         self.assertEqual(pdf_response.status_code, 200)
 
-    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    @patch('intake.notifications.slack_submissions_viewed.send')
     def test_authenticated_user_can_see_app_bundle(self, slack):
         self.be_cfa_user()
         submissions = self.submissions
@@ -386,7 +386,7 @@ class TestRAPSheetInstructions(TestCase):
     def test_renders_with_no_session_data(self):
         response = self.client.get(reverse('intake-rap_sheet'))
         # make sure it has a link to the pdf
-        self.assertNotIn('qualifies_for_fee_waiver', response.context)
+        self.assertNotIn('qualifies_for_fee_waiver', response.context_data)
         # make sure there aren't any unrendered variables
         self.assertNotContains(response, "{{")
 
@@ -400,8 +400,8 @@ class TestRAPSheetInstructions(TestCase):
             'an_org', 'another_org']
         get_sub.return_value = submission_mock
         response = self.client.get(reverse('intake-rap_sheet'))
-        self.assertIn('qualifies_for_fee_waiver', response.context)
-        self.assertIn('organizations', response.context)
+        self.assertIn('qualifies_for_fee_waiver', response.context_data)
+        self.assertIn('organizations', response.context_data)
         submission_mock.qualifies_for_fee_waiver.assert_called_once_with()
 
 
@@ -446,7 +446,7 @@ class TestSelectCountyView(AuthIntegrationTestCase):
         result = self.client.fill_form(
             reverse('intake-apply'))
         self.assertEqual(result.status_code, 200)
-        form = result.context['form']
+        form = result.context_data['form']
         self.assertFalse(form.is_valid())
         self.assertTrue(form.errors)
 
@@ -478,7 +478,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
             )
         self.assertEqual(
             response.wsgi_request.path, reverse('intake-confirm'))
-        form = response.context['form']
+        form = response.context_data['form']
         self.assertTrue(form.warnings)
         self.assertFalse(form.errors)
         self.assertIn('ssn', form.warnings)
@@ -576,15 +576,15 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         result = self.client.fill_form(
             reverse('intake-county_application'),
             **bad_data)
-        self.assertTrue(result.context['form'].email.errors)
-        self.assertTrue(result.context['form'].phone_number.errors)
+        self.assertTrue(result.context_data['form'].email.errors)
+        self.assertTrue(result.context_data['form'].phone_number.errors)
 
         event = models.ApplicationEvent.objects.filter(
             applicant_id=self.client.session['applicant_id'],
             name=models.ApplicationEvent.APPLICATION_ERRORS).first()
 
         self.assertDictEqual(
-            result.context['form'].get_serialized_errors(),
+            result.context_data['form'].get_serialized_errors(),
             event.data['errors'])
 
         result = self.client.fill_form(
@@ -637,7 +637,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         self.assertEqual(result.status_code, 200)
         self.assertEqual(result.wsgi_request.path,
                          reverse('intake-county_application'))
-        self.assertTrue(result.context['form'].errors)
+        self.assertTrue(result.context_data['form'].errors)
         slack.assert_not_called()
         send_confirmation.assert_not_called()
 
@@ -646,7 +646,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
             name=models.ApplicationEvent.APPLICATION_ERRORS).first()
 
         self.assertDictEqual(
-            result.context['form'].get_serialized_errors(),
+            result.context_data['form'].get_serialized_errors(),
             event.data['errors'])
 
     @patch(
@@ -691,7 +691,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         self.assertEqual(result.status_code, 200)
         self.assertEqual(result.wsgi_request.path,
                          reverse('intake-county_application'))
-        self.assertTrue(result.context['form'].errors)
+        self.assertTrue(result.context_data['form'].errors)
         slack.assert_not_called()
         send_confirmation.assert_not_called()
 
@@ -700,7 +700,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
             name=models.ApplicationEvent.APPLICATION_ERRORS).first()
 
         self.assertDictEqual(
-            result.context['form'].get_serialized_errors(),
+            result.context_data['form'].get_serialized_errors(),
             event.data['errors'])
 
     def test_can_go_back_and_reset_counties(self):
@@ -722,7 +722,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         county_setting = self.client.session['form_in_progress']['counties']
         self.assertEqual(county_setting, second_choices)
 
-    @patch('intake.views.session_view_base.notifications.slack_simple.send')
+    @patch('intake.notifications.slack_simple.send')
     def test_no_counties_found_error_sends_slack_and_redirects(self, slack):
         self.be_anonymous()
         response = self.client.get(reverse('intake-county_application'))
@@ -730,7 +730,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
             response, reverse('intake-home'), fetch_redirect_response=False)
         self.assertTrue(slack.called)
         response = self.client.get(response.url)
-        messages = response.context.get('messages', [])
+        import ipdb; ipdb.set_trace()
+        messages = response.context_data.get('messages', [])
         messages = [str(m) for m in messages]
         self.assertIn(session_view_base.GENERIC_USER_ERROR_MESSAGE, messages)
 
@@ -791,14 +792,14 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
         self.assertEqual(result.wsgi_request.path,
                          reverse('intake-write_letter'))
 
-        self.assertTrue(result.context['form'].errors)
+        self.assertTrue(result.context_data['form'].errors)
 
         event = models.ApplicationEvent.objects.filter(
             applicant_id=self.client.session['applicant_id'],
             name=models.ApplicationEvent.APPLICATION_ERRORS).first()
 
         self.assertDictEqual(
-            result.context['form'].get_serialized_errors(),
+            result.context_data['form'].get_serialized_errors(),
             event.data['errors'])
 
     def test_no_existing_data(self):
@@ -910,9 +911,9 @@ class TestApplicationDetail(IntakeDataTestCase):
         ]
 
     def get_detail(self, submission):
-        result = self.client.get(
-            reverse('intake-app_detail',
-                    kwargs=dict(submission_id=submission.id)))
+        url = reverse('intake-app_detail',
+                    kwargs=dict(submission_id=submission.id))
+        result = self.client.get(url)
         return result
 
     def assertHasDisplayData(self, response, submission):
@@ -921,24 +922,24 @@ class TestApplicationDetail(IntakeDataTestCase):
                 escaped_value = html_utils.conditional_escape(value)
                 self.assertContains(response, escaped_value)
 
-    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    @patch('intake.notifications.slack_submissions_viewed.send')
     def test_logged_in_user_can_get_submission_display(self, slack):
         self.be_apubdef_user()
         submission = self.a_pubdef_submissions[0]
-        result = self.get_detail(submission)
-        self.assertEqual(result.context['form'].submission, submission)
-        self.assertHasDisplayData(result, submission)
+        response = self.get_detail(submission)
+        self.assertEqual(response.context_data['form'].submission, submission)
+        self.assertHasDisplayData(response, submission)
 
-    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    @patch('intake.notifications.slack_submissions_viewed.send')
     def test_staff_user_can_get_submission_display(self, slack):
         self.be_cfa_user()
         submission = self.a_pubdef_submissions[0]
         result = self.get_detail(submission)
-        self.assertEqual(result.context['form'].submission, submission)
+        self.assertEqual(result.context_data['form'].submission, submission)
         self.assertHasDisplayData(result, submission)
 
     @patch('intake.models.FillablePDF')
-    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    @patch('intake.notifications.slack_submissions_viewed.send')
     def test_user_with_pdf_redirected_to_pdf(self, slack, FillablePDF):
         self.be_sfpubdef_user()
         submission = self.sf_pubdef_submissions[0]
@@ -951,7 +952,7 @@ class TestApplicationDetail(IntakeDataTestCase):
         slack.assert_not_called()  # notification should be handled by pdf view
         FillablePDF.assert_not_called()
 
-    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    @patch('intake.notifications.slack_submissions_viewed.send')
     def test_user_cant_see_app_detail_for_other_county(self, slack):
         self.be_ccpubdef_user()
         submission = self.sf_pubdef_submissions[0]
@@ -959,14 +960,14 @@ class TestApplicationDetail(IntakeDataTestCase):
         self.assertRedirects(response, reverse('intake-app_index'))
         slack.assert_not_called()
 
-    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    @patch('intake.notifications.slack_submissions_viewed.send')
     def test_user_can_see_app_detail_for_multi_county(self, slack):
         self.be_apubdef_user()
         submission = self.combo_submissions[0]
         response = self.get_detail(submission)
         self.assertHasDisplayData(response, submission)
 
-    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    @patch('intake.notifications.slack_submissions_viewed.send')
     def test_agency_user_can_see_transfer_action_link(self, slack):
         self.be_apubdef_user()
         submission = self.a_pubdef_submissions[0]
@@ -999,14 +1000,14 @@ class TestApplicationBundle(IntakeDataTestCase):
                     escaped_value = html_utils.conditional_escape(value)
                     self.assertContains(response, escaped_value)
 
-    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    @patch('intake.notifications.slack_submissions_viewed.send')
     def test_user_can_get_app_bundle_without_pdf(self, slack):
         self.be_apubdef_user()
         response = self.get_submissions(self.a_pubdef_submissions)
         self.assertNotContains(response, 'iframe class="pdf_inset"')
         self.assertHasDisplayData(response, self.a_pubdef_submissions)
 
-    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    @patch('intake.notifications.slack_submissions_viewed.send')
     def test_staff_user_can_get_app_bundle_with_pdf(self, slack):
         self.be_cfa_user()
         response = self.get_submissions(self.combo_submissions)
@@ -1014,20 +1015,20 @@ class TestApplicationBundle(IntakeDataTestCase):
         self.assertHasDisplayData(response, self.combo_submissions)
 
     @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
-    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    @patch('intake.notifications.slack_submissions_viewed.send')
     def test_user_can_get_bundle_with_pdf(self, slack):
         self.be_sfpubdef_user()
         response = self.get_submissions(self.sf_pubdef_submissions)
         self.assertContains(response, 'iframe class="pdf_inset"')
 
-    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    @patch('intake.notifications.slack_submissions_viewed.send')
     def test_user_cant_see_app_bundle_for_other_county(self, slack):
         self.be_sfpubdef_user()
         response = self.get_submissions(self.a_pubdef_submissions)
         self.assertEqual(response.status_code, 404)
         slack.assert_not_called()
 
-    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    @patch('intake.notifications.slack_submissions_viewed.send')
     def test_user_can_see_app_bundle_for_multi_county(self, slack):
         self.be_apubdef_user()
         response = self.get_submissions(self.combo_submissions)
@@ -1079,7 +1080,7 @@ class TestApplicationIndex(IntakeDataTestCase):
         self.be_sfpubdef_user()
         # look for the pdf link of each app
         response = self.client.get(reverse('intake-app_index'))
-        self.assertEqual(response.context['show_pdf'], True)
+        self.assertEqual(response.context_data['show_pdf'], True)
         for sub in self.sf_pubdef_submissions:
             pdf_url = reverse('intake-filled_pdf', kwargs=dict(
                 submission_id=sub.id))
@@ -1089,7 +1090,7 @@ class TestApplicationIndex(IntakeDataTestCase):
         self.be_apubdef_user()
         # look for the pdf link of each app
         response = self.client.get(reverse('intake-app_index'))
-        self.assertEqual(response.context['show_pdf'], False)
+        self.assertEqual(response.context_data['show_pdf'], False)
         for sub in self.combo_submissions:
             pdf_url = reverse('intake-filled_pdf', kwargs=dict(
                 submission_id=sub.id))
@@ -1099,7 +1100,7 @@ class TestApplicationIndex(IntakeDataTestCase):
         self.be_cfa_user()
         # look for the pdf link of each app
         response = self.client.get(reverse('intake-app_index'))
-        self.assertEqual(response.context['show_pdf'], True)
+        self.assertEqual(response.context_data['show_pdf'], True)
         for sub in self.sf_pubdef_submissions:
             pdf_url = reverse('intake-filled_pdf', kwargs=dict(
                 submission_id=sub.id))
@@ -1187,7 +1188,7 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
                     kwargs=dict(bundle_id=bundle.id)))
         self.assertContains(result, url)
 
-    @patch('intake.models.notifications.slack_submissions_viewed.send')
+    @patch('intake.notifications.slack_submissions_viewed.send')
     def test_agency_user_can_see_transfer_action_links(self, slack):
         self.be_apubdef_user()
         response = self.client.get(
@@ -1209,7 +1210,7 @@ class TestApplicationBundleDetailPDFView(IntakeDataTestCase):
     def setUpTestData(cls):
         super().setUpTestData()
         # patch slack_simple
-        patcher = patch('intake.models.notifications')
+        patcher = patch('intake.notifications')
         patcher.start()
         cls.bundle = models.ApplicationBundle.create_with_submissions(
             organization=cls.sf_pubdef, submissions=cls.sf_pubdef_submissions)

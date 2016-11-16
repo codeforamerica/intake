@@ -12,7 +12,7 @@ from intake.tests import mock
 from user_accounts.tests.mock import create_fake_auth_models
 from user_accounts import models as auth_models
 from intake import (
-    models, model_fields, anonymous_names, validators, notifications,
+    models, anonymous_names, validators, notifications,
     constants)
 
 from formation import field_types
@@ -105,7 +105,7 @@ class TestModels(TestCase):
         submission = mock.FormSubmissionFactory.build(answers=prefers_nothing)
         self.assertListEqual([], submission.get_contact_preferences())
 
-    @patch('intake.models.not_refactored_models.notifications')
+    @patch('intake.notifications')
     def test_mark_viewed(self, notifications):
         submission = mock.FormSubmissionFactory.create()
         submissions = [submission]
@@ -206,7 +206,7 @@ class TestModels(TestCase):
 
     def test_contact_info_json_field(self):
 
-        contact_info_field = model_fields.ContactInfoJSONField(
+        contact_info_field = models.fields.ContactInfoJSONField(
             default=dict, blank=True)
         # valid inputs
         empty = {}
@@ -282,11 +282,11 @@ class TestModels(TestCase):
         result = submission.get_contact_info()
         self.assertDictEqual(result, expected)
 
-    @patch('intake.models.not_refactored_models.notifications.slack_confirmation_send_failed.send')
-    @patch('intake.models.not_refactored_models.notifications.slack_confirmation_sent.send')
-    @patch('intake.models.not_refactored_models.notifications.sms_confirmation.send')
-    @patch('intake.models.not_refactored_models.notifications.email_confirmation.send')
-    @patch('intake.models.not_refactored_models.random')
+    @patch('intake.notifications.slack_confirmation_send_failed.send')
+    @patch('intake.notifications.slack_confirmation_sent.send')
+    @patch('intake.notifications.sms_confirmation.send')
+    @patch('intake.notifications.email_confirmation.send')
+    @patch('intake.models.form_submission.random')
     def test_send_submission_confirmation(self, random, email_notification,
                                           sms_notification, sent_notification,
                                           slack_failed_notification):
@@ -638,9 +638,9 @@ class TestApplicationBundle(TestCase):
         bundle.build_bundled_pdf_if_necessary()
         get_pdfs_mock.assert_not_called()
 
-    @patch('intake.models.not_refactored_models.notifications.slack_simple.send')
-    @patch('intake.models.not_refactored_models.get_parser')
-    @patch('intake.models.not_refactored_models.logger')
+    @patch('intake.notifications.slack_simple.send')
+    @patch('intake.models.get_parser')
+    @patch('intake.models.application_bundle.logger')
     def test_build_bundled_pdf_with_one_pdf(self, logger, get_parser, slack):
         # set up associated data
         sf_pubdef = auth_models.Organization.objects.get(
@@ -671,9 +671,9 @@ class TestApplicationBundle(TestCase):
         get_individual_filled_pdfs.assert_called_once_with()
         self.assertEqual(bundle.bundled_pdf.read(), data)
 
-    @patch('intake.models.not_refactored_models.notifications.slack_simple.send')
-    @patch('intake.models.not_refactored_models.get_parser')
-    @patch('intake.models.not_refactored_models.logger')
+    @patch('intake.notifications.slack_simple.send')
+    @patch('intake.models.get_parser')
+    @patch('intake.models.application_bundle.logger')
     def test_build_bundled_pdf_if_has_pdfs(self, logger, get_parser, slack):
         sf_pubdef = auth_models.Organization.objects.get(
             slug=constants.Organizations.SF_PUBDEF)
@@ -696,10 +696,10 @@ class TestApplicationBundle(TestCase):
         slack.assert_not_called()
         get_individual_filled_pdfs.assert_called_once_with()
 
-    @patch('intake.models.not_refactored_models.notifications.slack_simple.send')
-    @patch('intake.models.not_refactored_models.SimpleUploadedFile')
-    @patch('intake.models.not_refactored_models.get_parser')
-    @patch('intake.models.not_refactored_models.logger')
+    @patch('intake.notifications.slack_simple.send')
+    @patch('intake.models.application_bundle.SimpleUploadedFile')
+    @patch('intake.models.get_parser')
+    @patch('intake.models.application_bundle.logger')
     def test_build_bundled_pdfs_if_not_prefilled(
             self, logger, get_parser, SimpleUploadedFile, slack):
         should_have_a_pdf = Mock(return_value=True)
@@ -720,10 +720,10 @@ class TestApplicationBundle(TestCase):
         self.assertEqual(len(get_individual_filled_pdfs.mock_calls), 2)
         mock_bundle.save.assert_called_once_with()
 
-    @patch('intake.models.not_refactored_models.notifications.slack_simple.send')
-    @patch('intake.models.not_refactored_models.SimpleUploadedFile')
-    @patch('intake.models.not_refactored_models.get_parser')
-    @patch('intake.models.not_refactored_models.logger')
+    @patch('intake.notifications.slack_simple.send')
+    @patch('intake.models.application_bundle.SimpleUploadedFile')
+    @patch('intake.models.get_parser')
+    @patch('intake.models.application_bundle.logger')
     def test_build_bundled_pdfs_if_some_are_not_prefilled(
             self, logger, get_parser, SimpleUploadedFile, slack):
         should_have_a_pdf = Mock(return_value=True)

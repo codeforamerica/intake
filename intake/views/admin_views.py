@@ -1,10 +1,11 @@
 
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import View
 from django.views.generic.base import TemplateView
 from django.contrib import messages
 from django.http import Http404, HttpResponse
+from django.template.response import TemplateResponse
 
 from intake import models, notifications
 from user_accounts.models import Organization
@@ -52,7 +53,7 @@ class ApplicationDetail(View):
         context = dict(
             form=display_form,
             declaration_form=letter_display)
-        response = render(request, self.template_name, context)
+        response = TemplateResponse(request, self.template_name, context)
         return response
 
 
@@ -148,7 +149,7 @@ class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
         notifications.slack_submissions_viewed.send(
             submissions=submissions, user=request.user,
             bundle_url=bundle.get_external_url())
-        return render(request, "app_bundle.jinja", context)
+        return TemplateResponse(request, "app_bundle.jinja", context)
 
 
 class ApplicationBundleDetail(ApplicationDetail):
@@ -176,7 +177,7 @@ class ApplicationBundleDetail(ApplicationDetail):
         notifications.slack_submissions_viewed.send(
             submissions=submissions, user=request.user,
             bundle_url=bundle.get_external_url())
-        return render(request, "app_bundle.jinja", context)
+        return TemplateResponse(request, "app_bundle.jinja", context)
 
 
 class ApplicationBundleDetailPDFView(View):
@@ -236,7 +237,7 @@ class Delete(View):
 
     def get(self, request, submission_id):
         submission = models.FormSubmission.objects.get(id=int(submission_id))
-        return render(
+        return TemplateResponse(
             request,
             self.template_name, {'submission': submission})
 
