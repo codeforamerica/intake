@@ -3,6 +3,8 @@ from project.external_services import log_to_mixpanel
 from urllib.parse import urlparse
 import uuid
 
+from intake.models import Visitor
+
 
 logger = logging.getLogger(__name__)
 
@@ -34,12 +36,15 @@ class GetCleanIpAddressMiddleware:
         return None
 
 
-class TrackPageViewsMiddleware:
+class CountUniqueVisitorsMiddleware:
 
     def process_request(self, request):
-        applicant_id = request.session.get(
-            'applicant_id', 'anon_%s' % uuid.uuid4())
-        log_to_mixpanel(applicant_id, "page_view", {
-            'applicant_id': applicant_id,
-            'path': request.path
-        })
+        visitor_id = request.session.get(
+            'visitor_id', None)
+        if not visitor_id:
+            visitor = Visitor(
+                referrer=request.session.get('referrer', ''),
+                source=request.session.get('source', '')
+                )
+            visitor.save()
+            request.session['visitor_id'] = visitor.id

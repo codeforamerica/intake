@@ -1,8 +1,10 @@
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
 from intake.middleware import GetCleanIpAddressMiddleware
+from intake import models
+
 
 class TestPersistReferrerMiddleware(TestCase):
 
@@ -54,3 +56,23 @@ class TestGetCleanIpAddressMiddleware(TestCase):
         middleware = GetCleanIpAddressMiddleware()
         result = middleware._get_client_ip(mock_request)
         self.assertEqual(result, 'fake_ip1')
+
+
+class TestCountUniqueVisitorsMiddleware(TestCase):
+
+    def test_new_visitor_is_created_on_pageview(self):
+        response = self.client.get(reverse('intake-home'))
+        visitor_id = response.wsgi_request.session.get('visitor_id')
+        self.assertTrue(visitor_id)
+        visitor = models.Visitor.objects.get(pk=visitor_id)
+        self.assertTrue(visitor)
+
+    @patch('intake.middleware.Visitor')
+    def test_visitor_is_created_only_once(self, Visitor):
+        Visitor.return_value = Mock(id=1)
+        response = self.client.get(reverse('intake-home'))
+        visitor_id = response.wsgi_request.session.get('visitor_id')
+        response_2 = self.client.get(reverse('intake-apply'))
+        visitor_id_2 = response_2.wsgi_request.session.get('visitor_id')
+        self.assertEqual(visitor_id, visitor_id_2)
+        Visitor.assert_called_once_with(referrer='', source='')
