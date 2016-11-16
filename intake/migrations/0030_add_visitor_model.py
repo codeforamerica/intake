@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 import django.db.models.deletion
+import intake
 import intake.models.form_submission
 
 
@@ -22,11 +23,6 @@ class Migration(migrations.Migration):
                 ('source', models.TextField(null=True)),
                 ('referrer', models.TextField(null=True)),
             ],
-        ),
-        migrations.AlterField(
-            model_name='formsubmission',
-            name='anonymous_name',
-            field=models.CharField(default=intake.models.form_submission.generate_pseudonym, max_length=60),
         ),
         migrations.AddField(
             model_name='applicant',

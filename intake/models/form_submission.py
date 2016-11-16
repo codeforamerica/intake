@@ -13,6 +13,7 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
 import intake
+from intake import anonymous_names
 from project.jinja2 import namify
 from formation.forms import (
     display_form_selector, DeclarationLetterDisplay)
@@ -31,10 +32,6 @@ def gen_uuid():
     return uuid.uuid4().hex
 
 
-def generate_pseudonym():
-    return intake.anonymous_names.generate()
-
-
 class FormSubmission(models.Model):
 
     organizations = models.ManyToManyField('user_accounts.Organization',
@@ -47,7 +44,7 @@ class FormSubmission(models.Model):
     old_uuid = models.CharField(max_length=34, unique=True,
                                 default=gen_uuid)
     anonymous_name = models.CharField(max_length=60,
-                                      default=generate_pseudonym)
+                                      default=anonymous_names.generate)
     date_received = models.DateTimeField(default=timezone_utils.now)
 
     class Meta:
