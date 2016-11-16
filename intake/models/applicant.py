@@ -4,6 +4,7 @@ import intake
 
 
 class Applicant(models.Model):
+    visitor = models.ForeignKey('intake.Visitor', null=True)
 
     def log_event(self, name, data=None):
         data = data or {}

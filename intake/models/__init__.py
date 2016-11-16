@@ -2,6 +2,7 @@ from . import fields
 from .county import County, CountyManager
 from .pdfs import (
     get_parser, FillablePDF, FilledPDF)
+from .visitor import Visitor
 from .applicant import Applicant
 from .application_event import ApplicationEvent
 from .application_bundle import ApplicationBundle
@@ -19,6 +20,7 @@ __all__ = [
     fields,
     get_parser,
     gen_uuid,
+    Visitor,
     County,
     CountyManager,
     Applicant,
