@@ -38,9 +38,9 @@ class FormSubmissionSerializer(serializers.ModelSerializer):
         'currently_employed', source='answers')
     city = serializer_fields.CityField(source='answers')
     age = serializer_fields.AgeField(source='answers')
+    where_they_heard = serializer_fields.DictKeyField(
+        'how_did_you_hear', source='answers')
     url = serializers.CharField(source='get_absolute_url', read_only=True)
-    # where_they_heard = serializer_fields.WhereTheyHeardField(
-        # source='answers')
 
     class Meta:
         model = models.FormSubmission
@@ -57,7 +57,8 @@ class FormSubmissionSerializer(serializers.ModelSerializer):
             'currently_employed',
             'city',
             'age',
-            'url'
+            'url',
+            'where_they_heard'
         ]
 
 
@@ -86,7 +87,8 @@ class ApplicantSerializer(serializers.ModelSerializer):
             'events',
             'form_submissions',
             'tried_to_apply',
-            'is_multicounty'
+            'is_multicounty',
+            'visitor_id'
         ]
 
     def to_representation(self, obj):

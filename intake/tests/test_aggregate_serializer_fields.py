@@ -47,25 +47,6 @@ class TestMedianCompletionTimeField(DjangoTestCase):
         self.assertIsNone(result)
 
 
-class TestMajorSourcesField(DjangoTestCase):
-
-    def test_returns_correct_sources(self):
-        field = fields.MajorSourcesField()
-        result = field.to_representation(all_apps)
-        expected = {
-            'www.codeforamerica.org',
-            'www.google.com',
-            'www.safeandjust.org',
-            'sfpublicdefender.org',
-            'checkrapplicant.zendesk.com'}
-        self.assertEqual(set(result.keys()), expected)
-
-    def test_returns_empty_dict_for_empty_list(self):
-        field = fields.MajorSourcesField()
-        result = field.to_representation([])
-        self.assertEqual(result, {})
-
-
 class TestDropOffField(DjangoTestCase):
 
     def test_returns_correct_dropoff(self):
