@@ -96,6 +96,9 @@ class MedianCompletionTimeField(MeanCompletionTimeField):
 
 class DropOff(ApplicationAggregateField):
 
+    def get_default_value(self):
+        return 0
+
     def filter(self, applications):
         return truthy_values_filter(applications, 'started')
 
@@ -230,6 +233,9 @@ order by count(*) desc
 
 
 class ErrorRate(ApplicationAggregateField):
+
+    def get_default_value(self):
+        return 0
 
     def filter(self, applications):
         today = get_todays_date()

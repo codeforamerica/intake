@@ -54,10 +54,10 @@ class TestDropOff(DjangoTestCase):
         result = field.to_representation(all_apps)
         self.assertEqual(result, 0.0)
 
-    def test_returns_none_for_empty_list(self):
+    def test_returns_zero_for_empty_list(self):
         field = fields.DropOff()
         result = field.to_representation([])
-        self.assertIsNone(result)
+        self.assertEqual(result, 0)
 
 
 class TestMultiCountyField(DjangoTestCase):
