@@ -4240,6 +4240,17 @@ pre.address {
   border: 1px solid #eeeeee;
   border-radius: .5em;
 }
+.stats-single_figure {
+  display: inline-block;
+  width: 15em;
+}
+.stats-total-number {
+  font-size: 2em;
+  font-weight: 500;
+}
+span.perc-sign {
+  font-size: 0.8em;
+}
 svg g.axis text {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 }

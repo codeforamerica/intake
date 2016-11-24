@@ -18,10 +18,10 @@ class PublicStatsSerializer(serializers.Serializer):
     #     pass
 
 
-# class PrivateStatsSerializer(PublicStatsSerializer):
-#     channels = fields.Channels(source='apps')
-#     drop_off = fields.DropOff(source='apps')
-#     app_error_rate = fields.ErrorRate(source='apps')
+class PrivateStatsSerializer(PublicStatsSerializer):
+    channels = fields.Channels(source='apps')
+    drop_off = fields.DropOff(source='apps')
+    app_error_rate = fields.ErrorRate(source='apps')
 
 
 # how do I scope completion times?

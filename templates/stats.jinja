@@ -9,14 +9,52 @@ Numbers for Clear My Record
 {% for org_data in stats.org_stats %}
 <div class="stats_block {{ org_data.org.slug }}">
   <h2>{{ org_data.org.name }}</h2>
-  <div class="stats-total">
+  <div class="stats-single_figure">
     <span class="stats-total-number">{{ org_data.total }}</span>
     <span class="stats-total-annot">applications</span>
   </div>
-  <div class="stats-this_week">
+  <div class="stats-single_figure">
     <span class="stats-total-number">{{ org_data.apps_this_week }}</span>
     <span class="stats-total-annot">this week</span>
   </div>
+  {% if 'drop_off' in org_data %}
+  <div class="stats-single_figure">
+    <span class="stats-total-number">{{
+     (org_data.app_error_rate * 100)|round(1)
+     }}<span class="perc-sign">%</span></span>
+    <span class="stats-total-annot">error rate</span>
+  </div>
+  <div class="stats-single_figure">
+    <span class="stats-total-number">{{
+     (org_data.drop_off * 100)|round(1)
+     }}<span class="perc-sign">%</span></span>
+    <span class="stats-total-annot">dropoff rate</span>
+  </div>
+  <div class="stats-chart">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Channel</th>
+          <th>Hits</th>
+          <th>Apps</th>
+          <th>Apps/Hits</th>
+          <th>Apps/All apps</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for datum in org_data.channels %}
+        <tr>
+          <td>{{ datum.channel }}</td>
+          <td>{{ datum.hits }}</td>
+          <td>{{ datum.apps }}</td>
+          <td>{{ (datum.conversion_rate * 100)|round(1) }}<span class="perc-sign">%</span></td>
+          <td>{{ (datum.percent_of_apps * 100)|round(1) }}<span class="perc-sign">%</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
   <div class="stats-chart_container_set">
   </div>
 </div>

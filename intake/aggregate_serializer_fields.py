@@ -94,7 +94,7 @@ class MedianCompletionTimeField(MeanCompletionTimeField):
         return statistics.median(seconds_to_complete(applications))
 
 
-class DropOffField(ApplicationAggregateField):
+class DropOff(ApplicationAggregateField):
 
     def filter(self, applications):
         return truthy_values_filter(applications, 'started')
@@ -104,7 +104,7 @@ class DropOffField(ApplicationAggregateField):
         """
         total = len(applications)
         finished = len(list(truthy_values_filter(applications, 'finished')))
-        return finished / total
+        return 1.0 - (finished / total)
 
 
 class MultiCountyField(ApplicationAggregateField):
@@ -176,6 +176,7 @@ order by count(*) desc
 """
 
     def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.last_visitor_tally_date = None
         self.visitor_tally = {}
 

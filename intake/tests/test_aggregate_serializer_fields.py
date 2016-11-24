@@ -47,15 +47,15 @@ class TestMedianCompletionTimeField(DjangoTestCase):
         self.assertIsNone(result)
 
 
-class TestDropOffField(DjangoTestCase):
+class TestDropOff(DjangoTestCase):
 
     def test_returns_correct_dropoff(self):
-        field = fields.DropOffField()
+        field = fields.DropOff()
         result = field.to_representation(all_apps)
-        self.assertEqual(result, 1.0)
+        self.assertEqual(result, 0.0)
 
     def test_returns_none_for_empty_list(self):
-        field = fields.DropOffField()
+        field = fields.DropOff()
         result = field.to_representation([])
         self.assertIsNone(result)
 
