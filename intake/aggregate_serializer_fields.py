@@ -183,6 +183,9 @@ order by count(*) desc
         self.last_visitor_tally_date = None
         self.visitor_tally = {}
 
+    def get_default_value(self):
+        return []
+
     def get_visitor_tally_if_needed(self):
         today = get_todays_date()
         tallied_today = self.last_visitor_tally_date == today

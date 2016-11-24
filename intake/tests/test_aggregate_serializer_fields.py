@@ -71,3 +71,11 @@ class TestMultiCountyField(DjangoTestCase):
         field = fields.MultiCountyField()
         result = field.to_representation([])
         self.assertIsNone(result)
+
+
+class TestChannels(DjangoTestCase):
+
+    def test_returns_empty_list_if_no_apps(self):
+        field = fields.Channels()
+        result = field.to_representation([])
+        self.assertEqual(result, [])
