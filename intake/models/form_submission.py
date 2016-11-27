@@ -349,6 +349,10 @@ class FormSubmission(models.Model):
     def get_external_url(self):
         return urljoin(settings.DEFAULT_HOST, self.get_absolute_url())
 
+    def get_case_printout_url(self):
+        return reverse(
+            'intake-case_printout', kwargs=dict(submission_id=self.id))
+
     def qualifies_for_fee_waiver(self):
         on_benefits = OnPublicBenefits(self.answers)
         if on_benefits.is_valid():

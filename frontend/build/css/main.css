@@ -4240,6 +4240,13 @@ pre.address {
   border: 1px solid #eeeeee;
   border-radius: .5em;
 }
+.admin section.content > .container:first-child {
+  padding-top: 0;
+}
+.admin .action_bar {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
 .stats-single_figure {
   display: inline-block;
   width: 15em;

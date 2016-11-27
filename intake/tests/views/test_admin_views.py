@@ -87,6 +87,15 @@ class TestApplicationDetail(IntakeDataTestCase):
             submission.get_transfer_action(response.wsgi_request)['url'])
         self.assertContains(response, transfer_action_url)
 
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_agency_user_can_see_case_printout_link(self, slack):
+        self.be_apubdef_user()
+        submission = self.a_pubdef_submissions[0]
+        response = self.get_detail(submission)
+        printout_url = html_utils.conditional_escape(
+            submission.get_case_printout_url())
+        self.assertContains(response, printout_url)
+
 
 class TestApplicationBundle(IntakeDataTestCase):
 
@@ -217,6 +226,14 @@ class TestApplicationIndex(IntakeDataTestCase):
                 submission_id=sub.id))
             self.assertContains(response, pdf_url)
 
+    def test_user_can_see_case_detail_printout_links(self):
+        self.be_apubdef_user()
+        response = self.client.get(reverse('intake-app_index'))
+        for sub in self.a_pubdef_submissions:
+            printout_url = html_utils.conditional_escape(
+                sub.get_case_printout_url())
+            self.assertContains(response, printout_url)
+
 
 class TestApplicationBundleDetail(IntakeDataTestCase):
 
@@ -308,6 +325,14 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
             transfer_action_url = html_utils.conditional_escape(
                 sub.get_transfer_action(response.wsgi_request)['url'])
             self.assertContains(response, transfer_action_url)
+
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_user_can_see_app_bundle_printout_link(self, slack):
+        self.be_apubdef_user()
+        response = self.client.get(self.a_pubdef_bundle.get_absolute_url())
+        printout_url = html_utils.conditional_escape(
+            self.a_pubdef_bundle.get_printout_url())
+        self.assertContains(response, printout_url)
 
 
 @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")

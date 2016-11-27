@@ -140,6 +140,7 @@ class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
             submission.get_display_form_for_user(request.user)
             for submission in submissions]
         context = dict(
+            bundle=bundle,
             forms=forms,
             count=len(submissions),
             show_pdf=request.user.profile.should_see_pdf(),
@@ -168,6 +169,7 @@ class ApplicationBundleDetail(ApplicationDetail):
             submission.get_display_form_for_user(request.user)
             for submission in submissions]
         context = dict(
+            bundle=bundle,
             forms=forms,
             count=len(submissions),
             show_pdf=bool(bundle.bundled_pdf),
@@ -348,6 +350,29 @@ class ReferToAnotherOrgView(MarkSubmissionStepView):
         messages.success(self.request, message)
 
 
+class CasePrintoutPDFView(ApplicationDetail):
+    """Serves a PDF with full case details, based on the details
+    needed by the user's organization
+
+    The PDF is created on the fly
+    """
+
+    def get(self, request, submission_id):
+        response = HttpResponse(
+            b'a pdf', content_type='application/pdf')
+        return response
+
+
+class CaseBundlePrintoutPDFView(View):
+    """Returns a concatenated PDF of case detail PDFs
+    for an org user
+    """
+    def get(self, request, bundle_id):
+        response = HttpResponse(
+            b'a pdf', content_type='application/pdf')
+        return response
+
+
 filled_pdf = FilledPDF.as_view()
 pdf_bundle = FilledPDFBundle.as_view()
 app_index = ApplicationIndex.as_view()
@@ -358,3 +383,5 @@ mark_transferred_to_other_org = ReferToAnotherOrgView.as_view()
 delete_page = Delete.as_view()
 app_bundle_detail = ApplicationBundleDetail.as_view()
 app_bundle_detail_pdf = ApplicationBundleDetailPDFView.as_view()
+case_printout = CasePrintoutPDFView.as_view()
+case_bundle_printout = CaseBundlePrintoutPDFView.as_view()

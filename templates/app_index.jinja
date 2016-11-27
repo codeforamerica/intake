@@ -16,6 +16,7 @@
       <th>Date</th>
       <th>Last Name</th>
       <th>First Name</th>
+      <th>Case Details PDF</th>
       {%- if show_pdf %}
       <th>Intake PDF</th>
       {%- endif %}
@@ -32,6 +33,15 @@
       </td>
       <td>{{ namify(app.answers.get("last_name", "")) }}</td>
       <td>{{ namify(app.answers.get("first_name", "")) }}</td>
+      <td>
+        <a
+          href="{{ app.get_case_printout_url() }}"
+          target="_blank"
+          class="btn btn-default btn-sm">
+          <span class="glyphicon glyphicon-print"></span>
+          Details
+        </a>
+      </td>
       {%- if show_pdf %}
       <td>
         <a href="{{ 

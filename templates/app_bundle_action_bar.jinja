@@ -1,0 +1,15 @@
+{#-
+  This displays the set of actions relating to an application bundle
+  that are available to a user. 
+
+  In the future, the set of actions should be determined through more detailed
+  permissions. But for now the actions will be hardcoded
+
+  context:
+    bundle - an ApplicationBundle
+
+#}
+      <a href="{{ bundle.get_printout_url() }}" target="_blank" class="btn btn-default">
+        <span class="glyphicon glyphicon-print"></span>
+        Get a printout of these cases
+      </a>
