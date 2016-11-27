@@ -203,9 +203,12 @@ class PhoneField(CharField):
         return self.empty_value
 
     def get_display_value(self):
-        return phonenumbers.format_number(
-            self.get_current_value_parsed(),
-            phonenumbers.PhoneNumberFormat.NATIONAL)
+        parsed_value = self.get_current_value_parsed()
+        if parsed_value:
+            return phonenumbers.format_number(
+                parsed_value,
+                phonenumbers.PhoneNumberFormat.NATIONAL)
+        return self.empty_value
 
     def get_tel_href_number(self):
         return "1" + str(self.get_current_value_parsed().national_number)
