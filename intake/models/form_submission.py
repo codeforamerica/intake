@@ -200,6 +200,7 @@ class FormSubmission(models.Model):
         """
         based on user information, get the correct Form class and return it
         instantiated with the data for self
+
         """
         # TODO: get rid of this method, and put it elsewhere and make it right
         if not user.is_staff:
@@ -230,7 +231,8 @@ class FormSubmission(models.Model):
             (user.is_staff and any(self.organizations.all().values_list(
                 'requires_declaration_letter', flat=True)))
         if show_declaration:
-            declaration_letter_form = DeclarationLetterDisplay(init_data)
+            declaration_letter_form = DeclarationLetterDisplay(
+                init_data, validate=True)
             return display_form, declaration_letter_form
         return display_form, None
 

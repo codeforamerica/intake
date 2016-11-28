@@ -238,7 +238,7 @@ class ChoiceField(CharField):
             )
 
     def get_display_for_choice(self, value):
-        return self.choice_display_dict[value]
+        return self.choice_display_dict.get(value, self.empty_value)
 
     def get_display_choices(self):
         if getattr(self, 'flip_display_choice_order', False):
