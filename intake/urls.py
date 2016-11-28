@@ -44,6 +44,10 @@ urlpatterns = [
         login_required(admin_views.filled_pdf),
         name='intake-filled_pdf'),
 
+    url(r'^application/(?P<submission_id>[0-9]+)/printout/$',
+        login_required(admin_views.case_printout),
+        name='intake-case_printout'),
+
     url(r'^applications/$',
         login_required(admin_views.app_index),
         name='intake-app_index'),
@@ -59,6 +63,10 @@ urlpatterns = [
     url(r'^applications/bundle/(?P<bundle_id>[0-9]+)/pdf/$',
         login_required(admin_views.app_bundle_detail_pdf),
         name='intake-app_bundle_detail_pdf'),
+
+    url(r'^applications/bundle/(?P<bundle_id>[0-9]+)/printout/$',
+        login_required(admin_views.case_bundle_printout),
+        name='intake-case_bundle_printout'),
 
     url(r'^applications/pdfs/$',
         login_required(admin_views.pdf_bundle),

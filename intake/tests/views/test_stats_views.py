@@ -1,12 +1,11 @@
-from unittest.mock import patch
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from intake.tests.base_testcases import IntakeDataTestCase
 
 from intake.tests.mock_serialized_apps import apps as all_apps
-from intake.tests.mock_serialized_apps import MOCK_NOW
 
 from intake.views import stats_views
+from intake import constants
 from user_accounts.models import Organization
 
 
@@ -41,32 +40,26 @@ class TestStats(IntakeDataTestCase):
     def test_contains_data_for_all_orgs(self):
         self.be_anonymous()
         response = self.client.get(reverse('intake-stats'))
-        stats = response.context['stats']
+        stats = response.context_data['stats']
         org_stats = stats['org_stats']
         org_slugs = list(Organization.objects.filter(
             is_receiving_agency=True
         ).values_list('slug', flat=True))
-        org_slugs.append(stats_views.ALL)
+        org_slugs.append(constants.Organizations.ALL)
         stats_slugs = [data['org']['slug'] for data in org_stats]
         self.assertEqual(set(org_slugs), set(stats_slugs))
 
-    def test_anonymous_user_doesnt_get_json(self):
+    def test_anonymous_user_doesnt_see_private_aggs(self):
         self.be_anonymous()
         response = self.client.get(reverse('intake-stats'))
-        stats = response.context['stats']
-        org_stats = stats['org_stats']
-        sample_day_stats = org_stats[0]['days'][0]
-        self.assert_day_stat_has_correct_fields(sample_day_stats)
+        for private_agg in ('error rate', 'dropoff rate', 'Channel'):
+            self.assertNotContains(response, private_agg)
 
-    def test_logged_in_user_gets_json(self):
+    def test_logged_in_user_sees_error_and_dropoff(self):
         self.be_cfa_user()
         response = self.client.get(reverse('intake-stats'))
-        response = self.client.get(reverse('intake-stats'))
-        stats = response.context['stats']
-        org_stats = stats['org_stats']
-        sample_day_stats = org_stats[0]['days'][0]
-        self.assert_day_stat_has_correct_fields(
-            sample_day_stats, private=True)
+        self.assertContains(response, 'error rate')
+        self.assertContains(response, 'dropoff rate')
 
 
 class TestDailyTotals(TestCase):
@@ -82,27 +75,10 @@ class TestDailyTotals(TestCase):
 
 class TestMiscellaneousFunctions(TestCase):
 
-    @patch('intake.views.stats_views.get_todays_date')
-    def test_get_aggregate_data_for_org_bucket(self, today):
-        today.return_value = MOCK_NOW.date()
-        buckets = stats_views.breakup_apps_by_org(all_apps)
-        key = 'all'
-        result = stats_views.get_aggregate_day_data(buckets[key]['apps'])
-        self.assertIn('days', result)
-        self.assertIn('total', result)
-        self.assertEqual(len(result['days']), 62)
-        self.assertEqual(result['total'], 9)
-
-    @patch('intake.views.stats_views.get_todays_date')
-    def test_get_day_lookup_structure(self, today):
-        today.return_value = MOCK_NOW.date()
-        result = stats_views.get_day_lookup_structure()
-        self.assertEqual(len(result), 62)
-
     def test_breakup_apps_by_org(self):
         result = stats_views.breakup_apps_by_org(all_apps)
         counts = {
-            key: len(stuff['apps']) for key, stuff in result.items()
+            org_agg['org']['slug']: len(org_agg['apps']) for org_agg in result
         }
         self.assertDictEqual(
             counts,

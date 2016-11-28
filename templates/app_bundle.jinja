@@ -9,6 +9,7 @@
       <div class="bundle-metadata col-xs-12 col-md-10 col_centered">
         <h1 class="bundle-count">{{ count }} applications</h1>
 
+    <p>{% include "app_bundle_action_bar.jinja" %}</p>
     {%- if show_pdf and not request.user.profile.organization.show_pdf_only %}
         <p><a href="#bundle-pdf">Scroll to PDF</a></p>
     {%- endif %}

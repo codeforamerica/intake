@@ -103,6 +103,11 @@ class ApplicationBundle(models.Model):
                     filled.pdf for filled in filled_pdfs))
         self.save()
 
+    def get_printout_url(self):
+        return reverse(
+            'intake-case_bundle_printout',
+            kwargs=dict(bundle_id=self.id))
+
     def get_pdf_bundle_url(self):
         return reverse(
             'intake-app_bundle_detail_pdf',

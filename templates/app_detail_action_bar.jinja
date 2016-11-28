@@ -1,0 +1,19 @@
+{#
+  This displays the set of actions relating to a single form submission
+  that are available to a user. 
+
+  In the future, the set of actions should be determined through more detailed
+  permissions. But for now the actions will be hardcoded
+
+  context:
+    form - a display form from formation
+    form.submission - the corresponding submission
+
+#}
+<a
+  href="{{ form.submission.get_case_printout_url() }}"
+  target="_blank"
+  class="btn btn-default btn-sm">
+  <span class="glyphicon glyphicon-print"></span>
+  Get case printout
+</a>

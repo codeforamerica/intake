@@ -1,4 +1,3 @@
-
 from django.shortcuts import redirect, get_object_or_404
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import View
@@ -7,8 +6,11 @@ from django.contrib import messages
 from django.http import Http404, HttpResponse
 from django.template.response import TemplateResponse
 
+
 from intake import models, notifications
 from user_accounts.models import Organization
+from printing.pdf_form_display import PDFFormDisplay
+from intake.aggregate_serializer_fields import get_todays_date
 
 
 NOT_ALLOWED_MESSAGE = str(
@@ -140,6 +142,7 @@ class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
             submission.get_display_form_for_user(request.user)
             for submission in submissions]
         context = dict(
+            bundle=bundle,
             forms=forms,
             count=len(submissions),
             show_pdf=request.user.profile.should_see_pdf(),
@@ -168,6 +171,7 @@ class ApplicationBundleDetail(ApplicationDetail):
             submission.get_display_form_for_user(request.user)
             for submission in submissions]
         context = dict(
+            bundle=bundle,
             forms=forms,
             count=len(submissions),
             show_pdf=bool(bundle.bundled_pdf),
@@ -348,6 +352,99 @@ class ReferToAnotherOrgView(MarkSubmissionStepView):
         messages.success(self.request, message)
 
 
+def get_applicant_name(form):
+    return '{}, {}'.format(
+        form.last_name.get_display_value(),
+        ' '.join([
+                n for n in [
+                    form.first_name.get_display_value(),
+                    form.middle_name.get_display_value()
+                ] if n
+            ])
+    )
+
+
+def get_printout_for_submission(user, submission):
+    # get the correct form
+    form, letter = submission.get_display_form_for_user(user)
+    # use the form to serialize the submission
+    pdf_display = PDFFormDisplay(form, letter)
+    canvas, pdf = pdf_display.render(
+        title=get_applicant_name(form) + " - Case Details"
+    )
+    filename = '{}-{}-{}-CaseDetails.pdf'.format(
+        form.last_name.get_display_value(),
+        form.first_name.get_display_value(),
+        submission.id
+        )
+    pdf.seek(0)
+    return filename, pdf.read()
+
+
+def get_concatenated_printout_for_bundle(user, bundle):
+    # for each of the submissions,
+    canvas = None
+    pdf_file = None
+    submissions = list(bundle.submissions.all())
+    count = len(submissions)
+    if count == 1:
+        return get_printout_for_submission(user, submissions[0])
+    for i, submission in enumerate(submissions):
+        form, letter = submission.get_display_form_for_user(user)
+        if i == 0:
+            pdf_display = PDFFormDisplay(form, letter)
+            canvas, pdf_file = pdf_display.render(save=False)
+        elif i > 0 and i < (count - 1):
+            pdf_display = PDFFormDisplay(form, letter, canvas=canvas)
+            canvas, pdf = pdf_display.render(save=False)
+        else:
+            pdf_display = PDFFormDisplay(form, letter, canvas=canvas)
+            canvas, pdf = pdf_display.render(
+                save=True,
+                title="{} Applications from Code for America".format(count))
+    today = get_todays_date()
+    filename = '{}-{}-Applications-CodeForAmerica.pdf'.format(
+        today.strftime('%Y-%m-%d'),
+        count
+        )
+    pdf_file.seek(0)
+    return filename, pdf_file.read()
+
+
+class CasePrintoutPDFView(ApplicationDetail):
+    """Serves a PDF with full case details, based on the details
+    needed by the user's organization
+
+    The PDF is created on the fly
+    """
+
+    def get(self, request, submission_id):
+        submission = get_object_or_404(
+            models.FormSubmission, pk=int(submission_id))
+        filename, pdf_bytes = get_printout_for_submission(
+            request.user,
+            submission)
+        response = HttpResponse(pdf_bytes, content_type='application/pdf')
+        response['Content-Disposition'] = 'filename="{}"'.format(filename)
+        return response
+
+
+class CaseBundlePrintoutPDFView(View):
+    """Returns a concatenated PDF of case detail PDFs
+    for an org user
+    """
+    def get(self, request, bundle_id):
+        bundle = get_object_or_404(
+            models.ApplicationBundle,
+            pk=int(bundle_id))
+        filename, pdf_bytes = get_concatenated_printout_for_bundle(
+            request.user, bundle)
+        response = HttpResponse(
+            pdf_bytes, content_type='application/pdf')
+        response['Content-Disposition'] = 'filename="{}"'.format(filename)
+        return response
+
+
 filled_pdf = FilledPDF.as_view()
 pdf_bundle = FilledPDFBundle.as_view()
 app_index = ApplicationIndex.as_view()
@@ -358,3 +455,5 @@ mark_transferred_to_other_org = ReferToAnotherOrgView.as_view()
 delete_page = Delete.as_view()
 app_bundle_detail = ApplicationBundleDetail.as_view()
 app_bundle_detail_pdf = ApplicationBundleDetailPDFView.as_view()
+case_printout = CasePrintoutPDFView.as_view()
+case_bundle_printout = CaseBundlePrintoutPDFView.as_view()

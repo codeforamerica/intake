@@ -17,6 +17,8 @@ django-jinja~=2.2
 django-debug-toolbar==1.4
 djangorestframework~=3.5
 newrelic==2.70.0.51
+reportlab~=3.3
+Pillow~=3.4
 # for debugging in production
 ipdb~=0.10
 ipython~=5.1
