@@ -19,6 +19,10 @@ def parse_url_host(full_url):
         return ''
 
 
+def parse_self_reported_referral(text):
+    return text.lower()
+
+
 def get_duration(start, end):
     tdelta = end - start
     return tdelta.total_seconds()
@@ -251,3 +255,24 @@ class ErrorRate(ApplicationAggregateField):
         error_count = len([app for app in applications if app['had_errors']])
         total = len(applications)
         return error_count / total
+
+
+class WhereTheyHeard(ApplicationAggregateField):
+
+    def get_default_value(self):
+        return []
+
+    def filter(self, applications):
+        today = get_todays_date()
+        a_week_ago = today - datetime.timedelta(days=28)
+        for app in truthy_values_filter(applications, 'where_they_heard'):
+            if app['finished'].date() > a_week_ago:
+                yield app
+
+    def reduce(self, applications):
+        counts = list(collections.Counter([
+            parse_self_reported_referral(app['where_they_heard'])
+            for app in applications
+        ]).items())
+        counts.sort(key=lambda a: a[1], reverse=True)
+        return counts
