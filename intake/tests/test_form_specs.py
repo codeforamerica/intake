@@ -11,7 +11,7 @@ from intake import constants, models
 
 class TestAlamedaCountyForm(TestCase):
 
-    fixtures = ['organizations', 'mock_profiles']
+    fixtures = ['counties', 'organizations', 'mock_profiles']
 
     def test_records_all_fields(self):
         data = mock.fake.alameda_county_form_answers()

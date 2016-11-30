@@ -23,6 +23,7 @@ from project.jinja2 import url_with_ids
 class TestViews(IntakeDataTestCase):
 
     fixtures = [
+        'counties',
         'organizations',
         'mock_profiles',
         'mock_2_submissions_to_sf_pubdef']
@@ -350,7 +351,7 @@ class TestViews(IntakeDataTestCase):
 
 
 class TestPartnerListView(TestCase):
-    fixtures = ['organizations']
+    fixtures = ['counties', 'organizations']
 
     def test_returns_200_with_org_name_list(self):
         response = self.client.get(reverse('intake-partner_list'))
@@ -363,7 +364,7 @@ class TestPartnerListView(TestCase):
 
 
 class TestPartnerDetailView(TestCase):
-    fixtures = ['organizations']
+    fixtures = ['counties', 'organizations']
 
     def test_returns_200_with_org_details(self):
         sf_pubdef = auth_models.Organization.objects.get(
@@ -455,7 +456,7 @@ class TestSelectCountyView(AuthIntegrationTestCase):
 
 class TestMultiCountyApplication(AuthIntegrationTestCase):
 
-    fixtures = ['organizations']
+    fixtures = ['counties', 'organizations']
 
     @patch(
         'intake.views.application_form_views.models.FormSubmission.send_confirmation_notifications')
@@ -739,7 +740,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
 
 class TestDeclarationLetterView(AuthIntegrationTestCase):
 
-    fixtures = ['organizations', 'mock_profiles']
+    fixtures = ['counties', 'organizations', 'mock_profiles']
 
     @patch(
         'intake.views.application_form_views.models.FormSubmission.send_confirmation_notifications')
@@ -813,7 +814,7 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
 
 class TestDeclarationLetterReviewPage(AuthIntegrationTestCase):
 
-    fixtures = ['organizations', 'mock_profiles']
+    fixtures = ['counties', 'organizations', 'mock_profiles']
 
     def test_get_with_expected_data(self):
         self.be_anonymous()
@@ -906,6 +907,7 @@ class TestDeclarationLetterReviewPage(AuthIntegrationTestCase):
 class TestThanks(IntakeDataTestCase):
 
     fixtures = [
+        'counties',
         'organizations',
         'mock_profiles',
         'mock_2_submissions_to_cc_pubdef']

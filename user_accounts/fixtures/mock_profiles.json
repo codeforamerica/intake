@@ -2,8 +2,8 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$24000$kjrOnsbc7CXa$n18RR7fygcp5Fx4lX4mRy5KRl8mAouteXpa5W5oblRM=",
-    "last_login": "2016-09-21T07:08:21.661Z",
+    "password": "pbkdf2_sha256$30000$mQNl2M1ZGrni$/FN7D7xxb84FcvHfIQ1Da/uN9Vdstc57Npw1Vm3BONM=",
+    "last_login": "2016-11-30T20:56:10.368Z",
     "is_superuser": true,
     "username": "cfa_user",
     "first_name": "Fake",
@@ -85,6 +85,23 @@
   }
 },
 {
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$30000$TtyBJ4dTfTYs$OC1+kLqeu5d6FEl7j/Fvjwo+3EMJFH9B0YNJquZUnlo=",
+    "last_login": "2016-11-30T21:48:06Z",
+    "is_superuser": false,
+    "username": "monterey_pubdef_user",
+    "first_name": "Fake",
+    "last_name": "MontereyPubDef",
+    "email": "bgolder+demo+monterey_pubdef_user@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2016-11-30T21:47:28.844Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
   "model": "user_accounts.userprofile",
   "pk": 1,
   "fields": {
@@ -150,6 +167,20 @@
     ],
     "organization": [
       "East Bay Community Law Center"
+    ],
+    "should_get_notifications": true
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 10,
+  "fields": {
+    "name": "Fake Monterey",
+    "user": [
+      "monterey_pubdef_user"
+    ],
+    "organization": [
+      "Monterey County Public Defender"
     ],
     "should_get_notifications": true
   }

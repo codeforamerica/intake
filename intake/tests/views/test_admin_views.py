@@ -15,6 +15,7 @@ from project.jinja2 import url_with_ids
 class TestApplicationDetail(IntakeDataTestCase):
 
     fixtures = [
+        'counties',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
@@ -100,6 +101,7 @@ class TestApplicationDetail(IntakeDataTestCase):
 class TestApplicationBundle(IntakeDataTestCase):
 
     fixtures = [
+        'counties',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
@@ -159,6 +161,7 @@ class TestApplicationBundle(IntakeDataTestCase):
 class TestApplicationIndex(IntakeDataTestCase):
 
     fixtures = [
+        'counties',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
@@ -238,6 +241,7 @@ class TestApplicationIndex(IntakeDataTestCase):
 class TestApplicationBundleDetail(IntakeDataTestCase):
 
     fixtures = [
+        'counties',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
@@ -338,6 +342,7 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
 @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
 class TestApplicationBundleDetailPDFView(IntakeDataTestCase):
     fixtures = [
+        'counties',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_sf_pubdef',
         ]
@@ -380,6 +385,7 @@ class TestApplicationBundleDetailPDFView(IntakeDataTestCase):
 class TestReferToAnotherOrgView(IntakeDataTestCase):
 
     fixtures = [
+        'counties',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
         'mock_1_bundle_to_a_pubdef']

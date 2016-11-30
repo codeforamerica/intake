@@ -33,6 +33,7 @@ test.screenshots:
 deploy.demo:
 	git push -f demo HEAD:master
 	heroku run --app cmr-demo python manage.py loaddata \
+		counties \
 		organizations \
 		addresses \
 		mock_profiles \
@@ -40,11 +41,13 @@ deploy.demo:
 		mock_2_submissions_to_ebclc \
 		mock_2_submissions_to_sf_pubdef \
 		mock_2_submissions_to_cc_pubdef \
+		mock_2_submissions_to_monterey_pubdef \
 		mock_1_submission_to_multiple_orgs \
 		mock_1_bundle_to_a_pubdef \
 		mock_1_bundle_to_ebclc \
 		mock_1_bundle_to_sf_pubdef \
 		mock_1_bundle_to_cc_pubdef \
+		mock_1_bundle_to_monterey_pubdef \
 		mock_application_events
 
 deploy.prod:
@@ -80,7 +83,7 @@ db.dump_fixtures:
 	    --format json
 
 
-db.load_fixtures:
+db.load_mock_fixtures:
 	python ./manage.py loaddata \
 		counties \
 		organizations \
@@ -90,10 +93,12 @@ db.load_fixtures:
 		mock_2_submissions_to_a_pubdef \
 		mock_2_submissions_to_sf_pubdef \
 		mock_2_submissions_to_cc_pubdef \
+		mock_2_submissions_to_monterey_pubdef \
 		mock_1_submission_to_multiple_orgs \
 		mock_1_bundle_to_a_pubdef \
 		mock_1_bundle_to_sf_pubdef \
 		mock_1_bundle_to_cc_pubdef \
+		mock_1_bundle_to_monterey_pubdef \
 		mock_application_events
 
 

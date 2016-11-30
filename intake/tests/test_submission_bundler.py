@@ -16,11 +16,13 @@ def yes_it_is():
 class BundlerTestCase(TestCase):
 
     fixtures = [
+        'counties',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_sf_pubdef',
         'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_cc_pubdef',
         'mock_2_submissions_to_ebclc',
+        'mock_2_submissions_to_monterey_pubdef',
         'mock_1_submission_to_multiple_orgs',
     ]
 
@@ -55,14 +57,19 @@ class TestOrganizationBundle(BundlerTestCase):
 
     @patch('intake.submission_bundler.is_the_weekend', not_the_weekend)
     def test_bundle_unopened_apps(self, *args):
+        receiving_org_count = Organization.objects.filter(
+            is_receiving_agency=True).count()
         submission_bundler.bundle_and_notify()
         self.assertEqual(
-            self.notifications.front_email_daily_app_bundle.send.call_count, 4)
+            self.notifications.front_email_daily_app_bundle.send.call_count,
+            receiving_org_count)
         self.assertEqual(
-            self.notifications.slack_app_bundle_sent.send.call_count, 4)
-        self.assertEqual(self.log_referred.call_count, 4)
+            self.notifications.slack_app_bundle_sent.send.call_count,
+            receiving_org_count)
+        self.assertEqual(
+            self.log_referred.call_count, receiving_org_count)
         bundles = models.ApplicationBundle.objects.all()
-        self.assertEqual(bundles.count(), 4)
+        self.assertEqual(bundles.count(), receiving_org_count)
 
     @patch('intake.submission_bundler.is_the_weekend', not_the_weekend)
     def test_bundle_with_no_unopened_apps(self, *args):
@@ -124,7 +131,7 @@ class TestSubmissionBundler(BundlerTestCase):
         ebclc_user = UserProfile.objects.filter(
             organization=ebclc).first().user
         sub = models.FormSubmission.objects.annotate(
-            org_count=Count('organizations')).filter(org_count=3).first()
+            org_count=Count('organizations')).filter(org_count__gte=3).first()
         models.ApplicationLogEntry.log_opened([sub.id], ebclc_user)
         bundler = submission_bundler.bundle_and_notify()
         a_pubdef_subs = bundler.organization_bundle_map.get(

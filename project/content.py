@@ -73,6 +73,8 @@ class constants:
         "Alameda County Public Defender's Office")
     footer_ebclc = str(
         "East Bay Community Law Center")
+    footer_monterey = str(
+        "Monterey County Public Defender")
     back_home_btn = "Go back to main page"
 
     metadata_title = topbar

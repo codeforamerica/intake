@@ -11,6 +11,7 @@ from user_accounts.tests import mock
 class TestUserProfile(IntakeDataTestCase):
 
     fixtures = [
+        'counties',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_cc_pubdef',
         'mock_2_submissions_to_sf_pubdef',
@@ -60,11 +61,13 @@ class TestUserProfile(IntakeDataTestCase):
 class TestOrganization(IntakeDataTestCase):
 
     fixtures = [
+        'counties',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_ebclc',
         'mock_2_submissions_to_cc_pubdef',
         'mock_2_submissions_to_sf_pubdef',
+        'mock_2_submissions_to_monterey_pubdef',
         'mock_1_submission_to_multiple_orgs',
         'mock_application_events',
     ]
@@ -123,7 +126,7 @@ class TestOrganization(IntakeDataTestCase):
         cc_pubdef_user = models.UserProfile.objects.filter(
                 organization=cc_pubdef).first().user
         sub = intake_models.FormSubmission.objects.annotate(
-            org_count=Count('organizations')).filter(org_count=3).first()
+            org_count=Count('organizations')).filter(org_count__gte=3).first()
         intake_models.ApplicationLogEntry.log_opened([sub.id], cc_pubdef_user)
         # assert that it shows up in unopened apps
         self.assertIn(sub, a_pubdef.get_unopened_apps())

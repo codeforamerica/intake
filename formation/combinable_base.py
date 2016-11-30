@@ -2,6 +2,10 @@ from formation.form_base import Form
 from formation.fields import get_field_index
 
 
+class NoFormSpecError(Exception):
+    pass
+
+
 class CombinableFormSpec:
 
     union_attributes = [
@@ -92,6 +96,10 @@ class FormSpecSelector:
                 combined_spec = spec
             else:
                 combined_spec |= spec
+        if not combined_spec:
+            raise NoFormSpecError(
+                "No form spec found with criteria={} and specs={}".format(
+                    criteria, self.form_specs))
         return combined_spec
 
     def get_combined_form_class(self, **criteria):

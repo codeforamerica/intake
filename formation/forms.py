@@ -247,6 +247,46 @@ class AlamedaPublicDefenderFormSpec(CombinableOrganizationFormSpec):
     }
 
 
+class MontereyCountyFormSpec(CombinableCountyFormSpec):
+    county = Counties.MONTEREY
+    fields = {
+        F.ContactPreferences,
+        F.FirstName,
+        F.MiddleName,
+        F.LastName,
+        F.PhoneNumberField,
+        F.EmailField,
+        F.AddressField,
+        F.FinancialScreeningNote,
+        F.MonthlyIncome,
+        F.HouseholdSize,
+        F.DateOfBirthField,
+        F.USCitizen,
+        F.OnProbationParole,
+        F.WhereProbationParole,
+        F.WhenProbationParole,
+        F.ServingSentence,
+        F.BeingCharged,
+        F.HowDidYouHear,
+        F.AdditionalInformation,
+    }
+    required_fields = {
+        F.FirstName,
+        F.LastName,
+        F.AddressField,
+        F.DateOfBirthField,
+        F.MonthlyIncome,
+        F.HouseholdSize,
+        F.OnProbationParole,
+        F.ServingSentence,
+        F.BeingCharged,
+    }
+    optional_fields = {
+        F.HowDidYouHear,
+        F.AdditionalInformation,
+    }
+
+
 class EBCLCIntakeFormSpec(CombinableOrganizationFormSpec):
     organization = Organizations.EBCLC
     fields = {
@@ -344,6 +384,7 @@ INPUT_FORM_SPECS = [
     SanFranciscoCountyFormSpec(),
     ContraCostaFormSpec(),
     AlamedaCountyFormSpec(),
+    MontereyCountyFormSpec(),
 ]
 DISPLAY_FORM_SPECS = INPUT_FORM_SPECS + [
     SupplementaryDisplayForm(),

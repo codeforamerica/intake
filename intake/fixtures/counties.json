@@ -25,5 +25,14 @@
     "name": "Alameda",
     "description": "Alameda County (near Oakland, Berkeley, San Leandro, Hayward, Union City, Pleasanton, or Livermore)"
   }
+},
+{
+  "model": "intake.county",
+  "pk": 4,
+  "fields": {
+    "slug": "monterey",
+    "name": "Monterey",
+    "description": "Monterey County (near Salinas, Monterey, Marina, Seaside, Prunedale, Castroville, or King City)"
+  }
 }
 ]

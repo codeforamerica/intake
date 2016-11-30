@@ -26,17 +26,20 @@
           <li>
             <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_sf) }}
           </li>
-          {%- if not settings.LIVE_COUNTY_CHOICES %}
           <li>
             <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_alameda) }}
           </li>
           <li>
             <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_ebclc) }}
           </li>
-          {%- endif %}
           <li>
             <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_cc) }}
           </li>
+          {%- if not settings.LIVE_COUNTY_CHOICES %}
+          <li>
+            <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_monterey) }}
+          </li>
+          {%- endif %}
         </ul>
       </div>
     </div>

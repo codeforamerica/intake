@@ -18,7 +18,9 @@ class Home(TemplateView):
             counties = models.County.objects.prefetch_related(
                 'organizations').filter(slug__in=[
                     constants.Counties.SAN_FRANCISCO,
-                    constants.Counties.CONTRA_COSTA])
+                    constants.Counties.CONTRA_COSTA,
+                    constants.Counties.ALAMEDA,
+                    ])
         else:
             counties = models.County.objects.prefetch_related(
                 'organizations').all()
