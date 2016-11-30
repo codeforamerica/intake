@@ -14,7 +14,7 @@ from user_accounts.tests.base_testcases import AuthIntegrationTestCase
 
 class TestUserAccounts(AuthIntegrationTestCase):
 
-    fixtures = ['organizations', 'mock_profiles']
+    fixtures = ['counties', 'organizations', 'mock_profiles']
 
     def test_invite_form_has_the_right_fields(self):
         form = InviteForm()

@@ -15,7 +15,8 @@
     "long_confirmation_message": "",
     "address": "",
     "phone_number": "",
-    "email": ""
+    "email": "",
+    "notify_on_weekends": false
   }
 },
 {
@@ -36,7 +37,8 @@
     "long_confirmation_message": "You will get a letter in the mail from the San Francisco Public Defender in 2-4 weeks.",
     "address": "San Francisco Public Defender\r\n555 7th Street, 2nd Floor\r\nSan Francisco, CA\r\n94103",
     "phone_number": "4155539337",
-    "email": ""
+    "email": "",
+    "notify_on_weekends": false
   }
 },
 {
@@ -57,7 +59,8 @@
     "long_confirmation_message": "The Contra Costa Public Defender will follow up with you if they need any other information.",
     "address": "Contra Costa Public Defender\r\n800 Ferry Street\r\nMartinez, CA\r\n94553",
     "phone_number": "9253358000",
-    "email": "cleanslate@pd.cccounty.us"
+    "email": "cleanslate@pd.cccounty.us",
+    "notify_on_weekends": false
   }
 },
 {
@@ -78,7 +81,8 @@
     "long_confirmation_message": "Your application for Alameda is not yet compete. If you do not have your California criminal record (RAP sheet), please follow these instructions to request it.\r\nhttp://c4a.me/rap",
     "address": "East Bay Community Law Center\r\n2921 Adeline St\r\nBerkeley, CA\r\n94703",
     "phone_number": "5105484064",
-    "email": "crimrecordshelp@ebclc.org"
+    "email": "crimrecordshelp@ebclc.org",
+    "notify_on_weekends": false
   }
 },
 {
@@ -99,7 +103,30 @@
     "long_confirmation_message": "The Alameda Public Defender will follow up with you if they need any other information.",
     "address": "",
     "phone_number": "5102726600",
-    "email": "cleanslate@acgov.org"
+    "email": "cleanslate@acgov.org",
+    "notify_on_weekends": false
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Monterey County Public Defender",
+    "slug": "monterey_pubdef",
+    "county": [
+      "monterey"
+    ],
+    "website": "",
+    "blurb": "",
+    "is_receiving_agency": true,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": true,
+    "show_pdf_only": false,
+    "short_confirmation_message": "The Monterey Public Defender will contact you in 1-2 weeks with your next steps.",
+    "long_confirmation_message": "The Monterey Public Defender will contact you in 1-2 weeks with your next steps.",
+    "address": "",
+    "phone_number": "",
+    "email": "",
+    "notify_on_weekends": false
   }
 }
 ]

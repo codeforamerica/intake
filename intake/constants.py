@@ -42,6 +42,7 @@ class Organizations:
     SF_PUBDEF = 'sf_pubdef'
     COCO_PUBDEF = 'cc_pubdef'
     ALAMEDA_PUBDEF = 'a_pubdef'
+    MONTEREY_PUBDEF = 'monterey_pubdef'
     EBCLC = 'ebclc'
     ALL = 'all'
 
@@ -51,6 +52,7 @@ DEFAULT_ORGANIZATION_ORDER = [
     Organizations.ALAMEDA_PUBDEF,
     Organizations.EBCLC,
     Organizations.COCO_PUBDEF,
+    Organizations.MONTEREY_PUBDEF,
 ]
 
 
@@ -59,6 +61,7 @@ ORG_NAMES = {
     Organizations.SF_PUBDEF: _("San Francisco Public Defender"),
     Organizations.COCO_PUBDEF: _("Contra Costa Public Defender"),
     Organizations.ALAMEDA_PUBDEF: _("Alameda County Public Defender's Office"),
+    Organizations.MONTEREY_PUBDEF: _("Monterey County Public Defender"),
     Organizations.EBCLC: _("East Bay Community Law Center"),
 }
 
@@ -66,6 +69,9 @@ PAGE_COMPLETE_SEQUENCES = {
     Organizations.SF_PUBDEF: ["SelectCounty", "CountyApplication"],
     Organizations.COCO_PUBDEF: ["SelectCounty", "CountyApplication"],
     Organizations.ALAMEDA_PUBDEF: [
+        "SelectCounty", "CountyApplication",
+        "DeclarationLetterView", "DeclarationLetterReviewPage"],
+    Organizations.MONTEREY_PUBDEF: [
         "SelectCounty", "CountyApplication",
         "DeclarationLetterView", "DeclarationLetterReviewPage"],
     Organizations.EBCLC: ["SelectCounty", "CountyApplication"],
@@ -76,6 +82,7 @@ class Counties:
     CONTRA_COSTA = 'contracosta'
     SAN_FRANCISCO = 'sanfrancisco'
     ALAMEDA = 'alameda'
+    MONTEREY = 'monterey'
     OTHER = 'other'
 
 
@@ -83,18 +90,12 @@ class CountyNames:
     SAN_FRANCISCO = 'San Francisco'
     CONTRA_COSTA = 'Contra Costa'
     ALAMEDA = 'Alameda'
-    ALL = 'San Francisco, Alameda, and Contra Costa Counties'
+    MONTEREY = 'Monterey'
+    ALL = 'San Francisco, Alameda, Contra Costa, and Monterey Counties'
 
 
 if SCOPE_TO_LIVE_COUNTIES:
-    CountyNames.ALL = 'San Francisco and Contra Costa Counties'
-
-
-CONFIRMATION_MESSAGES = {
-    Counties.SAN_FRANCISCO: _("You will get a letter in the mail from the San Francisco Public Defender in 2-4 weeks."),
-    Counties.CONTRA_COSTA: _("The Contra Costa Public Defender will follow up with you if they need any other information."),
-    Counties.ALAMEDA: _("In # weeks, you will get a phone call from the Alameda Public Defender with an update on your case.")
-}
+    CountyNames.ALL = 'San Francisco, Alameda, and Contra Costa Counties'
 
 
 if SCOPE_TO_LIVE_COUNTIES:
@@ -103,11 +104,13 @@ if SCOPE_TO_LIVE_COUNTIES:
         (Counties.CONTRA_COSTA, _(
             'Conta Costa County (near Richmond, Concord, Walnut Creek, '
             'San Ramon, Antioch, or Brentwood)')),
-        # (Counties.ALAMEDA, _(
-        #     'Alameda County (near Oakland, Berkeley, San Leandro, Hayward, '
-        #     'Fremont, Albany, Newark, Dublin, Union City, Pleasanton, '
-        #     'or Livermore)')),
-        # (Counties.OTHER, _('Some other county'))
+        (Counties.ALAMEDA, _(
+            'Alameda County (near Oakland, Berkeley, San Leandro, Hayward, '
+            'Fremont, Albany, Newark, Dublin, Union City, Pleasanton, '
+            'or Livermore)')),
+        # (Counties.MONTEREY, _(
+        #     'Monterey County (near Salinas, Monterey, Marina, Seaside, '
+        #     'Prunedale, Castroville, or King City)')),
     )
 else:
     COUNTY_CHOICES = (
@@ -119,13 +122,16 @@ else:
             'Alameda County (near Oakland, Berkeley, San Leandro, Hayward, '
             'Fremont, Albany, Newark, Dublin, Union City, Pleasanton, '
             'or Livermore)')),
-        # (Counties.OTHER, _('Some other county'))
+        (Counties.MONTEREY, _(
+            'Monterey County (near Salinas, Monterey, Marina, Seaside, '
+            'Prunedale, Castroville, or King City)')),
     )
 
 COUNTY_CHOICE_DISPLAY_DICT = {
     Counties.SAN_FRANCISCO: CountyNames.SAN_FRANCISCO,
     Counties.CONTRA_COSTA: CountyNames.CONTRA_COSTA,
     Counties.ALAMEDA: CountyNames.ALAMEDA,
+    Counties.MONTEREY: CountyNames.MONTEREY,
 }
 
 

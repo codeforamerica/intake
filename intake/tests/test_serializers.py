@@ -6,6 +6,7 @@ from intake import serializers
 class TestApplicantSerializer(TestCase):
 
     fixtures = [
+        'counties',
         'organizations',
         'mock_2_submissions_to_cc_pubdef'
     ]
@@ -48,7 +49,7 @@ class TestApplicantSerializer(TestCase):
 class TestFormSubmissionSerializer(TestCase):
 
     fixtures = [
-        'organizations',
+        'counties', 'organizations',
         'mock_2_submissions_to_cc_pubdef'
     ]
 

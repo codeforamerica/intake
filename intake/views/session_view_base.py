@@ -23,6 +23,10 @@ class NoCountyCookiesError(Exception):
     pass
 
 
+class NoFormSpecFoundError(Exception):
+    pass
+
+
 GENERIC_USER_ERROR_MESSAGE = _(
     "Oops! Something went wrong. This is embarrassing. If you noticed anything"
     " unusual, please email us: clearmyrecord@codeforamerica.org")
@@ -40,7 +44,7 @@ class GetFormSessionDataMixin:
         """
         try:
             return super().dispatch(request, *args, **kwargs)
-        except Exception as err:
+        except NoCountyCookiesError as err:
             notifications.slack_simple.send("ApplicationError!\n"+str(err))
             logger.error(err)
             messages.error(request, GENERIC_USER_ERROR_MESSAGE)

@@ -92,6 +92,7 @@ class DailyTotals(View):
             constants.CountyNames.SAN_FRANCISCO,
             constants.CountyNames.CONTRA_COSTA,
             constants.CountyNames.ALAMEDA,
+            constants.CountyNames.MONTEREY,
         ]
         writer = csv.DictWriter(
             response,

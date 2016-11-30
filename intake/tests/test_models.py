@@ -362,6 +362,7 @@ class TestModels(TestCase):
 class TestFormSubmission(TestCase):
 
     fixtures = [
+        'counties',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
         'mock_1_submission_to_multiple_orgs']
@@ -492,7 +493,7 @@ class TestFormSubmission(TestCase):
 
 class TestCounty(TestCase):
 
-    fixtures = ['organizations']
+    fixtures = ['counties', 'organizations']
 
     def test_county_init(self):
         county = models.County(slug="yolo", description="Yolo County")
@@ -562,7 +563,7 @@ class TestFilledPDF(TestCase):
 
 class TestApplicationBundle(TestCase):
 
-    fixtures = ['organizations']
+    fixtures = ['counties', 'organizations']
 
     def test_should_have_a_pdf_positive(self):
         sf_pubdef = auth_models.Organization.objects.get(
@@ -752,6 +753,7 @@ class TestApplicationBundle(TestCase):
 
 class TestApplicationLogEntry(TestCase):
     fixtures = [
+        'counties',
         'organizations',
         'mock_profiles',
         'mock_2_submissions_to_cc_pubdef',

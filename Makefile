@@ -80,7 +80,7 @@ db.dump_fixtures:
 	    --format json
 
 
-db.load_fixtures:
+db.load_mock_fixtures:
 	python ./manage.py loaddata \
 		counties \
 		organizations \
