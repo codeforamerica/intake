@@ -52,7 +52,9 @@ deploy.demo:
 
 deploy.prod:
 	git push prod master
-	heroku run --app cmr-prod python manage.py loaddata organizations
+	heroku run --app cmr-prod python manage.py loaddata \
+		counties \
+		organizations
 
 
 db.pull.demo:
