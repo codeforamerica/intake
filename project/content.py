@@ -74,7 +74,7 @@ class constants:
     footer_ebclc = str(
         "East Bay Community Law Center")
     footer_monterey = str(
-        "East Bay Community Law Center")
+        "Monterey County Public Defender")
     back_home_btn = "Go back to main page"
 
     metadata_title = topbar
