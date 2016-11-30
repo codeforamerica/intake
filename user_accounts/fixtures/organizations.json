@@ -115,16 +115,16 @@
     "county": [
       "monterey"
     ],
-    "website": "",
-    "blurb": "",
+    "website": "http://www.co.monterey.ca.us/government/departments-i-z/public-defender",
+    "blurb": "The Monterey County Public Defender's Office offers help to low-income people charged with crimes in Monterey County.",
     "is_receiving_agency": true,
     "requires_rap_sheet": false,
     "requires_declaration_letter": true,
     "show_pdf_only": false,
     "short_confirmation_message": "The Monterey Public Defender will contact you in 1-2 weeks with your next steps.",
     "long_confirmation_message": "The Monterey Public Defender will contact you in 1-2 weeks with your next steps.",
-    "address": "",
-    "phone_number": "",
+    "address": "111 W. Alisal Street\r\nSalinas, CA 93901",
+    "phone_number": "(831) 755-5058",
     "email": "",
     "notify_on_weekends": false
   }
