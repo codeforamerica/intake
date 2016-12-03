@@ -2,7 +2,7 @@ from unittest.mock import patch
 from django.test import TestCase
 from django.db.models import Count
 from intake.tests.base_testcases import IntakeDataTestCase
-from user_accounts import models
+from user_accounts import models, exceptions
 from intake import models as intake_models
 from intake import constants
 from user_accounts.tests import mock
@@ -92,7 +92,7 @@ class TestOrganization(IntakeDataTestCase):
     def test_get_referral_emails_raises_error_with_no_emails(self):
         org = models.Organization(name="Acme Nonprofit Services Inc.")
         org.save()
-        with self.assertRaises(models.NoEmailsForOrgError):
+        with self.assertRaises(exceptions.NoEmailsForOrgError):
             org.get_referral_emails()
 
     def test_get_transfer_org_returns_correct_org(self):
