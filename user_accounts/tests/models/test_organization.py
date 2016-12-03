@@ -1,61 +1,10 @@
 from unittest.mock import patch
-from django.test import TestCase
-from django.db.models import Count
 from intake.tests.base_testcases import IntakeDataTestCase
+from django.db.models import Count
 from user_accounts import models, exceptions
 from intake import models as intake_models
-from intake import constants
 from user_accounts.tests import mock
-
-
-class TestUserProfile(IntakeDataTestCase):
-
-    fixtures = [
-        'counties',
-        'organizations', 'mock_profiles',
-        'mock_2_submissions_to_cc_pubdef',
-        'mock_2_submissions_to_sf_pubdef',
-        'mock_1_submission_to_multiple_orgs',
-        'mock_1_bundle_to_cc_pubdef',
-    ]
-
-    def test_user_should_see_pdf(self):
-        self.assertTrue(self.sf_pubdef_user.profile.should_see_pdf())
-        self.assertTrue(self.cfa_user.profile.should_see_pdf())
-        self.assertFalse(self.cc_pubdef_user.profile.should_see_pdf())
-
-    def test_should_have_access_to_allows_staff_submission_access(self):
-        for sub in self.submissions:
-            self.assertTrue(self.cfa_user.profile.should_have_access_to(sub))
-
-    def test_should_have_access_to_limits_submission_access_same_org(self):
-        for sub in self.sf_pubdef_submissions:
-            self.assertTrue(
-                self.sf_pubdef_user.profile.should_have_access_to(sub))
-            self.assertFalse(
-                self.cc_pubdef_user.profile.should_have_access_to(sub))
-        for sub in self.cc_pubdef_submissions:
-            self.assertFalse(
-                self.sf_pubdef_user.profile.should_have_access_to(sub))
-            self.assertTrue(
-                self.cc_pubdef_user.profile.should_have_access_to(sub))
-        for sub in self.combo_submissions:
-            self.assertTrue(
-                self.cc_pubdef_user.profile.should_have_access_to(sub))
-            self.assertTrue(
-                self.sf_pubdef_user.profile.should_have_access_to(sub))
-
-    def should_have_access_to_allows_staff_submission_access(self):
-        bundle = self.cc_pubdef_bundle
-        self.assertTrue(self.cfa_user.profile.should_have_access_to(bundle))
-        self.assertTrue(
-            self.cc_pubdef_user.profile.should_have_access_to(bundle))
-        self.assertFalse(
-            self.sf_pubdef_user.profile.should_have_access_to(bundle))
-
-    def should_have_access_to_raises_error_for_other_objects(self):
-        with self.assertRaises(models.UndefinedResourceAccessError):
-            self.cfa_user.profile.should_have_access_to({})
+from intake import constants
 
 
 class TestOrganization(IntakeDataTestCase):
@@ -141,41 +90,3 @@ class TestOrganization(IntakeDataTestCase):
         self.assertTrue(logs[0].id)
         self.assertIsNone(logs[0].submission_id)
         self.assertEqual(self.sf_pubdef.get_unopened_apps().count(), 3)
-
-
-class TestAddress(TestCase):
-
-    def test_can_create_without_walk_in_hours(self):
-        a_pubdef = models.Organization.objects.get(
-            slug=constants.Organizations.ALAMEDA_PUBDEF)
-        address = models.Address(
-            organization=a_pubdef,
-            name='Oakland Office',
-            text="545 4th St\nOakland, CA\n94607")
-        address.save()
-        self.assertTrue(address.id)
-
-    def test_can_create_with_walk_in_hours(self):
-        a_pubdef = models.Organization.objects.get(
-            slug=constants.Organizations.ALAMEDA_PUBDEF)
-        address = models.Address(
-            organization=a_pubdef,
-            name='Oakland Office',
-            walk_in_hours="Every Tuesday, from 2pm to 4pm",
-            text="545 4th St\nOakland, CA\n94607")
-        address.save()
-        self.assertTrue(address.id)
-
-    def can_get_addresses_of_organization(self):
-        a_pubdef = models.Organization.objects.get(
-            slug=constants.Organizations.ALAMEDA_PUBDEF)
-        address = models.Address(
-            organization=a_pubdef,
-            name='Oakland Office',
-            walk_in_hours="Every Tuesday, from 2pm to 4pm",
-            text="545 4th St\nOakland, CA\n94607")
-        address.save()
-        self.assertEqual(address.organization, a_pubdef)
-        self.assertListEqual(
-            list(a_pubdef.addresses.all()),
-            [address])
