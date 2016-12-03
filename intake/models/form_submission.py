@@ -1,5 +1,4 @@
 import uuid
-import datetime
 import random
 from urllib.parse import urljoin
 from pytz import timezone
@@ -49,98 +48,6 @@ class FormSubmission(models.Model):
 
     class Meta:
         ordering = ['-date_received']
-
-    @classmethod
-    def create_for_organizations(cls, organizations, **kwargs):
-        submission = cls(**kwargs)
-        submission.save()
-        submission.organizations.add(*organizations)
-        return submission
-
-    @classmethod
-    def create_for_counties(cls, counties, **kwargs):
-        if 'answers' not in kwargs:
-            msg = ("'answers' are needed to infer organizations "
-                   "for a form submission")
-            raise MissingAnswersError(msg)
-        organizations = [
-            county.get_receiving_agency(kwargs['answers'])
-            for county in counties
-        ]
-        return cls.create_for_organizations(
-            organizations=organizations, **kwargs)
-
-    @classmethod
-    def mark_viewed(cls, submissions, user):
-        # TODO: doesn't need to be a method here
-        logs = intake.models.ApplicationLogEntry.log_opened(
-            [s.id for s in submissions], user)
-        # send a slack notification
-        intake.notifications.slack_submissions_viewed.send(
-            submissions=submissions, user=user)
-        return submissions, logs
-
-    @classmethod
-    def get_opened_apps(cls):
-        return cls.objects.filter(
-            logs__user__profile__organization__is_receiving_agency=True
-        ).distinct()
-
-    @classmethod
-    def get_permitted_submissions(cls, user, ids=None, related_objects=False):
-        query = cls.objects
-        if related_objects:
-            query = query.prefetch_related(
-                'logs__user__profile__organization')
-        if ids:
-            query = query.filter(pk__in=ids)
-        if user.is_staff:
-            return query.all()
-        org = user.profile.organization
-        return query.filter(organizations=org)
-
-    @classmethod
-    def all_plus_related_objects(cls):
-        return cls.objects.prefetch_related(
-            'logs__user__profile__organization',
-            'counties'
-        ).all()
-
-    @classmethod
-    def get_daily_totals(cls):
-        county_names = intake.models.County.objects.all(
-            ).values_list('name', flat=True)
-        submissions = cls.objects.prefetch_related(
-            'organizations', 'organizations__county').all()
-        first_sub = min(submissions, key=lambda x: x.date_received)
-        time_counter = timezone_utils.now().astimezone(
-            intake.constants.PACIFIC_TIME)
-        day_strings = []
-        day_fmt = '%Y-%m-%d'
-        a_day = datetime.timedelta(days=1)
-        while time_counter >= (first_sub.get_local_date_received() - a_day):
-            day_strings.append(time_counter.strftime(day_fmt))
-            time_counter -= a_day
-        county_totals = {
-            name: 0 for name in county_names}
-        county_totals['All'] = 0
-        day_totals = {day_str: county_totals.copy() for day_str in day_strings}
-        for sub in submissions:
-            day = sub.get_local_date_received(fmt=day_fmt)
-            day_totals[day]['All'] += 1
-            for org in sub.organizations.all():
-                county_name = org.county.name
-                day_totals[day][county_name] += 1
-        for day, counts in sorted(day_totals.items(), key=lambda x: x[0]):
-            yield dict(Day=day, **counts)
-
-    def fill_pdfs(self):
-        """Checks for and creates any needed `FilledPDF` objects
-        """
-        fillables = intake.models.FillablePDF.objects.filter(
-            organization__submissions=self)
-        for fillable in fillables:
-            fillable.fill_for_submission(self)
 
     def agency_event_logs(self, event_type):
         '''assumes that self.logs and self.logs.user are prefetched'''

@@ -8,6 +8,8 @@ from formation.forms import (
 from intake.tests import mock
 from intake import constants, models
 
+import intake.services.submissions as SubmissionsService
+
 
 class TestAlamedaCountyForm(TestCase):
 
@@ -20,7 +22,7 @@ class TestAlamedaCountyForm(TestCase):
             counties=[alameda.slug])
         input_form = Form(data)
         self.assertTrue(input_form.is_valid())
-        submission = models.FormSubmission.create_for_counties(
+        submission = SubmissionsService.create_for_counties(
             counties=[alameda], answers=input_form.cleaned_data)
         output_form = Form(submission.answers)
         self.assertTrue(output_form.is_valid())
@@ -36,7 +38,7 @@ class TestAlamedaCountyForm(TestCase):
             counties=[alameda.slug])
         input_form = Form(data)
         input_form.is_valid()
-        submission = models.FormSubmission.create_for_counties(
+        submission = SubmissionsService.create_for_counties(
             counties=[alameda], answers=input_form.cleaned_data)
         user = User.objects.get(username="a_pubdef_user")
         display_form, letter_display = \

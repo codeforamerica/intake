@@ -64,18 +64,6 @@ class TestStats(IntakeDataTestCase):
         self.assertContains(response, 'dropoff rate')
 
 
-class TestDailyTotals(TestCase):
-
-    fixtures = [
-        'counties',
-        'organizations',
-        'mock_2_submissions_to_a_pubdef']
-
-    def test_returns_200(self):
-        response = self.client.get(reverse('intake-daily_totals'))
-        self.assertEqual(response.status_code, 200)
-
-
 class TestMiscellaneousFunctions(TestCase):
 
     def test_breakup_apps_by_org(self):

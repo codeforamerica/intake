@@ -9,6 +9,7 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 
 import intake
+import intake.services.submissions as SubmissionsService
 
 logger = logging.getLogger(__name__)
 
@@ -93,7 +94,7 @@ class ApplicationBundle(models.Model):
             logger.error(msg)
             intake.notifications.slack_simple.send(msg)
             for submission in submissions:
-                submission.fill_pdfs()
+                SubmissionsService.fill_pdfs_for_submission(submission)
             filled_pdfs = self.get_individual_filled_pdfs()
         if len(filled_pdfs) == 1:
             self.set_bundled_pdf_to_bytes(filled_pdfs[0].pdf.read())

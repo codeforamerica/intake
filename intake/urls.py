@@ -32,8 +32,6 @@ urlpatterns = [
 
     # stats views
     url(r'^stats/$', stats_views.stats, name='intake-stats'),
-    url(r'^stats/daily_totals/$',
-        stats_views.daily_totals, name='intake-daily_totals'),
 
     # protected views
     url(r'^application/(?P<submission_id>[0-9]+)/$',
