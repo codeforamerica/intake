@@ -12,6 +12,8 @@ from user_accounts.models import Organization
 from printing.pdf_form_display import PDFFormDisplay
 from intake.aggregate_serializer_fields import get_todays_date
 
+import intake.services.submissions as SubmissionsService
+
 
 NOT_ALLOWED_MESSAGE = str(
     "Sorry, you are not allowed to access that client information. "
@@ -44,7 +46,7 @@ class ApplicationDetail(View):
             return redirect(
                 reverse_lazy('intake-filled_pdf',
                              kwargs=dict(submission_id=submission_id)))
-        submissions = list(models.FormSubmission.get_permitted_submissions(
+        submissions = list(SubmissionsService.get_permitted_submissions(
             request.user, [submission_id]))
         if not submissions:
             return self.not_allowed(request)
@@ -98,7 +100,7 @@ class ApplicationIndex(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['submissions'] = list(
-            models.FormSubmission.get_permitted_submissions(
+            SubmissionsService.get_permitted_submissions(
                 self.request.user, related_objects=True))
         context['show_pdf'] = self.request.user.profile.should_see_pdf()
         context['body_class'] = 'admin'
@@ -116,7 +118,7 @@ class MultiSubmissionMixin:
 
     def get_submissions_from_params(self, request):
         ids = self.get_ids_from_params(request)
-        return list(models.FormSubmission.get_permitted_submissions(
+        return list(SubmissionsService.get_permitted_submissions(
             request.user, ids))
 
 

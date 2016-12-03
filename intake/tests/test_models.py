@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 from unittest import skipUnless
-from unittest.mock import patch, Mock
+from unittest.mock import patch, Mock, call
 
 from django.test import TestCase
 from django.core.exceptions import ValidationError
@@ -16,6 +16,8 @@ from intake import (
     constants)
 
 from formation import field_types
+
+import intake.services.submissions as SubmissionsService
 
 
 DELUXE_TEST = os.environ.get('DELUXE_TEST', False)
@@ -46,12 +48,6 @@ class TestModels(TestCase):
         self.assertIsNone(submission.last_processed_by_agency())
         self.assertEqual(
             models.FormSubmission.objects.get(id=submission.id), submission)
-
-    def test_all_submissions_have_organizations(self):
-        all_submissions = models.FormSubmission.all_plus_related_objects()
-        for submission in all_submissions:
-            organizations = submission.organizations.all()
-            self.assertTrue(list(organizations))
 
     def test_applicationlogentry(self):
         submission = mock.FormSubmissionFactory.create()
@@ -104,46 +100,6 @@ class TestModels(TestCase):
             self.assertIn(label, contact_preferences)
         submission = mock.FormSubmissionFactory.build(answers=prefers_nothing)
         self.assertListEqual([], submission.get_contact_preferences())
-
-    @patch('intake.notifications')
-    def test_mark_viewed(self, notifications):
-        submission = mock.FormSubmissionFactory.create()
-        submissions = [submission]
-        agency_user = self.agency_users[0]
-        non_agency_user = self.non_agency_users[0]
-
-        # case: viewed by non agency user
-        models.FormSubmission.mark_viewed(submissions, non_agency_user)
-        instance = models.FormSubmission.objects.get(pk=submission.id)
-        self.assertIsNone(instance.first_opened_by_agency())
-        logs = instance.logs.all()
-        self.assertEqual(len(logs), 1)
-        log = logs[0]
-        self.assertEqual(log.user, non_agency_user)
-        self.assertEqual(log.submission, submission)
-        self.assertEqual(log.event_type, models.ApplicationLogEntry.OPENED)
-        notifications.slack_submissions_viewed.send.assert_called_once_with(
-            submissions=submissions,
-            user=non_agency_user
-        )
-
-        # case: viewed by agency user
-        notifications.reset_mock()
-        submissions, logs = models.FormSubmission.mark_viewed(
-            submissions, agency_user)
-        instance = models.FormSubmission.objects.get(pk=submission.id)
-        self.assertTrue(instance.last_opened_by_agency())
-        self.assertTrue(instance.first_opened_by_agency())
-        logs = instance.logs.all()
-        self.assertEqual(len(logs), 2)
-        log = logs[0]
-        self.assertEqual(log.user, agency_user)
-        self.assertEqual(log.submission, submission)
-        self.assertEqual(log.event_type, models.ApplicationLogEntry.OPENED)
-        notifications.slack_submissions_viewed.send.assert_called_once_with(
-            submissions=submissions,
-            user=agency_user
-        )
 
     def test_agency_event_logs(self):
         instance = Mock()
@@ -371,33 +327,10 @@ class TestFormSubmission(TestCase):
         return models.FormSubmission.objects.filter(
             organizations__slug='a_pubdef').first()
 
-    def test_create_for_counties(self):
-        counties = models.County.objects.exclude(
-            slug=constants.Counties.ALAMEDA)
-        submission = models.FormSubmission.create_for_counties(
-            counties, answers={})
-        # one and only one org for each county
-        for county in counties:
-            self.assertEqual(
-                submission.organizations.filter(county=county).count(), 1)
-
-    def test_create_for_counties_fails_without_answers(self):
-        counties = models.County.objects.all()
-        with self.assertRaises(models.MissingAnswersError):
-            models.FormSubmission.create_for_counties(counties)
-
-    def test_create_for_organizations(self):
-        organizations = auth_models.Organization.objects.all()
-        submission = models.FormSubmission.create_for_organizations(
-            organizations, answers={})
-        orgs_of_sub = submission.organizations.all()
-        for org in organizations:
-            self.assertIn(org, orgs_of_sub)
-
     def test_get_counties(self):
         organizations = auth_models.Organization.objects.all()
         # a submission for all organizations
-        submission = models.FormSubmission.create_for_organizations(
+        submission = SubmissionsService.create_for_organizations(
             organizations, answers={})
         # it should be desitned for all counties
         counties = models.County.objects.order_by('slug').all()
@@ -409,7 +342,7 @@ class TestFormSubmission(TestCase):
             slug=constants.Organizations.COCO_PUBDEF)
         subs = cc_pubdef.submissions.all()
         mock_user = Mock(is_staff=False, **{'profile.organization': cc_pubdef})
-        result = models.FormSubmission.get_permitted_submissions(mock_user)
+        result = SubmissionsService.get_permitted_submissions(mock_user)
         self.assertListEqual(list(result), list(subs))
 
     def test_get_permitted_submisstions_when_not_permitted(self):
@@ -417,20 +350,20 @@ class TestFormSubmission(TestCase):
             slug=constants.Organizations.COCO_PUBDEF)
         sf_pubdef = auth_models.Organization.objects.get(
             slug=constants.Organizations.SF_PUBDEF)
-        submission = models.FormSubmission.create_for_organizations(
+        submission = SubmissionsService.create_for_organizations(
             [cc_pubdef], answers={})
         mock_user = Mock(is_staff=False, **{'profile.organization': sf_pubdef})
-        result = models.FormSubmission.get_permitted_submissions(
+        result = SubmissionsService.get_permitted_submissions(
             mock_user, [submission.id])
         self.assertListEqual(list(result), [])
 
     def test_get_permitted_submissions_when_staff(self):
         orgs = auth_models.Organization.objects.all()
         for org in orgs:
-            models.FormSubmission.create_for_organizations([org], answers={})
+            SubmissionsService.create_for_organizations([org], answers={})
         subs = set(models.FormSubmission.objects.all())
         mock_user = Mock(is_staff=True)
-        result = models.FormSubmission.get_permitted_submissions(mock_user)
+        result = SubmissionsService.get_permitted_submissions(mock_user)
         self.assertEqual(set(result), subs)
 
     def test_get_transfer_action_returns_dict(self):
@@ -542,7 +475,7 @@ class TestFilledPDF(TestCase):
     def test_get_absolute_url(self):
         org = auth_models.Organization.objects.get(
             slug=constants.Organizations.SF_PUBDEF)
-        sub = models.FormSubmission.create_for_organizations([org], answers={})
+        sub = SubmissionsService.create_for_organizations([org], answers={})
         expected_url = "/application/{}/pdf/".format(sub.id)
         filled = models.FilledPDF(submission=sub)
         self.assertEqual(filled.get_absolute_url(), expected_url)
@@ -550,7 +483,7 @@ class TestFilledPDF(TestCase):
     def test_save_binary_data_to_pdf(self):
         org = auth_models.Organization.objects.get(
             slug=constants.Organizations.SF_PUBDEF)
-        sub = models.FormSubmission.create_for_organizations([org], answers={})
+        sub = SubmissionsService.create_for_organizations([org], answers={})
         data = b'content'
         fob = SimpleUploadedFile(
             content=data, name="content.pdf", content_type="application/pdf")
@@ -569,7 +502,7 @@ class TestApplicationBundle(TestCase):
         sf_pubdef = auth_models.Organization.objects.get(
             slug=constants.Organizations.SF_PUBDEF)
         mock.fillable_pdf(organization=sf_pubdef)
-        sub = models.FormSubmission.create_for_organizations(
+        sub = SubmissionsService.create_for_organizations(
                 [sf_pubdef], answers={})
         bundle = models.ApplicationBundle.create_with_submissions(
             organization=sf_pubdef, submissions=[sub], skip_pdf=True)
@@ -578,7 +511,7 @@ class TestApplicationBundle(TestCase):
     def test_should_have_a_pdf_negative(self):
         cc_pubdef = auth_models.Organization.objects.get(
             slug=constants.Organizations.COCO_PUBDEF)
-        sub = models.FormSubmission.create_for_organizations(
+        sub = SubmissionsService.create_for_organizations(
                 [cc_pubdef], answers={})
         bundle = models.ApplicationBundle.create_with_submissions(
             organization=cc_pubdef, submissions=[sub], skip_pdf=True)
@@ -589,7 +522,7 @@ class TestApplicationBundle(TestCase):
             slug=constants.Organizations.SF_PUBDEF)
         fillable = mock.fillable_pdf(organization=sf_pubdef)
         subs = [
-            models.FormSubmission.create_for_organizations(
+            SubmissionsService.create_for_organizations(
                 [sf_pubdef], answers={})
             for i in range(2)]
         expected_pdfs = [
@@ -618,7 +551,7 @@ class TestApplicationBundle(TestCase):
             slug=constants.Organizations.SF_PUBDEF)
         fillable = mock.fillable_pdf(organization=sf_pubdef)
         subs = [
-            models.FormSubmission.create_for_organizations(
+            SubmissionsService.create_for_organizations(
                 [sf_pubdef],
                 answers=mock.fake.cleaned_sf_county_form_answers())
             for i in range(2)]
@@ -630,7 +563,7 @@ class TestApplicationBundle(TestCase):
     def test_build_bundled_pdf_with_no_filled_pdfs(self):
         cc_pubdef = auth_models.Organization.objects.get(
             slug=constants.Organizations.COCO_PUBDEF)
-        sub = models.FormSubmission.create_for_organizations(
+        sub = SubmissionsService.create_for_organizations(
                 [cc_pubdef], answers={})
         bundle = models.ApplicationBundle.create_with_submissions(
             organization=cc_pubdef, submissions=[sub], skip_pdf=True)
@@ -646,7 +579,7 @@ class TestApplicationBundle(TestCase):
         # set up associated data
         sf_pubdef = auth_models.Organization.objects.get(
             slug=constants.Organizations.SF_PUBDEF)
-        sub = models.FormSubmission.create_for_organizations(
+        sub = SubmissionsService.create_for_organizations(
                 [sf_pubdef], answers={})
         fillable = mock.fillable_pdf(organization=sf_pubdef)
         data = b'content'
@@ -679,7 +612,7 @@ class TestApplicationBundle(TestCase):
         sf_pubdef = auth_models.Organization.objects.get(
             slug=constants.Organizations.SF_PUBDEF)
         subs = [
-            models.FormSubmission.create_for_organizations(
+            SubmissionsService.create_for_organizations(
                 [sf_pubdef], answers={})
             for i in range(2)]
 
@@ -699,21 +632,25 @@ class TestApplicationBundle(TestCase):
 
     @patch('intake.notifications.slack_simple.send')
     @patch('intake.models.application_bundle.SimpleUploadedFile')
+    @patch('intake.models.application_bundle.SubmissionsService')
     @patch('intake.models.get_parser')
     @patch('intake.models.application_bundle.logger')
     def test_build_bundled_pdfs_if_not_prefilled(
-            self, logger, get_parser, SimpleUploadedFile, slack):
+            self, logger, get_parser, SimpleUploadedFile, SubmissionsService,
+            slack):
+        # given a bundle that should have a pdf
         should_have_a_pdf = Mock(return_value=True)
         get_individual_filled_pdfs = Mock(return_value=[])
+        # two submissions
         mock_submissions = Mock(**{'all.return_value': [Mock(), Mock()]})
         get_parser.return_value.join_pdfs.return_value = b'pdf'
+        # a bundle
         mock_bundle = Mock(
             pk=2,
             should_have_a_pdf=should_have_a_pdf,
             get_individual_filled_pdfs=get_individual_filled_pdfs,
             submissions=mock_submissions)
         mock_bundle.organization.pk = 1
-
         models.ApplicationBundle.build_bundled_pdf_if_necessary(mock_bundle)
         error_msg = "Submissions for ApplicationBundle(pk=2) lack pdfs"
         logger.error.assert_called_once_with(error_msg)
@@ -723,10 +660,12 @@ class TestApplicationBundle(TestCase):
 
     @patch('intake.notifications.slack_simple.send')
     @patch('intake.models.application_bundle.SimpleUploadedFile')
+    @patch('intake.models.application_bundle.SubmissionsService')
     @patch('intake.models.get_parser')
     @patch('intake.models.application_bundle.logger')
     def test_build_bundled_pdfs_if_some_are_not_prefilled(
-            self, logger, get_parser, SimpleUploadedFile, slack):
+            self, logger, get_parser, SubmissionsService,
+            SimpleUploadedFile, slack):
         should_have_a_pdf = Mock(return_value=True)
         mock_filled_pdf = Mock()
         # one existing pdf
@@ -741,14 +680,15 @@ class TestApplicationBundle(TestCase):
             get_individual_filled_pdfs=get_individual_filled_pdfs,
             submissions=mock_submissions_field)
         mock_bundle.organization.pk = 1
+        # run
         models.ApplicationBundle.build_bundled_pdf_if_necessary(mock_bundle)
         error_msg = "Submissions for ApplicationBundle(pk=2) lack pdfs"
         logger.error.assert_called_once_with(error_msg)
         slack.assert_called_once_with(error_msg)
         self.assertEqual(len(get_individual_filled_pdfs.mock_calls), 2)
         mock_bundle.save.assert_called_once_with()
-        for mock_sub in mock_submissions:
-            mock_sub.fill_pdfs.assert_called_once_with()
+        SubmissionsService.fill_pdfs_for_submission.assert_has_calls(
+            [call(mock_sub) for mock_sub in mock_submissions], any_order=True)
 
 
 class TestApplicationLogEntry(TestCase):
@@ -766,7 +706,7 @@ class TestApplicationLogEntry(TestCase):
             slug=constants.Organizations.EBCLC)
         from_org_user = from_org.profiles.first().user
         answers = mock.fake.alameda_pubdef_answers()
-        submission = models.FormSubmission.create_for_organizations(
+        submission = SubmissionsService.create_for_organizations(
             organizations=[from_org], answers=answers)
         log = models.ApplicationLogEntry.log_referred_from_one_org_to_another(
             submission.id, to_organization_id=to_org.id, user=from_org_user

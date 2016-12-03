@@ -1,6 +1,3 @@
-import csv
-from django.http import HttpResponse
-from django.views.generic import View
 from django.views.generic.base import TemplateView
 
 from intake import models, serializers, constants, aggregate_serializers
@@ -77,32 +74,4 @@ class Stats(TemplateView):
         return context
 
 
-class DailyTotals(View):
-    """A Downloadable CSV with daily totals for each county
-    """
-
-    def get(self, request):
-        totals = list(models.FormSubmission.get_daily_totals())
-        response = HttpResponse(content_type='text/csv')
-        filename = 'daily_totals.csv'
-        content_disposition = 'attachment; filename="{}"'.format(filename)
-        response['Content-Disposition'] = content_disposition
-        keys = [
-            "Day", "All",
-            constants.CountyNames.SAN_FRANCISCO,
-            constants.CountyNames.CONTRA_COSTA,
-            constants.CountyNames.ALAMEDA,
-            constants.CountyNames.MONTEREY,
-        ]
-        writer = csv.DictWriter(
-            response,
-            fieldnames=keys,
-            quoting=csv.QUOTE_ALL)
-        writer.writeheader()
-        for item in totals:
-            writer.writerow(item)
-        return response
-
-
 stats = Stats.as_view()
-daily_totals = DailyTotals.as_view()

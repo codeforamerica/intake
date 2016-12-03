@@ -15,6 +15,8 @@ from intake import models, notifications
 from user_accounts.models import Organization
 from formation.forms import county_form_selector
 
+import intake.services.submissions as SubmissionsService
+
 
 logger = logging.getLogger(__name__)
 
@@ -196,7 +198,10 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
 
     def save_submission_and_send_notifications(self, form):
         organizations = self.get_orgs_for_answers(form.cleaned_data)
-        submission = self.save_submission(form, organizations)
+        submission = SubmissionsService.create_submission(
+            form,
+            organizations,
+            self.get_applicant_id())
         self.send_notifications(submission)
 
     def form_valid(self, form):
@@ -207,9 +212,12 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
             **form.parsed_data)
         if any([org.requires_declaration_letter for org in organizations]):
             return redirect(reverse('intake-write_letter'))
-        submission = self.save_submission(form, organizations)
+        submission = SubmissionsService.create_submission(
+            form,
+            organizations,
+            self.get_applicant_id())
         self.send_notifications(submission)
-        submission.fill_pdfs()
+        SubmissionsService.fill_pdfs_for_submission(submission)
         if any([org.requires_rap_sheet for org in organizations]):
             return redirect(reverse('intake-rap_sheet'))
         return super().form_valid(form)
