@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.contrib.auth.models import User, Group, Permission
 from intake import models
 
 
@@ -29,3 +30,14 @@ class TestApplicant(TestCase):
         event_data = {"foo": "bar"}
         event = applicant.log_event(event_name, event_data)
         self.assertEqual(event.data, event_data)
+
+    def test_permission_to_view_aggregate_stats(self):
+        # given a user and a group
+        # and the group has permission to view aggregate_stats
+        user = User.objects.create(username='testuser')
+        group = Group.objects.create(name="performance_monitors")
+        permission = Permission.objects.get(
+            name=models.applicant.Permissions.CAN_SEE_APP_STATS)
+        group.permissions.add(permission)
+        user.groups.add(group)
+        self.assertTrue(user.has_perm('intake.view_app_stats'))
