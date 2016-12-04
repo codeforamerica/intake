@@ -1,19 +1,16 @@
 {
   "private": true,
-  "devDependencies": {
+  "dependencies": {
+    "c3": "^0.4.11",
     "bootstrap": "^3.3.6",
     "browserify": "^13.1.0",
-    "d3": "^4.2.6",
-    "gulp": "^3.9.0",
+    "gulp": "^3.9.1",
+    "gulp-less": "^3.3.0",
     "gulp-concat": "^2.6.0",
-    "gulp-less": "^3.0.5",
     "gulp-util": "^3.0.7",
     "jquery": "^2.1.4",
+    "moment": "^2.17.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
-  },
-  "dependencies": {
-    "gulp": "^3.9.1",
-    "gulp-less": "^3.3.0"
   }
 }

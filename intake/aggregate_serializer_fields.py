@@ -123,18 +123,18 @@ class MultiCountyField(ApplicationAggregateField):
         return multicounty / total
 
 
-class DailyTotals(ApplicationAggregateField):
-    number_of_days = 62
+class WeeklyTotals(ApplicationAggregateField):
+    start_date = datetime.date(2016, 4, 18)
 
     def get_lookup_structure(self):
-        duration = datetime.timedelta(days=self.number_of_days)
         today = get_todays_date()
-        start_date = today - duration
-        return collections.OrderedDict(
-            [
-                (start_date + datetime.timedelta(days=i), [])
-                for i in range(self.number_of_days)
-            ])
+        duration = today - self.start_date
+        number_of_days = duration.days
+        structure = [
+                (today - datetime.timedelta(days=i), [])
+                for i in range(0, number_of_days, 7)
+            ]
+        return structure
 
     def filter(self, applications):
         """
@@ -142,10 +142,17 @@ class DailyTotals(ApplicationAggregateField):
         in buckets
         """
         day_buckets = self.get_lookup_structure()
+        num_weeks = len(day_buckets)
         for app in truthy_values_filter(applications, 'finished'):
             date = app['finished'].date()
-            if date in day_buckets:
-                day_buckets[date].append(app)
+            added = False
+            index = 1
+            while (not added) and (index < num_weeks):
+                week_end_date, weeks_apps = day_buckets[index]
+                if date > week_end_date:
+                    day_buckets[index - 1][1].append(app)
+                    added = True
+                index += 1
         return day_buckets
 
     def reduce(self, buckets):
@@ -156,7 +163,7 @@ class DailyTotals(ApplicationAggregateField):
                 date=day.isoformat(),
                 count=len(apps)
                 )
-            for day, apps in buckets.items()
+            for day, apps in reversed(buckets)
             ]
 
 

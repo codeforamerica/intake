@@ -71,6 +71,7 @@ class Stats(TemplateView):
         for org_data in apps_by_org:
             add_stats_for_org(org_data, Serializer)
         context['stats'] = {'org_stats': apps_by_org}
+        context['show_private_data'] = show_private_data
         return context
 
 
