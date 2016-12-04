@@ -1,11 +1,24 @@
 {% extends "public_base_single_column.jinja" %}
 
+
+{% block extra_css_links %}
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.css">
+{% endblock extra_css_links %}
+
 {%- block header_title -%}
 Numbers for Clear My Record
 {%- endblock header_title -%}
 {%- block section_class %}stats{% endblock section_class -%}
 {% block column_content %}
 {% if stats.org_stats %}
+<div class="stats_block">
+  <h2>Weekly Application Totals</h2>
+  <div id='timeSeries'></div>
+</div>
+<div class="stats_block">
+  <h2>Cumulative Applications</h2>
+  <div id='timeSeriesGrowth'></divmak>
+</div>
 {% for org_data in stats.org_stats %}
 <div class="stats_block {{ org_data.org.slug }}">
   <h2>{{ org_data.org.name }}</h2>
@@ -65,6 +78,7 @@ Numbers for Clear My Record
 {% endblock column_content %}
 {% block jsons %}
 <script type="text/json" name="applications_json">
+{{ to_json(stats.org_stats) }}
 </script>
 {% endblock jsons %}
 {% block main_script %}

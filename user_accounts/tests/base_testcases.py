@@ -41,6 +41,7 @@ class AuthIntegrationTestCase(TestCase):
     def setUpTestData(cls):
         cls.orgs = Organization.objects.all()
         profiles = UserProfile.objects.all()
+        cls.groups = list(auth.models.Group.objects.all())
         # set orgs by slug
         for org in cls.orgs:
             setattr(cls, org.slug, org)
@@ -52,6 +53,8 @@ class AuthIntegrationTestCase(TestCase):
             **cls.example_superuser)
         UserProfile.objects.create(user=cls.superuser,
                                    organization=cls.cfa)
+        cls.monitor_user = auth.models.User.objects.filter(
+            username='monitor_user').first()
 
     def set_session(self, **data):
         session = self.client.session
@@ -79,6 +82,9 @@ class AuthIntegrationTestCase(TestCase):
 
     def be_cfa_user(self):
         return self.be_user(self.cfa_user)
+
+    def be_monitor_user(self):
+        return self.be_user(self.monitor_user)
 
     def be_anonymous(self):
         self.client.logout()

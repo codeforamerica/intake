@@ -1,9 +1,40 @@
 [
 {
+  "model": "auth.group",
+  "fields": {
+    "name": "performance_monitors",
+    "permissions": [
+      [
+        "view_app_stats",
+        "intake",
+        "applicant"
+      ]
+    ]
+  }
+},
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "application_reviewers",
+    "permissions": [
+      [
+        "view_app_details",
+        "intake",
+        "applicant"
+      ],
+      [
+        "view_app_stats",
+        "intake",
+        "applicant"
+      ]
+    ]
+  }
+},
+{
   "model": "auth.user",
   "fields": {
     "password": "pbkdf2_sha256$30000$mQNl2M1ZGrni$/FN7D7xxb84FcvHfIQ1Da/uN9Vdstc57Npw1Vm3BONM=",
-    "last_login": "2016-11-30T20:56:10.368Z",
+    "last_login": "2016-12-04T00:48:18Z",
     "is_superuser": true,
     "username": "cfa_user",
     "first_name": "Fake",
@@ -12,7 +43,11 @@
     "is_staff": true,
     "is_active": true,
     "date_joined": "2016-06-13T22:47:38Z",
-    "groups": [],
+    "groups": [
+      [
+        "application_reviewers"
+      ]
+    ],
     "user_permissions": []
   }
 },
@@ -29,7 +64,11 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2016-06-13T23:12:25Z",
-    "groups": [],
+    "groups": [
+      [
+        "application_reviewers"
+      ]
+    ],
     "user_permissions": []
   }
 },
@@ -37,7 +76,7 @@
   "model": "auth.user",
   "fields": {
     "password": "pbkdf2_sha256$24000$vHlGpVwG7BaY$63mMLLMDHBs2kQ9Ygp3o7d2WSWz9afuQ7335Vbes+IY=",
-    "last_login": "2016-09-15T05:04:14.455Z",
+    "last_login": "2016-09-15T05:04:14Z",
     "is_superuser": false,
     "username": "a_pubdef_user",
     "first_name": "Fake",
@@ -46,7 +85,11 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2016-08-17T10:45:11Z",
-    "groups": [],
+    "groups": [
+      [
+        "application_reviewers"
+      ]
+    ],
     "user_permissions": []
   }
 },
@@ -63,7 +106,11 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2016-08-30T21:30:07Z",
-    "groups": [],
+    "groups": [
+      [
+        "application_reviewers"
+      ]
+    ],
     "user_permissions": []
   }
 },
@@ -80,7 +127,11 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2016-09-13T23:09:25Z",
-    "groups": [],
+    "groups": [
+      [
+        "application_reviewers"
+      ]
+    ],
     "user_permissions": []
   }
 },
@@ -97,7 +148,32 @@
     "is_staff": false,
     "is_active": true,
     "date_joined": "2016-11-30T21:47:28.844Z",
-    "groups": [],
+    "groups": [
+      [
+        "application_reviewers"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$30000$evSc7aaGwP2T$Vrjl4KkepRm2DSzb3GOUdnqWdTLu/bdvXYe0nokIycw=",
+    "last_login": "2016-12-04T00:33:23Z",
+    "is_superuser": false,
+    "username": "monitor_user",
+    "first_name": "Fake",
+    "last_name": "Project Monitor",
+    "email": "bgolder+demo+monitor_user@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2016-12-04T00:32:44.570Z",
+    "groups": [
+      [
+        "performance_monitors"
+      ]
+    ],
     "user_permissions": []
   }
 },
@@ -183,6 +259,20 @@
       "Monterey County Public Defender"
     ],
     "should_get_notifications": true
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 11,
+  "fields": {
+    "name": "Fake Performance Monitor",
+    "user": [
+      "monitor_user"
+    ],
+    "organization": [
+      "Code for America"
+    ],
+    "should_get_notifications": false
   }
 }
 ]

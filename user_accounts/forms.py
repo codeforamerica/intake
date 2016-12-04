@@ -1,5 +1,6 @@
 from django import forms
 from django.forms.models import model_to_dict
+from django.contrib.auth.models import Group
 from invitations.forms import InviteForm as BaseInviteForm
 from allauth.account import forms as allauth_forms
 from . import models
@@ -23,12 +24,23 @@ class InviteForm(BaseInviteForm):
         required=True,
         queryset=models.Organization.objects.all(),
         empty_label=None)
+    groups = forms.ModelMultipleChoiceField(
+        label="Groups",
+        required=False,
+        queryset=Group.objects.all())
+    should_get_notifications = forms.BooleanField(
+        label="Should get notifications",
+        required=False)
 
     def save(self, inviter=None):
-        return models.Invitation.create(
+        invitation = models.Invitation.create(
             email=self.cleaned_data['email'],
             organization=self.cleaned_data['organization'],
+            should_get_notifications=self.cleaned_data[
+                'should_get_notifications'],
             inviter=inviter)
+        invitation.groups.add(*self.cleaned_data['groups'])
+        return invitation
 
 
 class UserProfileForm(forms.ModelForm):

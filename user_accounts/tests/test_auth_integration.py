@@ -1,7 +1,7 @@
 from django.core import mail
 from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 from user_accounts.forms import InviteForm
 from user_accounts.models import (
@@ -18,18 +18,22 @@ class TestUserAccounts(AuthIntegrationTestCase):
 
     def test_invite_form_has_the_right_fields(self):
         form = InviteForm()
-        # email_field = form.fields['email']
-        # org_field = form.fields['organization']
         form_html = form.as_p()
         for org in self.orgs:
             self.assertIn(
                 html_utils.escape(org.name),
                 form_html)
+        for group in Group.objects.all():
+            self.assertIn(
+                html_utils.escape(group.name),
+                form_html)
 
     def test_invite_form_saves_correctly(self):
         form = InviteForm(dict(
             email="someone@example.com",
-            organization=self.orgs[0].id
+            organization=self.orgs[0].id,
+            groups=[self.groups[0].id],
+            should_get_notifications=True
         ))
         self.assertTrue(form.is_valid())
         invite = form.save()
@@ -54,6 +58,8 @@ class TestUserAccounts(AuthIntegrationTestCase):
             reverse(self.send_invite_view),
             email=self.example_user['email'],
             organization=self.orgs[0].id,
+            groups=[self.groups[0].id],
+            should_get_notifications=True,
             follow=True,
         )
         last_email = mail.outbox[-1]
@@ -68,6 +74,8 @@ class TestUserAccounts(AuthIntegrationTestCase):
             reverse(self.send_invite_view),
             email=self.example_user['email'],
             organization=self.orgs[0].id,
+            groups=[self.groups[0].id],
+            should_get_notifications=True,
             follow=True,
         )
         # be anonymous

@@ -57,8 +57,14 @@ class TestStats(IntakeDataTestCase):
         for private_agg in ('error rate', 'dropoff rate', 'Channel'):
             self.assertNotContains(response, private_agg)
 
-    def test_logged_in_user_sees_error_and_dropoff(self):
-        self.be_cfa_user()
+    def test_user_in_performance_monitor_group_sees_error_and_dropoff(self):
+        self.be_monitor_user()
+        response = self.client.get(reverse('intake-stats'))
+        self.assertContains(response, 'error rate')
+        self.assertContains(response, 'dropoff rate')
+
+    def test_user_in_application_reviewer_group_sees_error_and_dropoff(self):
+        self.be_apubdef_user()
         response = self.client.get(reverse('intake-stats'))
         self.assertContains(response, 'error rate')
         self.assertContains(response, 'dropoff rate')

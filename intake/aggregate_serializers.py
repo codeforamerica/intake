@@ -4,7 +4,7 @@ from intake import aggregate_serializer_fields as fields
 
 class PublicStatsSerializer(serializers.Serializer):
     total = fields.FinishedCountField(source='apps')
-    daily_totals = fields.DailyTotals(source='apps')
+    weekly_totals = fields.WeeklyTotals(source='apps')
     apps_this_week = fields.AppsThisWeek(source='apps')
     # mean_completion_time = serializers.SerializerMethodField(
     #     method_name='get_scoped_mean_time')

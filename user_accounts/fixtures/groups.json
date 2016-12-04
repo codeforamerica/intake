@@ -1,0 +1,33 @@
+[
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "performance_monitors",
+    "permissions": [
+      [
+        "view_app_stats",
+        "intake",
+        "applicant"
+      ]
+    ]
+  }
+},
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "application_reviewers",
+    "permissions": [
+      [
+        "view_app_details",
+        "intake",
+        "applicant"
+      ],
+      [
+        "view_app_stats",
+        "intake",
+        "applicant"
+      ]
+    ]
+  }
+}
+]

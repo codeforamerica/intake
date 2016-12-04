@@ -3,6 +3,8 @@
   <head>
     {% include "includes/head.jinja" %}
     <link rel="stylesheet" type="text/css" href="{{ static('css/main.css') }}">
+    {% block extra_css_links %}
+    {% endblock extra_css_links %}
   </head>
   <body class="{%- block body_class -%}admin{%- endblock body_class -%}">
     {% block body %}
