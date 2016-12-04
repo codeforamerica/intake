@@ -60,7 +60,6 @@ class PrepopulatedModelFactory:
 OrganizationFactory = PrepopulatedModelFactory(models.Organization)
 
 
-
 def create_user(**attributes):
     name = attributes.get('name', fake.name())
     username = attributes.get('username', slugify(name))
