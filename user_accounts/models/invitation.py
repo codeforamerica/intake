@@ -14,6 +14,9 @@ class Invitation(BaseInvitation):
         'user_accounts.Organization',
         on_delete=models.CASCADE
     )
+    groups = models.ManyToManyField(
+        'auth.Group', related_name='invitations')
+    should_get_notifications = models.BooleanField(default=False)
     # inherits the following fields
     #   email
     #   accepted
@@ -68,6 +71,7 @@ class Invitation(BaseInvitation):
             user=user,
             form=MockForm(cleaned_data=data)
         )
+        user.groups.add(*self.groups)
         user_accounts.models.UserProfile.create_from_invited_user(
             user, self, **kwargs)
         allauth_account_utils.setup_user_email(mock_request, user, [])

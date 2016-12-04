@@ -37,6 +37,7 @@ class UserProfile(models.Model):
         profile = cls(
             user=user,
             organization=invitation.organization,
+            should_get_notifications=invitation.should_get_notifications,
             **kwargs
         )
         profile.save()
