@@ -61,6 +61,7 @@ db.pull.demo:
 db.dump_fixtures:
 	python ./manage.py dumpdata \
 	    auth.User \
+	    auth.Group \
 	    user_accounts.UserProfile \
 	    -o user_accounts/fixtures/mock_profiles.json \
 	    --natural-foreign --natural-primary \
@@ -90,8 +91,8 @@ db.seed:
 		mock_profiles \
 		mock_2_submissions_to_a_pubdef \
 		mock_2_submissions_to_ebclc \
-		mock_2_submissions_to_sf_pubdef \
 		mock_2_submissions_to_cc_pubdef \
+		mock_2_submissions_to_sf_pubdef \
 		mock_2_submissions_to_monterey_pubdef \
 		mock_1_submission_to_multiple_orgs \
 		mock_1_bundle_to_a_pubdef \

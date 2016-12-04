@@ -63,6 +63,13 @@ class TestStats(IntakeDataTestCase):
         self.assertContains(response, 'error rate')
         self.assertContains(response, 'dropoff rate')
 
+    def test_user_in_performance_monitor_group_sees_error_and_dropoff(self):
+        self.be_monitor_user()
+        response = self.client.get(reverse('intake-stats'))
+        response = self.client.get(reverse('intake-stats'))
+        self.assertContains(response, 'error rate')
+        self.assertContains(response, 'dropoff rate')
+
 
 class TestMiscellaneousFunctions(TestCase):
 
