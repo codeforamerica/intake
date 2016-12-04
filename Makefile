@@ -45,7 +45,8 @@ deploy.prod:
 	git push prod master
 	heroku run --app cmr-prod python manage.py loaddata \
 		counties \
-		organizations
+		organizations \
+		groups
 
 
 db.setup:
@@ -61,9 +62,14 @@ db.pull.demo:
 db.dump_fixtures:
 	python ./manage.py dumpdata \
 	    auth.User \
-	    auth.Group \
 	    user_accounts.UserProfile \
+	    auth.Group \
 	    -o user_accounts/fixtures/mock_profiles.json \
+	    --natural-foreign --natural-primary \
+	    --indent 2
+	python ./manage.py dumpdata \
+	    auth.Group \
+	    -o user_accounts/fixtures/groups.json \
 	    --natural-foreign --natural-primary \
 	    --indent 2
 	python ./manage.py dumpdata \
