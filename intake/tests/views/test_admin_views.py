@@ -240,9 +240,7 @@ class TestApplicationIndex(IntakeDataTestCase):
     def test_that_nonstaff_cfa_user_cant_see_apps(self):
         self.be_monitor_user()
         response = self.client.get(reverse('intake-app_index'))
-        for sub in self.submissions:
-            url = html_utils.conditional_escape(sub.get_absolute_url())
-            self.assertNotContains(response, url)
+        self.assertEqual(response.status_code, 302)
 
 
 class TestApplicationBundleDetail(IntakeDataTestCase):

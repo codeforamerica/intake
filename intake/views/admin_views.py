@@ -2,6 +2,7 @@ from django.shortcuts import redirect, get_object_or_404
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import View
 from django.views.generic.base import TemplateView
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib import messages
 from django.http import Http404, HttpResponse
 from django.template.response import TemplateResponse
@@ -26,7 +27,11 @@ def not_allowed(request):
     return redirect('intake-app_index')
 
 
-class ApplicationDetail(View):
+class ViewAppDetailsMixin(PermissionRequiredMixin):
+    permission_required = 'intake.view_app_details'
+
+
+class ApplicationDetail(ViewAppDetailsMixin, View):
     """Displays detailed information for an org user.
     """
     template_name = "app_detail.jinja"
@@ -92,7 +97,7 @@ class FilledPDF(ApplicationDetail):
         return response
 
 
-class ApplicationIndex(TemplateView):
+class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
     """A list view of all the application to a user's organization.
     """
     template_name = "app_index.jinja"
@@ -186,7 +191,7 @@ class ApplicationBundleDetail(ApplicationDetail):
         return TemplateResponse(request, "app_bundle.jinja", context)
 
 
-class ApplicationBundleDetailPDFView(View):
+class ApplicationBundleDetailPDFView(ViewAppDetailsMixin, View):
     """A concatenated PDF of individual filled PDFs for an org user
 
     replaces FilledPDFBundle
@@ -236,7 +241,7 @@ class FilledPDFBundle(FilledPDF, MultiSubmissionMixin):
         return redirect(bundle.get_pdf_bundle_url())
 
 
-class Delete(View):
+class Delete(ViewAppDetailsMixin, View):
     """A page to confirm the deletion of an individual application.
     """
     template_name = "delete_page.jinja"
@@ -262,7 +267,7 @@ class Delete(View):
         return redirect(reverse_lazy('intake-app_index'))
 
 
-class MarkSubmissionStepView(View, MultiSubmissionMixin):
+class MarkSubmissionStepView(ViewAppDetailsMixin, View, MultiSubmissionMixin):
 
     def modify_submissions(self):
         pass
@@ -431,7 +436,7 @@ class CasePrintoutPDFView(ApplicationDetail):
         return response
 
 
-class CaseBundlePrintoutPDFView(View):
+class CaseBundlePrintoutPDFView(ViewAppDetailsMixin, View):
     """Returns a concatenated PDF of case detail PDFs
     for an org user
     """
