@@ -41,6 +41,17 @@ def truthy_values_filter(apps, *keys):
             yield app
 
 
+def single_org_filter(apps, org):
+    all_orgs = org['slug'] == constants.Organizations.ALL
+    for app in apps:
+        if all_orgs:
+            yield app
+        else:
+            orgs = app.get('organizations', [])
+            if (len(orgs) == 1) and (orgs[0]['slug'] == org['slug']):
+                yield app
+
+
 class ApplicationAggregateField(serializers.Field):
     reducer = len
 
@@ -53,8 +64,8 @@ class ApplicationAggregateField(serializers.Field):
     def reduce(self, applications):
         return self.reducer(applications)
 
-    def to_representation(self, applications):
-        filtered = self.filter(applications)
+    def to_representation(self, *args):
+        filtered = self.filter(*args)
         if not hasattr(filtered, '__len__'):
             filtered = list(filtered)
         if filtered:
@@ -83,11 +94,12 @@ class FinishedCountField(ApplicationAggregateField):
 
 
 class MeanCompletionTimeField(ApplicationAggregateField):
-    def filter(self, applications):
+    def filter(self, applications, org):
         """Only include applications that have both finished and started times
         """
-        return truthy_values_filter(
-            applications, 'finished', 'started')
+        return single_org_filter(
+            truthy_values_filter(applications, 'finished', 'started'),
+            org)
 
     def reduce(self, applications):
         return statistics.mean(seconds_to_complete(applications))
@@ -271,7 +283,7 @@ class WhereTheyHeard(ApplicationAggregateField):
 
     def filter(self, applications):
         today = get_todays_date()
-        a_week_ago = today - datetime.timedelta(days=28)
+        a_week_ago = today - datetime.timedelta(days=7)
         for app in truthy_values_filter(applications, 'where_they_heard'):
             if app['finished'].date() > a_week_ago:
                 yield app
