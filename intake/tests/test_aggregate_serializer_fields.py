@@ -2,6 +2,9 @@ from django.test import TestCase as DjangoTestCase
 
 from intake.tests.mock_serialized_apps import apps as all_apps
 from intake import aggregate_serializer_fields as fields
+from intake.constants import Organizations
+
+ALL = dict(slug=Organizations.ALL)
 
 
 class TestFinishedCountField(DjangoTestCase):
@@ -21,14 +24,14 @@ class TestMeanCompletionTimeField(DjangoTestCase):
 
     def test_returns_correct_mean(self):
         field = fields.MeanCompletionTimeField()
-        result = field.to_representation(all_apps)
+        result = field.to_representation(all_apps, ALL)
         expected = 441.5181111111111
         difference = abs(expected - result)
         self.assertTrue(difference < 0.00001)
 
     def test_returns_none_for_empty_list(self):
         field = fields.MeanCompletionTimeField()
-        result = field.to_representation([])
+        result = field.to_representation([], ALL)
         self.assertIsNone(result)
 
 
@@ -36,14 +39,14 @@ class TestMedianCompletionTimeField(DjangoTestCase):
 
     def test_returns_correct_median(self):
         field = fields.MedianCompletionTimeField()
-        result = field.to_representation(all_apps)
+        result = field.to_representation(all_apps, ALL)
         expected = 417.204
         difference = abs(expected - result)
         self.assertTrue(difference < 0.00001)
 
     def test_returns_none_for_empty_list(self):
         field = fields.MedianCompletionTimeField()
-        result = field.to_representation([])
+        result = field.to_representation([], ALL)
         self.assertIsNone(result)
 
 

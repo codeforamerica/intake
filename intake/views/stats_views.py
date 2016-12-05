@@ -48,10 +48,10 @@ def organization_index(serialized_org):
 
 
 def add_stats_for_org(org_data, Serializer):
-    org_apps = org_data.pop('apps', [])
-    input_data = {'apps': org_apps}
-    results = Serializer(input_data).data
+    results = Serializer(org_data).data
     org_data.update(results)
+    org_data.pop('apps')
+    return org_data
 
 
 class Stats(TemplateView):
