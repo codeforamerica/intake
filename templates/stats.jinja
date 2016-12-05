@@ -23,6 +23,14 @@ Numbers for Clear My Record
 <div class="stats_block {{ org_data.org.slug }}">
   {% if 'drop_off' in org_data %}
   <h2>{{ org_data.org.name }}</h2>
+  <div class="stats-single_figure">
+    <span class="stats-total-number">{{ org_data.total }}</span>
+    <span class="stats-total-annot">applications</span>
+  </div>
+  <div class="stats-single_figure">
+    <span class="stats-total-number">{{ org_data.apps_this_week }}</span>
+    <span class="stats-total-annot">this week</span>
+  </div>
   <div class="stats-single_figure minutes">
     <span class="stats-total-number">{{
      (org_data.mean_completion_time / 60)|int
