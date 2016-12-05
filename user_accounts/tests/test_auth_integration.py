@@ -221,3 +221,14 @@ class TestUserAccounts(AuthIntegrationTestCase):
             password=new_password
         )
         self.assertLoggedInAs(user)
+
+    def test_only_staff_users_cant_invite_people(self):
+        self.be_apubdef_user()
+        response = self.client.get(reverse(self.send_invite_view))
+        self.assertEqual(response.status_code, 302)
+        self.be_monitor_user()
+        response = self.client.get(reverse(self.send_invite_view))
+        self.assertEqual(response.status_code, 302)
+        self.be_cfa_user()
+        response = self.client.get(reverse(self.send_invite_view))
+        self.assertEqual(response.status_code, 200)
