@@ -142,7 +142,12 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
             error_data = dict(
                 applicant_id=self.get_applicant_id(),
                 session_key=getattr(self.request.session, 'session_key', None),
-                referrer=self.request.session.get('referrer', None)
+                referrer=self.request.session.get('referrer', None),
+                path=self.request.path,
+                user_agent=self.request.META.get('HTTP_USER_AGENT', 'None'),
+                session_data=dict([
+                    keyval for keyval in self.request.session.items()]),
+                ip_address=self.request.ip_address,
                 )
             error_message = "No Counties in session data: `{}`".format(
                 json.dumps(error_data))
