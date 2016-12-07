@@ -295,3 +295,30 @@ class WhereTheyHeard(ApplicationAggregateField):
         ]).items())
         counts.sort(key=lambda a: a[1], reverse=True)
         return counts
+
+
+class ContactPreferencesCount(ApplicationAggregateField):
+
+    def get_default_value(self):
+        return []
+
+    def filter(self, applications):
+        return truthy_values_filter(applications, 'finished')
+
+    def reduce(self, applications):
+        counter = collections.Counter()
+        for app in applications:
+            keys = tuple(
+                    key.replace('prefers_', '')
+                    for key in
+                    sorted(app.get('contact_preferences', []))
+                )
+            counter.update([keys])
+        counts = list(counter.items())
+        counts.sort(key=lambda a: a[1], reverse=True)
+        num_apps = len(applications)
+        counts = [
+            (pref, count, num_apps, count / num_apps)
+            for pref, count in counts
+        ]
+        return counts
