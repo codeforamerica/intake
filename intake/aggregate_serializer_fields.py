@@ -2,14 +2,10 @@ import statistics
 import datetime
 import urllib
 import collections
-from django.utils import timezone
 from django.db import connection
 from rest_framework import serializers
 from intake import constants
-
-
-def get_todays_date():
-    return timezone.now().astimezone(constants.PACIFIC_TIME).date()
+from intake.utils import get_todays_date
 
 
 def parse_url_host(full_url):
