@@ -44,6 +44,24 @@ class TestCreateSubmissions(TestCase):
             set(submission.organizations.all()),
             set(organizations))
 
+    def test_create_sub_with_existing_duplicate(self):
+        applicant = Applicant()
+        applicant.save()
+        answers = mock.fake.all_county_answers()
+        org = Organization.objects.filter(is_receiving_agency=True).first()
+        Form = county_form_selector.get_combined_form_class(
+            counties=ALL_COUNTY_SLUGS)
+        form = Form(answers, validate=True)
+        a = SubmissionsService.create_submission(form, [org], applicant.id)
+        self.assertFalse(a.duplicate_set_id)
+        answers['last_name'] += 's'
+        form = Form(answers, validate=True)
+        b = SubmissionsService.create_submission(form, [org], applicant.id)
+        self.assertTrue(b.duplicate_set_id)
+        dup_set_subs = list(b.duplicate_set.submissions.all())
+        for sub in (a, b):
+            self.assertIn(sub, dup_set_subs)
+
 
 class TestGetPermittedSubmissions(TestCase):
 
@@ -124,10 +142,14 @@ class TestFindDuplicates(TestCase):
             answers=mock.fake.alameda_pubdef_answers(**b_name),
             organizations=[org],
             )
+        c = mock.FormSubmissionFactory.create(
+            answers=mock.fake.alameda_pubdef_answers(**b_name),
+            organizations=[org],
+            )
         dups = SubmissionsService.find_duplicates(
             FormSubmission.objects.all())
         pair = dups[0]
-        for sub in (a, b):
+        for sub in (a, b, c):
             self.assertIn(sub, pair)
 
     def test_doesnt_pair_subs_with_differing_names(self):

@@ -33,7 +33,7 @@ def submission_set_to_list(submissions):
 def check_for_existing_duplicates(submission, applicant_id):
     dups = []
     other_subs = models.FormSubmission.objects.filter(
-        applicant_id=applicant_id)
+        applicant_id=applicant_id).exclude(id=submission.id)
     for other in other_subs:
         if are_duplicates(submission, other):
             dups.append(other)
@@ -49,13 +49,16 @@ def link_with_any_duplicates(submission, applicant_id):
     duplicates = check_for_existing_duplicates(submission, applicant_id)
     if duplicates:
         dup_set_id = None
+        unadded_duplicates = []
         for dup in duplicates:
             if dup.duplicate_set_id:
                 dup_set_id = dup.duplicate_set_id
-                break
+            else:
+                unadded_duplicates.append(dup)
         if not dup_set_id:
             new_dup_set = models.DuplicateSubmissionSet()
             new_dup_set.save()
+            new_dup_set.submissions.add(*unadded_duplicates)
             dup_set_id = new_dup_set.id
         submission.duplicate_set_id = dup_set_id
         submission.save()
@@ -64,16 +67,16 @@ def link_with_any_duplicates(submission, applicant_id):
 
 
 def create_submission(form, organizations, applicant_id):
-        """Save the submission data
-        """
-        submission = models.FormSubmission(
-            answers=form.cleaned_data,
-            applicant_id=applicant_id)
-        submission.save()
-        submission.organizations.add(*organizations)
-        link_with_any_duplicates(submission, applicant_id)
-        models.ApplicationEvent.log_app_submitted(applicant_id)
-        return submission
+    """Save the submission data
+    """
+    submission = models.FormSubmission(
+        answers=form.cleaned_data,
+        applicant_id=applicant_id)
+    submission.save()
+    submission.organizations.add(*organizations)
+    link_with_any_duplicates(submission, applicant_id)
+    models.ApplicationEvent.log_app_submitted(applicant_id)
+    return submission
 
 
 def fill_pdfs_for_submission(submission):
@@ -159,10 +162,6 @@ def create_for_organizations(organizations, **kwargs):
 
 
 def create_for_counties(counties, **kwargs):
-    if 'answers' not in kwargs:
-        msg = ("'answers' are needed to infer organizations "
-               "for a form submission")
-        raise MissingAnswersError(msg)
     organizations = [
         county.get_receiving_agency(kwargs['answers'])
         for county in counties
