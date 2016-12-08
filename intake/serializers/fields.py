@@ -1,11 +1,28 @@
 import datetime
-from pytz import timezone
 from rest_framework import serializers
 from intake import models
 from formation.field_types import YES, NO
+from intake.constants import PACIFIC_TIME
 
 THIS_YEAR = datetime.datetime.now().year
-PACIFIC = timezone('US/Pacific')
+
+
+class TruthyValueField(serializers.Field):
+    """A read only field that coerces values to boolean
+    """
+    def to_representation(self, obj):
+        return bool(obj)
+
+
+class LocalDateField(serializers.DateTimeField):
+    def __init__(self, *args, format="%m/%d/%Y", tz=PACIFIC_TIME, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.format = format
+        self.tz = PACIFIC_TIME
+
+    def to_representation(self, dt):
+        local = dt.astimezone(self.tz)
+        return local.strftime(self.format)
 
 
 class DictField(serializers.Field):
@@ -106,7 +123,7 @@ class EventTimeField(EventTypeField):
     def reduce(self, events):
         times = [e.time for e in events]
         if times:
-            return self.time_reducer(times).astimezone(PACIFIC)
+            return self.time_reducer(times).astimezone(PACIFIC_TIME)
 
 
 class EventDataKeyField(EventTypeField):

@@ -1,7 +1,7 @@
 from intake import models
 from django.test import TestCase
 
-from intake.serializer_fields import made_a_meaningful_attempt_to_apply
+from intake.serializers.fields import made_a_meaningful_attempt_to_apply
 
 
 def make_applicant():
