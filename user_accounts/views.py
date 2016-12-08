@@ -1,12 +1,12 @@
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.core.urlresolvers import reverse_lazy
-from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views.generic.edit import FormView
 from allauth.account import views as allauth_views
 from invitations.views import SendInvite
 
 from . import forms
+from user_accounts.base_views import StaffOnlyMixin
 
 
 class CustomLoginView(allauth_views.LoginView):
@@ -34,13 +34,10 @@ class CustomSignupView(allauth_views.SignupView):
         return redirect('intake-home')
 
 
-class CustomSendInvite(UserPassesTestMixin, SendInvite):
+class CustomSendInvite(StaffOnlyMixin, SendInvite):
     template_name = "user_accounts/invite_form.jinja"
     form_class = forms.InviteForm
     success_url = reverse_lazy("user_accounts-profile")
-
-    def test_func(self):
-        return self.request.user.is_staff
 
     def form_valid(self, form):
         invite = form.save(inviter=self.request.user)
