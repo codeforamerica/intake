@@ -25,6 +25,7 @@ class ApplicationEvent(models.Model):
     DELETED = "deleted"
     CONFIRMATION_SENT = "sent_confirmation"
     REFERRED_BETWEEN_ORGS = "referred_to_another_org"
+    FOLLOWUP_SENT = "sent_followup"
 
     class Meta:
         ordering = ['-time']
@@ -64,6 +65,12 @@ class ApplicationEvent(models.Model):
     @classmethod
     def log_app_submitted(cls, applicant_id):
         return cls.create(cls.APPLICATION_SUBMITTED, applicant_id)
+
+    @classmethod
+    def log_followup_sent(cls, applicant_id, contact_info, message):
+        return cls.create(
+            cls.FOLLOWUP_SENT, applicant_id, contact_info=contact_info,
+            message=message)
 
     @classmethod
     def from_logs(cls, logs):
