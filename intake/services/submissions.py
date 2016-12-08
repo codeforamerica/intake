@@ -7,29 +7,6 @@ class MissingAnswersError(Exception):
     pass
 
 
-def ids_to_objects(ids):
-    return models.FormSubmission.objects.filter(id__in=ids)
-
-
-def pull_objects(ids_or_objects):
-    ids = []
-    objects = []
-    for thing in ids_or_objects:
-        if isinstance(thing, int):
-            ids.append(thing)
-        else:
-            objects.append(thing)
-    if ids:
-        objects.extend(ids_to_objects(ids))
-    return objects
-
-
-def submission_set_to_list(submissions):
-    if hasattr(submissions, 'all'):
-        return list(submissions)
-    return pull_objects(submissions)
-
-
 def check_for_existing_duplicates(submission, applicant_id):
     dups = []
     other_subs = models.FormSubmission.objects.filter(
@@ -102,9 +79,8 @@ def get_permitted_submissions(user, ids=None, related_objects=False):
 
 
 def find_duplicates(search_space):
-    submissions = submission_set_to_list(search_space)
     duplicate_sets = []
-    for pair in itertools.combinations(submissions, 2):
+    for pair in itertools.combinations(search_space, 2):
         if are_duplicates(*pair):
             pair_set = set(pair)
             attached_to_existing_set = False
