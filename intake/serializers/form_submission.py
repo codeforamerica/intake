@@ -65,10 +65,10 @@ class FollowupInfoSerializer(serializers.ModelSerializer):
         'serving_sentence', source='answers')
     us_citizen = fields.YesNoAnswerField('us_citizen', source='answers')
     is_duplicate = fields.TruthyValueField(source='duplicate_set_id')
+    contact_info = fields.ContactInfoByPreferenceField(source='answers')
     # not yet implemented:
     #   # missing_or_invalid_fields =
     #   # has_a_lot_of_probation_left =
-    #   # contact_info =
 
     class Meta:
         model = models.FormSubmission
@@ -83,4 +83,5 @@ class FollowupInfoSerializer(serializers.ModelSerializer):
             'serving_sentence',
             'us_citizen',
             'is_duplicate',
+            'contact_info',
         ]

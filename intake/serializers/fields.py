@@ -4,7 +4,46 @@ from intake import models
 from formation.field_types import YES, NO
 from intake.constants import PACIFIC_TIME
 
+from formation.display_form_base import DisplayForm
+from django.utils.safestring import mark_safe
+from formation import fields as F
+
 THIS_YEAR = datetime.datetime.now().year
+
+
+class ContactInfoMiniForm(DisplayForm):
+    fields = [
+        F.PhoneNumberField,
+        F.AlternatePhoneNumberField,
+        F.AddressField,
+        F.EmailField,
+    ]
+
+
+class ContactInfoByPreferenceField(serializers.Field):
+    """A read only field that pulls out salient contact
+        information for display.
+    """
+    alt_template = ' <span class="altphone">{}</span>'
+
+    def to_representation(self, obj):
+        mini_form = ContactInfoMiniForm(obj)
+        contact_preferences = obj.get('contact_preferences', [])
+        output = {}
+        for pref in contact_preferences:
+            key = pref.replace('prefers_', '')
+            if key == 'email':
+                output[key] = mark_safe(mini_form.email.get_display_value())
+            elif key == 'snailmail':
+                output[key] = mark_safe(
+                    mini_form.address.get_inline_display_value())
+            elif key in ('sms', 'voicemail'):
+                value = mini_form.phone_number.get_display_value()
+                alt_val = mini_form.alternate_phone_number.get_display_value()
+                if alt_val:
+                    value += self.alt_template.format(alt_val)
+                output[key] = mark_safe(value)
+        return output
 
 
 class TruthyValueField(serializers.Field):

@@ -246,6 +246,10 @@ class AddressField(MultiValueField):
         return "{street}\n{city}, {state}\n{zip}".format(
             **self.get_current_value())
 
+    def get_inline_display_value(self):
+        return "{street}, {city}, {state} {zip}".format(
+            **self.get_current_value())
+
 
 ###
 # Case status and screening
