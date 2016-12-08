@@ -4,7 +4,7 @@ import intake.services.submissions as SubmissionsService
 from intake.tests import mock
 from formation.forms import county_form_selector
 from intake.constants import COUNTY_CHOICE_DISPLAY_DICT, Organizations
-from intake.models import Applicant, ApplicationEvent
+from intake.models import Applicant, ApplicationEvent, FormSubmission
 from user_accounts.models import Organization
 
 """
@@ -55,9 +55,9 @@ class TestGetPermittedSubmissions(TestCase):
     ]
 
     def test_filters_to_organization_of_user(self):
-        """Given a user from one org who tries to access all submissions
-        assert that they only receive submissions for their org
-        """
+        # Given a user from one org who tries to access all submissions
+        # assert that they only receive submissions for their org
+
         # given a user from one org
         org = Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)
         user = org.profiles.first().user
@@ -67,3 +67,87 @@ class TestGetPermittedSubmissions(TestCase):
         for sub in submissions:
             orgs = list(sub.organizations.all())
             self.assertIn(org, orgs)
+
+
+class TestHaveSameOrgs(TestCase):
+
+    fixtures = [
+        'counties', 'organizations',
+        'mock_2_submissions_to_a_pubdef',
+        'mock_2_submissions_to_cc_pubdef',
+    ]
+
+    def test_returns_false_when_orgs_are_different(self):
+        a = FormSubmission.objects.filter(
+            organizations__slug=Organizations.ALAMEDA_PUBDEF).first()
+        b = FormSubmission.objects.filter(
+            organizations__slug=Organizations.COCO_PUBDEF).first()
+        self.assertEqual(SubmissionsService.have_same_orgs(a, b), False)
+
+    def test_returns_true_when_orgs_are_the_same(self):
+        subs = FormSubmission.objects.filter(
+            organizations__slug=Organizations.ALAMEDA_PUBDEF)
+        a, b = list(subs)[:2]
+        self.assertEqual(SubmissionsService.have_same_orgs(a, b), True)
+
+    def test_returns_false_when_orgs_dont_overlap(self):
+        a = FormSubmission.objects.filter(
+            organizations__slug=Organizations.ALAMEDA_PUBDEF).first()
+        b = FormSubmission.objects.filter(
+            organizations__slug=Organizations.COCO_PUBDEF).first()
+        cc_pubdef = Organization.objects.get(slug=Organizations.COCO_PUBDEF)
+        a.organizations.add(cc_pubdef)
+        self.assertEqual(SubmissionsService.have_same_orgs(a, b), False)
+
+
+class TestFindDuplicates(TestCase):
+
+    fixtures = [
+        'counties', 'organizations',
+        ]
+
+    def test_finds_subs_with_similar_names(self):
+        org = Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)
+        a_name = dict(
+            first_name="Joe",
+            middle_name="H",
+            last_name="Parabola")
+        b_name = dict(
+            first_name="Joe",
+            middle_name="H",
+            last_name="Parabole")
+        a = mock.FormSubmissionFactory.create(
+            answers=mock.fake.alameda_pubdef_answers(**a_name),
+            organizations=[org],
+            )
+        b = mock.FormSubmissionFactory.create(
+            answers=mock.fake.alameda_pubdef_answers(**b_name),
+            organizations=[org],
+            )
+        dups = SubmissionsService.find_duplicates(
+            FormSubmission.objects.all())
+        pair = dups[0]
+        for sub in (a, b):
+            self.assertIn(sub, pair)
+
+    def test_doesnt_pair_subs_with_differing_names(self):
+        org = Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)
+        a_name = dict(
+            first_name="Joe",
+            middle_name="H",
+            last_name="Parabola")
+        b_name = dict(
+            first_name="Joseph",
+            middle_name="H",
+            last_name="Conic Intersection")
+        mock.FormSubmissionFactory.create(
+            answers=mock.fake.alameda_pubdef_answers(**a_name),
+            organizations=[org],
+            )
+        mock.FormSubmissionFactory.create(
+            answers=mock.fake.alameda_pubdef_answers(**b_name),
+            organizations=[org],
+            )
+        dups = SubmissionsService.find_duplicates(
+            FormSubmission.objects.all())
+        self.assertFalse(dups)
