@@ -286,4 +286,10 @@ class FormSubmission(models.Model):
 
 
 class DuplicateSubmissionSet(models.Model):
-    pass
+
+    def __str__(self):
+        return "DuplicateSubmissionSet({})".format(
+            self.submissions.count())
+
+    def __repr__(self):
+        return self.__str__()
