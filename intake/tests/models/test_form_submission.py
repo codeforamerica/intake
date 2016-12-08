@@ -117,3 +117,18 @@ class TestFormSubmission(TestCase):
     def test_doesnt_qualify_for_fee_waiver_without_valid_inputs(self):
         sub = models.FormSubmission(answers={})
         self.assertEqual(sub.qualifies_for_fee_waiver(), None)
+
+
+class TestDuplicateSubmissionSet(TestCase):
+
+    def test_can_add_subs_to_duplicate_set(self):
+        dup_set = models.DuplicateSubmissionSet()
+        dup_set.save()
+        subs = [
+            mock.FormSubmissionFactory.create()
+            for i in range(2)
+        ]
+        dup_set.submissions.add(*subs)
+        for sub in subs:
+            self.assertEqual(sub.duplicate_set, dup_set)
+            self.assertTrue(sub.duplicate_set.id)

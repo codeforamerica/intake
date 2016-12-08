@@ -33,11 +33,14 @@ def gen_uuid():
 
 class FormSubmission(models.Model):
 
-    organizations = models.ManyToManyField('user_accounts.Organization',
-                                           related_name="submissions")
-    applicant = models.ForeignKey('Applicant',
-                                  on_delete=models.PROTECT, null=True,
-                                  related_name='form_submissions')
+    organizations = models.ManyToManyField(
+        'user_accounts.Organization', related_name="submissions")
+    applicant = models.ForeignKey(
+        'Applicant', on_delete=models.PROTECT, null=True,
+        related_name='form_submissions')
+    duplicate_set = models.ForeignKey(
+        'intake.DuplicateSubmissionSet', null=True,
+        related_name='submissions')
     answers = JSONField()
     # old_uuid is only used for porting legacy applications
     old_uuid = models.CharField(max_length=34, unique=True,
@@ -280,3 +283,7 @@ class FormSubmission(models.Model):
 
     def __str__(self):
         return self.get_anonymous_display()
+
+
+class DuplicateSubmissionSet(models.Model):
+    pass

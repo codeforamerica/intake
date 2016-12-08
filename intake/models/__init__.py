@@ -11,6 +11,7 @@ from .application_log_entry import (
 from .form_submission import (
     gen_uuid,
     FormSubmission,
+    DuplicateSubmissionSet,
     MissingAnswersError,
     MissingPDFsError,
     )
@@ -29,6 +30,7 @@ __all__ = [
     ApplicationLogEntry,
     ApplicantContactedLogEntry,
     FormSubmission,
+    DuplicateSubmissionSet,
     MissingAnswersError,
     MissingPDFsError,
     FillablePDF,
