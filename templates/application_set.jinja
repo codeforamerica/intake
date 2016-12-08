@@ -1,0 +1,32 @@
+{% extends "admin_base.jinja" %}
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <h1>{{ count }} {{ page_heading }}</h1>
+  </div>
+  <div class="row">
+    {% if submissions %}
+    <table class="table applications_list">
+    <tr>
+      <th>Date</th>
+      <th>First Name</th>
+    </tr>
+    {% for app in submissions %}
+    <tr>
+      <td>
+        <a href="{{ url('intake-app_detail', submission_id=app.id)}}">
+        {{ app.get_local_date_received('%-m/%-d/%y') }}
+        </a>
+      </td>
+      <td>{{ namify(app.answers.get("first_name", "")) }}</td>
+    </tr>
+    {% endfor %}
+    </table>
+    {% else %}
+    <h2>{{ empty_set_message }}</h2>
+    {% endif %}
+  </div>
+</div>
+{% endblock content %}
