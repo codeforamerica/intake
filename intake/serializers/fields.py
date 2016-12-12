@@ -24,25 +24,29 @@ class ContactInfoByPreferenceField(serializers.Field):
     """A read only field that pulls out salient contact
         information for display.
     """
-    alt_template = ' <span class="altphone">{}</span>'
 
     def to_representation(self, obj):
         mini_form = ContactInfoMiniForm(obj)
         contact_preferences = obj.get('contact_preferences', [])
-        output = {}
-        for pref in contact_preferences:
-            key = pref.replace('prefers_', '')
-            if key == 'email':
-                output[key] = mark_safe(mini_form.email.get_display_value())
-            elif key == 'snailmail':
-                output[key] = mark_safe(
-                    mini_form.address.get_inline_display_value())
-            elif key in ('sms', 'voicemail'):
-                value = mini_form.phone_number.get_display_value()
-                alt_val = mini_form.alternate_phone_number.get_display_value()
-                if alt_val:
-                    value += self.alt_template.format(alt_val)
-                output[key] = mark_safe(value)
+        output = []
+        for key in ('sms', 'email', 'voicemail', 'snailmail'):
+            pref = 'prefers_' + key
+            if pref in contact_preferences:
+                if key == 'email':
+                    output.append((
+                        key, mark_safe(
+                            mini_form.email.get_display_value())
+                        ))
+                elif key == 'snailmail':
+                    output.append((
+                        key, mark_safe(
+                            mini_form.address.get_inline_display_value())
+                        ))
+                elif key in ('sms', 'voicemail'):
+                    output.append((
+                        key, mark_safe(
+                            mini_form.phone_number.get_display_value())
+                        ))
         return output
 
 

@@ -91,19 +91,17 @@ class TestContactInfoByPreferenceField(TestCase):
             alternate_phone_number='5551114444',
             email='test@gmail.com',
         )
-        expected_output = {
-            'voicemail':
-                '(444) 222-3333 <span class="altphone">(555) 111-4444</span>',
-            'sms':
-                '(444) 222-3333 <span class="altphone">(555) 111-4444</span>',
-            'email': 'test@gmail.com',
-            'snailmail': '654 11th St Apt 999, Oakland, CA 94449'
-        }
+        expected_output = [
+            ('sms', '(444) 222-3333'),
+            ('email', 'test@gmail.com'),
+            ('voicemail', '(444) 222-3333'),
+            ('snailmail', '654 11th St Apt 999, Oakland, CA 94449'),
+        ]
         results = ContactInfoByPreferenceField(
             ).to_representation(answers)
-        for value in results.values():
+        for key, value in results:
             self.assertTrue(hasattr(value, '__html__'))
-        self.assertDictEqual(results, expected_output)
+        self.assertEqual(results, expected_output)
 
     def test_doesnt_return_contact_info_if_not_preferred(self):
         answers = dict(
@@ -119,16 +117,16 @@ class TestContactInfoByPreferenceField(TestCase):
             alternate_phone_number='5551114444',
             email='test@gmail.com',
         )
-        expected_output = {
-            'email': 'test@gmail.com',
-        }
+        expected_output = [
+            ('email', 'test@gmail.com'),
+        ]
         results = ContactInfoByPreferenceField(
             ).to_representation(answers)
-        self.assertDictEqual(results, expected_output)
+        self.assertEqual(results, expected_output)
 
-    def test_empty_input_returns_empty_dict(self):
+    def test_empty_input_returns_empty_list(self):
         answers = {}
-        expected_output = {}
+        expected_output = []
         results = ContactInfoByPreferenceField(
             ).to_representation(answers)
-        self.assertDictEqual(results, expected_output)
+        self.assertEqual(results, expected_output)

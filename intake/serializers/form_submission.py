@@ -60,12 +60,16 @@ class FollowupInfoSerializer(serializers.ModelSerializer):
     url = serializers.CharField(source='get_absolute_url', read_only=True)
     where_they_heard = fields.DictKeyField(
         'how_did_you_hear', source='answers')
+    contact_preferences = fields.DictKeyField(
+        'contact_preferences', source='answers')
     being_charged = fields.YesNoAnswerField('being_charged', source='answers')
     serving_sentence = fields.YesNoAnswerField(
         'serving_sentence', source='answers')
     us_citizen = fields.YesNoAnswerField('us_citizen', source='answers')
     is_duplicate = fields.TruthyValueField(source='duplicate_set_id')
     contact_info = fields.ContactInfoByPreferenceField(source='answers')
+    additional_info = fields.DictKeyField(
+        'additional_information', source='answers')
     # not yet implemented:
     #   # missing_or_invalid_fields =
     #   # has_a_lot_of_probation_left =
@@ -76,9 +80,11 @@ class FollowupInfoSerializer(serializers.ModelSerializer):
             'id',
             'date_received',
             'organizations',
+            'contact_preferences',
             'first_name',
             'url',
             'where_they_heard',
+            'additional_info',
             'being_charged',
             'serving_sentence',
             'us_citizen',
