@@ -61,11 +61,40 @@ class TestGetSubmissionsDueForFollowups(TestCase):
         self.assertIn(no_followup, results_set)
         self.assertNotIn(sub_w_followup, results_set)
 
-
-class TestGetFollowupsCount(TestCase):
-
-    def test_count_is_correct(self):
-        for i in range(5):
+    def test_can_start_at_particular_id_to_create_time_interval(self):
+        # assume we have 4 old subs, 1 new sub
+        old_subs = sorted([
             mock.FormSubmissionFactory.create(date_received=get_old_date())
-        result = FollowupsService.get_followups_count()
-        self.assertEqual(result, 5)
+            for i in range(4)
+            ], key=lambda s: s.date_received)
+        new_sub = mock.FormSubmissionFactory.create(
+            date_received=get_newer_date())
+        # but we only want ones after the second oldest sub
+        second_oldest_id = old_subs[1].id
+        # and within the old subs, we still don't want ones that already
+        #   received followups
+        applicant = models.Applicant()
+        applicant.save()
+        followed_up_sub = old_subs[2]
+        followed_up_sub.applicant = applicant
+        followed_up_sub.save()
+        models.ApplicationEvent.log_followup_sent(
+            applicant.id,
+            contact_info=followed_up_sub.answers['email'],
+            message="hey how are things going?")
+        # when we get submissions due for follow ups,
+        results = list(FollowupsService.get_submissions_due_for_follow_ups(
+            after_id=second_oldest_id))
+        # we should only receive two:
+        self.assertEqual(len(results), 2)
+        #   the second oldest
+        self.assertIn(old_subs[1], results)
+        #   and not-as-old one that did not have a follow up
+        self.assertIn(old_subs[3], results)
+        # we should not receive
+        #   the oldest sub
+        self.assertNotIn(old_subs[0], results)
+        #   the one with the follow up
+        self.assertNotIn(followed_up_sub, results)
+        #   or the new sub
+        self.assertNotIn(new_sub, results)
