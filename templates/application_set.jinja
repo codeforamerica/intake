@@ -17,10 +17,10 @@
     <tr>
       <td>
         <a href="{{ url('intake-app_detail', submission_id=app.id)}}">
-        {{ app.get_local_date_received('%-m/%-d/%y') }}
+        {{ app.date_received }}
         </a>
       </td>
-      <td>{{ namify(app.answers.get("first_name", "")) }}</td>
+      <td>{{ app.first_name }}</td>
     </tr>
     {% endfor %}
     </table>
