@@ -46,6 +46,7 @@ deploy.prod:
 	heroku run --app cmr-prod python manage.py loaddata \
 		counties \
 		organizations \
+		addresses \
 		groups
 
 
