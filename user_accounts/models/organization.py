@@ -8,7 +8,6 @@ from django.core.urlresolvers import reverse
 from django.utils.html import conditional_escape
 
 
-
 class OrganizationManager(models.Manager):
 
     def get_by_natural_key(self, name):
@@ -31,6 +30,8 @@ class Organization(models.Model):
     show_pdf_only = models.BooleanField(default=False)
     short_confirmation_message = models.TextField(blank=True)
     long_confirmation_message = models.TextField(blank=True)
+    short_followup_message = models.TextField(blank=True)
+    long_followup_message = models.TextField(blank=True)
     address = models.TextField(blank=True)
     phone_number = models.TextField(blank=True)
     email = models.TextField(blank=True)
