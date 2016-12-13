@@ -1,12 +1,10 @@
 from collections import namedtuple
 import json
 import requests
-from project.jinja2 import url_with_ids
 from django.core import mail
 from django.conf import settings
 from django.utils.translation import ugettext as _
-
-from django.template import loader, Context
+from django.template import loader
 
 jinja = loader.engines['jinja']
 
@@ -39,7 +37,7 @@ class TemplateNotification:
 
     def __init__(self, default_context=None, **template_and_path_args):
         '''Feed this init function a set of templates of the form:
-            any_name_at_all_template_path --> loads a template from template dirs
+            any_name_at_all_template_path --> loads template from template dirs
             any_name_at_all_template --> loads a template from a string
         '''
         self.template_and_path_args = template_and_path_args
@@ -72,7 +70,6 @@ class TemplateNotification:
         if not jinja.env:
             raise JinjaNotInitializedError(
                 "the jinja environment has not been initialized")
-        content_keys = []
         for key, value in self.template_and_path_args.items():
             pieces = key.split('_')
             if pieces[-1] == 'path' and pieces[-2] == 'template':
@@ -162,7 +159,7 @@ REQUEST JSON:
             'text': content.body,
             'to': to,
             'options': {
-                'archive': False
+                'archive': True
             }
         }
         if hasattr(content, 'subject') and content.subject:
@@ -212,9 +209,9 @@ class SlackTemplateNotification(BasicSlackNotification, TemplateNotification):
     def __init__(self, default_context=None,
                  message_template_path='', webhook_url=None):
         BasicSlackNotification.__init__(self, webhook_url)
-        TemplateNotification.__init__(self,
-                                      default_context=default_context,
-                                      message_template_path=message_template_path)
+        TemplateNotification.__init__(
+            self, default_context=default_context,
+            message_template_path=message_template_path)
 
     def send(self, **context_args):
         content = self.render(**context_args)
@@ -247,14 +244,16 @@ slack_submission_transferred = SlackTemplateNotification(
     {'action': 'transferred'},
     message_template_path="slack/submission_action.jinja")
 
-# count, submission_ids
+# count, bundle
 front_email_daily_app_bundle = FrontEmailNotification(
     subject_template=_(
-        "{{current_local_time('%a %b %-d, %Y')}}: Online applications to Clean Slate"),
+        "{{current_local_time('%a %b %-d, %Y')}}: "
+        "Online applications to Clean Slate"),
     body_template_path='email/app_bundle_email.jinja')
 email_daily_app_bundle = EmailNotification(
     subject_template=_(
-        "{{current_local_time('%a %b %-d, %Y')}}: Online applications to Clean Slate"),
+        "{{current_local_time('%a %b %-d, %Y')}}: "
+        "Online applications to Clean Slate"),
     body_template_path='email/app_bundle_email.jinja')
 
 # submissions, emails

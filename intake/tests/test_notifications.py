@@ -72,7 +72,7 @@ class TestNotifications(TestCase):
             'text': "Hey Ben can you read me?",
             'to': ["+15555555555"],
             'options': {
-                'archive': False
+                'archive': True
             }
         }
         expected_headers = {
