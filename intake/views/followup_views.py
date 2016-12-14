@@ -11,9 +11,9 @@ class FollowupsIndex(StaffOnlyMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        count, subs = FollowupsService.serialized_follow_up_subs()
+        subs = FollowupsService.get_serialized_follow_up_subs()
         context['submissions'] = subs
-        context['count'] = count
+        context['count'] = len(subs)
         context['page_heading'] = self.heading
         context['empty_set_message'] = self.empty_set_message
         return context

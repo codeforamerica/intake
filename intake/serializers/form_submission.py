@@ -10,6 +10,17 @@ class OrganizationSerializer(serializers.ModelSerializer):
         fields = ['slug', 'name']
 
 
+class OrganizationFollowupSerializer(serializers.ModelSerializer):
+    county = serializers.SlugRelatedField(read_only=True, slug_field='name')
+
+    class Meta:
+        model = Organization
+        fields = [
+            'slug', 'name', 'county',
+            'short_followup_message',
+            'long_followup_message']
+
+
 class FormSubmissionSerializer(serializers.ModelSerializer):
     organizations = OrganizationSerializer(many=True)
     contact_preferences = fields.DictKeyField(
@@ -53,8 +64,7 @@ class FormSubmissionSerializer(serializers.ModelSerializer):
 
 
 class FollowupInfoSerializer(serializers.ModelSerializer):
-    organizations = serializers.SlugRelatedField(
-        many=True, slug_field='slug', read_only=True)
+    organizations = OrganizationFollowupSerializer(many=True, read_only=True)
     date_received = fields.LocalDateField()
     first_name = fields.DictKeyField('first_name', source='answers')
     url = serializers.CharField(source='get_absolute_url', read_only=True)
@@ -70,15 +80,13 @@ class FollowupInfoSerializer(serializers.ModelSerializer):
     contact_info = fields.ContactInfoByPreferenceField(source='answers')
     additional_info = fields.DictKeyField(
         'additional_information', source='answers')
-    # not yet implemented:
-    #   # missing_or_invalid_fields =
-    #   # has_a_lot_of_probation_left =
 
     class Meta:
         model = models.FormSubmission
         fields = [
             'id',
             'date_received',
+            'anonymous_name',
             'organizations',
             'contact_preferences',
             'first_name',

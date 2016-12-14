@@ -81,6 +81,14 @@ class TemplateNotification:
         self._content_base = namedtuple('RenderedContent',
                                         self.templates.keys())
 
+    # def get_context_variables(self):
+    #     return {
+    #         key: jinja.env.parse(
+    #             jinja.env.loader.get_source(
+    #                 jinja.env, path)[0])
+    #     }
+    #     for key in self.templates.keys():
+
     def render(self, **context_args):
         if not self.templates:
             self.init_templates()
@@ -111,6 +119,8 @@ class EmailNotification(TemplateNotification):
         content = self.render(**context_args)
         from_email = from_email or self.default_from_email
         to = to or self.default_recipients
+        # does not need to check for remote connection permission because
+        # emails are diverted by default in a test environment.
         return mail.send_mail(
             subject=content.subject,
             message=content.body,
@@ -261,19 +271,27 @@ slack_app_bundle_sent = SlackTemplateNotification(
     message_template_path="slack/app_bundle_sent.jinja"
 )
 
-# CONFIRMATIONS
+# CONFIRMATIONS & FOLLOWUPS
 
-# name, staff name
+CONFIRMATION_SUBJECT = _("Thanks for applying - Next steps")
+# name, staff_name, county_names, next_steps, organizations
 email_confirmation = FrontEmailNotification(
-    subject_template=_("Thanks for applying - Next steps"),
+    subject_template=CONFIRMATION_SUBJECT,
     body_template_path='email/confirmation.jinja')
 sms_confirmation = FrontSMSNotification(
     body_template_path='text/confirmation.jinja'
 )
 
+# name, staff_name, followup_messages, county_names, organization_names
+email_followup = FrontEmailNotification(
+    subject_template=CONFIRMATION_SUBJECT,
+    body_template_path='email/followup.jinja')
+sms_followup = FrontSMSNotification(
+    body_template_path='text/followup.jinja')
+
 # submission, method
-slack_confirmation_sent = SlackTemplateNotification(
-    message_template_path="slack/confirmation_sent.jinja")
+slack_notification_sent = SlackTemplateNotification(
+    message_template_path="slack/notification_sent.jinja")
 # submission, method, errors
-slack_confirmation_send_failed = SlackTemplateNotification(
-    message_template_path="slack/confirmation_failed.jinja")
+slack_notification_failed = SlackTemplateNotification(
+    message_template_path="slack/notification_failed.jinja")
