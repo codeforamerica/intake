@@ -1,6 +1,11 @@
 import itertools
-from intake import models
+from django.utils.translation import ugettext_lazy as _
 import Levenshtein
+
+import intake
+from intake import models
+from intake.constants import SMS, EMAIL
+from intake.service_objects import ConfirmationNotification
 
 
 class MissingAnswersError(Exception):
@@ -127,9 +132,26 @@ def have_same_orgs(a, b):
     return a_orgs == b_orgs
 
 
-""" These methods are used for test setup only """
+def get_confirmation_flash_messages(confirmation_notification):
+    messages = []
+    message_templates = {
+        EMAIL: _("We've sent you an email at {}"),
+        SMS: _("We've sent you a text message at {}")
+    }
+    for method in confirmation_notification.successes:
+        template = message_templates[method]
+        contact_info = confirmation_notification.contact_info[method]
+        messages.append(template.format(contact_info))
+    return messages
 
 
+def send_confirmation_notifications(sub):
+    confirmation_notification = ConfirmationNotification(sub)
+    confirmation_notification.send()
+    return get_confirmation_flash_messages(confirmation_notification)
+
+
+# These methods are used for test setup only
 def create_for_organizations(organizations, **kwargs):
     submission = models.FormSubmission(**kwargs)
     submission.save()

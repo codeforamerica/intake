@@ -1,9 +1,14 @@
+from unittest.mock import Mock, patch
 from django.test import TestCase
 
 import intake.services.submissions as SubmissionsService
 from intake.tests import mock
+from intake.tests.base_testcases import ExternalNotificationsPatchTestCase
 from formation.forms import county_form_selector
-from intake.constants import COUNTY_CHOICE_DISPLAY_DICT, Organizations
+from intake.constants import (
+    COUNTY_CHOICE_DISPLAY_DICT, Organizations,
+    EMAIL, SMS, VOICEMAIL, SNAILMAIL
+    )
 from intake.models import Applicant, ApplicationEvent, FormSubmission
 from user_accounts.models import Organization
 
@@ -173,3 +178,122 @@ class TestFindDuplicates(TestCase):
         dups = SubmissionsService.find_duplicates(
             FormSubmission.objects.all())
         self.assertFalse(dups)
+
+
+class TestGetConfirmationFlashMessages(TestCase):
+
+    def make_mock_confirmation_notification(self, successes, **contact_info):
+        """contact_info and successes
+        """
+        notification = Mock()
+        notification.contact_info = contact_info
+        notification.successes = successes
+        return notification
+
+    def test_messages_for_full_success(self):
+        confirmation = self.make_mock_confirmation_notification(
+            successes=[EMAIL, SMS],
+            email="test@test.com",
+            sms="(555) 444-2222")
+        expected = [
+            "We've sent you an email at test@test.com",
+            "We've sent you a text message at (555) 444-2222",
+        ]
+        result = SubmissionsService.get_confirmation_flash_messages(
+            confirmation)
+        self.assertEqual(result, expected)
+
+    def test_messages_with_no_usable_contact_info(self):
+        confirmation = self.make_mock_confirmation_notification(
+            successes=[],
+            snailmail="111 Main St.",
+            voicemail="(555) 444-2222")
+        expected = []
+        result = SubmissionsService.get_confirmation_flash_messages(
+            confirmation)
+        self.assertEqual(result, expected)
+
+
+class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
+
+    fixtures = [
+        'counties',
+        'organizations'
+    ]
+
+    def get_orgs(self):
+        return [Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)]
+
+    def test_notifications_slacks_and_logs_for_full_contact_preferences(self):
+        applicant = Applicant()
+        applicant.save()
+        answers = mock.fake.alameda_pubdef_answers(
+            contact_preferences=[
+                'prefers_email',
+                'prefers_sms',
+                'prefers_voicemail',
+                'prefers_snailmail'
+                ],
+            email='test@gmail.com',
+            phone_number='5554442222',
+        )
+        sub = mock.FormSubmissionFactory.create(
+            applicant=applicant,
+            organizations=self.get_orgs(),
+            answers=answers)
+        SubmissionsService.send_confirmation_notifications(sub)
+        self.assertEqual(
+            len(self.notifications.slack_notification_sent.send.mock_calls), 1)
+        self.assertEqual(
+            len(self.notifications.email_confirmation.send.mock_calls), 1)
+        self.assertEqual(
+            len(self.notifications.sms_confirmation.send.mock_calls), 1)
+        self.assertEqual(
+            applicant.events.filter(
+                name=ApplicationEvent.CONFIRMATION_SENT).count(), 2)
+
+    def test_notifications_slacks_and_logs_for_no_contact_preferences(self):
+        applicant = Applicant()
+        applicant.save()
+        answers = mock.fake.alameda_pubdef_answers(
+            contact_preferences=[],
+            email='test@gmail.com',
+            phone_number='5554442222',
+        )
+        sub = mock.FormSubmissionFactory.create(
+            applicant=applicant,
+            organizations=self.get_orgs(),
+            answers=answers)
+        SubmissionsService.send_confirmation_notifications(sub)
+        self.assertEqual(
+            len(self.notifications.slack_notification_sent.send.mock_calls), 0)
+        self.assertEqual(
+            len(self.notifications.email_confirmation.send.mock_calls), 0)
+        self.assertEqual(
+            len(self.notifications.sms_confirmation.send.mock_calls), 0)
+        self.assertEqual(
+            applicant.events.filter(
+                name=ApplicationEvent.CONFIRMATION_SENT).count(), 0)
+
+    def test_notifications_slacks_and_logs_for_one_contact_preference(self):
+        applicant = Applicant()
+        applicant.save()
+        answers = mock.fake.alameda_pubdef_answers(
+            contact_preferences=['prefers_email'],
+            email='test@gmail.com',
+            phone_number='5554442222',
+        )
+        sub = mock.FormSubmissionFactory.create(
+            applicant=applicant,
+            organizations=self.get_orgs(),
+            answers=answers)
+        SubmissionsService.send_confirmation_notifications(sub)
+        self.assertEqual(
+            len(self.notifications.slack_notification_sent.send.mock_calls), 1)
+        self.assertEqual(
+            len(self.notifications.email_confirmation.send.mock_calls), 1)
+        self.assertEqual(
+            len(self.notifications.sms_confirmation.send.mock_calls), 0)
+        self.assertEqual(
+            applicant.events.filter(
+                name=ApplicationEvent.CONFIRMATION_SENT).count(), 1)

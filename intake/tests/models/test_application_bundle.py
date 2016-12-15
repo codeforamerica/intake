@@ -11,6 +11,8 @@ from intake import models, constants
 
 import intake.services.submissions as SubmissionsService
 
+import intake.services.bundles as BundlesService
+
 
 DELUXE_TEST = os.environ.get('DELUXE_TEST', False)
 
@@ -25,7 +27,7 @@ class TestApplicationBundle(TestCase):
         mock.fillable_pdf(organization=sf_pubdef)
         sub = SubmissionsService.create_for_organizations(
                 [sf_pubdef], answers={})
-        bundle = models.ApplicationBundle.create_with_submissions(
+        bundle = BundlesService.create_with_submissions(
             organization=sf_pubdef, submissions=[sub], skip_pdf=True)
         self.assertTrue(bundle.should_have_a_pdf())
 
@@ -34,7 +36,7 @@ class TestApplicationBundle(TestCase):
             slug=constants.Organizations.COCO_PUBDEF)
         sub = SubmissionsService.create_for_organizations(
                 [cc_pubdef], answers={})
-        bundle = models.ApplicationBundle.create_with_submissions(
+        bundle = BundlesService.create_with_submissions(
             organization=cc_pubdef, submissions=[sub], skip_pdf=True)
         self.assertFalse(bundle.should_have_a_pdf())
 
@@ -51,7 +53,7 @@ class TestApplicationBundle(TestCase):
             for sub in subs]
         for pdf in expected_pdfs:
             pdf.save()
-        bundle = models.ApplicationBundle.create_with_submissions(
+        bundle = BundlesService.create_with_submissions(
             organization=sf_pubdef, submissions=subs, skip_pdf=True)
         query = bundle.get_individual_filled_pdfs().order_by('pk')
         pdfs = list(query)
@@ -86,7 +88,7 @@ class TestApplicationBundle(TestCase):
             slug=constants.Organizations.COCO_PUBDEF)
         sub = SubmissionsService.create_for_organizations(
                 [cc_pubdef], answers={})
-        bundle = models.ApplicationBundle.create_with_submissions(
+        bundle = BundlesService.create_with_submissions(
             organization=cc_pubdef, submissions=[sub], skip_pdf=True)
         get_pdfs_mock = Mock()
         bundle.get_individual_filled_pdfs = get_pdfs_mock
@@ -106,7 +108,7 @@ class TestApplicationBundle(TestCase):
         data = b'content'
         filled = models.FilledPDF.create_with_pdf_bytes(
             pdf_bytes=data, submission=sub, original_pdf=fillable)
-        bundle = models.ApplicationBundle.create_with_submissions(
+        bundle = BundlesService.create_with_submissions(
             organization=sf_pubdef, submissions=[sub], skip_pdf=True)
 
         # set up mocks
@@ -142,7 +144,7 @@ class TestApplicationBundle(TestCase):
             return_value=['pdf' for sub in subs])
         get_parser.return_value.join_pdfs.return_value = b'pdf'
 
-        bundle = models.ApplicationBundle.create_with_submissions(
+        bundle = BundlesService.create_with_submissions(
             organization=sf_pubdef, submissions=subs, skip_pdf=True)
         bundle.should_have_a_pdf = should_have_a_pdf
         bundle.get_individual_filled_pdfs = get_individual_filled_pdfs
@@ -172,7 +174,7 @@ class TestApplicationBundle(TestCase):
             get_individual_filled_pdfs=get_individual_filled_pdfs,
             submissions=mock_submissions)
         mock_bundle.organization.pk = 1
-        models.ApplicationBundle.build_bundled_pdf_if_necessary(mock_bundle)
+        BundlesService.build_bundled_pdf_if_necessary(mock_bundle)
         error_msg = "Submissions for ApplicationBundle(pk=2) lack pdfs"
         logger.error.assert_called_once_with(error_msg)
         slack.assert_called_once_with(error_msg)
@@ -202,7 +204,7 @@ class TestApplicationBundle(TestCase):
             submissions=mock_submissions_field)
         mock_bundle.organization.pk = 1
         # run
-        models.ApplicationBundle.build_bundled_pdf_if_necessary(mock_bundle)
+        BundlesService.build_bundled_pdf_if_necessary(mock_bundle)
         error_msg = "Submissions for ApplicationBundle(pk=2) lack pdfs"
         logger.error.assert_called_once_with(error_msg)
         slack.assert_called_once_with(error_msg)

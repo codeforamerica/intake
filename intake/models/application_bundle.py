@@ -9,7 +9,6 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 
 import intake
-import intake.services.submissions as SubmissionsService
 
 logger = logging.getLogger(__name__)
 
@@ -69,40 +68,6 @@ class ApplicationBundle(models.Model):
             self.organization.pk, now_str)
         self.bundled_pdf = SimpleUploadedFile(
             filename, bytes_, content_type='application/pdf')
-
-    def build_bundled_pdf_if_necessary(self):
-        """Populates `self.bundled_pdf` attribute if needed
-
-        First checks whether or not there should be a pdf. If so,
-        - tries to grab filled pdfs for this bundles submissionts
-        - if it needs a pdf but there weren't any pdfs, it logs an error and
-          creates the necessary filled pdfs.
-        - makes a filename based on the organization and current time.
-        - adds the file data and saves itself.
-        """
-        needs_pdf = self.should_have_a_pdf()
-        if not needs_pdf:
-            return
-        submissions = self.submissions.all()
-        filled_pdfs = self.get_individual_filled_pdfs()
-        missing_filled_pdfs = (
-            not filled_pdfs or (len(submissions) > len(filled_pdfs)))
-        if needs_pdf and missing_filled_pdfs:
-            msg = str(
-                "Submissions for ApplicationBundle(pk={}) lack pdfs"
-                ).format(self.pk)
-            logger.error(msg)
-            intake.notifications.slack_simple.send(msg)
-            for submission in submissions:
-                SubmissionsService.fill_pdfs_for_submission(submission)
-            filled_pdfs = self.get_individual_filled_pdfs()
-        if len(filled_pdfs) == 1:
-            self.set_bundled_pdf_to_bytes(filled_pdfs[0].pdf.read())
-        else:
-            self.set_bundled_pdf_to_bytes(
-                intake.models.get_parser().join_pdfs(
-                    filled.pdf for filled in filled_pdfs))
-        self.save()
 
     def get_printout_url(self):
         return reverse(

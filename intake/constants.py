@@ -6,11 +6,17 @@ PACIFIC_TIME = timezone('US/Pacific')
 
 SCOPE_TO_LIVE_COUNTIES = getattr(settings, 'LIVE_COUNTY_CHOICES', False)
 
+# Communication methods
+SMS = 'sms'
+EMAIL = 'email'
+VOICEMAIL = 'voicemail'
+SNAILMAIL = 'snailmail'
+
 CONTACT_METHOD_CHOICES = (
-    ('voicemail', _('voicemail')),
-    ('sms', _('text message')),
-    ('email', _('email')),
-    ('snailmail', _('paper mail')),
+    (VOICEMAIL, _(VOICEMAIL)),
+    (SMS, _('text message')),
+    (EMAIL, _(EMAIL)),
+    (SNAILMAIL, _('paper mail')),
 )
 
 CONTACT_PREFERENCE_CHOICES = (
@@ -21,10 +27,10 @@ CONTACT_PREFERENCE_CHOICES = (
 )
 
 CONTACT_PREFERENCE_CHECKS = {
-    'prefers_email': ('email', _('email'), _("an email address")),
+    'prefers_email': (EMAIL, _(EMAIL), _("an email address")),
     'prefers_sms': ('phone_number', _('text message'), _("a phone number")),
     'prefers_snailmail': ('address', _('paper mail'), _("a mailing address")),
-    'prefers_voicemail': ('phone_number', _('voicemail'), _("a phone number")),
+    'prefers_voicemail': ('phone_number', _(VOICEMAIL), _("a phone number")),
 }
 
 GENDER_PRONOUN_CHOICES = (

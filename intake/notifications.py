@@ -6,19 +6,13 @@ from django.conf import settings
 from django.utils.translation import ugettext as _
 from django.template import loader
 
+from intake.exceptions import (
+    JinjaNotInitializedError,
+    DuplicateTemplateError,
+    FrontAPIError
+)
+
 jinja = loader.engines['jinja']
-
-
-class JinjaNotInitializedError(Exception):
-    pass
-
-
-class DuplicateTemplateError(Exception):
-    pass
-
-
-class FrontAPIError(Exception):
-    pass
 
 
 def check_that_remote_connections_are_okay(*output_if_not_okay):

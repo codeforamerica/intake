@@ -1,16 +1,15 @@
 from unittest.mock import patch, Mock
-from django.test import TestCase
 from user_accounts.models import Organization
 from intake.constants import Organizations
 from intake.tests import mock
+from intake.tests.base_testcases import ExternalNotificationsPatchTestCase
 from intake.tests.services.test_followups import get_old_date
 from intake.service_objects import applicant_notifications
-from intake.service_objects.applicant_notifications import (
-    EMAIL, SMS, VOICEMAIL, SNAILMAIL)
+from intake.constants import SMS, EMAIL
 from intake import utils, models
 
 
-class TestApplicantNotification(TestCase):
+class TestApplicantNotification(ExternalNotificationsPatchTestCase):
 
     fixtures = [
         'counties',
@@ -109,45 +108,32 @@ class TestFollowupNotification(TestApplicantNotification):
         notification.set_contact_methods()
         self.assertEqual(methods, notification.contact_methods)
 
-    @patch(
-        'intake.service_objects.applicant_notifications.notifications'
-        '.slack_notification_sent')
-    def test_logs_one_followup_event_on_applicant(self, slack):
+    def test_logs_one_followup_event_on_applicant(self):
         orgs, sub, notification = self.org_notification_and_default_sub()
-        notification.notification_channels[EMAIL].send = Mock()
         # after sending, should log event on applicant
         notification.send()
         results = sub.applicant.events.filter(
             name=models.ApplicationEvent.FOLLOWUP_SENT)
         self.assertEqual(results.count(), 1)
 
-    @patch(
-        'intake.service_objects.applicant_notifications.notifications'
-        '.slack_notification_sent')
-    def test_logs_to_slack_correctly(self, slack):
+    def test_logs_to_slack_correctly(self):
         orgs, sub, notification = self.org_notification_and_default_sub()
-        notification.notification_channels[EMAIL].send = Mock()
         notification.send()
-        slack.send.assert_called_once_with(
-            methods=[EMAIL],
-            notification_type='followup',
-            submission=sub
-            )
+        self.notifications.slack_notification_sent.send.\
+            assert_called_once_with(
+                methods=[EMAIL],
+                notification_type='followup',
+                submission=sub
+                )
 
-    @patch(
-        'intake.service_objects.applicant_notifications.notifications'
-        '.slack_notification_sent')
-    def test_sends_expected_notification_calls(self, slack):
+    def test_sends_expected_notification_calls(self):
         orgs, sub, notification = self.org_notification_and_default_sub()
-        email_followup, sms_followup = Mock(), Mock()
-        notification.notification_channels = {
-            EMAIL: email_followup,
-            SMS: sms_followup
-        }
         notification.log_event_to_submission = Mock()
         notification.send()
-        self.assertEqual(len(email_followup.send.mock_calls), 1)
-        self.assertEqual(len(sms_followup.send.mock_calls), 0)
+        self.assertEqual(
+            len(self.notifications.email_followup.send.mock_calls), 1)
+        self.assertEqual(
+            len(self.notifications.sms_followup.send.mock_calls), 0)
 
 
 class TestConfirmationNotification(TestApplicantNotification):
@@ -170,44 +156,40 @@ class TestConfirmationNotification(TestApplicantNotification):
 
         self.assertEqual(messages, context['next_steps'])
 
-    @patch(
-        'intake.service_objects.applicant_notifications.notifications'
-        '.slack_notification_sent')
-    def test_logs_two_confirmation_events_on_applicant(self, slack):
+    def test_logs_two_confirmation_events_on_applicant(self):
         orgs, sub, notification = self.org_notification_and_default_sub()
-        notification.notification_channels[SMS].send = Mock()
-        notification.notification_channels[EMAIL].send = Mock()
         # after sending, should log event on applicant
         notification.send()
         results = sub.applicant.events.filter(
             name=models.ApplicationEvent.CONFIRMATION_SENT)
         self.assertEqual(results.count(), 2)
 
-    @patch(
-        'intake.service_objects.applicant_notifications.notifications'
-        '.slack_notification_sent')
-    def test_logs_to_slack_correctly(self, slack):
+    def test_logs_to_slack_correctly(self):
         orgs, sub, notification = self.org_notification_and_default_sub()
-        notification.notification_channels[SMS].send = Mock()
-        notification.notification_channels[EMAIL].send = Mock()
         notification.send()
-        slack.send.assert_called_once_with(
-            methods=[EMAIL, SMS],
-            notification_type='confirmation',
-            submission=sub
+        self.notifications.slack_notification_sent.send\
+            .assert_called_once_with(
+                methods=[EMAIL, SMS],
+                notification_type='confirmation',
+                submission=sub
             )
 
-    @patch(
-        'intake.service_objects.applicant_notifications.notifications'
-        '.slack_notification_sent')
-    def test_sends_expected_notification_calls(self, slack):
+    def test_logs_to_slack_correctly_with_one_preference(self):
+        orgs, sub, notification = self.org_notification_and_default_sub(
+            contact_preferences=['prefers_email'])
+        notification.send()
+        self.notifications.slack_notification_sent.send\
+            .assert_called_once_with(
+                methods=[EMAIL],
+                notification_type='confirmation',
+                submission=sub
+            )
+
+    def test_sends_expected_notification_calls(self):
         orgs, sub, notification = self.org_notification_and_default_sub()
-        email_confirmation, sms_confirmation = Mock(), Mock()
-        notification.notification_channels = {
-            EMAIL: email_confirmation,
-            SMS: sms_confirmation
-        }
         notification.log_event_to_submission = Mock()
         notification.send()
-        self.assertEqual(len(email_confirmation.send.mock_calls), 1)
-        self.assertEqual(len(sms_confirmation.send.mock_calls), 1)
+        self.assertEqual(
+            len(self.notifications.email_confirmation.send.mock_calls), 1)
+        self.assertEqual(
+            len(self.notifications.sms_confirmation.send.mock_calls), 1)

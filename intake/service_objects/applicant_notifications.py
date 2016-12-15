@@ -1,19 +1,13 @@
 from intake import notifications, models, utils
+from intake.constants import SMS, EMAIL
 
 from intake.serializers.fields import ContactInfoByPreferenceField
-
-
-# Communication methods
-SMS = 'sms'
-EMAIL = 'email'
-VOICEMAIL = 'voicemail'
-SNAILMAIL = 'snailmail'
+from intake.exceptions import FrontAPIError
 
 
 class ApplicantNotification:
     message_accessors = {}
     notification_type = None
-    notification_channels = {}
     application_event_log_function = None
 
     def __init__(self, submission):
@@ -61,10 +55,8 @@ class ApplicantNotification:
             organization_names=organization_names,
         )
 
-    def get_notification_channels(self):
-        return [
-            (method, self.notification_channels[method])
-            for method in self.contact_methods]
+    def get_notification_channel(self, method):
+        return None
 
     def log_event_to_submission(self, contact_method, message_content):
         message_info = dict(
@@ -78,7 +70,7 @@ class ApplicantNotification:
 
     def send_notification_message(self, contact_method):
         context = self.get_context(contact_method)
-        notification_channel = self.notification_channels[contact_method]
+        notification_channel = self.get_notification_channel(contact_method)
         # notification_channel.render returns a namedtuple
         message_content = notification_channel.render(**context)._asdict()
         notification_channel.send(
@@ -93,7 +85,7 @@ class ApplicantNotification:
             try:
                 self.send_notification_message(method)
                 self.successes.append(method)
-            except notifications.FrontAPIError as error:
+            except FrontAPIError as error:
                 self.errors[method] = error
 
     def log_outcome_in_slack(self):
@@ -123,11 +115,13 @@ class FollowupNotification(ApplicantNotification):
         EMAIL: 'long_followup_message',
         SMS: 'short_followup_message',
     }
-    notification_channels = {
-        EMAIL: notifications.email_followup,
-        SMS: notifications.sms_followup,
-    }
     application_event_log_function = models.ApplicationEvent.log_followup_sent
+
+    def get_notification_channel(self, method):
+        if method == EMAIL:
+            return notifications.email_followup
+        elif method == SMS:
+            return notifications.sms_followup
 
     def filter_contact_methods(self, keys):
         """Followups should pick one method and prefer email.
@@ -154,12 +148,14 @@ class ConfirmationNotification(ApplicantNotification):
         EMAIL: 'long_confirmation_message',
         SMS: 'short_confirmation_message',
     }
-    notification_channels = {
-        EMAIL: notifications.email_confirmation,
-        SMS: notifications.sms_confirmation,
-    }
     application_event_log_function = \
         models.ApplicationEvent.log_confirmation_sent
+
+    def get_notification_channel(self, method):
+        if method == EMAIL:
+            return notifications.email_confirmation
+        elif method == SMS:
+            return notifications.sms_confirmation
 
     def filter_contact_methods(self, keys):
         return [key for key in keys if key in [EMAIL, SMS]]
