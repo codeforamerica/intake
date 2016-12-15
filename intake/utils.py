@@ -13,7 +13,13 @@ def get_random_staff_name():
     return random.choice(STAFF_NAME_CHOICES)
 
 
-def sort_orgs_in_default_order(serialized_orgs):
-    return sorted(
-        serialized_orgs,
-        key=lambda org: DEFAULT_ORGANIZATION_ORDER.index(org['slug']))
+def sort_orgs_in_default_order(orgs):
+    if not orgs:
+        return orgs
+    if hasattr(orgs[0], 'slug'):
+        return sorted(
+            orgs, key=lambda org: DEFAULT_ORGANIZATION_ORDER.index(org.slug))
+    else:
+        return sorted(
+            orgs,
+            key=lambda org: DEFAULT_ORGANIZATION_ORDER.index(org['slug']))

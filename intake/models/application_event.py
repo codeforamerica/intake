@@ -67,10 +67,17 @@ class ApplicationEvent(models.Model):
         return cls.create(cls.APPLICATION_SUBMITTED, applicant_id)
 
     @classmethod
-    def log_followup_sent(cls, applicant_id, contact_info, message):
+    def log_confirmation_sent(
+            cls, applicant_id, contact_info, message_content):
+        return cls.create(
+            cls.CONFIRMATION_SENT, applicant_id, contact_info=contact_info,
+            message_content=message_content)
+
+    @classmethod
+    def log_followup_sent(cls, applicant_id, contact_info, message_content):
         return cls.create(
             cls.FOLLOWUP_SENT, applicant_id, contact_info=contact_info,
-            message=message)
+            message_content=message_content)
 
     @classmethod
     def from_logs(cls, logs):
