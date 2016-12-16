@@ -6,7 +6,6 @@ from intake.views import (
     legacy_redirect_views,
     application_form_views,
     admin_views,
-    followup_views,
     )
 
 urlpatterns = [
@@ -82,11 +81,6 @@ urlpatterns = [
     url(r'^applications/mark/transferred/$',
         login_required(admin_views.mark_transferred_to_other_org),
         name='intake-mark_transferred_to_other_org'),
-
-
-    url(r'^followups/$',
-        login_required(followup_views.index),
-        name='intake-followups'),
 
 ]
 

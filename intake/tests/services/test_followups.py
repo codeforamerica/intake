@@ -3,6 +3,7 @@ from django.test import TestCase
 
 import intake.services.followups as FollowupsService
 from intake.tests import mock
+from intake.tests.base_testcases import ExternalNotificationsPatchTestCase
 from intake.constants import PACIFIC_TIME, Organizations
 from intake import models
 from user_accounts.models import Organization
@@ -101,110 +102,96 @@ class TestGetSubmissionsDueForFollowups(TestCase):
         self.assertNotIn(new_sub, results)
 
 
-class TestSendFollowupNotification(TestCase):
+class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
 
     fixtures = ['counties', 'organizations']
 
-    @patch('intake.notifications.check_that_remote_connections_are_okay')
-    @patch('intake.notifications.json')
-    def test_expected_result(self, mock_json, ext_conn_check):
-        ext_conn_check.return_value = False
-        mock_json.dumps.return_value = "a mock_json"
-        orgs = list(Organization.objects.filter(
-            slug__in=[
-                Organizations.ALAMEDA_PUBDEF,
-                Organizations.SF_PUBDEF,
-                Organizations.MONTEREY_PUBDEF,
-            ]))
-        answers = mock.fake.all_county_answers(
-            first_name="Hubert",
+    def full_answers(self):
+        return mock.fake.alameda_pubdef_answers(
             contact_preferences=[
                 'prefers_email',
                 'prefers_sms',
                 'prefers_voicemail',
-                'prefers_snailmail'
-            ],
-            email='test@gmail.com',
+                'prefers_snailmail'],
+            email='test@testing.com',
+            phone_number='5554443333'
             )
-        mock.FormSubmissionFactory.create(
-            date_received=get_old_date(),
-            anonymous_name="Cerulean Beetle",
-            organizations=orgs,
-            answers=answers)
-        results = FollowupsService.get_contactable_followups()
-        FollowupsService.send_followup_notification(results[0])
 
-        dict_for_front = mock_json.dumps.mock_calls[0][1][0]
-        message_text = dict_for_front['text']
-        self.assertEqual(dict_for_front['to'], answers['email'])
-
-        self.assertIn("Hello again Hubert,", message_text)
-        self.assertIn(
-            str("You applied online about one month ago for help in San "
-                "Francisco, Alameda, and Monterey counties"),
-            message_text)
-        for org in orgs:
-            self.assertIn(org.long_followup_message, message_text)
-        # we should have sent two external requests
-        self.assertEqual(len(ext_conn_check.mock_calls), 2)
-
-    @patch('intake.notifications.check_that_remote_connections_are_okay')
-    @patch('intake.notifications.json')
-    def test_with_sms(self, mock_json, ext_conn_check):
-        ext_conn_check.return_value = False
-        mock_json.dumps.return_value = "a mock_json"
-        orgs = list(Organization.objects.filter(
-            slug__in=[
-                Organizations.ALAMEDA_PUBDEF,
-                Organizations.SF_PUBDEF,
-                Organizations.MONTEREY_PUBDEF,
-            ]))
-        answers = mock.fake.all_county_answers(
-            first_name="Hubert",
-            contact_preferences=[
-                'prefers_sms',
-                'prefers_voicemail',
-                'prefers_snailmail'
-            ],
-            phone_number='555-555-5555',
-            )
-        mock.FormSubmissionFactory.create(
-            date_received=get_old_date(),
-            anonymous_name="Cerulean Beetle",
-            organizations=orgs,
-            answers=answers)
-        results = FollowupsService.get_contactable_followups()
-        FollowupsService.send_followup_notification(results[0])
-        dict_for_front = mock_json.dumps.mock_calls[0][1][0]
-        message_text = dict_for_front['text']
-        self.assertTrue(len(message_text) < 500)
-
-    @patch('intake.notifications.check_that_remote_connections_are_okay')
-    @patch('intake.notifications.json')
-    def test_with_no_contact_info(self, mock_json, ext_conn_check):
-        ext_conn_check.return_value = False
-        mock_json.dumps.return_value = "a mock_json"
-        orgs = list(Organization.objects.filter(
-            slug__in=[
-                Organizations.ALAMEDA_PUBDEF,
-                Organizations.SF_PUBDEF,
-                Organizations.MONTEREY_PUBDEF,
-            ]))
-        answers = mock.fake.all_county_answers(
-            first_name="Hubert",
+    def cant_contact_answers(self):
+        return mock.fake.alameda_pubdef_answers(
             contact_preferences=[
                 'prefers_voicemail',
-                'prefers_snailmail'
-            ]
+                'prefers_snailmail'],
+            email='test@testing.com',
+            phone_number='5554443333'
             )
-        mock.FormSubmissionFactory.create(
-            date_received=get_old_date(),
-            anonymous_name="Cerulean Beetle",
-            organizations=orgs,
-            answers=answers)
-        results = FollowupsService.get_serialized_follow_up_subs()
-        FollowupsService.send_followup_notification(results[0])
-        dict_for_slack = mock_json.dumps.mock_calls[0][1][0]
-        self.assertIn(
-            "Did not send a followup to Cerulean Beetle",
-            dict_for_slack['text'])
+
+    def test_case_when_all_have_usable_contact_info(self):
+        orgs = [
+            Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)]
+        subs = []
+        for i in range(4):
+            applicant = models.Applicant()
+            applicant.save()
+            subs.append(mock.FormSubmissionFactory.create(
+                applicant=applicant,
+                organizations=orgs,
+                answers=self.full_answers(),
+            ))
+        FollowupsService.send_followup_notifications(subs)
+        self.assertEqual(
+            FollowupsService.get_submissions_due_for_follow_ups().count(), 0)
+        self.assertEqual(
+            len(self.notifications.email_followup.send.mock_calls), 4)
+        self.assertEqual(
+            len(self.notifications.sms_followup.send.mock_calls), 0)
+        self.assertEqual(
+            len(self.notifications.slack_notification_sent.send.mock_calls), 4)
+        followup_events = models.ApplicationEvent.objects.filter(
+            name=models.ApplicationEvent.FOLLOWUP_SENT)
+        self.assertEqual(followup_events.count(), 4)
+        followed_up_app_ids = set(
+            followup_events.values_list('applicant_id', flat=True))
+        for sub in subs:
+            self.assertIn(sub.applicant_id, followed_up_app_ids)
+
+    def test_if_some_have_usable_contact_info(self):
+        orgs = [
+            Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)]
+        contacted_subs = []
+        for i in range(2):
+            applicant = models.Applicant()
+            applicant.save()
+            contacted_subs.append(mock.FormSubmissionFactory.create(
+                applicant=applicant,
+                organizations=orgs,
+                answers=self.full_answers(),
+            ))
+        not_contacted_subs = []
+        for i in range(2):
+            applicant = models.Applicant()
+            applicant.save()
+            not_contacted_subs.append(mock.FormSubmissionFactory.create(
+                applicant=applicant,
+                organizations=orgs,
+                answers=self.cant_contact_answers(),
+            ))
+        FollowupsService.send_followup_notifications(
+            contacted_subs + not_contacted_subs)
+        self.assertEqual(
+            FollowupsService.get_submissions_due_for_follow_ups().count(), 0)
+        self.assertEqual(
+            len(self.notifications.email_followup.send.mock_calls), 2)
+        self.assertEqual(
+            len(self.notifications.sms_followup.send.mock_calls), 0)
+        self.assertEqual(
+            len(self.notifications.slack_notification_sent.send.mock_calls), 2)
+        followup_events = models.ApplicationEvent.objects.filter(
+            name=models.ApplicationEvent.FOLLOWUP_SENT)
+        self.assertEqual(followup_events.count(), 2)
+        followed_up_app_ids = set(
+            followup_events.values_list('applicant_id', flat=True))
+        for sub in contacted_subs:
+            self.assertIn(sub.applicant_id, followed_up_app_ids)
+        for sub in not_contacted_subs:
+            self.assertNotIn(sub.applicant_id, followed_up_app_ids)

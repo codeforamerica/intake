@@ -1,3 +1,4 @@
+from project.jinja2 import oxford_comma
 from intake import notifications, models, utils
 from intake.constants import SMS, EMAIL
 
@@ -47,10 +48,16 @@ class ApplicantNotification:
             org.name for org in orgs]
         county_names = [
             org.county.name for org in orgs]
+        counties_applied_to = oxford_comma(county_names)
+        if len(county_names) > 1:
+            counties_applied_to += " counties"
+        else:
+            counties_applied_to += " County"
         return dict(
             staff_name=utils.get_random_staff_name(),
             name=self.sub.answers['first_name'],
             county_names=county_names,
+            counties_applied_to=counties_applied_to,
             organizations=orgs,
             organization_names=organization_names,
         )
@@ -129,6 +136,7 @@ class FollowupNotification(ApplicantNotification):
         for key in [EMAIL, SMS]:
             if key in keys:
                 return [key]
+        return []
 
     def get_context(self, contact_method):
         context = super().get_context()

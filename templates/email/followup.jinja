@@ -1,6 +1,6 @@
 Hello again {{ name|safe }},
 
-This is {{ staff_name|safe }} from Clear My Record. You applied online about one month ago for help in {{ oxford_comma(county_names)|safe }} counties and we sent your application to {{ oxford_comma(organization_names)|safe }}. I'm just checking to see how things are going.
+This is {{ staff_name|safe }} from Clear My Record. You applied online about one month ago for help in {{ counties_applied_to|safe }} counties and we sent your application to {{ oxford_comma(organization_names)|safe }}. I'm just checking to see how things are going.
 
 {% for followup_message in followup_messages -%}
 {{ followup_message|safe }}
