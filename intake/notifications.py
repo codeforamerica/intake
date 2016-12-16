@@ -156,6 +156,8 @@ REQUEST JSON:
 
     def send(self, to, **context_args):
         content = self.render(**context_args)
+        if isinstance(to, str):
+            to = [to]
         data = {
             'body': content.body.replace('\n', '<br>'),
             'text': content.body,
