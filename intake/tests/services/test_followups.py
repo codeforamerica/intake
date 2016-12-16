@@ -1,10 +1,10 @@
-from unittest.mock import patch
 from django.test import TestCase
 
 import intake.services.followups as FollowupsService
 from intake.tests import mock
+from intake.tests.mock import get_old_date, get_newer_date
 from intake.tests.base_testcases import ExternalNotificationsPatchTestCase
-from intake.constants import PACIFIC_TIME, Organizations
+from intake.constants import Organizations
 from intake import models
 from user_accounts.models import Organization
 
@@ -12,14 +12,6 @@ from user_accounts.models import Organization
 Each function in intake.services.followups corresponds to a TestCase in this
 file.
 """
-
-
-def get_old_date():
-    return PACIFIC_TIME.localize(mock.fake.date_time_between('-8w', '-5w'))
-
-
-def get_newer_date():
-    return PACIFIC_TIME.localize(mock.fake.date_time_between('-3w', 'now'))
 
 
 class TestGetSubmissionsDueForFollowups(TestCase):

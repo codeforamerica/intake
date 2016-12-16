@@ -23,3 +23,9 @@ def sort_orgs_in_default_order(orgs):
         return sorted(
             orgs,
             key=lambda org: DEFAULT_ORGANIZATION_ORDER.index(org['slug']))
+
+
+def is_the_weekend():
+    """datetime.weekday() returns 0 for Monday, 6 for Sunday
+    """
+    return timezone.now().weekday() in [5, 6]

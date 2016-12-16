@@ -12,6 +12,7 @@ from django.conf import settings
 from django.utils.datastructures import MultiValueDict
 
 from intake import models, constants
+from intake.constants import PACIFIC_TIME
 from intake.tests import mock_user_agents, mock_referrers
 from user_accounts.tests.mock import OrganizationFactory
 from unittest.mock import Mock
@@ -65,6 +66,14 @@ NEW_RAW_FORM_DATA = {
     'when_where_outside_sf': '',
     'where_probation_or_parole': '',
 }
+
+
+def get_old_date():
+    return PACIFIC_TIME.localize(fake.date_time_between('-8w', '-5w'))
+
+
+def get_newer_date():
+    return PACIFIC_TIME.localize(fake.date_time_between('-3w', 'now'))
 
 
 def load_counties_and_orgs():
