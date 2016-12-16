@@ -27,8 +27,6 @@ class PrivateStatsSerializer(PublicStatsSerializer):
     where_they_heard = fields.WhereTheyHeard(source='apps')
 
 
-# how do I scope completion times?
-
 # class ExtraStatsSerializer(PrivateStatsSerializer):
 #     income_brackets = fields.IncomeBrackets()
 #     age_brackets = fields.AgeBrackets()

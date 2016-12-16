@@ -22,30 +22,6 @@ class ApplicationBundle(models.Model):
     bundled_pdf = models.FileField(upload_to='pdf_bundles/', null=True,
                                    blank=True)
 
-    @classmethod
-    def create_with_submissions(cls, submissions, skip_pdf=False, **kwargs):
-        instance = cls(**kwargs)
-        instance.save()
-        if submissions:
-            instance.submissions.add(*submissions)
-        if not skip_pdf and not instance.bundled_pdf:
-            instance.build_bundled_pdf_if_necessary()
-        return instance
-
-    @classmethod
-    def get_or_create_for_submissions_and_user(cls, submissions, user):
-        query = cls.objects.all()
-        for sub in submissions:
-            query = query.filter(submissions=sub)
-        if not user.is_staff:
-            query = query.filter(organization=user.profile.organization)
-        query = query.first()
-        if not query:
-            query = cls.create_with_submissions(
-                submissions,
-                organization=user.profile.organization)
-        return query
-
     def should_have_a_pdf(self):
         """Returns `True` if `self.organization` has any `FillablePDF`
         """

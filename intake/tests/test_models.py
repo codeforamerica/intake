@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 from unittest import skipUnless
-from unittest.mock import patch, Mock
+from unittest.mock import Mock
 
 from django.test import TestCase
 from django.core.exceptions import ValidationError
@@ -11,7 +11,7 @@ from intake.tests import mock
 from user_accounts.tests.mock import create_fake_auth_models
 from user_accounts import models as auth_models
 from intake import (
-    models, anonymous_names, validators, notifications)
+    models, anonymous_names, validators)
 
 
 DELUXE_TEST = os.environ.get('DELUXE_TEST', False)
@@ -231,79 +231,3 @@ class TestModels(TestCase):
         expected = {}
         result = submission.get_contact_info()
         self.assertDictEqual(result, expected)
-
-    @patch('intake.notifications.slack_confirmation_send_failed.send')
-    @patch('intake.notifications.slack_confirmation_sent.send')
-    @patch('intake.notifications.sms_confirmation.send')
-    @patch('intake.notifications.email_confirmation.send')
-    @patch('intake.models.form_submission.random')
-    def test_send_submission_confirmation(self, random, email_notification,
-                                          sms_notification, sent_notification,
-                                          slack_failed_notification):
-        random.choice.return_value = 'Staff'
-        submission = mock.FormSubmissionFactory.create()
-        submission.answers['first_name'] = 'Foo'
-
-        # case: all methods all good
-        submission.answers['contact_preferences'] = [
-            'prefers_email', 'prefers_sms',
-            'prefers_snailmail', 'prefers_voicemail']
-        submission.answers['email'] = 'someone@gmail.com'
-        submission.answers['phone_number'] = '+19993334444'
-
-        submission.send_confirmation_notifications()
-
-        logs = models.ApplicationLogEntry.objects.filter(
-            submission=submission,
-            event_type=models.ApplicationLogEntry.CONFIRMATION_SENT).all()
-        self.assertEqual(len(logs), 2)
-        self.assertWasCalledOnce(email_notification)
-        self.assertWasCalledOnce(sms_notification)
-        sent_notification.assert_called_once_with(
-            submission=submission,
-            methods=['email', 'sms', 'snailmail', 'voicemail'])
-        slack_failed_notification.assert_not_called()
-
-        # case: sms fails, email works
-        sms_notification.reset_mock()
-        email_notification.reset_mock()
-        sent_notification.reset_mock()
-        logs.delete()
-        sms_error = notifications.FrontAPIError('front error')
-        sms_notification.side_effect = sms_error
-
-        submission.send_confirmation_notifications()
-        logs = models.ApplicationLogEntry.objects.filter(
-            submission=submission,
-            event_type=models.ApplicationLogEntry.CONFIRMATION_SENT).all()
-        self.assertEqual(len(logs), 1)
-        self.assertWasCalledOnce(email_notification)
-        self.assertWasCalledOnce(sms_notification)
-        sent_notification.assert_called_once_with(
-            submission=submission, methods=['email', 'snailmail', 'voicemail'])
-        slack_failed_notification.assert_called_once_with(
-            submission=submission, errors={'sms': sms_error})
-
-        # case: email & sms both fail
-        sms_notification.reset_mock()
-        email_notification.reset_mock()
-        sent_notification.reset_mock()
-        slack_failed_notification.reset_mock()
-        logs.delete()
-        sms_error = notifications.FrontAPIError('sms error')
-        email_error = notifications.FrontAPIError('sms error')
-        sms_notification.side_effect = sms_error
-        email_notification.side_effect = email_error
-
-        submission.send_confirmation_notifications()
-        logs = models.ApplicationLogEntry.objects.filter(
-            submission=submission,
-            event_type=models.ApplicationLogEntry.CONFIRMATION_SENT).all()
-        self.assertEqual(len(logs), 0)
-        self.assertWasCalledOnce(email_notification)
-        self.assertWasCalledOnce(sms_notification)
-        sent_notification.assert_called_once_with(
-            submission=submission, methods=['snailmail', 'voicemail'])
-        slack_failed_notification.assert_called_once_with(
-            submission=submission,
-            errors={'sms': sms_error, 'email': email_error})

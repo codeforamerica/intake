@@ -66,8 +66,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
     fixtures = ['counties', 'organizations']
 
     @patch(
-        'intake.views.application_form_views.models.FormSubmission'
-        '.send_confirmation_notifications')
+        'intake.services.submissions.send_confirmation_notifications')
     @patch(
         'intake.views.session_view_base.notifications'
         '.slack_new_submission.send')
@@ -101,8 +100,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         self.assertEqual(0, submitted_event_count)
 
     @patch(
-        'intake.views.application_form_views.models.FormSubmission'
-        '.send_confirmation_notifications')
+        'intake.services.submissions.send_confirmation_notifications')
     @patch(
         'intake.views.session_view_base.notifications'
         '.slack_new_submission.send')
@@ -158,8 +156,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         self.assertEqual(1, submitted_event_count)
 
     @patch(
-        'intake.views.application_form_views.models.FormSubmission'
-        '.send_confirmation_notifications')
+        'intake.services.submissions.send_confirmation_notifications')
     @patch(
         'intake.views.session_view_base.notifications'
         '.slack_new_submission.send')
@@ -213,8 +210,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         self.assertTrue(send_confirmation.called)
 
     @patch(
-        'intake.views.application_form_views.models.FormSubmission'
-        '.send_confirmation_notifications')
+        'intake.services.submissions.send_confirmation_notifications')
     @patch(
         'intake.views.session_view_base.notifications'
         '.slack_new_submission.send')
@@ -238,8 +234,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         send_confirmation.assert_not_called()
 
     @patch(
-        'intake.views.application_form_views.models.FormSubmission'
-        '.send_confirmation_notifications')
+        'intake.services.submissions.send_confirmation_notifications')
     @patch(
         'intake.views.session_view_base.notifications.slack_new_submission'
         '.send')
@@ -274,8 +269,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
             event.data['errors'])
 
     @patch(
-        'intake.views.application_form_views.models.FormSubmission'
-        '.send_confirmation_notifications')
+        'intake.services.submissions.send_confirmation_notifications')
     @patch(
         'intake.views.session_view_base.notifications'
         '.slack_new_submission.send')
@@ -298,8 +292,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         self.assertTrue(send_confirmation.called)
 
     @patch(
-        'intake.views.application_form_views.models.FormSubmission'
-        '.send_confirmation_notifications')
+        'intake.services.submissions.send_confirmation_notifications')
     @patch(
         'intake.views.session_view_base.notifications'
         '.slack_new_submission.send')
@@ -370,8 +363,7 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
     fixtures = ['counties', 'organizations', 'mock_profiles']
 
     @patch(
-        'intake.views.application_form_views.models.FormSubmission'
-        '.send_confirmation_notifications')
+        'intake.services.submissions.send_confirmation_notifications')
     @patch(
         'intake.views.session_view_base.notifications'
         '.slack_new_submission.send')
@@ -400,8 +392,7 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
         send_confirmation.assert_not_called()
 
     @patch(
-        'intake.views.application_form_views.models.FormSubmission'
-        '.send_confirmation_notifications')
+        'intake.services.submissions.send_confirmation_notifications')
     @patch(
         'intake.views.session_view_base.notifications'
         '.slack_new_submission.send')
@@ -500,8 +491,7 @@ class TestDeclarationLetterReviewPage(AuthIntegrationTestCase):
             applicant_id=applicant_id).count(), 0)
 
     @patch(
-        'intake.views.application_form_views.models.FormSubmission'
-        '.send_confirmation_notifications')
+        'intake.services.submissions.send_confirmation_notifications')
     @patch(
         'intake.views.session_view_base.notifications'
         '.slack_new_submission.send')

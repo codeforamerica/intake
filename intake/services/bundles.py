@@ -1,6 +1,6 @@
 import logging
 import intake
-from intake.models import ApplicationBundle
+from intake.models import ApplicationBundle, get_parser
 import intake.services.submissions as SubmissionsService
 
 
@@ -17,11 +17,25 @@ def create_bundle_from_submissions(submissions, skip_pdf=False, **kwargs):
     return bundle
 
 
+def get_or_create_for_submissions_and_user(submissions, user):
+        query = ApplicationBundle.objects.all()
+        for sub in submissions:
+            query = query.filter(submissions=sub)
+        if not user.is_staff:
+            query = query.filter(organization=user.profile.organization)
+        query = query.first()
+        if not query:
+            query = create_bundle_from_submissions(
+                submissions,
+                organization=user.profile.organization)
+        return query
+
+
 def build_bundled_pdf_if_necessary(bundle):
     """Populates `bundled_pdf` attribute if needed
 
     First checks whether or not there should be a pdf. If so,
-    - tries to grab filled pdfs for this bundles submissionts
+    - tries to grab filled pdfs for the bundles submissions
     - if it needs a pdf but there weren't any pdfs, it logs an error and
       creates the necessary filled pdfs.
     - makes a filename based on the organization and current time.
@@ -47,6 +61,6 @@ def build_bundled_pdf_if_necessary(bundle):
         bundle.set_bundled_pdf_to_bytes(filled_pdfs[0].pdf.read())
     else:
         bundle.set_bundled_pdf_to_bytes(
-            intake.models.get_parser().join_pdfs(
+            get_parser().join_pdfs(
                 filled.pdf for filled in filled_pdfs))
     bundle.save()
