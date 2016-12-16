@@ -5,7 +5,7 @@ from intake.views import (
     stats_views,
     legacy_redirect_views,
     application_form_views,
-    admin_views
+    admin_views,
     )
 
 urlpatterns = [

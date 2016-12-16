@@ -11,6 +11,8 @@ from user_accounts import models as auth_models
 from intake.tests.base_testcases import IntakeDataTestCase, DELUXE_TEST
 from project.jinja2 import url_with_ids
 
+import intake.services.bundles as BundlesService
+
 
 class TestApplicationDetail(IntakeDataTestCase):
 
@@ -303,7 +305,8 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
         self.assertRedirects(
             result, reverse('intake-app_index'), fetch_redirect_response=False)
 
-    @patch('intake.views.admin_views.notifications.slack_submissions_viewed.send')
+    @patch(
+        'intake.views.admin_views.notifications.slack_submissions_viewed.send')
     def test_has_pdf_bundle_url_if_needed(self, slack):
         """ApplicationBundleDetailView return pdf url if needed
 
@@ -314,7 +317,7 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
         self.be_sfpubdef_user()
         mock_pdf = SimpleUploadedFile(
             'a.pdf', b"things", content_type="application/pdf")
-        bundle = models.ApplicationBundle.create_with_submissions(
+        bundle = BundlesService.create_bundle_from_submissions(
             organization=self.sf_pubdef,
             submissions=self.sf_pubdef_submissions,
             bundled_pdf=mock_pdf
@@ -358,7 +361,7 @@ class TestApplicationBundleDetailPDFView(IntakeDataTestCase):
         # patch slack_simple
         patcher = patch('intake.notifications')
         patcher.start()
-        cls.bundle = models.ApplicationBundle.create_with_submissions(
+        cls.bundle = BundlesService.create_bundle_from_submissions(
             organization=cls.sf_pubdef, submissions=cls.sf_pubdef_submissions)
         patcher.stop()
 
@@ -379,7 +382,7 @@ class TestApplicationBundleDetailPDFView(IntakeDataTestCase):
 
     def test_nonexistent_pdf_returns_404(self):
         self.be_cfa_user()
-        bundle = models.ApplicationBundle.create_with_submissions(
+        bundle = BundlesService.create_bundle_from_submissions(
                     organization=self.sf_pubdef,
                     submissions=self.sf_pubdef_submissions,
                     skip_pdf=True)

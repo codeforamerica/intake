@@ -1,0 +1,5 @@
+{{ notification_type }} by {{ oxford_comma(errors.keys()) }} for {{ submission.get_anonymous_display() }} failed with errors:
+```{% for method, error in errors.items() %}
+{{ method }}:
+    {{ error }}
+{% endfor %}```

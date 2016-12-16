@@ -12,6 +12,8 @@ from formation import fields
 
 from project.jinja2 import url_with_ids
 
+import intake.services.bundles as BundlesService
+
 
 class TestViews(IntakeDataTestCase):
 
@@ -62,9 +64,7 @@ class TestViews(IntakeDataTestCase):
             fields.DateOfBirthField.is_recommended_error_message)
 
     @patch('intake.models.get_parser')
-    @patch(
-        'intake.views.application_form_views.models.FormSubmission'
-        '.send_confirmation_notifications')
+    @patch('intake.services.submissions.send_confirmation_notifications')
     @patch(
         'intake.views.session_view_base.notifications'
         '.slack_new_submission.send')
@@ -107,11 +107,11 @@ class TestViews(IntakeDataTestCase):
             submission='FormSubmission',
             request='WSGIRequest',
             submission_count='int')
-        send_confirmation.assert_called_once_with()
+        send_confirmation.assert_called_once_with(submission)
 
     @patch('intake.models.get_parser')
     @patch(
-        'intake.views.application_form_views.models.FormSubmission'
+        'intake.views.session_view_base.SubmissionsService'
         '.send_confirmation_notifications')
     @patch(
         'intake.views.session_view_base.notifications'
@@ -151,13 +151,16 @@ class TestViews(IntakeDataTestCase):
             last_name="Bar",
             follow=True
         )
+        submission = models.FormSubmission.objects.filter(
+            answers__first_name="Foo",
+            answers__last_name="Bar").first()
         self.assertEqual(result.wsgi_request.path, reverse('intake-thanks'))
         self.assert_called_once_with_types(
             slack,
             submission='FormSubmission',
             request='WSGIRequest',
             submission_count='int')
-        send_confirmation.assert_called_once_with()
+        send_confirmation.assert_called_once_with(submission)
 
     @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
     @patch('intake.notifications.slack_submissions_viewed.send')
@@ -246,7 +249,7 @@ class TestViews(IntakeDataTestCase):
     def test_staff_user_can_see_pdf_bundle(self, slack):
         self.be_cfa_user()
         submissions = self.sf_pubdef_submissions
-        bundle = models.ApplicationBundle.create_with_submissions(
+        bundle = BundlesService.create_bundle_from_submissions(
             submissions=submissions,
             organization=self.sf_pubdef)
         ids = [s.id for s in submissions]

@@ -170,7 +170,8 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
         full_message = _("You have applied for help in ") + joined_county_list
         messages.success(self.request, full_message)
         # send emails and texts
-        sent_confirmations = submission.send_confirmation_notifications()
+        sent_confirmations = \
+            SubmissionsService.send_confirmation_notifications(submission)
         for message in sent_confirmations:
             messages.success(self.request, message)
 

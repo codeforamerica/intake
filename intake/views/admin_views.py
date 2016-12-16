@@ -14,7 +14,7 @@ from printing.pdf_form_display import PDFFormDisplay
 from intake.aggregate_serializer_fields import get_todays_date
 
 import intake.services.submissions as SubmissionsService
-
+import intake.services.bundles as BundlesService
 
 NOT_ALLOWED_MESSAGE = str(
     "Sorry, you are not allowed to access that client information. "
@@ -143,7 +143,7 @@ class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
             raise Http404(
                 "Either those applications have been deleted or you don't "
                 "have permission to view those applications")
-        bundle = models.ApplicationBundle\
+        bundle = BundlesService\
             .get_or_create_for_submissions_and_user(submissions, request.user)
         forms = [
             submission.get_display_form_for_user(request.user)
@@ -236,7 +236,7 @@ class FilledPDFBundle(FilledPDF, MultiSubmissionMixin):
             raise Http404(
                 "Either those applications have been deleted or you don't "
                 "have permission to view those applications")
-        bundle = models.ApplicationBundle\
+        bundle = BundlesService\
             .get_or_create_for_submissions_and_user(submissions, request.user)
         return redirect(bundle.get_pdf_bundle_url())
 

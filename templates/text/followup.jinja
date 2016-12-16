@@ -1,0 +1,4 @@
+Hi again {{ name|safe }}, this is {{ staff_name|safe }} from Clear My Record. You applied about a month ago for help in {{ oxford_comma(county_names)|safe }}.
+{%- for followup_message in followup_messages %}
+{{ followup_message|safe }}
+{%- endfor %}

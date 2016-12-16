@@ -1,15 +1,11 @@
-from django.utils import timezone
 from intake import (
     notifications,
     models as intake_models
 )
 from user_accounts.models import Organization
+import intake.services.bundles as BundlesService
 
-
-def is_the_weekend():
-    """datetime.weekday() returns 0 for Monday, 6 for Sunday
-    """
-    return timezone.now().weekday() in [5, 6]
+from intake.utils import is_the_weekend
 
 
 class OrganizationBundle:
@@ -32,7 +28,7 @@ class OrganizationBundle:
         """If there are new submissions, make a new bundle
         If the submissions are the same as the last bundle, use the last bundle
         """
-        return intake_models.ApplicationBundle.create_with_submissions(
+        return BundlesService.create_bundle_from_submissions(
             submissions=self.submissions,
             organization=self.organization,
         )

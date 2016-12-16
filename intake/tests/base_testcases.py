@@ -1,5 +1,7 @@
 import os
+from unittest.mock import patch
 from django.db.models import Count
+from django.test import TestCase
 from django.test.utils import setup_test_environment
 from user_accounts.tests.base_testcases import AuthIntegrationTestCase
 from intake import models
@@ -59,3 +61,24 @@ class IntakeDataTestCase(AuthIntegrationTestCase):
                 arg, '__qualname__', arg.__class__.__qualname__
             )
         self.assertDictEqual(keyword_argument_classes, dict(kwarg_types))
+
+
+class ExternalNotificationsPatchTestCase(TestCase):
+
+    def patch_json_serialization(self, mock_obj):
+        """ensure that rendered notifications are json serializable"""
+        mock_obj.render.return_value._asdict.return_value = {}
+
+    def setUp(self):
+        """patch outgoing externail notifications"""
+        self.notifications_patcher = patch(
+            'intake.service_objects.applicant_notifications.notifications')
+        notifications = self.notifications_patcher.start()
+        self.patch_json_serialization(notifications.email_followup)
+        self.patch_json_serialization(notifications.sms_followup)
+        self.patch_json_serialization(notifications.email_confirmation)
+        self.patch_json_serialization(notifications.sms_confirmation)
+        self.notifications = notifications
+
+    def tearDown(self):
+        self.notifications_patcher.stop()

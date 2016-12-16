@@ -1,6 +1,6 @@
 from unittest import TestCase as BaseTestCase
-from unittest.mock import Mock, patch, MagicMock
-from django.test import TestCase, override_settings
+from unittest.mock import Mock, patch
+from django.test import TestCase as DjangoTestCase, override_settings
 
 from django.core import mail
 from django.conf import settings
@@ -20,10 +20,10 @@ notification_mock_settings = dict(
 )
 
 
-class TestNotifications(TestCase):
+class TestNotifications(DjangoTestCase):
 
     def setUp(self):
-        TestCase.setUp(self)
+        DjangoTestCase.setUp(self)
 
     def test_email(self):
         mail.send_mail(
@@ -63,7 +63,7 @@ class TestNotifications(TestCase):
 
         front_text.channel_id = 'phone_id'
 
-        result = front_text.send(
+        front_text.send(
             to=["+15555555555"],
             message="Hey Ben")
 
@@ -72,7 +72,7 @@ class TestNotifications(TestCase):
             'text': "Hey Ben can you read me?",
             'to': ["+15555555555"],
             'options': {
-                'archive': False
+                'archive': True
             }
         }
         expected_headers = {
@@ -80,7 +80,7 @@ class TestNotifications(TestCase):
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         }
-        post_args, post_kwargs = [*mock_post.call_args]
+        post_kwargs = [*mock_post.call_args][1]
         posted_data = json.loads(post_kwargs['data'])
         self.assertDictEqual(posted_data, expected_data)
         self.assertDictEqual(post_kwargs['headers'], expected_headers)
@@ -107,7 +107,7 @@ class TestNotifications(TestCase):
         )
         front_email.channel_id = 'email_id'
 
-        result = front_email.send(
+        front_email.send(
             to=["bgolder@codeforamerica.org"],
             message="Hi")
         expected_data.update({
@@ -117,7 +117,7 @@ class TestNotifications(TestCase):
             'text': 'Hi this is an email message body.',
         })
 
-        post_args, post_kwargs = [*mock_post.call_args]
+        post_kwargs = [*mock_post.call_args][1]
         posted_data = json.loads(post_kwargs['data'])
         self.assertDictEqual(posted_data, expected_data)
         self.assertDictEqual(post_kwargs['headers'], expected_headers)
@@ -161,6 +161,7 @@ They want to be contacted via text message and email
             submission_count=self.submission_count,
             request=self.request
         ).message
+        self.assertEqual(new_submission, expected_new_submission_text)
 
     def test_render_submission_viewed(self):
         expected_submission_viewed_text = str(
@@ -174,7 +175,8 @@ They want to be contacted via text message and email
 
     def test_render_submissions_viewed(self):
         expected_submissions_viewed_text = str(
-            """staff@org.org opened apps from <url|Shining Koala, Shining Koala, and Shining Koala>""")
+            "staff@org.org opened apps from <url|Shining Koala, Shining "
+            "Koala, and Shining Koala>")
         submissions_viewed = notifications.slack_submissions_viewed.render(
             user=self.user,
             submissions=[self.sub for i in range(3)],
@@ -200,7 +202,7 @@ They want to be contacted via text message and email
         expected_json = '{"text": "Hello slack <&>"}'
         expected_headers = {'Content-type': 'application/json'}
         notifications.slack_simple.send("Hello slack <&>")
-        called_args, called_kwargs = [*mock_post.call_args]
+        called_kwargs = [*mock_post.call_args][1]
         self.assertEqual(
             called_kwargs['data'], expected_json)
         self.assertDictEqual(
@@ -211,14 +213,17 @@ They want to be contacted via text message and email
                        **notification_mock_settings)
     def test_slack_send(self, mock_post):
         mock_post.return_value = "HTTP response"
-        expected_json = '{"text": "New submission #101 to San Francisco and Contra Costa!\\n<http://filled_pdf/|Shining Koala>\\nThey want to be contacted via text message and email\\n"}'
+        expected_json = str(
+            '{"text": "New submission #101 to San Francisco and Contra '
+            'Costa!\\n<http://filled_pdf/|Shining Koala>\\nThey want to be '
+            'contacted via text message and email\\n"}')
         expected_headers = {'Content-type': 'application/json'}
-        response = notifications.slack_new_submission.send(
+        notifications.slack_new_submission.send(
             submission=self.sub,
             submission_count=self.submission_count,
             request=self.request
         )
-        called_args, called_kwargs = [*mock_post.call_args]
+        called_kwargs = [*mock_post.call_args][1]
         self.assertEqual(
             called_kwargs['data'], expected_json)
         self.assertDictEqual(
@@ -250,7 +255,9 @@ You can review and print them at this link:
                 id=i + 1, anonymous_name='App')
             for i in range(3)]
         emails = ['email1', 'email2']
-        expected_message = """Emailed email1 and email2 with a link to apps from <something.com/applications/bundle/1/|App, App, and App>"""
+        expected_message = str(
+            "Emailed email1 and email2 with a link to apps from "
+            "<something.com/applications/bundle/1/|App, App, and App>")
 
         content = notifications.slack_app_bundle_sent.render(
             emails=emails,
@@ -260,42 +267,50 @@ You can review and print them at this link:
         self.assertEqual(expected_message, content.message)
 
         # case: no submissions
-        expected_message = """No unopened applications. Did not email email1 and email2"""
+        expected_message = \
+            "No unopened applications. Did not email email1 and email2"
         content = notifications.slack_app_bundle_sent.render(
             emails=emails,
             submissions=[]
         )
         self.assertEqual(expected_message, content.message)
 
-    def test_render_slack_confirmation_sent(self):
+    def test_render_slack_notification_sent(self):
         submission = mock.FormSubmissionFactory.build(anonymous_name="App")
 
         # case: email, sms
-        expected = "Successfully sent a confirmation to App via email\nSuccessfully sent a confirmation to App via sms\n"
+        expected = str(
+            "Successfully sent a ping to App via email\nSuccessfully "
+            "sent a ping to App via sms\n")
         methods = ['email', 'sms']
-        result = notifications.slack_confirmation_sent.render(
+        result = notifications.slack_notification_sent.render(
+            notification_type='ping',
             submission=submission, methods=methods).message
         self.assertEqual(expected, result)
 
         # case: snailmail, voicemail
-        expected = "Did not send a confirmation to App via snailmail\nDid not send a confirmation to App via voicemail\n"
+        expected = str(
+            "Did not send a ping to App via snailmail\nDid not send a "
+            "ping to App via voicemail\n")
         methods = ['snailmail', 'voicemail']
-        result = notifications.slack_confirmation_sent.render(
+        result = notifications.slack_notification_sent.render(
+            notification_type='ping',
             submission=submission, methods=methods).message
         self.assertEqual(expected, result)
 
         # case: email, sms, snailmail, voicemail
         expected = "\n".join([
-            "Successfully sent a confirmation to App via email",
-            "Successfully sent a confirmation to App via sms",
-            "Did not send a confirmation to App via snailmail",
-            "Did not send a confirmation to App via voicemail\n"])
+            "Successfully sent a ping to App via email",
+            "Successfully sent a ping to App via sms",
+            "Did not send a ping to App via snailmail",
+            "Did not send a ping to App via voicemail\n"])
         methods = ['email', 'sms', 'snailmail', 'voicemail']
-        result = notifications.slack_confirmation_sent.render(
+        result = notifications.slack_notification_sent.render(
+            notification_type='ping',
             submission=submission, methods=methods).message
         self.assertEqual(expected, result)
 
-    def test_render_slack_confirmation_failed(self):
+    def test_render_slack_notification_failed(self):
         submission = mock.FormSubmissionFactory.build(anonymous_name="App")
         errors = Mock(**{
             'items.return_value': [
@@ -304,7 +319,7 @@ You can review and print them at this link:
             ],
             'keys.return_value': ['email', 'sms']
         })
-        expected = """Confirmation by email and sms for App failed with errors:
+        expected = """ping by email and sms for App failed with errors:
 ```
 email:
     some errors
@@ -312,6 +327,7 @@ email:
 sms:
     more errors
 ```"""
-        result = notifications.slack_confirmation_send_failed.render(
+        result = notifications.slack_notification_failed.render(
+            notification_type='ping',
             submission=submission, errors=errors).message
         self.assertEqual(expected, result)

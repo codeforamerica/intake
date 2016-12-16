@@ -1,5 +1,4 @@
 import uuid
-import random
 from urllib.parse import urljoin
 from pytz import timezone
 
@@ -9,7 +8,6 @@ from django.contrib.postgres.fields import JSONField
 from django.utils import timezone as timezone_utils
 from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext_lazy as _
 
 import intake
 from intake import anonymous_names
@@ -33,11 +31,14 @@ def gen_uuid():
 
 class FormSubmission(models.Model):
 
-    organizations = models.ManyToManyField('user_accounts.Organization',
-                                           related_name="submissions")
-    applicant = models.ForeignKey('Applicant',
-                                  on_delete=models.PROTECT, null=True,
-                                  related_name='form_submissions')
+    organizations = models.ManyToManyField(
+        'user_accounts.Organization', related_name="submissions")
+    applicant = models.ForeignKey(
+        'Applicant', on_delete=models.PROTECT, null=True,
+        related_name='form_submissions')
+    duplicate_set = models.ForeignKey(
+        'intake.DuplicateSubmissionSet', null=True,
+        related_name='submissions')
     answers = JSONField()
     # old_uuid is only used for porting legacy applications
     old_uuid = models.CharField(max_length=34, unique=True,
@@ -172,69 +173,6 @@ class FormSubmission(models.Model):
                 info[short] = self.answers.get(field_name, '')
         return info
 
-    def send_notification(self, notification, contact_info_key, **context):
-        contact_info = self.get_contact_info()
-        contact_info_used = {
-            contact_info_key: contact_info[contact_info_key]
-        }
-        notification.send(
-            to=[contact_info[contact_info_key]],
-            **context
-        )
-        intake.models.ApplicationLogEntry.log_confirmation_sent(
-            submission_id=self.id, user=None, time=None,
-            contact_info=contact_info_used,
-            message_sent=notification.render_content_fields(**context)
-        )
-
-    def send_confirmation_notifications(self):
-        contact_info = self.get_contact_info()
-        errors = {}
-        context = dict(
-            staff_name=random.choice(intake.constants.STAFF_NAME_CHOICES),
-            name=self.answers['first_name'],
-            county_names=self.get_nice_counties(),
-            organizations=self.organizations.all())
-        notification_settings = [
-            ('email', intake.notifications.email_confirmation,
-                'long_confirmation_message'),
-            ('sms', intake.notifications.sms_confirmation,
-                'short_confirmation_message')
-        ]
-        for key, notification, step_query_att in notification_settings:
-            if key in contact_info:
-                context.update(
-                    next_steps=self.organizations.values_list(
-                        step_query_att, flat=True))
-                try:
-                    self.send_notification(
-                        notification, key, **context)
-                except intake.notifications.FrontAPIError as error:
-                    errors[key] = error
-        successes = sorted([key for key in contact_info if key not in errors])
-        if successes:
-            intake.notifications.slack_confirmation_sent.send(
-                submission=self,
-                methods=successes)
-        if errors:
-            intake.notifications.slack_confirmation_send_failed.send(
-                submission=self,
-                errors=errors)
-        return self.confirmation_flash_messages(successes, contact_info)
-
-    def confirmation_flash_messages(self, successes, contact_info):
-        messages = []
-        sent_email_message = _("We've sent you an email at {}")
-        sent_sms_message = _("We've sent you a text message at {}")
-        for method in successes:
-            if method == 'email':
-                messages.append(
-                    sent_email_message.format(
-                        contact_info['email']))
-            if method == 'sms':
-                messages.append(sent_sms_message.format(contact_info['sms']))
-        return messages
-
     def get_transfer_action(self, request):
         other_org = request.user.profile.organization.get_transfer_org()
         if other_org:
@@ -280,3 +218,13 @@ class FormSubmission(models.Model):
 
     def __str__(self):
         return self.get_anonymous_display()
+
+
+class DuplicateSubmissionSet(models.Model):
+
+    def __str__(self):
+        return "DuplicateSubmissionSet({})".format(
+            self.submissions.count())
+
+    def __repr__(self):
+        return self.__str__()
