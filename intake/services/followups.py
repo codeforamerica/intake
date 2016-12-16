@@ -1,6 +1,7 @@
 import datetime
 from django.db.models import Q
 from intake import models, utils
+from intake.notifications import slack_simple
 from intake.service_objects import FollowupNotification
 
 
@@ -35,3 +36,14 @@ def send_followup_notifications(submissions):
         followup_notification = FollowupNotification(submission)
         followup_notification.send()
         notifications.append(followup_notification)
+    return notifications
+
+
+def send_all_followups_that_are_due(*args, **kwargs):
+    submissions = get_submissions_due_for_follow_ups(*args, **kwargs)
+    notifications = send_followup_notifications(submissions)
+    num_messages = sum([len(n.messages) for n in notifications])
+    report_template = str(
+        "Sent {} initial followups out of {} applications due for followups")
+    report = report_template.format(num_messages, submissions.count())
+    slack_simple.send(report)

@@ -1,4 +1,4 @@
-from project.jinja2 import oxford_comma
+from project.jinja2 import oxford_comma, namify
 from intake import notifications, models, utils
 from intake.constants import SMS, EMAIL
 
@@ -55,7 +55,7 @@ class ApplicantNotification:
             counties_applied_to += " County"
         return dict(
             staff_name=utils.get_random_staff_name(),
-            name=self.sub.answers['first_name'],
+            name=namify(self.sub.answers['first_name']),
             county_names=county_names,
             counties_applied_to=counties_applied_to,
             organizations=orgs,
