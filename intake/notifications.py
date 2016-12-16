@@ -147,14 +147,12 @@ class FrontNotification(TemplateNotification):
 
     def raise_post_errors(self, response, payload):
         if response.status_code != 202:
-            raise FrontAPIError(
-                """
-STATUS {status}
-Error: {title}
-{detail}
+            raise FrontAPIError("""
+Error:
+{details}
 REQUEST JSON:
 {payload}
-""".format(payload=payload, **response.json()['errors'][0]))
+""".format(details=str(response.json()), payload=payload))
 
     def send(self, to, **context_args):
         content = self.render(**context_args)
