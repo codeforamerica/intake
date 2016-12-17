@@ -64,15 +64,18 @@ span + .subfield { margin-top: .5em; }
 .options_list {
 	padding: 0;
 	margin: .25em -.25em;
-	li {
+	li { display: inline-block; }
+	label {
+		font-weight: 400;
 		background-color: #fff;
 		line-height: 1em;
 		display: inline-block; 
-		padding: .35em .75em;
+		padding: .5em .8em;
 		border: 1px solid #ddd;
 		border-radius: .25em;
-		margin: 0.5em 0.25em; }
-	label { font-weight: 400; } }
+		margin: 0.5em 0.25em;
+	}
+}
 button {
 		line-height: 1em;
 		display: inline-block; 
