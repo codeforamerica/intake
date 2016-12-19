@@ -564,9 +564,16 @@ class TestThanks(IntakeDataTestCase):
         for org in sub.organizations.all():
             self.assertContains(response, html_utils.escape(org.name))
 
+    def test_no_error_if_applicant_with_no_sub(self):
+        app = models.Applicant()
+        app.save()
+        self.set_session(applicant_id=app.id)
+        response = self.client.get(reverse('intake-thanks'))
+        self.assertEqual(response.status_code, 200)
+
 
 @override_settings(MIXPANEL_KEY='fake_key')
-class TestRAPSheetInstructions(TestCase):
+class TestRAPSheetInstructions(IntakeDataTestCase):
 
     def test_renders_with_no_session_data(self):
         response = self.client.get(reverse('intake-rap_sheet'))
@@ -576,7 +583,8 @@ class TestRAPSheetInstructions(TestCase):
         self.assertNotContains(response, "{{")
 
     @patch(
-        'intake.views.application_form_views.get_last_submission_of_applicant')
+        'intake.views.application_form_views'
+        '.get_last_submission_of_applicant_if_exists')
     @patch(
         'intake.views.application_form_views.RAPSheetInstructions'
         '.get_applicant_id')
@@ -590,3 +598,10 @@ class TestRAPSheetInstructions(TestCase):
         self.assertIn('qualifies_for_fee_waiver', response.context_data)
         self.assertIn('organizations', response.context_data)
         submission_mock.qualifies_for_fee_waiver.assert_called_once_with()
+
+    def test_no_error_if_applicant_with_no_sub(self):
+        app = models.Applicant()
+        app.save()
+        self.set_session(applicant_id=app.id)
+        response = self.client.get(reverse('intake-rap_sheet'))
+        self.assertEqual(response.status_code, 200)

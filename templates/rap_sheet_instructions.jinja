@@ -8,11 +8,12 @@
 {%- block section_class %}thanks{% endblock section_class -%}
 
 {% block column_content %}
+  {%- if organizations %}
   {%- for organization in organizations %}
   <p class="next_step {{ organization.slug }}">
     {{ linkify(organization.long_confirmation_message) }} </p>
   {%- endfor %}
-
+  {%- endif %}
 
   {#
     qualifies_for_fee_waiver can have three different values:

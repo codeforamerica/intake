@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext as _
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse, reverse_lazy
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.views.generic.base import TemplateView
 
@@ -165,9 +166,12 @@ class SelectCounty(base_views.MultiStepFormViewBase):
         return super().form_valid(form)
 
 
-def get_last_submission_of_applicant(applicant_id):
-    return models.FormSubmission.objects.filter(
-        applicant_id=applicant_id).latest('date_received')
+def get_last_submission_of_applicant_if_exists(applicant_id):
+    subs = models.FormSubmission.objects.filter(
+            applicant_id=applicant_id)
+    if subs.count():
+        return subs.latest('date_received')
+    return None
 
 
 class Thanks(TemplateView, base_views.GetFormSessionDataMixin):
@@ -183,10 +187,12 @@ class Thanks(TemplateView, base_views.GetFormSessionDataMixin):
         return super().get(request)
 
     def get_context_data(self, *args, **kwargs):
-        sub = get_last_submission_of_applicant(self.applicant_id)
-        context = dict(
-            organizations=sub.organizations.all()
-            )
+        sub = get_last_submission_of_applicant_if_exists(self.applicant_id)
+        context = {}
+        if sub:
+            context.update(
+                organizations=sub.organizations.all()
+                )
         return context
 
 
@@ -197,10 +203,12 @@ class RAPSheetInstructions(TemplateView, base_views.GetFormSessionDataMixin):
         context = {}
         applicant_id = self.get_applicant_id()
         if applicant_id:
-            submission = get_last_submission_of_applicant(applicant_id)
-            context['organizations'] = submission.organizations.all()
-            context['qualifies_for_fee_waiver'] = \
-                submission.qualifies_for_fee_waiver()
+            submission = get_last_submission_of_applicant_if_exists(
+                applicant_id)
+            if submission:
+                context['organizations'] = submission.organizations.all()
+                context['qualifies_for_fee_waiver'] = \
+                    submission.qualifies_for_fee_waiver()
         return context
 
 
