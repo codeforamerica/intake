@@ -6,6 +6,7 @@ from intake.views import (
     legacy_redirect_views,
     application_form_views,
     admin_views,
+    application_note_views,
     )
 
 urlpatterns = [
@@ -81,6 +82,15 @@ urlpatterns = [
     url(r'^applications/mark/transferred/$',
         login_required(admin_views.mark_transferred_to_other_org),
         name='intake-mark_transferred_to_other_org'),
+
+    # API Views
+    url(r'^notes/create/$',
+        login_required(application_note_views.create_note),
+        name='intake-create_note'),
+
+    url(r'^notes/(?P<pk>[0-9]+)/delete/$',
+        login_required(application_note_views.destroy_note),
+        name='intake-destroy_note'),
 
 ]
 
