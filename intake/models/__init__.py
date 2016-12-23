@@ -15,6 +15,7 @@ from .form_submission import (
     MissingAnswersError,
     MissingPDFsError,
     )
+from .note import ApplicationNote
 
 
 __all__ = [
@@ -27,6 +28,7 @@ __all__ = [
     Applicant,
     ApplicationBundle,
     ApplicationEvent,
+    ApplicationNote,
     ApplicationLogEntry,
     ApplicantContactedLogEntry,
     FormSubmission,
