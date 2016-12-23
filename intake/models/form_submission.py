@@ -75,11 +75,8 @@ class FormSubmission(models.Model):
             intake.models.ApplicationLogEntry.PROCESSED, max)
 
     def get_local_date_received(self, fmt=None, timezone_name='US/Pacific'):
-        local_tz = timezone(timezone_name)
-        local_datetime = self.date_received.astimezone(local_tz)
-        if not fmt:
-            return local_datetime
-        return local_datetime.strftime(fmt)
+        return intake.utils.local_time(
+            self.date_received, fmt, timezone_name)
 
     def get_contact_preferences(self):
         if 'contact_preferences' in self.answers:
