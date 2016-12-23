@@ -1,105 +1,44 @@
+window.$ = require('jquery');
+var csrf = require('./csrf');
 var utils = require('./utils');
-var c3 = require('c3');
-var moment = require('moment');
 
+var templateRenderer = require('./templates');
 
-function buildChart1(data){
-	var timeline = data.map(function (oneOrgsData) {
-		var weeklyRates = oneOrgsData.weekly_totals.map(function(week) {
-			week.date = moment(week.date).format('YYYY-MM-DD');
-			week.count = Number(week.count);
-			if (isNaN(week.count)) week.count = 0;
-			return week;
-			});
-		return weeklyRates;
-	});
-	// this creates the xs reference x-axis that we will use
-	var xs = {};
-	var columns = [];
-	data.forEach(function(org, i) {
-		var name = org.org.name;
-		var xName = 'x' + String(i + 1); 
-		xs[name] = xName;
-		// do somethigng that creates a column
-		columns.push([xName].concat(timeline[i].map(function(d) {return d.date})));
-		columns.push([name].concat(timeline[i].map(function(d) {return d.count})));
-	});
-	var chart1 = c3.generate({
-		data: {
-			xs: xs,
-			columns: columns,
-		},
-		axis: {
-			x: {
-				type: 'timeseries',
-			},
-			y: {
-				padding: {
-					bottom:0
-				}
-			}
-		},
-		bindto: '#timeSeries'
-	});
-	return chart1;
+function handleNoteDeletionClick(e){
+	// .target == delete note button
+	// this == ./notes_log
+	if( !confirm("Are you sure?") ){ return false; }
+	var targetedNote = $(e.target).parents('.note');
+	var note_id = targetedNote.attr("id").replace('application_note-', '');
+	var actionUrl = '/notes/' + note_id + '/delete/';
+	$.post(actionUrl, {}, function (data){ targetedNote.remove(); })
 }
 
-function buildChart2(data) {
-  var timeline = data.map(function (oneOrgsData) {
-    var weeklyRates = oneOrgsData.weekly_totals.map(function(week) {
-      week.date = moment(week.date).format('YYYY-MM-DD');
-      week.count = Number(week.count);
-      if (isNaN(week.count)) week.count = 0;
-      return week;
-    });
-    return weeklyRates;
-  });
-  // this creates the xs reference x-axis that we will use
-  var xs = {};
-  var columns = [];
-  data.forEach(function(org, i) {
-    var name = org.org.name;
-    var xName = 'x' + String(i + 1); 
-    xs[name] = xName;
-    // do somethigng that creates a column
-    columns.push([xName].concat(timeline[i].map(function(d) {return d.date})));
-    columns.push([name].concat(timeline[i].map(function(d) {return d.count})));
-  });
-  columns = columns.map(function(col) {
-    if (col[0][0] !== 'x') {
-      for (var i = 2; i < col.length; i++) {
-        col[i] = col[i - 1] + col[i];
-      }
-    }
-    return col;
-  });
-  var chart2 = c3.generate({
-    data: {
-      xs: xs,
-      columns: columns,
-    },
-    axis: {
-      x: {
-        type: 'timeseries',
-      },
-      y: {
-        padding: {
-          bottom:0
-        }
-      }
-    },
-    bindto: '#timeSeriesGrowth'
-  });
-  return chart2;
+function handleNewNoteFormSubmission(e){
+	// .target == Save note button
+	// this == form
+	e.preventDefault();
+	var form = $(this);
+	var actionUrl = form.attr('action');
+	var rawData = form.serializeArray();
+	var data = {};
+	rawData.forEach(function (field){ data[field.name] = field.value; });
+	$.post(actionUrl, data, function (note){
+		var html = templateRenderer.note(note);
+		form.parents('.notes_log').find('.notes').prepend(html);
+		form.find("[name='body']").val('');
+	});
 }
 
-function readDataAndDrawCharts(){
-	// pull in JSON data
-	var data = utils.getJson('applications_json');
-	window.chart1 = buildChart1(data);
-	window.chart2 = buildChart2(data);
+function initializeEventListeners(){
+	$('.notes_log').on('click', '.note-remove', handleNoteDeletionClick);
+	$('form.note-create_form').on('submit', handleNewNoteFormSubmission);
 }
 
+function main(){
+	var csrftoken = utils.getCookie('csrftoken');
+	csrf.setupAjaxCsrf($, csrftoken);
+	initializeEventListeners();
+}
 
-
-readDataAndDrawCharts();
+$(document).ready(main)
