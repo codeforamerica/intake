@@ -1,7 +1,7 @@
 {% extends "admin_base.jinja" %}
 
-{% block content %}
 
+{% block content %}
 <div class="container">
   <div class="row">
     {%- if request.user.is_staff %}
@@ -11,79 +11,16 @@
     {%- endif %}
   </div>
   <div class="row">
-    <table class="table applications_list">
-    <tr>
-      <th>Date</th>
-      <th>Last Name</th>
-      <th>First Name</th>
-      <th>Case Details PDF</th>
-      {%- if show_pdf %}
-      <th>Intake PDF</th>
-      {%- endif %}
-      <th>Last Opened</th>
-      <th>Added to DB</th>
-      <th>Delete?</th>
-    </tr>
-    {% for app in submissions %}
-    <tr>
-      <td>
-        <a href="{{ url('intake-app_detail', submission_id=app.id)}}">
-        {{ app.get_local_date_received('%-m/%-d/%y') }}
-        </a>
-      </td>
-      <td>{{ namify(app.answers.get("last_name", "")) }}</td>
-      <td>{{ namify(app.answers.get("first_name", "")) }}</td>
-      <td>
-        <a
-          href="{{ app.get_case_printout_url() }}"
-          target="_blank"
-          class="btn btn-default btn-sm">
-          <span class="glyphicon glyphicon-print"></span>
-          Details
-        </a>
-      </td>
-      {%- if show_pdf %}
-      <td>
-        <a href="{{ 
-          url('intake-filled_pdf',
-            submission_id=app.id
-            ) }}" class="btn btn-default btn-sm">
-            <span class="glyphicon glyphicon-file"></span>
-            PDF
-            </a>
-      </td> 
-      {%- endif %}
-      <td>
-      {% if app.last_opened_by_agency() %}
-      {{ humanize.naturaltime(app.last_opened_by_agency()) }}
-      {%- else -%}------------{% endif %}
-      </td>
-      <td>
-      {% if app.last_processed_by_agency() %}
-        <span class="glyphicon glyphicon-ok-sign"></span>
-        Added {{ humanize.naturaltime(app.last_processed_by_agency()) }}
-      {%- else -%}
-        <a class="btn btn-default btn-sm" href="{{
-          url_with_ids('intake-mark_processed',
-          ids=[app.id]) + '&next=' + url('intake-app_index')
-             }}">
-        <span class="glyphicon glyphicon-plus"></span>
-        Mark as added
-        </a>
-      {% endif %}
-      </td>
-      <td>
-        <a class="btn btn-default btn-sm delete" href="{{ url('intake-delete_page',
-          submission_id=app.id
-            ) }}">
-          <span class="glyphicon glyphicon-remove"></span>
-          Delete
-        </a>
-      </td>
-    </tr>
-    {% endfor %}
-      
-    </table>
+    {% if perms.intake.view_application_note %}
+      {% include "followup_list.jinja" %}
+    {% else %}
+      {% include "app_reviewer_list.jinja" %}
+    {% endif %}
   </div>
 </div>
 {% endblock content %}
+
+
+{% block scripts %}
+<script src="{{ static('js/admin.js')}}"></script>
+{% endblock scripts %}

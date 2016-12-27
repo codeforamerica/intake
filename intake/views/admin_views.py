@@ -115,13 +115,6 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
         return context
 
 
-@method_decorator(staff_member_required, 'dispatch')
-class StaffIndex(ApplicationIndex):
-    """A page for staff to review and edit applications
-    """
-    template_name = "staff_index.jinja"
-
-
 class MultiSubmissionMixin:
     """A mixin for pulling multiple submission ids
     out of request query params.
@@ -465,7 +458,6 @@ class CaseBundlePrintoutPDFView(ViewAppDetailsMixin, View):
 filled_pdf = FilledPDF.as_view()
 pdf_bundle = FilledPDFBundle.as_view()
 app_index = ApplicationIndex.as_view()
-staff_index = StaffIndex.as_view()
 app_bundle = ApplicationBundle.as_view()
 app_detail = ApplicationDetail.as_view()
 mark_processed = MarkProcessed.as_view()

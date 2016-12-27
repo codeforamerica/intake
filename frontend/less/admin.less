@@ -7,3 +7,69 @@
 		padding-bottom: 1em;
 	}
 }
+.org_tag {
+	font-size: 0.8em;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+.notes_log {
+	font-size: 0.7em;
+	width: 28em;
+}
+td.notes_log-cell {
+	padding: 0;
+}
+.note {
+	padding: 0.25em 0;
+	margin: 0.5em 0 0 0;
+	border-top: 1px solid #ccc;
+}
+.note > * {
+	display: inline-block;
+	vertical-align: top;
+	line-height: 1.5rem;
+}
+
+.note-time {
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	font-size: 0.8em;
+	width: 4.2em;
+}
+.note-body {
+	width: 12em;
+}
+
+.note-author {
+	width: 4em;
+}
+div.note-remove > button.btn {
+	font-size: 0.9em;
+	color: #ccc;
+	border-color: #ccc;
+	padding: .2em .4em;
+	&:hover {
+		color: #fff;
+		border-color: @brand-danger;
+		background-color: @brand-danger;
+	}
+	.glyphicon {
+		margin: 0;
+	}
+}
+div.create_note > button.note-show_form {
+	font-size: 0.9em;
+	padding: .3em .6em;
+}
+.note-create_form {
+	input[name="body"] {
+		width: 18.5em;
+		font-weight: 400;
+		display: inline-block;
+		padding: .25em .5em;
+	}
+	button[type="submit"] {
+		font-size: 1.1em;
+		padding: .3em .6em;
+	}
+}
