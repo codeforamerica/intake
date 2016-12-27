@@ -1,10 +1,9 @@
 from django.db import models
 import intake
-
-
-class Permissions:
-    CAN_SEE_APP_STATS = 'Can see detailed aggregate information about apps'
-    CAN_SEE_APP_DETAILS = 'Can see detail information about individual apps'
+from intake.permissions import (
+    CAN_SEE_APP_STATS,
+    CAN_SEE_APP_DETAILS
+    )
 
 
 class Applicant(models.Model):
@@ -14,8 +13,8 @@ class Applicant(models.Model):
 
     class Meta:
         permissions = (
-            ('view_app_stats', Permissions.CAN_SEE_APP_STATS),
-            ('view_app_details', Permissions.CAN_SEE_APP_DETAILS),
+            CAN_SEE_APP_STATS(),
+            CAN_SEE_APP_DETAILS(),
         )
 
     def log_event(self, name, data=None):

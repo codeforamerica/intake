@@ -1,6 +1,9 @@
 from django.views.generic.base import TemplateView
 
-from intake import models, serializers, constants, aggregate_serializers
+from intake import (
+    models, serializers, constants, aggregate_serializers,
+    permissions
+    )
 
 
 def is_valid_app(app):
@@ -60,7 +63,8 @@ class Stats(TemplateView):
     template_name = "stats.jinja"
 
     def get_context_data(self, **kwargs):
-        show_private_data = self.request.user.has_perm('intake.view_app_stats')
+        show_private_data = self.request.user.has_perm(
+            permissions.CAN_SEE_APP_STATS.app_code)
         context = super().get_context_data(**kwargs)
         all_apps = get_serialized_applications()
         apps_by_org = breakup_apps_by_org(all_apps)

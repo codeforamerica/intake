@@ -2,13 +2,16 @@ from django.shortcuts import redirect, get_object_or_404
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import View
 from django.views.generic.base import TemplateView
+
+from django.utils.decorators import method_decorator
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib import messages
 from django.http import Http404, HttpResponse
 from django.template.response import TemplateResponse
 
 
-from intake import models, notifications
+from intake import models, notifications, permissions
 from user_accounts.models import Organization
 from printing.pdf_form_display import PDFFormDisplay
 from intake.aggregate_serializer_fields import get_todays_date
@@ -28,7 +31,7 @@ def not_allowed(request):
 
 
 class ViewAppDetailsMixin(PermissionRequiredMixin):
-    permission_required = 'intake.view_app_details'
+    permission_required = permissions.CAN_SEE_APP_DETAILS.app_code
 
 
 class ApplicationDetail(ViewAppDetailsMixin, View):
@@ -110,6 +113,13 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
         context['show_pdf'] = self.request.user.profile.should_see_pdf()
         context['body_class'] = 'admin'
         return context
+
+
+@method_decorator(staff_member_required, 'dispatch')
+class StaffIndex(ApplicationIndex):
+    """A page for staff to review and edit applications
+    """
+    template_name = "staff_index.jinja"
 
 
 class MultiSubmissionMixin:
@@ -455,6 +465,7 @@ class CaseBundlePrintoutPDFView(ViewAppDetailsMixin, View):
 filled_pdf = FilledPDF.as_view()
 pdf_bundle = FilledPDFBundle.as_view()
 app_index = ApplicationIndex.as_view()
+staff_index = StaffIndex.as_view()
 app_bundle = ApplicationBundle.as_view()
 app_detail = ApplicationDetail.as_view()
 mark_processed = MarkProcessed.as_view()
