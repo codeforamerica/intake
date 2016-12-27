@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth.models import User, Group, Permission
 from intake import models
+from intake import permissions
 
 
 class TestApplicant(TestCase):
@@ -37,7 +38,7 @@ class TestApplicant(TestCase):
         user = User.objects.create(username='testuser')
         group = Group.objects.create(name="performance_monitors")
         permission = Permission.objects.get(
-            name=models.applicant.Permissions.CAN_SEE_APP_STATS)
+            name=permissions.CAN_SEE_APP_STATS.name)
         group.permissions.add(permission)
         user.groups.add(group)
         self.assertTrue(user.has_perm('intake.view_app_stats'))

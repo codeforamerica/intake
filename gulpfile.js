@@ -38,6 +38,24 @@ gulp.task('admin_js', function(){
     .pipe(gulp.dest('./frontend/build/js/'));
 });
 
+
+gulp.task('stats_js', function(){
+  return browserify({
+    entries: './frontend/js/stats_entry.js',
+    debug: true,
+    // defining transforms here will avoid crashing your stream
+    transform: []
+  }).bundle()
+    .pipe(source('stats.js'))
+    .pipe(buffer())
+    .on('error', function(e) {
+        gutil.log(e.stack);
+        this.emit('end');
+    })
+    .pipe(gulp.dest('./frontend/build/js/'));
+});
+
+
 gulp.task('less_dev', function(){
   return gulp.src('./frontend/less/main.less')
     .pipe(less())
@@ -46,7 +64,7 @@ gulp.task('less_dev', function(){
 
 gulp.task('watch', function(){
   gulp.watch('./frontend/less/**/*.less', ['less_dev']);
-  gulp.watch('./frontend/js/**/*.js', ['admin_js']);
+  gulp.watch('./frontend/js/**/*.js', ['admin_js', 'stats_js']);
 })
 
 gulp.task('django', function(){
@@ -56,5 +74,6 @@ gulp.task('django', function(){
 });
 
 
-gulp.task('build', ['fonts', 'img', 'voicemail', 'less_dev', 'admin_js'])
+gulp.task('build', [
+  'fonts', 'img', 'voicemail', 'less_dev', 'admin_js', 'stats_js'])
 gulp.task('default', ['django', 'build', 'watch'])

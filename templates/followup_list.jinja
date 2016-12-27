@@ -1,0 +1,81 @@
+<table class="table applications_list">
+<tr>
+  <th>ID</th>
+  <th>Received</th>
+  <th>Name</th>
+  <th>Phone</th>
+  <th>Email</th>
+  <th>Organizations</th>
+  {%- if perms.intake.view_application_note %}
+  <th>Notes</th>
+  {%- endif %}
+</tr>
+{% for app in submissions %}
+<tr>
+  <td>
+    <a href="{{ app.get_absolute_url() }}">{{ app.id }}</a>
+  </td>
+  <td>
+    <a href="{{ app.get_absolute_url() }}">
+      <div class="date_received">
+        <div class="date">{{ 
+          app.get_local_date_received('%b %-d')
+        }}</div>
+        <div class="time">{{ 
+          app.get_local_date_received('%-I:%M %p') 
+        }}</div>
+      </div>
+    </a>
+  </td>
+  <td>
+    {{ app.get_full_name() }}
+  </td>
+  <td>
+    {{ app.answers.get('phone_number', '----') }}
+  </td>
+  <td>
+    {{ app.answers.get('email', '----') }}
+  </td>
+  <td>
+    {%- for org in app.organizations.all() %}
+      <div class="org_tag">{{ org.slug.replace('_', ' ') }}</div>
+    {%- endfor %}
+  </td>
+  {%- if perms.intake.view_application_note %}
+  <td class="notes_log-cell">
+    <div class="notes_log">
+      {%- if perms.intake.add_application_note %}
+      <form class="note-create_form" action="{{ url('intake-create_note') }}" method="post">
+        <input type="hidden" name="submission" value="{{ app.id }}">
+        <input type="hidden" name="user" value="{{ request.user.id }}">
+        <input type="text" name="body">
+        <button type="submit" class="btn btn-default btn-sm">
+        <span class="glyphicon glyphicon-comment"></span>
+        Save note</button>
+      </form>
+      {%- endif %}
+      <div class="notes">
+      {%- for note in app.notes.all() %}
+        <div class="note" id="application_note-{{ note.id }}">
+          <div class="note-time">{{
+            local_time(note.created, '%b %-d')
+          }}</div>
+          <div class="note-body">{{ note.body }}</div>
+          <div class="note-author">-Tiffany</div>
+          
+          {%- if perms.intake.delete_application_note %}
+          <div class="note-remove" title="Delete this note">
+            <button class="btn btn-danger btn-sm">
+            <span class="glyphicon glyphicon-remove-sign"></span> Delete</a>
+          </div>
+          {%- endif %}
+        </div>
+      {%- endfor %}
+      </div>
+    </div>
+  </td>
+  {%- endif %}
+</tr>
+{% endfor %}
+  
+</table>

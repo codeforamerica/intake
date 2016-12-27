@@ -2,8 +2,7 @@ import itertools
 from django.utils.translation import ugettext_lazy as _
 import Levenshtein
 
-import intake
-from intake import models
+from intake import models, groups
 from intake.constants import SMS, EMAIL
 from intake.service_objects import ConfirmationNotification
 
@@ -73,8 +72,12 @@ def fill_pdfs_for_submission(submission):
 def get_permitted_submissions(user, ids=None, related_objects=False):
     query = models.FormSubmission.objects
     if related_objects:
-        query = query.prefetch_related(
-            'logs__user__profile__organization')
+        prefetch_relations = [
+            'logs__user__profile__organization'
+        ]
+        if user.groups.filter(name=groups.FOLLOWUP_STAFF).exists():
+            prefetch_relations.append('notes')
+        query = query.prefetch_related(*prefetch_relations)
     if ids:
         query = query.filter(pk__in=ids)
     if user.is_staff:

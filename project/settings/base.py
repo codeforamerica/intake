@@ -80,6 +80,7 @@ TEMPLATES = [
                 "to_json": "project.jinja2.to_json",
                 "humanize": "project.jinja2.humanize",
                 "settings": "django.conf.settings",
+                "local_time": "intake.utils.local_time",
             }
         },
     },
