@@ -9,8 +9,6 @@ from intake.permissions import (
 class Applicant(models.Model):
     visitor = models.ForeignKey('intake.Visitor', null=True)
 
-    # permissions
-
     class Meta:
         permissions = (
             CAN_SEE_APP_STATS(),

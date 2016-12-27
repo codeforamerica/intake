@@ -31,10 +31,33 @@
   }
 },
 {
+  "model": "auth.group",
+  "fields": {
+    "name": "followup_staff",
+    "permissions": [
+      [
+        "add_applicationnote",
+        "intake",
+        "applicationnote"
+      ],
+      [
+        "change_applicationnote",
+        "intake",
+        "applicationnote"
+      ],
+      [
+        "delete_applicationnote",
+        "intake",
+        "applicationnote"
+      ]
+    ]
+  }
+},
+{
   "model": "auth.user",
   "fields": {
     "password": "pbkdf2_sha256$30000$mQNl2M1ZGrni$/FN7D7xxb84FcvHfIQ1Da/uN9Vdstc57Npw1Vm3BONM=",
-    "last_login": "2016-12-04T00:48:18Z",
+    "last_login": "2016-12-27T22:10:49Z",
     "is_superuser": true,
     "username": "cfa_user",
     "first_name": "Fake",
@@ -46,6 +69,9 @@
     "groups": [
       [
         "application_reviewers"
+      ],
+      [
+        "followup_staff"
       ]
     ],
     "user_permissions": []

@@ -1,5 +1,6 @@
 from django.db import models
 from intake.utils import local_time
+from intake.permissions import CAN_SEE_FOLLOWUP_NOTES
 
 
 class ApplicationNote(models.Model):
@@ -12,6 +13,9 @@ class ApplicationNote(models.Model):
 
     class Meta:
         ordering = ['-created']
+        permissions = (
+            CAN_SEE_FOLLOWUP_NOTES(),
+            )
 
     def __str__(self):
         name = self.user.first_name or self.user.username

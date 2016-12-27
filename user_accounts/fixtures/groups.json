@@ -29,5 +29,28 @@
       ]
     ]
   }
+},
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "followup_staff",
+    "permissions": [
+      [
+        "add_applicationnote",
+        "intake",
+        "applicationnote"
+      ],
+      [
+        "change_applicationnote",
+        "intake",
+        "applicationnote"
+      ],
+      [
+        "delete_applicationnote",
+        "intake",
+        "applicationnote"
+      ]
+    ]
+  }
 }
 ]

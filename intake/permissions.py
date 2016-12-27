@@ -19,3 +19,8 @@ CAN_SEE_APP_STATS = PermissionDefinition(
     'view_app_stats', 'Can see detailed aggregate information about apps')
 CAN_SEE_APP_DETAILS = PermissionDefinition(
     'view_app_details', 'Can see detail information about individual apps')
+
+
+# notes
+CAN_SEE_FOLLOWUP_NOTES = PermissionDefinition(
+    'view_application_note', 'Can read the contents of notes from followups')
