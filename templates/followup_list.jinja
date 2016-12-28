@@ -61,7 +61,7 @@
             local_time(note.created, '%b %-d')
           }}</div>
           <div class="note-body">{{ note.body }}</div>
-          <div class="note-author">-Tiffany</div>
+          <div class="note-author">-{{ note.user.first_name }}</div>
           
           {%- if perms.intake.delete_application_note %}
           <div class="note-remove" title="Delete this note">
