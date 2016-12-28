@@ -247,6 +247,9 @@ order by count(*) desc
             if hits:
                 data['hits'] = hits
                 data['conversion_rate'] = app_count / hits
+            else:
+                data['hits'] = 0
+                data['conversion_rate'] = 1.0
             if referrer == '':
                 data['channel'] = 'DIRECT'
             results.append(data)
