@@ -1,11 +1,10 @@
-<table class="table applications_list">
+<table class="table applications_list followups">
 <tr>
   <th>ID</th>
   <th>Received</th>
   <th>Name</th>
-  <th>Phone</th>
-  <th>Email</th>
-  <th>Organizations</th>
+  <th>Contact</th>
+  <th>Orgs</th>
   {%- if perms.intake.view_application_note %}
   <th>Notes</th>
   {%- endif %}
@@ -31,12 +30,14 @@
     {{ app.get_full_name() }}
   </td>
   <td>
-    {{ app.answers.get('phone_number', '----') }}
-  </td>
-  <td>
+    <div class="phone_number">
+    +1{{ app.answers.get('phone_number', '----') }}
+    </div>
+    <div class="email">
     {{ app.answers.get('email', '----') }}
+    </div>
   </td>
-  <td>
+  <td class="org_tags">
     {%- for org in app.organizations.all() %}
       <div class="org_tag">{{ org.slug.replace('_', ' ') }}</div>
     {%- endfor %}

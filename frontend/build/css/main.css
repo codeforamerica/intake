@@ -4248,10 +4248,17 @@ pre.address {
   padding-top: 1em;
   padding-bottom: 1em;
 }
-.org_tag {
+table.followups {
   font-size: 0.8em;
+}
+.org_tag {
+  display: inline-block;
+  font-size: 0.7em;
   text-transform: uppercase;
-  letter-spacing: 1px;
+}
+table.table tr > td.org_tags {
+  width: 6em;
+  line-height: 0.9em;
 }
 .notes_log {
   font-size: 0.7em;
@@ -4268,16 +4275,17 @@ td.notes_log-cell {
 .note > * {
   display: inline-block;
   vertical-align: top;
-  line-height: 1.5rem;
+  line-height: 1rem;
 }
 .note-time {
   text-transform: uppercase;
   letter-spacing: 1px;
   font-size: 0.8em;
-  width: 4.2em;
+  width: 4.4em;
 }
 .note-body {
-  width: 12em;
+  width: 13em;
+  padding: 0 .35em;
 }
 .note-author {
   width: 4em;
@@ -4287,6 +4295,7 @@ div.note-remove > button.btn {
   color: #ccc;
   border-color: #ccc;
   padding: .2em .4em;
+  margin: 0 0.4em;
 }
 div.note-remove > button.btn:hover {
   color: #fff;
