@@ -1,0 +1,36 @@
+<nav aria-label="Page navigation">
+  <h4 class="page_nav_header">
+    Page {{ submissions.number }} of {{ submissions.paginator.num_pages }}
+  </h4>
+  <ul class="pagination pagination-sm">
+    {%- if submissions.has_previous() %}
+    <li title="Previous page">
+      <a href="?page={{ submissions.previous_page_number() }}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {%- endif %}
+    {% for page_index in page_counter %}
+      {%- if page_index == submissions.number %}
+      <li class="active">
+        <span>{{ page_index }} <span class="sr-only">(current)</span></span>
+      </li>
+      {%- elif page_index == 'jump' %}
+      <li class="disabled">
+        <span>&hellip;</span>
+      </li>
+      {%- else %}
+      <li title="Jump to page {{ page_index }}">
+        <a href="?page={{ page_index }}">{{ page_index }}</a>
+      </li>
+      {%- endif %}
+    {% endfor %}
+    {%- if submissions.has_next() %}
+    <li title="Next page">
+      <a href="?page={{ submissions.next_page_number() }}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    {%- endif %}
+  </ul>
+</nav>

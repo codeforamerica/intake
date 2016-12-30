@@ -31,10 +31,14 @@
   </td>
   <td>
     <div class="phone_number">
-    +1{{ app.answers.get('phone_number', '----') }}
+      {%- if app.answers.get('phone_number') %}
+        +1{{ app.answers.get('phone_number') }}
+      {%- else %}
+        -----
+      {%- endif %}
     </div>
     <div class="email">
-    {{ app.answers.get('email', '----') }}
+    {{ app.answers.get('email', '-----') }}
     </div>
   </td>
   <td class="org_tags">
