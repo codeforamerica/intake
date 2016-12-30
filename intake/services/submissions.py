@@ -1,5 +1,6 @@
 import itertools
 from django.utils.translation import ugettext_lazy as _
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import Levenshtein
 
 from intake import models, groups
@@ -67,6 +68,22 @@ def fill_pdfs_for_submission(submission):
         organization__submissions=submission)
     for fillable in fillables:
         fillable.fill_for_submission(submission)
+
+
+def get_paginated_submissions_for_user(
+        user, page_index, max_count_per_page=25, min_count_per_page=5):
+    qset = get_permitted_submissions(user, related_objects=True)
+    paginator = Paginator(
+        qset, max_count_per_page, orphans=min_count_per_page)
+    try:
+        return paginator.page(page_index)
+    except PageNotAnInteger:
+        return paginator.page(1)
+    except EmptyPage:
+        if int(page_index) <= 0:
+            return paginator.page(1)
+        else:
+            return paginator.page(paginator.num_pages)
 
 
 def get_permitted_submissions(user, ids=None, related_objects=False):

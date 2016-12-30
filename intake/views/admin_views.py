@@ -11,7 +11,7 @@ from django.http import Http404, HttpResponse
 from django.template.response import TemplateResponse
 
 
-from intake import models, notifications, permissions
+from intake import models, notifications, permissions, utils
 from user_accounts.models import Organization
 from printing.pdf_form_display import PDFFormDisplay
 from intake.aggregate_serializer_fields import get_todays_date
@@ -101,15 +101,21 @@ class FilledPDF(ApplicationDetail):
 
 
 class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
-    """A list view of all the application to a user's organization.
+    """A paginated list view of all the application to a user's organization.
     """
     template_name = "app_index.jinja"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['submissions'] = list(
-            SubmissionsService.get_permitted_submissions(
-                self.request.user, related_objects=True))
+        context['submissions'] = \
+            SubmissionsService.get_paginated_submissions_for_user(
+                self.request.user,
+                self.request.GET.get('page')
+            )
+        context['page_counter'] = \
+            utils.get_page_navigation_counter(
+                page=context['submissions'],
+                wing_size=9)
         context['show_pdf'] = self.request.user.profile.should_see_pdf()
         context['body_class'] = 'admin'
         return context
