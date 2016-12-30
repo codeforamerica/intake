@@ -1,18 +1,3 @@
-{#-
-`submissions` is a Page object
-  - .object_list
-  - .number
-  - .paginator
-    - .num_pages
-    - .page_range
-  - .has_next()
-  - .has_previous()
-  - .has_other_pages()
-  - .next_page_number()
-  - .previous_page_number()
-  - .start_index()
-  - .end_index()
--#}
 <nav aria-label="Page navigation">
   <h4 class="page_nav_header">
     Page {{ submissions.number }} of {{ submissions.paginator.num_pages }}
