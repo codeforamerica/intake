@@ -1,0 +1,210 @@
+var $ = require('jquery');
+var tagSearch = require('./tag_search');
+var templates = require('./templates');
+
+
+// key codes
+var UP_ARROW = 38;
+var DOWN_ARROW = 40;
+var TAB_KEY = 9;
+var DELETE_KEY = 8;
+
+
+// there is one STATE used for any active widget
+var STATE;
+function resetState(){
+  // revert to initial state
+  STATE = {
+    elems: {
+      widget: null,
+      input: null,
+      resultsList: null
+    },
+    results: [],
+    selectedResultIndex: null,
+  };
+}
+
+function clearResults(){
+  // empty all results and render an empty menu
+  STATE.results = [];
+  renderResults();
+}
+
+function selectResult(index){
+  /*
+    changes the state to select the new result (by index)
+    and then renders the new results state
+  */
+  var currentIndex = STATE.selectedResultIndex;
+  if( currentIndex !== null ){
+    var currentSelection = STATE.results[currentIndex];
+    currentSelection.selected = false;
+  }
+  STATE.selectedResultIndex = index;
+  if( index !== null ){
+    STATE.results[index].selected = true
+  }
+  renderResults();
+}
+
+function renderResults(){
+  // render the menu to match the search results state
+  STATE.elems.resultsList.html(
+    STATE.results.map(templates.tagAutocompleteSearchResult).join('')
+  );
+}
+
+function getMaxSplittingIndex(text){
+  // get the index position after the last comma or space
+  var lastCommaIndex = text.lastIndexOf(',');
+  var lastSpaceIndex = text.lastIndexOf(' ');
+  return Math.max(lastCommaIndex, lastSpaceIndex) + 1;
+}
+
+
+function updateAutocompleteSearchWithLatestValue(){
+  // get the portion of text after the last comma or space
+  var currentValue = STATE.elems.input.val();
+  var maxCuttingIndex = getMaxSplittingIndex(currentValue);
+  var searchTerm = currentValue.substring(maxCuttingIndex);
+  STATE.results = tagSearch.searchTags(searchTerm);
+  renderResults();
+}
+
+function selectPreviousResult(){
+  var currentIndex = STATE.selectedResultIndex;
+  switch( currentIndex ){
+    case null:
+      // if nothing is selected, select the last result
+      selectResult(STATE.results.length - 1);
+      break;
+    case 0:
+      // if the first result is selected, clear the selection
+      selectResult(null);
+      break;
+    default:
+      // select the result before the current one
+      selectResult(currentIndex - 1);
+      break;
+  }
+  renderResults();
+}
+
+function selectNextResult(){
+  var currentIndex = STATE.selectedResultIndex;
+  var lastResultIndex = STATE.results.length - 1;
+  switch( currentIndex ){
+    case null:
+      // if nothing is selected, select the first result
+      selectResult(0);
+      break;
+    case lastResultIndex:
+      // if the last result is selected, select the first result
+      selectResult(0);
+      break;
+    default:
+      // select the result after the current one
+      selectResult(currentIndex + 1);
+      break;
+  }
+}
+
+function addSelectedResult(){
+  /*
+    appends the current result selection to the input's value
+    replacing any half-typed tag names
+  */
+  var currentValue = STATE.elems.input.val();
+  var currentResult = STATE.results[STATE.selectedResultIndex];
+  var maxCuttingIndex = getMaxSplittingIndex(currentValue);
+  var existingCompleteTagInput = currentValue.substring(0, maxCuttingIndex);
+  var newValue = existingCompleteTagInput + currentResult.text + ' ';
+  selectResult(null);
+  clearResults();
+  STATE.elems.input.val(newValue);
+}
+
+function handleKeydownInTagInput(e){
+  /*
+    if there is a currently selected result:
+      add that tag to the input value
+  */
+  var code = event.which;
+  if( STATE.selectedResultIndex !== null ){
+    if(code == TAB_KEY){
+      addSelectedResult();
+      e.preventDefault();
+    }
+  }
+}
+
+function handleKeyupInTagInput(e){
+  /*
+    if there are open results:
+      up arrow selects the previous result
+      down arrow selects the next result
+    if the input key is a letter, dash, underscore or delete:
+      update the autocomplete results
+  */
+  var code = event.which;
+  if( STATE.results.length > 0 ){
+    switch (code) {
+      case UP_ARROW:
+        selectPreviousResult();
+        break;
+      case DOWN_ARROW:
+        selectNextResult();
+        break;
+    }
+  }
+  var key = String.fromCharCode(code);
+  var tagSymbolMatch = key.match(/[A-Za-z\-_]/)
+  if( tagSymbolMatch || code === DELETE_KEY ){
+    updateAutocompleteSearchWithLatestValue();
+  }
+}
+
+function handleResultClick(e){
+  // adds the clicked item to the input value
+  selectResult($(this).index())
+  addSelectedResult();
+}
+
+function handleResultHover(e){
+  // selects that result of the hovered item
+  var index = $(this).index();
+  if( index !== STATE.selectedResultIndex ){
+    selectResult(index);
+  }
+}
+
+function handleInputBlur(e){
+  // clears and closes contents and state
+  clearResults();
+  resetState();
+}
+
+function handleInputFocus(e){
+  // Sets the targeted widget and associated elements
+  STATE.elems.widget = $(e.delegateTarget);
+  STATE.elems.input = $(e.target);
+  STATE.elems.resultsList = STATE.elems.widget.find(
+    '.tags-autocomplete_results');
+}
+
+function initTagWidgets(){
+  tagSearch.init();
+  resetState();
+  var widgets = $('.tags-input_module');
+  widgets.on('focusin', "input[name='tags-input']", handleInputFocus);
+  widgets.on('keydown', "input[name='tags-input']", handleKeydownInTagInput);
+  widgets.on('keyup', "input[name='tags-input']", handleKeyupInTagInput);
+  widgets.on('mousedown', ".autocomplete-result", handleResultClick);
+  widgets.on('mouseenter', ".autocomplete-result", handleResultHover);
+  widgets.on('blur', "input[name='tags-input']", handleInputBlur);
+}
+
+module.exports = {
+  init: initTagWidgets,
+};

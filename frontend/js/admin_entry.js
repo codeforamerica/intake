@@ -1,8 +1,8 @@
 window.$ = require('jquery');
 var csrf = require('./csrf');
 var utils = require('./utils');
-
-var templateRenderer = require('./templates');
+var templates = require('./templates');
+var tagWidget = require('./tag_widget');
 
 function handleNoteDeletionClick(e){
 	// .target == delete note button
@@ -24,15 +24,17 @@ function handleNewNoteFormSubmission(e){
 	var data = {};
 	rawData.forEach(function (field){ data[field.name] = field.value; });
 	$.post(actionUrl, data, function (note){
-		var html = templateRenderer.note(note);
+		var html = templates.note(note);
 		form.parents('.notes_log').find('.notes').prepend(html);
 		form.find("[name='body']").val('');
 	});
 }
 
+
 function initializeEventListeners(){
 	$('.notes_log').on('click', '.note-remove', handleNoteDeletionClick);
 	$('form.note-create_form').on('submit', handleNewNoteFormSubmission);
+	tagWidget.init();
 }
 
 function main(){

@@ -89,3 +89,41 @@ div.create_note > button.note-show_form {
 		padding: .3em .6em;
 	}
 }
+.tags-input_module {
+	width: 30rem;
+	width: 200px;
+	font-size: 0.8em;
+}
+input[name="tags-input"] {
+	width: 100%;
+	font-size: inherit;
+	font-family: inherit;
+}
+ul.tags-autocomplete_results {
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	background-color: #fff;
+	font-size: inherit;
+	margin-top: 1px;
+	max-height: 20em;
+	overflow-y: scroll;
+	-webkit-box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.2);
+	-moz-box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.2);
+	box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.2);
+}
+li.autocomplete-result.active {
+	color: #fff;
+	background-color: @brand-note;
+}
+li.autocomplete-result {
+	padding: .2em .5em;
+	width: 200px;
+	border-left: 1px solid #dfdfdf;
+	border-right: 1px solid #dfdfdf;
+	border-bottom: 1px solid #dfdfdf;
+	cursor: pointer;
+	.result-match {
+		font-weight: 700;
+	}
+}
