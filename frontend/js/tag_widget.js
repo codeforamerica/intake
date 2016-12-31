@@ -1,6 +1,7 @@
 var $ = require('jquery');
 var tagSearch = require('./tag_search');
 var templates = require('./templates');
+var ajaxModule = require('./ajax');
 
 
 // key codes
@@ -193,16 +194,51 @@ function handleInputFocus(e){
     '.tags-autocomplete_results');
 }
 
+
+function handleAddTagsFormSubmission(e){
+  e.preventDefault();
+  var form = $(this);
+  ajaxModule.handleForm(form, function (tags){
+    // tags = search.exampleData.map();
+    var tagContainer = form.parents('.tags-input_module').find('.tags');
+    var html = tags.map(templates.tag).join('');
+    tagContainer.html(html);
+  });
+}
+
+function removeHoverWarning(e){
+  var targetedTag = $(e.target).parents('.tag');
+  targetedTag.removeClass('danger');
+}
+function addHoverWarning(e){
+  var targetedTag = $(e.target).parents('.tag');
+  targetedTag.addClass('danger');
+}
+
+function handleTagRemovalClick(e){
+  var targetedTag = $(e.target).parents('.tag');
+  var tagId = targetedTag.attr("data-key");
+  var appId = targetedTag.parents('.form_submission').attr("data-key");
+  var actionUrl = '/tags/' + tagId + '/remove/' + appId + '/';
+  // $.post(actionUrl, {}, function (data){
+    targetedTag.remove();
+  // })
+}
+
 function initTagWidgets(){
   tagSearch.init();
   resetState();
   var widgets = $('.tags-input_module');
-  widgets.on('focusin', "input[name='tags-input']", handleInputFocus);
-  widgets.on('keydown', "input[name='tags-input']", handleKeydownInTagInput);
-  widgets.on('keyup', "input[name='tags-input']", handleKeyupInTagInput);
+  widgets.on('focusin', "input[name='tags']", handleInputFocus);
+  widgets.on('keydown', "input[name='tags']", handleKeydownInTagInput);
+  widgets.on('keyup', "input[name='tags']", handleKeyupInTagInput);
   widgets.on('mousedown', ".autocomplete-result", handleResultClick);
   widgets.on('mouseenter', ".autocomplete-result", handleResultHover);
-  // widgets.on('blur', "input[name='tags-input']", handleInputBlur);
+  widgets.on('blur', "input[name='tags']", handleInputBlur);
+  widgets.on('submit', 'form', handleAddTagsFormSubmission);
+  widgets.on('mouseenter', '.glyphicon-remove-sign', addHoverWarning);
+  widgets.on('mouseleave', '.glyphicon-remove-sign', removeHoverWarning);
+  widgets.on('click', '.glyphicon-remove-sign', handleTagRemovalClick);
 }
 
 module.exports = {

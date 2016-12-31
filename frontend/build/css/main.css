@@ -4454,6 +4454,23 @@ li.autocomplete-result {
 li.autocomplete-result .result-match {
   font-weight: 700;
 }
+.tags {
+  padding: 0 0 0.5em 0;
+}
+span.tag.label {
+  display: inline-block;
+  background-color: #c4eefd;
+  padding: 0.4em 0.6em;
+  border-radius: 1em;
+  margin-right: .1em;
+}
+span.tag.label .glyphicon-remove-sign {
+  cursor: pointer;
+}
+span.tag.label.danger {
+  background-color: #d9534f;
+  color: #fff;
+}
 .stats-single_figure {
   display: inline-block;
   width: 15em;

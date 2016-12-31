@@ -4,8 +4,15 @@ function renderTagAutocompleteResultTemplate(result){
   return '<li class="autocomplete-result'+activeClass+'">'+result.prefix+'<span class="result-match">'+result.selection+'</span>'+result.suffix+'</li>';
 }
 
+function renderTagTemplate(tag){
+  return '<span class="tag label" data-key="'+tag.id+'"">' +
+    '<span class="tag-text">'+tag.slug+'</span> ' +
+    '<span class="glyphicon glyphicon-remove-sign" title="Remove this tag"></span>' +
+  '</span> ';
+}
+
 function renderNoteTemplate(note){
-	return '<div class="note" id="application_note-'+note.id+'">' +
+	return '<div class="note" data-key="'+note.id+'">' +
     '<div class="note-time">'+note.created+'</div>' +
     '<div class="note-body">'+note.body+'</div>' +
     '<div class="note-author">-'+note.user+'</div>' +
@@ -17,6 +24,7 @@ function renderNoteTemplate(note){
 }
 
 module.exports = {
-  note: renderNoteTemplate,
+  tag: renderTagTemplate,
   tagAutocompleteSearchResult: renderTagAutocompleteResultTemplate,
+  note: renderNoteTemplate,
 }

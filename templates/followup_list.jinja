@@ -11,7 +11,7 @@
   {%- endif %}
 </tr>
 {% for app in submissions %}
-<tr>
+<tr class="form_submission" data-key="{{ app.id }}">
   <td>
     <a href="{{ app.get_absolute_url() }}">{{ app.id }}</a>
   </td>
@@ -62,7 +62,7 @@
       {%- endif %}
       <div class="notes">
       {%- for note in app.notes.all() %}
-        <div class="note" id="application_note-{{ note.id }}">
+        <div class="note" data-key="{{ note.id }}">
           <div class="note-time">{{
             local_time(note.created, '%b %-d')
           }}</div>
@@ -71,8 +71,8 @@
           
           {%- if perms.intake.delete_application_note %}
           <div class="note-remove" title="Delete this note">
-            <button class="btn btn-danger btn-sm">
-            <span class="glyphicon glyphicon-remove-sign"></span> Delete</a>
+            <button class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-remove-sign"></span>
+             Delete</a>
           </div>
           {%- endif %}
         </div>
@@ -82,8 +82,19 @@
   </td>
   <td class="tags-cell">
     <div class="tags-input_module">
-      <form class="tags-add_tags" action="{{ '#' }}">
-        <input name="tags-input" type="text"><ul class="tags-autocomplete_results"></ul><button type="submit" class="btn btn-default btn-sm">
+      <div class="tags">
+        {%- for tag in [
+          {'slug': 'apple'}, {'slug': 'durian'}] %}
+          <span class="tag label label-default" data-key="{{ tag.id }}">
+            <span class="tag-text">{{ tag.slug }}</span>
+            <span class="glyphicon glyphicon-remove-sign" title="Remove '{{ tag.slug }}' tag"></span>
+          </span>
+        {%- endfor %}
+      </div>
+      <form class="tags-add_tags" action="/tags/add/" method="post">
+        <input type="hidden" name="submission" value="{{ app.id }}">
+        <input type="hidden" name="user" value="{{ request.user.id }}">
+        <input name="tags" type="text" autocomplete="off"><ul class="tags-autocomplete_results"></ul><button type="submit" class="btn btn-default btn-sm">
           <span class="glyphicon glyphicon-plus"></span>
           Add tags
         </button>

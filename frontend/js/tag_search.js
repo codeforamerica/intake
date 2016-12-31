@@ -37,5 +37,6 @@ searchModule.init = function (){
   if (!tagData) { tagData = exampleSearchSpace; }
   searchModule.searchTags = buildSearchFunction(tagData);
 };
+searchModule.exampleData = exampleSearchSpace;
 
 module.exports = searchModule;

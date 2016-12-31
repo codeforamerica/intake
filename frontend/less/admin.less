@@ -114,3 +114,20 @@ li.autocomplete-result {
 		font-weight: 700;
 	}
 }
+.tags {
+	padding: 0 0 0.5em 0;
+}
+span.tag.label {
+	display: inline-block;
+	background-color: lighten(@brand-note, 45%);
+	padding: 0.4em 0.6em;
+	border-radius: 1em;
+	margin-right: .1em;
+	.glyphicon-remove-sign {
+		cursor: pointer;
+	}
+}
+span.tag.label.danger {
+	background-color: @brand-danger;
+	color: #fff;
+}
