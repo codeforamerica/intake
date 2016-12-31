@@ -54,10 +54,10 @@
       <form class="note-create_form" action="{{ url('intake-create_note') }}" method="post">
         <input type="hidden" name="submission" value="{{ app.id }}">
         <input type="hidden" name="user" value="{{ request.user.id }}">
-        <input type="text" name="body">
-        <button type="submit" class="btn btn-default btn-sm">
-        <span class="glyphicon glyphicon-comment"></span>
-        Save note</button>
+        <input type="text" name="body"><button type="submit" class="btn btn-default btn-sm">
+          <span class="glyphicon glyphicon-comment"></span>
+          Save note
+        </button>
       </form>
       {%- endif %}
       <div class="notes">
@@ -82,8 +82,12 @@
   </td>
   <td class="tags-cell">
     <div class="tags-input_module">
-      <input name="tags-input" type="text">
-      <ul class="tags-autocomplete_results"></ul>
+      <form class="tags-add_tags" action="{{ '#' }}">
+        <input name="tags-input" type="text"><ul class="tags-autocomplete_results"></ul><button type="submit" class="btn btn-default btn-sm">
+          <span class="glyphicon glyphicon-plus"></span>
+          Add tags
+        </button>
+      </form>
     </div>
   </td>
   {%- endif %}

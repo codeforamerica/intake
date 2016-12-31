@@ -202,7 +202,7 @@ function initTagWidgets(){
   widgets.on('keyup', "input[name='tags-input']", handleKeyupInTagInput);
   widgets.on('mousedown', ".autocomplete-result", handleResultClick);
   widgets.on('mouseenter', ".autocomplete-result", handleResultHover);
-  widgets.on('blur', "input[name='tags-input']", handleInputBlur);
+  // widgets.on('blur', "input[name='tags-input']", handleInputBlur);
 }
 
 module.exports = {

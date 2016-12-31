@@ -4354,6 +4354,27 @@ ul.pagination {
 table.followups {
   font-size: 0.8em;
 }
+table.followups input[type="text"],
+table.followups button[type="submit"] {
+  font-size: 1em;
+  line-height: 1.4em;
+  padding: .3em .6em;
+}
+table.followups input[type="text"],
+table.followups .autocomplete-result {
+  width: 20em;
+}
+table.followups input[type="text"] {
+  font-weight: 400;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-right: 0px;
+}
+table.followups button[type="submit"] {
+  margin: 0;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
 .org_tag {
   display: inline-block;
   font-size: 0.7em;
@@ -4363,8 +4384,9 @@ table.table tr > td.org_tags {
   width: 6em;
   line-height: 0.9em;
 }
-.notes_log {
-  font-size: 0.7em;
+.notes_log,
+.tags-input_module {
+  font-size: 0.75em;
   width: 28em;
 }
 td.notes_log-cell {
@@ -4381,9 +4403,6 @@ td.notes_log-cell {
   line-height: 1rem;
 }
 .note-time {
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-size: 0.8em;
   width: 4.4em;
 }
 .note-body {
@@ -4408,30 +4427,6 @@ div.note-remove > button.btn:hover {
 div.note-remove > button.btn .glyphicon {
   margin: 0;
 }
-div.create_note > button.note-show_form {
-  font-size: 0.9em;
-  padding: .3em .6em;
-}
-.note-create_form input[name="body"] {
-  width: 18.5em;
-  font-weight: 400;
-  display: inline-block;
-  padding: .25em .5em;
-}
-.note-create_form button[type="submit"] {
-  font-size: 1.1em;
-  padding: .3em .6em;
-}
-.tags-input_module {
-  width: 30rem;
-  width: 200px;
-  font-size: 0.8em;
-}
-input[name="tags-input"] {
-  width: 100%;
-  font-size: inherit;
-  font-family: inherit;
-}
 ul.tags-autocomplete_results {
   margin: 0;
   padding: 0;
@@ -4450,8 +4445,7 @@ li.autocomplete-result.active {
   background-color: #069ED6;
 }
 li.autocomplete-result {
-  padding: .2em .5em;
-  width: 200px;
+  padding: .2em .6em;
   border-left: 1px solid #dfdfdf;
   border-right: 1px solid #dfdfdf;
   border-bottom: 1px solid #dfdfdf;
