@@ -46,7 +46,7 @@ class FormSubmission(models.Model):
     anonymous_name = models.CharField(max_length=60,
                                       default=anonymous_names.generate)
     date_received = models.DateTimeField(default=timezone_utils.now)
-    tags = TaggableManager(through='intake.ApplicationTag')
+    tags = TaggableManager(through='intake.SubmissionTagLink')
 
     class Meta:
         ordering = ['-date_received']
