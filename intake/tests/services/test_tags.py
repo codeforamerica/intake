@@ -26,33 +26,31 @@ class TestUpdateTagsForSubmission(IntakeDataTestCase):
             user=self.user, content_object=self.sub, tag=existing)
         link.save()
 
+    def assertTagsHaveNames(self, serialized_tags, names):
+        tag_names = sorted([tag['name'] for tag in serialized_tags])
+        names = sorted(names)
+        for name, tag_name in zip(names, tag_names):
+            self.assertEqual(name, tag_name)
+
     def test_all_new_tags(self):
         result = TagsService.update_tags_for_submission(
             self.cfa_user.id, self.sub.id, "new, thing")
-        self.assertEqual(
-            set(result),
-            set(["existing", "new", "thing"]))
+        self.assertTagsHaveNames(result, ["existing", "new", "thing"])
 
     def test_some_new_tags(self):
         result = TagsService.update_tags_for_submission(
             self.cfa_user.id, self.sub.id, "old, new")
-        self.assertEqual(
-            set(result),
-            set(["existing", "new", "old"]))
+        self.assertTagsHaveNames(result, ["existing", "new", "old"])
 
     def test_no_new_tags(self):
         result = TagsService.update_tags_for_submission(
             self.cfa_user.id, self.sub.id, "old, existing")
-        self.assertEqual(
-            set(result),
-            set(["existing", "old"]))
+        self.assertTagsHaveNames(result, ["existing", "old"])
 
     def test_same_tags_as_existing(self):
         result = TagsService.update_tags_for_submission(
             self.cfa_user.id, self.sub.id, "existing")
-        self.assertEqual(
-            set(result),
-            set(["existing"]))
+        self.assertTagsHaveNames(result, ["existing"])
 
     def test_bad_user(self):
         with self.assertRaises(UserCannotBeNoneError):
@@ -67,7 +65,7 @@ class TestUpdateTagsForSubmission(IntakeDataTestCase):
     def test_empty_tags(self):
         result = TagsService.update_tags_for_submission(
             self.cfa_user.id, self.sub.id, ", ,")
-        self.assertEqual(list(result), ['existing'])
+        self.assertTagsHaveNames(result, ["existing"])
 
 
 class TestGetAllUsedTagNames(TestCase):

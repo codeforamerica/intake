@@ -2,6 +2,7 @@ from django.db.models import Count
 from taggit.models import Tag
 from intake.models import SubmissionTagLink, FormSubmission
 from intake.exceptions import UserCannotBeNoneError
+from intake.serializers import TagSerializer
 
 
 def update_tags_for_submission(user_id, submission_id, tags_input_string):
@@ -38,9 +39,9 @@ def update_tags_for_submission(user_id, submission_id, tags_input_string):
                 user_id=user_id) for tag in tag_objs
             if tag.id not in existing_through_tag_ids)
         SubmissionTagLink.objects.bulk_create(new_through_models)
-    tags_for_submission = FormSubmission.objects.filter(
-        id=submission_id).first().tags.values_list('name', flat=True)
-    return tags_for_submission
+    tags_for_submission = FormSubmission.objects.get(
+        id=submission_id).tags.all()
+    return TagSerializer(tags_for_submission, many=True).data
 
 
 def get_all_used_tag_names():
