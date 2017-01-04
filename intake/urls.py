@@ -7,6 +7,7 @@ from intake.views import (
     application_form_views,
     admin_views,
     application_note_views,
+    tag_views
     )
 
 urlpatterns = [
@@ -91,6 +92,14 @@ urlpatterns = [
     url(r'^notes/(?P<pk>[0-9]+)/delete/$',
         login_required(application_note_views.destroy_note),
         name='intake-destroy_note'),
+
+    url(r'^tags/add/$',
+        login_required(tag_views.add_tags),
+        name='intake-add_tags'),
+
+    url(r'^tags/(?P<tag_id>[0-9]+)/remove/(?P<submission_id>[0-9]+)/$',
+        login_required(tag_views.remove_tag),
+        name='intake-remove_tag'),
 
 ]
 

@@ -16,6 +16,25 @@ ul.pagination {
 }
 table.followups {
 	font-size: 0.8em;
+	input[type="text"], button[type="submit"] {
+		font-size: 1em;
+		line-height: 1.4em;
+		padding: .3em .6em;
+	}
+	input[type="text"], .autocomplete-result {
+		width: 20em;
+	}
+	input[type="text"] {
+		font-weight: 400;
+		display: inline-block;
+		border: 1px solid #ccc;
+		border-right: 0px;
+	}
+	button[type="submit"] {
+		margin: 0;
+		border-bottom-left-radius: 0;
+		border-top-left-radius: 0;
+	}
 }
 .org_tag {
 	display: inline-block;
@@ -26,13 +45,11 @@ table.table tr > td.org_tags {
 	width: 6em;
 	line-height: 0.9em;
 }
-.notes_log {
-	font-size: 0.7em;
+.notes_log, .tags-input_module {
+	font-size: 0.75em;
 	width: 28em;
 }
-td.notes_log-cell {
-	padding: 0;
-}
+td.notes_log-cell { padding: 0; }
 .note {
 	padding: 0.25em 0;
 	margin: 0.5em 0 0 0;
@@ -45,9 +62,6 @@ td.notes_log-cell {
 }
 
 .note-time {
-	text-transform: uppercase;
-	letter-spacing: 1px;
-	font-size: 0.8em;
 	width: 4.4em;
 }
 .note-body {
@@ -73,19 +87,49 @@ div.note-remove > button.btn {
 		margin: 0;
 	}
 }
-div.create_note > button.note-show_form {
-	font-size: 0.9em;
-	padding: .3em .6em;
+ul.tags-autocomplete_results {
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	background-color: #fff;
+	font-size: inherit;
+	margin-top: 1px;
+	max-height: 20em;
+	overflow-y: scroll;
+	-webkit-box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.2);
+	-moz-box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.2);
+	box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.2);
+	z-index: 10;
 }
-.note-create_form {
-	input[name="body"] {
-		width: 18.5em;
-		font-weight: 400;
-		display: inline-block;
-		padding: .25em .5em;
+li.autocomplete-result.active {
+	color: #fff;
+	background-color: @brand-note;
+}
+li.autocomplete-result {
+	padding: .2em .6em;
+	border-left: 1px solid #dfdfdf;
+	border-right: 1px solid #dfdfdf;
+	border-bottom: 1px solid #dfdfdf;
+	cursor: pointer;
+	.result-match {
+		font-weight: 700;
 	}
-	button[type="submit"] {
-		font-size: 1.1em;
-		padding: .3em .6em;
+}
+.tags {
+	padding: 0 0 0.5em 0;
+}
+span.tag.label {
+	display: inline-block;
+	background-color: lighten(@brand-note, 45%);
+	padding: 0.4em 0.6em;
+	border-radius: 1em;
+	margin-right: .1em;
+	margin-bottom: 0.2em;
+	.glyphicon-remove-sign {
+		cursor: pointer;
 	}
+}
+span.tag.label.danger {
+	background-color: @brand-danger;
+	color: #fff;
 }

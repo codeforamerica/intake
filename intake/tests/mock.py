@@ -11,6 +11,8 @@ from django.core.management import call_command
 from django.conf import settings
 from django.utils.datastructures import MultiValueDict
 
+from taggit.models import Tag
+
 from intake import models, constants
 from intake.constants import PACIFIC_TIME
 from intake.tests import mock_user_agents, mock_referrers
@@ -70,6 +72,12 @@ NEW_RAW_FORM_DATA = {
 
 def make_submission():
     return FormSubmissionFactory.create()
+
+
+def make_tag(name="example"):
+    tag = Tag(name=name)
+    tag.save()
+    return tag
 
 
 def make_note(user, submission_id):

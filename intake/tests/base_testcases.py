@@ -1,7 +1,7 @@
 import os
 from unittest.mock import patch
 from django.db.models import Count
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.test.utils import setup_test_environment
 from user_accounts.tests.base_testcases import AuthIntegrationTestCase
 from intake import models
@@ -82,3 +82,11 @@ class ExternalNotificationsPatchTestCase(TestCase):
 
     def tearDown(self):
         self.notifications_patcher.stop()
+
+
+class APIViewTestCase(IntakeDataTestCase):
+
+    client_class = Client
+
+    fixtures = [
+        'counties', 'organizations', 'mock_profiles']

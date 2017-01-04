@@ -16,6 +16,7 @@ from .form_submission import (
     MissingPDFsError,
     )
 from .note import ApplicationNote
+from .tag import SubmissionTagLink
 
 
 __all__ = [
@@ -29,6 +30,7 @@ __all__ = [
     ApplicationBundle,
     ApplicationEvent,
     ApplicationNote,
+    SubmissionTagLink,
     ApplicationLogEntry,
     ApplicantContactedLogEntry,
     FormSubmission,

@@ -1,17 +1,9 @@
-from intake.tests.base_testcases import IntakeDataTestCase
-from django.test import Client
+from intake.tests.base_testcases import APIViewTestCase
 from django.core.urlresolvers import reverse
 from intake.tests import mock
 
 
-class NoteViewTestBase(IntakeDataTestCase):
-    client_class = Client
-
-    fixtures = [
-        'counties', 'organizations', 'mock_profiles']
-
-
-class TestCreateNote(NoteViewTestBase):
+class TestCreateNote(APIViewTestCase):
 
     def post_new_note(self, user, **kwargs):
         sub_id = mock.make_submission().id
@@ -54,7 +46,7 @@ class TestCreateNote(NoteViewTestBase):
         self.assertIn('This field may not be blank.', errors)
 
 
-class TestDestroyNote(NoteViewTestBase):
+class TestDestroyNote(APIViewTestCase):
 
     def post_note_destruction(self, user):
         sub_id = mock.make_submission().id

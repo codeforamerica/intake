@@ -18,6 +18,7 @@ from intake.aggregate_serializer_fields import get_todays_date
 
 import intake.services.submissions as SubmissionsService
 import intake.services.bundles as BundlesService
+import intake.services.tags as TagsService
 
 NOT_ALLOWED_MESSAGE = str(
     "Sorry, you are not allowed to access that client information. "
@@ -101,11 +102,12 @@ class FilledPDF(ApplicationDetail):
 
 
 class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
-    """A paginated list view of all the application to a user's organization.
+    """A paginated list view of all the applications to a user's organization.
     """
     template_name = "app_index.jinja"
 
     def get_context_data(self, **kwargs):
+        is_staff = self.request.user.is_staff
         context = super().get_context_data(**kwargs)
         context['submissions'] = \
             SubmissionsService.get_paginated_submissions_for_user(
@@ -118,6 +120,8 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
                 wing_size=9)
         context['show_pdf'] = self.request.user.profile.should_see_pdf()
         context['body_class'] = 'admin'
+        if is_staff:
+            context['ALL_TAG_NAMES'] = TagsService.get_all_used_tag_names()
         return context
 
 

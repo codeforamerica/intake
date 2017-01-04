@@ -8,7 +8,7 @@ from django.contrib.postgres.fields import JSONField
 from django.utils import timezone as timezone_utils
 from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
-
+from taggit.managers import TaggableManager
 import intake
 from intake import anonymous_names
 from project.jinja2 import namify
@@ -46,6 +46,7 @@ class FormSubmission(models.Model):
     anonymous_name = models.CharField(max_length=60,
                                       default=anonymous_names.generate)
     date_received = models.DateTimeField(default=timezone_utils.now)
+    tags = TaggableManager(through='intake.SubmissionTagLink')
 
     class Meta:
         ordering = ['-date_received']

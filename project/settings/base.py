@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'invitations',
     'storages',
     'formation',
+    'taggit',
     'debug_toolbar',
     'django_extensions',
 ]
