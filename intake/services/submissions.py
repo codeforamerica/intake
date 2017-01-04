@@ -93,7 +93,7 @@ def get_permitted_submissions(user, ids=None, related_objects=False):
             'logs__user__profile__organization'
         ]
         if user.groups.filter(name=groups.FOLLOWUP_STAFF).exists():
-            prefetch_relations.append('notes')
+            prefetch_relations.extend(['notes', 'tags'])
         query = query.prefetch_related(*prefetch_relations)
     if ids:
         query = query.filter(pk__in=ids)
