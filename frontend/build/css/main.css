@@ -4439,6 +4439,7 @@ ul.tags-autocomplete_results {
   -webkit-box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.2);
   box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.2);
+  z-index: 10;
 }
 li.autocomplete-result.active {
   color: #fff;
@@ -4463,6 +4464,7 @@ span.tag.label {
   padding: 0.4em 0.6em;
   border-radius: 1em;
   margin-right: .1em;
+  margin-bottom: 0.2em;
 }
 span.tag.label .glyphicon-remove-sign {
   cursor: pointer;

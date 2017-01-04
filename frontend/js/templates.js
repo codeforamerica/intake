@@ -6,7 +6,7 @@ function renderTagAutocompleteResultTemplate(result){
 
 function renderTagTemplate(tag){
   return '<span class="tag label" data-key="'+tag.id+'"">' +
-    '<span class="tag-text">'+tag.slug+'</span> ' +
+    '<span class="tag-text">'+tag.name+'</span> ' +
     '<span class="glyphicon glyphicon-remove-sign" title="Remove this tag"></span>' +
   '</span> ';
 }

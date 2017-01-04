@@ -1,11 +1,5 @@
 var utils = require('./utils');
 
-var exampleSearchSpace = [
-  'apple', 'banana', 'cherry', 'durian', 'eggplant',
-  'fig', 'guava', 'honeydew', 'kiwi', 'lemon', 'melon', 'nectarine',
-  'orange', 'peach', 'quince', 'raspberry', 'strawberry'
-];
-
 var searchModule = {};
 
 function buildSearchFunction(searchSpace){
@@ -16,15 +10,18 @@ function buildSearchFunction(searchSpace){
       return results;
     }
     searchSpace.forEach(function(possibleResult){
-      var match = possibleResult.match(searchTerm);
+      var match = possibleResult.toLowerCase().match(
+        searchTerm.toLowerCase());
       if( match ){
         var prefix = possibleResult.substring(0, match.index);
+        var selection = possibleResult.substring(
+          match.index, match.index + termLength);
         var suffix = possibleResult.substring(match.index + termLength);
         results.push({
           text: possibleResult,
           prefix: prefix,
           suffix: suffix,
-          selection: searchTerm,
+          selection: selection,
         });
       }
     });
@@ -33,10 +30,9 @@ function buildSearchFunction(searchSpace){
 }
 
 searchModule.init = function (){
-  var tagData = utils.getJson('applications_json');
-  if (!tagData) { tagData = exampleSearchSpace; }
+  var tagData = utils.getJson('tags_json');
+  if (!tagData) { tagData = []; }
   searchModule.searchTags = buildSearchFunction(tagData);
 };
-searchModule.exampleData = exampleSearchSpace;
 
 module.exports = searchModule;

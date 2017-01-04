@@ -83,11 +83,10 @@
   <td class="tags-cell">
     <div class="tags-input_module">
       <div class="tags">
-        {%- for tag in [
-          {'slug': 'apple'}, {'slug': 'durian'}] %}
+        {%- for tag in app.tags.all() %}
           <span class="tag label label-default" data-key="{{ tag.id }}">
-            <span class="tag-text">{{ tag.slug }}</span>
-            <span class="glyphicon glyphicon-remove-sign" title="Remove '{{ tag.slug }}' tag"></span>
+            <span class="tag-text">{{ tag.name }}</span>
+            <span class="glyphicon glyphicon-remove-sign" title="Remove '{{ tag.name }}' tag"></span>
           </span>
         {%- endfor %}
       </div>

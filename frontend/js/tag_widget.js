@@ -70,7 +70,11 @@ function updateAutocompleteSearchWithLatestValue(){
   var maxCuttingIndex = getMaxSplittingIndex(currentValue);
   var searchTerm = currentValue.substring(maxCuttingIndex);
   STATE.results = tagSearch.searchTags(searchTerm);
-  renderResults();
+  if( STATE.results.length > 0){
+    selectResult(0);
+  } else {
+    renderResults();
+  }
 }
 
 function selectPreviousResult(){
@@ -120,7 +124,7 @@ function addSelectedResult(){
   var currentResult = STATE.results[STATE.selectedResultIndex];
   var maxCuttingIndex = getMaxSplittingIndex(currentValue);
   var existingCompleteTagInput = currentValue.substring(0, maxCuttingIndex);
-  var newValue = existingCompleteTagInput + currentResult.text + ' ';
+  var newValue = existingCompleteTagInput + currentResult.text + ', ';
   selectResult(null);
   clearResults();
   STATE.elems.input.val(newValue);
@@ -199,10 +203,10 @@ function handleAddTagsFormSubmission(e){
   e.preventDefault();
   var form = $(this);
   ajaxModule.handleForm(form, function (tags){
-    // tags = search.exampleData.map();
     var tagContainer = form.parents('.tags-input_module').find('.tags');
     var html = tags.map(templates.tag).join('');
     tagContainer.html(html);
+    form.find("input[name='tags']").val('');
   });
 }
 
@@ -220,9 +224,9 @@ function handleTagRemovalClick(e){
   var tagId = targetedTag.attr("data-key");
   var appId = targetedTag.parents('.form_submission').attr("data-key");
   var actionUrl = '/tags/' + tagId + '/remove/' + appId + '/';
-  // $.post(actionUrl, {}, function (data){
+  $.post(actionUrl, {}, function (data){
     targetedTag.remove();
-  // })
+  })
 }
 
 function initTagWidgets(){

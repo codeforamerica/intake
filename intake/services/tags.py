@@ -16,9 +16,9 @@ def update_tags_for_submission(user_id, submission_id, tags_input_string):
     if not submission_id or not isinstance(submission_id, int):
         raise ValueError("submission_id must be a positive integer")
     tag_names = [
-        name.strip().lower()
+        name.strip()
         for name in tags_input_string.split(',')
-        if name.strip().lower()
+        if name.strip()
     ]
     if tag_names:
         existing_tag_objs = Tag.objects.filter(name__in=tag_names)
