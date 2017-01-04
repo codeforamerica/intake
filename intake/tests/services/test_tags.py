@@ -1,5 +1,4 @@
 from django.test import TestCase
-from django.db.utils import IntegrityError
 from intake.tests.base_testcases import IntakeDataTestCase
 from intake.tests import mock
 from user_accounts.tests.mock import create_user
@@ -58,7 +57,7 @@ class TestUpdateTagsForSubmission(IntakeDataTestCase):
                 None, self.sub.id, "existing")
 
     def test_bad_submission(self):
-        with self.assertRaises(IntegrityError):
+        with self.assertRaises(ValueError):
             TagsService.update_tags_for_submission(
                 self.cfa_user.id, None, "existing")
 

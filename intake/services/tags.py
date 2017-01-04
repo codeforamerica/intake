@@ -13,6 +13,8 @@ def update_tags_for_submission(user_id, submission_id, tags_input_string):
     if not user_id:
         raise UserCannotBeNoneError(
             "Adding tags to a submission requires a user_id")
+    if not submission_id or not isinstance(submission_id, int):
+        raise ValueError("submission_id must be a positive integer")
     tag_names = [
         name.strip().lower()
         for name in tags_input_string.split(',')
