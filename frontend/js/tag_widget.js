@@ -207,6 +207,7 @@ function handleAddTagsFormSubmission(e){
     var html = tags.map(templates.tag).join('');
     tagContainer.html(html);
     form.find("input[name='tags']").val('');
+    clearResults();
   });
 }
 
