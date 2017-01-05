@@ -10,10 +10,8 @@
     <h1>All Applications to {{ request.user.profile.organization.name }}</h1>
     {%- endif %}
   </div>
-  {%- if submissions.has_other_pages() %}
-  <div class="row">
-    {% include "includes/submission_paginator.jinja" %}
-  </div>
+  {%- if page_counter %}
+  {% include "includes/submission_paginator.jinja" %}
   {%- endif %}
   <div class="row">
     {% if perms.intake.view_application_note %}
@@ -22,10 +20,8 @@
       {% include "app_reviewer_list.jinja" %}
     {% endif %}
   </div>
-  {%- if submissions.has_other_pages() %}
-  <div class="row">
-    {% include "includes/submission_paginator.jinja" %}
-  </div>
+  {%- if page_counter %}
+  {% include "includes/submission_paginator.jinja" %}
   {%- endif %}
 </div>
 {% endblock content %}

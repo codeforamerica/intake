@@ -110,14 +110,12 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
         is_staff = self.request.user.is_staff
         context = super().get_context_data(**kwargs)
         context['submissions'] = \
-            SubmissionsService.get_paginated_submissions_for_user(
-                self.request.user,
-                self.request.GET.get('page')
-            )
-        context['page_counter'] = \
-            utils.get_page_navigation_counter(
-                page=context['submissions'],
-                wing_size=9)
+            SubmissionsService.get_permitted_submissions(
+                self.request.user, related_objects=True)
+        # context['page_counter'] = \
+        #     utils.get_page_navigation_counter(
+        #         page=context['submissions'],
+        #         wing_size=9)
         context['show_pdf'] = self.request.user.profile.should_see_pdf()
         context['body_class'] = 'admin'
         if is_staff:
