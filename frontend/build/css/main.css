@@ -3710,11 +3710,11 @@ section.content.application_form {
   color: #666;
   font-weight: 400;
 }
-.note p {
+.field-form_note p {
   font-size: 1em;
   font-weight: 400;
 }
-.note ol {
+.field-form_note ol {
   padding-left: 1.5em;
 }
 .field input,
@@ -4384,50 +4384,50 @@ table.table tr > td.org_tags {
   width: 6em;
   line-height: 0.9em;
 }
-.notes_log,
-.tags-input_module {
+.applications_list .notes_log,
+.applications_list .tags-input_module {
   font-size: 0.75em;
   width: 28em;
 }
-td.notes_log-cell {
+.applications_list td.notes_log-cell {
   padding: 0;
 }
-.note {
+.applications_list .note {
   padding: 0.25em 0;
   margin: 0.5em 0 0 0;
   border-top: 1px solid #ccc;
 }
-.note > * {
+.applications_list .note > * {
   display: inline-block;
   vertical-align: top;
   line-height: 1rem;
 }
-.note-time {
+.applications_list .note-time {
   width: 4.4em;
 }
-.note-body {
+.applications_list .note-body {
   width: 13em;
   padding: 0 .35em;
 }
-.note-author {
+.applications_list .note-author {
   width: 4em;
 }
-div.note-remove > button.btn {
+.applications_list div.note-remove > button.btn {
   font-size: 0.9em;
   color: #ccc;
   border-color: #ccc;
   padding: .2em .4em;
   margin: 0 0.4em;
 }
-div.note-remove > button.btn:hover {
+.applications_list div.note-remove > button.btn:hover {
   color: #fff;
   border-color: #d9534f;
   background-color: #d9534f;
 }
-div.note-remove > button.btn .glyphicon {
+.applications_list div.note-remove > button.btn .glyphicon {
   margin: 0;
 }
-ul.tags-autocomplete_results {
+.applications_list ul.tags-autocomplete_results {
   margin: 0;
   padding: 0;
   position: absolute;
@@ -4441,24 +4441,24 @@ ul.tags-autocomplete_results {
   box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.2);
   z-index: 10;
 }
-li.autocomplete-result.active {
+.applications_list li.autocomplete-result.active {
   color: #fff;
   background-color: #069ED6;
 }
-li.autocomplete-result {
+.applications_list li.autocomplete-result {
   padding: .2em .6em;
   border-left: 1px solid #dfdfdf;
   border-right: 1px solid #dfdfdf;
   border-bottom: 1px solid #dfdfdf;
   cursor: pointer;
 }
-li.autocomplete-result .result-match {
+.applications_list li.autocomplete-result .result-match {
   font-weight: 700;
 }
-.tags {
+.applications_list .tags {
   padding: 0 0 0.5em 0;
 }
-span.tag.label {
+.applications_list span.tag.label {
   display: inline-block;
   background-color: #c4eefd;
   padding: 0.4em 0.6em;
@@ -4466,10 +4466,10 @@ span.tag.label {
   margin-right: .1em;
   margin-bottom: 0.2em;
 }
-span.tag.label .glyphicon-remove-sign {
+.applications_list span.tag.label .glyphicon-remove-sign {
   cursor: pointer;
 }
-span.tag.label.danger {
+.applications_list span.tag.label.danger {
   background-color: #d9534f;
   color: #fff;
 }
