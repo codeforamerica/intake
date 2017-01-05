@@ -4,6 +4,7 @@ var searchModule = {};
 
 function buildSearchFunction(searchSpace){
   return function (searchTerm){
+    searchTerm = searchTerm.trim();
     var termLength = searchTerm.length;
     var results = [];
     if( termLength < 1 ){
@@ -24,6 +25,10 @@ function buildSearchFunction(searchSpace){
           selection: selection,
         });
       }
+    });
+    // previlege matches in the beginning of the word
+    results.sort(function(a, b){
+      return a.prefix.length - b.prefix.length;
     });
     return results;
   }

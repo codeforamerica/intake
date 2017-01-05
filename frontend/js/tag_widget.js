@@ -59,8 +59,7 @@ function renderResults(){
 function getMaxSplittingIndex(text){
   // get the index position after the last comma or space
   var lastCommaIndex = text.lastIndexOf(',');
-  var lastSpaceIndex = text.lastIndexOf(' ');
-  return Math.max(lastCommaIndex, lastSpaceIndex) + 1;
+  return Math.max(lastCommaIndex) + 1;
 }
 
 
@@ -124,7 +123,7 @@ function addSelectedResult(){
   var currentResult = STATE.results[STATE.selectedResultIndex];
   var maxCuttingIndex = getMaxSplittingIndex(currentValue);
   var existingCompleteTagInput = currentValue.substring(0, maxCuttingIndex);
-  var newValue = existingCompleteTagInput + currentResult.text + ', ';
+  var newValue = existingCompleteTagInput + ' ' + currentResult.text + ', ';
   selectResult(null);
   clearResults();
   STATE.elems.input.val(newValue);
