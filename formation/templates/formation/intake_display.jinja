@@ -16,9 +16,13 @@
       {{ form.middle_name_display }}
       {{ form.last_name }}
     </div>
+    <div class="data_display-row alias">
+      {{ form.aliases_display }}
+    </div>
     <div class="data_display-row id_numbers">
       {{ form.dob_display }}
       {{ form.ssn_display }}
+      {{ form.case_number_display }}
     </div>
   </div>
 
@@ -28,7 +32,7 @@
       {{ form.contact_preferences }}
     </div>
     <div class="data_display-row devices">
-      {{ form.phone_number }}
+      {{ form.phone_number_display }}
       {{ form.email }}
     </div>
     <div class="data_display-row alt_devices">
@@ -43,6 +47,8 @@
     <h3 class="data_display-section_header">Case Information</h3>
     <div class="data_display-stack">
       {{ form.us_citizen }}
+      {{ form.is_veteran_display }}
+      {{ form.is_student_display }}
     </div>
     <div class="data_display-stack probation_parole">
       {{ form.on_probation_parole }}
@@ -71,12 +77,14 @@
     {%- endif %}
     <div class="data_display-stack">
       {{ form.has_suspended_license_display }}
+      {{ form.owes_court_fees_display }}
     </div>
     <div class="data_display-stack">
-      {{ form.owes_court_fees_display }}
+      {{ form.reasons_for_applying_display }}
     </div>
   </div>
 
+  {%- if 'monthly_income' in form.fields %}
   <div class="data_display-section financial">
     <h3 class="data_display-section_header">Financial Information</h3>
     <div class="data_display-row employment">
@@ -88,18 +96,24 @@
       {{ form.monthly_expenses_display }}
     </div>
 
-    <div class="data_display-row household_and_benefits">
+    <div class="data_display-row household">
       {{ form.household_size_display }}
+      {{ form.has_children_display }}
+      {{ form.is_married_display }}
+    </div>
+
+    <div class="data_display-row other_financial">
       {{ form.owns_home_display }}
       {{ form.on_public_benefits_display }}
     </div>
+    
   </div>
+  {%- endif %}
 
   <div class="data_display-section meta">
     <div class="data_display-row">
       {{ form.how_did_you_hear }}
     </div>
-
     {%- if 'additional_information' in form.fields %}
     <div class="data_display-row">
       {{ form.additional_information }}
