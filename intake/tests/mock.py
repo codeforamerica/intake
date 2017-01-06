@@ -16,7 +16,8 @@ from taggit.models import Tag
 from intake import models, constants
 from intake.constants import PACIFIC_TIME
 from intake.tests import mock_user_agents, mock_referrers
-from user_accounts.tests.mock import OrganizationFactory
+from intake.services import bundles as BundlesService
+from user_accounts.tests.mock import OrganizationFactory, create_seed_users
 from unittest.mock import Mock
 Pacific = timezone('US/Pacific')
 
@@ -306,6 +307,7 @@ def make_mock_submission_event_sequence(applicant):
 
 
 def build_seed_submissions():
+    create_seed_users()
     from user_accounts.models import Organization
     from formation.forms import county_form_selector
     cc_pubdef = Organization.objects.get(
@@ -318,13 +320,31 @@ def build_seed_submissions():
         slug=constants.Organizations.SF_PUBDEF)
     monterey_pubdef = Organization.objects.get(
         slug=constants.Organizations.MONTEREY_PUBDEF)
-    receiving_orgs = [cc_pubdef, a_pubdef, ebclc, sf_pubdef, monterey_pubdef]
+    solano_pubdef = Organization.objects.get(
+        slug=constants.Organizations.SOLANO_PUBDEF)
+    san_diego_pubdef = Organization.objects.get(
+        slug=constants.Organizations.SAN_DIEGO_PUBDEF)
+    san_joaquin_pubdef = Organization.objects.get(
+        slug=constants.Organizations.SAN_JOAQUIN_PUBDEF)
+    santa_clara_pubdef = Organization.objects.get(
+        slug=constants.Organizations.SANTA_CLARA_PUBDEF)
+    fresno_pubdef = Organization.objects.get(
+        slug=constants.Organizations.FRESNO_PUBDEF)
+    receiving_orgs = [
+        cc_pubdef, a_pubdef, ebclc, sf_pubdef, monterey_pubdef,
+        solano_pubdef, san_diego_pubdef, san_joaquin_pubdef,
+        santa_clara_pubdef, fresno_pubdef]
     answer_pairs = {
         sf_pubdef.slug: fake.sf_county_form_answers,
         cc_pubdef.slug: fake.contra_costa_county_form_answers,
         ebclc.slug: fake.ebclc_answers,
         a_pubdef.slug: fake.alameda_pubdef_answers,
-        monterey_pubdef.slug: fake.alameda_county_form_answers,
+        monterey_pubdef.slug: fake.monterey_pubdef_answers,
+        solano_pubdef.slug: fake.solano_pubdef_answers,
+        san_diego_pubdef.slug: fake.san_diego_pubdef_answers,
+        san_joaquin_pubdef.slug: fake.san_joaquin_pubdef_answers,
+        santa_clara_pubdef.slug: fake.santa_clara_pubdef_answers,
+        fresno_pubdef.slug: fake.fresno_pubdef_answers,
     }
     form_pairs = {
         org.slug: county_form_selector.get_combined_form_class(
@@ -346,14 +366,17 @@ def build_seed_submissions():
                 applicant=applicant,
                 answers=form.cleaned_data
                 )
-            if org == a_pubdef:
+            if org in (a_pubdef, santa_clara_pubdef, monterey_pubdef):
                 letter = fake.declaration_letter_answers()
                 sub.answers.update(letter)
             sub.save()
             sub.organizations.add(org)
             subs.append(sub)
     # make 1 submission to multiple orgs
-    target_orgs = [a_pubdef, cc_pubdef, sf_pubdef, monterey_pubdef]
+    target_orgs = [
+        a_pubdef, cc_pubdef, sf_pubdef, monterey_pubdef, solano_pubdef,
+        san_diego_pubdef, san_joaquin_pubdef, santa_clara_pubdef,
+        fresno_pubdef]
     answers = fake.all_county_answers()
     Form = county_form_selector.get_combined_form_class(
         counties=[org.county.slug for org in target_orgs])
@@ -363,6 +386,7 @@ def build_seed_submissions():
     applicants.append(applicant)
     multi_org_sub = models.FormSubmission(
             applicant=applicant, answers=form.cleaned_data)
+    multi_org_sub.answers.update(fake.declaration_letter_answers())
     multi_org_sub.save()
     multi_org_sub.organizations.add(*target_orgs)
     subs.append(multi_org_sub)
@@ -376,7 +400,7 @@ def build_seed_submissions():
             sub for sub in subs
             if (org in sub.organizations.all()) and (
                 sub != multi_org_sub)]
-        bundle = models.ApplicationBundle.create_with_submissions(
+        bundle = BundlesService.create_bundle_from_submissions(
             organization=org,
             submissions=org_subs,
             skip_pdf=True)
