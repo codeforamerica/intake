@@ -358,7 +358,7 @@ class RAPOutsideSF(YesNoField):
 class WhenWhereOutsideSF(CharField):
     context_key = "when_where_outside_sf"
     label = _(
-        "If you were arrested or convicted on other counties, which ones and "
+        "If you were arrested or convicted in other counties, which ones and "
         "when?")
     display_label = "Where/when"
 
