@@ -57,7 +57,7 @@
   "model": "auth.user",
   "fields": {
     "password": "pbkdf2_sha256$30000$mQNl2M1ZGrni$/FN7D7xxb84FcvHfIQ1Da/uN9Vdstc57Npw1Vm3BONM=",
-    "last_login": "2017-01-05T19:58:40.437Z",
+    "last_login": "2017-01-06T07:15:41.420Z",
     "is_superuser": true,
     "username": "cfa_user",
     "first_name": "Fake",
@@ -417,7 +417,7 @@
     "organization": [
       "Santa Clara County Public Defender"
     ],
-    "should_get_notifications": false
+    "should_get_notifications": true
   }
 },
 {
@@ -431,7 +431,7 @@
     "organization": [
       "Fresno County Public Defender"
     ],
-    "should_get_notifications": false
+    "should_get_notifications": true
   }
 },
 {
@@ -445,7 +445,7 @@
     "organization": [
       "Solano County Public Defender"
     ],
-    "should_get_notifications": false
+    "should_get_notifications": true
   }
 },
 {
@@ -459,7 +459,7 @@
     "organization": [
       "San Joaquin County Public Defender"
     ],
-    "should_get_notifications": false
+    "should_get_notifications": true
   }
 },
 {
@@ -473,7 +473,7 @@
     "organization": [
       "San Diego County Public Defender"
     ],
-    "should_get_notifications": false
+    "should_get_notifications": true
   }
 }
 ]
