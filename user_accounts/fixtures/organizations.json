@@ -140,5 +140,125 @@
     "email": "",
     "notify_on_weekends": false
   }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Solano County Public Defender",
+    "slug": "solano_pubdef",
+    "county": [
+      "solano"
+    ],
+    "website": "https://www.solanocounty.com/depts/pubdefender/home.asp",
+    "blurb": "",
+    "is_receiving_agency": true,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": false,
+    "show_pdf_only": false,
+    "short_confirmation_message": "The Solano County Public Defender will contact you in 2-4 weeks with next steps.",
+    "long_confirmation_message": "The Solano County Public Defender will contact you in 2-4 weeks with your next steps.",
+    "short_followup_message": "",
+    "long_followup_message": "",
+    "address": "",
+    "phone_number": "",
+    "email": "",
+    "notify_on_weekends": false
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "San Diego County Public Defender",
+    "slug": "san_diego_pubdef",
+    "county": [
+      "san_diego"
+    ],
+    "website": "http://www.sandiegocounty.gov/public_defender/",
+    "blurb": "",
+    "is_receiving_agency": true,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": false,
+    "show_pdf_only": false,
+    "short_confirmation_message": "The San Diego County Public Defender will contact you in 2-4 weeks with next steps.",
+    "long_confirmation_message": "The San Diego County Public Defender will contact you in 2-4 weeks with your next steps.",
+    "short_followup_message": "",
+    "long_followup_message": "",
+    "address": "",
+    "phone_number": "",
+    "email": "",
+    "notify_on_weekends": false
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "San Joaquin County Public Defender",
+    "slug": "san_joaquin_pubdef",
+    "county": [
+      "san_joaquin"
+    ],
+    "website": "https://www.sjgov.org/pubdefender/",
+    "blurb": "",
+    "is_receiving_agency": true,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": false,
+    "show_pdf_only": false,
+    "short_confirmation_message": "The San Joaquin County Public Defender will contact you in 2-4 weeks with next steps.",
+    "long_confirmation_message": "The San Joaquin County Public Defender will contact you in 2-4 weeks with your next steps.",
+    "short_followup_message": "",
+    "long_followup_message": "",
+    "address": "",
+    "phone_number": "",
+    "email": "",
+    "notify_on_weekends": false
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Santa Clara County Public Defender",
+    "slug": "santa_clara_pubdef",
+    "county": [
+      "santa_clara"
+    ],
+    "website": "https://www.sccgov.org/sites/pdo/Pages/pdo.aspx",
+    "blurb": "",
+    "is_receiving_agency": true,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": true,
+    "show_pdf_only": false,
+    "short_confirmation_message": "",
+    "long_confirmation_message": "",
+    "short_followup_message": "",
+    "long_followup_message": "",
+    "address": "",
+    "phone_number": "408-535-4290",
+    "email": "",
+    "notify_on_weekends": false
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Fresno County Public Defender",
+    "slug": "fresno_pubdef",
+    "county": [
+      "fresno"
+    ],
+    "website": "http://www.co.fresno.ca.us/Departments.aspx?id=404",
+    "blurb": "",
+    "is_receiving_agency": true,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": false,
+    "show_pdf_only": false,
+    "short_confirmation_message": "You'll get a letter from the Fresno County Public Defender in 2-4 weeks.",
+    "long_confirmation_message": "You will get a letter in the mail with your next steps from the Fresno County Public Defender in 2-4 weeks.",
+    "short_followup_message": "",
+    "long_followup_message": "",
+    "address": "",
+    "phone_number": "(559) 600-3546",
+    "email": "",
+    "notify_on_weekends": false
+  }
 }
 ]
