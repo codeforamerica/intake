@@ -35,9 +35,24 @@
           <li>
             <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_cc) }}
           </li>
-          {%- if not settings.LIVE_COUNTY_CHOICES %}
           <li>
             <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_monterey) }}
+          </li>
+          {%- if not settings.LIVE_COUNTY_CHOICES %}
+          <li>
+            <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_solano) }}
+          </li>
+          <li>
+            <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_san_diego) }}
+          </li>
+          <li>
+            <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_san_joaquin) }}
+          </li>
+          <li>
+            <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_santa_clara) }}
+          </li>
+          <li>
+            <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_fresno) }}
           </li>
           {%- endif %}
         </ul>
