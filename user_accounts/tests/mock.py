@@ -62,11 +62,15 @@ OrganizationFactory = PrepopulatedModelFactory(models.Organization)
 
 def create_user(**attributes):
     name = attributes.get('name', fake.name())
+    first_name = attributes.get('first_name', fake.first_name())
+    last_name = attributes.get('last_name', fake.last_name())
     username = attributes.get('username', slugify(name))
     email = attributes.get('email',
                            username + '@' + fake.free_email_domain())
     password = fake_password
     return auth_models.User.objects.create_user(
+        first_name=first_name,
+        last_name=last_name,
         username=username,
         email=email,
         password=password
@@ -74,14 +78,45 @@ def create_user(**attributes):
 
 
 def create_user_with_profile(organization, **attributes):
-    name = attributes.get('name', fake.name())
+    name = attributes.pop('name', fake.name())
     user = create_user(name=name, **attributes)
     return models.UserProfile.objects.create(
         name=name,
         user=user,
         organization=organization,
-        **attributes
     )
+
+
+def create_seed_users():
+    user_args = {}
+    application_reviewers_group = auth_models.Group.objects.get(
+        name='application_reviewers')
+    for org in models.Organization.objects.filter(is_receiving_agency=True):
+        username = org.slug + "_user"
+        first_name = 'Fake'
+        last_name = ' '.join([
+            piece.title() for piece in org.slug.split('_')])
+        name = ' '.join([first_name, last_name])
+        email = 'bgolder+demo+{}@codeforamerica.org'.format(username)
+        password = fake_password
+        user_args[username] = dict(
+            organization=org,
+            username=username,
+            first_name=first_name,
+            last_name=last_name,
+            name=name,
+            email=email,
+            password=password)
+    for username, kwargs in user_args.items():
+        user = auth_models.User.objects.filter(username=username).first()
+        if not user:
+            user = create_user(**kwargs)
+        if not hasattr(user, 'profile'):
+            models.UserProfile.objects.create(
+                organization=kwargs['organization'],
+                name=kwargs['name'],
+                user=user)
+        application_reviewers_group.user_set.add(user)
 
 
 def create_fake_auth_models(num_users_per_org=2):
@@ -107,11 +142,17 @@ def create_fake_auth_models(num_users_per_org=2):
         'organizations': orgs,
         'users': [p.user for p in profiles],
         'cfa_users': [p.user for p in profiles if p.organization == cfa],
-        'sfpubdef_users': [p.user for p in profiles if p.organization == sfpubdef],
-        'ccpubdef_users': [p.user for p in profiles if p.organization == ccpubdef],
-        'notified_users': [p.user for p in profiles if p.should_get_notifications],
-        'agency_users': [p.user for p in profiles if p.organization.is_receiving_agency],
-        'non_agency_users': [p.user for p in profiles if not p.organization.is_receiving_agency],
+        'sfpubdef_users': [
+            p.user for p in profiles if p.organization == sfpubdef],
+        'ccpubdef_users': [
+            p.user for p in profiles if p.organization == ccpubdef],
+        'notified_users': [
+            p.user for p in profiles if p.should_get_notifications],
+        'agency_users': [
+            p.user for p in profiles if p.organization.is_receiving_agency],
+        'non_agency_users': [
+            p.user for p in profiles
+            if not p.organization.is_receiving_agency],
         'profiles': profiles
     }
 
