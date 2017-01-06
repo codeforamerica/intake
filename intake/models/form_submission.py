@@ -1,6 +1,5 @@
 import uuid
 from urllib.parse import urljoin
-from pytz import timezone
 
 from django.conf import settings
 from django.db import models
@@ -117,6 +116,12 @@ class FormSubmission(models.Model):
                     intake.constants.Counties.SAN_FRANCISCO,
                     intake.constants.Counties.CONTRA_COSTA,
                     intake.constants.Counties.ALAMEDA,
+                    intake.constants.Counties.MONTEREY,
+                    intake.constants.Counties.SOLANO,
+                    intake.constants.Counties.SAN_DIEGO,
+                    intake.constants.Counties.SAN_JOAQUIN,
+                    intake.constants.Counties.SANTA_CLARA,
+                    intake.constants.Counties.FRESNO,
                 ])
         init_data = dict(
             date_received=self.get_local_date_received(),
@@ -132,10 +137,8 @@ class FormSubmission(models.Model):
         display_form.display_only = True
         display_form.display_template_name = "formation/intake_display.jinja"
         display_form.submission = self
-        show_declaration = \
-            user.profile.organization.requires_declaration_letter or \
-            (user.is_staff and any(self.organizations.all().values_list(
-                'requires_declaration_letter', flat=True)))
+        show_declaration = any(self.organizations.all().values_list(
+                'requires_declaration_letter', flat=True))
         if show_declaration:
             declaration_letter_form = DeclarationLetterDisplay(
                 init_data, validate=True)
