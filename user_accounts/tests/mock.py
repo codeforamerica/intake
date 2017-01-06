@@ -115,7 +115,8 @@ def create_seed_users():
             models.UserProfile.objects.create(
                 organization=kwargs['organization'],
                 name=kwargs['name'],
-                user=user)
+                user=user,
+                should_get_notifications=True)
         application_reviewers_group.user_set.add(user)
 
 
