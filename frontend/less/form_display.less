@@ -58,7 +58,8 @@ li.action_menu-item > a {
 }
 .data_display-value {
 	color: black;
-	font-size: 1.2em;
+	font-size: 1.19em; 
+	// font-size: 1.2em causes rendering artifacts for 'z' chars on chrome :/
 }
 
 .data_display-value.empty:after {
@@ -91,7 +92,6 @@ h3.data_display-section_header {
 }
 
 .data_display-section.time_place {
-	height: 4em;
 	max-width: 48em;
 	.data_display-value {
 		font-size: 1em;
@@ -154,10 +154,13 @@ pre.address {
 	border: 2px solid black;
 }
 .data_display-section.declaration_letter {
-
 	padding: 1em;
 	background-color: lighten(@gray-lighter, 5%);
 	border: 1px solid @gray-lighter;
 	border-radius: .5em;
 
+}
+
+.data_display.counties {
+	max-width: 20em;
 }

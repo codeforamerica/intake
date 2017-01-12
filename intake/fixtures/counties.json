@@ -34,5 +34,50 @@
     "name": "Monterey",
     "description": "Monterey County (near Salinas, Monterey, Marina, Seaside, Prunedale, Castroville, or King City)"
   }
+},
+{
+  "model": "intake.county",
+  "pk": 5,
+  "fields": {
+    "slug": "solano",
+    "name": "Solano",
+    "description": "Solano County (near Vallejo, Fairfield, Vacaville, Benicia, or Allendale)"
+  }
+},
+{
+  "model": "intake.county",
+  "pk": 6,
+  "fields": {
+    "slug": "san_diego",
+    "name": "San Diego",
+    "description": "San Diego County (near San Diego, Oceanside, Chula Vista, or Escondido)"
+  }
+},
+{
+  "model": "intake.county",
+  "pk": 7,
+  "fields": {
+    "slug": "san_joaquin",
+    "name": "San Joaquin",
+    "description": "San Joaquin County (near Stockton, Lodi, Tracy, Manteca, Thornton, or Victor)"
+  }
+},
+{
+  "model": "intake.county",
+  "pk": 8,
+  "fields": {
+    "slug": "santa_clara",
+    "name": "Santa Clara",
+    "description": "Santa Clara County (near San Jose, Santa Clara, Campbell, Saratoga, Los Altos, Los Gatos, or Gilroy)"
+  }
+},
+{
+  "model": "intake.county",
+  "pk": 9,
+  "fields": {
+    "slug": "fresno",
+    "name": "Fresno",
+    "description": "Fresno County (near Fresno, Clovis, Sanger, Kingsburg, Mendota, Fowler, or Three Rocks)"
+  }
 }
 ]

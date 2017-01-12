@@ -8,7 +8,7 @@ from formation.field_types import (
     FormNote, DateTimeField, YES_NO_CHOICES, NOT_APPLICABLE
 )
 from intake.constants import (
-    COUNTY_CHOICES, CONTACT_PREFERENCE_CHOICES,
+    COUNTY_CHOICES, CONTACT_PREFERENCE_CHOICES, REASON_FOR_APPLYING_CHOICES,
     GENDER_PRONOUN_CHOICES,
     COUNTY_CHOICE_DISPLAY_DICT
 )
@@ -43,10 +43,10 @@ class DateReceived(DateTimeField):
 class Counties(MultipleChoiceField):
     context_key = "counties"
     choices = COUNTY_CHOICES
-    label = _('Where would you like to apply for help with your arrests or '
-              'convictions?')
+    label = _('Where were you arrested or convicted?')
     help_text = _(
-        "We will send your Clear My Record application to these counties.")
+        "We will send your Clear My Record application to agencies in these "
+        "counties.")
     display_label = "Wants help with record in"
     choice_display_dict = COUNTY_CHOICE_DISPLAY_DICT
 
@@ -67,6 +67,12 @@ class ConsentNote(FormNote):
         attorney will represent you.
       </li>
     </ol>""")
+
+
+class ReasonsForApplying(MultipleChoiceField):
+    context_key = "reasons_for_applying"
+    label = _("Why are you applying to clear your record?")
+    choices = REASON_FOR_APPLYING_CHOICES
 
 
 class HowDidYouHear(CharField):
@@ -103,6 +109,11 @@ class MiddleName(NameField):
 class LastName(NameField):
     context_key = "last_name"
     label = _('What is your last name?')
+
+
+class Aliases(NameField):
+    context_key = "aliases"
+    label = _('Any other names that might be used on your record?')
 
 
 class Month(CharField):
@@ -152,9 +163,15 @@ class SocialSecurityNumberField(CharField):
     display_label = "SSN"
 
 
+class CaseNumber(CharField):
+    context_key = "case_number"
+    label = _("What is your case number, if you know it?")
+
+
 ###
 # Contact Info Questions
 ###
+
 
 class ContactPreferences(MultipleChoiceField):
     context_key = "contact_preferences"
@@ -264,6 +281,16 @@ class USCitizen(YesNoField):
     display_label = "Is a citizen"
 
 
+class IsVeteran(YesNoField):
+    context_key = "is_veteran"
+    label = _("Are you a veteran?")
+
+
+class IsStudent(YesNoField):
+    context_key = "is_student"
+    label = _("Are you a student?")
+
+
 class BeingCharged(YesNoField):
     context_key = "being_charged"
     label = _("Are you currently being charged with a crime?")
@@ -322,16 +349,17 @@ class ReducedProbation(FinishedHalfProbation):
 
 class RAPOutsideSF(YesNoField):
     context_key = "rap_outside_sf"
-    label = _("Have you ever been arrested or convicted outside of San "
-              "Francisco?")
-    display_label = "Has RAP outside SF"
+    label = _(
+        "Have you ever been arrested or convicted in any other counties?")
+    display_label = "RAP in other counties"
     flip_display_choice_order = True
 
 
 class WhenWhereOutsideSF(CharField):
     context_key = "when_where_outside_sf"
-    label = _("When and where were you arrested or convicted outside of San "
-              "Francisco?")
+    label = _(
+        "If you were arrested or convicted in other counties, which ones and "
+        "when?")
     display_label = "Where/when"
 
 
@@ -436,9 +464,20 @@ class HouseholdSize(IntegerField):
         return value
 
 
+class IsMarried(YesNoField):
+    context_key = "is_married"
+    label = _("Are you married?")
+
+
+class HasChildren(YesNoField):
+    context_key = "has_children"
+    label = _("Do you have children?")
+
+
 ###
 # Declaration Letter
 ###
+
 
 class AlamedaDeclarationLetterNote(FormNote):
     context_key = "alameda_declaration_letter_note"
@@ -485,6 +524,7 @@ INTAKE_FIELDS = [
     FirstName,
     MiddleName,
     LastName,
+    Aliases,
 
     PreferredPronouns,
 
@@ -494,8 +534,11 @@ INTAKE_FIELDS = [
     AddressField,
     DateOfBirthField,
     SocialSecurityNumberField,
+    CaseNumber,
 
     USCitizen,
+    IsVeteran,
+    IsStudent,
     BeingCharged,
     ServingSentence,
     OnProbationParole,
@@ -516,7 +559,10 @@ INTAKE_FIELDS = [
     MonthlyExpenses,
     OwnsHome,
     HouseholdSize,
+    HasChildren,
+    IsMarried,
 
+    ReasonsForApplying,
     HowDidYouHear,
     AdditionalInformation,
     ConsentNote,

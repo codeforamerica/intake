@@ -58,5 +58,17 @@
     "text": "555 7th Street, 2nd Floor\r\nSan Francisco, CA\r\n94103",
     "walk_in_hours": "Every Tuesday, from 9am to 11am"
   }
+},
+{
+  "model": "user_accounts.address",
+  "pk": 6,
+  "fields": {
+    "organization": [
+      "Santa Clara County Public Defender"
+    ],
+    "name": "Reentry Expungement Program",
+    "text": "Reentry Resource Center\r\n151 W. Mission Street\r\nSan Jose, CA  95110",
+    "walk_in_hours": "8:00 AM \u2013 5:00 PM Monday through Friday"
+  }
 }
 ]

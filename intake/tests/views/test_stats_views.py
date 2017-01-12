@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
-from intake.tests.base_testcases import IntakeDataTestCase
+from intake.tests.base_testcases import (
+    IntakeDataTestCase, ALL_APPLICATION_FIXTURES)
 
 from intake.tests.mock_serialized_apps import apps as all_apps
 
@@ -21,17 +22,7 @@ class TestStats(IntakeDataTestCase):
         'weekly_median_completion_time'
     ]
 
-    fixtures = [
-        'counties',
-        'organizations', 'mock_profiles',
-        'mock_2_submissions_to_a_pubdef',
-        'mock_2_submissions_to_ebclc',
-        'mock_2_submissions_to_sf_pubdef',
-        'mock_2_submissions_to_cc_pubdef',
-        'mock_2_submissions_to_monterey_pubdef',
-        'mock_1_submission_to_multiple_orgs',
-        'mock_application_events'
-        ]
+    fixtures = ALL_APPLICATION_FIXTURES
 
     def assert_day_stat_has_correct_fields(self, day, private=False):
         for key in self.private_stats_fields:

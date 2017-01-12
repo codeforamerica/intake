@@ -283,6 +283,11 @@ class TestPhoneNumberField(PatchTranslationTestCase):
         field = fields.PhoneNumberField()
         self.assertEqual(field.get_display_value(), '')
 
+    def test_get_display_value_has_correct_format(self):
+        field = fields.PhoneNumberField({'phone_number': '8884445555'})
+        field.is_valid()
+        self.assertEqual(field.get_display_value(), '(888) 444-5555')
+
     def test_adds_parse_error_if_given_misc_string(self):
         field = fields.PhoneNumberField({'phone_number': 'Not sure'})
         self.assertFalse(field.is_valid())

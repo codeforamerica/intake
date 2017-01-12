@@ -74,6 +74,11 @@ linkify_links = {
     "Alameda County Public Defender's Office": "/partners/a_pubdef/",
     "East Bay Community Law Center": "/partners/ebclc/",
     "Monterey County Public Defender": "/partners/monterey_pubdef/",
+    "Solano County Public Defender": "/partners/solano_pubdef/",
+    "San Diego County Public Defender": "/partners/san_diego_pubdef/",
+    "San Joaquin County Public Defender": "/partners/san_joaquin_pubdef/",
+    "Santa Clara County Public Defender": "/partners/santa_clara_pubdef/",
+    "Fresno County Public Defender": "/partners/fresno_pubdef/",
     "clearmyrecord@codeforamerica.org": "mailto:clearmyrecord@codeforamerica.org",
     "(415) 301-6005": "tel:14153016005"
 }

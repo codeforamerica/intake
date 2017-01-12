@@ -10,6 +10,39 @@ from intake.tests import mock
 DELUXE_TEST = os.environ.get('DELUXE_TEST', False)
 
 
+ALL_APPLICATION_FIXTURES = [
+    'counties',
+    'organizations',
+    'addresses',
+    'mock_profiles',
+    'mock_2_submissions_to_a_pubdef',
+    'mock_2_submissions_to_ebclc',
+    'mock_2_submissions_to_cc_pubdef',
+    'mock_2_submissions_to_sf_pubdef',
+    'mock_2_submissions_to_monterey_pubdef',
+    'mock_2_submissions_to_solano_pubdef',
+    'mock_2_submissions_to_san_diego_pubdef',
+    'mock_2_submissions_to_san_joaquin_pubdef',
+    'mock_2_submissions_to_santa_clara_pubdef',
+    'mock_2_submissions_to_fresno_pubdef',
+    'mock_1_submission_to_multiple_orgs',
+    'mock_application_events',
+]
+
+ALL_BUNDLES = [
+    'mock_1_bundle_to_a_pubdef',
+    'mock_1_bundle_to_ebclc',
+    'mock_1_bundle_to_sf_pubdef',
+    'mock_1_bundle_to_cc_pubdef',
+    'mock_1_bundle_to_monterey_pubdef',
+    'mock_1_bundle_to_solano_pubdef',
+    'mock_1_bundle_to_san_diego_pubdef',
+    'mock_1_bundle_to_san_joaquin_pubdef',
+    'mock_1_bundle_to_santa_clara_pubdef',
+    'mock_1_bundle_to_fresno_pubdef',
+]
+
+
 class IntakeDataTestCase(AuthIntegrationTestCase):
 
     display_field_checks = [

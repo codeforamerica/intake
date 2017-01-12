@@ -1,4 +1,4 @@
-from intake.constants import CountyNames, SCOPE_TO_LIVE_COUNTIES
+from intake.constants import CountyNames
 
 
 
@@ -11,9 +11,11 @@ class constants:
     call_to_action_time = "Take the first step. Apply in 10 minutes."
     call_to_action_button = "Apply now"
     learn_more_button = "Learn more"
-    credibility_note = str("Clear My Record is a free, non-profit service from "
-                           "Code for America for people with a criminal record in {}. "
-                           "We are not a law firm and the information on this site is not legal advice.").format(CountyNames.ALL)
+    credibility_note = str(
+        "Clear My Record is a free, non-profit service from "
+        "Code for America for people with a criminal record in {}. "
+        "We are not a law firm and the information on this site is not "
+        "legal advice.").format(CountyNames.ALL)
 
     benefits_headline = "Clearing your criminal record could help you qualify for jobs, housing, and educational opportunities."
     eligibilty_headline = "Are you eligible to clear your record?"
@@ -62,19 +64,20 @@ class constants:
     opportunity_2 = "Improve your chances of qualifying for financial aid or housing assistance"
     opportunity_3 = "Hold a record that better represents who you are today"
 
-    footer_website_description = str(
-        "Code for America")
+    footer_website_description = str("Code for America")
     footer_legal = "Privacy Policy"
-    footer_sf = str(
-        "San Francisco Public Defender")
-    footer_cc = str(
-        "Contra Costa Public Defender")
-    footer_alameda = str(
-        "Alameda County Public Defender's Office")
-    footer_ebclc = str(
-        "East Bay Community Law Center")
-    footer_monterey = str(
-        "Monterey County Public Defender")
+
+    footer_sf = str("San Francisco Public Defender")
+    footer_cc = str("Contra Costa Public Defender")
+    footer_alameda = str("Alameda County Public Defender's Office")
+    footer_ebclc = str("East Bay Community Law Center")
+    footer_monterey = str("Monterey County Public Defender")
+    footer_solano = str("Solano County Public Defender")
+    footer_san_diego = str("San Diego County Public Defender")
+    footer_san_joaquin = str("San Joaquin County Public Defender")
+    footer_santa_clara = str("Santa Clara County Public Defender")
+    footer_fresno = str("Fresno County Public Defender")
+
     back_home_btn = "Go back to main page"
 
     metadata_title = topbar

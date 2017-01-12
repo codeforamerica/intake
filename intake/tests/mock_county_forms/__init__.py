@@ -28,13 +28,16 @@ class Provider(BaseProvider):
             'prefers_voicemail',
             ], preferences)
 
+    def make_phone_number(self):
+        return self.numerify('2##-###-####')
+
     def sf_county_form_answers(self, **overrides):
         data = {
             'first_name': self.generator.first_name(),
             'middle_name': self.generator.first_name(),
             'last_name': self.generator.last_name(),
             'contact_preferences': self.generate_contact_preferences(),
-            'phone_number': self.numerify('###-###-####'),
+            'phone_number': self.make_phone_number(),
             'email': self.generator.free_email(),
             'address.street': self.generator.street_address(),
             'address.city': self.generator.city(),
@@ -66,7 +69,7 @@ class Provider(BaseProvider):
             'contact_preferences': self.generate_contact_preferences(),
             'first_name': self.generator.first_name(),
             'last_name': self.generator.last_name(),
-            'phone_number': self.numerify('###-###-####'),
+            'phone_number': self.make_phone_number(),
             'email': self.generator.free_email(),
             'dob.day': str(random.randint(1, 31)),
             'dob.month': str(random.randint(1, 12)),
@@ -95,8 +98,8 @@ class Provider(BaseProvider):
             'first_name': self.generator.first_name(),
             'middle_name': self.generator.first_name(),
             'last_name': self.generator.last_name(),
-            'phone_number': self.numerify('###-###-####'),
-            'alternate_phone_number': self.numerify('###-###-####'),
+            'phone_number': self.make_phone_number(),
+            'alternate_phone_number': self.make_phone_number(),
             'email': self.generator.free_email(),
             'dob.day': str(random.randint(1, 31)),
             'dob.month': str(random.randint(1, 12)),
@@ -107,6 +110,7 @@ class Provider(BaseProvider):
             'address.state': self.generator.state_abbr(),
             'address.zip': self.generator.zipcode(),
             'on_probation_parole': 'yes',
+            'rap_outside_sf': self.maybe(0.1),
             'finished_half_probation': 'not_applicable',
             'reduced_probation': 'not_applicable',
             'being_charged': self.maybe(0.05),
@@ -139,7 +143,7 @@ class Provider(BaseProvider):
         data = {
             'contact_preferences': self.generate_contact_preferences(),
             'first_name': self.generator.first_name(),
-            'phone_number': self.numerify('###-###-####'),
+            'phone_number': self.make_phone_number(),
             'email': self.generator.free_email(),
             'address.street': self.generator.street_address(),
             'address.city': self.generator.city(),
@@ -156,7 +160,7 @@ class Provider(BaseProvider):
             'middle_name': self.generator.first_name(),
             'last_name': self.generator.last_name(),
             'contact_preferences': self.generate_contact_preferences(),
-            'phone_number': self.numerify('###-###-####'),
+            'phone_number': self.make_phone_number(),
             'email': self.generator.free_email(),
             'address': {
                 'street': self.generator.street_address(),
@@ -188,16 +192,71 @@ class Provider(BaseProvider):
         return data
 
     def ebclc_answers(self, **overrides):
-        data = self.alameda_county_form_answers(**overrides)
+        data = self.alameda_county_form_answers()
         data['monthly_income'] = 3001
         data['owns_home'] = "yes"
         data.update(overrides)
         return data
 
     def alameda_pubdef_answers(self, **overrides):
-        data = self.alameda_county_form_answers(**overrides)
+        data = self.alameda_county_form_answers()
         data['monthly_income'] = 2999
         data['owns_home'] = "no"
+        data.update(overrides)
+        return data
+
+    def monterey_pubdef_answers(self, **overrides):
+        data = self.alameda_county_form_answers()
+        data.update(
+            is_veteran=self.maybe(0.1),
+            is_student=self.maybe(0.2),
+            when_probation_or_parole='2018',
+            where_probation_or_parole='Solano County',
+        )
+        data.update(overrides)
+        return data
+
+    def solano_pubdef_answers(self, **overrides):
+        data = self.monterey_pubdef_answers()
+        data.update(
+            owes_court_fees=self.maybe(0.5),
+        )
+        data.update(overrides)
+        return data
+
+    def san_diego_pubdef_answers(self, **overrides):
+        data = self.solano_pubdef_answers()
+        data.update(
+            case_number=self.generator.numerify("C####-###"),
+            reasons_for_applying=['background_check', 'lost_job', 'housing'],
+        )
+        data.update(overrides)
+        return data
+
+    def san_joaquin_pubdef_answers(self, **overrides):
+        return self.solano_pubdef_answers(**overrides)
+
+    def santa_clara_pubdef_answers(self, **overrides):
+        data = self.solano_pubdef_answers()
+        data.update(
+            currently_employed=self.maybe(0.3),
+            income_source='a job',
+            monthly_expenses=2000,
+            is_married=self.maybe(0.4),
+            has_children=self.maybe(0.6),
+            reduced_probation=self.maybe(0.1),
+            reasons_for_applying=['background_check', 'lost_job', 'housing'],
+        )
+        data.update(overrides)
+        return data
+
+    def fresno_pubdef_answers(self, **overrides):
+        data = self.solano_pubdef_answers()
+        data.update(
+            aliases=self.generator.name(),
+            case_number=self.generator.numerify("C####-###"),
+            reasons_for_applying=['background_check', 'lost_job', 'housing'],
+        )
         data.update(overrides)
         return data
 
@@ -205,7 +264,12 @@ class Provider(BaseProvider):
         data = {
             **self.sf_county_form_answers(),
             **self.alameda_county_form_answers(),
-            **self.contra_costa_county_form_answers()
+            **self.contra_costa_county_form_answers(),
+            **self.monterey_pubdef_answers(),
+            **self.san_joaquin_pubdef_answers(),
+            **self.san_diego_pubdef_answers(),
+            **self.santa_clara_pubdef_answers(),
+            **self.fresno_pubdef_answers(),
         }
         data.update(overrides)
         return data

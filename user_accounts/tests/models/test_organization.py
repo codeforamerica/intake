@@ -1,5 +1,6 @@
 from unittest.mock import patch
-from intake.tests.base_testcases import IntakeDataTestCase
+from intake.tests.base_testcases import (
+    IntakeDataTestCase, ALL_APPLICATION_FIXTURES)
 from django.db.models import Count
 from user_accounts import models, exceptions
 from intake import models as intake_models
@@ -9,17 +10,7 @@ from intake import constants
 
 class TestOrganization(IntakeDataTestCase):
 
-    fixtures = [
-        'counties',
-        'organizations', 'mock_profiles',
-        'mock_2_submissions_to_a_pubdef',
-        'mock_2_submissions_to_ebclc',
-        'mock_2_submissions_to_cc_pubdef',
-        'mock_2_submissions_to_sf_pubdef',
-        'mock_2_submissions_to_monterey_pubdef',
-        'mock_1_submission_to_multiple_orgs',
-        'mock_application_events',
-    ]
+    fixtures = ALL_APPLICATION_FIXTURES
 
     def test_has_a_pdf(self):
         self.assertTrue(self.sf_pubdef.has_a_pdf())

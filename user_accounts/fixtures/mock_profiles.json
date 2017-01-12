@@ -57,7 +57,7 @@
   "model": "auth.user",
   "fields": {
     "password": "pbkdf2_sha256$30000$mQNl2M1ZGrni$/FN7D7xxb84FcvHfIQ1Da/uN9Vdstc57Npw1Vm3BONM=",
-    "last_login": "2016-12-27T22:10:49Z",
+    "last_login": "2017-01-06T07:15:41.420Z",
     "is_superuser": true,
     "username": "cfa_user",
     "first_name": "Fake",
@@ -165,7 +165,7 @@
   "model": "auth.user",
   "fields": {
     "password": "pbkdf2_sha256$30000$TtyBJ4dTfTYs$OC1+kLqeu5d6FEl7j/Fvjwo+3EMJFH9B0YNJquZUnlo=",
-    "last_login": "2016-11-30T21:48:06Z",
+    "last_login": "2017-01-06T05:54:59.042Z",
     "is_superuser": false,
     "username": "monterey_pubdef_user",
     "first_name": "Fake",
@@ -198,6 +198,111 @@
     "groups": [
       [
         "performance_monitors"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$30000$fOJC2z2qAdxw$YLaKXfQ+8ld0ybBZ3nvkdOETcPbt/anNJQq4ramU9SU=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "san_joaquin_pubdef_user",
+    "first_name": "Fake",
+    "last_name": "San Joaquin Pubdef",
+    "email": "bgolder+demo+san_joaquin_pubdef_user@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-01-06T04:32:57.343Z",
+    "groups": [
+      [
+        "application_reviewers"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$30000$FGkpyqpNJC3F$fePeHYjrU9CzGsCK7fVj78rypKqVIwV6zlpLcwAIYHs=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "san_diego_pubdef_user",
+    "first_name": "Fake",
+    "last_name": "San Diego Pubdef",
+    "email": "bgolder+demo+san_diego_pubdef_user@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-01-06T04:38:26.732Z",
+    "groups": [
+      [
+        "application_reviewers"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$30000$kTgy734QAeVt$pDl3/PPVNj/j71APcCGDPg9LXVKQ2uUxTui+XO4BiRk=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "santa_clara_pubdef_user",
+    "first_name": "Fake",
+    "last_name": "Santa Clara Pubdef",
+    "email": "bgolder+demo+santa_clara_pubdef_user@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-01-06T04:41:16.657Z",
+    "groups": [
+      [
+        "application_reviewers"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$30000$W6anEemhLIGA$h7ulM3AW0/VAysXGRluCEAK4ULL1cE2VvjpdyVgu4X0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "fresno_pubdef_user",
+    "first_name": "Fake",
+    "last_name": "Fresno Pubdef",
+    "email": "bgolder+demo+fresno_pubdef_user@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-01-06T04:41:16.705Z",
+    "groups": [
+      [
+        "application_reviewers"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$30000$7HJJrLRXcCdf$qvl+wGGhfaK7HQHlWq3Ibt+90jCtvvfpel47/4Hz3Jo=",
+    "last_login": "2017-01-06T06:01:28.947Z",
+    "is_superuser": false,
+    "username": "solano_pubdef_user",
+    "first_name": "Fake",
+    "last_name": "Solano Pubdef",
+    "email": "bgolder+demo+solano_pubdef_user@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-01-06T04:41:16.751Z",
+    "groups": [
+      [
+        "application_reviewers"
       ]
     ],
     "user_permissions": []
@@ -299,6 +404,76 @@
       "Code for America"
     ],
     "should_get_notifications": false
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 12,
+  "fields": {
+    "name": "Fake Santa Clara Pubdef",
+    "user": [
+      "santa_clara_pubdef_user"
+    ],
+    "organization": [
+      "Santa Clara County Public Defender"
+    ],
+    "should_get_notifications": true
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 13,
+  "fields": {
+    "name": "Fake Fresno Pubdef",
+    "user": [
+      "fresno_pubdef_user"
+    ],
+    "organization": [
+      "Fresno County Public Defender"
+    ],
+    "should_get_notifications": true
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 14,
+  "fields": {
+    "name": "Fake Solano Pubdef",
+    "user": [
+      "solano_pubdef_user"
+    ],
+    "organization": [
+      "Solano County Public Defender"
+    ],
+    "should_get_notifications": true
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 15,
+  "fields": {
+    "name": "Fake San Joaquin Pubdef",
+    "user": [
+      "san_joaquin_pubdef_user"
+    ],
+    "organization": [
+      "San Joaquin County Public Defender"
+    ],
+    "should_get_notifications": true
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 16,
+  "fields": {
+    "name": "Fake San Diego Pubdef",
+    "user": [
+      "san_diego_pubdef_user"
+    ],
+    "organization": [
+      "San Diego County Public Defender"
+    ],
+    "should_get_notifications": true
   }
 }
 ]

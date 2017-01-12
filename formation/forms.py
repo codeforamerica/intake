@@ -174,8 +174,8 @@ class AlamedaCountyFormSpec(CombinableCountyFormSpec):
         F.BeingCharged,
         F.HasSuspendedLicense,
         F.OwesCourtFees,
-        # F.HasExternalRAP,
-        # F.ExternalRAPWhereWhen,
+        F.RAPOutsideSF,
+        F.WhenWhereOutsideSF,
         F.HowDidYouHear,
         F.AdditionalInformation,
     }
@@ -259,14 +259,19 @@ class MontereyCountyFormSpec(CombinableCountyFormSpec):
         F.AddressField,
         F.FinancialScreeningNote,
         F.MonthlyIncome,
+        F.OnPublicBenefits,
         F.HouseholdSize,
         F.DateOfBirthField,
         F.USCitizen,
+        F.IsVeteran,
+        F.IsStudent,
         F.OnProbationParole,
         F.WhereProbationParole,
         F.WhenProbationParole,
         F.ServingSentence,
         F.BeingCharged,
+        F.RAPOutsideSF,
+        F.WhenWhereOutsideSF,
         F.HowDidYouHear,
         F.AdditionalInformation,
     }
@@ -276,6 +281,7 @@ class MontereyCountyFormSpec(CombinableCountyFormSpec):
         F.AddressField,
         F.DateOfBirthField,
         F.MonthlyIncome,
+        F.OnPublicBenefits,
         F.HouseholdSize,
         F.OnProbationParole,
         F.ServingSentence,
@@ -285,6 +291,114 @@ class MontereyCountyFormSpec(CombinableCountyFormSpec):
         F.HowDidYouHear,
         F.AdditionalInformation,
     }
+
+
+class SolanoCountyFormSpec(CombinableCountyFormSpec):
+    county = Counties.SOLANO
+    fields = {
+        F.ContactPreferences,
+        F.FirstName,
+        F.MiddleName,
+        F.LastName,
+        F.PhoneNumberField,
+        F.AlternatePhoneNumberField,
+        F.EmailField,
+        F.AddressField,
+        F.DateOfBirthField,
+        F.USCitizen,
+        F.OnProbationParole,
+        F.WhereProbationParole,
+        F.WhenProbationParole,
+        F.OwesCourtFees,
+        F.ServingSentence,
+        F.BeingCharged,
+        F.RAPOutsideSF,
+        F.WhenWhereOutsideSF,
+        F.HowDidYouHear,
+        F.AdditionalInformation,
+        F.ConsentNote,
+    }
+    required_fields = {
+        F.FirstName,
+        F.LastName,
+        F.PhoneNumberField,
+        F.DateOfBirthField,
+        F.OnProbationParole,
+        F.OwesCourtFees,
+        F.ServingSentence,
+        F.BeingCharged,
+    }
+    optional_fields = {
+        F.MiddleName,
+        F.AlternatePhoneNumberField,
+        F.HowDidYouHear,
+        F.AdditionalInformation
+    }
+
+
+class SanDiegoCountyFormSpec(SolanoCountyFormSpec):
+    county = Counties.SAN_DIEGO
+    fields = SolanoCountyFormSpec.fields | {
+        F.CaseNumber,
+    }
+    required_fields = SolanoCountyFormSpec.required_fields - {
+        F.PhoneNumberField
+    }
+    optional_fields = SolanoCountyFormSpec.optional_fields | {
+        F.CaseNumber
+    }
+
+
+class SanJoaquinCountyFormSpec(SolanoCountyFormSpec):
+    county = Counties.SAN_JOAQUIN
+    required_fields = SolanoCountyFormSpec.required_fields - {
+        F.PhoneNumberField
+    }
+
+
+class FresnoCountyFormSpec(SolanoCountyFormSpec):
+    county = Counties.FRESNO
+    fields = (SolanoCountyFormSpec.fields | {
+        F.Aliases,
+        F.CaseNumber,
+        F.ReasonsForApplying,
+    }) - {
+        F.OwesCourtFees,
+        F.RAPOutsideSF,
+        F.WhenWhereOutsideSF,
+    }
+    optional_fields = SolanoCountyFormSpec.optional_fields | {
+        F.Aliases,
+    }
+    required_fields = SolanoCountyFormSpec.required_fields - {
+        F.OwesCourtFees
+    }
+
+
+class SantaClaraCountyFormSpec(SolanoCountyFormSpec):
+    county = Counties.SANTA_CLARA
+    fields = SolanoCountyFormSpec.fields | {
+        F.FinancialScreeningNote,
+        F.CurrentlyEmployed,
+        F.MonthlyIncome,
+        F.IncomeSource,
+        F.MonthlyExpenses,
+        F.OnPublicBenefits,
+        F.HouseholdSize,
+        F.IsMarried,
+        F.HasChildren,
+        F.IsVeteran,
+        F.ReducedProbation,
+        F.ReasonsForApplying,
+    }
+    required_fields = (SolanoCountyFormSpec.required_fields | {
+        F.CurrentlyEmployed,
+        F.MonthlyIncome,
+        F.IncomeSource,
+        F.MonthlyExpenses,
+        F.OnPublicBenefits,
+        F.HouseholdSize,
+    }) - {F.PhoneNumberField}
 
 
 class EBCLCIntakeFormSpec(CombinableOrganizationFormSpec):
@@ -312,10 +426,10 @@ class EBCLCIntakeFormSpec(CombinableOrganizationFormSpec):
         F.ReducedProbation,
         F.ServingSentence,
         F.BeingCharged,
-        # F.HasExternalRAP,
-        # F.ExternalRAPWhereWhen,
-        # Fines & Fees
-        # urgency
+        F.RAPOutsideSF,
+        F.WhenWhereOutsideSF,
+        F.HasSuspendedLicense,
+        F.OwesCourtFees,
         F.HowDidYouHear,
         F.AdditionalInformation,
     }
@@ -385,7 +499,13 @@ INPUT_FORM_SPECS = [
     ContraCostaFormSpec(),
     AlamedaCountyFormSpec(),
     MontereyCountyFormSpec(),
+    SolanoCountyFormSpec(),
+    SanDiegoCountyFormSpec(),
+    SanJoaquinCountyFormSpec(),
+    SantaClaraCountyFormSpec(),
+    FresnoCountyFormSpec(),
 ]
+
 DISPLAY_FORM_SPECS = INPUT_FORM_SPECS + [
     SupplementaryDisplayForm(),
 ]

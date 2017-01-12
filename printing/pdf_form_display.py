@@ -58,20 +58,24 @@ class PDFFormDisplay:
     main_display_fields = [
         ['date_received', 'counties'],
         ['first_name', 'middle_name', 'last_name'],
-        ['dob', 'ssn'],
+        ['aliases'],
+        ['dob', 'ssn', 'case_number'],
         ['contact_preferences'],
         ['phone_number', 'alternate_phone_number'],
         ['email'],
         ['address'],
-        ['is_employed'],
-        ['monthly_income', 'income_source', 'monthly_expenses'],
-        ['household_size', 'owns_home', 'on_public_benefits'],
+        ['currently_employed', 'income_source'],
+        ['monthly_income', 'monthly_expenses'],
+        ['household_size', 'has_children', 'is_married'],
+        ['owns_home', 'on_public_benefits'],
         ['how_did_you_hear'],
         ['additional_information'],
     ]
 
     case_status_fields = [
         ['us_citizen'],
+        ['is_veteran'],
+        ['is_student'],
         [
             'on_probation_parole',
             'where_probation_or_parole',
@@ -87,6 +91,7 @@ class PDFFormDisplay:
         ],
         ['has_suspended_license'],
         ['owes_court_fees'],
+        ['reasons_for_applying'],
     ]
 
     letter_display_fields = [
@@ -249,8 +254,8 @@ class PDFFormDisplay:
                 start.y - (dy + margin))
 
     def draw_case_status_fields(self):
-        left_edge = u('5.75in')
-        max_width = u('2.5in')
+        left_edge = u('5.625in')
+        max_width = u('2.125in')
         self.set_cursor(left_edge, self.height - self.frame.top)
         for section in self.case_status_fields:
             dx, dy = self.draw_vertical_section(section, max_width)
