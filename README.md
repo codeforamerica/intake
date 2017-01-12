@@ -7,7 +7,7 @@
 
 ## Requirements
 To get a local version of intake running, you'll need to have the following installed:
-*   [python 3.5](https://github.com/codeforamerica/howto/blob/master/Python-Virtualenv.md) (note that python 3.5 includes venv, a standard library module. A separate installation of virtualenv is  unnecessary)
+*   [python 3.5](https://github.com/codeforamerica/howto/blob/master/Python-Virtualenv.md) (note that python 3.5 includes `venv`, a standard library module. Separate installation of virtualenv is unnecessary)
 *   [Node.js and npm](https://github.com/codeforamerica/howto/blob/master/Node.js.md)
 *   [Gulp](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md), simply follow step 1 to enable the `gulp` command from your terminal.
 *   [Local PostreSQL](https://github.com/codeforamerica/howto/blob/master/PostgreSQL.md)
@@ -17,7 +17,7 @@ To get a local version of intake running, you'll need to have the following inst
 ### Quickstart
 
 An overview of the command line steps to get started
-```
+```sh
 git clone https://github.com/codeforamerica/intake.git
 cd intake
 createdb intake
@@ -35,7 +35,7 @@ make serve   # run the server
 
 Be sure to install all the dependencies in a python virtual environment. `make install` will install both npm packages as well as python packages.
 
-```
+```sh
 git clone https://github.com/codeforamerica/intake.git
 cd intake
 python3 -m venv .  # or virtualenv .
@@ -45,7 +45,7 @@ make install
 
 ### Copy the local settings
 
-```
+```sh
 cp ./local_settings.py.example ./local_settings.py
 ```
 
@@ -56,7 +56,7 @@ Make sure you have a local PostgreSQL database, and that you know the login info
 
 For example, if I have a default user named `postgres`:
 
-```
+```sh
 # create a database named "intake"
 createdb intake
 ```
@@ -75,7 +75,7 @@ DATABASES = {
 
 With the database connection information in place, the following command will migrate the database and add seed data:
 
-```
+```sh
 make db.setup
 ```
 
@@ -84,7 +84,7 @@ make db.setup
 
 This only needs to be run the first time you set up.
 
-```
+```sh
 ./manage.py collectstatic
 ```
 
@@ -92,28 +92,43 @@ This only needs to be run the first time you set up.
 
 The following command will spin up a local server at [http://localhost:8000/](http://localhost:8000/)
 
-```
+```sh
 make serve
 ```
 
 ## Testing
 
 To run the test suite, use:
-```
+```sh
 make test
 ```
 
 
 If you'd like to see coverage results you can use:
-```
+```sh
 make test.coverage
 ```
 
-To target a particular test, you can add a `SCOPE` variable. For example if I want to just test that an org user can only see applications to their own organization on the app index page, I would run:
+Some of the tests take longer to run than others. Some of them need to create and read pdfs on the file system. These do not run local by default. But they do run during Travis builds. If you'd like to include these slower tests you can run them with:
+
+```sh
+make test.deluxe
 ```
+
+To target a particular test, you can add a `SCOPE` variable. For example if I want to just test that an org user can only see applications to their own organization on the app index page, I would run:
+```sh
 make test \
-SCOPE=intake.tests.views.test_admin_views.TestApplicationIndex.test_that_org_user_can_only_see_apps_to_own_org
+    SCOPE=intake.tests.views.test_admin_views.TestApplicationIndex.test_that_org_user_can_only_see_apps_to_own_org
+```
+
+Alternatively you could run all the tests for the admin views with:
+
+```sh
+make test \
+    SCOPE=intake.tests.views.test_admin_views
 ```
 
 As you can see, the `SCOPE` variable should use the syntax of a python import path.
+
+
 
