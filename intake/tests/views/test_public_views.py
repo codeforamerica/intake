@@ -6,6 +6,15 @@ from intake import constants
 from user_accounts import models as auth_models
 
 
+class TestFooterContent(TestCase):
+
+    def test_footer_contains_login_link(self):
+        response = self.client.get(reverse('intake-home'))
+        self.assertContains(
+            response,
+            html_utils.conditional_escape(reverse('account_login')))
+
+
 class TestPartnerListView(TestCase):
     fixtures = ['counties', 'organizations']
 
