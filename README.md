@@ -7,69 +7,88 @@
 
 ## Requirements
 To get a local version of intake running, you'll need to have the following installed:
-*   [virtualenv with python3](https://github.com/codeforamerica/howto/blob/master/Python-Virtualenv.md)
+*   [python 3.5](https://github.com/codeforamerica/howto/blob/master/Python-Virtualenv.md) (note that python 3.5 includes venv, a standard library module. A separate installation of virtualenv is  unnecessary)
 *   [Node.js and npm](https://github.com/codeforamerica/howto/blob/master/Node.js.md)
 *   [Gulp](https://github.com/gulpjs/gulp/blob/master/docs/getting-started.md), simply follow step 1 to enable the `gulp` command from your terminal.
 *   [Local PostreSQL](https://github.com/codeforamerica/howto/blob/master/PostgreSQL.md)
 
-## Installation
+## Installation and Setup
+
+### Quickstart
+
+An overview of the command line steps to get started
+```
+git clone https://github.com/codeforamerica/intake.git
+cd intake
+createdb intake
+cp ./local_settings.py.example ./local_settings.py
+# add database connection info to local_settings.py
+python3 -m venv .
+source bin/activate
+make install
+./manage.py collectstatic
+make db.setup  # migrate the database and add seed data
+make serve   # run the server
+```
+
+### Installation
+
+Be sure to install all the dependencies in a python virtual environment. `make install` will install both npm packages as well as python packages.
 
 ```
 git clone https://github.com/codeforamerica/intake.git
 cd intake
-virtualenv .
+python3 -m venv .  # or virtualenv .
 source bin/activate
 make install
-npm install
 ```
 
-## Set up the database
-With whatever command line interface you're using to interact with your Postgres instance. Creat an intake database:
+### Copy the local settings
 
 ```
-# CREATE DATABASE intake;
+cp ./local_settings.py.example ./local_settings.py
 ```
 
-By default our database owner will have username "postgres" and password="".
-To verify this user exists you can use:
+
+### Set up the database
+
+Make sure you have a local PostgreSQL database, and that you know the login information. Add this database information to `local_settings.py`. If you're not sure how to setup a PostgreSQL database, [read more documentation]([Local PostreSQL](https://github.com/codeforamerica/howto/blob/master/PostgreSQL.md)) before proceeding.
+
+For example, if I have a default user named `postgres`:
 
 ```
-# SELECT USENAME FROM pg_user;
+# create a database named "intake"
+createdb intake
 ```
 
-If this user doesn't exist create them with:
-
-```
-# CREATE USER postgres PASSWORD '';
-```
-
-Apply migrations to set up the database schema:
-
-```
-python manage.py migrate
-```
-
-## Set up environment variables
-To allow Django to deploy onto a localhost, add the following to whatever .__rc file is sourced when you open a terminal (.zshrc, .bashrc, etc.):
-
-```
-export ALLOWED_HOSTS = "localhost,127.0.0.1"
+```python
+# in local_settings.py
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'intake',
+        'USER': 'postgres',
+    }
+}
 ```
 
-We're using Sendgrid to handle emails. If you don't have an account it's okay but we still need to set an API_Key. Emails won't work but the app will run. Add the following to the same file as above:
+
+With the database connection information in place, the following command will migrate the database and add seed data:
 
 ```
-export SENDGRID_API_KEY = ""
+make db.setup
 ```
-If you DO have a Sendgrid account, that's your spot for your api key.
+
+
+### Build static assets
+
+This only needs to be run the first time you set up.
+
+```
+./manage.py collectstatic
+```
 
 ## Run the local server
-
-First, copy local_settings.py.example to local_settings.py and make sure to update your database connection info.
-
-```
-cp local_settings.py.example local_settings.py
-```
 
 The following command will spin up a local server at [http://localhost:8000/](http://localhost:8000/)
 
@@ -79,31 +98,22 @@ make serve
 
 ## Testing
 
-To run the suite of integration and unit tests and see a coverage report, use
+To run the test suite, use:
 ```
 make test
 ```
 
-### Functional testing
 
-Functional tests are written using the Chrome webdriver with selenium.
-
-Install the Chrome drivers for your operating system. On OS X, you can use Homebrew.
-
+If you'd like to see coverage results you can use:
 ```
-brew install chromedriver
-brew services start chromedriver
+make test.coverage
 ```
 
-Run the functional tests with
-
+To target a particular test, you can add a `SCOPE` variable. For example if I want to just test that an org user can only see applications to their own organization on the app index page, I would run:
 ```
-make test.functional
+make test \
+SCOPE=intake.tests.views.test_admin_views.TestApplicationIndex.test_that_org_user_can_only_see_apps_to_own_org
 ```
 
-This will create a series of screenshots in `tests/screenshots`.
-
-### Deployment
-
-These instructions assume that the app is being deployed on Heroku with static assets hosted on AWS S3.
+As you can see, the `SCOPE` variable should use the syntax of a python import path.
 
