@@ -130,5 +130,36 @@ make test \
 
 As you can see, the `SCOPE` variable should use the syntax of a python import path.
 
+## Debugging and introspection
+
+The requirements include a few libraries that are helpful for debugging and exploring functionality.
 
 
+### `ipdb` breakpoints
+To set an interactive breakpoint somewhere in the code, insert this line:
+
+```python
+import ipdb; ipdb.set_trace()
+```
+
+[Here is a Sublime Text snippet](https://gist.github.com/bengolder/f18d7aa10d3119381ead2a4b3ca7247a) that lets you type `ipd` as shortcut for the line above. Go to _Tools > Developer > New Snippet_ while a python file is open.
+
+The execution will enter an interactive prompt at this point in the code, with tab completion and a variety of shortcuts available.
+
+- **`s` or `step`**: step into the next execution frame.
+- **`c` or `continue`**: Continue exection
+- **`u` or `up`**: Move up one frame in the stack trace.
+- **`d` or `down`**: Move down one frame in the stack trace.
+- **`n` or `next`**: continue to the next line.
+- **`ll`**: show the lines of code in the current function.
+- **`pp`**: pretty print an object. For example, (`pp my_object`).
+
+### `shell_plus` interactive python shell
+
+To load an interactive ipython prompt with tab completion, models, and other useful things preloaded, run this shell command:
+
+```sh
+./manage.py shell_plus
+```
+
+Any print commands will pretty print by default. Tab completion is available.
