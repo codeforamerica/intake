@@ -3,4 +3,3 @@
 selenium~=2.53
 autopep8~=1.2
 pep8~=1.6
-mixpanel~=4.3.1
