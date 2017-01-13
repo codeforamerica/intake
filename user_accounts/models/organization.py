@@ -26,6 +26,8 @@ class Organization(models.Model):
     website = models.URLField(blank=True)
     blurb = models.TextField(blank=True)
     is_receiving_agency = models.BooleanField(default=False)
+    is_accepting_applications = models.BooleanField(default=True)
+    is_checking_notifications = models.BooleanField(default=True)
     requires_rap_sheet = models.BooleanField(default=False)
     requires_declaration_letter = models.BooleanField(default=False)
     show_pdf_only = models.BooleanField(default=False)
