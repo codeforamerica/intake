@@ -1,16 +1,18 @@
 from unittest.mock import Mock, patch
 from django.test import TestCase
-
+from django.db.models import Count
 import intake.services.submissions as SubmissionsService
 from intake.tests import mock
-from intake.tests.base_testcases import ExternalNotificationsPatchTestCase
+from intake.tests.base_testcases import (
+    ExternalNotificationsPatchTestCase, ALL_APPLICATION_FIXTURES)
 from formation.forms import county_form_selector
 from intake.constants import (
     COUNTY_CHOICE_DISPLAY_DICT, Organizations,
-    EMAIL, SMS, VOICEMAIL, SNAILMAIL
-    )
-from intake.models import Applicant, ApplicationEvent, FormSubmission
-from user_accounts.models import Organization
+    EMAIL, SMS, VOICEMAIL, SNAILMAIL)
+from intake.models import (
+    Applicant, ApplicationEvent, FormSubmission, ApplicationLogEntry)
+from intake import constants
+from user_accounts.models import Organization, UserProfile
 
 """
 Each function in intake.services.submissions corresponds to a TestCase in this
@@ -25,7 +27,7 @@ class TestCreateSubmissions(TestCase):
 
     fixtures = [
         'counties', 'organizations',
-    ]
+    ] 
 
     def test_can_create_with_form_orgs_and_app_id(self):
         # given an applicant, some orgs, and a validated form
@@ -297,3 +299,60 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
         self.assertEqual(
             applicant.events.filter(
                 name=ApplicationEvent.CONFIRMATION_SENT).count(), 1)
+
+
+class TestGetUnopenedSubmissionsForOrg(TestCase):
+
+    fixtures = ALL_APPLICATION_FIXTURES
+
+    def test_uses_only_one_query(self):
+        org = Organization.objects.filter(
+            is_receiving_agency=True).first()
+        subs = SubmissionsService.get_unopened_submissions_for_org(org)
+        with self.assertNumQueries(1):
+            list(subs)
+
+    def test_returns_all_apps_if_no_open_events(self):
+        ebclc = Organization.objects.get(
+            slug=constants.Organizations.EBCLC)
+        for org in Organization.objects.filter(
+                is_receiving_agency=True):
+            subs = SubmissionsService.get_unopened_submissions_for_org(org)
+            if org == ebclc:
+                self.assertEqual(subs.count(), 2)
+            else:
+                self.assertEqual(subs.count(), 3)
+
+    def test_returns_apps_opened_by_other_org(self):
+        # assume we have a multi-org app opened by a user from one org
+        cc_pubdef = Organization.objects.get(
+            slug=constants.Organizations.COCO_PUBDEF)
+        a_pubdef = Organization.objects.get(
+            slug=constants.Organizations.ALAMEDA_PUBDEF)
+        cc_pubdef_user = UserProfile.objects.filter(
+                organization=cc_pubdef).first().user
+        sub = FormSubmission.objects.annotate(
+            org_count=Count('organizations')).filter(org_count__gte=3).first()
+        ApplicationLogEntry.log_opened([sub.id], cc_pubdef_user)
+        # assert that it shows up in unopened apps
+        cc_pubdef_subs = \
+            SubmissionsService.get_unopened_submissions_for_org(cc_pubdef)
+        a_pubdef_subs = \
+            SubmissionsService.get_unopened_submissions_for_org(a_pubdef)
+        self.assertIn(sub, a_pubdef_subs)
+        self.assertNotIn(sub, cc_pubdef_subs)
+
+    @patch('intake.models.ApplicationEvent.from_logs')
+    def test_deleted_opened_app_doesnt_inhibit_return_of_other_apps(
+            self, from_logs):
+        # https://code.djangoproject.com/ticket/25467?cversion=0&cnum_hist=2
+        sf_pubdef = Organization.objects.get(
+            slug=constants.Organizations.SF_PUBDEF)
+        sf_pubdef_user = UserProfile.objects.filter(
+            organization=sf_pubdef).first().user
+        logs = ApplicationLogEntry.log_opened([None], user=sf_pubdef_user)
+        self.assertTrue(logs[0].id)
+        self.assertIsNone(logs[0].submission_id)
+        unopened_subs = \
+            SubmissionsService.get_unopened_submissions_for_org(sf_pubdef)
+        self.assertEqual(unopened_subs.count(), 3)

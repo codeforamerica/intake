@@ -6,6 +6,7 @@ import user_accounts
 from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
 from django.utils.html import conditional_escape
+from django.contrib.auth.models import User
 
 
 class OrganizationManager(models.Manager):
@@ -61,18 +62,17 @@ class Organization(models.Model):
         This is not an efficient query and assumes that profiles and
         users have been prefetched in a previous query.
         """
-        emails = [
-            profile.user.email
-            for profile
-            in self.profiles.filter(should_get_notifications=True)]
+        emails = list(User.objects.filter(
+            profile__should_get_notifications=True,
+            profile__organization=self).values_list('email', flat=True))
         if not emails:
             # this assumes that any existing invitations are valid emails
             # to use for notification
             emails = list(user_accounts.models.Invitation.objects.filter(
                 organization=self).values_list('email', flat=True))
-        if not emails:
-            msg = "{} has no invites or users".format(self)
-            raise user_accounts.exceptions.NoEmailsForOrgError(msg)
+            if not emails:
+                msg = "{} has no invites or users".format(self)
+                raise user_accounts.exceptions.NoEmailsForOrgError(msg)
         return emails
 
     def has_a_pdf(self):
@@ -101,14 +101,6 @@ class Organization(models.Model):
         return mark_safe('<a href="{url}">{name}</a>'.format(
             url=self.get_absolute_url(),
             name=conditional_escape(self.name)))
-
-    def get_unopened_apps(self):
-        opened_sub_ids = intake_models.ApplicationLogEntry.objects.filter(
-            event_type=intake_models.ApplicationLogEntry.OPENED,
-            user__profile__organization=self,
-            submission_id__isnull=False
-        ).values_list('submission_id', flat=True)
-        return self.submissions.all().exclude(pk__in=opened_sub_ids)
 
     def get_last_bundle(self):
         return intake_models.ApplicationBundle.objects.filter(
