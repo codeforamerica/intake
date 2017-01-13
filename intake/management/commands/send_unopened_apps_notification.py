@@ -1,13 +1,13 @@
 from django.core.management.base import BaseCommand
 
-from intake import submission_bundler
+import intake.services.bundles as BundlesService
 
 
 class Command(BaseCommand):
     help = 'Sends an email about unopened applications'
 
     def handle(self, *args, **options):
-        submission_bundler.bundle_and_notify()
+        BundlesService.create_bundles_and_send_notifications_to_orgs()
         self.stdout.write(
             self.style.SUCCESS("Successfully referred any unopened apps")
         )
