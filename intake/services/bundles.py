@@ -73,7 +73,9 @@ def build_bundled_pdf_if_necessary(bundle):
 
 
 def get_orgs_that_might_need_a_bundle_email_today():
-    """Returns Organization receiving agencies which:
+    """Returns Organizations which:
+        - are receiving agencies
+        - are checking notifications
         - have at least one user
         - have at least one submission
     and if today is the weekend:
@@ -83,6 +85,7 @@ def get_orgs_that_might_need_a_bundle_email_today():
         profile_count=Count('profiles'),
         submission_count=Count('submissions'),
     ).filter(
+        is_checking_notifications=True,
         is_receiving_agency=True,
         profile_count__gte=1,
         submission_count__gte=1

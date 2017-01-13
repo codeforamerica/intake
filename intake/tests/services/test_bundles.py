@@ -190,6 +190,19 @@ class TestGetOrgsThatMightNeedABundleEmailToday(TestCase):
         self.assertIn(weekend_org, org_results)
         self.assertNotIn(weekday_org, org_results)
 
+    @patch('intake.services.bundles.is_the_weekend', not_the_weekend)
+    def test_only_returns_orgs_that_check_notifications(self):
+        expected_org = auth_models.Organization.objects.get(
+            slug=constants.Organizations.COCO_PUBDEF)
+        org_not_checking_notifications = auth_models.Organization.objects.get(
+            slug=constants.Organizations.ALAMEDA_PUBDEF)
+        org_not_checking_notifications.is_checking_notifications = False
+        org_not_checking_notifications.save()
+        org_results = set(
+            BundlesService.get_orgs_that_might_need_a_bundle_email_today())
+        self.assertIn(expected_org, org_results)
+        self.assertNotIn(org_not_checking_notifications, org_results)
+
 
 class TestCreateBundlesAndSendNotificationsToOrgs(TestCase):
 
