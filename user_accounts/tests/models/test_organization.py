@@ -46,38 +46,3 @@ class TestOrganization(IntakeDataTestCase):
         cc_pubdef = self.cc_pubdef
         self.assertIsNone(sf_pubdef.get_transfer_org())
         self.assertIsNone(cc_pubdef.get_transfer_org())
-
-    def test_get_unopened_apps_returns_all_apps_if_no_open_events(self):
-        ebclc = models.Organization.objects.get(
-            slug=constants.Organizations.EBCLC)
-        for org in models.Organization.objects.filter(
-                is_receiving_agency=True):
-            if org == ebclc:
-                self.assertEqual(org.get_unopened_apps().count(), 2)
-            else:
-                self.assertEqual(org.get_unopened_apps().count(), 3)
-
-    def test_get_unopened_apps_returns_apps_opened_by_other_org(self):
-        # assume we have a multi-org app opened by a user from one org
-        cc_pubdef = models.Organization.objects.get(
-            slug=constants.Organizations.COCO_PUBDEF)
-        a_pubdef = models.Organization.objects.get(
-            slug=constants.Organizations.ALAMEDA_PUBDEF)
-        cc_pubdef_user = models.UserProfile.objects.filter(
-                organization=cc_pubdef).first().user
-        sub = intake_models.FormSubmission.objects.annotate(
-            org_count=Count('organizations')).filter(org_count__gte=3).first()
-        intake_models.ApplicationLogEntry.log_opened([sub.id], cc_pubdef_user)
-        # assert that it shows up in unopened apps
-        self.assertIn(sub, a_pubdef.get_unopened_apps())
-        self.assertNotIn(sub, cc_pubdef.get_unopened_apps())
-
-    @patch('intake.models.ApplicationEvent.from_logs')
-    def test_get_unopened_apps_with_deleted_opened_app_returns_expected_result(
-            self, from_logs):
-        # https://code.djangoproject.com/ticket/25467?cversion=0&cnum_hist=2
-        logs = intake_models.ApplicationLogEntry.log_opened(
-            [None], user=self.sf_pubdef_user)
-        self.assertTrue(logs[0].id)
-        self.assertIsNone(logs[0].submission_id)
-        self.assertEqual(self.sf_pubdef.get_unopened_apps().count(), 3)
