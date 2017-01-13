@@ -6,8 +6,15 @@ import user_accounts.models as auth_models
 from intake import constants, models
 import intake.services.bundles as BundlesService
 import intake.services.submissions as SubmissionsService
-
 from intake.tests import mock
+
+
+def not_the_weekend():
+    return False
+
+
+def yes_its_the_weekend():
+    return True
 
 
 class TestBuildBundledPdfIfNecessary(TestCase):
@@ -134,3 +141,109 @@ class TestBuildBundledPdfIfNecessary(TestCase):
         mock_bundle.save.assert_called_once_with()
         SubService.fill_pdfs_for_submission.assert_has_calls(
             [call(mock_sub) for mock_sub in mock_submissions], any_order=True)
+
+
+class TestGetOrgsThatMightNeedABundleEmailToday(TestCase):
+
+    fixtures = [
+        'counties',
+        'organizations', 'mock_profiles',
+        'mock_2_submissions_to_a_pubdef',
+        'mock_2_submissions_to_cc_pubdef',
+        ]
+
+    @patch('intake.services.bundles.is_the_weekend', not_the_weekend)
+    def test_returns_orgs_iff_have_subs_and_profiles(self):
+        expected_org = auth_models.Organization.objects.get(
+            slug=constants.Organizations.ALAMEDA_PUBDEF)
+        org_with_subs_but_no_user = auth_models.Organization.objects.get(
+            slug=constants.Organizations.COCO_PUBDEF)
+        # delete user_profiles for coco
+        auth_models.UserProfile.objects.filter(
+            organization=org_with_subs_but_no_user).delete()
+        org_with_users_but_no_subs = auth_models.Organization.objects.get(
+            slug=constants.Organizations.SAN_DIEGO_PUBDEF)
+        org_without_users_or_subs = auth_models.Organization(
+            name='New Org', slug='new_org', is_receiving_agency=True)
+        org_without_users_or_subs.save()
+
+        with self.assertNumQueries(1):
+            org_results = set(
+                BundlesService.get_orgs_that_might_need_a_bundle_email_today())
+
+        self.assertIn(expected_org, org_results)
+        self.assertNotIn(org_with_subs_but_no_user, org_results)
+        self.assertNotIn(org_with_users_but_no_subs, org_results)
+        self.assertNotIn(org_without_users_or_subs, org_results)
+
+    @patch('intake.services.bundles.is_the_weekend', yes_its_the_weekend)
+    def test_doesnt_return_some_orgs_on_the_weekend(self):
+        weekend_org = auth_models.Organization.objects.get(
+            slug=constants.Organizations.ALAMEDA_PUBDEF)
+        weekend_org.notify_on_weekends = True
+        weekend_org.save()
+        # all the orgs are weekday only by default
+        weekday_org = auth_models.Organization.objects.get(
+            slug=constants.Organizations.COCO_PUBDEF)
+        org_results = set(
+            BundlesService.get_orgs_that_might_need_a_bundle_email_today())
+        self.assertIn(weekend_org, org_results)
+        self.assertNotIn(weekday_org, org_results)
+
+
+class TestCreateBundlesAndSendNotificationsToOrgs(TestCase):
+
+    fixtures = [
+        'counties',
+        'organizations', 'mock_profiles',
+        'mock_2_submissions_to_cc_pubdef',
+        'mock_2_submissions_to_a_pubdef',
+    ]
+
+    def setUp(self):
+        self.get_unopened_patcher = patch(
+            'intake.services.bundles.SubmissionsService'
+            '.get_unopened_submissions_for_org')
+        self.log_referred_patcher = patch(
+            'intake.services.bundles'
+            '.ApplicationLogEntry.log_referred')
+        self.notifications_patcher = patch(
+            'intake.services.bundles.notifications')
+
+        self.log_referred = self.log_referred_patcher.start()
+        self.notifications = self.notifications_patcher.start()
+
+    def patch_unopened(self, return_value):
+        unopened = self.get_unopened_patcher.start()
+        unopened.return_value = return_value
+
+    def restore_unopened(self):
+        self.get_unopened_patcher.stop()
+
+    def tearDown(self):
+        self.log_referred_patcher.stop()
+        self.notifications_patcher.stop()
+
+    @patch(
+        'intake.services.bundles'
+        '.get_orgs_that_might_need_a_bundle_email_today')
+    @patch('intake.services.bundles.is_the_weekend', not_the_weekend)
+    def test_queries_and_notifications_for_each_org(self, get_orgs):
+        a_pubdef = auth_models.Organization.objects.get(
+            slug=constants.Organizations.ALAMEDA_PUBDEF)
+        # assume we only receive one org back
+        get_orgs.return_value = [a_pubdef]
+        with self.assertNumQueries(6):
+            # queries that are run:
+            #   get org emails
+            #   get unopened submissions
+            #   make new bundle
+            #   add submissions to bundle (2 queries)
+            #   check if it needs pdfs
+            BundlesService.create_bundles_and_send_notifications_to_orgs()
+        self.assertEqual(
+            self.notifications.front_email_daily_app_bundle.send.call_count, 1)
+        self.assertEqual(
+            self.notifications.slack_app_bundle_sent.send.call_count, 1)
+        self.assertEqual(
+            self.log_referred.call_count, 1)
