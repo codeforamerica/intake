@@ -39,6 +39,9 @@ class County(models.Model):
             # return first receiving agency
         return self.organizations.filter(is_receiving_agency=True).first()
 
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         return str(self.name)
 
