@@ -40,6 +40,9 @@ class Organization(models.Model):
     email = models.TextField(blank=True)
     notify_on_weekends = models.BooleanField(default=False)
 
+    class Meta:
+        ordering = ['name']
+
     def __str__(self):
         return str(self.name)
 
