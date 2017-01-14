@@ -9,7 +9,6 @@
   {%- endif %}
   <th>Last Opened</th>
   <th>Added to DB</th>
-  <th>Delete?</th>
 </tr>
 {% for app in submissions %}
 <tr>
@@ -58,14 +57,6 @@
     Mark as added
     </a>
   {% endif %}
-  </td>
-  <td>
-    <a class="btn btn-default btn-sm delete" href="{{ url('intake-delete_page',
-      submission_id=app.id
-        ) }}">
-      <span class="glyphicon glyphicon-remove"></span>
-      Delete
-    </a>
   </td>
 </tr>
 {% endfor %}

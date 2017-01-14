@@ -72,10 +72,6 @@ urlpatterns = [
         login_required(admin_views.pdf_bundle),
         name='intake-pdf_bundle'),
 
-    url(r'^application/(?P<submission_id>[0-9]+)/delete/$',
-        login_required(admin_views.delete_page),
-        name='intake-delete_page'),
-
     url(r'^applications/mark/processed/$',
         login_required(admin_views.mark_processed),
         name='intake-mark_processed'),
