@@ -270,23 +270,6 @@ class TestViews(IntakeDataTestCase):
 
     @patch(
         'intake.views.session_view_base.notifications'
-        '.slack_submissions_deleted.send')
-    def test_authenticated_user_can_delete_apps(self, slack):
-        self.be_cfa_user()
-        submission = self.submissions[0]
-        pdf_link = reverse('intake-filled_pdf',
-                           kwargs={'submission_id': submission.id})
-        url = reverse('intake-delete_page',
-                      kwargs={'submission_id': submission.id})
-        delete_page = self.client.get(url)
-        self.assertEqual(delete_page.status_code, 200)
-        after_delete = self.client.fill_form(url)
-        self.assertRedirects(after_delete, reverse('intake-app_index'))
-        index = self.client.get(after_delete.url)
-        self.assertNotContains(index, pdf_link)
-
-    @patch(
-        'intake.views.session_view_base.notifications'
         '.slack_submissions_processed.send')
     def test_agency_user_can_mark_apps_as_processed(self, slack):
         self.be_sfpubdef_user()
@@ -311,7 +294,7 @@ class TestViews(IntakeDataTestCase):
             '/sanfrancisco/applications/': reverse('intake-app_index'),
         }
 
-        # redirecting the action views (delete, add) does not seem necessary
+        # redirecting the action views (add) does not seem necessary
         id_redirects = {'/sanfrancisco/{}/': 'intake-filled_pdf'}
         multi_id_redirects = {
             '/sanfrancisco/bundle/{}': 'intake-app_bundle',

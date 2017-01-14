@@ -252,32 +252,6 @@ class FilledPDFBundle(FilledPDF, MultiSubmissionMixin):
         return redirect(bundle.get_pdf_bundle_url())
 
 
-class Delete(ViewAppDetailsMixin, View):
-    """A page to confirm the deletion of an individual application.
-    """
-    template_name = "delete_page.jinja"
-
-    def get(self, request, submission_id):
-        submission = models.FormSubmission.objects.get(id=int(submission_id))
-        return TemplateResponse(
-            request,
-            self.template_name, {'submission': submission})
-
-    def post(self, request, submission_id):
-        submission = models.FormSubmission.objects.get(id=int(submission_id))
-        models.ApplicationLogEntry.objects.create(
-            user=request.user,
-            submission_id=submission_id,
-            organization=request.user.profile.organization,
-            event_type=models.ApplicationLogEntry.DELETED
-        )
-        submission.delete()
-        notifications.slack_submissions_deleted.send(
-            submissions=[submission],
-            user=request.user)
-        return redirect(reverse_lazy('intake-app_index'))
-
-
 class MarkSubmissionStepView(ViewAppDetailsMixin, View, MultiSubmissionMixin):
 
     def modify_submissions(self):
@@ -470,7 +444,6 @@ app_bundle = ApplicationBundle.as_view()
 app_detail = ApplicationDetail.as_view()
 mark_processed = MarkProcessed.as_view()
 mark_transferred_to_other_org = ReferToAnotherOrgView.as_view()
-delete_page = Delete.as_view()
 app_bundle_detail = ApplicationBundleDetail.as_view()
 app_bundle_detail_pdf = ApplicationBundleDetailPDFView.as_view()
 case_printout = CasePrintoutPDFView.as_view()
