@@ -1,7 +1,8 @@
 
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import TemplateView
-
+from django.db.models.aggregates import Count
+from django.db.models.expressions import Case, When
 from intake import models, constants
 from user_accounts.models import Organization
 from user_accounts.forms import OrganizationDetailsDisplayForm
@@ -20,6 +21,7 @@ class Home(TemplateView):
                     constants.Counties.SAN_FRANCISCO,
                     constants.Counties.CONTRA_COSTA,
                     constants.Counties.ALAMEDA,
+                    constants.Counties.MONTEREY,
                     ])
         else:
             counties = models.County.objects.prefetch_related(
@@ -36,9 +38,14 @@ class PartnerListView(TemplateView):
     template_name = "partner_list.jinja"
 
     def get_context_data(self, *args, **kwargs):
-        return dict(
-            counties=models.County.objects.prefetch_related(
-                'organizations').all())
+        counties = models.County.objects.annotate(
+            live_org_count=Count(
+                Case(When(
+                    organizations__is_accepting_applications=True, then=1
+                ))
+            )
+        ).filter(live_org_count__gte=1).prefetch_related('organizations')
+        return dict(counties=counties)
 
 
 class PartnerDetailView(TemplateView):

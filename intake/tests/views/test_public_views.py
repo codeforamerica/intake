@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
 
 from intake import constants
+from intake import models
 from user_accounts import models as auth_models
 
 
@@ -26,6 +27,31 @@ class TestPartnerListView(TestCase):
         for org in orgs:
             self.assertContains(
                 response, html_utils.conditional_escape(org.name))
+
+    def test_doesnt_show_nonlive_partners(self):
+        county = models.County.objects.first()
+        live_org = auth_models.Organization(
+            name='Starfleet',
+            slug='starfleet',
+            county=county,
+            is_receiving_agency=True,
+        )
+        not_live_org = auth_models.Organization(
+            name="Jem'Hadar",
+            slug='jem-hadar',
+            county=county,
+            is_receiving_agency=True,
+            is_accepting_applications=False,
+        )
+        live_org.save()
+        not_live_org.save()
+        response = self.client.get(reverse('intake-partner_list'))
+        self.assertContains(
+            response,
+            html_utils.conditional_escape(live_org.get_absolute_url()))
+        self.assertNotContains(
+            response,
+            html_utils.conditional_escape(not_live_org.get_absolute_url()))
 
 
 class TestPartnerDetailView(TestCase):
