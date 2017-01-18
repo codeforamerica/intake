@@ -140,9 +140,7 @@ class CountyNames:
     SAN_JOAQUIN = 'San Joaquin'
     SANTA_CLARA = 'Santa Clara'
     FRESNO = 'Fresno'
-    ALL = str(
-        'San Francisco, Alameda, Contra Costa, Solano, Santa Clara, '
-        'Fresno, San Joaquin, Monterey, and San Diego Counties')
+    ALL = 'counties throughout California'
 
 
 if SCOPE_TO_LIVE_COUNTIES:
