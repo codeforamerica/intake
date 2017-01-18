@@ -23,11 +23,3 @@ class TestApplicationNote(TestCase):
             result,
             str('Aug 26, 8:00 AM The 19th Amendment was signed '
                 '-test@codeforamerica.org'))
-
-    def test_deleting_submission_deletes_note(self):
-        user = fake_superuser()
-        submission = mock.make_submission()
-        mock.make_note(user, submission.id)
-        submission.delete()
-        notes = models.ApplicationNote.objects.filter(user=user)
-        self.assertEqual(notes.count(), 0)
