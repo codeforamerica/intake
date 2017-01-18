@@ -6,7 +6,7 @@ class constants:
 
     topbar = "Clear My Record | Get help clearing your criminal record in {}".format(
         CountyNames.ALL)
-    main_headline = "Better days ahead"
+    main_headline = "Clear My Record"
     subheadline = "Reduce or dismiss convictions on your criminal record"
     call_to_action_time = "Take the first step. Apply in 10 minutes."
     call_to_action_button = "Apply now"
