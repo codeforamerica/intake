@@ -30,9 +30,11 @@ def gen_uuid():
 
 class FormSubmission(models.Model):
 
+    # organizations = models.ManyToManyField(
+    #     'user_accounts.Organization', related_name="submissions",
+    #     through='intake.Application')
     organizations = models.ManyToManyField(
-        'user_accounts.Organization', related_name="submissions",
-        through='intake.Application')
+        'user_accounts.Organization', related_name="submissions")
     applicant = models.ForeignKey(
         'Applicant', on_delete=models.PROTECT, null=True,
         related_name='form_submissions')

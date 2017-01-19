@@ -10,7 +10,3 @@ class Application(models.Model):
         db_column='formsubmission_id',
         on_delete=models.PROTECT
     )
-
-    class Meta:
-        db_table = 'intake_formsubmission_organizations'
-        auto_created = True

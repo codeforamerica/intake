@@ -12,5 +12,5 @@ class StatusUpdate(models.Model):
         'intake.NextStep')
     additional_information = models.TextField()
     author = models.ForeignKey('auth.User', on_delete=models.PROTECT)
-    # application = models.ForeignKey(
-    #     Application, on_delete=models.CASCADE)
+    application = models.ForeignKey(
+        Application, on_delete=models.CASCADE)
