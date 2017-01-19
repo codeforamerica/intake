@@ -16,17 +16,10 @@ from user_accounts.models import Organization
 from formation.forms import county_form_selector
 
 import intake.services.submissions as SubmissionsService
+from intake.exceptions import NoCountyCookiesError
 
 
 logger = logging.getLogger(__name__)
-
-
-class NoCountyCookiesError(Exception):
-    pass
-
-
-class NoFormSpecFoundError(Exception):
-    pass
 
 
 GENERIC_USER_ERROR_MESSAGE = _(
@@ -41,16 +34,22 @@ class GetFormSessionDataMixin:
     """
     session_storage_key = "form_in_progress"
 
+    def check_session_data_validity(self):
+        pass
+
     def dispatch(self, request, *args, **kwargs):
         """Wrap super().dispatch to catch and handle errors
         """
+        self.session_data = self.get_session_data()
         try:
-            return super().dispatch(request, *args, **kwargs)
+            self.check_session_data_validity()
         except NoCountyCookiesError as err:
-            notifications.slack_simple.send("ApplicationError!\n"+str(err))
+            notifications.slack_simple.send(
+                "ApplicationError!\n"+str(err))
             logger.error(err)
-            messages.error(request, GENERIC_USER_ERROR_MESSAGE)
-            return redirect(reverse('intake-home'))
+            messages.error(self.request, GENERIC_USER_ERROR_MESSAGE)
+            return redirect(reverse('intake-apply'))
+        return super().dispatch(request, *args, **kwargs)
 
     def get_session_data(self):
         return dict(**self.request.session.get(self.session_storage_key, {}))
@@ -103,6 +102,7 @@ class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
         return super().form_invalid(form, *args, **kwargs)
 
     def get_context_data(self, *args, **kwargs):
+        # adds the form and form class
         context = super().get_context_data(*args, **kwargs)
         context.update(self.get_county_context())
         return context
@@ -126,40 +126,52 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
     """
     template_name = "forms/county_form.jinja"
     success_url = reverse_lazy('intake-thanks')
+    form_spec = None
 
-    def get_form_kwargs(self):
-        """Ensures that the dynamic form class is instantiated with POST data.
-        """
-        kwargs = {}
-        if self.request.method in ('POST', 'PUT'):
-            kwargs.update({
-                'data': self.request.POST})
-        return kwargs
-
-    def get_form_specs(self):
-        counties = self.get_session_data().get('counties', [])
+    def check_session_data_validity(self):
+        counties = self.session_data.get('counties', [])
         if not counties:
             error_data = dict(
-                applicant_id=self.get_applicant_id(),
-                session_key=getattr(self.request.session, 'session_key', None),
                 referrer=self.request.session.get('referrer', None),
                 path=self.request.path,
                 user_agent=self.request.META.get('HTTP_USER_AGENT', 'None'),
                 session_data=dict([
                     keyval for keyval in self.request.session.items()]),
-                ip_address=self.request.ip_address,
                 )
             error_message = "No Counties in session data: `{}`".format(
                 json.dumps(error_data))
             raise NoCountyCookiesError(error_message)
-        return county_form_selector.get_combined_form_spec(counties=counties)
 
-    def get_form_class(self):
-        """Builds a form class dynamically, based on a list of county slugs
-        stored in the session.
-        """
-        spec = self.get_form_specs()
-        return spec.build_form_class()
+    def get_form(self, *args):
+        if self.form_spec:
+            form_class_specification = self.form_spec
+        else:
+            county_slugs = self.session_data.get('counties', [])
+            form_class_specification = \
+                county_form_selector.get_combined_form_spec(
+                    counties=county_slugs)
+        CombinedFormClass = form_class_specification.build_form_class()
+        if self.request.method in ('POST', 'PUT'):
+            return CombinedFormClass(data=self.request.POST)
+        elif self.request.method == 'GET':
+            form_input_keys = set(CombinedFormClass.get_field_keys())
+            session_data_keys = set(self.session_data.keys())
+            session_and_form_overlap = \
+                session_data_keys & form_input_keys
+            if session_and_form_overlap:
+                return CombinedFormClass(data=self.session_data, validate=True)
+            else:
+                # we have a new empty form with no saved session
+                return CombinedFormClass()
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        county_slugs = self.session_data.get('counties', [])
+        counties = models.County.objects.filter(slug__in=county_slugs).all()
+        context.update(
+            counties=counties,
+            county_list=[county.name + " County" for county in counties])
+        return context
 
     def create_confirmations_for_user(self, submission):
         """Sends texts/emails to user and adds flash messages
