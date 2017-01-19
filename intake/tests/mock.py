@@ -442,7 +442,13 @@ def serialize_subs(subs, filepath):
     applicants = [
         models.Applicant.objects.get(id=sub.applicant_id)
         for sub in subs]
+    application_sets = [
+        models.Application.objects.filter(form_submission=sub)
+        for sub in subs]
+    applications = []
+    for application_set in application_sets:
+        applications.extend(application_set)
     with open(filepath, 'w') as f:
-        data = [*applicants, *subs]
+        data = [*applicants, *subs, *applications]
         f.write(serializers.serialize(
             'json', data, indent=2, use_natural_foreign_keys=True))

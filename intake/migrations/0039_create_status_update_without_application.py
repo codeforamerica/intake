@@ -12,14 +12,15 @@ def copy_form_submission_orgs_to_application(apps, schema_editor):
     FormSubmission = apps.get_model('intake', 'FormSubmission')
     Application = apps.get_model('intake', 'Application')
     sub = FormSubmission.objects.using(db_alias).last()
-    sub_orgs = sub.organizations.through.objects.all()
-    applications = []
-    for sub_org in sub_orgs:
-        app = Application(
-            form_submission=sub_org.formsubmission,
-            organization=sub_org.organization)
-        applications.append(app)
-    Application.objects.bulk_create(applications)
+    if sub:
+        sub_orgs = sub.organizations.through.objects.all()
+        applications = []
+        for sub_org in sub_orgs:
+            app = Application(
+                form_submission=sub_org.formsubmission,
+                organization=sub_org.organization)
+            applications.append(app)
+        Application.objects.bulk_create(applications)
 
 
 def empty_application_table(apps, schema_editor):
