@@ -16,7 +16,9 @@ from .form_submission import (
     MissingAnswersError,
     MissingPDFsError,
     )
+from .next_step import NextStep
 from .note import ApplicationNote
+from .status_type import StatusType
 from .tag import SubmissionTagLink
 
 
@@ -41,4 +43,6 @@ __all__ = [
     MissingPDFsError,
     FillablePDF,
     FilledPDF,
+    NextStep,
+    StatusType
 ]
