@@ -146,8 +146,8 @@ class FormSubmissionFactory(factory.DjangoModelFactory):
         if not create:
             return
         if extracted:
-            self.organizations.add(*[
-                organization.id for organization in extracted
+            self.organizations.add_orgs_to_sub(*[
+                organization for organization in extracted
             ])
 
     @classmethod

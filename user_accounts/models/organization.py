@@ -14,6 +14,25 @@ class OrganizationManager(models.Manager):
     def get_by_natural_key(self, name):
         return self.get(name=name)
 
+    def add_orgs_to_sub(self, *orgs):
+        args, kwargs = self._constructor_args
+        if len(args) == 1 and orgs:
+            if isinstance(args[0], intake_models.FormSubmission):
+                sub = args[0]
+                applications = [
+                    intake_models.Application(
+                        form_submission=sub,
+                        organization=org)
+                    for org in orgs
+                ]
+                intake_models.Application.objects.bulk_create(applications)
+
+    def remove_orgs_from_sub(self, *orgs):
+        args, kwargs = self._constructor_args
+        if len(args) == 1 and orgs:
+            sub = args[0]
+            sub.applications.filter(organization__in=orgs).delete()
+
 
 class Organization(models.Model):
     objects = OrganizationManager()
