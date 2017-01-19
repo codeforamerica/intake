@@ -34,15 +34,6 @@ class TestViews(IntakeDataTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('Clear My Record', response.content.decode('utf-8'))
 
-    def test_apply_view(self):
-        self.set_session_counties()
-        response = self.client.get(reverse('intake-county_application'))
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('Apply to Clear My Record',
-                      response.content.decode('utf-8'))
-        self.assertNotContains(response, "This field is required.")
-        self.assertNotContains(response, "warninglist")
-
     def test_confirm_view(self):
         self.be_anonymous()
         base_data = dict(
