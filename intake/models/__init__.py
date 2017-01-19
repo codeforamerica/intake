@@ -19,6 +19,7 @@ from .form_submission import (
 from .next_step import NextStep
 from .note import ApplicationNote
 from .status_type import StatusType
+from .status_update import StatusUpdate
 from .tag import SubmissionTagLink
 
 
@@ -44,5 +45,6 @@ __all__ = [
     FillablePDF,
     FilledPDF,
     NextStep,
-    StatusType
+    StatusType,
+    StatusUpdate
 ]
