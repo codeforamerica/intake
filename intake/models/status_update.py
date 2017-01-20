@@ -1,5 +1,4 @@
 from django.db import models
-from .application import Application
 
 
 class StatusUpdate(models.Model):
@@ -13,4 +12,4 @@ class StatusUpdate(models.Model):
     additional_information = models.TextField()
     author = models.ForeignKey('auth.User', on_delete=models.PROTECT)
     application = models.ForeignKey(
-        Application, on_delete=models.CASCADE)
+        'intake.Application', on_delete=models.CASCADE)

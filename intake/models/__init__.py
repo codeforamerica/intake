@@ -20,6 +20,7 @@ from .next_step import NextStep
 from .note import ApplicationNote
 from .status_type import StatusType
 from .status_update import StatusUpdate
+from .status_notification import StatusNotification
 from .tag import SubmissionTagLink
 
 
@@ -46,5 +47,6 @@ __all__ = [
     FilledPDF,
     NextStep,
     StatusType,
-    StatusUpdate
+    StatusUpdate,
+    StatusNotification
 ]
