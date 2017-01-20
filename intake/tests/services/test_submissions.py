@@ -27,7 +27,7 @@ class TestCreateSubmissions(TestCase):
 
     fixtures = [
         'counties', 'organizations',
-    ] 
+    ]
 
     def test_can_create_with_form_orgs_and_app_id(self):
         # given an applicant, some orgs, and a validated form
@@ -121,7 +121,7 @@ class TestHaveSameOrgs(TestCase):
         b = FormSubmission.objects.filter(
             organizations__slug=Organizations.COCO_PUBDEF).first()
         cc_pubdef = Organization.objects.get(slug=Organizations.COCO_PUBDEF)
-        a.organizations.add(cc_pubdef)
+        a.organizations.add_orgs_to_sub(cc_pubdef)
         self.assertEqual(SubmissionsService.have_same_orgs(a, b), False)
 
 

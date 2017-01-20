@@ -1,6 +1,7 @@
 from django.db import models
 from intake import models as intake_models
 from intake import constants
+from intake.utils import coerce_to_ids
 from formation.forms import county_form_selector, display_form_selector
 import user_accounts
 from django.utils.safestring import mark_safe
@@ -22,8 +23,8 @@ class OrganizationManager(models.Manager):
                 applications = [
                     intake_models.Application(
                         form_submission=sub,
-                        organization=org)
-                    for org in orgs
+                        organization_id=org_id)
+                    for org_id in coerce_to_ids(orgs)
                 ]
                 intake_models.Application.objects.bulk_create(applications)
 

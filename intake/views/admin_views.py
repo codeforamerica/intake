@@ -328,9 +328,9 @@ class ReferToAnotherOrgView(MarkSubmissionStepView):
     def modify_submissions(self):
         submission = self.submissions[0]
         to_organization_id = int(self.request.GET.get('to_organization_id'))
-        submission.organizations.remove(
+        submission.organizations.remove_orgs_from_sub(
             self.request.user.profile.organization)
-        submission.organizations.add(to_organization_id)
+        submission.organizations.add_orgs_to_sub(to_organization_id)
 
     def notify(self):
         notifications.slack_submission_transferred.send(
