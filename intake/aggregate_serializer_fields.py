@@ -283,7 +283,8 @@ class WhereTheyHeard(ApplicationAggregateField):
     def filter(self, applications):
         today = get_todays_date()
         a_week_ago = today - datetime.timedelta(days=7)
-        for app in truthy_values_filter(applications, 'where_they_heard'):
+        for app in truthy_values_filter(
+                applications, 'where_they_heard', 'finished'):
             if app['finished'].date() > a_week_ago:
                 yield app
 
