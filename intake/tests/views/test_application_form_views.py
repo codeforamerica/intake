@@ -1,4 +1,4 @@
-from django.test import TestCase, override_settings
+from django.test import override_settings
 import logging
 import random
 from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase
@@ -9,8 +9,95 @@ from intake.tests import mock
 from intake import models, constants
 from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
-from formation import forms
-from intake.views import session_view_base
+from formation import forms, fields
+from intake.views import session_view_base, application_form_views
+
+
+class TestFullCountyApplicationSequence(IntakeDataTestCase):
+
+    @patch('intake.models.pdfs.get_parser')
+    @patch('intake.services.submissions.send_confirmation_notifications')
+    @patch(
+        'intake.views.session_view_base.notifications'
+        '.slack_new_submission.send')
+    def test_anonymous_user_can_fill_out_app_and_reach_thanks_page(
+            self, slack, send_confirmation, get_parser):
+        get_parser.return_value.fill_pdf.return_value = b'a pdf'
+        self.be_anonymous()
+        result = self.client.fill_form(
+            reverse('intake-apply'),
+            counties=['sanfrancisco'])
+        self.assertRedirects(result, reverse('intake-county_application'))
+        result = self.client.fill_form(
+            reverse('intake-county_application'),
+            **mock.fake.sf_county_form_answers())
+        self.assertRedirects(result, reverse('intake-thanks'))
+        thanks_page = self.client.get(result.url)
+        filled_pdf = models.FilledPDF.objects.first()
+        self.assertTrue(filled_pdf)
+        self.assertTrue(filled_pdf.pdf)
+        self.assertNotEqual(filled_pdf.pdf.size, 0)
+        submission = models.FormSubmission.objects.order_by('-pk').first()
+        self.assertEqual(filled_pdf.submission, submission)
+        organization = submission.organizations.first()
+        self.assertEqual(filled_pdf.original_pdf, organization.pdfs.first())
+        self.assertContains(thanks_page, "Thank")
+        self.assertEqual(len(slack.mock_calls), 1)
+        send_confirmation.assert_called_once_with(submission)
+
+    @patch('intake.models.pdfs.get_parser')
+    @patch(
+        'intake.views.session_view_base.SubmissionsService'
+        '.send_confirmation_notifications')
+    @patch(
+        'intake.views.session_view_base.notifications'
+        '.slack_new_submission.send')
+    def test_apply_to_sf_with_name_only(
+            self, slack, send_confirmation, get_parser):
+        get_parser.return_value.fill_pdf.return_value = b'a pdf'
+        self.be_anonymous()
+        result = self.client.fill_form(
+            reverse('intake-apply'),
+            counties=['sanfrancisco'],
+            follow=True
+        )
+        # this should raise warnings
+        result = self.client.fill_form(
+            reverse('intake-county_application'),
+            first_name="Foo",
+            last_name="Bar",
+            consent_to_represent='yes',
+            understands_limits='yes',
+        )
+        self.assertRedirects(
+            result, reverse('intake-confirm'), fetch_redirect_response=False)
+        result = self.client.get(result.url)
+        self.assertContains(result, "Foo")
+        self.assertContains(result, "Bar")
+        self.assertContains(
+            result, fields.AddressField.is_recommended_error_message)
+        self.assertContains(
+            result,
+            fields.SocialSecurityNumberField.is_recommended_error_message)
+        self.assertContains(
+            result, fields.DateOfBirthField.is_recommended_error_message)
+        self.assertContains(
+            result, application_form_views.Confirm.incoming_message)
+        slack.assert_not_called()
+        result = self.client.fill_form(
+            reverse('intake-confirm'),
+            first_name="Foo",
+            last_name="Bar",
+            consent_to_represent='yes',
+            understands_limits='yes',
+            follow=True
+        )
+        submission = models.FormSubmission.objects.filter(
+            answers__first_name="Foo",
+            answers__last_name="Bar").first()
+        self.assertEqual(result.wsgi_request.path, reverse('intake-thanks'))
+        self.assertEqual(len(slack.mock_calls), 1)
+        send_confirmation.assert_called_once_with(submission)
 
 
 class TestSelectCountyView(AuthIntegrationTestCase):
@@ -64,6 +151,16 @@ class TestSelectCountyView(AuthIntegrationTestCase):
 class TestMultiCountyApplication(AuthIntegrationTestCase):
 
     fixtures = ['counties', 'organizations']
+
+    def test_get_county_application_has_no_errors(self):
+        self.set_session(form_in_progress={
+                    'counties': [constants.Counties.SAN_FRANCISCO]})
+        response = self.client.get(reverse('intake-county_application'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Apply to Clear My Record',
+                      response.content.decode('utf-8'))
+        self.assertNotContains(response, "This field is required.")
+        self.assertNotContains(response, "warninglist")
 
     @patch(
         'intake.services.submissions.send_confirmation_notifications')
@@ -350,7 +447,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         self.be_anonymous()
         response = self.client.get(reverse('intake-county_application'))
         self.assertRedirects(
-            response, reverse('intake-home'), fetch_redirect_response=False)
+            response, reverse('intake-apply'), fetch_redirect_response=False)
         self.assertTrue(slack.called)
         response = self.client.get(response.url)
         expected_flash_message = html_utils.conditional_escape(
@@ -428,12 +525,37 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
             result.context_data['form'].get_serialized_errors(),
             event.data['errors'])
 
-    def test_no_existing_data(self):
+    @patch('intake.notifications.slack_simple.send')
+    def test_no_existing_data(self, slack):
         self.be_anonymous()
         with self.assertLogs(
-                'intake.views.application_form_views', level=logging.WARN):
-            result = self.client.get(reverse('intake-write_letter'))
-            self.assertRedirects(result, reverse('intake-apply'))
+                'intake.views.session_view_base', level=logging.WARN):
+            response = self.client.get(reverse('intake-write_letter'))
+        self.assertTrue(slack.called)
+        self.assertRedirects(
+            response, reverse('intake-apply'), fetch_redirect_response=False)
+        final_response = self.client.get(response.url)
+        self.assertContains(
+            final_response, html_utils.conditional_escape(
+                session_view_base.GENERIC_USER_ERROR_MESSAGE
+            ),
+        )
+
+    def test_pulls_in_existing_letter_answers_data(self):
+        self.be_anonymous()
+        mock_letter = mock.fake.declaration_letter_answers()
+        mock_answers = mock.fake.alameda_pubdef_answers(
+            first_name="foo", last_name="bar")
+        counties = {'counties': constants.Counties.ALAMEDA}
+        session_data = {}
+        for other_data in [counties, mock_answers, mock_letter]:
+            session_data.update(other_data)
+        self.set_session(
+            form_in_progress=session_data)
+        response = self.client.get(reverse('intake-write_letter'))
+        for letter_answer in mock_letter.values():
+            self.assertContains(
+                response, html_utils.conditional_escape(letter_answer))
 
 
 class TestDeclarationLetterReviewPage(AuthIntegrationTestCase):
@@ -463,12 +585,21 @@ class TestDeclarationLetterReviewPage(AuthIntegrationTestCase):
         self.assertContains(
             response, 'name="submit_action" value="edit_letter"')
 
-    def test_get_with_no_existing_data(self):
+    @patch('intake.notifications.slack_simple.send')
+    def test_get_with_no_existing_data(self, slack):
         self.be_anonymous()
         with self.assertLogs(
-                'intake.views.application_form_views', level=logging.WARN):
-            result = self.client.get(reverse('intake-review_letter'))
-            self.assertRedirects(result, reverse('intake-apply'))
+                'intake.views.session_view_base', level=logging.WARN):
+            response = self.client.get(reverse('intake-review_letter'))
+        self.assertTrue(slack.called)
+        self.assertRedirects(
+            response, reverse('intake-apply'), fetch_redirect_response=False)
+        final_response = self.client.get(response.url)
+        self.assertContains(
+            final_response, html_utils.conditional_escape(
+                session_view_base.GENERIC_USER_ERROR_MESSAGE
+            ),
+        )
 
     def test_post_edit_letter(self):
         self.be_anonymous()

@@ -305,7 +305,8 @@ class MultiValueField(Field):
         super().__init__(*args, **kwargs)
         if not hasattr(self, 'subfields'):
             raise exceptions.MultiValueFieldSubfieldError(
-                "There is no defined behavior for a MultiValueField with no .subfields attribute")
+                "There is no defined behavior for a MultiValueField with no "
+                ".subfields attribute")
         # build the subfields
         self.subfields = [
             self.build_subfield(subfield)
@@ -370,6 +371,26 @@ class MultiValueField(Field):
             sub.context_key: sub.get_current_value()
             for sub in self.subfields
         }
+
+
+class ConsentCheckbox(YesNoField):
+    """A field that consists of a single checkbox. Default beahvior is to error
+    if not checked.
+    It also expects more detailed content in it's label.
+
+    Inherits from a Yes No Field, but only offers a 'Yes' choice as a checkbox
+    """
+    template_name = "formation/checkbox_select.jinja"
+    agreement_text = _("Yes")
+
+    def __init__(self, *args, **kwargs):
+        self.set_pseudo_choices()
+        super().__init__(*args, **kwargs)
+
+    def set_pseudo_choices(self):
+        """The only choice on a consent checkbox is YES.
+        """
+        self.choices = ((YES, self.agreement_text),)
 
 
 class FormNote:

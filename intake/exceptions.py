@@ -14,3 +14,11 @@ class UserCannotBeNoneError(Exception):
     """Raise this if a task is receiving None but needs a user id
     """
     pass
+
+
+class NoCountyCookiesError(Exception):
+    pass
+
+
+class NoFormSpecFoundError(Exception):
+    pass

@@ -140,9 +140,7 @@ class CountyNames:
     SAN_JOAQUIN = 'San Joaquin'
     SANTA_CLARA = 'Santa Clara'
     FRESNO = 'Fresno'
-    ALL = str(
-        'San Francisco, Alameda, Contra Costa, Solano, Santa Clara, '
-        'Fresno, San Joaquin, Monterey, and San Diego Counties')
+    ALL = 'counties throughout California'
 
 
 if SCOPE_TO_LIVE_COUNTIES:
@@ -181,6 +179,8 @@ if not SCOPE_TO_LIVE_COUNTIES:
             'Fresno County (near Fresno, Clovis, Sanger, Kingsburg, Mendota, '
             'Fowler, or Three Rocks)')),
     )
+
+COUNTY_CHOICES = sorted(COUNTY_CHOICES, key=lambda item: item[1])
 
 COUNTY_CHOICE_DISPLAY_DICT = {
     Counties.SAN_FRANCISCO: CountyNames.SAN_FRANCISCO,

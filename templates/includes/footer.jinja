@@ -7,11 +7,6 @@
           <li>Email: {{ linkify(content.contact_email) }}</li>
           <li>Phone: {{ linkify(content.contact_phone) }}</li>
         </ul>
-        <ul>
-          <li>
-            <a href="{{ url('account_login') }}">Partner Login</a>
-          </li>
-        </ul>
       </div>
 
       <div class="col-md-3">
@@ -29,37 +24,11 @@
             <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_website_description) }}
           </li>
           <li>
-            <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_sf) }}
+            <span class="glyphicon glyphicon-circle-arrow-right"></span><a href="{{ url('intake-partner_list') }}">Our County Partners</a>
           </li>
           <li>
-            <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_alameda) }}
+            <span class="glyphicon glyphicon-circle-arrow-right"></span><a href="{{ url('account_login') }}">Partner Login</a>
           </li>
-          <li>
-            <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_ebclc) }}
-          </li>
-          <li>
-            <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_cc) }}
-          </li>
-          <li>
-            <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_monterey) }}
-          </li>
-          {%- if not settings.LIVE_COUNTY_CHOICES %}
-          <li>
-            <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_solano) }}
-          </li>
-          <li>
-            <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_san_diego) }}
-          </li>
-          <li>
-            <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_san_joaquin) }}
-          </li>
-          <li>
-            <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_santa_clara) }}
-          </li>
-          <li>
-            <span class="glyphicon glyphicon-circle-arrow-right"></span>{{ linkify(content.footer_fresno) }}
-          </li>
-          {%- endif %}
         </ul>
       </div>
     </div>
