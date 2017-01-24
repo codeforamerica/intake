@@ -1,4 +1,3 @@
-import inspect
 from formation.tests.utils import PatchTranslationTestCase, django_only
 from formation.tests import mock
 
@@ -41,7 +40,9 @@ class TestForm(PatchTranslationTestCase):
         keys = form.errors.keys()
         self.assertTrue('first_name' in keys)
         self.assertTrue('last_name' in keys)
-        self.assertEqual(len(keys), 2)
+        self.assertTrue('understands_limits' in keys)
+        self.assertTrue('consent_to_represent' in keys)
+        self.assertEqual(len(keys), 4)
 
     def test_application_form_with_mock_answers(self):
         fake_answers = mock.form_answers()
@@ -80,6 +81,8 @@ class TestForm(PatchTranslationTestCase):
             'when_probation_or_parole': '',
             'when_where_outside_sf': '',
             'where_probation_or_parole': '',
+            'consent_to_represent': '',
+            'understands_limits': '',
             'additional_information': '',
         }
         form = self.get_sf_form()
@@ -117,6 +120,8 @@ class TestForm(PatchTranslationTestCase):
             'when_probation_or_parole': '',
             'when_where_outside_sf': '',
             'where_probation_or_parole': '',
+            'consent_to_represent': 'yes',
+            'understands_limits': 'yes',
             'additional_information': 'foo bar',
         }
         form = self.get_sf_form(preparsed)

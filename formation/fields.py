@@ -72,19 +72,23 @@ class ConsentNote(FormNote):
 
 class ConsentToRepresent(ConsentCheckbox):
     context_key = "consent_to_represent"
+    is_required_error_message = (
+        "The attorneys need your permission in order to help you")
     label = _(
-        "Is it okay for attoneys in each county you've selected to access "
+        "Is it okay for attorneys in each county you've selected to access "
         "your criminal record, file petitions for you, and attend court on "
         "your behalf?")
     agreement_text = _("Yes, I give them permission to do that")
     display_label = str(
-        "Okay for attorneys to access record, file petitions, & attend court?")
+        "Consents to record access, filing, and court representation")
 
 
 class UnderstandsLimits(ConsentCheckbox):
     context_key = "understands_limits"
+    is_required_error_message = (
+        "We need your undertstanding before we can help you")
     label = _(
-        "Do you understand that not everyone qualifies for help, "
+        "Do you understand that not everyone qualifies for help "
         "and it might take a few months to finish?")
     agreement_text = _("Yes, I understand")
     display_label = str(

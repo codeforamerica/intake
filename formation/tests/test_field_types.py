@@ -597,8 +597,15 @@ class TestConsentCheckbox(TestCase):
         self.assertEqual(field.choices, expected_choices)
 
     @django_only
-    def test_errors_when_unchecked(self):
-        field = IsOkayWithPizza({})
+    def test_errors_when_unset(self):
+        field = IsOkayWithPizza({}, required=True)
+        self.assertFalse(field.is_valid())
+        expected_error = "We're sorry, but pizza is the only option."
+        self.assertIn(expected_error, field.get_errors_list())
+
+    @django_only
+    def test_errors_when_empty(self):
+        field = IsOkayWithPizza({'okay_with_pizza': ''}, required=True)
         self.assertFalse(field.is_valid())
         expected_error = "We're sorry, but pizza is the only option."
         self.assertIn(expected_error, field.get_errors_list())
