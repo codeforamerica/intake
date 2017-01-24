@@ -1,14 +1,13 @@
 from django.test import TestCase
 from intake import models
+from intake.tests.factories import StatusTypeFactory
+from django.db import IntegrityError
 
 
 class TestTemplateOption(TestCase):
 
     def test_slug_must_be_unique(self):
-        self.assertEqual("xyz", "abc")
-
-    def test_requires_all_fields_but_help_text(self):
-        self.assertEqual("xyz", "abc")
-
-    def test_successful_save_with_all_fields(self):
-        self.assertEqual("xyz", "abc")
+        existing_status_type = StatusTypeFactory.create()
+        new_status_type = StatusTypeFactory.build()
+        with self.assertRaises(IntegrityError):
+            new_status_type.save()

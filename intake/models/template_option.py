@@ -13,7 +13,7 @@ class TemplateOption(models.Model):
     template = models.TextField()
 
     help_text = models.TextField()
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
 
     class Meta:
         abstract = True
