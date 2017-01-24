@@ -505,10 +505,10 @@ class HasChildren(YesNoField):
 ###
 
 
-class AlamedaDeclarationLetterNote(FormNote):
-    context_key = "alameda_declaration_letter_note"
-    content = _("Create your letter for the Alameda County Judge. This is "
-                "required to complete your appication in Alameda County.")
+class DeclarationLetterNote(FormNote):
+    context_key = "declaration_letter_note"
+    content = _("Create your letter to the judges in the counties you "
+                "applied to. This is required to complete your application.")
 
 
 class DeclarationLetterIntro(MultilineCharField):
@@ -595,7 +595,7 @@ INTAKE_FIELDS = [
     ConsentToRepresent,
     ConsentNote,
 
-    AlamedaDeclarationLetterNote,
+    DeclarationLetterNote,
     DeclarationLetterIntro,
     DeclarationLetterLifeChanges,
     DeclarationLetterActivities,
