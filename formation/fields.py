@@ -5,7 +5,8 @@ from django.core.validators import EmailValidator, URLValidator
 from formation.field_types import (
     CharField, MultilineCharField, IntegerField, WholeDollarField, ChoiceField,
     YesNoField, MultipleChoiceField, MultiValueField, PhoneField,
-    FormNote, DateTimeField, YES_NO_CHOICES, NOT_APPLICABLE
+    FormNote, DateTimeField, ConsentCheckbox,
+    YES_NO_CHOICES, NOT_APPLICABLE
 )
 from intake.constants import (
     COUNTY_CHOICES, CONTACT_PREFERENCE_CHOICES, REASON_FOR_APPLYING_CHOICES,
@@ -67,6 +68,27 @@ class ConsentNote(FormNote):
         attorney will represent you.
       </li>
     </ol>""")
+
+
+class ConsentToRepresent(ConsentCheckbox):
+    context_key = "consent_to_represent"
+    label = _(
+        "Is it okay for attoneys in each county you've selected to access "
+        "your criminal record, file petitions for you, and attend court on "
+        "your behalf?")
+    agreement_text = _("Yes, I give them permission to do that")
+    display_label = str(
+        "Okay for attorneys to access record, file petitions, & attend court?")
+
+
+class UnderstandsLimits(ConsentCheckbox):
+    context_key = "understands_limits"
+    label = _(
+        "Do you understand that not everyone qualifies for help, "
+        "and it might take a few months to finish?")
+    agreement_text = _("Yes, I understand")
+    display_label = str(
+        "Understands might not qualify and could take a few months")
 
 
 class ReasonsForApplying(MultipleChoiceField):
@@ -565,6 +587,8 @@ INTAKE_FIELDS = [
     ReasonsForApplying,
     HowDidYouHear,
     AdditionalInformation,
+    UnderstandsLimits,
+    ConsentToRepresent,
     ConsentNote,
 
     AlamedaDeclarationLetterNote,

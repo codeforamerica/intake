@@ -2,13 +2,13 @@ import inspect
 import datetime
 from unittest import TestCase
 
-from django.utils.safestring import mark_safe
 from formation.tests import mock
 from formation.tests import sample_answers
 
 from formation.tests.utils import PatchTranslationTestCase, django_only
 
 from formation import field_types, exceptions, fields
+from formation.field_base import Field
 
 from django.utils.datastructures import MultiValueDict
 
@@ -40,6 +40,14 @@ class MultipleFruit(field_types.MultipleChoiceField):
     choices = (
         ('apples', 'Apples'),
         ('oranges', 'Oranges'))
+
+
+class IsOkayWithPizza(field_types.ConsentCheckbox):
+    context_key = "okay_with_pizza"
+    label = "Is pizza okay for dinner?"
+    display_text = "Is okay with pizza"
+    is_required_error_message = "We're sorry, but pizza is the only option."
+    agreement_text = "Yes, I am okay with pizza"
 
 
 class TestCharField(PatchTranslationTestCase):
@@ -578,6 +586,46 @@ class TestMultiValueField(PatchTranslationTestCase):
 
         with self.assertRaises(exceptions.MultiValueFieldSubfieldError):
             BadMulti()
+
+
+class TestConsentCheckbox(TestCase):
+
+    @django_only
+    def test_has_expected_choices(self):
+        field = IsOkayWithPizza()
+        expected_choices = ((field_types.YES, "Yes, I am okay with pizza"),)
+        self.assertEqual(field.choices, expected_choices)
+
+    @django_only
+    def test_errors_when_unchecked(self):
+        field = IsOkayWithPizza({})
+        self.assertFalse(field.is_valid())
+        expected_error = "We're sorry, but pizza is the only option."
+        self.assertIn(expected_error, field.get_errors_list())
+
+    @django_only
+    def test_renders_with_checkbox(self):
+        field = IsOkayWithPizza()
+        self.assertIn('type="checkbox"', field.render())
+
+    @django_only
+    def test_works_with_yes(self):
+        field = IsOkayWithPizza({'okay_with_pizza': field_types.YES})
+        self.assertTrue(field.is_valid())
+
+    @django_only
+    def test_minimal_spec(self):
+
+        class TinyConsent(field_types.ConsentCheckbox):
+            context_key = "is_okay"
+            label = "Is okay?"
+
+        field = TinyConsent({})
+        self.assertFalse(field.is_valid())
+        expected_choices = ((field_types.YES, "Yes"),)
+        self.assertEqual(field.choices, expected_choices)
+        expected_error = Field.is_required_error_message
+        self.assertIn(expected_error, field.get_errors_list())
 
 
 class TestRenderFieldTypes(TestCase):
