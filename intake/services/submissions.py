@@ -55,7 +55,7 @@ def create_submission(form, organizations, applicant_id):
         answers=form.cleaned_data,
         applicant_id=applicant_id)
     submission.save()
-    submission.organizations.add(*organizations)
+    submission.organizations.add_orgs_to_sub(*organizations)
     link_with_any_duplicates(submission, applicant_id)
     models.ApplicationEvent.log_app_submitted(applicant_id)
     return submission
@@ -175,7 +175,7 @@ def send_confirmation_notifications(sub):
 def create_for_organizations(organizations, **kwargs):
     submission = models.FormSubmission(**kwargs)
     submission.save()
-    submission.organizations.add(*organizations)
+    submission.organizations.add_orgs_to_sub(*organizations)
     return submission
 
 

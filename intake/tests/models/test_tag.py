@@ -57,13 +57,6 @@ class TestSubmissionTagLink(TestCase):
         self.assertEqual(
             models.SubmissionTagLink.objects.filter(id=link_id).count(), 0)
 
-    def test_submission_deletion(self):
-        # Deletes link if submission is deleted
-        link_id = self.make_link().id
-        models.FormSubmission.objects.filter(id=self.sub_id).delete()
-        self.assertEqual(
-            models.SubmissionTagLink.objects.filter(id=link_id).count(), 0)
-
     def test_user_deletion(self):
         # Link remains if user is deleted, with link.user = None
         link_id = self.make_link().id

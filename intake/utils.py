@@ -1,4 +1,5 @@
 import random
+from django.db import models
 from django.utils import timezone
 from pytz import timezone as pytz_timezone
 from intake.constants import (
@@ -31,6 +32,14 @@ def sort_orgs_in_default_order(orgs):
         return sorted(
             orgs,
             key=lambda org: DEFAULT_ORGANIZATION_ORDER.index(org['slug']))
+
+
+def coerce_to_ids(items):
+    for item in items:
+        if isinstance(item, models.Model):
+            yield item.id
+        else:
+            yield item
 
 
 def is_the_weekend():

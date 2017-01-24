@@ -146,8 +146,8 @@ class FormSubmissionFactory(factory.DjangoModelFactory):
         if not create:
             return
         if extracted:
-            self.organizations.add(*[
-                organization.id for organization in extracted
+            self.organizations.add_orgs_to_sub(*[
+                organization for organization in extracted
             ])
 
     @classmethod
@@ -370,7 +370,9 @@ def build_seed_submissions():
                 letter = fake.declaration_letter_answers()
                 sub.answers.update(letter)
             sub.save()
-            sub.organizations.add(org)
+            application = models.Application(
+                organization=org, form_submission=sub)
+            application.save()
             subs.append(sub)
     # make 1 submission to multiple orgs
     target_orgs = [
@@ -388,7 +390,11 @@ def build_seed_submissions():
             applicant=applicant, answers=form.cleaned_data)
     multi_org_sub.answers.update(fake.declaration_letter_answers())
     multi_org_sub.save()
-    multi_org_sub.organizations.add(*target_orgs)
+    applications = [
+        models.Application(organization=org, form_submission=multi_org_sub)
+        for org in target_orgs
+    ]
+    models.Application.objects.bulk_create(applications)
     subs.append(multi_org_sub)
     # fake the date received for each sub
     for sub in subs:
@@ -396,10 +402,11 @@ def build_seed_submissions():
         sub.save()
     # make a bundle for each org
     for org in receiving_orgs:
-        org_subs = [
-            sub for sub in subs
-            if (org in sub.organizations.all()) and (
-                sub != multi_org_sub)]
+        org_subs = []
+        for sub in subs:
+            has_app = sub.applications.filter(organization=org).exists()
+            if has_app and sub != multi_org_sub:
+                org_subs.append(sub)
         bundle = BundlesService.create_bundle_from_submissions(
             organization=org,
             submissions=org_subs,
@@ -435,7 +442,13 @@ def serialize_subs(subs, filepath):
     applicants = [
         models.Applicant.objects.get(id=sub.applicant_id)
         for sub in subs]
+    application_sets = [
+        models.Application.objects.filter(form_submission=sub)
+        for sub in subs]
+    applications = []
+    for application_set in application_sets:
+        applications.extend(application_set)
     with open(filepath, 'w') as f:
-        data = [*applicants, *subs]
+        data = [*applicants, *subs, *applications]
         f.write(serializers.serialize(
             'json', data, indent=2, use_natural_foreign_keys=True))

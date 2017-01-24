@@ -58,10 +58,11 @@ class IntakeDataTestCase(AuthIntegrationTestCase):
         org_subs = []
         cls.combo_submissions = list(
             models.FormSubmission.objects.annotate(
-                orgs_count=Count('organizations')
-            ).filter(orgs_count__gt=1))
+                apps_count=Count('applications')
+            ).filter(apps_count__gt=1))
         for org in cls.orgs:
-            subs = models.FormSubmission.objects.filter(organizations=org)
+            subs = models.FormSubmission.objects.filter(
+                applications__organization=org)
             subs = list(set(subs) - set(cls.combo_submissions))
             setattr(cls, org.slug + "_submissions", subs)
             org_subs += subs
