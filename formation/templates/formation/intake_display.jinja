@@ -112,6 +112,12 @@
 
   <div class="data_display-section meta">
     <div class="data_display-row">
+      {{ form.understands_limits }}
+    </div>
+    <div class="data_display-row">
+      {{ form.consent_to_represent }}
+    </div>
+    <div class="data_display-row">
       {{ form.how_did_you_hear }}
     </div>
     {%- if 'additional_information' in form.fields %}

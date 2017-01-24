@@ -82,11 +82,14 @@ class SanFranciscoCountyFormSpec(CombinableCountyFormSpec):
         F.MonthlyExpenses,
         F.HowDidYouHear,
         F.AdditionalInformation,
-        F.ConsentNote,
+        F.UnderstandsLimits,
+        F.ConsentToRepresent,
     }
     required_fields = {
         F.FirstName,
-        F.LastName
+        F.LastName,
+        F.UnderstandsLimits,
+        F.ConsentToRepresent,
     }
     recommended_fields = {
         F.AddressField,
@@ -123,6 +126,8 @@ class ContraCostaFormSpec(CombinableCountyFormSpec):
         F.IncomeSource,
         F.MonthlyExpenses,
         F.HowDidYouHear,
+        F.UnderstandsLimits,
+        F.ConsentToRepresent,
         F.AdditionalInformation
     }
     required_fields = {
@@ -137,6 +142,8 @@ class ContraCostaFormSpec(CombinableCountyFormSpec):
         F.MonthlyExpenses,
         F.ServingSentence,
         F.OnProbationParole,
+        F.UnderstandsLimits,
+        F.ConsentToRepresent,
     }
     optional_fields = {
         F.HowDidYouHear,
@@ -178,6 +185,8 @@ class AlamedaCountyFormSpec(CombinableCountyFormSpec):
         F.WhenWhereOutsideSF,
         F.HowDidYouHear,
         F.AdditionalInformation,
+        F.UnderstandsLimits,
+        F.ConsentToRepresent,
     }
     required_fields = {
         F.FirstName,
@@ -193,6 +202,8 @@ class AlamedaCountyFormSpec(CombinableCountyFormSpec):
         F.ReducedProbation,
         F.ServingSentence,
         F.BeingCharged,
+        F.UnderstandsLimits,
+        F.ConsentToRepresent,
     }
     optional_fields = {
         F.AlternatePhoneNumberField,
@@ -274,6 +285,8 @@ class MontereyCountyFormSpec(CombinableCountyFormSpec):
         F.WhenWhereOutsideSF,
         F.HowDidYouHear,
         F.AdditionalInformation,
+        F.UnderstandsLimits,
+        F.ConsentToRepresent,
     }
     required_fields = {
         F.FirstName,
@@ -286,6 +299,8 @@ class MontereyCountyFormSpec(CombinableCountyFormSpec):
         F.OnProbationParole,
         F.ServingSentence,
         F.BeingCharged,
+        F.UnderstandsLimits,
+        F.ConsentToRepresent,
     }
     optional_fields = {
         F.HowDidYouHear,
@@ -316,7 +331,8 @@ class SolanoCountyFormSpec(CombinableCountyFormSpec):
         F.WhenWhereOutsideSF,
         F.HowDidYouHear,
         F.AdditionalInformation,
-        F.ConsentNote,
+        F.UnderstandsLimits,
+        F.ConsentToRepresent,
     }
     required_fields = {
         F.FirstName,
@@ -327,6 +343,8 @@ class SolanoCountyFormSpec(CombinableCountyFormSpec):
         F.OwesCourtFees,
         F.ServingSentence,
         F.BeingCharged,
+        F.UnderstandsLimits,
+        F.ConsentToRepresent,
     }
     optional_fields = {
         F.MiddleName,
@@ -363,6 +381,9 @@ class FresnoCountyFormSpec(SolanoCountyFormSpec):
         F.CaseNumber,
         F.ReasonsForApplying,
     }) - {
+        F.OnProbationParole,
+        F.WhereProbationParole,
+        F.WhenProbationParole,
         F.OwesCourtFees,
         F.RAPOutsideSF,
         F.WhenWhereOutsideSF,
@@ -371,7 +392,8 @@ class FresnoCountyFormSpec(SolanoCountyFormSpec):
         F.Aliases,
     }
     required_fields = SolanoCountyFormSpec.required_fields - {
-        F.OwesCourtFees
+        F.OnProbationParole,
+        F.OwesCourtFees,
     }
 
 
@@ -457,7 +479,7 @@ class EBCLCIntakeFormSpec(CombinableOrganizationFormSpec):
 
 class DeclarationLetterFormSpec(CombinableFormSpec):
     fields = {
-        F.AlamedaDeclarationLetterNote,
+        F.DeclarationLetterNote,
         F.DeclarationLetterIntro,
         F.DeclarationLetterLifeChanges,
         F.DeclarationLetterActivities,

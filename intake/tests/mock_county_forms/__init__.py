@@ -58,6 +58,8 @@ class Provider(BaseProvider):
             'when_probation_or_parole': '',
             'when_where_outside_sf': '',
             'where_probation_or_parole': '',
+            'consent_to_represent': 'yes',
+            'understands_limits': 'yes',
             'how_did_you_hear': '',
             'additional_information': 'I want help',
         }
@@ -85,6 +87,8 @@ class Provider(BaseProvider):
             'monthly_income': str(random.randint(100, 7000)),
             'monthly_expenses': str(random.randint(100, 3000)),
             'income_source': 'a job',
+            'consent_to_represent': 'yes',
+            'understands_limits': 'yes',
             'how_did_you_hear': '',
             'additional_information': '',
         }
@@ -121,6 +125,8 @@ class Provider(BaseProvider):
             'on_public_benefits': self.maybe(0.7),
             'owns_home': self.maybe(0.1),
             'household_size': str(random.randint(0, 4)),
+            'consent_to_represent': 'yes',
+            'understands_limits': 'yes',
             'how_did_you_hear': 'from work',
             'additional_information': 'I want help',
         }
@@ -186,6 +192,8 @@ class Provider(BaseProvider):
             'when_where_outside_sf': '',
             'where_probation_or_parole': '',
             'how_did_you_hear': '',
+            'consent_to_represent': 'yes',
+            'understands_limits': 'yes',
             'additional_information': 'I want help',
         }
         data.update(overrides)

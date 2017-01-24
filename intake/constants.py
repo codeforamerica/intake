@@ -180,6 +180,8 @@ if not SCOPE_TO_LIVE_COUNTIES:
             'Fowler, or Three Rocks)')),
     )
 
+COUNTY_CHOICES = sorted(COUNTY_CHOICES, key=lambda item: item[1])
+
 COUNTY_CHOICE_DISPLAY_DICT = {
     Counties.SAN_FRANCISCO: CountyNames.SAN_FRANCISCO,
     Counties.CONTRA_COSTA: CountyNames.CONTRA_COSTA,
