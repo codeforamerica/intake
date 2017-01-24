@@ -69,6 +69,8 @@ class PDFFormDisplay:
         ['household_size', 'has_children', 'is_married'],
         ['owns_home', 'on_public_benefits'],
         ['how_did_you_hear'],
+        ['understands_limits'],
+        ['consent_to_represent'],
         ['additional_information'],
     ]
 
