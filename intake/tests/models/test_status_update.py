@@ -1,10 +1,16 @@
 from django.test import TestCase
 from intake import models
 
+from intake.tests.mock import *
+
 
 class TestStatusUpdate(TestCase):
 
-    # set up fixtures here
+    fixtures = [
+        'counties',
+        'organizations', 'mock_profiles',
+        'mock_2_submissions_to_a_pubdef'
+        ]
 
     def test_cannot_be_built_without_application(self):
         self.assertEqual("xyz", "abc")
