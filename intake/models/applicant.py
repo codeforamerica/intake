@@ -11,8 +11,10 @@ class Applicant(models.Model):
 
     class Meta:
         permissions = (
-            CAN_SEE_APP_STATS(),
-            CAN_SEE_APP_DETAILS(),
+            ('view_app_stats',
+                'Can see detailed aggregate information about apps'),
+            ('view_app_details',
+                'Can see detail information about individual apps'),
         )
 
     def log_event(self, name, data=None):

@@ -14,7 +14,7 @@ class ApplicationNote(models.Model):
     class Meta:
         ordering = ['-created']
         permissions = (
-            CAN_SEE_FOLLOWUP_NOTES(),
+            ('view_application_note', 'Can read the contents of notes from followups'),
             )
 
     def __str__(self):
