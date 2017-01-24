@@ -457,7 +457,7 @@ class EBCLCIntakeFormSpec(CombinableOrganizationFormSpec):
 
 class DeclarationLetterFormSpec(CombinableFormSpec):
     fields = {
-        F.AlamedaDeclarationLetterNote,
+        F.DeclarationLetterNote,
         F.DeclarationLetterIntro,
         F.DeclarationLetterLifeChanges,
         F.DeclarationLetterActivities,
