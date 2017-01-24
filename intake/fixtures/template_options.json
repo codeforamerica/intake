@@ -1,0 +1,210 @@
+[
+{
+  "model": "intake.statustype",
+  "pk": 1,
+  "fields": {
+    "label": "Can't Proceed",
+    "display_name": "Can't Proceed",
+    "template": "I'm sorry, we can't move forward with your application.",
+    "help_text": "",
+    "slug": "cant-proceed"
+  }
+},
+{
+  "model": "intake.statustype",
+  "pk": 2,
+  "fields": {
+    "label": "No convictions found",
+    "display_name": "No Convictions",
+    "template": "Good news, we didn't find anything on your {{county}} record that needed to be cleared. If you think this is a mistake, please call {{organization.phone_number}} or email {{organization.email}}.",
+    "help_text": "",
+    "slug": "no-convictions"
+  }
+},
+{
+  "model": "intake.statustype",
+  "pk": 3,
+  "fields": {
+    "label": "Not Eligible",
+    "display_name": "Not Eligible",
+    "template": "Im sorry, we reviewed your record and you do not qualify to clear your {{county}} record.",
+    "help_text": "",
+    "slug": "not-eligible"
+  }
+},
+{
+  "model": "intake.statustype",
+  "pk": 4,
+  "fields": {
+    "label": "Eligible",
+    "display_name": "Eligible",
+    "template": "Good news, you qualify to clear your some convictions on your {{county}} record!",
+    "help_text": "",
+    "slug": "eligible"
+  }
+},
+{
+  "model": "intake.statustype",
+  "pk": 5,
+  "fields": {
+    "label": "Court date scheduled",
+    "display_name": "Court Date",
+    "template": "Your court date has been scheduled.",
+    "help_text": "",
+    "slug": "court-date"
+  }
+},
+{
+  "model": "intake.statustype",
+  "pk": 6,
+  "fields": {
+    "label": "Outcome - passed",
+    "display_name": "Passed",
+    "template": "Congrats, your request to clear some convictions on your {{county}} record was passed!",
+    "help_text": "",
+    "slug": "passed"
+  }
+},
+{
+  "model": "intake.statustype",
+  "pk": 7,
+  "fields": {
+    "label": "Outcome - declined",
+    "display_name": "Declined",
+    "template": "I'm sorry, the judge declined your request to clear some convictions on your {{county}} record.",
+    "help_text": "",
+    "slug": "declined"
+  }
+},
+{
+  "model": "intake.nextstep",
+  "pk": 1,
+  "fields": {
+    "label": "Submit personal statement",
+    "display_name": "Submit personal statement",
+    "template": "Submit a personal statement. Please do that here: {{ url('intake-personal_statement') }}",
+    "help_text": "",
+    "slug": "personal-statement"
+  }
+},
+{
+  "model": "intake.nextstep",
+  "pk": 2,
+  "fields": {
+    "label": "Submit letters of recommendation",
+    "display_name": "Submit letters of recommendation",
+    "template": "Submit letters of recommendation. Follow the instructions here: {{ url('intake-letters_of_rec') }}",
+    "help_text": "",
+    "slug": "letters-of-rec"
+  }
+},
+{
+  "model": "intake.nextstep",
+  "pk": 3,
+  "fields": {
+    "label": "Wait for court date",
+    "display_name": "Wait for court date",
+    "template": "We are going to schedule your court hearing. We'll update you when its scheduled.",
+    "help_text": "",
+    "slug": "wait-for-court-date"
+  }
+},
+{
+  "model": "intake.nextstep",
+  "pk": 4,
+  "fields": {
+    "label": "Wait for court results",
+    "display_name": "Wait for court results",
+    "template": "An attorney will attend your court hearing. You do not have to attend. We'll update you after with the results.",
+    "help_text": "",
+    "slug": "wait-for-court-results"
+  }
+},
+{
+  "model": "intake.nextstep",
+  "pk": 5,
+  "fields": {
+    "label": "Contact us",
+    "display_name": "Contact us",
+    "template": "Please call {{organization.phone}} or email {{organization.email}} when you get the chance.",
+    "help_text": "",
+    "slug": "contact-us"
+  }
+},
+{
+  "model": "intake.nextstep",
+  "pk": 6,
+  "fields": {
+    "label": "Apply at another time",
+    "display_name": "Apply at another time",
+    "template": "Please apply at another time.",
+    "help_text": "",
+    "slug": "apply-later"
+  }
+},
+{
+  "model": "intake.nextstep",
+  "pk": 7,
+  "fields": {
+    "label": "Other next steps",
+    "display_name": "Other next steps",
+    "template": "",
+    "help_text": "",
+    "slug": "other"
+  }
+},
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "performance_monitors",
+    "permissions": [
+      [
+        "view_app_stats",
+        "intake",
+        "applicant"
+      ]
+    ]
+  }
+},
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "application_reviewers",
+    "permissions": [
+      [
+        "view_app_details",
+        "intake",
+        "applicant"
+      ],
+      [
+        "view_app_stats",
+        "intake",
+        "applicant"
+      ]
+    ]
+  }
+},
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "followup_staff",
+    "permissions": [
+      [
+        "add_applicationnote",
+        "intake",
+        "applicationnote"
+      ],
+      [
+        "change_applicationnote",
+        "intake",
+        "applicationnote"
+      ],
+      [
+        "delete_applicationnote",
+        "intake",
+        "applicationnote"
+      ]
+    ]
+  }
+}
+]

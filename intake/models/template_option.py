@@ -1,6 +1,12 @@
 from django.db import models
 
 
+class TemplateOptionManager(models.Manager):
+
+    def get_by_natural_key(self, slug):
+        return self.get(slug=slug)
+
+
 class TemplateOption(models.Model):
 
     label = models.TextField()
