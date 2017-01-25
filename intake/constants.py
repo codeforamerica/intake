@@ -162,7 +162,7 @@ COUNTY_CHOICES = (
         'Prunedale, Castroville, or King City)')),
     (Counties.FRESNO, _(
         'Fresno County (near Fresno, Clovis, Sanger, Kingsburg, Mendota, '
-        'Fowler, or Three Rocks)')),
+        'Fowler, Selma, Coalinga, Orange Cove, Reedley, Huron, Kerman)')),
 )
 if not SCOPE_TO_LIVE_COUNTIES:
     COUNTY_CHOICES += (

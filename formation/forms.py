@@ -380,10 +380,12 @@ class FresnoCountyFormSpec(SolanoCountyFormSpec):
         F.Aliases,
         F.CaseNumber,
         F.ReasonsForApplying,
+        F.FinancialScreeningNote,
+        F.MonthlyIncome,
+        F.HowManyDependents,
+        F.LastFourOfSocial,
+        F.DriverLicenseOrIDNumber,
     }) - {
-        F.OnProbationParole,
-        F.WhereProbationParole,
-        F.WhenProbationParole,
         F.OwesCourtFees,
         F.RAPOutsideSF,
         F.WhenWhereOutsideSF,
@@ -392,7 +394,6 @@ class FresnoCountyFormSpec(SolanoCountyFormSpec):
         F.Aliases,
     }
     required_fields = SolanoCountyFormSpec.required_fields - {
-        F.OnProbationParole,
         F.OwesCourtFees,
     }
 

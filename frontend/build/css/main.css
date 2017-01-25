@@ -1022,6 +1022,7 @@ a:focus {
   text-decoration: underline;
 }
 a:focus {
+  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -2394,6 +2395,7 @@ select[size] {
 input[type="file"]:focus,
 input[type="radio"]:focus,
 input[type="checkbox"]:focus {
+  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -2884,6 +2886,7 @@ select[multiple].input-lg {
 .btn.focus,
 .btn:active.focus,
 .btn.active.focus {
+  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -4051,10 +4054,25 @@ button[type="submit"].action-back .badge {
 .monthly_expenses input[type="text"] {
   width: 7em;
 }
-.household_size input[type="text"] {
+.household_size input[type="text"],
+.dependents input[type="text"] {
   width: 3em;
 }
+.people-count::after {
+  content: "people";
+  width: 1em;
+  font-size: 1.25em;
+  padding: .25em .5em .25em .5em;
+  font-weight: 400;
+}
 .household_size .field-input_wrapper::after {
+  content: "people";
+  width: 1em;
+  font-size: 1.25em;
+  padding: .25em .5em .25em .5em;
+  font-weight: 400;
+}
+.dependents .field-input_wrapper::after {
   content: "people";
   width: 1em;
   font-size: 1.25em;
@@ -4148,6 +4166,7 @@ li.action_menu-item > a.active:focus,
 li.action_menu-item > a.focus,
 li.action_menu-item > a:active.focus,
 li.action_menu-item > a.active.focus {
+  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }

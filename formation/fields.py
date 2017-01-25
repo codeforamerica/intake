@@ -77,7 +77,7 @@ class ConsentToRepresent(ConsentCheckbox):
     label = _(
         "Is it okay for attorneys in each county you've selected to access "
         "your criminal record, file petitions for you, and attend court on "
-        "your behalf?")
+        "your behalf, even if you aren't there?")
     agreement_text = _("Yes, I give them permission to do that")
     display_label = str(
         "Consents to record access, filing, and court representation")
@@ -179,14 +179,32 @@ class DateOfBirthField(MultiValueField):
 class SocialSecurityNumberField(CharField):
     context_key = "ssn"
     label = _('What is your Social Security Number?')
-    help_text = help_text = _("The public defender's office will use this to "
-                              "get your San Francisco RAP sheet and find any "
-                              "convictions that can be reduced or dismissed.")
+    help_text = _("The public defender's office will use this to "
+                  "get your San Francisco RAP sheet and find any "
+                  "convictions that can be reduced or dismissed.")
     is_required_error_message = _("The public defender may not be able to "
                                   "check your RAP sheet without a social "
                                   "security number.")
     is_recommended_error_message = is_required_error_message
     display_label = "SSN"
+
+
+class LastFourOfSocial(CharField):
+    context_key = "last_four"
+    label = _('What are the last 4 digits of your Social Security Number?')
+    help_text = _(
+        "This helps identify your case from people who have a "
+        "similar name.")
+    display_label = "SSN (Last 4)"
+
+
+class DriverLicenseOrIDNumber(CharField):
+    context_key = "driver_license_or_id"
+    label = _("What is your Driver License or ID number?")
+    help_text = _(
+        "This helps identify your case from people who have a "
+        "similar name.")
+    display_label = "Driver License/ID"
 
 
 class CaseNumber(CharField):
@@ -410,7 +428,7 @@ class OwesCourtFees(YesNoField):
 
 class FinancialScreeningNote(FormNote):
     context_key = "financial_screening_note"
-    content = _("Clean Slate uses information about your income to "
+    content = _("Our partners use information about your income to "
                 "give low income applicants special help and get help from "
                 "government programs.")
 
@@ -490,6 +508,11 @@ class HouseholdSize(IntegerField):
         return value
 
 
+class HowManyDependents(IntegerField):
+    context_key = "dependents"
+    label = ("How many people depend on your financial support?")
+
+
 class IsMarried(YesNoField):
     context_key = "is_married"
     label = _("Are you married?")
@@ -559,6 +582,8 @@ INTAKE_FIELDS = [
     EmailField,
     AddressField,
     DateOfBirthField,
+    DriverLicenseOrIDNumber,
+    LastFourOfSocial,
     SocialSecurityNumberField,
     CaseNumber,
 
@@ -586,6 +611,7 @@ INTAKE_FIELDS = [
     OwnsHome,
     HouseholdSize,
     HasChildren,
+    HowManyDependents,
     IsMarried,
 
     ReasonsForApplying,
