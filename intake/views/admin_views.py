@@ -5,13 +5,12 @@ from django.views.generic.base import TemplateView
 
 from django.utils.decorators import method_decorator
 from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib import messages
 from django.http import Http404, HttpResponse
 from django.template.response import TemplateResponse
 
 
-from intake import models, notifications, permissions, utils
+from intake import models, notifications, utils
 from user_accounts.models import Organization
 from printing.pdf_form_display import PDFFormDisplay
 from intake.aggregate_serializer_fields import get_todays_date
@@ -20,54 +19,8 @@ import intake.services.submissions as SubmissionsService
 import intake.services.bundles as BundlesService
 import intake.services.tags as TagsService
 
-NOT_ALLOWED_MESSAGE = str(
-    "Sorry, you are not allowed to access that client information. "
-    "If you have any questions, please contact us at "
-    "clearmyrecord@codeforamerica.org")
-
-
-def not_allowed(request):
-    messages.error(request, NOT_ALLOWED_MESSAGE)
-    return redirect('intake-app_index')
-
-
-class ViewAppDetailsMixin(PermissionRequiredMixin):
-    permission_required = permissions.CAN_SEE_APP_DETAILS.app_code
-
-
-class ApplicationDetail(ViewAppDetailsMixin, View):
-    """Displays detailed information for an org user.
-    """
-    template_name = "app_detail.jinja"
-
-    def not_allowed(self, request):
-        messages.error(request, NOT_ALLOWED_MESSAGE)
-        return redirect('intake-app_index')
-
-    def mark_viewed(self, request, submission):
-        models.ApplicationLogEntry.log_opened([submission.id], request.user)
-        notifications.slack_submissions_viewed.send(
-            submissions=[submission], user=request.user,
-            bundle_url=submission.get_external_url())
-
-    def get(self, request, submission_id):
-        if request.user.profile.should_see_pdf() and not request.user.is_staff:
-            return redirect(
-                reverse_lazy('intake-filled_pdf',
-                             kwargs=dict(submission_id=submission_id)))
-        submissions = list(SubmissionsService.get_permitted_submissions(
-            request.user, [submission_id]))
-        if not submissions:
-            return self.not_allowed(request)
-        submission = submissions[0]
-        self.mark_viewed(request, submission)
-        display_form, letter_display = submission.get_display_form_for_user(
-            request.user)
-        context = dict(
-            form=display_form,
-            declaration_form=letter_display)
-        response = TemplateResponse(request, self.template_name, context)
-        return response
+from intake.views.base_views import ViewAppDetailsMixin
+from intake.views.app_detail_views import ApplicationDetail, not_allowed
 
 
 class FilledPDF(ApplicationDetail):
@@ -441,7 +394,6 @@ filled_pdf = FilledPDF.as_view()
 pdf_bundle = FilledPDFBundle.as_view()
 app_index = ApplicationIndex.as_view()
 app_bundle = ApplicationBundle.as_view()
-app_detail = ApplicationDetail.as_view()
 mark_processed = MarkProcessed.as_view()
 mark_transferred_to_other_org = ReferToAnotherOrgView.as_view()
 app_bundle_detail = ApplicationBundleDetail.as_view()

@@ -6,6 +6,7 @@ from intake.views import (
     legacy_redirect_views,
     application_form_views,
     admin_views,
+    app_detail_views,
     application_note_views,
     tag_views
     )
@@ -37,7 +38,7 @@ urlpatterns = [
 
     # protected views
     url(r'^application/(?P<submission_id>[0-9]+)/$',
-        login_required(admin_views.app_detail),
+        login_required(app_detail_views.app_detail),
         name='intake-app_detail'),
 
     url(r'^application/(?P<submission_id>[0-9]+)/pdf/$',
