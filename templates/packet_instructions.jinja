@@ -1,0 +1,205 @@
+{% extends "public_base_single_column.jinja" %}
+
+
+{%- block header_title -%}
+{{ _("Submit Recommendation Letters") }}
+{%- endblock header_title -%}
+
+
+<section class="rap_intro">
+  <div class="row">
+    <div class="col-xs-12">
+      <h2>{{ _("How to collect recommendation letters") }}</h2>
+      <p>{{ _("If your attorney asked you to submit recommendation letters, please follow these "
+            "instructions. Find 3-5 people to write these letters for you. They are letters written "
+            "by someone else about why they think you should clear your record. Your case is on hold "
+            "until you have submitted your recommendation letters.") }}
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<section class="rap_fee_waiver_instructions">
+  <div class="row">
+    <div class="col-xs-12">
+      <h4>
+        <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
+        {{ _(" Who should write your recommendation letters:") }}
+      </h4>
+      <p>{{ _("People who can tell the judge positive things about you should write your recommendation letters. "
+            "They should also be able to say why you deserve to clear your record. You will need to ask 3-5 people "
+            "to write a 3-5 letters for you. Each person will write one letter. Your attorney will tell you the exact "
+            "number of letters you should collect and submit. Here are some people you might ask to write a recommendation "
+            "letter for you:") }}
+      </p>
+      <ul class="rap_sheet_instructions">
+        <li>
+          {{ _("Case managers") }}
+        </li>
+        <li>
+          {{ _("Counselors") }}
+        </li>
+        <li>
+          {{ _("Sponsors") }}
+        </li>
+        <li>
+          {{ _("Supervisors") }}
+        </li>
+        <li>
+          {{ _("Bosses at work") }}
+        </li>
+        <li>
+          {{ _("Co-workers") }}
+        </li>
+        <li>
+          {{ _("Teachers") }}
+        </li>
+        <li>
+          {{ _("Family members") }}
+        </li>
+        <li>
+          {{ _("Friends") }}
+        </li>
+        <li>
+          {{ _("Neighbors") }}
+        </li>
+        <li>
+          {{ _("Church members") }}
+        </li>
+        <li>
+          {{ _("Members of organizations you volunteer at") }}
+        </li>
+        <li>
+          {{ _("Other community members") }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<section class="rap_ca_instructions">
+  <div class="row">
+    <div class="col-xs-12">
+      <h4>
+        <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
+        {{ _("Instructions for writing the letters:") }}
+      </h4>
+      <p>{{ _("Please tell the person who is writing your letter to follow these instructions. "
+            "They should answer all the questions below in their letter and write at least 3-5 "
+            "sentences in each paragraph.") }}
+      </p>
+      <ol class="rap_sheet_instructions">
+        <li>
+          {{ _("Introduction: ") }}
+            <ul class="rap_instructions_details">
+              <li class="rap_detail">
+                {{ _("Write the date.") }}
+              </li>
+              <li class="rap_detail">
+                {{ _("Start the letter with To Whom It May Concern, ") }}
+            </ul>
+        </li>
+        <li>
+          {{ _("First Paragraph (3-5 sentences): ") }}
+            <ul class="rap_instructions_details">
+              <li class="rap_detail">
+                {{ _("Introduce yourself to the judge. ") }}
+              </li>
+              <li class="rap_detail">
+                {{ _("Explain how you know the person who is trying to clear their record. ") }}
+            </ul>
+        </li>
+        <li>
+          {{ _("Second Paragraph (3-5 sentences): ") }}
+            <ul class="rap_instructions_details">
+              <li class="rap_detail">
+                {{ _("What are the positive character traits of the person who is trying "
+                  "to clear their record? For example, you can tell the judge if they are honest, "
+                  "trustworthy, hardworking, or other qualities you find admirable in them. ") }}
+              </li>
+              <li class="rap_detail">
+                {{ _("Give some examples of when you have seen the character traits you have mentioned "
+                  "during your time spent with the person who is trying to clear their record. ") }}
+              </li>
+            </ul>
+        </li>
+        <li>
+          {{ _("Third Paragraph (3-5 sentences): ") }}
+            <ul class="rap_instructions_details">
+              <li class="rap_detail">
+                {{ _("Why do you think the judge should allow this person should clear your record? ") }}
+              </li>
+              <li class="rap_detail">
+                {{ _("How do you think clearing their record would improve their life? ") }}
+              </li>
+            </ul>
+        </li>
+        <li>
+          {{ _("Closing: ") }}
+            <ul class="rap_instructions_details">
+              <li class="rap_detail">
+                {{ _("Write Sincerely, ") }}
+              </li>
+              <li class="rap_detail">
+                {{ _("Print your full name. ") }}
+              </li>
+              <li class="rap_detail">
+                {{ _("Sign your name. ") }}
+              </li>
+            </ul>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="rap_fee_waiver_instructions">
+  <div class="row">
+    <div class="col-xs-12">
+      <h4>
+        <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
+        {{ _(" Additional documents to include, if you can:") }}
+      </h4>
+      <ul class="rap_sheet_instructions">
+        <li>
+          {{ _("Copies of certificates from programs you have completed") }}
+        </li>
+        <li>
+          {{ _("Copies of diplomas from school you have completed") }}
+        </li>
+        <li>
+          {{ _("Copies of awards you have received") }}
+        </li>
+        <li>
+          {{ _("Copies of newspaper articles you have been featured in") }}
+        </li>
+        <li>
+          {{ _("Any other documents you think show off your good character traits") }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="rap_fee_waiver_instructions">
+  <div class="row">
+    <div class="col-xs-12">
+      <h4>
+        <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
+        {{ _(" Where to send the documents:") }}
+      </h4>
+    </div>
+  </div>
+</section>
+
+<!-- end of section about out of ca rap sheets -->
+{% endif %}
+
+
+
+  {%- include "includes/cmr_contact_info.jinja" %}
+  {%- include "includes/back_to_home_button.jinja" %}
+
+{% endblock column_content %}
