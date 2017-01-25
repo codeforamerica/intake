@@ -48,6 +48,7 @@ class Organization(models.Model):
     is_receiving_agency = models.BooleanField(default=False)
     is_accepting_applications = models.BooleanField(default=True)
     is_checking_notifications = models.BooleanField(default=True)
+    is_live = models.BooleanField(default=False)
     requires_rap_sheet = models.BooleanField(default=False)
     requires_declaration_letter = models.BooleanField(default=False)
     show_pdf_only = models.BooleanField(default=False)
