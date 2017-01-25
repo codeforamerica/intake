@@ -41,6 +41,10 @@ urlpatterns = [
         login_required(app_detail_views.app_detail),
         name='intake-app_detail'),
 
+    url(r'^application/(?P<submission_id>[0-9]+)/history/$',
+        login_required(app_detail_views.app_history),
+        name='intake-app_history'),
+
     url(r'^application/(?P<submission_id>[0-9]+)/pdf/$',
         login_required(admin_views.filled_pdf),
         name='intake-filled_pdf'),

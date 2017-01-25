@@ -4,13 +4,25 @@
 <section class="content">
   <div class="container">
     <div class="row">
+      <div class="col-xs-12 col-md-10 col_centered">
+        {% include "includes/app_detail_navigation.jinja" %}
+      </div>
+    </div>
+    <div class="row">
       <div class="action_bar col-xs-12 col-md-10 col_centered">
-      {% include "app_detail_action_bar.jinja" %}  
+        <h1>
+        {%- block page_heading -%}
+          Application Details
+          {% include "app_detail_action_bar.jinja" %}  
+        {%- endblock page_heading -%}
+        </h1>
       </div>
     </div>
     <div class="row">
       <div class="app_detail-data_display col-xs-12 col-md-10 col_centered">
+      {%- block app_detail_contents -%}
       {% include "formation/intake_display.jinja" %}
+      {%- endblock app_detail_contents -%}
       </div>
     </div>
   </div>

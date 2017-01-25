@@ -3,14 +3,12 @@ from django.core.urlresolvers import reverse_lazy
 from django.views.generic import View
 from django.views.generic.base import TemplateView
 
-from django.utils.decorators import method_decorator
-from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.http import Http404, HttpResponse
 from django.template.response import TemplateResponse
 
 
-from intake import models, notifications, utils
+from intake import models, notifications
 from user_accounts.models import Organization
 from printing.pdf_form_display import PDFFormDisplay
 from intake.aggregate_serializer_fields import get_todays_date
@@ -135,7 +133,7 @@ class ApplicationBundleDetail(ApplicationDetail):
         bundle = get_object_or_404(models.ApplicationBundle, pk=int(bundle_id))
         has_access = request.user.profile.should_have_access_to(bundle)
         if not has_access:
-            return self.not_allowed(request)
+            return not_allowed(request)
         submissions = list(
             request.user.profile.filter_submissions(bundle.submissions.all()))
         forms = [
