@@ -7,9 +7,12 @@ import intake.services.counties as CountiesService
 class TestGetLiveCountiesAndOrgs(TestCase):
 
     def test_doesnt_return_non_live_orgs(self):
-        non_live_org = Organization(name="Vulcan High Council")
+        non_live_org = Organization(
+            name="Vulcan High Council",
+            is_receiving_agency=True)
         live_org = Organization(
-            name="United Federation of Planets", is_live=True)
+            name="United Federation of Planets", is_live=True,
+            is_receiving_agency=True)
         non_live_org.save()
         live_org.save()
         counties, orgs = CountiesService.get_live_counties_and_orgs()
@@ -19,10 +22,11 @@ class TestGetLiveCountiesAndOrgs(TestCase):
     def test_returns_counties_with_at_least_one_live_org(self):
         county = County.objects.first()
         non_live_org = Organization(
-            name="Vulcan High Council", county=county)
+            name="Vulcan High Council", county=county,
+            is_receiving_agency=True)
         live_org = Organization(
             name="United Federation of Planets", is_live=True,
-            county=county)
+            county=county, is_receiving_agency=True)
         non_live_org.save()
         live_org.save()
         counties, orgs = CountiesService.get_live_counties_and_orgs()
@@ -32,10 +36,11 @@ class TestGetLiveCountiesAndOrgs(TestCase):
         live_county = County.objects.first()
         non_live_county = County.objects.last()
         non_live_org = Organization(
-            name="Vulcan High Council", county=non_live_county)
+            name="Vulcan High Council", county=non_live_county,
+            is_receiving_agency=True)
         live_org = Organization(
             name="United Federation of Planets", is_live=True,
-            county=live_county)
+            county=live_county, is_receiving_agency=True)
         non_live_org.save()
         live_org.save()
         counties, orgs = CountiesService.get_live_counties_and_orgs()
