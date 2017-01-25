@@ -262,7 +262,10 @@ class Provider(BaseProvider):
         data = self.solano_pubdef_answers()
         data.update(
             aliases=self.generator.name(),
+            driver_license_or_id=self.generator.numerify("D#######"),
+            last_four=self.generator.numerify("####"),
             case_number=self.generator.numerify("C####-###"),
+            dependents=random.randint(0, 5),
             reasons_for_applying=['background_check', 'lost_job', 'housing'],
         )
         data.update(overrides)

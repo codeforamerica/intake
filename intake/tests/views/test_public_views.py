@@ -22,7 +22,7 @@ class TestPartnerListView(TestCase):
     def test_returns_200_with_org_name_list(self):
         response = self.client.get(reverse('intake-partner_list'))
         orgs = auth_models.Organization.objects.filter(
-            is_receiving_agency=True)
+            is_live=True)
         self.assertEqual(response.status_code, 200)
         for org in orgs:
             self.assertContains(
@@ -35,13 +35,14 @@ class TestPartnerListView(TestCase):
             slug='starfleet',
             county=county,
             is_receiving_agency=True,
+            is_live=True,
         )
         not_live_org = auth_models.Organization(
             name="Jem'Hadar",
             slug='jem-hadar',
             county=county,
             is_receiving_agency=True,
-            is_accepting_applications=False,
+            is_live=False,
         )
         live_org.save()
         not_live_org.save()

@@ -21,6 +21,8 @@
     </div>
     <div class="data_display-row id_numbers">
       {{ form.dob_display }}
+      {{ form.last_four_display }}
+      {{ form.driver_license_or_id_display }}
       {{ form.ssn_display }}
       {{ form.case_number_display }}
     </div>
@@ -98,6 +100,7 @@
 
     <div class="data_display-row household">
       {{ form.household_size_display }}
+      {{ form.dependents_display }}
       {{ form.has_children_display }}
       {{ form.is_married_display }}
     </div>
