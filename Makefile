@@ -47,7 +47,8 @@ deploy.prod:
 		counties \
 		organizations \
 		addresses \
-		groups
+		groups \
+		template_options
 
 
 db.setup:
@@ -117,7 +118,8 @@ db.seed:
 		mock_1_bundle_to_san_joaquin_pubdef \
 		mock_1_bundle_to_santa_clara_pubdef \
 		mock_1_bundle_to_fresno_pubdef \
-		mock_application_events
+		mock_application_events \
+		template_options
 
 
 notebook:

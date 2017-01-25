@@ -149,7 +149,7 @@ class TestGetOrgsThatMightNeedABundleEmailToday(TestCase):
         'counties',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
-        'mock_2_submissions_to_cc_pubdef',
+        'mock_2_submissions_to_cc_pubdef', 'template_options'
         ]
 
     @patch('intake.services.bundles.is_the_weekend', not_the_weekend)
@@ -210,7 +210,7 @@ class TestCreateBundlesAndSendNotificationsToOrgs(TestCase):
         'counties',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_cc_pubdef',
-        'mock_2_submissions_to_a_pubdef',
+        'mock_2_submissions_to_a_pubdef', 'template_options'
     ]
 
     def setUp(self):

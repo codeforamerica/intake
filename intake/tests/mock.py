@@ -5,6 +5,7 @@ import factory
 import datetime as dt
 from pytz import timezone
 from faker import Factory as FakerFactory
+from intake.tests.factories import StatusUpdateFactory
 from django.core.files import File
 from django.core import serializers
 from django.core.management import call_command
@@ -373,6 +374,8 @@ def build_seed_submissions():
             application = models.Application(
                 organization=org, form_submission=sub)
             application.save()
+            StatusUpdateFactory.create(
+                application=application, author=org.profiles.first().user)
             subs.append(sub)
     # make 1 submission to multiple orgs
     target_orgs = [
@@ -446,9 +449,12 @@ def serialize_subs(subs, filepath):
         models.Application.objects.filter(form_submission=sub)
         for sub in subs]
     applications = []
+    status_updates = []
     for application_set in application_sets:
         applications.extend(application_set)
+    for application in applications:
+        status_updates.extend(application.status_updates.all())
     with open(filepath, 'w') as f:
-        data = [*applicants, *subs, *applications]
+        data = [*applicants, *subs, *applications, *status_updates]
         f.write(serializers.serialize(
             'json', data, indent=2, use_natural_foreign_keys=True))

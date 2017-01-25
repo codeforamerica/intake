@@ -76,7 +76,7 @@ class TestGetPermittedSubmissions(TestCase):
         'counties', 'organizations',
         'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
-        'mock_2_submissions_to_cc_pubdef',
+        'mock_2_submissions_to_cc_pubdef', 'template_options'
     ]
 
     def test_filters_to_organization_of_user(self):
@@ -97,9 +97,9 @@ class TestGetPermittedSubmissions(TestCase):
 class TestHaveSameOrgs(TestCase):
 
     fixtures = [
-        'counties', 'organizations',
+        'counties', 'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
-        'mock_2_submissions_to_cc_pubdef',
+        'mock_2_submissions_to_cc_pubdef', 'template_options'
     ]
 
     def test_returns_false_when_orgs_are_different(self):

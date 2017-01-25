@@ -6,8 +6,8 @@ from intake import serializers
 class TestFormSubmissionSerializer(TestCase):
 
     fixtures = [
-        'counties', 'organizations',
-        'mock_2_submissions_to_cc_pubdef'
+        'counties', 'organizations', 'mock_profiles',
+        'mock_2_submissions_to_cc_pubdef', 'template_options'
     ]
 
     def test_doesnt_include_too_much_information(self):

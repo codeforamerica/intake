@@ -7,8 +7,8 @@ class TestApplicantSerializer(TestCase):
 
     fixtures = [
         'counties',
-        'organizations',
-        'mock_2_submissions_to_cc_pubdef'
+        'organizations', 'mock_profiles',
+        'mock_2_submissions_to_cc_pubdef', 'template_options'
     ]
 
     def test_gets_expected_json(self):

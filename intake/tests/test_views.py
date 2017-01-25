@@ -21,7 +21,7 @@ class TestViews(IntakeDataTestCase):
         'counties',
         'organizations',
         'mock_profiles',
-        'mock_2_submissions_to_sf_pubdef']
+        'mock_2_submissions_to_sf_pubdef', 'template_options']
 
     def set_session_counties(self, counties=None):
         if not counties:

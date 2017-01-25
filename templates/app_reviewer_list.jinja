@@ -7,19 +7,22 @@
   {%- if show_pdf %}
   <th>Intake PDF</th>
   {%- endif %}
-  <th>Last Opened</th>
+  <th>Status</th>
+  <th>Latest Status Update</th>
   <th>Added to DB</th>
 </tr>
 {% for app in submissions %}
 <tr>
   <td>
+    {# Date #}
     <a href="{{ url('intake-app_detail', submission_id=app.id)}}">
     {{ app.get_local_date_received('%-m/%-d/%y') }}
     </a>
   </td>
-  <td>{{ namify(app.answers.get("last_name", "")) }}</td>
-  <td>{{ namify(app.answers.get("first_name", "")) }}</td>
+  <td>{# Last Name #} {{ namify(app.answers.get("last_name", "")) }}</td>
+  <td>{# First Name #} {{ namify(app.answers.get("first_name", "")) }}</td>
   <td>
+    {# Case Details PDF #}
     <a
       href="{{ app.get_case_printout_url() }}"
       target="_blank"
@@ -30,6 +33,7 @@
   </td>
   {%- if show_pdf %}
   <td>
+    {# Intake PDF #}
     <a href="{{ 
       url('intake-filled_pdf',
         submission_id=app.id
@@ -40,9 +44,21 @@
   </td> 
   {%- endif %}
   <td>
-  {% if app.last_opened_by_agency() %}
-  {{ humanize.naturaltime(app.last_opened_by_agency()) }}
-  {%- else -%}------------{% endif %}
+    {# Status #}
+    {% if app.applications.filter(organization=user.profile.organization).first().status_updates.exists() %}
+      {{app.applications.filter(organization=user.profile.organization).first().status_updates.latest('updated').status_type.display_name}}
+    {%- else -%}
+      New
+    {% endif %}
+  </td>
+  <td>
+    {# Latest Status Update #}
+    
+    {% if app.applications.filter(organization=user.profile.organization).first().status_updates.exists() %}
+      {{humanize.naturaltime(app.applications.filter(organization=user.profile.organization).first().status_updates.latest('updated').updated)}}
+    {%- else -%}
+      ------------
+    {% endif %}
   </td>
   <td>
   {% if app.last_processed_by_agency() %}
