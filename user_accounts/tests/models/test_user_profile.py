@@ -10,7 +10,7 @@ class TestUserProfile(IntakeDataTestCase):
         'mock_2_submissions_to_cc_pubdef',
         'mock_2_submissions_to_sf_pubdef',
         'mock_1_submission_to_multiple_orgs',
-        'mock_1_bundle_to_cc_pubdef',
+        'mock_1_bundle_to_cc_pubdef', 'template_options'
     ]
 
     def test_user_should_see_pdf(self):

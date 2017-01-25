@@ -21,7 +21,7 @@ class TestApplicationDetail(IntakeDataTestCase):
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
-        'mock_1_submission_to_multiple_orgs'
+        'mock_1_submission_to_multiple_orgs', 'template_options'
         ]
 
     def get_detail(self, submission):
@@ -109,7 +109,7 @@ class TestApplicationBundle(IntakeDataTestCase):
         'mock_2_submissions_to_sf_pubdef',
         'mock_1_submission_to_multiple_orgs',
         'mock_1_bundle_to_sf_pubdef',
-        'mock_1_bundle_to_a_pubdef',
+        'mock_1_bundle_to_a_pubdef', 'template_options'
         ]
 
     def get_submissions(self, group):
@@ -169,7 +169,7 @@ class TestApplicationIndex(IntakeDataTestCase):
         'mock_2_submissions_to_sf_pubdef',
         'mock_1_submission_to_multiple_orgs',
         'mock_1_bundle_to_sf_pubdef',
-        'mock_1_bundle_to_a_pubdef',
+        'mock_1_bundle_to_a_pubdef', 'template_options'
         ]
 
     def assertContainsSubmissions(self, response, submissions):
@@ -239,6 +239,16 @@ class TestApplicationIndex(IntakeDataTestCase):
         response = self.client.get(reverse('intake-app_index'))
         self.assertEqual(response.status_code, 302)
 
+    def test_org_user_can_see_latest_status_of_app(self):
+        user = self.be_apubdef_user()
+        response = self.client.get(reverse('intake-app_index'))
+        for sub in self.a_pubdef_submissions:
+            status = sub.applications.filter(
+                organization=user.profile.organization).first(
+                ).status_updates.latest('updated').status_type.display_name
+            self.assertContains(
+                response, html_utils.conditional_escape(status))
+
 
 class TestApplicationBundleDetail(IntakeDataTestCase):
 
@@ -246,9 +256,9 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
         'counties',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
-        'mock_2_submissions_to_sf_pubdef',
+        'mock_2_submissions_to_sf_pubdef', 'template_options',
         'mock_1_submission_to_multiple_orgs',
-        'mock_1_bundle_to_a_pubdef',
+        'mock_1_bundle_to_a_pubdef'
     ]
 
     @patch('intake.views.admin_views.notifications.slack_submissions_viewed.send')
@@ -347,7 +357,7 @@ class TestApplicationBundleDetailPDFView(IntakeDataTestCase):
     fixtures = [
         'counties',
         'organizations', 'mock_profiles',
-        'mock_2_submissions_to_sf_pubdef',
+        'mock_2_submissions_to_sf_pubdef', 'template_options',
         ]
 
     @classmethod
@@ -391,7 +401,7 @@ class TestReferToAnotherOrgView(IntakeDataTestCase):
         'counties',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
-        'mock_1_bundle_to_a_pubdef']
+        'mock_1_bundle_to_a_pubdef', 'template_options']
 
     def setUp(self):
         super().setUp()

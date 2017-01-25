@@ -429,6 +429,7 @@ def build_seed_submissions():
             make_mock_submission_event_sequence(applicant))
     dump_as_json(events, fixture_path('mock_application_events.json'))
 
+
 def fixture_path(filename):
     return os.path.join('intake', 'fixtures', filename)
 

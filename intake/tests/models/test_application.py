@@ -9,7 +9,7 @@ class TestApplicant(TestCase):
     fixtures = [
         'counties',
         'organizations', 'mock_profiles',
-        'mock_2_submissions_to_a_pubdef'
+        'mock_2_submissions_to_a_pubdef', 'template_options'
         ]
 
     def test_cannot_create_without_organization(self):

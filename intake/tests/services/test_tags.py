@@ -11,7 +11,7 @@ class TestUpdateTagsForSubmission(IntakeDataTestCase):
 
     fixtures = [
         'counties', 'organizations', 'mock_profiles',
-        'mock_2_submissions_to_a_pubdef'
+        'mock_2_submissions_to_a_pubdef', 'template_options'
     ]
 
     def setUp(self):

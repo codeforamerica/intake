@@ -27,6 +27,7 @@ ALL_APPLICATION_FIXTURES = [
     'mock_2_submissions_to_fresno_pubdef',
     'mock_1_submission_to_multiple_orgs',
     'mock_application_events',
+    'template_options'
 ]
 
 ALL_BUNDLES = [

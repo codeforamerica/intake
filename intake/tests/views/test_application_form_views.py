@@ -675,7 +675,8 @@ class TestThanks(IntakeDataTestCase):
         'counties',
         'organizations',
         'mock_profiles',
-        'mock_2_submissions_to_cc_pubdef']
+        'mock_2_submissions_to_cc_pubdef', 
+        'template_options']
 
     def test_anonymous_with_no_application_redirected_to_home(self):
         self.be_anonymous()

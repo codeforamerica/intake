@@ -16,7 +16,7 @@ class TestFormSubmission(TestCase):
         'counties',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
-        'mock_1_submission_to_multiple_orgs']
+        'mock_1_submission_to_multiple_orgs', 'template_options']
 
     def get_a_sample_sub(self):
         return models.FormSubmission.objects.filter(
