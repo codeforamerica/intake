@@ -45,14 +45,20 @@
   {%- endif %}
   <td>
     {# Status #}
-    Opened
+    {% if app.applications.filter(organization=user.profile.organization).first().status_updates.exists() %}
+      {{app.applications.filter(organization=user.profile.organization).first().status_updates.latest('updated').status_type.display_name}}
+    {%- else -%}
+      New
+    {% endif %}
   </td>
   <td>
     {# Latest Status Update #}
-    1 day ago
-    {#   {% if app.last_opened_by_agency() %}
-    {{ humanize.naturaltime(app.last_opened_by_agency()) }}
-    {%- else -%}------------{% endif %} #}
+    
+    {% if app.applications.filter(organization=user.profile.organization).first().status_updates.exists() %}
+      {{humanize.naturaltime(app.applications.filter(organization=user.profile.organization).first().status_updates.latest('updated').updated)}}
+    {%- else -%}
+      ------------
+    {% endif %}
   </td>
   <td>
   {% if app.last_processed_by_agency() %}

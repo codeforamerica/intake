@@ -100,7 +100,7 @@ def get_permitted_submissions(user, ids=None, related_objects=False):
     if user.is_staff:
         return query.all()
     org = user.profile.organization
-    return query.filter(organizations=org)
+    return query.filter(organizations=org).distinct()
 
 
 def find_duplicates(search_space):

@@ -1,6 +1,5 @@
 import factory
 from intake import models
-from intake.tests.mock import fake
 
 
 class StatusTypeFactory(factory.DjangoModelFactory):
