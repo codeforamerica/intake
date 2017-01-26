@@ -178,7 +178,7 @@ class DateOfBirthField(MultiValueField):
 
 class SocialSecurityNumberField(CharField):
     context_key = "ssn"
-    label = _('What is your Social Security Number?')
+    label = _('What is your Social Security Number? (if you have one)')
     help_text = _("The public defender's office will use this to "
                   "get your San Francisco RAP sheet and find any "
                   "convictions that can be reduced or dismissed.")
@@ -191,7 +191,7 @@ class SocialSecurityNumberField(CharField):
 
 class LastFourOfSocial(CharField):
     context_key = "last_four"
-    label = _('What are the last 4 digits of your Social Security Number?')
+    label = _('What are the last 4 digits of your Social Security Number? (if you have one)')
     help_text = _(
         "This helps identify your case from people who have a "
         "similar name.")
@@ -200,7 +200,7 @@ class LastFourOfSocial(CharField):
 
 class DriverLicenseOrIDNumber(CharField):
     context_key = "driver_license_or_id"
-    label = _("What is your Driver License or ID number?")
+    label = _("What is your Driver License or ID number? (if you have one)")
     help_text = _(
         "This helps identify your case from people who have a "
         "similar name.")
@@ -358,13 +358,13 @@ class OnProbationParole(YesNoField):
 
 class WhereProbationParole(CharField):
     context_key = "where_probation_or_parole"
-    label = _("Where is your probation or parole?")
+    label = _("If you are on probation or parole, where is it?")
     display_label = "Where"
 
 
 class WhenProbationParole(CharField):
     context_key = "when_probation_or_parole"
-    label = _("When does your probation or parole end?")
+    label = _("If you are on probation or parole, when does it end?")
     display_label = "Until"
 
 
