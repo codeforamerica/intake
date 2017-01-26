@@ -47,10 +47,18 @@ class ApplicationDetail(ViewAppDetailsMixin, TemplateView):
         self.mark_viewed(self.request, submission)
         display_form, letter_display = submission.get_display_form_for_user(
             self.request.user)
+        application = models.Application.objects.filter(
+            form_submission=submission,
+            organization=self.request.user.profile.organization).first()
+        if application.status_updates.exists():
+            latest_status = application.status_updates.latest('updated')
+        else:
+            latest_status = None
         context.update(
             form=display_form,
             submission=submission,
-            declaration_form=letter_display)
+            declaration_form=letter_display,
+            latest_status=latest_status)
         return context
 
 

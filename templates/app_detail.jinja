@@ -21,6 +21,28 @@
     <div class="row">
       <div class="app_detail-data_display col-xs-12 col-md-10 col_centered">
       {%- block app_detail_contents -%}
+        {% if latest_status %}
+          <div>
+            Current Status:
+            <br/>
+            {{latest_status.status_type.display_name}}
+            <br/>
+            Additional Info:
+            <br/>
+            {{latest_status.additional_information}}
+            <br/>
+            {% if latest_status.next_steps %}
+              Applicant's Next Steps:
+              <br/>
+              <ul>
+                {% for step in latest_status.next_steps.all() %}
+                  <li>{{ step.display_name }}</li>
+                {% endfor %}
+              </ul>
+              <br/>
+            {% endif %}
+          </div>
+        {% endif %}
       {% include "formation/intake_display.jinja" %}
       {%- endblock app_detail_contents -%}
       </div>
