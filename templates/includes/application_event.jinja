@@ -1,0 +1,31 @@
+  <li class="application-event-block">
+    Status Update - {{status_update.status_type.display_name}}
+    {{local_time(status_update.created, '%-m/%-d/%y')}}  ({{humanize.naturaltime(status_update.created)}}) by {{status_update.author.first_name}} {{status_update.author.last_name}}
+
+    <br/>
+    <br/>
+    Additional information:
+    {{status_update.additional_information}}
+    
+    <br/>
+    Next steps:
+    {% if status_update.next_steps %}
+      <ul>
+          {% for step in status_update.next_steps.all() %}
+            <li>{{ step.display_name }}</li>
+          {% endfor %}
+      </ul>
+    {% endif %}
+    <br/>
+
+    {# TODO: create more notification objects #}
+    {% if status_update.notification %}
+        {# Need to determine send method in order to show "text sent to" or "email sent to" 
+        Also need to account for multi #}
+        Sent to {{status_update.notification.contact_info["email"]}}:
+        <br/>
+        {{status_update.notification.sent_message}}
+    {% endif %}
+  </li>
+  <hr/>
+  <br/>

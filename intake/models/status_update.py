@@ -14,3 +14,8 @@ class StatusUpdate(models.Model):
     application = models.ForeignKey(
         'intake.Application', on_delete=models.CASCADE,
         related_name='status_updates')
+
+    def __str__(self):
+        app = str(self.application.form_submission.id)
+        status_type = self.status_type.display_name
+        return app+status_type

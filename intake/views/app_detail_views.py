@@ -59,6 +59,21 @@ class ApplicationHistoryView(ApplicationDetail):
     """
     template_name = "app_history.jinja"
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        org = self.request.user.profile.organization
+        sub = context['submission']
+        application = models.Application.objects.filter(
+            organization=org, form_submission=sub).first()
+        status_updates = models.StatusUpdate.objects.filter(
+            application=application).prefetch_related('notification')
+        context.update(
+            org=org,
+            application=application,
+            status_updates=status_updates
+            )
+        return context
+
 
 app_detail = ApplicationDetail.as_view()
 app_history = ApplicationHistoryView.as_view()

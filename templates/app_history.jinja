@@ -7,17 +7,8 @@ Application History
 
 {%- block app_detail_contents -%}
 <ul class="application-events-list">
-  <li class="application-event-block">
-    Something happened
-  </li>
-  <li class="application-event-block">
-    Another thing happened
-  </li>
-  <li class="application-event-block">
-    Temporal Anomaly!
-  </li>
-  <li class="application-event-block">
-    Nothing happened
-  </li>
+  {% for status_update in status_updates %}
+    {% include "includes/application_event.jinja" %}
+  {% endfor %}
 </ul>
 {%- endblock app_detail_contents -%}
