@@ -25,6 +25,8 @@
         Sent to {{contact_info_to_html(status_update.notification.contact_info)}}:
         <br/>
         {{status_update.notification.sent_message}}
+    {% else %}
+        <em>No notification sent to applicant. Contact info unavailable or applicant has opted out of email and text message notifications.</em>
     {% endif %}
   </li>
   <hr/>
