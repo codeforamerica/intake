@@ -160,12 +160,12 @@ COUNTY_CHOICES = (
     (Counties.MONTEREY, _(
         'Monterey County (near Salinas, Monterey, Marina, Seaside, '
         'Prunedale, Castroville, or King City)')),
-    (Counties.FRESNO, _(
-        'Fresno County (near Fresno, Clovis, Sanger, Kingsburg, Mendota, '
-        'Fowler, Selma, Coalinga, Orange Cove, Reedley, Huron, Kerman)')),
 )
 if not SCOPE_TO_LIVE_COUNTIES:
     COUNTY_CHOICES += (
+        (Counties.FRESNO, _(
+            'Fresno County (near Fresno, Clovis, Sanger, Kingsburg, Mendota, '
+            'Fowler, Selma, Coalinga, Orange Cove, Reedley, Huron, Kerman)')),
         (Counties.SOLANO, _(
             'Solano County (near Vallejo, Fairfield, Vacaville, Benicia, '
             'or Allendale)')),
