@@ -399,6 +399,9 @@ def build_seed_submissions():
         for org in target_orgs
     ]
     models.Application.objects.bulk_create(applications)
+    for application in applications:
+        StatusUpdateFactory.create(
+            application=application, author=org.profiles.first().user)
     subs.append(multi_org_sub)
     # fake the date received for each sub
     for sub in subs:

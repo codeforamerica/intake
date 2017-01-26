@@ -1,6 +1,7 @@
 from unittest.mock import patch
 from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
+from intake import models
 from intake.tests.base_testcases import IntakeDataTestCase
 
 
@@ -103,6 +104,18 @@ class TestApplicationDetail(AppDetailAccessBaseTests):
         printout_url = html_utils.conditional_escape(
             submission.get_case_printout_url())
         self.assertContains(response, printout_url)
+
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_agency_user_can_see_latest_status(self, slack):
+        user = self.be_apubdef_user()
+        submission = self.a_pubdef_submissions[0]
+        response = self.get_page(submission)
+        latest_status = models.StatusUpdate.objects.filter(
+            application__organization=user.profile.organization,
+            application__form_submission=submission
+            ).latest('updated').status_type.display_name
+        self.assertContains(
+            response, html_utils.conditional_escape(latest_status))
 
 
 class TestApplicationHistory(AppDetailAccessBaseTests):
