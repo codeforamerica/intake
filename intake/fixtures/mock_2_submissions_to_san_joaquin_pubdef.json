@@ -20,46 +20,45 @@
     "applicant": 555,
     "duplicate_set": null,
     "answers": {
-      "understands_limits": "yes",
-      "middle_name": "Rachel",
-      "dob": {
-        "day": "16",
-        "year": "1997",
-        "month": "3"
-      },
-      "first_name": "Tracey",
-      "phone_number": "2858083931",
-      "rap_outside_sf": "no",
-      "when_where_outside_sf": "",
+      "on_probation_parole": "yes",
+      "being_charged": "no",
       "contact_preferences": [
-        "prefers_sms",
         "prefers_snailmail",
         "prefers_email",
-        "prefers_voicemail"
+        "prefers_sms"
       ],
-      "being_charged": "no",
-      "serving_sentence": "no",
-      "owes_court_fees": "yes",
-      "us_citizen": "yes",
-      "alternate_phone_number": "2437104492",
-      "email": "sheribridges@gmail.com",
-      "additional_information": "I want help",
-      "when_probation_or_parole": "2018",
+      "phone_number": "2397558934",
       "consent_to_represent": "yes",
-      "on_probation_parole": "yes",
-      "where_probation_or_parole": "Solano County",
-      "last_name": "Williams",
       "how_did_you_hear": "from work",
+      "understands_limits": "yes",
+      "middle_name": "Cheryl",
+      "first_name": "Kayla",
+      "where_probation_or_parole": "Solano County",
       "address": {
-        "zip": "37959",
-        "city": "West Jeffrey",
-        "street": "244 Benjamin Way Suite 432",
-        "state": "NM"
-      }
+        "city": "Jenniferfurt",
+        "street": "25661 Elizabeth Turnpike",
+        "zip": "37418",
+        "state": "PA"
+      },
+      "last_name": "Lee",
+      "dob": {
+        "day": "10",
+        "month": "6",
+        "year": "1997"
+      },
+      "email": "jamesmartin@hotmail.com",
+      "serving_sentence": "no",
+      "alternate_phone_number": "2587952732",
+      "us_citizen": "yes",
+      "rap_outside_sf": "no",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "yes",
+      "when_probation_or_parole": "2018",
+      "additional_information": "I want help"
     },
-    "old_uuid": "4ba4346ad5ab4f72b701cbd6fd9ebd99",
-    "anonymous_name": "Wise Koala",
-    "date_received": "2017-01-16T22:15:00-08:00"
+    "old_uuid": "5062fd6afb4f46c9a60272f714b6c905",
+    "anonymous_name": "Cosmic Planet",
+    "date_received": "2017-01-16T22:55:45-08:00"
   }
 },
 {
@@ -69,44 +68,45 @@
     "applicant": 556,
     "duplicate_set": null,
     "answers": {
-      "understands_limits": "yes",
-      "middle_name": "Nicole",
-      "dob": {
-        "day": "16",
-        "year": "1987",
-        "month": "10"
-      },
-      "first_name": "Trevor",
-      "phone_number": "2028886451",
-      "rap_outside_sf": "no",
-      "when_where_outside_sf": "",
-      "contact_preferences": [
-        "prefers_snailmail",
-        "prefers_sms"
-      ],
-      "being_charged": "no",
-      "serving_sentence": "no",
-      "owes_court_fees": "no",
-      "us_citizen": "yes",
-      "alternate_phone_number": "2284294244",
-      "email": "annahobbs@yahoo.com",
-      "additional_information": "I want help",
-      "when_probation_or_parole": "2018",
-      "consent_to_represent": "yes",
       "on_probation_parole": "yes",
-      "where_probation_or_parole": "Solano County",
-      "last_name": "Lee",
+      "being_charged": "no",
+      "contact_preferences": [
+        "prefers_sms",
+        "prefers_email",
+        "prefers_voicemail"
+      ],
+      "phone_number": "2527685267",
+      "consent_to_represent": "yes",
       "how_did_you_hear": "from work",
+      "understands_limits": "yes",
+      "middle_name": "Mark",
+      "first_name": "Michael",
+      "where_probation_or_parole": "Solano County",
       "address": {
-        "zip": "07931",
-        "city": "East Alanside",
-        "street": "1246 Duncan Dam",
-        "state": "OR"
-      }
+        "city": "West Valeriechester",
+        "street": "94766 Matthew Forge",
+        "zip": "95643",
+        "state": "NM"
+      },
+      "last_name": "Lowe",
+      "dob": {
+        "day": "25",
+        "month": "9",
+        "year": "1983"
+      },
+      "email": "michael29@yahoo.com",
+      "serving_sentence": "no",
+      "alternate_phone_number": "2095010833",
+      "us_citizen": "yes",
+      "rap_outside_sf": "yes",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "no",
+      "when_probation_or_parole": "2018",
+      "additional_information": "I want help"
     },
-    "old_uuid": "2868dd484e314d708446ecd0e4a0bc14",
-    "anonymous_name": "Calm Adventurer",
-    "date_received": "2017-01-15T14:36:50-08:00"
+    "old_uuid": "3336d47f1ba94750a53776a84dbb526c",
+    "anonymous_name": "Spontaneous Gazelle",
+    "date_received": "2017-01-21T11:03:17-08:00"
   }
 },
 {
@@ -131,10 +131,10 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 122,
+  "pk": 123,
   "fields": {
-    "created": "2017-01-25T20:13:34.377Z",
-    "updated": "2017-01-25T20:13:34.381Z",
+    "created": "2017-01-26T18:31:10.390Z",
+    "updated": "2017-01-26T18:31:10.397Z",
     "status_type": 1,
     "additional_information": "just a little note",
     "author": [
@@ -148,10 +148,10 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 123,
+  "pk": 124,
   "fields": {
-    "created": "2017-01-25T20:13:34.392Z",
-    "updated": "2017-01-25T20:13:34.396Z",
+    "created": "2017-01-26T18:31:10.415Z",
+    "updated": "2017-01-26T18:31:10.424Z",
     "status_type": 2,
     "additional_information": "just a little note",
     "author": [
@@ -161,6 +161,32 @@
     "next_steps": [
       1
     ]
+  }
+},
+{
+  "model": "intake.statusnotification",
+  "pk": 17,
+  "fields": {
+    "status_update": 123,
+    "contact_info": {
+      "email": "bgolder+borg@codeforamerica.org"
+    },
+    "base_message": "Resistance is futile",
+    "sent_message": "Live long and prosper",
+    "created": "2017-01-26T18:31:11.331Z"
+  }
+},
+{
+  "model": "intake.statusnotification",
+  "pk": 18,
+  "fields": {
+    "status_update": 124,
+    "contact_info": {
+      "email": "bgolder+borg@codeforamerica.org"
+    },
+    "base_message": "Resistance is futile",
+    "sent_message": "Live long and prosper",
+    "created": "2017-01-26T18:31:11.337Z"
   }
 }
 ]

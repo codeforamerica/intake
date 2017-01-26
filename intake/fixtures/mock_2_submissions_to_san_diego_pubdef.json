@@ -20,46 +20,46 @@
     "applicant": 553,
     "duplicate_set": null,
     "answers": {
-      "understands_limits": "yes",
-      "middle_name": "Matthew",
-      "dob": {
-        "day": "7",
-        "year": "1985",
-        "month": "1"
-      },
-      "first_name": "Scott",
-      "phone_number": "2688782116",
-      "rap_outside_sf": "no",
-      "when_where_outside_sf": "",
+      "on_probation_parole": "yes",
+      "being_charged": "no",
       "contact_preferences": [
+        "prefers_sms",
         "prefers_snailmail",
-        "prefers_email",
         "prefers_voicemail"
       ],
-      "being_charged": "no",
-      "serving_sentence": "no",
-      "owes_court_fees": "no",
-      "us_citizen": "yes",
-      "case_number": "C5368-081",
-      "alternate_phone_number": "2578451442",
-      "email": "hodgesholly@yahoo.com",
-      "additional_information": "I want help",
-      "when_probation_or_parole": "2018",
+      "phone_number": "2563679356",
       "consent_to_represent": "yes",
-      "on_probation_parole": "yes",
-      "where_probation_or_parole": "Solano County",
-      "last_name": "Huffman",
       "how_did_you_hear": "from work",
+      "understands_limits": "yes",
+      "middle_name": "Alexis",
+      "first_name": "Alex",
+      "where_probation_or_parole": "Solano County",
       "address": {
-        "zip": "10855",
-        "city": "West Patrickview",
-        "street": "9671 Katherine Field Apt. 840",
-        "state": "NC"
-      }
+        "city": "Jasonmouth",
+        "street": "95548 Mark Springs Suite 451",
+        "zip": "61324",
+        "state": "IA"
+      },
+      "case_number": "C6728-897",
+      "last_name": "Phillips",
+      "dob": {
+        "day": "28",
+        "month": "10",
+        "year": "1987"
+      },
+      "email": "justin56@gmail.com",
+      "serving_sentence": "no",
+      "alternate_phone_number": "2145113248",
+      "us_citizen": "no",
+      "rap_outside_sf": "no",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "no",
+      "when_probation_or_parole": "2018",
+      "additional_information": "I want help"
     },
-    "old_uuid": "62d5581355de4dc9ad90bf8b30322529",
-    "anonymous_name": "Adventurous Giraffe",
-    "date_received": "2017-01-12T08:30:29-08:00"
+    "old_uuid": "2ba434b2a119402384e7fb3f6ff33bb5",
+    "anonymous_name": "Amber Redwood",
+    "date_received": "2017-01-23T19:44:28-08:00"
   }
 },
 {
@@ -69,44 +69,45 @@
     "applicant": 554,
     "duplicate_set": null,
     "answers": {
+      "on_probation_parole": "yes",
+      "being_charged": "no",
+      "contact_preferences": [
+        "prefers_sms",
+        "prefers_snailmail"
+      ],
+      "phone_number": "2906254495",
+      "consent_to_represent": "yes",
+      "how_did_you_hear": "from work",
       "understands_limits": "yes",
-      "middle_name": "Thomas",
-      "dob": {
-        "day": "28",
-        "year": "1997",
-        "month": "8"
+      "middle_name": "Duane",
+      "first_name": "Terri",
+      "where_probation_or_parole": "Solano County",
+      "address": {
+        "city": "Port Kelly",
+        "street": "690 Crane Trafficway Suite 525",
+        "zip": "28015",
+        "state": "ID"
       },
-      "first_name": "Daniel",
-      "phone_number": "2830005261",
+      "case_number": "C5266-282",
+      "last_name": "Dunn",
+      "dob": {
+        "day": "21",
+        "month": "4",
+        "year": "1982"
+      },
+      "email": "alyssa19@hotmail.com",
+      "serving_sentence": "no",
+      "alternate_phone_number": "2211108611",
+      "us_citizen": "yes",
       "rap_outside_sf": "no",
       "when_where_outside_sf": "",
-      "contact_preferences": [
-        "prefers_sms"
-      ],
-      "being_charged": "no",
-      "serving_sentence": "no",
       "owes_court_fees": "no",
-      "us_citizen": "yes",
-      "case_number": "C6273-640",
-      "alternate_phone_number": "2842122962",
-      "email": "rodriguezhannah@gmail.com",
-      "additional_information": "I want help",
       "when_probation_or_parole": "2018",
-      "consent_to_represent": "yes",
-      "on_probation_parole": "yes",
-      "where_probation_or_parole": "Solano County",
-      "last_name": "Quinn",
-      "how_did_you_hear": "from work",
-      "address": {
-        "zip": "90907",
-        "city": "Roachbury",
-        "street": "0843 West Ville",
-        "state": "KY"
-      }
+      "additional_information": "I want help"
     },
-    "old_uuid": "0f5b46017fbd4d28b4aa2ee1f0e6f1dd",
-    "anonymous_name": "Chartreuse Redwood",
-    "date_received": "2017-01-15T03:11:10-08:00"
+    "old_uuid": "c1939222acbe484ba84288f37d2c0278",
+    "anonymous_name": "Brilliant Cuttlefish",
+    "date_received": "2017-01-22T09:53:09-08:00"
   }
 },
 {
@@ -131,10 +132,10 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 120,
+  "pk": 121,
   "fields": {
-    "created": "2017-01-25T20:13:34.343Z",
-    "updated": "2017-01-25T20:13:34.347Z",
+    "created": "2017-01-26T18:31:10.339Z",
+    "updated": "2017-01-26T18:31:10.346Z",
     "status_type": 6,
     "additional_information": "just a little note",
     "author": [
@@ -148,10 +149,10 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 121,
+  "pk": 122,
   "fields": {
-    "created": "2017-01-25T20:13:34.360Z",
-    "updated": "2017-01-25T20:13:34.365Z",
+    "created": "2017-01-26T18:31:10.359Z",
+    "updated": "2017-01-26T18:31:10.366Z",
     "status_type": 7,
     "additional_information": "just a little note",
     "author": [
@@ -161,6 +162,32 @@
     "next_steps": [
       1
     ]
+  }
+},
+{
+  "model": "intake.statusnotification",
+  "pk": 15,
+  "fields": {
+    "status_update": 121,
+    "contact_info": {
+      "email": "bgolder+borg@codeforamerica.org"
+    },
+    "base_message": "Resistance is futile",
+    "sent_message": "Live long and prosper",
+    "created": "2017-01-26T18:31:11.240Z"
+  }
+},
+{
+  "model": "intake.statusnotification",
+  "pk": 16,
+  "fields": {
+    "status_update": 122,
+    "contact_info": {
+      "email": "bgolder+borg@codeforamerica.org"
+    },
+    "base_message": "Resistance is futile",
+    "sent_message": "Live long and prosper",
+    "created": "2017-01-26T18:31:11.249Z"
   }
 }
 ]

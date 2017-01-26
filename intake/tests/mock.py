@@ -5,7 +5,8 @@ import factory
 import datetime as dt
 from pytz import timezone
 from faker import Factory as FakerFactory
-from intake.tests.factories import StatusUpdateFactory
+from intake.tests.factories import (
+    StatusUpdateFactory, StatusNotificationFactory)
 from django.core.files import File
 from django.core import serializers
 from django.core.management import call_command
@@ -450,11 +451,15 @@ def serialize_subs(subs, filepath):
         for sub in subs]
     applications = []
     status_updates = []
+    status_notifications = []
     for application_set in application_sets:
         applications.extend(application_set)
     for application in applications:
         status_updates.extend(application.status_updates.all())
+    status_notifications = [StatusNotificationFactory.create(
+        status_update=status_update) for status_update in status_updates]
     with open(filepath, 'w') as f:
-        data = [*applicants, *subs, *applications, *status_updates]
+        data = [*applicants, *subs, *applications,
+                *status_updates, *status_notifications]
         f.write(serializers.serialize(
             'json', data, indent=2, use_natural_foreign_keys=True))
