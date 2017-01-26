@@ -22,7 +22,7 @@
     {% if status_update.notification %}
         {# Need to determine send method in order to show "text sent to" or "email sent to" 
         Also need to account for multi #}
-        Sent to {{status_update.notification.contact_info["email"]}}:
+        Sent to {{contact_info_to_html(status_update.notification.contact_info)}}:
         <br/>
         {{status_update.notification.sent_message}}
     {% endif %}
