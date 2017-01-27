@@ -1,4 +1,4 @@
-from .status_update_form import StatusUpdateForm, StatusNotificationForm
+from .status_update_forms import StatusUpdateForm, StatusNotificationForm
 
 __all__ = [
     StatusUpdateForm,

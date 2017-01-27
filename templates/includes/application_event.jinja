@@ -9,13 +9,17 @@
     
     <br/>
     Next steps:
-    {% if status_update.next_steps %}
+    {% if status_update.next_steps or status_update.other_next_step %}
       <ul>
           {% for step in status_update.next_steps.all() %}
             <li>{{ step.display_name }}</li>
           {% endfor %}
+          {% if status_update.other_next_step %}
+          <li>{{ status_update.other_next_step }}</li>
+          {% endif %}
       </ul>
     {% endif %}
+
     <br/>
 
     {# TODO: create more notification objects #}
