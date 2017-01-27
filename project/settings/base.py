@@ -78,6 +78,7 @@ TEMPLATES = [
                 "namify": "project.jinja2.namify",
                 "url_with_ids": "project.jinja2.url_with_ids",
                 "oxford_comma": "project.jinja2.oxford_comma",
+                "contact_info_to_html": "project.jinja2.contact_info_to_html",
                 "to_json": "project.jinja2.to_json",
                 "humanize": "project.jinja2.humanize",
                 "settings": "django.conf.settings",
