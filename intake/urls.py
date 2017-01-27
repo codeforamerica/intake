@@ -18,6 +18,8 @@ urlpatterns = [
     url(r'^partners/$', public_views.partner_list, name='intake-partner_list'),
     url(r'^partners/(?P<organization_slug>[\w-]+)/$',
         public_views.partner_detail, name='intake-partner_detail'),
+    url(r'^recommendation-letters/$', public_views.recommendation_letters,
+        name='intake-recommendation_letters'),
 
     # public form processing views
     url(r'^apply/$',

@@ -5,7 +5,7 @@
 {{ _("Submit Recommendation Letters") }}
 {%- endblock header_title -%}
 
-
+{% block column_content %}
 <section class="rap_intro">
   <div class="row">
     <div class="col-xs-12">
@@ -193,11 +193,6 @@
     </div>
   </div>
 </section>
-
-<!-- end of section about out of ca rap sheets -->
-{% endif %}
-
-
 
   {%- include "includes/cmr_contact_info.jinja" %}
   {%- include "includes/back_to_home_button.jinja" %}
