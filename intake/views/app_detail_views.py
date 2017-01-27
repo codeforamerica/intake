@@ -47,18 +47,20 @@ class ApplicationDetail(ViewAppDetailsMixin, TemplateView):
         self.mark_viewed(self.request, submission)
         display_form, letter_display = submission.get_display_form_for_user(
             self.request.user)
-        application = models.Application.objects.filter(
-            form_submission=submission,
-            organization=self.request.user.profile.organization).first()
-        if application.status_updates.exists():
-            latest_status = application.status_updates.latest('updated')
-        else:
-            latest_status = None
+        applications = models.Application.objects.filter(
+            form_submission=submission)
+        if not self.request.user.is_staff:
+            applications = applications.filter(
+                organization=self.request.user.profile.organization)
+        for application in applications:
+            if application.status_updates.exists():
+                application.latest_status = \
+                    application.status_updates.latest('updated')
         context.update(
             form=display_form,
             submission=submission,
             declaration_form=letter_display,
-            latest_status=latest_status)
+            applications=applications)
         return context
 
 
@@ -69,17 +71,12 @@ class ApplicationHistoryView(ApplicationDetail):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        org = self.request.user.profile.organization
-        sub = context['submission']
-        application = models.Application.objects.filter(
-            organization=org, form_submission=sub).first()
+        apps = context['applications']
         status_updates = models.StatusUpdate.objects.filter(
-            application=application).prefetch_related('notification')
+            application__in=apps
+        ).prefetch_related('notification').order_by('-updated')
         context.update(
-            org=org,
-            application=application,
-            status_updates=status_updates
-            )
+            status_updates=status_updates)
         return context
 
 

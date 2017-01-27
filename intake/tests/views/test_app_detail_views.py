@@ -126,7 +126,7 @@ class TestApplicationHistory(AppDetailAccessBaseTests):
         return self.client.get(url)
 
     @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_anonymous_user_is_redirected_to_login(self, slack):
+    def test_anonymous_user_is_redirected_to_login_history(self, slack):
         self.be_anonymous()
         submission = self.a_pubdef_submissions[0]
         response = self.get_page(submission)
@@ -135,21 +135,21 @@ class TestApplicationHistory(AppDetailAccessBaseTests):
         slack.assert_not_called()
 
     @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_logged_in_user_can_get_submission_display(self, slack):
+    def test_logged_in_user_can_get_submission_display_history(self, slack):
         self.be_apubdef_user()
         submission = self.a_pubdef_submissions[0]
         response = self.get_page(submission)
         self.assertEqual(response.context_data['submission'], submission)
 
     @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_staff_user_can_get_submission_display(self, slack):
+    def test_staff_user_can_get_submission_display_history(self, slack):
         self.be_cfa_user()
         submission = self.a_pubdef_submissions[0]
         result = self.get_page(submission)
         self.assertEqual(result.context_data['submission'], submission)
 
     @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_user_cant_see_app_detail_for_other_county(self, slack):
+    def test_user_cant_see_app_history_for_other_county(self, slack):
         self.be_ccpubdef_user()
         submission = self.sf_pubdef_submissions[0]
         response = self.get_page(submission)
@@ -157,7 +157,7 @@ class TestApplicationHistory(AppDetailAccessBaseTests):
         slack.assert_not_called()
 
     @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_user_can_see_app_detail_for_multi_county(self, slack):
+    def test_user_can_see_app_history_for_multi_county(self, slack):
         self.be_apubdef_user()
         submission = self.combo_submissions[0]
         response = self.get_page(submission)
