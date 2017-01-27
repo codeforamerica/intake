@@ -23,3 +23,16 @@ class StatusUpdateForm(forms.ModelForm):
         fields = [
             'author', 'application', 'status_type',
             'additional_information', 'next_steps', 'other_next_step']
+
+
+class StatusNotificationForm(forms.ModelForm):
+    status_update = forms.ModelChoiceField(
+        widget=forms.HiddenInput,
+        queryset=models.StatusUpdate.objects.all())
+    sent_message = forms.CharField(
+        widget=forms.Textarea())
+
+    class Meta:
+        model = models.StatusNotification
+        fields = [
+            'status_update', 'sent_message']
