@@ -170,3 +170,14 @@ class TestApplicationHistory(AppDetailAccessBaseTests):
         response = self.get_page(submission)
         self.assertContains(
             response, html_utils.conditional_escape('Application History'))
+
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_user_can_only_see_own_status_updates_in_history(self, slack):
+        user = self.be_apubdef_user()
+        submission = self.combo_submissions[0]
+        response = self.get_page(submission)
+        status_updates = response.context_data['status_updates']
+        for status_update in status_updates:
+            self.assertEqual(
+                status_update.application.organization,
+                user.profile.organization)
