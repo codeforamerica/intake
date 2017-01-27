@@ -20,6 +20,7 @@ class TemplateOption(models.Model):
 
     help_text = models.TextField(blank=True)
     slug = models.SlugField(unique=True)
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         abstract = True
