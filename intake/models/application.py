@@ -12,3 +12,8 @@ class Application(models.Model):
         on_delete=models.PROTECT,
         related_name='applications'
     )
+
+    def __str__(self):
+        sub = str(self.form_submission.id)
+        org = self.organization.name
+        return sub+org
