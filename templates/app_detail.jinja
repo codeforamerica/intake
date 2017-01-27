@@ -34,13 +34,17 @@
               <br/>
               {{application.latest_status.additional_information}}
               <br/>
-              {% if application.latest_status.next_steps %}
+              {% if application.latest_status.next_steps or application.latest_status.other_next_step %}
                 Applicant's Next Steps:
                 <br/>
                 <ul>
                   {% for step in application.latest_status.next_steps.all() %}
                     <li>{{ step.display_name }}</li>
                   {% endfor %}
+
+                  {% if application.latest_status.other_next_step %}
+                    <li>{{ application.latest_status.other_next_step }}</li>
+                  {% endif %}
                 </ul>
                 <br/>
               {% endif %}
