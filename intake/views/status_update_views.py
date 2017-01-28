@@ -95,10 +95,13 @@ class ReviewStatusNotificationFormView(StatusUpdateBase, FormView):
         context = super().get_context_data(*args, **kwargs)
         contact_info_display = NotificationContactInfoDisplayForm(
             self.submission.answers)
+        intro_message = StatusNotificationService.get_notification_intro(
+            self.request.user.profile)
         context.update(
             submission=self.submission,
             contact_info_display=contact_info_display,
-            status_update=self.existing_status_update_data)
+            status_update=self.existing_status_update_data,
+            intro_message=intro_message)
         return context
 
     def form_valid(self, form):

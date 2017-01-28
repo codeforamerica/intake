@@ -2,9 +2,9 @@
 {% import 'macros.jinja' as macros %}
 
 {%- block header_title -%}
-Update Application Status
+Update Application Status for {{ submission.get_full_name() }}
 {%- endblock header_title -%}
-for {{ submission.get_full_name() }}
+
 {% block form %}
 <form id="invite-form" method="POST" action="{{ url('intake-create_status_update', submission_id=submission.id ) }}">
   {% include "includes/csrf_field.jinja" %}

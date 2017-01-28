@@ -2,9 +2,8 @@
 {% import 'macros.jinja' as macros %}
 
 {%- block header_title -%}
-Application Status - Review
+Application Status - Review for {{ submission.get_full_name() }}
 {%- endblock header_title -%}
-for {{ submission.get_full_name() }}
 
 {#
   Within the scope of this form, status_update is an unsaved

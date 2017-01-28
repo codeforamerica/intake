@@ -76,14 +76,6 @@ class TemplateNotification:
         self._content_base = namedtuple('RenderedContent',
                                         self.templates.keys())
 
-    # def get_context_variables(self):
-    #     return {
-    #         key: jinja.env.parse(
-    #             jinja.env.loader.get_source(
-    #                 jinja.env, path)[0])
-    #     }
-    #     for key in self.templates.keys():
-
     def render(self, **context_args):
         if not self.templates:
             self.init_templates()
@@ -128,7 +120,7 @@ class SimpleFrontNotification:
 
     def __init__(self, channel_id=None):
         if channel_id:
-            self.channel_id = self.channel_id
+            self.channel_id = channel_id
 
     def build_headers(self):
         return {
