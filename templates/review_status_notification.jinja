@@ -1,0 +1,56 @@
+{% extends "admin_form_base.jinja" %}
+{% import 'macros.jinja' as macros %}
+
+{%- block header_title -%}
+Application Status - Review
+{%- endblock header_title -%}
+for {{ submission.get_full_name() }}
+
+{#
+  Within the scope of this form, status_update is an unsaved
+  StatusUpdate instance.
+#}
+
+{% block form %}
+<form id="invite-form" method="POST" action="{{ url('intake-review_status_notification', submission_id=submission.id ) }}">
+  {% include "includes/csrf_field.jinja" %}
+  <ul>
+    <li>
+      <em>Status:</em>
+      {{ status_update.status_type.display_name }}
+    </li>
+    <li>
+      <em>Additional info:</em>
+      {% if status_update.additional_information %}
+      {{ status_update.additional_information }}
+      {% else %}
+      —
+      {% endif %}
+    </li>
+    <li>
+      <em>Next steps:</em>
+      <ul>
+        {% for step in status_update.next_steps.all() %}
+          <li>{{ step.display_name }}</li>
+        {% endfor %}
+        {% if status_update.other_next_step %}
+          <li>{{ status_update.other_next_step }}</li>
+        {% endif %}
+      </ul>
+    </li>
+    <li>
+      <em>Update will be sent via:</em>
+      {{ contact_info_display.contact_preferences.get_display_value() }}
+    </li>
+  </ul>
+
+  {{ macros.render_form_fields(form) }}
+
+  <p>
+    <a 
+      class="btn btn-lg btn-default"
+      href="{{ url('intake-create_status_update', submission_id=submission.id) }}">Back</a>
+    <input type="submit" value="Send" class="btn btn-lg btn-primary">  
+  </p>
+</form> 
+{% endblock form %}

@@ -70,6 +70,14 @@ def fill_pdfs_for_submission(submission):
         fillable.fill_for_submission(submission)
 
 
+def get_usable_contact_info(submission):
+    return {
+        key: value
+        for key, value in submission.get_contact_info().items()
+        if key in [SMS, EMAIL]
+    }
+
+
 def get_paginated_submissions_for_user(
         user, page_index, max_count_per_page=25, min_count_per_page=5):
     qset = get_permitted_submissions(user, related_objects=True)

@@ -1,6 +1,8 @@
 from django import forms
 from intake import models
 from django.contrib.auth.models import User
+from formation.display_form_base import DisplayForm
+from formation.fields import ContactPreferences
 
 
 class StatusUpdateForm(forms.ModelForm):
@@ -27,13 +29,15 @@ class StatusUpdateForm(forms.ModelForm):
 
 
 class StatusNotificationForm(forms.ModelForm):
-    status_update = forms.ModelChoiceField(
-        widget=forms.HiddenInput,
-        queryset=models.StatusUpdate.objects.all())
     sent_message = forms.CharField(
         widget=forms.Textarea())
 
     class Meta:
         model = models.StatusNotification
-        fields = [
-            'status_update', 'sent_message']
+        fields = ['sent_message']
+
+
+class NotificationContactInfoDisplayForm(DisplayForm):
+    fields = [
+        ContactPreferences
+    ]

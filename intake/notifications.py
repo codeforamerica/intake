@@ -1,6 +1,7 @@
 from collections import namedtuple
 import json
 import requests
+from intake.constants import SMS, EMAIL
 from django.core import mail
 from django.conf import settings
 from django.utils.translation import ugettext as _
@@ -123,15 +124,10 @@ class EmailNotification(TemplateNotification):
         )
 
 
-class FrontNotification(TemplateNotification):
+class SimpleFrontNotification:
 
-    def __init__(self, default_context=None, subject_template='',
-                 body_template_path=''):
-        super().__init__(
-            default_context=default_context,
-            subject_template=subject_template,
-            body_template_path=body_template_path
-        )
+    def __init__(self, channel=None):
+        self.channel = channel or self.channel
 
     def build_headers(self):
         return {
@@ -154,30 +150,47 @@ REQUEST JSON:
 {payload}
 """.format(details=str(response.json()), payload=payload))
 
-    def send(self, to, **context_args):
-        content = self.render(**context_args)
+    def send(self, to, body, subject=None):
         if isinstance(to, str):
             to = [to]
-        data = {
-            'body': content.body.replace('\n', '<br>'),
-            'text': content.body,
-            'to': to,
-            'options': {
-                'archive': True
+            data = {
+                'body': body.replace('\n', '<br>'),
+                'text': body,
+                'to': to,
+                'options': {
+                    'archive': True
+                }
             }
-        }
+            if subject:
+                data.update(subject=subject)
+            payload = json.dumps(data)
+            if check_that_remote_connections_are_okay(
+                    'FRONT POST:', payload):
+                result = requests.post(
+                    url=self.build_api_url_endpoint(),
+                    data=payload,
+                    headers=self.build_headers()
+                )
+                self.raise_post_errors(result, payload)
+                return result
+
+
+class FrontNotification(TemplateNotification, SimpleFrontNotification):
+
+    def __init__(self, default_context=None, subject_template='',
+                 body_template_path=''):
+        super().__init__(
+            default_context=default_context,
+            subject_template=subject_template,
+            body_template_path=body_template_path
+        )
+
+    def send(self, to, **context_args):
+        content = self.render(**context_args)
+        kwargs = dict(body=content.body)
         if hasattr(content, 'subject') and content.subject:
-            data['subject'] = content.subject
-        payload = json.dumps(data)
-        if check_that_remote_connections_are_okay(
-                'FRONT POST:', payload):
-            result = requests.post(
-                url=self.build_api_url_endpoint(),
-                data=payload,
-                headers=self.build_headers()
-            )
-            self.raise_post_errors(result, payload)
-            return result
+            kwargs['subject'] = content.subject
+        return super().send(to, **kwargs)
 
 
 class FrontEmailNotification(FrontNotification):
@@ -186,6 +199,24 @@ class FrontEmailNotification(FrontNotification):
 
 class FrontSMSNotification(FrontNotification):
     channel_id = getattr(settings, 'FRONT_PHONE_CHANNEL_ID', None)
+
+
+front_sms = SimpleFrontNotification(
+    channel=getattr(settings, 'FRONT_PHONE_CHANNEL_ID', None))
+
+front_email = SimpleFrontNotification(
+    channel=getattr(settings, 'FRONT_EMAIL_CHANNEL_ID', None))
+
+
+def send_simple_front_notification(contact_info, message, subject=None):
+    results = []
+    if SMS in contact_info:
+        results.append(
+            front_sms.send(contact_info[SMS], message))
+    if EMAIL in contact_info:
+        results.append(
+            front_email.send(contact_info[EMAIL], message, subject=subject))
+    return results
 
 
 class BasicSlackNotification:
@@ -282,6 +313,7 @@ email_followup = FrontEmailNotification(
     body_template_path='email/followup.jinja')
 sms_followup = FrontSMSNotification(
     body_template_path='text/followup.jinja')
+
 
 # submission, method
 slack_notification_sent = SlackTemplateNotification(
