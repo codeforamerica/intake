@@ -126,8 +126,9 @@ class EmailNotification(TemplateNotification):
 
 class SimpleFrontNotification:
 
-    def __init__(self, channel=None):
-        self.channel = channel or self.channel
+    def __init__(self, channel_id=None):
+        if channel_id:
+            self.channel_id = self.channel_id
 
     def build_headers(self):
         return {
@@ -202,10 +203,10 @@ class FrontSMSNotification(FrontNotification):
 
 
 front_sms = SimpleFrontNotification(
-    channel=getattr(settings, 'FRONT_PHONE_CHANNEL_ID', None))
+    channel_id=getattr(settings, 'FRONT_PHONE_CHANNEL_ID', None))
 
 front_email = SimpleFrontNotification(
-    channel=getattr(settings, 'FRONT_EMAIL_CHANNEL_ID', None))
+    channel_id=getattr(settings, 'FRONT_EMAIL_CHANNEL_ID', None))
 
 
 def send_simple_front_notification(contact_info, message, subject=None):
