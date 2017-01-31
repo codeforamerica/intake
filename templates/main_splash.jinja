@@ -58,7 +58,7 @@
 {% block content %}
 
 <section class="about_the_service">
-  
+
 
   <div class="container">
 
@@ -144,19 +144,32 @@
             {{ _("Here is a list of our county partners:") }}
           </p>
           <ul class="partner_list">
-            {%- for county in counties %}
-            <li class="partner_list-county_partners_item">
-              <span class="partner_list-county">{{ county.name }} County</span>
-              -
-              <span class="partner_list-partners">{{
-                linkify(
-                  oxford_comma(
-                    county.organizations.order_by('name').values_list(
-                      'name', flat=True
-                    )))
-              }}</span>
+            <li>{{ _("Alameda County") }}
+              <ul>
+                <li>{{ _("Alameda County Public Defender's Office") }}</li>
+                <li>{{ _("East Bay Community Law Center") }}</li>
+              </ul>
             </li>
-            {%- endfor %}
+            <li>{{ _("Contra Costa County") }}
+              <ul>
+                <li>{{ _("Contra Costa County Public Defender's Office") }}</li>
+              </ul>
+            </li>
+            <li>{{ _("Fresno County") }}
+              <ul>
+                <li>{{ _("Fresno County Public Defender's Office") }}</li>
+              </ul>
+            </li>
+            <li>{{ _("San Francisco County") }}
+              <ul>
+                <li>{{ _("San Francisco County Public Defender's Office") }}</li>
+              </ul>
+            </li>
+            <li>{{ _("Santa Clara County") }}
+              <ul>
+                <li>{{ _("Santa Clara County Public Defender's Office") }}</li>
+              </ul>
+            </li>
           </ul>
         </div>
 
@@ -234,4 +247,3 @@
 
 
 {% endblock content %}
-
