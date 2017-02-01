@@ -58,7 +58,7 @@
 {% block content %}
 
 <section class="about_the_service">
-  
+
 
   <div class="container">
 
@@ -139,32 +139,55 @@
           <p class="gov_service_description_2)">
             {{ content.gov_service_description_2 }}
           </p>
-
-          <p class="partners">
-            {{ _("Here is a list of our county partners:") }}
-          </p>
-          <ul class="partner_list">
-            {%- for county in counties %}
-            <li class="partner_list-county_partners_item">
-              <span class="partner_list-county">{{ county.name }} County</span>
-              -
-              <span class="partner_list-partners">{{
-                linkify(
-                  oxford_comma(
-                    county.organizations.order_by('name').values_list(
-                      'name', flat=True
-                    )))
-              }}</span>
-            </li>
-            {%- endfor %}
-          </ul>
         </div>
 
-        <div class="contact_info">
-          <h2>{{ content.contact_headline }}</h2>
-          <ul>
-            <li>Email: {{ linkify(content.contact_email) }}</li>
-            <li>Phone: {{ linkify(content.contact_phone) }}</li>
+        <div class="our_partners">
+
+          <h2 class="partners">
+            {{ _("Our County Partners") }}
+          </p>
+          <ul class="partner_list">
+            <li class="partner_list_county">{{ _("Alameda County") }}
+              <ul class="county_contacts">
+                <li><a href="/partners/a_pubdef/">{{ _("Alameda County Public Defender") }}</a></li>
+                <li><a href="/partners/ebclc/">{{ _("East Bay Community Law Center") }}</a></li>
+              </ul>
+            </li>
+            <li class="partner_list_county">{{ _("Contra Costa County") }}
+              <ul class="county_contacts">
+                <li><a href="/partners/cc_pubdef/">{{ _("Contra Costa County Public Defender") }}</a></li>
+              </ul>
+            </li>
+            <li class="partner_list_county">{{ _("Fresno County") }}
+              <ul class="county_contacts">
+                <li><a href="/partners/fresno_pubdef/">{{ _("Fresno County Public Defender") }}</a></li>
+              </ul>
+            </li>
+            <li class="partner_list_county">{{ _("San Diego County") }}
+              <ul class="county_contacts">
+                <li><a href="/partners/san_diego_pubdef/">{{ _("San Diego County Public Defender") }}</a></li>
+              </ul>
+            </li>
+            <li class="partner_list_county">{{ _("San Francisco County") }}
+              <ul class="county_contacts">
+                <li><a href="/partners/sf_pubdef/">{{ _("San Francisco County Public Defender") }}</a></li>
+              </ul>
+            </li>
+            <li class="partner_list_county">{{ _("San Joaquin County") }}
+              <ul class="county_contacts">
+                <li><a href="/partners/san_joaquin_pubdef/">{{ _("San Joaquin County Public Defender") }}</a></li>
+              </ul>
+            </li>
+            <li class="partner_list_county">{{ _("Santa Clara County") }}
+              <ul class="county_contacts">
+                <li><a href="/partners/santa_clara_pubdef/">{{ _("Santa Clara County Public Defender") }}</a></li>
+              </ul>
+            </li>
+            <li class="partner_list_county">{{ _("Solano County") }}
+              <ul class="county_contacts">
+                <li><a href="/partners/solano_pubdef/">{{ _("Solano County Public Defender") }}</a></li>
+              </ul>
+            </li>
           </ul>
         </div>
       </div>
@@ -213,6 +236,13 @@
           </div>
 
         </div>
+        <div class="contact_info">
+          <h2>{{ content.contact_headline }}</h2>
+          <ul>
+            <li>Email: {{ linkify(content.contact_email) }}</li>
+            <li>Phone: {{ linkify(content.contact_phone) }}</li>
+          </ul>
+        </div>
       </div>
     </div>
 
@@ -234,4 +264,3 @@
 
 
 {% endblock content %}
-
