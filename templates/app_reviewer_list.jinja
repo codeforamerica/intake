@@ -3,13 +3,13 @@
   <th>Date</th>
   <th>Last Name</th>
   <th>First Name</th>
-  <th>Case Details PDF</th>
   {%- if show_pdf %}
   <th>Intake PDF</th>
   {%- endif %}
   <th>Status</th>
   <th>Latest Status Update</th>
-  <th>Added to DB</th>
+  <th>Actions</th>
+  <th></th>
 </tr>
 {% for app in submissions %}
 <tr>
@@ -21,16 +21,7 @@
   </td>
   <td>{# Last Name #} {{ namify(app.answers.get("last_name", "")) }}</td>
   <td>{# First Name #} {{ namify(app.answers.get("first_name", "")) }}</td>
-  <td>
-    {# Case Details PDF #}
-    <a
-      href="{{ app.get_case_printout_url() }}"
-      target="_blank"
-      class="btn btn-default btn-sm">
-      <span class="glyphicon glyphicon-print"></span>
-      Details
-    </a>
-  </td>
+  
   {%- if show_pdf %}
   <td>
     {# Intake PDF #}
@@ -61,18 +52,20 @@
     {% endif %}
   </td>
   <td>
-  {% if app.last_processed_by_agency() %}
-    <span class="glyphicon glyphicon-ok-sign"></span>
-    Added {{ humanize.naturaltime(app.last_processed_by_agency()) }}
-  {%- else -%}
-    <a class="btn btn-default btn-sm" href="{{
-      url_with_ids('intake-mark_processed',
-      ids=[app.id]) + '&next=' + url('intake-app_index')
-         }}">
-    <span class="glyphicon glyphicon-plus"></span>
-    Mark as added
+  {# Actions - Update Status #}
+  <a href="{{ url('intake-create_status_update', submission_id=app.id) }}">
+  <span class="glyphicon glyphicon-pencil"></span>
+  Update Status</a>
+  </td>
+  <td>
+    {# Actions - Print #}
+    <a
+      href="{{ app.get_case_printout_url() }}"
+      target="_blank">
+      {# class="btn btn-default btn-sm"> #}
+      <span class="glyphicon glyphicon-print"></span>
+      Print
     </a>
-  {% endif %}
   </td>
 </tr>
 {% endfor %}
