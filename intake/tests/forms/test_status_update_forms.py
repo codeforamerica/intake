@@ -13,6 +13,6 @@ class TestStatusUpdateForm(TestCase):
 
 class TestStatusNotificationForm(TestCase):
     def test_has_expected_fields(self):
-        keys = ['status_update', 'sent_message']
+        keys = ['sent_message']
         form = StatusNotificationForm()
         self.assertEquals(keys, list(form.fields.keys()))
