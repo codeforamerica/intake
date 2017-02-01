@@ -52,7 +52,7 @@ class constants:
 
     time_expectation = "It could take up to one year to clear your record. Start today."
 
-    returning_user_question = "Already applied to Clean Slate?"
+    returning_user_question = "Already applied to Clear My Record?"
     returning_user_headline = "Get in touch with the San Francisco public defender"
     returning_user_help_paragraph = str("Have questions about your pending application? "
                                         "Call the San Francisco Public Defender’s office to get the information you need. "

@@ -29,7 +29,7 @@ dollar_answer_pairs = {
     'Social Security': None,
     'Stay at home mom (trying to work for the school district)': None,
     'Not sure': None,
-    'Is there a fee that I can pay Clean Slate for this service?': None,
+    'Is there a fee that I can pay Clear My Record for this service?': None,
     'Detained as Arriving Alien': None,
     '(grad school loans)': None,
     'boyfriends income': None,
