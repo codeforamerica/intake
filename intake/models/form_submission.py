@@ -202,6 +202,10 @@ class FormSubmission(models.Model):
         return reverse(
             'intake-case_printout', kwargs=dict(submission_id=self.id))
 
+    def get_case_update_status_url(self):
+        return reverse(
+            'intake-create_status_update', kwargs=dict(submission_id=self.id))
+
     def qualifies_for_fee_waiver(self):
         on_benefits = OnPublicBenefits(self.answers)
         if on_benefits.is_valid():
