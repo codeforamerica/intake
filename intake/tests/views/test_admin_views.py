@@ -147,6 +147,14 @@ class TestApplicationIndex(IntakeDataTestCase):
                 sub.get_case_printout_url())
             self.assertContains(response, printout_url)
 
+    def test_user_can_see_update_status_links(self):
+        self.be_apubdef_user()
+        response = self.client.get(reverse('intake-app_index'))
+        for sub in self.a_pubdef_submissions:
+            update_status_url = html_utils.conditional_escape(
+                sub.get_case_update_status_url())
+            self.assertContains(response, update_status_url)
+
     def test_that_nonstaff_cfa_user_cant_see_apps(self):
         self.be_monitor_user()
         response = self.client.get(reverse('intake-app_index'))

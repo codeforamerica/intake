@@ -23,27 +23,35 @@
       {%- block app_detail_contents -%}
         {% for application in applications%}
           {% if application.latest_status %}
-            <div>
-              Current Status:
-              <br/>
-              {{application.latest_status.status_type.display_name}}
-              (logged by
-              {{application.latest_status.author.profile.name}})
-              <br/>
-              Additional Info:
-              <br/>
-              {{application.latest_status.additional_information}}
-              <br/>
-              {% if application.latest_status.next_steps %}
-                Applicant's Next Steps:
+            <div class="application-detail-latest-status">
+              <div class="col-xs-4 col-md-4">
+                <span class="data_display-label">Current Status:</span>
                 <br/>
-                <ul>
-                  {% for step in application.latest_status.next_steps.all() %}
-                    <li>{{ step.display_name }}</li>
-                  {% endfor %}
-                </ul>
+                {{application.latest_status.status_type.display_name}}
+                (logged by
+                {{application.latest_status.author.profile.name}})
+              </div>
+              <div class="col-xs-4 col-md-4">
+                <span class="data_display-label">Additional Info:</span>
                 <br/>
-              {% endif %}
+                {{application.latest_status.additional_information}}
+              </div>
+              <div class="col-xs-4 col-md-4">
+                {% if application.latest_status.next_steps or application.latest_status.other_next_step %}
+                  <span class="data_display-label">Applicant's Next Steps:</span>
+                  <br/>
+                  <ul class="event-next-steps">
+                    {% for step in application.latest_status.next_steps.all() %}
+                      <li>{{ step.display_name }}</li>
+                    {% endfor %}
+
+                    {% if application.latest_status.other_next_step %}
+                      <li>{{ application.latest_status.other_next_step }}</li>
+                    {% endif %}
+                  </ul>
+                  <br/>
+                {% endif %}
+              </div>
             </div>
           {% endif %}
         {% endfor %}
