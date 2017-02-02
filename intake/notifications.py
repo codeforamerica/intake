@@ -146,26 +146,26 @@ REQUEST JSON:
     def send(self, to, body, subject=None):
         if isinstance(to, str):
             to = [to]
-            data = {
-                'body': body.replace('\n', '<br>'),
-                'text': body,
-                'to': to,
-                'options': {
-                    'archive': True
-                }
+        data = {
+            'body': body.replace('\n', '<br>'),
+            'text': body,
+            'to': to,
+            'options': {
+                'archive': True
             }
-            if subject:
-                data.update(subject=subject)
-            payload = json.dumps(data)
-            if check_that_remote_connections_are_okay(
-                    'FRONT POST:', payload):
-                result = requests.post(
-                    url=self.build_api_url_endpoint(),
-                    data=payload,
-                    headers=self.build_headers()
-                )
-                self.raise_post_errors(result, payload)
-                return result
+        }
+        if subject:
+            data.update(subject=subject)
+        payload = json.dumps(data)
+        if check_that_remote_connections_are_okay(
+                'FRONT POST:', payload):
+            result = requests.post(
+                url=self.build_api_url_endpoint(),
+                data=payload,
+                headers=self.build_headers()
+            )
+            self.raise_post_errors(result, payload)
+            return result
 
 
 class FrontNotification(TemplateNotification, SimpleFrontNotification):
