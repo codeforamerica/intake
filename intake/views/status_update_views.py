@@ -47,9 +47,10 @@ class CreateStatusUpdateFormView(StatusUpdateBase, FormView):
 
     def get_initial(self):
         initial = super().get_initial()
+        initial.update(**self.existing_status_update_data)
         initial.update(
             application=self.application,
-            author=self.request.user
+            author=self.request.user,
             )
         return initial
 

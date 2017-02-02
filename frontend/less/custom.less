@@ -471,6 +471,65 @@ li.rap_detail{
   font-weight: 500;
 }
 
+/***Status Updates (App Detail)***/
+.app_detail-data_display .application-detail-latest-status{
+  background-color: @brand-primary-background-light;
+  overflow: auto;
+  padding: 1em;
+
+  ul.event-next-steps{
+    padding-left: 0;
+    font-size: 16px;
+  }
+}
+
+/***Status Notifications (App History)***/
+li.application-event-block{
+  border: 1px solid @gray-lighter;
+  border-radius: 4px;
+  margin-bottom: 3em;
+
+  .application-event-header{
+    background-color: @splash-background-medium;
+    color: white;
+    border-radius: 4px;
+    padding:12px;
+    font-size: 12px;
+
+    .application-event-title{
+      font-size: 18px;
+    }
+  }
+
+  .application-event-body{
+    padding: 1em;
+    font-size: 16px;
+
+    .section-label{
+      color: @gray-light;
+      .contact-info {
+        color: @brand-note;
+      }
+    }
+
+    ul.event-next-steps{
+      padding-left: 0;
+      font-size: 16px;
+    }
+    .status-update-details{
+      clear:both;
+      margin-bottom: 1em;
+      min-height: 60px;
+    }
+    .status-notification-message{
+      background-color: @gray-lighter;
+      border-radius: 4px;
+      padding: 8px;
+      margin-top: 0.5em;
+    }
+  }
+
+}
 
 
 /***Media Queries***/
