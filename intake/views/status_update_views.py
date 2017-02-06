@@ -79,11 +79,6 @@ class ReviewStatusNotificationFormView(StatusUpdateBase, FormView):
     def set_success_url(self):
         self.success_url = reverse('intake-app_index')
 
-    # def dispatch(self, *args, **kwargs):
-    #     response = super().dispatch(*args, **kwargs)
-    #     import ipdb; ipdb.set_trace()
-    #     return response
-
     def get_initial(self):
         initial = super().get_initial()
         base_message = \
@@ -110,6 +105,7 @@ class ReviewStatusNotificationFormView(StatusUpdateBase, FormView):
             self.request,
             form.cleaned_data,
             self.existing_status_update_data)
+        # possibly clear the session at this point
         return super().form_valid(form)
 
 
