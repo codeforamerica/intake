@@ -94,6 +94,11 @@ urlpatterns = [
         login_required(status_update_views.review_status_notification),
         name='intake-review_status_notification'),
 
+    url(
+        r'^applicant-autocomplete/$',
+        admin_views.applicant_autocomplete,
+        name='applicant-autocomplete',),
+
     # API Views
     url(r'^notes/create/$',
         login_required(application_note_views.create_note),

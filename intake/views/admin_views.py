@@ -7,6 +7,8 @@ from django.contrib import messages
 from django.http import Http404, HttpResponse
 from django.template.response import TemplateResponse
 
+from dal import autocomplete
+
 
 from intake import models, notifications
 from user_accounts.models import Organization
@@ -388,6 +390,16 @@ class CaseBundlePrintoutPDFView(ViewAppDetailsMixin, View):
         return response
 
 
+class ApplicantAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = models.FormSubmission.objects.all()
+
+        if self.q:
+            qs = qs.filter(anonymous_name__istartswith=self.q)
+
+        return qs
+
+
 filled_pdf = FilledPDF.as_view()
 pdf_bundle = FilledPDFBundle.as_view()
 app_index = ApplicationIndex.as_view()
@@ -398,3 +410,4 @@ app_bundle_detail = ApplicationBundleDetail.as_view()
 app_bundle_detail_pdf = ApplicationBundleDetailPDFView.as_view()
 case_printout = CasePrintoutPDFView.as_view()
 case_bundle_printout = CaseBundlePrintoutPDFView.as_view()
+applicant_autocomplete = ApplicantAutocomplete.as_view()
