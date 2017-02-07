@@ -10,6 +10,9 @@ class TestStatusUpdateForm(TestCase):
         form = StatusUpdateForm()
         self.assertEquals(keys, list(form.fields.keys()))
 
+    def test_non_live_next_steps_arent_shown(self):
+        raise NotImplementedError
+
 
 class TestStatusNotificationForm(TestCase):
     def test_has_expected_fields(self):

@@ -12,9 +12,44 @@ class StatusUpdateViewBaseTestCase(IntakeDataTestCase):
         ]
 
 
+class TestStatusUpdateWorkflow(StatusUpdateViewBaseTestCase):
+    # test case for multi-page workflow integration tests
+
+    def test_return_from_review_page_displays_existing_form_data(self):
+        raise NotImplementedError
+
+    def test_submitting_status_update_clears_session_for_new_one(self):
+        raise NotImplementedError
+
+    def test_user_sees_success_flash_and_new_status_after_submission(self):
+        raise NotImplementedError
+
+
 class TestCreateStatusUpdateFormView(StatusUpdateViewBaseTestCase):
-    pass
+
+    def test_access_permissions(self):
+        raise NotImplementedError
+
+    def test_submit_redirects_to_review_page(self):
+        raise NotImplementedError
+
+    def test_displays_note_if_no_contact_info(self):
+        raise NotImplementedError
 
 
 class TestReviewStatusNotificationFormView(StatusUpdateViewBaseTestCase):
-    pass
+
+    def test_access_permissions(self):
+        raise NotImplementedError
+
+    def test_submit_redirects_to_app_index(self):
+        raise NotImplementedError
+
+    def test_correctly_renders_message(self):
+        raise NotImplementedError
+
+    def test_displays_note_if_no_contact_info(self):
+        raise NotImplementedError
+
+    def test_user_can_edit_message(self):
+        raise NotImplementedError
