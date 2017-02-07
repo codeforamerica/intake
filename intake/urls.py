@@ -20,6 +20,8 @@ urlpatterns = [
         public_views.partner_detail, name='intake-partner_detail'),
     url(r'^recommendation-letters/$', public_views.recommendation_letters,
         name='intake-recommendation_letters'),
+    url(r'^personal-statement/$', public_views.personal_statement,
+        name='intake-personal_statement'),
 
     # public form processing views
     url(r'^apply/$',

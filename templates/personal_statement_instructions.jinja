@@ -1,0 +1,20 @@
+{% extends "public_base_single_column.jinja" %}
+
+
+{%- block header_title -%}
+{{ _("How to submit a personal statement") }}
+{%- endblock header_title -%}
+
+{% block column_content %}
+<section class="how_to_intro">
+  <div class="row">
+    <div class="col-xs-12">
+      <h2>{{ _("How to write a personal statement") }}</h2>
+    </div>
+  </div>
+</section>
+
+  {%- include "includes/cmr_contact_info.jinja" %}
+  {%- include "includes/back_to_home_button.jinja" %}
+
+{% endblock column_content %}
