@@ -105,7 +105,8 @@ class ReviewStatusNotificationFormView(StatusUpdateBase, FormView):
             self.request,
             form.cleaned_data,
             self.existing_status_update_data)
-        # possibly clear the session at this point
+        utils.clear_form_data_from_session(
+            self.request, self.get_session_storage_key())
         return super().form_valid(form)
 
 

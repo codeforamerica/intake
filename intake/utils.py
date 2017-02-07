@@ -55,6 +55,10 @@ def get_form_data_from_session(request, session_key):
     return qdict
 
 
+def clear_form_data_from_session(request, session_key):
+    request.session[session_key] = {}
+
+
 def coerce_to_ids(items):
     for item in items:
         if isinstance(item, models.Model):
