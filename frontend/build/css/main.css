@@ -4972,6 +4972,14 @@ li.how_to_detail {
   font-size: 16px;
   font-weight: 500;
 }
+.how_to_bg_warning {
+  font-weight: bold;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 20px;
+  margin-bottom: 25px;
+  margin-top: 25px;
+}
 /***Media Queries***/
 @media (max-width: 767px) {
   a.btn.btn-primary.btn-lg.call_to_action_button {
