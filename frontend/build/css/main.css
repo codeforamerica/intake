@@ -1022,6 +1022,7 @@ a:focus {
   text-decoration: underline;
 }
 a:focus {
+  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -2394,6 +2395,7 @@ select[size] {
 input[type="file"]:focus,
 input[type="radio"]:focus,
 input[type="checkbox"]:focus {
+  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -2884,6 +2886,7 @@ select[multiple].input-lg {
 .btn.focus,
 .btn:active.focus,
 .btn.active.focus {
+  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -4163,6 +4166,7 @@ li.action_menu-item > a.active:focus,
 li.action_menu-item > a.focus,
 li.action_menu-item > a:active.focus,
 li.action_menu-item > a.active.focus {
+  outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
@@ -4947,21 +4951,21 @@ body.admin .top_bar {
 .btn .glyphicon {
   margin-right: .5em;
 }
-/***Rap Sheet Instructions***/
-.rap_sheet_instructions li {
+/***How To Pages (getting your rap + recommendation letters)***/
+.how_to_instructions li {
   margin-bottom: 25px;
 }
-.rap_instructions_details {
+.how_to_instructions_details {
   font-size: 16px;
   margin-top: 10px;
 }
-.rap_instructions_details li {
+.how_to_instructions_details li {
   list-style: circle;
 }
-.rap_contact_info {
+.how_to_contact_info {
   font-weight: 500;
 }
-li.rap_detail {
+li.how_to_detail {
   margin-bottom: 10px;
 }
 .address {
@@ -4971,6 +4975,14 @@ li.rap_detail {
   margin-bottom: 0;
   font-size: 16px;
   font-weight: 500;
+}
+.how_to_bg_warning {
+  font-weight: bold;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 20px;
+  margin-bottom: 25px;
+  margin-top: 25px;
 }
 /***Media Queries***/
 @media (max-width: 767px) {

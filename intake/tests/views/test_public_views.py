@@ -71,3 +71,9 @@ class TestPartnerDetailView(TestCase):
         self.assertContains(response, sf_pubdef.phone_number)
         self.assertContains(response, html_utils.escape(sf_pubdef.blurb))
         self.assertContains(response, sf_pubdef.name)
+
+
+class TestRecommendationLettersView(TestCase):
+    def test_returns_200(self):
+        response = self.client.get(reverse('intake-recommendation_letters'))
+        self.assertEqual(response.status_code, 200)
