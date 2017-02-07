@@ -67,7 +67,7 @@ translator = ClearMyRecordFormToPDFTranslator({
     'Employed': lambda s: yesno(s, 'currently_employed'),
     'First Name': lambda s: namify(s.answers.get('first_name', '')),
     'Home phone number': '',
-    'How did you hear about the Clean Slate Program': 'how_did_you_hear',
+    'How did you hear about the Clear My Record Program': 'how_did_you_hear',
     'If probation where and when?': lambda s: '{} {}'.format(
         s.answers.get('where_probation_or_parole'),
         s.answers.get('when_probation_or_parole')),
