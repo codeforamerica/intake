@@ -121,31 +121,15 @@
             "find their contact information by visiting the partner pages below. ") }}
       </p>
       <ul class="how_to_instructions_details">
-        <li class="how_to_detail">
-          <a href="/partners/a_pubdef/">
-            {{ _("Alameda County Public Defender's Office") }}
-          </a>
-        </li>
-        <li class="how_to_detail">
-          <a href="/partners/ebclc/">
-            {{ _("East Bay Community Law Center") }}
-          </a>
-        </li>
-        <li class="how_to_detail">
-          <a href="/partners/cc_pubdef/">
-            {{ _("Contra Costa County Public Defender's Office") }}
-          </a>
-        </li>
-        <li class="how_to_detail">
-          <a href="/partners/fresno_pubdef/">
-            {{ _("Fresno County Public Defender's Office") }}
-          </a>
-        </li>
-        <li class="how_to_detail">
-          <a href="/partners/sf_pubdef/">
-            {{ _("San Francisco County Public Defender's Office") }}
-          </a>
-        </li>
+        {%- for org in organizations %}
+          {% if org.is_receiving_agency and org.is_live %}
+          <li class="how_to_detail">
+            <a href="{{ org.get_absolute_url() }}">
+              {{ org.name }}
+            </a>
+          </li>
+          {% endif %}
+        {%- endfor %}
       </ul>
       <p class="how_to_bg_warning bg-warning">{{ _("Your case is on hold until your attorney has received your personal statement. ") }}
       </p>
