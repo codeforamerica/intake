@@ -4,11 +4,14 @@
 Application History
 {%- endblock page_heading -%}
 
-
-{%- block app_detail_contents -%}
-<ul class="application-events-list">
-  {% for status_update in status_updates %}
-    {% include "includes/application_event.jinja" %}
-  {% endfor %}
-</ul>
-{%- endblock app_detail_contents -%}
+<div class="row">
+  <div class="col-xs-12 col-md-10 col_centered">
+    {%- block app_detail_contents -%}
+    <ul class="application-events-list">
+      {% for status_update in status_updates %}
+        {% include "includes/application_event.jinja" %}
+      {% endfor %}
+    </ul>
+    {%- endblock app_detail_contents -%}
+  </div>
+ </div>

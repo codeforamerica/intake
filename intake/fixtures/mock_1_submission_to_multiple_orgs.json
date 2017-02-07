@@ -1,209 +1,192 @@
 [
 {
   "model": "intake.applicant",
-  "pk": 603,
+  "pk": 645,
   "fields": {
     "visitor": null
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 802,
+  "pk": 844,
   "fields": {
-    "applicant": 603,
+    "applicant": 645,
     "duplicate_set": null,
     "answers": {
-      "declaration_letter_goals": "Culpa totam autem facilis atque animi voluptas unde unde. Rerum adipisci commodi fuga eaque consectetur quasi distinctio architecto. Voluptatibus reiciendis omnis corrupti aliquid.",
-      "finished_half_probation": "not_applicable",
-      "where_probation_or_parole": "Solano County",
-      "declaration_letter_why": "Pariatur autem cupiditate maiores ducimus consequuntur necessitatibus. Reiciendis ex odio neque sint. Saepe dolore quas nulla earum.",
+      "dependents": 3,
+      "monthly_income": 4482,
+      "last_four": "9116",
+      "owes_court_fees": "yes",
+      "last_name": "Caldwell",
+      "middle_name": "Patrick",
+      "consent_to_represent": "yes",
+      "when_probation_or_parole": "2018",
+      "on_probation_parole": "yes",
+      "on_public_benefits": "yes",
+      "alternate_phone_number": "2550607189",
+      "address": {
+        "state": "FL",
+        "city": "South Timothy",
+        "street": "35957 Stephanie Locks Suite 281",
+        "zip": "14010"
+      },
+      "has_suspended_license": "no",
+      "us_citizen": "yes",
+      "how_did_you_hear": "from work",
+      "declaration_letter_why": "Praesentium rem rerum laudantium. Sit veniam cupiditate a repudiandae temporibus accusamus. Earum velit praesentium blanditiis nobis cum. Illo quisquam quaerat accusantium quaerat ratione amet voluptatibus.",
+      "declaration_letter_activities": "Ipsa nemo dicta architecto tempora omnis ipsum tempore velit. Aperiam ab eos temporibus doloremque earum. Nulla cum ipsa corrupti earum consectetur incidunt officia.",
+      "currently_employed": "no",
       "monthly_expenses": 2000,
-      "middle_name": "Robert",
+      "being_charged": "no",
       "reasons_for_applying": [
         "background_check",
         "lost_job",
         "housing"
       ],
-      "being_charged": "no",
-      "declaration_letter_intro": "Dignissimos quos quasi adipisci quod hic necessitatibus error. Ducimus doloremque blanditiis nulla quasi eum. Veritatis odio atque ad similique esse culpa.",
-      "currently_employed": "yes",
-      "alternate_phone_number": "2855313251",
-      "is_student": "no",
-      "on_probation_parole": "yes",
-      "driver_license_or_id": "D1259493",
-      "is_veteran": "no",
-      "ssn": "565776936",
-      "has_suspended_license": "no",
-      "on_public_benefits": "yes",
-      "has_children": "yes",
-      "declaration_letter_activities": "Illum laboriosam ratione provident veritatis debitis libero quibusdam. Et nam in explicabo repudiandae vero aliquid beatae. Eos unde asperiores odit libero ratione. Consectetur natus esse cumque ullam.",
-      "serving_sentence": "yes",
-      "owes_court_fees": "no",
-      "how_did_you_hear": "from work",
-      "declaration_letter_life_changes": "Exercitationem omnis nisi quos labore nam repudiandae. Occaecati impedit sed dolore.",
-      "monthly_income": 4341,
-      "email": "susananderson@hotmail.com",
-      "is_married": "yes",
-      "reduced_probation": "not_applicable",
-      "case_number": "C4447-077",
       "additional_information": "I want help",
-      "consent_to_represent": "yes",
-      "first_name": "Andrew",
       "contact_preferences": [
-        "prefers_email",
         "prefers_sms",
-        "prefers_voicemail"
+        "prefers_snailmail"
       ],
+      "is_student": "no",
       "when_where_outside_sf": "",
-      "us_citizen": "yes",
-      "rap_outside_sf": "no",
-      "understands_limits": "yes",
-      "dependents": 4,
-      "aliases": "Christopher Howe",
-      "when_probation_or_parole": "2018",
-      "address": {
-        "zip": "64639",
-        "street": "41947 Kristin Dale",
-        "city": "East Troychester",
-        "state": "HI"
-      },
-      "last_four": "2533",
-      "preferred_pronouns": "",
       "income_source": "a job",
-      "last_name": "Adams",
+      "phone_number": "2836895279",
+      "aliases": "Alexander Nicholson",
+      "rap_outside_sf": "no",
+      "serving_sentence": "no",
+      "is_married": "no",
+      "understands_limits": "yes",
+      "first_name": "Linda",
+      "preferred_pronouns": "",
+      "household_size": 2,
+      "where_probation_or_parole": "Solano County",
+      "owns_home": "no",
+      "declaration_letter_life_changes": "Dignissimos blanditiis at impedit corrupti vero. Saepe ab repellendus ipsam qui cum porro.",
       "dob": {
-        "year": "1978",
-        "day": "15",
-        "month": "6"
+        "month": "12",
+        "year": "1997",
+        "day": "28"
       },
-      "phone_number": "2220597354",
-      "owns_home": "yes",
-      "household_size": 3
+      "declaration_letter_goals": "Nulla sunt optio sunt error. Rerum voluptatum occaecati quaerat optio deleniti. A iste libero consequatur facilis.",
+      "ssn": "025371937",
+      "has_children": "yes",
+      "reduced_probation": "not_applicable",
+      "case_number": "C3572-795",
+      "driver_license_or_id": "D0934366",
+      "finished_half_probation": "not_applicable",
+      "is_veteran": "no",
+      "email": "marybeck@yahoo.com",
+      "declaration_letter_intro": "Velit architecto beatae sed. Aliquid sed quae at. Nihil repellendus repellendus quo ullam. Laboriosam maxime necessitatibus nemo iusto sed ad. Mollitia impedit hic aut nostrum voluptatum."
     },
-    "old_uuid": "0262e975877d40ff9490b53c5245c892",
-    "anonymous_name": "Dynamic Adventurer",
-    "date_received": "2017-01-23T00:26:12-08:00"
+    "old_uuid": "64ab0739801f4efb8081b96f696d61a5",
+    "anonymous_name": "Invisible Meerkat",
+    "date_received": "2017-01-22T05:27:22-08:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 485,
-  "fields": {
-    "organization": [
-      "Fresno County Public Defender"
-    ],
-    "form_submission": 802
-  }
-},
-{
-  "model": "intake.application",
-  "pk": 484,
-  "fields": {
-    "organization": [
-      "Santa Clara County Public Defender"
-    ],
-    "form_submission": 802
-  }
-},
-{
-  "model": "intake.application",
-  "pk": 483,
-  "fields": {
-    "organization": [
-      "San Joaquin County Public Defender"
-    ],
-    "form_submission": 802
-  }
-},
-{
-  "model": "intake.application",
-  "pk": 482,
-  "fields": {
-    "organization": [
-      "San Diego County Public Defender"
-    ],
-    "form_submission": 802
-  }
-},
-{
-  "model": "intake.application",
-  "pk": 481,
-  "fields": {
-    "organization": [
-      "Solano County Public Defender"
-    ],
-    "form_submission": 802
-  }
-},
-{
-  "model": "intake.application",
-  "pk": 480,
-  "fields": {
-    "organization": [
-      "Monterey County Public Defender"
-    ],
-    "form_submission": 802
-  }
-},
-{
-  "model": "intake.application",
-  "pk": 479,
-  "fields": {
-    "organization": [
-      "San Francisco Public Defender"
-    ],
-    "form_submission": 802
-  }
-},
-{
-  "model": "intake.application",
-  "pk": 478,
-  "fields": {
-    "organization": [
-      "Contra Costa Public Defender"
-    ],
-    "form_submission": 802
-  }
-},
-{
-  "model": "intake.application",
-  "pk": 477,
+  "pk": 535,
   "fields": {
     "organization": [
       "Alameda County Public Defender's Office"
     ],
-    "form_submission": 802
+    "form_submission": 844
   }
 },
 {
-  "model": "intake.statusupdate",
-  "pk": 179,
+  "model": "intake.application",
+  "pk": 536,
   "fields": {
-    "created": "2017-01-26T22:01:34.855Z",
-    "updated": "2017-01-26T22:01:34.860Z",
-    "status_type": 1,
-    "additional_information": "just a little note",
-    "author": [
-      "fresno_pubdef_user"
+    "organization": [
+      "Contra Costa Public Defender"
     ],
-    "application": 485,
-    "next_steps": [
-      1
-    ]
+    "form_submission": 844
+  }
+},
+{
+  "model": "intake.application",
+  "pk": 537,
+  "fields": {
+    "organization": [
+      "San Francisco Public Defender"
+    ],
+    "form_submission": 844
+  }
+},
+{
+  "model": "intake.application",
+  "pk": 538,
+  "fields": {
+    "organization": [
+      "Monterey County Public Defender"
+    ],
+    "form_submission": 844
+  }
+},
+{
+  "model": "intake.application",
+  "pk": 539,
+  "fields": {
+    "organization": [
+      "Solano County Public Defender"
+    ],
+    "form_submission": 844
+  }
+},
+{
+  "model": "intake.application",
+  "pk": 540,
+  "fields": {
+    "organization": [
+      "San Diego County Public Defender"
+    ],
+    "form_submission": 844
+  }
+},
+{
+  "model": "intake.application",
+  "pk": 541,
+  "fields": {
+    "organization": [
+      "San Joaquin County Public Defender"
+    ],
+    "form_submission": 844
+  }
+},
+{
+  "model": "intake.application",
+  "pk": 542,
+  "fields": {
+    "organization": [
+      "Santa Clara County Public Defender"
+    ],
+    "form_submission": 844
+  }
+},
+{
+  "model": "intake.application",
+  "pk": 543,
+  "fields": {
+    "organization": [
+      "Fresno County Public Defender"
+    ],
+    "form_submission": 844
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 178,
+  "pk": 229,
   "fields": {
-    "created": "2017-01-26T22:01:34.844Z",
-    "updated": "2017-01-26T22:01:34.850Z",
+    "created": "2017-01-27T19:14:33.470Z",
+    "updated": "2017-01-27T19:14:33.475Z",
     "status_type": 7,
-    "additional_information": "just a little note",
+    "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "fresno_pubdef_user"
     ],
-    "application": 484,
+    "application": 535,
+    "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
     ]
@@ -211,16 +194,17 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 177,
+  "pk": 230,
   "fields": {
-    "created": "2017-01-26T22:01:34.824Z",
-    "updated": "2017-01-26T22:01:34.836Z",
-    "status_type": 6,
-    "additional_information": "just a little note",
+    "created": "2017-01-27T19:14:33.480Z",
+    "updated": "2017-01-27T19:14:33.486Z",
+    "status_type": 1,
+    "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "fresno_pubdef_user"
     ],
-    "application": 483,
+    "application": 536,
+    "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
     ]
@@ -228,67 +212,17 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 176,
+  "pk": 231,
   "fields": {
-    "created": "2017-01-26T22:01:34.811Z",
-    "updated": "2017-01-26T22:01:34.817Z",
-    "status_type": 5,
-    "additional_information": "just a little note",
-    "author": [
-      "fresno_pubdef_user"
-    ],
-    "application": 482,
-    "next_steps": [
-      1
-    ]
-  }
-},
-{
-  "model": "intake.statusupdate",
-  "pk": 175,
-  "fields": {
-    "created": "2017-01-26T22:01:34.800Z",
-    "updated": "2017-01-26T22:01:34.806Z",
-    "status_type": 4,
-    "additional_information": "just a little note",
-    "author": [
-      "fresno_pubdef_user"
-    ],
-    "application": 481,
-    "next_steps": [
-      1
-    ]
-  }
-},
-{
-  "model": "intake.statusupdate",
-  "pk": 174,
-  "fields": {
-    "created": "2017-01-26T22:01:34.782Z",
-    "updated": "2017-01-26T22:01:34.793Z",
-    "status_type": 3,
-    "additional_information": "just a little note",
-    "author": [
-      "fresno_pubdef_user"
-    ],
-    "application": 480,
-    "next_steps": [
-      1
-    ]
-  }
-},
-{
-  "model": "intake.statusupdate",
-  "pk": 173,
-  "fields": {
-    "created": "2017-01-26T22:01:34.762Z",
-    "updated": "2017-01-26T22:01:34.772Z",
+    "created": "2017-01-27T19:14:33.491Z",
+    "updated": "2017-01-27T19:14:33.501Z",
     "status_type": 2,
-    "additional_information": "just a little note",
+    "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "fresno_pubdef_user"
     ],
-    "application": 479,
+    "application": 537,
+    "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
     ]
@@ -296,16 +230,17 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 172,
+  "pk": 232,
   "fields": {
-    "created": "2017-01-26T22:01:34.751Z",
-    "updated": "2017-01-26T22:01:34.756Z",
-    "status_type": 1,
-    "additional_information": "just a little note",
+    "created": "2017-01-27T19:14:33.506Z",
+    "updated": "2017-01-27T19:14:33.519Z",
+    "status_type": 3,
+    "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "fresno_pubdef_user"
     ],
-    "application": 478,
+    "application": 538,
+    "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
     ]
@@ -313,16 +248,89 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 171,
+  "pk": 233,
   "fields": {
-    "created": "2017-01-26T22:01:34.724Z",
-    "updated": "2017-01-26T22:01:34.743Z",
+    "created": "2017-01-27T19:14:33.524Z",
+    "updated": "2017-01-27T19:14:33.529Z",
+    "status_type": 4,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "fresno_pubdef_user"
+    ],
+    "application": 539,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 234,
+  "fields": {
+    "created": "2017-01-27T19:14:33.534Z",
+    "updated": "2017-01-27T19:14:33.542Z",
+    "status_type": 5,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "fresno_pubdef_user"
+    ],
+    "application": 540,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 235,
+  "fields": {
+    "created": "2017-01-27T19:14:33.552Z",
+    "updated": "2017-01-27T19:14:33.560Z",
+    "status_type": 6,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "fresno_pubdef_user"
+    ],
+    "application": 541,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 236,
+  "fields": {
+    "created": "2017-01-27T19:14:33.564Z",
+    "updated": "2017-01-27T19:14:33.570Z",
     "status_type": 7,
-    "additional_information": "just a little note",
+    "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "fresno_pubdef_user"
     ],
-    "application": 477,
+    "application": 542,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 237,
+  "fields": {
+    "created": "2017-01-27T19:14:33.575Z",
+    "updated": "2017-01-27T19:14:33.582Z",
+    "status_type": 1,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "fresno_pubdef_user"
+    ],
+    "application": 543,
+    "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
     ]
@@ -330,119 +338,119 @@
 },
 {
   "model": "intake.statusnotification",
-  "pk": 44,
+  "pk": 102,
   "fields": {
-    "status_update": 179,
+    "status_update": 229,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-01-26T22:01:35.896Z"
+    "created": "2017-01-27T19:14:34.523Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 45,
+  "pk": 103,
   "fields": {
-    "status_update": 178,
+    "status_update": 230,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-01-26T22:01:35.901Z"
+    "created": "2017-01-27T19:14:34.533Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 46,
+  "pk": 104,
   "fields": {
-    "status_update": 177,
+    "status_update": 231,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-01-26T22:01:35.906Z"
+    "created": "2017-01-27T19:14:34.538Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 47,
+  "pk": 105,
   "fields": {
-    "status_update": 176,
+    "status_update": 232,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-01-26T22:01:35.911Z"
+    "created": "2017-01-27T19:14:34.543Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 48,
+  "pk": 106,
   "fields": {
-    "status_update": 175,
+    "status_update": 233,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-01-26T22:01:35.916Z"
+    "created": "2017-01-27T19:14:34.547Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 49,
+  "pk": 107,
   "fields": {
-    "status_update": 174,
+    "status_update": 234,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-01-26T22:01:35.922Z"
+    "created": "2017-01-27T19:14:34.552Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 50,
+  "pk": 108,
   "fields": {
-    "status_update": 173,
+    "status_update": 235,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-01-26T22:01:35.928Z"
+    "created": "2017-01-27T19:14:34.561Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 51,
+  "pk": 109,
   "fields": {
-    "status_update": 172,
+    "status_update": 236,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-01-26T22:01:35.940Z"
+    "created": "2017-01-27T19:14:34.570Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 52,
+  "pk": 110,
   "fields": {
-    "status_update": 171,
+    "status_update": 237,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-01-26T22:01:35.946Z"
+    "created": "2017-01-27T19:14:34.574Z"
   }
 }
 ]

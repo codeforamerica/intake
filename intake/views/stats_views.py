@@ -13,6 +13,12 @@ def is_valid_app(app):
     return False
 
 
+def all_app_orgs_are_live(app):
+    return all([
+        org.get('is_live', False)
+        for org in app.get('organizations', [])])
+
+
 def get_serialized_applications():
     apps = models.Applicant.objects.prefetch_related(
             'form_submissions',
@@ -32,7 +38,7 @@ def breakup_apps_by_org(apps):
         }
     }
     for app in apps:
-        if is_valid_app(app):
+        if is_valid_app(app) and all_app_orgs_are_live(app):
             org_buckets[constants.Organizations.ALL]['apps'].append(app)
             for org in app.get('organizations', []):
                 slug = org['slug']

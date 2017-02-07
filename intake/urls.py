@@ -8,7 +8,8 @@ from intake.views import (
     admin_views,
     app_detail_views,
     application_note_views,
-    tag_views
+    tag_views,
+    status_update_views
     )
 
 urlpatterns = [
@@ -88,6 +89,14 @@ urlpatterns = [
     url(r'^applications/mark/transferred/$',
         login_required(admin_views.mark_transferred_to_other_org),
         name='intake-mark_transferred_to_other_org'),
+
+    url(r'^applications/(?P<submission_id>[0-9]+)/update-status/$',
+        login_required(status_update_views.create_status_update),
+        name='intake-create_status_update'),
+
+    url(r'^applications/(?P<submission_id>[0-9]+)/review-status/$',
+        login_required(status_update_views.review_status_notification),
+        name='intake-review_status_notification'),
 
     # API Views
     url(r'^notes/create/$',
