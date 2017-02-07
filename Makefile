@@ -35,6 +35,9 @@ test.screenshots:
 		tests.acceptance.test_screenshots \
 		--verbosity 2
 
+deploy.feature:
+	git push -f feature HEAD:master
+	heroku run --app cmr-feature make db.seed
 
 deploy.demo:
 	git push -f demo HEAD:master
