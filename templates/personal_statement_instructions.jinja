@@ -1,0 +1,143 @@
+{% extends "public_base_single_column.jinja" %}
+
+
+{%- block header_title -%}
+{{ _("Personal Statement") }}
+{%- endblock header_title -%}
+
+{% block column_content %}
+<section class="how_to_intro">
+  <div class="row">
+    <div class="col-xs-12">
+      <h2>{{ _("How to submit a personal statement") }}</h2>
+      <p>{{ _("If your attorney asked you to submit a personal statement, please follow these instructions. "
+            "A personal statement is a letter you write that states why you want to clear your record. The "
+            "judge in the county you are applying in will read this when deciding on your case.") }}
+      </p>
+      <p class="how_to_bg_warning bg-warning">{{ _(" Your case is on hold until your attorney has received your personal statement.") }}
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<section class="how_to_instructions">
+  <div class="row">
+    <div class="col-xs-12">
+      <h4>
+        <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
+        {{ _("Instructions for writing your personal statement:") }}
+      </h4>
+      <p>{{ _("Please  follow these instructions when writing your personal statement. Answer all the questions "
+            "below in your letter. Please write at least 3-5 sentences in each paragraph.") }}
+      </p>
+      <ol class="how_to_instructions">
+        <li>
+          {{ _("Introduction: ") }}
+            <ul class="how_to_instructions_details">
+              <li class="how_to_detail">
+                {{ _("Write the date.") }}
+              </li>
+              <li class="how_to_detail">
+                {{ _("Start the letter with To Whom It May Concern, ") }}
+            </ul>
+        </li>
+        <li>
+          {{ _("First Paragraph (write 3-5 sentences): ") }}
+            <ul class="how_to_instructions_details">
+              <li class="how_to_detail">
+                {{ _("Introduce yourself to the judge. ") }}
+              </li>
+              <li class="how_to_detail">
+                {{ _("What has been going on in your life recently? ") }}
+            </ul>
+        </li>
+        <li>
+          {{ _("Second Paragraph (write 3-5 sentences): ") }}
+            <ul class="how_to_instructions_details">
+              <li class="how_to_detail">
+                {{ _("How is your life different now, since your last conviction? ") }}
+              </li>
+            </ul>
+        </li>
+        <li>
+          {{ _("Third Paragraph (write 3-5 sentences): ") }}
+            <ul class="how_to_instructions_details">
+              <li class="how_to_detail">
+                {{ _("What jobs, programs, activities, or community service have you been involved in?  ") }}
+              </li>
+              <li class="how_to_detail">
+                {{ _("What did you do in those programs? ") }}
+              </li>
+            </ul>
+        </li>
+        <li>
+          {{ _("Fourth Paragraph (write 3-5 sentences): ") }}
+            <ul class="how_to_instructions_details">
+              <li class="how_to_detail">
+                {{ _("What goals are you working on achieving in your life right now?   ") }}
+              </li>
+              <li class="how_to_detail">
+                {{ _("How are you working on achieving your goals? ") }}
+              </li>
+            </ul>
+        </li>
+        <li>
+          {{ _("Fifth Paragraph (write 3-5 sentences): ") }}
+            <ul class="how_to_instructions_details">
+              <li class="how_to_detail">
+                {{ _("Why do you want to clear your record?    ") }}
+              </li>
+              <li class="how_to_detail">
+                {{ _("How will clearing your record change your life or help you? ") }}
+              </li>
+            </ul>
+        </li>
+        <li>
+          {{ _("Closing: ") }}
+            <ul class="how_to_instructions_details">
+              <li class="how_to_detail">
+                {{ _("Write Sincerely, ") }}
+              </li>
+              <li class="how_to_detail">
+                {{ _("Print your full name. ") }}
+              </li>
+            </ul>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+
+<section class="how_to_instructions">
+  <div class="row">
+    <div class="col-xs-12">
+      <h4>
+        <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
+        {{ _(" Where to send your personal statement:") }}
+      </h4>
+      <p>{{ _("Please send your personal statement to the organization who requested them from you. You can "
+            "find their contact information by visiting the partner pages below. ") }}
+      </p>
+      <ul class="how_to_instructions_details">
+        {%- for org in organizations %}
+          {% if org.is_receiving_agency and org.is_live %}
+          <li class="how_to_detail">
+            <a href="{{ org.get_absolute_url() }}">
+              {{ org.name }}
+            </a>
+          </li>
+          {% endif %}
+        {%- endfor %}
+      </ul>
+      <p class="how_to_bg_warning bg-warning">{{ _("Your case is on hold until your attorney has received your personal statement. ") }}
+      </p>
+    </div>
+  </div>
+</section>
+
+  {%- include "includes/cmr_contact_info.jinja" %}
+  {%- include "includes/back_to_home_button.jinja" %}
+
+{% endblock column_content %}

@@ -4,6 +4,7 @@ from intake.forms import (
 from intake import models, utils
 from django.views.generic.edit import FormView
 from django.core.urlresolvers import reverse
+from intake.views.app_detail_views import not_allowed
 
 import intake.services.status_notifications as StatusNotificationService
 
@@ -26,13 +27,15 @@ class StatusUpdateBase:
             self.get_session_storage_key())
 
     def set_success_url(self):
-        raise NotImplementedError('this must be overriden in a subclass')
+        raise NotImplementedError('this must be overridden in a subclass')
 
     def dispatch(self, request, submission_id, *args, **kwargs):
         submission_id = int(submission_id)
         self.application = models.Application.objects.filter(
             form_submission=submission_id,
             organization=request.user.profile.organization).first()
+        if not self.application:
+            return not_allowed(request)
         self.submission = models.FormSubmission.objects.get(
             id=submission_id)
         self.existing_status_update_data = \
@@ -79,11 +82,6 @@ class ReviewStatusNotificationFormView(StatusUpdateBase, FormView):
     def set_success_url(self):
         self.success_url = reverse('intake-app_index')
 
-    # def dispatch(self, *args, **kwargs):
-    #     response = super().dispatch(*args, **kwargs)
-    #     import ipdb; ipdb.set_trace()
-    #     return response
-
     def get_initial(self):
         initial = super().get_initial()
         base_message = \
@@ -110,6 +108,8 @@ class ReviewStatusNotificationFormView(StatusUpdateBase, FormView):
             self.request,
             form.cleaned_data,
             self.existing_status_update_data)
+        utils.clear_form_data_from_session(
+            self.request, self.get_session_storage_key())
         return super().form_valid(form)
 
 

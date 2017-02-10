@@ -63,8 +63,8 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
     template_name = "app_index.jinja"
 
     def get_context_data(self, **kwargs):
-        is_staff = self.request.user.is_staff
         context = super().get_context_data(**kwargs)
+        is_staff = self.request.user.is_staff
         context['submissions'] = \
             SubmissionsService.get_permitted_submissions(
                 self.request.user, related_objects=True)
