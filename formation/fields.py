@@ -191,7 +191,9 @@ class SocialSecurityNumberField(CharField):
 
 class LastFourOfSocial(CharField):
     context_key = "last_four"
-    label = _('What are the last 4 digits of your Social Security Number? (if you have one)')
+    label = _(
+        'What are the last 4 digits of your Social Security Number? '
+        '(if you have one)')
     help_text = _(
         "This helps identify your case from people who have a "
         "similar name.")
@@ -221,8 +223,9 @@ class ContactPreferences(MultipleChoiceField):
     context_key = "contact_preferences"
     choices = CONTACT_PREFERENCE_CHOICES
     label = _('How would you like us to contact you?')
-    help_text = _('Code for America will use this to update you about '
-                  'your application.')
+    help_text = _(
+        'An attorney may need to send you official documents in the mail '
+        'or call you to help with your case.')
     display_label = "Opted into Clear My Record updates via:"
 
     def get_display_value(self):
