@@ -1,15 +1,15 @@
 [
 {
   "model": "intake.applicationbundle",
-  "pk": 237,
+  "pk": 6,
   "fields": {
     "organization": [
       "Solano County Public Defender"
     ],
     "bundled_pdf": "",
     "submissions": [
-      898,
-      897
+      11,
+      12
     ]
   }
 }
