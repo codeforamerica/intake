@@ -4972,6 +4972,68 @@ li.rap_detail {
   font-size: 16px;
   font-weight: 500;
 }
+/***Status Updates (App Detail)***/
+.app_detail-data_display .application-detail-latest-status {
+  background-color: #f6fcff;
+  overflow: auto;
+  padding: 1em;
+}
+.app_detail-data_display .application-detail-latest-status ul.event-next-steps {
+  padding-left: 0;
+  font-size: 16px;
+}
+/***Status Notifications (App History)***/
+li.application-event-block {
+  border: 1px solid #eeeeee;
+  border-radius: 4px;
+  margin-bottom: 3em;
+}
+li.application-event-block .application-event-header {
+  background-color: #007eb9;
+  color: white;
+  border-radius: 4px;
+  padding: 12px;
+  font-size: 12px;
+}
+li.application-event-block .application-event-header .application-event-title {
+  font-size: 18px;
+}
+li.application-event-block .application-event-body {
+  padding: 1em;
+  font-size: 16px;
+}
+li.application-event-block .application-event-body .section-label {
+  color: #777777;
+}
+li.application-event-block .application-event-body .section-label .contact-info {
+  color: #069ED6;
+}
+li.application-event-block .application-event-body ul.event-next-steps {
+  padding-left: 0;
+  font-size: 16px;
+}
+li.application-event-block .application-event-body .status-update-details {
+  clear: both;
+  margin-bottom: 1em;
+  min-height: 60px;
+}
+li.application-event-block .application-event-body .status-notification-message {
+  background-color: #eeeeee;
+  border-radius: 4px;
+  padding: 8px;
+  margin-top: 0.5em;
+}
+/***Autocomplete (App Index)***/
+a.autocomplete {
+  color: #000;
+}
+.centered-to-header {
+  margin-top: 36px;
+  margin-bottom: 12px;
+}
+.select2-selection__arrow {
+  display: none;
+}
 /***Media Queries***/
 @media (max-width: 767px) {
   a.btn.btn-primary.btn-lg.call_to_action_button {
