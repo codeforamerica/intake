@@ -43,6 +43,11 @@ def oxford_comma(things, use_or=False):
         list(map(str, things[:-1])) + [sep + " " + str(things[-1])])
 
 
+def contact_info_to_html(contact_info_dict):
+    html = oxford_comma(contact_info_dict.values())
+    return mark_safe(html)
+
+
 class Linkifier:
 
     def __init__(self, links):

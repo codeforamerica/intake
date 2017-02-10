@@ -15,23 +15,40 @@ class OrganizationManager(models.Manager):
     def get_by_natural_key(self, name):
         return self.get(name=name)
 
-    def add_orgs_to_sub(self, *orgs):
+    def transfer_application(self, from_org, to_org):
+        sub = self.extract_sub()
+        self.add_orgs_to_sub(to_org)
+        existing_updates = intake_models.StatusUpdate.objects.filter(
+            application__organization=from_org,
+            application__form_submission=sub)
+        new_application = intake_models.Application.objects.get(
+            organization=to_org,
+            form_submission=sub)
+        for existing_update in existing_updates:
+            existing_update.application = new_application
+            existing_update.save()
+        self.remove_orgs_from_sub(from_org)
+
+    def extract_sub(self):
         args, kwargs = self._constructor_args
-        if len(args) == 1 and orgs:
-            if isinstance(args[0], intake_models.FormSubmission):
-                sub = args[0]
-                applications = [
-                    intake_models.Application(
-                        form_submission=sub,
-                        organization_id=org_id)
-                    for org_id in coerce_to_ids(orgs)
-                ]
-                intake_models.Application.objects.bulk_create(applications)
+        if len(args) == 1 and isinstance(
+                args[0], intake_models.FormSubmission):
+            return args[0]
+
+    def add_orgs_to_sub(self, *orgs):
+        sub = self.extract_sub()
+        if sub and orgs:
+            applications = [
+                intake_models.Application(
+                    form_submission=sub,
+                    organization_id=org_id)
+                for org_id in coerce_to_ids(orgs)
+            ]
+            intake_models.Application.objects.bulk_create(applications)
 
     def remove_orgs_from_sub(self, *orgs):
-        args, kwargs = self._constructor_args
-        if len(args) == 1 and orgs:
-            sub = args[0]
+        sub = self.extract_sub()
+        if sub and orgs:
             sub.applications.filter(organization__in=orgs).delete()
 
 
