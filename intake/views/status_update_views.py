@@ -4,6 +4,7 @@ from intake.forms import (
 from intake import models, utils
 from django.views.generic.edit import FormView
 from django.core.urlresolvers import reverse
+from intake.views.app_detail_views import not_allowed
 
 import intake.services.status_notifications as StatusNotificationService
 
@@ -33,6 +34,8 @@ class StatusUpdateBase:
         self.application = models.Application.objects.filter(
             form_submission=submission_id,
             organization=request.user.profile.organization).first()
+        if not self.application:
+            return not_allowed(request)
         self.submission = models.FormSubmission.objects.get(
             id=submission_id)
         self.existing_status_update_data = \

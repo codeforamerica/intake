@@ -2,6 +2,7 @@ from intake.tests.base_testcases import IntakeDataTestCase
 from django.core.urlresolvers import reverse
 from markupsafe import escape
 from intake import models, services, utils
+from intake.views.app_detail_views import NOT_ALLOWED_MESSAGE
 
 
 class StatusUpdateViewBaseTestCase(IntakeDataTestCase):
@@ -43,6 +44,11 @@ class StatusUpdateViewBaseTestCase(IntakeDataTestCase):
                 'intake-create_status_update',
                 kwargs=dict(submission_id=self.sub.id)),
             **post_data)
+
+    def get_review_page(self):
+        return self.client.get(reverse(
+                'intake-review_status_notification',
+                kwargs=dict(submission_id=self.sub.id)))
 
     def confirm_status_update(self, **status_notification_form_inputs):
         return self.client.fill_form(
@@ -93,10 +99,28 @@ class TestStatusUpdateWorkflow(StatusUpdateViewBaseTestCase):
 
 class TestCreateStatusUpdateFormView(StatusUpdateViewBaseTestCase):
 
-    def test_access_permissions(self):
+    def test_anon_redirected_to_login(self):
         self.be_anonymous()
         self.assertIn(
             reverse('user_accounts-login'), self.get_create_page().url)
+
+    def test_incorrect_org_user_redirected_to_app_index(self):
+        self.be_ccpubdef_user()
+        response = self.get_create_page()
+        self.assertRedirects(
+            response, reverse('intake-app_index'),
+            fetch_redirect_response=False)
+        index = self.client.get(response.url)
+        self.assertContains(index, escape(NOT_ALLOWED_MESSAGE))
+
+    def test_cfa_user_redirected_to_app_index(self):
+        self.be_cfa_user()
+        response = self.get_create_page()
+        self.assertRedirects(
+            response, reverse('intake-app_index'),
+            fetch_redirect_response=False)
+        index = self.client.get(response.url)
+        self.assertContains(index, escape(NOT_ALLOWED_MESSAGE))
 
     def test_submit_redirects_to_review_page(self):
         self.be_apubdef_user()
@@ -111,8 +135,29 @@ class TestCreateStatusUpdateFormView(StatusUpdateViewBaseTestCase):
 
 class TestReviewStatusNotificationFormView(StatusUpdateViewBaseTestCase):
 
-    def test_access_permissions(self):
-        raise NotImplementedError
+    def test_anon_redirected_to_login(self):
+        self.be_anonymous()
+        response = self.get_review_page()
+        self.assertIn(
+            reverse('user_accounts-login'), response.url)
+
+    def test_incorrect_org_user_redirected_to_app_index(self):
+        self.be_ccpubdef_user()
+        response = self.get_review_page()
+        self.assertRedirects(
+            response, reverse('intake-app_index'),
+            fetch_redirect_response=False)
+        index = self.client.get(response.url)
+        self.assertContains(index, escape(NOT_ALLOWED_MESSAGE))
+
+    def test_cfa_user_redirected_to_app_index(self):
+        self.be_cfa_user()
+        response = self.get_review_page()
+        self.assertRedirects(
+            response, reverse('intake-app_index'),
+            fetch_redirect_response=False)
+        index = self.client.get(response.url)
+        self.assertContains(index, escape(NOT_ALLOWED_MESSAGE))
 
     def test_correctly_renders_message(self):
         self.be_apubdef_user()
@@ -126,11 +171,22 @@ class TestReviewStatusNotificationFormView(StatusUpdateViewBaseTestCase):
         self.be_apubdef_user()
         self.sub.answers['contact_preferences'] = []
         self.sub.save()
-        response = self.create_status_update(follow=True)
+        self.create_status_update(follow=True)
+        raise NotImplementedError
 
     def test_displays_correct_note_if_no_usable_contact_prefs(self):
         self.be_apubdef_user()
         self.sub.answers['contact_preferences'] = ['prefers_voicemail']
 
     def test_user_can_edit_message(self):
-        raise NotImplementedError
+        self.be_apubdef_user()
+        self.create_status_update(follow=True)
+        edited_message = "Hi, I've been edited"
+        response = self.confirm_status_update(
+            sent_message=edited_message)
+        self.assertRedirects(response, reverse('intake-app_index'))
+        application = self.sub.applications.filter(
+            organization=self.a_pubdef).first()
+        status_update = application.status_updates.latest('updated')
+        self.assertEqual(
+            status_update.notification.sent_message, edited_message)
