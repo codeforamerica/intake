@@ -22,8 +22,6 @@ CONTACT_METHOD_CHOICES = (
 CONTACT_PREFERENCE_CHOICES = (
     ('prefers_email', _('Email')),
     ('prefers_sms', _('Text Message')),
-    ('prefers_snailmail', _('Paper mail')),
-    ('prefers_voicemail', _('Voicemail')),
 )
 
 CONTACT_PREFERENCE_CHECKS = {

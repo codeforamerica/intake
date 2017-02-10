@@ -223,7 +223,7 @@ class ContactPreferences(MultipleChoiceField):
     label = _('How would you like us to contact you?')
     help_text = _('Code for America will use this to update you about '
                   'your application.')
-    display_label = "Prefers contact via"
+    display_label = "Opted into Clear My Record updates via:"
 
     def get_display_value(self):
         return super().get_display_value(use_or=True)
