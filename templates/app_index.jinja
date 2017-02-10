@@ -2,20 +2,18 @@
 
 
 {% block content %}
-<div>
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ search_form.application }}
-        <input type="submit" />
-    </form>
-</div>
 <div class="container">
   <div class="row">
+    <div class="col-xs-12 col-sm-6 col-md-6">
     {%- if request.user.is_staff %}
     <h1>All Applications</h1>
     {%- else %}
     <h1>All Applications to {{ request.user.profile.organization.name }}</h1>
     {%- endif %}
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-6 centered-to-header">
+      {{ search_form.application }}
+    </div>
   </div>
   {%- if page_counter %}
   {% include "includes/submission_paginator.jinja" %}

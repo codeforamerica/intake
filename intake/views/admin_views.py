@@ -2,6 +2,9 @@ from django.shortcuts import redirect, get_object_or_404
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import View
 from django.views.generic.base import TemplateView
+from django.utils.safestring import mark_safe
+
+from django.db.models import Q
 
 from django.contrib import messages
 from django.http import Http404, HttpResponse
@@ -393,12 +396,20 @@ class CaseBundlePrintoutPDFView(ViewAppDetailsMixin, View):
 
 class ApplicantAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        qs = models.FormSubmission.objects.all()
+        qs = models.Application.objects.filter(
+                organization=self.request.user.profile.organization)
 
         if self.q:
-            qs = qs.filter(anonymous_name__icontains=self.q)
-
+            qs = qs.filter(
+                Q(form_submission__answers__contains={'first_name': self.q}) |
+                Q(form_submission__answers__contains={'last_name': self.q})
+            )
         return qs
+
+    def get_result_label(self, application):
+        return '<a href="{}" class="autocomplete">{}</a>'.format(
+                application.form_submission.get_absolute_url(),
+                application.form_submission.get_full_name())
 
 
 filled_pdf = FilledPDF.as_view()
