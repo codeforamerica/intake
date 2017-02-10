@@ -1,7 +1,6 @@
 import factory
 from intake import models
 from django.contrib.auth.models import User
-from .status_type import StatusTypeFactory
 
 
 class StatusUpdateFactory(factory.DjangoModelFactory):

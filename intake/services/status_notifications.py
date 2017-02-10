@@ -43,6 +43,11 @@ def get_base_message_from_status_update_data(status_update_data):
         next_step_message])
 
 
+def get_status_update_success_message(sub, status_type):
+    return 'Updated status to "{}" for {}'.format(
+        status_type.display_name, sub.get_full_name())
+
+
 def send_and_save_new_status(request, notification_data, status_update_data):
     next_steps = status_update_data.pop('next_steps', [])
     status_update = models.StatusUpdate(**status_update_data)
@@ -63,5 +68,6 @@ def send_and_save_new_status(request, notification_data, status_update_data):
     notifications.send_simple_front_notification(
         contact_info, full_message,
         subject="Update from Clear My Record")
-    messages.success(
-        request, "Notified {}".format(sub.get_full_name()))
+    success_message = get_status_update_success_message(
+            sub, status_update.status_type)
+    messages.success(request, success_message)

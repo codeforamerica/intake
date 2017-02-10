@@ -38,6 +38,9 @@ Application Status - Review for {{ submission.get_full_name() }}
       </ul>
     </li>
     <li>
+      {%- if not contact_info_display.contact_preferences.is_empty() %}
+      {%- else %}
+      {%- endif %}
       <em>Update will be sent via:</em>
       {{ contact_info_display.contact_preferences.get_display_value() }}
     </li>

@@ -26,7 +26,7 @@ class StatusUpdateBase:
             self.get_session_storage_key())
 
     def set_success_url(self):
-        raise NotImplementedError('this must be overriden in a subclass')
+        raise NotImplementedError('this must be overridden in a subclass')
 
     def dispatch(self, request, submission_id, *args, **kwargs):
         submission_id = int(submission_id)
