@@ -1,6 +1,9 @@
 from project.settings.base import *
 import dj_database_url
 
+
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
 SECRET_KEY = os.environ.get('SECRET_KEY', 'something super secret')
 
 # looks for 'DATABASE_URL' environmental variable
