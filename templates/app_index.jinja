@@ -2,6 +2,13 @@
 
 
 {% block content %}
+<div>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ search_form.application }}
+        <input type="submit" />
+    </form>
+</div>
 <div class="container">
   <div class="row">
     {%- if request.user.is_staff %}
@@ -32,4 +39,6 @@
 <script type="text/json" name="tags_json">{{ to_json(ALL_TAG_NAMES) }}</script>
 {%- endif %}
 <script src="{{ static('js/admin.js')}}"></script>
+{{ search_form.media }}
 {% endblock scripts %}
+

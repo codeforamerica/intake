@@ -10,7 +10,7 @@ from django.template.response import TemplateResponse
 from dal import autocomplete
 
 
-from intake import models, notifications
+from intake import models, notifications, forms
 from user_accounts.models import Organization
 from printing.pdf_form_display import PDFFormDisplay
 from intake.aggregate_serializer_fields import get_todays_date
@@ -71,6 +71,7 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
         #         wing_size=9)
         context['show_pdf'] = self.request.user.profile.should_see_pdf()
         context['body_class'] = 'admin'
+        context['search_form'] = forms.ApplicationSelectForm()
         if is_staff:
             context['ALL_TAG_NAMES'] = TagsService.get_all_used_tag_names()
         return context
@@ -395,7 +396,7 @@ class ApplicantAutocomplete(autocomplete.Select2QuerySetView):
         qs = models.FormSubmission.objects.all()
 
         if self.q:
-            qs = qs.filter(anonymous_name__istartswith=self.q)
+            qs = qs.filter(anonymous_name__icontains=self.q)
 
         return qs
 

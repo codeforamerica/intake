@@ -1,4 +1,5 @@
 window.$ = require('jquery');
+window.jQuery = $;
 var csrf = require('./csrf');
 var utils = require('./utils');
 var ajaxModule = require('./ajax');
