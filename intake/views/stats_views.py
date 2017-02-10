@@ -3,7 +3,7 @@ from django.views.generic.base import TemplateView
 from intake import (
     models, serializers, constants, aggregate_serializers,
     permissions
-    )
+)
 
 
 def is_valid_app(app):
@@ -21,9 +21,9 @@ def all_app_orgs_are_live(app):
 
 def get_serialized_applications():
     apps = models.Applicant.objects.prefetch_related(
-            'form_submissions',
-            'form_submissions__organizations',
-            'events')
+        'form_submissions',
+        'form_submissions__organizations',
+        'events')
     return serializers.ApplicantSerializer(apps, many=True).data
 
 

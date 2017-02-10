@@ -111,10 +111,10 @@ class TestViews(IntakeDataTestCase):
         self.assertRedirects(
             pdf,
             "{}?next={}".format(
-                 reverse('user_accounts-login'),
-                 reverse('intake-filled_pdf', kwargs={'submission_id': 1})),
+                reverse('user_accounts-login'),
+                reverse('intake-filled_pdf', kwargs={'submission_id': 1})),
             fetch_redirect_response=False
-            )
+        )
 
     def test_anonymous_user_cannot_see_submitted_apps(self):
         self.be_anonymous()

@@ -73,7 +73,7 @@ class IntakeDataTestCase(AuthIntegrationTestCase):
                     organization=org).first())
         cls.submissions = list(
             set(org_subs) | set(cls.combo_submissions)
-            )
+        )
 
     @classmethod
     def have_a_fillable_pdf(cls):

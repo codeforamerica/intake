@@ -22,7 +22,7 @@ class TestApplicationDetail(IntakeDataTestCase):
         'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
         'mock_1_submission_to_multiple_orgs', 'template_options'
-        ]
+    ]
 
     def get_detail(self, submission):
         url = reverse(
@@ -110,7 +110,7 @@ class TestApplicationBundle(IntakeDataTestCase):
         'mock_1_submission_to_multiple_orgs',
         'mock_1_bundle_to_sf_pubdef',
         'mock_1_bundle_to_a_pubdef', 'template_options'
-        ]
+    ]
 
     def get_submissions(self, group):
         ids = [s.id for s in group]
@@ -170,7 +170,7 @@ class TestApplicationIndex(IntakeDataTestCase):
         'mock_1_submission_to_multiple_orgs',
         'mock_1_bundle_to_sf_pubdef',
         'mock_1_bundle_to_a_pubdef', 'template_options'
-        ]
+    ]
 
     def assertContainsSubmissions(self, response, submissions):
         for submission in submissions:
@@ -245,7 +245,7 @@ class TestApplicationIndex(IntakeDataTestCase):
         for sub in self.a_pubdef_submissions:
             status = sub.applications.filter(
                 organization=user.profile.organization).first(
-                ).status_updates.latest('updated').status_type.display_name
+            ).status_updates.latest('updated').status_type.display_name
             self.assertContains(
                 response, html_utils.conditional_escape(status))
 
@@ -271,16 +271,16 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
         """
         self.be_apubdef_user()
         result = self.client.get(reverse(
-                    'intake-app_bundle_detail',
-                    kwargs=dict(bundle_id=self.a_pubdef_bundle.id)))
+            'intake-app_bundle_detail',
+            kwargs=dict(bundle_id=self.a_pubdef_bundle.id)))
         self.assertEqual(result.status_code, 200)
 
     @patch('intake.views.admin_views.notifications.slack_submissions_viewed.send')
     def test_staff_user_gets_200(self, slack):
         self.be_cfa_user()
         result = self.client.get(reverse(
-                    'intake-app_bundle_detail',
-                    kwargs=dict(bundle_id=self.a_pubdef_bundle.id)))
+            'intake-app_bundle_detail',
+            kwargs=dict(bundle_id=self.a_pubdef_bundle.id)))
         self.assertEqual(result.status_code, 200)
 
     def test_returns_404_on_nonexisting_bundle_id(self):
@@ -292,8 +292,8 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
         """
         self.be_ccpubdef_user()
         result = self.client.get(reverse(
-                    'intake-app_bundle_detail',
-                    kwargs=dict(bundle_id=20909872435)))
+            'intake-app_bundle_detail',
+            kwargs=dict(bundle_id=20909872435)))
         self.assertEqual(result.status_code, 404)
 
     def test_user_from_wrong_org_is_redirected_to_app_index(self):
@@ -305,8 +305,8 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
         """
         self.be_sfpubdef_user()
         result = self.client.get(reverse(
-                    'intake-app_bundle_detail',
-                    kwargs=dict(bundle_id=self.a_pubdef_bundle.id)))
+            'intake-app_bundle_detail',
+            kwargs=dict(bundle_id=self.a_pubdef_bundle.id)))
         self.assertRedirects(
             result, reverse('intake-app_index'), fetch_redirect_response=False)
 
@@ -326,11 +326,11 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
             organization=self.sf_pubdef,
             submissions=self.sf_pubdef_submissions,
             bundled_pdf=mock_pdf
-            )
+        )
         url = bundle.get_pdf_bundle_url()
         result = self.client.get(reverse(
-                    'intake-app_bundle_detail',
-                    kwargs=dict(bundle_id=bundle.id)))
+            'intake-app_bundle_detail',
+            kwargs=dict(bundle_id=bundle.id)))
         self.assertContains(result, url)
 
     @patch('intake.notifications.slack_submissions_viewed.send')
@@ -358,7 +358,7 @@ class TestApplicationBundleDetailPDFView(IntakeDataTestCase):
         'counties',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_sf_pubdef', 'template_options',
-        ]
+    ]
 
     @classmethod
     def setUpTestData(cls):
@@ -388,9 +388,9 @@ class TestApplicationBundleDetailPDFView(IntakeDataTestCase):
     def test_nonexistent_pdf_returns_404(self):
         self.be_cfa_user()
         bundle = BundlesService.create_bundle_from_submissions(
-                    organization=self.sf_pubdef,
-                    submissions=self.sf_pubdef_submissions,
-                    skip_pdf=True)
+            organization=self.sf_pubdef,
+            submissions=self.sf_pubdef_submissions,
+            skip_pdf=True)
         response = self.client.get(bundle.get_pdf_bundle_url())
         self.assertEqual(response.status_code, 404)
 

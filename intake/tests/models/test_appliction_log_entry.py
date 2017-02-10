@@ -11,8 +11,8 @@ class TestApplicationLogEntry(TestCase):
         'counties',
         'organizations',
         'mock_profiles',
-        'mock_2_submissions_to_cc_pubdef','template_options'
-        ]
+        'mock_2_submissions_to_cc_pubdef', 'template_options'
+    ]
 
     def test_can_log_referral_between_orgs(self):
         from_org = auth_models.Organization.objects.get(
@@ -25,7 +25,7 @@ class TestApplicationLogEntry(TestCase):
             organizations=[from_org], answers=answers)
         log = models.ApplicationLogEntry.log_referred_from_one_org_to_another(
             submission.id, to_organization_id=to_org.id, user=from_org_user
-            )
+        )
         self.assertEqual(log.from_org(), from_org)
         self.assertEqual(log.user, from_org_user)
         self.assertEqual(log.to_org(), to_org)

@@ -5,6 +5,7 @@ from user_accounts.models import Organization
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Organization
         fields = ['slug', 'name', 'is_live']

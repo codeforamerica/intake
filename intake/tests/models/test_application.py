@@ -10,7 +10,7 @@ class TestApplicant(TestCase):
         'counties',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef', 'template_options'
-        ]
+    ]
 
     def test_cannot_create_without_organization(self):
         form_submission = models.FormSubmission.objects.first()

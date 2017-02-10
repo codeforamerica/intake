@@ -76,7 +76,7 @@ example = [{
                 "key": "error_rate",
                 "data": 0.12312
             },
-        ]
+    ]
 }, {
 
 }]

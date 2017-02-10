@@ -36,28 +36,30 @@ class ContactInfoByPreferenceField(serializers.Field):
                     output.append((
                         key, mark_safe(
                             mini_form.email.get_display_value())
-                        ))
+                    ))
                 elif key == 'snailmail':
                     output.append((
                         key, mark_safe(
                             mini_form.address.get_inline_display_value())
-                        ))
+                    ))
                 elif key in ('sms', 'voicemail'):
                     output.append((
                         key, mark_safe(
                             mini_form.phone_number.get_display_value())
-                        ))
+                    ))
         return output
 
 
 class TruthyValueField(serializers.Field):
     """A read only field that coerces values to boolean
     """
+
     def to_representation(self, obj):
         return bool(obj)
 
 
 class LocalDateField(serializers.DateTimeField):
+
     def __init__(self, *args, format="%m/%d/%Y", tz=PACIFIC_TIME, **kwargs):
         super().__init__(*args, **kwargs)
         self.format = format
@@ -71,6 +73,7 @@ class LocalDateField(serializers.DateTimeField):
 class DictField(serializers.Field):
     """A read only field for serializing submission answers
     """
+
     def to_representation(self, obj):
         keys = getattr(self, 'keys', None)
         if keys:
@@ -78,11 +81,12 @@ class DictField(serializers.Field):
                 key: value
                 for key, value in obj.items()
                 if key in keys
-                }
+            }
         return obj
 
 
 class CityField(serializers.Field):
+
     def to_representation(self, obj):
         address = obj.get('address')
         if address:
@@ -92,6 +96,7 @@ class CityField(serializers.Field):
 
 
 class AgeField(serializers.Field):
+
     def to_representation(self, obj):
         dob = obj.get('dob')
         if dob:
@@ -104,6 +109,7 @@ class AgeField(serializers.Field):
 
 
 class DictKeyField(serializers.Field):
+
     def __init__(self, key, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.key = key
@@ -125,14 +131,14 @@ class YesNoAnswerField(DictKeyField):
 
 class SubmissionAnswersField(DictField):
     keys = [
-            'contact_preferences',
-            'monthly_income',
-            'us_citizen',
-            'being_charged',
-            'serving_sentence',
-            'on_probation_parole',
-            'currently_employed',
-        ]
+        'contact_preferences',
+        'monthly_income',
+        'us_citizen',
+        'being_charged',
+        'serving_sentence',
+        'on_probation_parole',
+        'currently_employed',
+    ]
 
 
 class EventTypeField(serializers.Field):
@@ -243,7 +249,7 @@ def is_multicounty(applicant):
     rap_outside_sf = any([
         sub.answers.get('rap_outside_sf') == YES
         for sub in submissions
-        ])
+    ])
     if rap_outside_sf:
         return True
     for sub in submissions:

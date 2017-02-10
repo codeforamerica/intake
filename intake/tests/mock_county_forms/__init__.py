@@ -26,7 +26,7 @@ class Provider(BaseProvider):
             'prefers_sms',
             'prefers_snailmail',
             'prefers_voicemail',
-            ], preferences)
+        ], preferences)
 
     def make_phone_number(self):
         return self.numerify('2##-###-####')

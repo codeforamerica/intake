@@ -41,7 +41,7 @@ class SelectCounty(base_views.MultiStepFormViewBase):
             referrer=self.request.session.get('referrer'),
             ip=self.request.ip_address,
             user_agent=self.request.META.get('HTTP_USER_AGENT'),
-            )
+        )
         return super().form_valid(form)
 
 
@@ -139,7 +139,7 @@ class DeclarationLetterReviewPage(DeclarationLetterView):
 
 def get_last_submission_of_applicant_if_exists(applicant_id):
     subs = models.FormSubmission.objects.filter(
-            applicant_id=applicant_id)
+        applicant_id=applicant_id)
     if subs.count():
         return subs.latest('date_received')
     return None
@@ -163,7 +163,7 @@ class Thanks(TemplateView, base_views.GetFormSessionDataMixin):
         if sub:
             context.update(
                 organizations=sub.organizations.all()
-                )
+            )
         return context
 
 

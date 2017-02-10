@@ -8,7 +8,7 @@ from intake.views import (
     admin_views,
     application_note_views,
     tag_views
-    )
+)
 
 urlpatterns = [
     # public views

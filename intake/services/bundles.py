@@ -24,17 +24,17 @@ def create_bundle_from_submissions(submissions, skip_pdf=False, **kwargs):
 
 
 def get_or_create_for_submissions_and_user(submissions, user):
-        query = ApplicationBundle.objects.all()
-        for sub in submissions:
-            query = query.filter(submissions=sub)
-        if not user.is_staff:
-            query = query.filter(organization=user.profile.organization)
-        query = query.first()
-        if not query:
-            query = create_bundle_from_submissions(
-                submissions,
-                organization=user.profile.organization)
-        return query
+    query = ApplicationBundle.objects.all()
+    for sub in submissions:
+        query = query.filter(submissions=sub)
+    if not user.is_staff:
+        query = query.filter(organization=user.profile.organization)
+    query = query.first()
+    if not query:
+        query = create_bundle_from_submissions(
+            submissions,
+            organization=user.profile.organization)
+    return query
 
 
 def build_bundled_pdf_if_necessary(bundle):
@@ -57,7 +57,7 @@ def build_bundled_pdf_if_necessary(bundle):
     if needs_pdf and missing_filled_pdfs:
         msg = str(
             "Submissions for ApplicationBundle(pk={}) lack pdfs"
-            ).format(bundle.pk)
+        ).format(bundle.pk)
         logger.error(msg)
         intake.notifications.slack_simple.send(msg)
         for submission in submissions:
@@ -113,4 +113,4 @@ def create_bundles_and_send_notifications_to_orgs():
                 submissions=subs,
                 emails=emails,
                 bundle_url=bundle_url
-                )
+            )

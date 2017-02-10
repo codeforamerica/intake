@@ -25,7 +25,7 @@ class TestApplicationBundle(TestCase):
             slug=constants.Organizations.SF_PUBDEF)
         mock.fillable_pdf(organization=sf_pubdef)
         sub = SubmissionsService.create_for_organizations(
-                [sf_pubdef], answers={})
+            [sf_pubdef], answers={})
         bundle = BundlesService.create_bundle_from_submissions(
             organization=sf_pubdef, submissions=[sub], skip_pdf=True)
         self.assertTrue(bundle.should_have_a_pdf())
@@ -34,7 +34,7 @@ class TestApplicationBundle(TestCase):
         cc_pubdef = auth_models.Organization.objects.get(
             slug=constants.Organizations.COCO_PUBDEF)
         sub = SubmissionsService.create_for_organizations(
-                [cc_pubdef], answers={})
+            [cc_pubdef], answers={})
         bundle = BundlesService.create_bundle_from_submissions(
             organization=cc_pubdef, submissions=[sub], skip_pdf=True)
         self.assertFalse(bundle.should_have_a_pdf())

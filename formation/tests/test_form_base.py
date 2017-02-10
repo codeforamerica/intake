@@ -22,11 +22,11 @@ class TestForm(PatchTranslationTestCase):
         return form_class(*args)
 
     def test_does_not_alter_class_attributes_after_instantiation(self):
-            # make sure we have a class
-            form = ExampleForm({})
-            self.assertFalse(form.is_valid())
-            form = ExampleForm({})
-            self.assertEqual(ExampleForm.required_fields[0], F.FirstName)
+        # make sure we have a class
+        form = ExampleForm({})
+        self.assertFalse(form.is_valid())
+        form = ExampleForm({})
+        self.assertEqual(ExampleForm.required_fields[0], F.FirstName)
 
     def test_can_be_instantiated_with_multivalue_dict(self):
         form = self.get_sf_form(mock.RAW_FORM_DATA)

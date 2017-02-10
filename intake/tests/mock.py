@@ -84,10 +84,10 @@ def make_tag(name="example"):
 
 def make_note(user, submission_id):
     note = models.ApplicationNote(
-            user=user,
-            submission_id=submission_id,
-            body="where is the mustard?",
-        )
+        user=user,
+        submission_id=submission_id,
+        body="where is the mustard?",
+    )
     note.save()
     return note
 
@@ -254,7 +254,7 @@ def fake_app_started(
         applicant_id=applicant.id,
         data=dict(
             counties=counties, referrer=referrer, ip=ip, user_agent=user_agent)
-        )
+    )
     if time:
         event.time = time
     event.save()
@@ -366,7 +366,7 @@ def build_seed_submissions():
             sub = models.FormSubmission(
                 applicant=applicant,
                 answers=form.cleaned_data
-                )
+            )
             if org in (a_pubdef, santa_clara_pubdef, monterey_pubdef):
                 letter = fake.declaration_letter_answers()
                 sub.answers.update(letter)
@@ -390,7 +390,7 @@ def build_seed_submissions():
     applicant.save()
     applicants.append(applicant)
     multi_org_sub = models.FormSubmission(
-            applicant=applicant, answers=form.cleaned_data)
+        applicant=applicant, answers=form.cleaned_data)
     multi_org_sub.answers.update(fake.declaration_letter_answers())
     multi_org_sub.save()
     applications = [
