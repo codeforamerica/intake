@@ -55,3 +55,5 @@ MIXPANEL_KEY = os.environ.get("MIXPANEL_KEY", "")
 USE_DEBUG_TOOLBAR = os.environ.get('USE_DEBUG_TOOLBAR', 0)
 
 LIVE_COUNTY_CHOICES = os.environ.get('LIVE_COUNTY_CHOICES', False)
+
+CELERY_BROKER = os.environ.get('BROKER_URL')

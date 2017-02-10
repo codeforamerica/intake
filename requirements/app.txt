@@ -18,3 +18,4 @@ python-Levenshtein~=0.12
 django-taggit~=0.21
 mixpanel~=4.3.1
 django-extensions~=1.7
+celery==4.0.2
