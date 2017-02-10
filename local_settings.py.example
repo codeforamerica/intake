@@ -48,4 +48,4 @@ TEST_PDF_PATH = "./CleanSlateCombined.pdf"
 
 MIXPANEL_KEY = '7654cd3ca2f987fec69c12a8439a479c'
 
-CELERY_BROKER = 'amqp://localhost'
+CELERY_BROKER_URL = 'amqp://localhost'
