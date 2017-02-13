@@ -86,7 +86,7 @@ class ConsentToRepresent(ConsentCheckbox):
 class UnderstandsLimits(ConsentCheckbox):
     context_key = "understands_limits"
     is_required_error_message = (
-        "We need your undertstanding before we can help you")
+        "We need your understanding before we can help you")
     label = _(
         "Do you understand that not everyone qualifies for help "
         "and it might take a few months to finish?")
