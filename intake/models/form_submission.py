@@ -158,6 +158,8 @@ class FormSubmission(models.Model):
         address = self.answers.get('address', {})
         if not address:
             return ""
+        if not any(address.values()):
+            return ""
         return "{street}\n{city}, {state}\n{zip}".format(
             **self.answers.get('address', {}))
 
