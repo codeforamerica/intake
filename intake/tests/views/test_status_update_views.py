@@ -1,8 +1,10 @@
+from unittest.mock import patch
 from intake.tests.base_testcases import IntakeDataTestCase
 from django.core.urlresolvers import reverse
 from markupsafe import escape
 from intake import models, services, utils
 from intake.views.app_detail_views import NOT_ALLOWED_MESSAGE
+from intake.views.status_update_views import WARNING_MESSAGE
 
 
 class StatusUpdateViewBaseTestCase(IntakeDataTestCase):
@@ -67,7 +69,8 @@ class TestStatusUpdateWorkflow(StatusUpdateViewBaseTestCase):
         response = self.get_create_page()
         self.assertContains(response, escape("nevertheless, persist"))
 
-    def test_submitting_status_update_clears_session_for_new_one(self):
+    @patch('intake.notifications.send_simple_front_notification')
+    def test_submitting_status_update_clears_session_for_new_one(self, front):
         self.be_apubdef_user()
         review_page = self.create_status_update(follow=True)
         default_message = \
@@ -80,8 +83,11 @@ class TestStatusUpdateWorkflow(StatusUpdateViewBaseTestCase):
         form_data = utils.get_form_data_from_session(
             create_page.wsgi_request, session_key)
         self.assertFalse(form_data)
+        self.assertEqual(len(front.mock_calls), 1)
 
-    def test_user_sees_success_flash_and_new_status_after_submission(self):
+    @patch('intake.notifications.send_simple_front_notification')
+    def test_user_sees_success_flash_and_new_status_after_submission(
+            self, front):
         self.be_apubdef_user()
         review_page = self.create_status_update(follow=True)
         default_message = \
@@ -95,6 +101,7 @@ class TestStatusUpdateWorkflow(StatusUpdateViewBaseTestCase):
             .get_status_update_success_message(self.sub, self.status_type)
         self.assertContains(
             index, escape(expected_message))
+        self.assertEqual(len(front.mock_calls), 1)
 
 
 class TestCreateStatusUpdateFormView(StatusUpdateViewBaseTestCase):
@@ -167,18 +174,43 @@ class TestReviewStatusNotificationFormView(StatusUpdateViewBaseTestCase):
             .get_base_message_from_status_update_data(status_update_data)
         self.assertContains(response, escape(expected_message))
 
-    def test_displays_correct_note_if_no_contact_prefs(self):
+    def test_displays_correct_note_if_no_contact_info(self):
         self.be_apubdef_user()
         self.sub.answers['contact_preferences'] = []
         self.sub.save()
-        self.create_status_update(follow=True)
-        raise NotImplementedError
+        response = self.create_status_update(follow=True)
+        status_update_data = response.context_data['status_update']
+        expected_message = services.status_notifications\
+            .get_base_message_from_status_update_data(status_update_data)
+        self.assertContains(response, escape("Save status"))
+        self.assertContains(response, escape(WARNING_MESSAGE))
+        self.assertContains(response, escape(expected_message))
 
     def test_displays_correct_note_if_no_usable_contact_prefs(self):
         self.be_apubdef_user()
         self.sub.answers['contact_preferences'] = ['prefers_voicemail']
+        response = self.create_status_update(follow=True)
+        status_update_data = response.context_data['status_update']
+        expected_message = services.status_notifications\
+            .get_base_message_from_status_update_data(status_update_data)
+        self.assertContains(response, escape("Save status"))
+        self.assertContains(response, escape(WARNING_MESSAGE))
+        self.assertContains(response, self.sub.answers['phone_number'][-4:])
+        self.assertContains(response, escape(expected_message))
 
-    def test_user_can_edit_message(self):
+    def test_displays_correct_button_if_contact_info(self):
+        self.be_apubdef_user()
+        self.sub.answers['contact_preferences'] = [
+            'prefers_email',
+            'prefers_sms'
+        ]
+        self.sub.save()
+        response = self.create_status_update(follow=True)
+        self.assertContains(response, escape("Send message"))
+        self.assertNotContains(response, escape(WARNING_MESSAGE))
+
+    @patch('intake.notifications.send_simple_front_notification')
+    def test_user_can_edit_message(self, front):
         self.be_apubdef_user()
         self.create_status_update(follow=True)
         edited_message = "Hi, I've been edited"
