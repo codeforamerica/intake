@@ -102,7 +102,6 @@ class ReviewStatusNotificationFormView(StatusUpdateBase, FormView):
         usable_contact_info = self.submission.get_usable_contact_info()
         all_contact_info_display = NotificationContactInfoDisplayForm(
             self.submission.answers)
-        import ipdb; ipdb.set_trace()
         context.update(
             submission=self.submission,
             contact_info=self.submission.get_contact_info(),
