@@ -400,9 +400,20 @@ class ApplicantAutocomplete(autocomplete.Select2QuerySetView):
                 organization=self.request.user.profile.organization)
 
         if self.q:
+            # qs = qs.filter(
+            #     Q(form_submission__answers__contains={'first_name': self.q}) |
+            #     Q(form_submission__answers__contains={'last_name': self.q})
+            # )
             qs = qs.filter(
-                Q(form_submission__answers__contains={'first_name': self.q}) |
-                Q(form_submission__answers__contains={'last_name': self.q})
+                Q(form_submission__first_name__icontains=self.q) |
+                Q(form_submission__last_name__icontains=self.q) |
+                Q(form_submission__ssn__icontains=self.q) |
+                Q(form_submission__last_four__icontains=self.q) |
+                Q(form_submission__drivers_license_or_id__icontains=self.q) |
+                Q(form_submission__phone_number__icontains=self.q) |
+                Q(form_submission__alternate_phone_number__icontains=self.q) |
+                Q(form_submission__email__icontains=self.q) |
+                Q(form_submission__case_number__icontains=self.q)
             )
         return qs
 
