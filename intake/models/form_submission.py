@@ -10,6 +10,7 @@ from django.core.urlresolvers import reverse
 from taggit.managers import TaggableManager
 import intake
 from intake import anonymous_names
+from intake.constants import SMS, EMAIL
 from project.jinja2 import namify
 from formation.forms import (
     display_form_selector, DeclarationLetterDisplay)
@@ -165,15 +166,34 @@ class FormSubmission(models.Model):
         intake.fields.ContactInfoJSONField
         """
         info = {}
-        for key in self.get_contact_preferences():
+        for key in intake.constants.CONTACT_PREFERENCE_CHECKS:
             short = key[8:]
             field_name, nice, datum = \
                 intake.constants.CONTACT_PREFERENCE_CHECKS[key]
+            value = ''
             if short == 'snailmail':
-                info[short] = self.get_formatted_address()
+                value = self.get_formatted_address()
             else:
-                info[short] = self.answers.get(field_name, '')
+                value = self.answers.get(field_name, '')
+            if value:
+                info[short] = value
         return info
+
+    def get_preferred_contact_info(self):
+        all_mediums = self.get_contact_info()
+        preferred_short_codes = [
+            key[8:]
+            for key in self.answers.get('contact_preferences', [])]
+        return {
+            key: value
+            for key, value in all_mediums.items()
+            if key in preferred_short_codes}
+
+    def get_usable_contact_info(self):
+        return {
+            key: value
+            for key, value in self.get_preferred_contact_info().items()
+            if key in [SMS, EMAIL]}
 
     def get_transfer_action(self, request):
         other_org = request.user.profile.organization.get_transfer_org()
