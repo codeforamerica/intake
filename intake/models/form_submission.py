@@ -15,6 +15,18 @@ from formation.forms import (
     display_form_selector, DeclarationLetterDisplay)
 from formation.fields import MonthlyIncome, HouseholdSize, OnPublicBenefits
 
+FORMSUBMISSION_TEXT_SEARCH_FIELDS = [
+        'first_name',
+        'last_name',
+        'ssn',
+        'last_four',
+        'drivers_license_or_id',
+        'case_number',
+        'phone_number',
+        'alternate_phone_number',
+        'email'
+    ]
+
 
 class MissingAnswersError(Exception):
     pass
@@ -30,6 +42,8 @@ def gen_uuid():
 
 class FormSubmission(models.Model):
 
+    text_search_fields = FORMSUBMISSION_TEXT_SEARCH_FIELDS
+
     organizations = models.ManyToManyField(
         'user_accounts.Organization', related_name="submissions",
         through='intake.Application')
@@ -40,6 +54,20 @@ class FormSubmission(models.Model):
         'intake.DuplicateSubmissionSet', null=True,
         related_name='submissions')
     answers = JSONField()
+
+    # extracting these values from answers for autocomplete/search
+    first_name = models.TextField(default="")
+    last_name = models.TextField(default="")
+    dob = models.DateField(null=True)
+    ssn = models.TextField(default="")
+    last_four = models.TextField(default="")
+    drivers_license_or_id = models.TextField(default="")
+    case_number = models.TextField(default="")
+    phone_number = models.TextField(default="")
+    alternate_phone_number = models.TextField(default="")
+    email = models.TextField(default="")
+
+
     # old_uuid is only used for porting legacy applications
     old_uuid = models.CharField(max_length=34, unique=True,
                                 default=gen_uuid)
