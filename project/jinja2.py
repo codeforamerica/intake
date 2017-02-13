@@ -43,6 +43,19 @@ def oxford_comma(things, use_or=False):
         list(map(str, things[:-1])) + [sep + " " + str(things[-1])])
 
 
+contact_medium_verb_lookup = dict(
+    email='emailed',
+    sms='texted'
+)
+
+
+def contact_method_verbs(mediums):
+    return oxford_comma([
+        contact_medium_verb_lookup[medium]
+        for medium in mediums
+    ])
+
+
 def contact_info_to_html(contact_info_dict):
     html = oxford_comma(contact_info_dict.values())
     return mark_safe(html)
