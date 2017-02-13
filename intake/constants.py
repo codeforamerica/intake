@@ -157,15 +157,15 @@ COUNTY_CHOICES = (
         'Alameda County (near Oakland, Berkeley, San Leandro, Hayward, '
         'Fremont, Albany, Newark, Dublin, Union City, Pleasanton, '
         'or Livermore)')),
+    (Counties.SOLANO, _(
+        'Solano County (near Vallejo, Fairfield, Vacaville, Benicia, '
+        'Dixon, Rio Vista, or Suisun City)')),
 )
 if not SCOPE_TO_LIVE_COUNTIES:
     COUNTY_CHOICES += (
         (Counties.FRESNO, _(
             'Fresno County (near Fresno, Clovis, Sanger, Kingsburg, Mendota, '
             'Fowler, Selma, Coalinga, Orange Cove, Reedley, Huron, Kerman)')),
-        (Counties.SOLANO, _(
-            'Solano County (near Vallejo, Fairfield, Vacaville, Benicia, '
-            'or Allendale)')),
         (Counties.SAN_DIEGO, _(
             'San Diego County (near San Diego, Oceanside, Chula Vista, or '
             'Escondido)')),
