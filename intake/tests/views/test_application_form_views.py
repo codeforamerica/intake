@@ -10,6 +10,7 @@ from intake import models, constants
 from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
 from formation import forms, fields
+from formation.field_types import YES
 from intake.views import session_view_base, application_form_views
 
 
@@ -26,7 +27,8 @@ class TestFullCountyApplicationSequence(IntakeDataTestCase):
         self.be_anonymous()
         result = self.client.fill_form(
             reverse('intake-apply'),
-            counties=['sanfrancisco'])
+            counties=['sanfrancisco'],
+            confirm_county_selection=YES)
         self.assertRedirects(result, reverse('intake-county_application'))
         result = self.client.fill_form(
             reverse('intake-county_application'),
@@ -59,6 +61,7 @@ class TestFullCountyApplicationSequence(IntakeDataTestCase):
         result = self.client.fill_form(
             reverse('intake-apply'),
             counties=['sanfrancisco'],
+            confirm_county_selection=YES,
             follow=True
         )
         # this should raise warnings
@@ -118,6 +121,7 @@ class TestSelectCountyView(AuthIntegrationTestCase):
         result = self.client.fill_form(
             reverse('intake-apply'),
             counties=['contracosta'],
+            confirm_county_selection=YES,
             headers={'HTTP_USER_AGENT': 'tester'})
         self.assertRedirects(result, reverse('intake-county_application'))
         applicant_id = self.client.session.get('applicant_id')
@@ -154,7 +158,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
 
     def test_get_county_application_has_no_errors(self):
         self.set_session(form_in_progress={
-                    'counties': [constants.Counties.SAN_FRANCISCO]})
+                    'counties': [constants.Counties.SAN_FRANCISCO],
+                    'confirm_county_selection': YES})
         response = self.client.get(reverse('intake-county_application'))
         self.assertEqual(response.status_code, 200)
         self.assertIn('Apply to Clear My Record',
@@ -176,7 +181,9 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         answers = mock.fake.sf_county_form_answers()
         answers['ssn'] = ''
         self.set_session(
-            form_in_progress=dict(counties=[sanfrancisco]),
+            form_in_progress=dict(
+                counties=[sanfrancisco],
+                confirm_county_selection=YES),
             applicant_id=applicant.id
             )
         response = self.client.fill_form(
@@ -220,7 +227,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
 
         result = self.client.fill_form(
             reverse('intake-apply'),
-            counties=[contracosta])
+            counties=[contracosta],
+            confirm_county_selection=YES)
         self.assertRedirects(result, reverse('intake-county_application'))
         result = self.client.get(reverse('intake-county_application'))
 
@@ -263,7 +271,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         answers = mock.fake.contra_costa_county_form_answers()
         result = self.client.fill_form(
             reverse('intake-apply'),
-            counties=[contracosta])
+            counties=[contracosta],
+            confirm_county_selection=YES)
         required_fields = forms.ContraCostaFormSpec.required_fields
 
         # check that leaving out any required field returns an error on that
@@ -318,7 +327,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         alameda = constants.Counties.ALAMEDA
         answers = mock.fake.alameda_pubdef_answers()
         result = self.client.fill_form(
-            reverse('intake-apply'), counties=[alameda])
+            reverse('intake-apply'), counties=[alameda],
+            confirm_county_selection=YES)
         self.assertRedirects(result, reverse('intake-county_application'))
         result = self.client.get(reverse('intake-county_application'))
 
@@ -342,7 +352,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         answers = mock.fake.alameda_pubdef_answers()
         answers['monthly_income'] = ""
         result = self.client.fill_form(
-            reverse('intake-apply'), counties=[alameda])
+            reverse('intake-apply'), counties=[alameda],
+            confirm_county_selection=YES)
         self.assertRedirects(result, reverse('intake-county_application'))
         result = self.client.get(reverse('intake-county_application'))
 
@@ -376,7 +387,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         alameda = constants.Counties.ALAMEDA
         answers = mock.fake.ebclc_answers()
         result = self.client.fill_form(
-            reverse('intake-apply'), counties=[alameda])
+            reverse('intake-apply'), counties=[alameda],
+            confirm_county_selection=YES)
         self.assertRedirects(result, reverse('intake-county_application'))
         result = self.client.get(reverse('intake-county_application'))
 
@@ -400,7 +412,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         answers = mock.fake.ebclc_answers()
         answers['monthly_income'] = ""
         result = self.client.fill_form(
-            reverse('intake-apply'), counties=[alameda])
+            reverse('intake-apply'), counties=[alameda],
+            confirm_county_selection=YES)
         self.assertRedirects(result, reverse('intake-county_application'))
         result = self.client.get(reverse('intake-county_application'))
 
@@ -431,6 +444,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         self.client.fill_form(
             reverse('intake-apply'),
             counties=first_choices,
+            confirm_county_selection=YES,
             follow=True)
         county_setting = self.client.session['form_in_progress']['counties']
         self.assertEqual(county_setting, first_choices)
@@ -438,6 +452,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         self.client.fill_form(
             reverse('intake-apply'),
             counties=second_choices,
+            confirm_county_selection=YES,
             follow=True)
         county_setting = self.client.session['form_in_progress']['counties']
         self.assertEqual(county_setting, second_choices)
@@ -468,7 +483,8 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
         self.be_anonymous()
         alameda = constants.Counties.ALAMEDA
         self.client.fill_form(
-            reverse('intake-apply'), counties=[alameda], follow=True)
+            reverse('intake-apply'), counties=[alameda],
+            confirm_county_selection=YES, follow=True)
         answers = mock.fake.alameda_pubdef_answers(first_name="RandomName")
         self.client.fill_form(
             reverse('intake-county_application'), follow=True, **answers)
@@ -497,7 +513,8 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
         self.be_anonymous()
         alameda = constants.Counties.ALAMEDA
         self.client.fill_form(
-            reverse('intake-apply'), counties=[alameda], follow=True)
+            reverse('intake-apply'), counties=[alameda],
+            confirm_county_selection=YES, follow=True)
         answers = mock.fake.alameda_pubdef_answers(first_name="RandomName")
         self.client.fill_form(
             reverse('intake-county_application'), follow=True, **answers)
