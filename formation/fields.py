@@ -52,6 +52,19 @@ class Counties(MultipleChoiceField):
     choice_display_dict = COUNTY_CHOICE_DISPLAY_DICT
 
 
+class AffirmCountySelection(ConsentCheckbox):
+    context_key = "confirm_county_selection"
+    is_required_error_message = _(
+        "We need your understanding before we can "
+        "help you")
+    label = _(
+        "Do you understand that you should only select the counties that you "
+        "think you have an arrest or conviction in?")
+    agreement_text = _(
+        "Yes, to the best of my memory, I was arrested or convicted in "
+        "these counties")
+
+
 class ConsentNote(FormNote):
     context_key = "consent_note"
     content = mark_safe("""
@@ -192,7 +205,8 @@ class SocialSecurityNumberField(CharField):
 
 class LastFourOfSocial(CharField):
     context_key = "last_four"
-    label = _('What are the last 4 digits of your Social Security Number? (if you have one)')
+    label = _('What are the last 4 digits of your Social Security Number? '
+              '(if you have one)')
     help_text = _(
         "This helps identify your case from people who have a "
         "similar name.")
@@ -571,6 +585,7 @@ class DeclarationLetterWhy(DeclarationLetterIntro):
 INTAKE_FIELDS = [
     DateReceived,
     Counties,
+    AffirmCountySelection,
 
     ContactPreferences,
 

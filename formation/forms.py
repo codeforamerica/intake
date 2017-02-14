@@ -529,8 +529,13 @@ class DeclarationLetterDisplay(DisplayForm):
 
 
 class SelectCountyForm(Form):
-    fields = [F.Counties]
-    required_fields = [F.Counties]
+    fields = [
+        F.Counties,
+        F.AffirmCountySelection
+    ]
+    required_fields = [
+        F.Counties,
+        F.AffirmCountySelection]
 
 
 INPUT_FORM_SPECS = [
