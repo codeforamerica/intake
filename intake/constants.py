@@ -143,11 +143,6 @@ class CountyNames:
     ALL = 'counties throughout California'
 
 
-if SCOPE_TO_LIVE_COUNTIES:
-    CountyNames.ALL = str(
-        'San Francisco, Alameda, and Contra Costa Counties')
-
-
 COUNTY_CHOICES = (
     (Counties.SAN_FRANCISCO, _('San Francisco')),
     (Counties.CONTRA_COSTA, _(
@@ -161,6 +156,10 @@ COUNTY_CHOICES = (
         'Fresno County (near Fresno, Clovis, Sanger, Kingsburg, Mendota, '
         'Fowler, Selma, Coalinga, Orange Cove, Reedley, Huron, Kerman)')),
 )
+
+if SCOPE_TO_LIVE_COUNTIES and len(COUNTY_CHOICES) == 3:
+    CountyNames.ALL = str(
+        'San Francisco, Alameda, and Contra Costa Counties')
 
 if not SCOPE_TO_LIVE_COUNTIES:
     COUNTY_CHOICES += (
