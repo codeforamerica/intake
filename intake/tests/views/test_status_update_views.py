@@ -189,6 +189,7 @@ class TestReviewStatusNotificationFormView(StatusUpdateViewBaseTestCase):
     def test_displays_correct_note_if_no_usable_contact_prefs(self):
         self.be_apubdef_user()
         self.sub.answers['contact_preferences'] = ['prefers_voicemail']
+        self.sub.save()
         response = self.create_status_update(follow=True)
         status_update_data = response.context_data['status_update']
         expected_message = services.status_notifications\
