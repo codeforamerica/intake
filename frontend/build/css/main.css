@@ -4096,6 +4096,9 @@ button[type="submit"].action-back .badge {
 .monthly_expenses .field-input_wrapper input {
   text-align: right;
 }
+.sent_message > .warninglist + .field-wrapping_label {
+  margin-top: 0.75em;
+}
 h1.bundle-count {
   font-size: 1.5em;
 }

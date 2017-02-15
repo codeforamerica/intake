@@ -11,7 +11,7 @@ Application Status - Review for {{ submission.get_full_name() }}
 #}
 
 {% block form %}
-<form id="invite-form" method="POST" action="{{ url('intake-review_status_notification', submission_id=submission.id ) }}">
+<form id="review-status-form" method="POST" action="{{ url('intake-review_status_notification', submission_id=submission.id ) }}">
   {% include "includes/csrf_field.jinja" %}
   <ul>
     <li>
@@ -37,22 +37,43 @@ Application Status - Review for {{ submission.get_full_name() }}
         {% endif %}
       </ul>
     </li>
-    <li>
-      {%- if not contact_info_display.contact_preferences.is_empty() %}
-      {%- else %}
-      {%- endif %}
-      <em>Update will be sent via:</em>
-      {{ contact_info_display.contact_preferences.get_display_value() }}
-    </li>
+
   </ul>
 
-  {{ macros.render_form_fields(form) }}
-
+<div class="field sent_message{% if warning %} warnings{% endif %}">
+    {%- if warning %}
+    <ul class="warninglist">
+      <li class="warning">
+      {{ warning }}
+      {%- if contact_info %}
+      But if you'd like to contact them outside of Clear My Record, here is their contact info:
+      {{ all_contact_info_display_form }}
+      {%- endif %}
+      </li>
+    </ul>
+    {%- endif %}
+    <label class="field-wrapping_label">
+      <span class="field-display_text">
+        {%- if usable_contact_info %}
+        The following message will be {{ contact_method_verbs(usable_contact_info.keys()) }} to the applicant:
+        {%- else %}
+        Example message:
+        {%- endif %}
+      </span>
+    </label>
+    <span class="field-input_wrapper">
+      <textarea name="sent_message">{{ form.sent_message.value() }}</textarea>
+    </span>
+</div>
   <p>
     <a 
       class="btn btn-lg btn-default"
       href="{{ url('intake-create_status_update', submission_id=submission.id) }}">Back</a>
-    <input type="submit" value="Send" class="btn btn-lg btn-primary">  
+    {%- if usable_contact_info %}
+    <input type="submit" value="Send message" class="btn btn-lg btn-primary">  
+    {%- else %}
+    <input type="submit" value="Save status" class="btn btn-lg btn-primary"> 
+    {%- endif %}
   </p>
 </form> 
 {% endblock form %}

@@ -2,7 +2,8 @@ from django import forms
 from intake import models
 from django.contrib.auth.models import User
 from formation.display_form_base import DisplayForm
-from formation.fields import ContactPreferences
+from formation.fields import (
+    EmailField, PhoneNumberField, AddressField)
 
 
 class StatusUpdateForm(forms.ModelForm):
@@ -39,5 +40,7 @@ class StatusNotificationForm(forms.ModelForm):
 
 class NotificationContactInfoDisplayForm(DisplayForm):
     fields = [
-        ContactPreferences
+        EmailField,
+        PhoneNumberField,
+        AddressField,
     ]

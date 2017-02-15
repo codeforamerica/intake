@@ -9,6 +9,11 @@ from intake.views.app_detail_views import not_allowed
 import intake.services.status_notifications as StatusNotificationService
 
 
+WARNING_MESSAGE = str(
+    "This applicant has opted out of email and text messages"
+    " from Clear My Record, so we won't send them a message.")
+
+
 class StatusUpdateBase:
 
     def get_session_storage_key(self):
@@ -92,15 +97,20 @@ class ReviewStatusNotificationFormView(StatusUpdateBase, FormView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        contact_info_display = NotificationContactInfoDisplayForm(
-            self.submission.answers)
         intro_message = StatusNotificationService.get_notification_intro(
             self.request.user.profile)
+        usable_contact_info = self.submission.get_usable_contact_info()
+        all_contact_info_display = NotificationContactInfoDisplayForm(
+            self.submission.answers)
         context.update(
             submission=self.submission,
-            contact_info_display=contact_info_display,
+            contact_info=self.submission.get_contact_info(),
+            usable_contact_info=usable_contact_info,
+            all_contact_info_display_form=all_contact_info_display,
             status_update=self.existing_status_update_data,
-            intro_message=intro_message)
+            intro_message=intro_message,
+            WARNING_MESSAGE=WARNING_MESSAGE,
+            warning=WARNING_MESSAGE if not usable_contact_info else "")
         return context
 
     def form_valid(self, form):

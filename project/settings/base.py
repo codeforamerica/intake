@@ -83,6 +83,7 @@ TEMPLATES = [
                 "contact_info_to_html": "project.jinja2.contact_info_to_html",
                 "to_json": "project.jinja2.to_json",
                 "humanize": "project.jinja2.humanize",
+                "contact_method_verbs": "project.jinja2.contact_method_verbs",
                 "settings": "django.conf.settings",
                 "local_time": "intake.utils.local_time",
             }
