@@ -22,7 +22,7 @@ def empty_new_answers_fields(apps, schema_editor):
     db_alias = schema_editor.connection.alias
     FormSubmission = apps.get_model('intake', 'FormSubmission')
     subs = FormSubmission.objects.using(db_alias).all()
-    keys = FormSubmission.text_search_fields
+    keys = FORMSUBMISSION_TEXT_SEARCH_FIELDS
     for sub in subs:
         for key in keys:
             setattr(sub, key, "")
