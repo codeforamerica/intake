@@ -2,7 +2,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 from intake.constants import CONTACT_METHOD_CHOICES
 from intake import utils
-from intake.tests import mock_template_field_contexts as get_sample_context
+from intake.tests import mock_template_field_contexts as example_contexts
 from jinja2.exceptions import TemplateError
 
 
@@ -43,8 +43,8 @@ class TemplateFieldValidator:
         """
         errors = []
         try:
-            template.render(get_sample_context())
-        except TemplateError as error:
+            template.render(example_contexts.status_notification_context())
+        except Exception as error:
             errors.append(
                 ValidationError(
                     "Could not render this template with an example context"))
@@ -52,8 +52,10 @@ class TemplateFieldValidator:
         from user_accounts.models import Organization
         for org in Organization.objects.filter(is_receiving_agency=True):
             try:
-                template.render(get_sample_context(organization=org))
-            except TemplateError as error:
+                template.render(
+                    example_contexts.status_notification_context(
+                        organization=org))
+            except Exception as error:
                 errors.append(
                     ValidationError(
                         "Could not render this template with {}".format(
@@ -73,16 +75,16 @@ class TemplateFieldValidator:
         return result, exception
 
     def __call__(self, data):
-        compilation_exception, compilation_result = \
+        compilation_result, compilation_exception = \
             self.check_compilation(data)
         if compilation_exception:
-            return ValidationError([
+            raise ValidationError([
                 ValidationError("This template failed to compile"),
                 ValidationError(compilation_exception)
             ])
         errors = self.validate_render_with_example_data(compilation_result)
         if errors:
-            return ValidationError(errors)
+            raise ValidationError(errors)
 
 
 contact_info_json = ContactInfoJSON()
