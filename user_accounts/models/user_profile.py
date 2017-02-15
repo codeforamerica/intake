@@ -41,6 +41,7 @@ class UserProfile(models.Model):
             **kwargs
         )
         profile.save()
+        user.groups.add(*invitation.groups.all())
         return profile
 
     def get_submission_display_form(self):
