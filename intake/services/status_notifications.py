@@ -2,21 +2,21 @@ from django.contrib import messages
 from intake import models, notifications
 import intake.services.submissions as SubmissionsService
 from django.template import loader
+from django.core.urlresolvers import reverse
 
 jinja = loader.engines['jinja']
 
 
-def build_status_notification_context(status_update_data):
+def build_status_notification_context(request, status_update_data):
     org = status_update_data['application'].organization
     return dict(
-        organization=org.name,
+        organization_contact_info=org.get_contact_info_message(),
         county=org.county.name + ' County',
+        personal_statement_link=request.build_absolute_uri(
+            reverse('intake-personal_statement')),
+        letters_of_rec_link=request.build_absolute_uri(
+            reverse('intake-recommendation_letters'))
     )
-
-
-def render_template_option(template_string, context):
-    template = jinja.env.from_string(template_string)
-    return template.render(context)
 
 
 def get_notification_intro(profile):
@@ -24,16 +24,13 @@ def get_notification_intro(profile):
         profile.name, profile.organization.name)
 
 
-def get_base_message_from_status_update_data(status_update_data):
+def get_base_message_from_status_update_data(request, status_update_data):
     template_option_context = \
-        build_status_notification_context(status_update_data)
-    status_type_message = render_template_option(
-        status_update_data['status_type'].template,
+        build_status_notification_context(request, status_update_data)
+    status_type_message = status_update_data['status_type'].render(
         template_option_context)
     next_step_message = ' '.join([
-        render_template_option(
-            next_step.template,
-            template_option_context)
+        next_step.render(template_option_context)
         for next_step in status_update_data.get('next_steps', [])])
     other_next_step = status_update_data.get('other_next_step')
     if other_next_step:
@@ -57,7 +54,7 @@ def send_and_save_new_status(request, notification_data, status_update_data):
     contact_info = SubmissionsService.get_usable_contact_info(sub)
     notification_data.update(
         base_message=get_base_message_from_status_update_data(
-            status_update_data),
+            request, status_update_data),
         status_update=status_update,
         contact_info=contact_info)
     status_notification = models.StatusNotification(**notification_data)

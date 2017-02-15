@@ -171,7 +171,8 @@ class TestReviewStatusNotificationFormView(StatusUpdateViewBaseTestCase):
         response = self.create_status_update(follow=True)
         status_update_data = response.context_data['status_update']
         expected_message = services.status_notifications\
-            .get_base_message_from_status_update_data(status_update_data)
+            .get_base_message_from_status_update_data(
+                response.wsgi_request, status_update_data)
         self.assertContains(response, escape(expected_message))
 
     def test_displays_correct_note_if_no_contact_info(self):
@@ -181,7 +182,8 @@ class TestReviewStatusNotificationFormView(StatusUpdateViewBaseTestCase):
         response = self.create_status_update(follow=True)
         status_update_data = response.context_data['status_update']
         expected_message = services.status_notifications\
-            .get_base_message_from_status_update_data(status_update_data)
+            .get_base_message_from_status_update_data(
+                response.wsgi_request, status_update_data)
         self.assertContains(response, escape("Save status"))
         self.assertContains(response, escape(WARNING_MESSAGE))
         self.assertContains(response, escape(expected_message))
@@ -192,7 +194,8 @@ class TestReviewStatusNotificationFormView(StatusUpdateViewBaseTestCase):
         response = self.create_status_update(follow=True)
         status_update_data = response.context_data['status_update']
         expected_message = services.status_notifications\
-            .get_base_message_from_status_update_data(status_update_data)
+            .get_base_message_from_status_update_data(
+                response.wsgi_request, status_update_data)
         self.assertContains(response, escape("Save status"))
         self.assertContains(response, escape(WARNING_MESSAGE))
         self.assertContains(response, self.sub.answers['phone_number'][-4:])
