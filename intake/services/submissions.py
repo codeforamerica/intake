@@ -6,7 +6,7 @@ import Levenshtein
 from intake import models, groups
 from intake.constants import SMS, EMAIL
 from intake.service_objects import ConfirmationNotification
-
+from intake.models.form_submission import FORMSUBMISSION_TEXT_SEARCH_FIELDS
 
 class MissingAnswersError(Exception):
     pass
@@ -54,7 +54,14 @@ def create_submission(form, organizations, applicant_id):
     submission = models.FormSubmission(
         answers=form.cleaned_data,
         applicant_id=applicant_id)
+
+    # extract out searchable fields from answers
+    keys = FORMSUBMISSION_TEXT_SEARCH_FIELDS
+    for key in keys:
+        existing = submission.answers.get(key, "")
+        setattr(submission, key, existing)
     submission.save()
+
     submission.organizations.add_orgs_to_sub(*organizations)
     link_with_any_duplicates(submission, applicant_id)
     models.ApplicationEvent.log_app_submitted(applicant_id)
