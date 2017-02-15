@@ -18,7 +18,7 @@ class TestTemplateFieldValidator(TestCase):
     def test_validates_good_template(self):
         template_field_renders_correctly("""
             {{ county.capitalize() }}
-            {{ organization_contact_info.upper() }}
+            {{ organization_contact_message.upper() }}
             {{ personal_statement_link.lower() }}
             {{ letters_of_rec_link.lower() }}
             """)

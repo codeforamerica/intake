@@ -10,7 +10,7 @@ jinja = loader.engines['jinja']
 def build_status_notification_context(request, status_update_data):
     org = status_update_data['application'].organization
     return dict(
-        organization_contact_info=org.get_contact_info_message(),
+        organization_contact_message=org.get_contact_info_message(),
         county=org.county.name + ' County',
         personal_statement_link=request.build_absolute_uri(
             reverse('intake-personal_statement')),

@@ -1,7 +1,7 @@
 
 def status_notification_context(**kwargs):
     context = dict(
-        organization_contact_info=str(
+        organization_contact_message=str(
             'call (559) 600-3546 or email publicdefender@co.yolo.ca.us'),
         county='Yolo County',
         personal_statement_link=str(
@@ -13,7 +13,7 @@ def status_notification_context(**kwargs):
     county = kwargs.get('county', None)
     if org:
         context.update(
-            organization_contact_info=org.get_contact_info_message())
+            organization_contact_message=org.get_contact_info_message())
     if county:
         context.update(
             county=county.name + " County")

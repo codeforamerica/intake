@@ -16,7 +16,7 @@
   "fields": {
     "label": "No convictions found",
     "display_name": "No Convictions",
-    "template": "Good news, we didn't find anything on your {{county}} record that needed to be cleared. If you think this is a mistake, please call {{organization.phone_number}} or email {{organization.email}}.",
+    "template": "Good news, we didn't find anything on your {{county}} record that needed to be cleared. If you think this is a mistake, please {{organization_contact_message}}.",
     "help_text": "",
     "slug": "no-convictions"
   }
@@ -93,7 +93,7 @@
   "fields": {
     "label": "Submit letters of recommendation",
     "display_name": "Submit letters of recommendation",
-    "template": "Submit letters of recommendation. Follow the instructions here: {{ url('intake-letters_of_rec') }}",
+    "template": "Submit letters of recommendation. Follow the instructions here: {{ url('intake-recommendation_letters') }}",
     "help_text": "",
     "slug": "letters-of-rec"
   }
@@ -126,7 +126,7 @@
   "fields": {
     "label": "Contact us",
     "display_name": "Contact us",
-    "template": "Please call {{organization.phone}} or email {{organization.email}} when you get the chance.",
+    "template": "Please call {{organization_contact_message}} when you get the chance.",
     "help_text": "",
     "slug": "contact-us"
   }
