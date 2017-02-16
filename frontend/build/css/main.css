@@ -3718,7 +3718,8 @@ section.content.application_form {
   padding-left: 1.5em;
 }
 .field input,
-.field textarea {
+.field textarea,
+.field .field-preceding_text {
   font-weight: 400;
   font-size: 1.25em;
 }
@@ -3764,6 +3765,18 @@ form p + p {
 }
 span + .subfield {
   margin-top: .5em;
+}
+.field-preceding_text {
+  display: block;
+  padding: 2px;
+  padding-bottom: 0;
+  color: #888;
+  border: 1px solid black;
+  border-bottom: 0;
+}
+.field-preceding_text + .field-input_wrapper textarea {
+  border-top: 0;
+  padding-top: 0;
 }
 .options_list {
   padding: 0;

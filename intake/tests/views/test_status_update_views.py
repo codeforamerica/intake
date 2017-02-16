@@ -224,5 +224,15 @@ class TestReviewStatusNotificationFormView(StatusUpdateViewBaseTestCase):
         application = self.sub.applications.filter(
             organization=self.a_pubdef).first()
         status_update = application.status_updates.latest('updated')
+        customizable_sent_message_string = \
+            status_update.notification.sent_message.split("\n\n")[1]
         self.assertEqual(
-            status_update.notification.sent_message, edited_message)
+            customizable_sent_message_string, edited_message)
+
+    def test_displays_intro_message(self):
+        self.be_apubdef_user()
+        response = self.create_status_update(follow=True)
+        status_update_data = response.context_data['status_update']
+        expected_intro = services.status_notifications.get_notification_intro(
+            status_update_data['author'].profile)
+        self.assertContains(response, escape(expected_intro))

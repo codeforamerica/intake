@@ -27,7 +27,7 @@
   "fields": {
     "label": "Not Eligible",
     "display_name": "Not Eligible",
-    "template": "Im sorry, we reviewed your record and you do not qualify to clear your {{county}} record.",
+    "template": "I'm sorry, we reviewed your record and you do not qualify to clear your {{county}} record.",
     "help_text": "",
     "slug": "not-eligible"
   }

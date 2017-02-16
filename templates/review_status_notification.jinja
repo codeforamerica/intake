@@ -53,14 +53,19 @@ Application Status - Review for {{ submission.get_full_name() }}
     </ul>
     {%- endif %}
     <label class="field-wrapping_label">
+      {%- if usable_contact_info %}
       <span class="field-display_text">
-        {%- if usable_contact_info %}
         The following message will be {{ contact_method_verbs(usable_contact_info.keys()) }} to the applicant:
-        {%- else %}
-        Example message:
-        {%- endif %}
       </span>
+      {%- else %}
+      <span class="field-display_text">
+        Example message
+      </span>
+      {%- endif %}
     </label>
+    <span class="field-preceding_text">
+      {{ intro_message }}:
+    </span>
     <span class="field-input_wrapper">
       <textarea name="sent_message">{{ form.sent_message.value() }}</textarea>
     </span>
