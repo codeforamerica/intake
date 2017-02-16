@@ -6,6 +6,12 @@ var ajaxModule = require('./ajax');
 var templates = require('./templates');
 var tagWidget = require('./tag_widget');
 
+$('#id_application').change(function(){
+    console.log("selected");
+    // $('a.autocomplete').click();
+    console.log($('#select2-id_application-container')[0])
+});
+
 function handleNoteDeletionClick(e){
 	// .target == delete note button
 	// this == ./notes_log

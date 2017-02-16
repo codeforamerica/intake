@@ -13,7 +13,7 @@ from django.template.response import TemplateResponse
 from dal import autocomplete
 
 
-from intake import models, notifications, forms
+from intake import models, notifications, forms, utils
 from user_accounts.models import Organization
 from printing.pdf_form_display import PDFFormDisplay
 from intake.aggregate_serializer_fields import get_todays_date
@@ -66,12 +66,12 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         is_staff = self.request.user.is_staff
         context['submissions'] = \
-            SubmissionsService.get_permitted_submissions(
-                self.request.user, related_objects=True)
-        # context['page_counter'] = \
-        #     utils.get_page_navigation_counter(
-        #         page=context['submissions'],
-        #         wing_size=9)
+            SubmissionsService.get_paginated_submissions_for_user(
+                self.request.user, self.request.GET.get('page'))
+        context['page_counter'] = \
+            utils.get_page_navigation_counter(
+                page=context['submissions'],
+                wing_size=9)
         context['show_pdf'] = self.request.user.profile.should_see_pdf()
         context['body_class'] = 'admin'
         context['search_form'] = forms.ApplicationSelectForm()
@@ -400,10 +400,6 @@ class ApplicantAutocomplete(autocomplete.Select2QuerySetView):
                 organization=self.request.user.profile.organization)
 
         if self.q:
-            # qs = qs.filter(
-            #     Q(form_submission__answers__contains={'first_name': self.q}) |
-            #     Q(form_submission__answers__contains={'last_name': self.q})
-            # )
             qs = qs.filter(
                 Q(form_submission__first_name__icontains=self.q) |
                 Q(form_submission__last_name__icontains=self.q) |
