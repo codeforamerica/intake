@@ -19,6 +19,7 @@ from intake import models, constants
 from intake.constants import PACIFIC_TIME
 from intake.tests import mock_user_agents, mock_referrers
 from intake.services import bundles as BundlesService
+from intake.models.form_submission import FORMSUBMISSION_TEXT_SEARCH_FIELDS
 from user_accounts.tests.mock import OrganizationFactory, create_seed_users
 from unittest.mock import Mock
 Pacific = timezone('US/Pacific')
@@ -371,6 +372,11 @@ def build_seed_submissions():
             if org in (a_pubdef, santa_clara_pubdef, monterey_pubdef):
                 letter = fake.declaration_letter_answers()
                 sub.answers.update(letter)
+            # graduate answers fields for search
+            keys = FORMSUBMISSION_TEXT_SEARCH_FIELDS
+            for key in keys:
+                existing = sub.answers.get(key, "")
+                setattr(sub, key, existing)
             sub.save()
             application = models.Application(
                 organization=org, form_submission=sub)
@@ -401,7 +407,8 @@ def build_seed_submissions():
     models.Application.objects.bulk_create(applications)
     for application in applications:
         StatusUpdateFactory.create(
-            application=application, author=org.profiles.first().user)
+            application=application,
+            author=application.organization.profiles.first().user)
     subs.append(multi_org_sub)
     # fake the date received for each sub
     for sub in subs:

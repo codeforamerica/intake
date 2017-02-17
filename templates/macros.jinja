@@ -21,12 +21,62 @@
   {{ field.errors }}
   {% endif %}
   <label class="field-wrapping_label">
-    {% if field.field.widget.__class__.__name__ in ["CheckboxInput"] %}
-      {{ field }}
-      <span class="field-display_text">
+    {% if field.field.widget.__class__.__name__ in ["CheckboxInput", "CheckboxSelectMultiple", "RadioSelect"] %}
+
+    <fieldset>
+      <legend>
         {{ field.label }}
-      </span>
-      {{ help_text(field) }}
+      </legend>
+      {% if field.help_text %}
+      <div class="field-help_text">
+        {{ field.help_text }}
+      </div>
+      {% endif %}
+      {% if field.field.widget.__class__.__name__ == "CheckboxInput" %}
+      <ul class="checkbox_options options_list">
+      {%- for option_key, option_label in field.field.choices %}
+        <li>
+          <label class="field-option_label">
+            <input type="checkbox" name="{{ field.html_name }}" value="{{ option_key }}"
+              {%- if option_key == field.value() %} checked="checked"{% endif %}>
+            <span class="option-display_text">
+              {{ option_label }}
+            </span>
+          </label>
+        </li>
+      {%- endfor %}
+      </ul>
+      {% elif field.field.widget.__class__.__name__ == "CheckboxSelectMultiple" %}
+      <ul class="checkbox_options options_list">
+      {%- for option_key, option_label in field.field.choices %}
+        <li>
+          <label class="field-option_label">
+            <input type="checkbox" name="{{ field.html_name }}" value="{{ option_key }}"
+              {%- if option_key in field.value() %} checked="checked"{% endif %}>
+            <span class="option-display_text">
+              {{ option_label }}
+            </span>
+          </label>
+        </li>
+      {%- endfor %}
+      </ul>
+      {% elif field.field.widget.__class__.__name__ == "RadioSelect" %}
+      <ul class="radio_options options_list">
+      {%- for option_key, option_label in field.field.choices %}
+        <li>
+          <label class="field-option_label">
+            <input type="radio" name="{{ field.html_name }}" value="{{ option_key }}"
+              {%- if option_key == field.value() %} checked="checked"{% endif %}>
+            <span class="option-display_text">
+              {{ option_label }}
+            </span>
+          </label>
+        </li>
+      {%- endfor %}
+      </ul>
+      {% endif %}
+
+    </fieldset>
     {% else %}
       <span class="field-display_text">
         {{ field.label }}

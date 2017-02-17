@@ -93,13 +93,17 @@ db.dump_fixtures:
 	    --indent 2 \
 	    --format json
 
-
-db.seed:
+db.core_seed:
 	python ./manage.py loaddata \
 		counties \
 		organizations \
 		addresses \
 		mock_profiles \
+		template_options
+
+db.seed:
+	make db.core_seed
+	python ./manage.py loaddata \
 		mock_2_submissions_to_a_pubdef \
 		mock_2_submissions_to_ebclc \
 		mock_2_submissions_to_cc_pubdef \
@@ -121,8 +125,7 @@ db.seed:
 		mock_1_bundle_to_san_joaquin_pubdef \
 		mock_1_bundle_to_santa_clara_pubdef \
 		mock_1_bundle_to_fresno_pubdef \
-		mock_application_events \
-		template_options
+		mock_application_events
 
 
 notebook:

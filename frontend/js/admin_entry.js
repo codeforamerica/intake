@@ -1,9 +1,12 @@
 window.$ = require('jquery');
+window.jQuery = $;
 var csrf = require('./csrf');
 var utils = require('./utils');
 var ajaxModule = require('./ajax');
 var templates = require('./templates');
 var tagWidget = require('./tag_widget');
+var searchWidget = require('./application_search_widget');
+
 
 function handleNoteDeletionClick(e){
 	// .target == delete note button
@@ -32,6 +35,7 @@ function initializeEventListeners(){
 	$('.notes_log').on('click', '.note-remove', handleNoteDeletionClick);
 	$('form.note-create_form').on('submit', handleNewNoteFormSubmission);
 	tagWidget.init();
+	searchWidget.init();
 }
 
 function main(){

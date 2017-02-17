@@ -203,7 +203,7 @@ class TestModels(TestCase):
         self.assertEqual(retrieved.submission, submission)
         self.assertEqual(retrieved.message_sent, "hi good job applying, ttyl")
 
-    def test_submission_get_contact_info(self):
+    def test_submission_get_preferred_contact_info(self):
         submission = mock.FormSubmissionFactory.build()
         # base case: easy
         submission.answers['contact_preferences'] = [
@@ -213,7 +213,7 @@ class TestModels(TestCase):
         expected = {
             'email': 'someone@gmail.com',
             'sms': '+19993334444'}
-        result = submission.get_contact_info()
+        result = submission.get_preferred_contact_info()
         self.assertDictEqual(result, expected)
 
         # case: address
@@ -223,11 +223,11 @@ class TestModels(TestCase):
         submission.answers['address']['state'] = 'CA'
         submission.answers['address']['zip'] = '99999'
         expected = {'snailmail': '123 Main St\nSan Francisco, CA\n99999'}
-        result = submission.get_contact_info()
+        result = submission.get_preferred_contact_info()
         self.assertDictEqual(result, expected)
 
         # case: no preference
         submission.answers.pop('contact_preferences')
         expected = {}
-        result = submission.get_contact_info()
+        result = submission.get_preferred_contact_info()
         self.assertDictEqual(result, expected)

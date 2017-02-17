@@ -14,6 +14,8 @@ ALLOWED_HOSTS = []
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 INSTALLED_APPS = [
     'django.contrib.sites',
+    'dal',
+    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -81,6 +83,8 @@ TEMPLATES = [
                 "contact_info_to_html": "project.jinja2.contact_info_to_html",
                 "to_json": "project.jinja2.to_json",
                 "humanize": "project.jinja2.humanize",
+                "contact_method_verbs": "project.jinja2.contact_method_verbs",
+                "format_phone_number": "project.jinja2.format_phone_number",
                 "settings": "django.conf.settings",
                 "local_time": "intake.utils.local_time",
             }
