@@ -4,6 +4,7 @@ from intake import (
     models, serializers, constants, aggregate_serializers,
     permissions
     )
+from intake.services import statistics
 
 
 def is_valid_app(app):
@@ -80,6 +81,12 @@ class Stats(TemplateView):
             Serializer = aggregate_serializers.PrivateStatsSerializer
         for org_data in apps_by_org:
             add_stats_for_org(org_data, Serializer)
+        status_update_data = statistics.get_status_update_success_metrics()
+        if show_private_data:
+            for org_name, counts in status_update_data:
+                for org_data in apps_by_org:
+                    if org_data['org']['name'] == org_name:
+                        org_data['status_updates'] = counts
         context['stats'] = {'org_stats': apps_by_org}
         context['show_private_data'] = show_private_data
         return context
