@@ -63,7 +63,13 @@ def contact_method_verbs(mediums):
 
 
 def contact_info_to_html(contact_info_dict):
-    html = oxford_comma(contact_info_dict.values())
+    phone = contact_info_dict.get('sms', '')
+    if phone:
+        phone = format_phone_number(phone)
+    email = contact_info_dict.get('email', '')
+
+    html = oxford_comma([
+        thing for thing in (phone, email) if thing])
     return mark_safe(html)
 
 
