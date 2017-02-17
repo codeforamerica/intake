@@ -68,7 +68,6 @@ class FormSubmission(models.Model):
     alternate_phone_number = models.TextField(default="")
     email = models.TextField(default="")
 
-
     # old_uuid is only used for porting legacy applications
     old_uuid = models.CharField(max_length=34, unique=True,
                                 default=gen_uuid)

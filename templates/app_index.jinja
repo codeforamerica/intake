@@ -20,9 +20,6 @@
       </div>
     </div>
   </div>
-  {%- if page_counter %}
-  {% include "includes/submission_paginator.jinja" %}
-  {%- endif %}
   <div class="row">
     {% if perms.intake.view_application_note %}
       {% include "followup_list.jinja" %}
