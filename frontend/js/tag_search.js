@@ -34,6 +34,7 @@ function buildSearchFunction(searchSpace){
   }
 }
 
+
 searchModule.init = function (){
   var tagData = utils.getJson('tags_json');
   if (!tagData) { tagData = []; }

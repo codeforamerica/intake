@@ -5,12 +5,8 @@ var utils = require('./utils');
 var ajaxModule = require('./ajax');
 var templates = require('./templates');
 var tagWidget = require('./tag_widget');
+var searchWidget = require('./application_search_widget');
 
-$('#id_application').change(function(){
-    console.log("selected");
-    // $('a.autocomplete').click();
-    console.log($('#select2-id_application-container')[0])
-});
 
 function handleNoteDeletionClick(e){
 	// .target == delete note button
@@ -39,6 +35,7 @@ function initializeEventListeners(){
 	$('.notes_log').on('click', '.note-remove', handleNoteDeletionClick);
 	$('form.note-create_form').on('submit', handleNewNoteFormSubmission);
 	tagWidget.init();
+	searchWidget.init();
 }
 
 function main(){

@@ -413,10 +413,11 @@ class ApplicantAutocomplete(autocomplete.Select2QuerySetView):
             )
         return qs
 
-    def get_result_label(self, application):
-        return '<a href="{}" class="autocomplete">{}</a>'.format(
-                application.form_submission.get_absolute_url(),
-                application.form_submission.get_full_name())
+    def get_result_value(self, application):
+        return dict(
+            organization=application.organization.name,
+            name=application.form_submission.get_full_name(),
+            url=application.form_submission.get_absolute_url())
 
 
 filled_pdf = FilledPDF.as_view()

@@ -12,7 +12,12 @@
     {%- endif %}
     </div>
     <div class="col-xs-12 col-sm-6 col-md-6 centered-to-header">
-      {{ search_form.application }}
+      <div class="applicants-search_module">
+      {# replace this form (copied from tags) with one for autocomplete #}
+        <form>
+          <input name="q" type="text" autocomplete="off"><ul class="applicants-autocomplete_results"></ul>
+        </form>
+      </div>
     </div>
   </div>
   {%- if page_counter %}
@@ -37,6 +42,5 @@
 <script type="text/json" name="tags_json">{{ to_json(ALL_TAG_NAMES) }}</script>
 {%- endif %}
 <script src="{{ static('js/admin.js')}}"></script>
-{{ search_form.media }}
 {% endblock scripts %}
 
