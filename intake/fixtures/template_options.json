@@ -82,7 +82,7 @@
   "fields": {
     "label": "Submit personal statement",
     "display_name": "Submit personal statement",
-    "template": "Submit a personal statement. Please do that here: {{ url('intake-personal_statement') }}",
+    "template": "Submit a personal statement. Please do that here: {{ personal_statement_link }}",
     "help_text": "",
     "slug": "personal-statement"
   }
@@ -93,7 +93,7 @@
   "fields": {
     "label": "Submit letters of recommendation",
     "display_name": "Submit letters of recommendation",
-    "template": "Submit letters of recommendation. Follow the instructions here: {{ url('intake-recommendation_letters') }}",
+    "template": "Submit letters of recommendation. Follow the instructions here: {{ letters_of_rec_link }}",
     "help_text": "",
     "slug": "letters-of-rec"
   }
