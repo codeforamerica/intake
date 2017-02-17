@@ -8,6 +8,7 @@ from intake.constants import SMS, EMAIL
 from intake.service_objects import ConfirmationNotification
 from intake.models.form_submission import FORMSUBMISSION_TEXT_SEARCH_FIELDS
 
+
 class MissingAnswersError(Exception):
     pass
 
@@ -75,14 +76,6 @@ def fill_pdfs_for_submission(submission):
         organization__submissions=submission)
     for fillable in fillables:
         fillable.fill_for_submission(submission)
-
-
-def get_usable_contact_info(submission):
-    return {
-        key: value
-        for key, value in submission.get_contact_info().items()
-        if key in [SMS, EMAIL]
-    }
 
 
 def get_paginated_submissions_for_user(
