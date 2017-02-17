@@ -8,71 +8,65 @@ TOTAL = 'Total'
 ALL = (constants.Organizations.ALL, 'Total (All Organizations)')
 
 
+def sort_status_type_and_next_step_counts(item_counts):
+    """item_counts is a counter"""
+    total_count = item_counts.pop(TOTAL)
+    sorted_bucket_counts = list(sorted(
+        item_counts.items(),
+        key=lambda i: i[1],
+        reverse=True
+    ))
+    sorted_bucket_counts.insert(
+        0, (TOTAL, total_count))
+    return sorted_bucket_counts
+
+
 def get_status_update_success_metrics():
     """calculates the total number of status updates,
         including the totals by type of status for all orgs and each org.
 
-    Example output:
+    Example output (with incorrect numbers):
 
     [('Total (All Organizations)',
       [('Total', 20),
+       ('Submit personal statement', 20),
        ('Eligible', 3),
-       ('Passed', 3),
-       ('No Convictions', 3),
-       ('Court Date', 3),
-       ("Can't Proceed", 3),
        ('Not Eligible', 3),
        ('Declined', 2)]),
      ('San Francisco Public Defender',
-      [('Total', 2), ('Declined', 1), ("Can't Proceed", 1)]),
-     ("Alameda County Public Defender's Office",
-      [('Total', 2), ('Eligible', 1), ('Not Eligible', 1)]),
-     ('East Bay Community Law Center',
-      [('Total', 2), ('Passed', 1), ('Court Date', 1)]),
-     ('Contra Costa Public Defender',
-      [('Total', 2), ("Can't Proceed", 1), ('No Convictions', 1)]),
-     ('Monterey County Public Defender',
-      [('Total', 2), ('No Convictions', 1), ('Not Eligible', 1)]),
-     ('Solano County Public Defender',
-      [('Total', 2), ('Eligible', 1), ('Court Date', 1)]),
-     ('San Diego County Public Defender',
-      [('Total', 2), ('Passed', 1), ('Declined', 1)]),
-     ('San Joaquin County Public Defender',
-      [('Total', 2), ("Can't Proceed", 1), ('No Convictions', 1)]),
-     ('Santa Clara County Public Defender',
-      [('Total', 2), ('Eligible', 1), ('Not Eligible', 1)]),
-     ('Fresno County Public Defender',
-      [('Total', 2), ('Passed', 1), ('Court Date', 1)])]
+      [('Total', 2),
+       ('Submit personal statement', 2),
+       ('Declined', 1),
+       ("Can't Proceed", 1)]),
     """
     updates = models.StatusUpdate.objects.all().prefetch_related(
         'application__organization',
-        'status_type'
+        'status_type',
+        'next_steps'
     )
-    orgs = {ALL: Counter()}
+    org_status_type_counts = {ALL: Counter()}
+    org_status_notification_counts = {ALL: Counter()}
     for update in updates:
         org = (
             update.application.organization.slug,
             update.application.organization.name
         )
         status_type = update.status_type.display_name
-        if not orgs.get(org):
-            orgs[org] = Counter()
-        orgs[ALL].update([TOTAL, status_type])
-        orgs[org].update([TOTAL, status_type])
+        next_steps = update.next_steps.all().values_list(
+            'display_name', flat=True)
+        if not org_status_type_counts.get(org):
+            org_status_type_counts[org] = Counter()
+        if not org_status_notification_counts.get(org):
+            org_status_notification_counts[org] = Counter()
+        org_status_type_counts[ALL].update([TOTAL, status_type, *next_steps])
+        org_status_type_counts[org].update([TOTAL, status_type, *next_steps])
     data = []
     sorted_orgs = sorted(
-        orgs.items(),
+        org_status_type_counts.items(),
         key=lambda entry: constants.DEFAULT_ORGANIZATION_ORDER.index(
             entry[0][0])
         )
     for org_tuple, counter in sorted_orgs:
-        entry = (
-            org_tuple[1],
-            list(sorted(
-                counter.items(),
-                key=lambda n: n[1],
-                reverse=True
-            ))
-        )
+        entry = (org_tuple[1], sort_status_type_and_next_step_counts(counter))
         data.append(entry)
     return data
