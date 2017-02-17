@@ -9,7 +9,7 @@ from intake.tests.base_testcases import IntakeDataTestCase, DELUXE_TEST
 from intake import models, constants
 from intake.views import application_form_views
 from formation import fields
-
+from formation.field_types import YES
 from project.jinja2 import url_with_ids
 
 import intake.services.bundles as BundlesService
@@ -27,7 +27,8 @@ class TestViews(IntakeDataTestCase):
         if not counties:
             counties = [constants.Counties.SAN_FRANCISCO]
         self.set_session(form_in_progress={
-            'counties': counties})
+            'counties': counties,
+            'confirm_county_selection': YES})
 
     def test_home_view(self):
         response = self.client.get(reverse('intake-home'))
@@ -38,6 +39,7 @@ class TestViews(IntakeDataTestCase):
         self.be_anonymous()
         base_data = dict(
             counties=['sanfrancisco'],
+            confirm_county_selection=YES,
             **mock.NEW_RAW_FORM_DATA)
         self.set_session(
             form_in_progress=base_data)

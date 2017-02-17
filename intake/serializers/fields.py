@@ -97,7 +97,10 @@ class AgeField(serializers.Field):
         if dob:
             year = dob.get('year')
             if year:
-                return THIS_YEAR - int(year)
+                try:
+                    return THIS_YEAR - int(year)
+                except ValueError as err:
+                    return None
 
 
 class DictKeyField(serializers.Field):

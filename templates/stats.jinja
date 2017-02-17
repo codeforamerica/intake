@@ -32,15 +32,15 @@ Numbers for Clear My Record
     <span class="stats-total-annot">this week</span>
   </div>
   <div class="stats-single_figure minutes">
-    <span class="stats-total-number">{{
+    <span class="stats-total-number">{% if org_data.mean_completion_time %}{{
      (org_data.mean_completion_time / 60)|int
-     }} minutes</span>
+     }} minutes{% else %}N/A{% endif %}</span>
     <span class="stats-total-annot">mean completion time</span>
   </div>
   <div class="stats-single_figure minutes">
-    <span class="stats-total-number">{{
+    <span class="stats-total-number">{% if org_data.median_completion_time %}{{
      (org_data.median_completion_time / 60)|int
-     }} minutes</span>
+     }} minutes{% else %}N/A{% endif %}</span>
     <span class="stats-total-annot">median completion time</span>
   </div>
   <div class="stats-single_figure">

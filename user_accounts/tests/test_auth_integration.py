@@ -100,6 +100,7 @@ class TestUserAccounts(AuthIntegrationTestCase):
             get_user_display(
                 users[0]),
             self.example_user['email'])
+        self.assertIn(self.groups[0], users[0].groups.all())
 
     def test_user_can_add_info_in_profile_view(self):
         user = self.be_sfpubdef_user()

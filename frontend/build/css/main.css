@@ -4377,6 +4377,9 @@ pre.address {
   margin: 0;
   font-weight: inherit;
 }
+.pagination-nav {
+  float: right;
+}
 ul.pagination {
   margin-top: .5em;
 }

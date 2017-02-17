@@ -141,11 +141,6 @@ class CountyNames:
     ALL = 'counties throughout California'
 
 
-if SCOPE_TO_LIVE_COUNTIES:
-    CountyNames.ALL = str(
-        'San Francisco, Alameda, and Contra Costa Counties')
-
-
 COUNTY_CHOICES = (
     (Counties.SAN_FRANCISCO, _('San Francisco')),
     (Counties.CONTRA_COSTA, _(
@@ -155,15 +150,20 @@ COUNTY_CHOICES = (
         'Alameda County (near Oakland, Berkeley, San Leandro, Hayward, '
         'Fremont, Albany, Newark, Dublin, Union City, Pleasanton, '
         'or Livermore)')),
+    (Counties.FRESNO, _(
+        'Fresno County (near Fresno, Clovis, Sanger, Kingsburg, Mendota, '
+        'Fowler, Selma, Coalinga, Orange Cove, Reedley, Huron, Kerman)')),
+    (Counties.SOLANO, _(
+        'Solano County (near Vallejo, Fairfield, Vacaville, Benicia, '
+        'Dixon, Rio Vista, or Suisun City)')),
 )
+
+if SCOPE_TO_LIVE_COUNTIES and len(COUNTY_CHOICES) == 3:
+    CountyNames.ALL = str(
+        'San Francisco, Alameda, and Contra Costa Counties')
+
 if not SCOPE_TO_LIVE_COUNTIES:
     COUNTY_CHOICES += (
-        (Counties.FRESNO, _(
-            'Fresno County (near Fresno, Clovis, Sanger, Kingsburg, Mendota, '
-            'Fowler, Selma, Coalinga, Orange Cove, Reedley, Huron, Kerman)')),
-        (Counties.SOLANO, _(
-            'Solano County (near Vallejo, Fairfield, Vacaville, Benicia, '
-            'or Allendale)')),
         (Counties.SAN_DIEGO, _(
             'San Diego County (near San Diego, Oceanside, Chula Vista, or '
             'Escondido)')),

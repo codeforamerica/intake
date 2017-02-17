@@ -52,6 +52,19 @@ class Counties(MultipleChoiceField):
     choice_display_dict = COUNTY_CHOICE_DISPLAY_DICT
 
 
+class AffirmCountySelection(ConsentCheckbox):
+    context_key = "confirm_county_selection"
+    is_required_error_message = _(
+        "We need your understanding before we can "
+        "help you")
+    label = _(
+        "Do you understand that you should only select the counties that you "
+        "think you have an arrest or conviction in?")
+    agreement_text = _(
+        "Yes, to the best of my memory, I was arrested or convicted in "
+        "these counties")
+
+
 class ConsentNote(FormNote):
     context_key = "consent_note"
     content = mark_safe("""
@@ -86,10 +99,11 @@ class ConsentToRepresent(ConsentCheckbox):
 class UnderstandsLimits(ConsentCheckbox):
     context_key = "understands_limits"
     is_required_error_message = (
-        "We need your undertstanding before we can help you")
+        "We need your understanding before we can help you")
     label = _(
-        "Do you understand that not everyone qualifies for help "
-        "and it might take a few months to finish?")
+        "Do you understand that not everyone qualifies for help, submitting "
+        "this form does not guarantee that you will be represented by one of "
+        "our partners, and it might take a few months to finish?")
     agreement_text = _("Yes, I understand")
     display_label = str(
         "Understands might not qualify and could take a few months")
@@ -354,7 +368,10 @@ class ServingSentence(YesNoField):
 
 class OnProbationParole(YesNoField):
     context_key = "on_probation_parole"
-    label = _("Are you on probation or parole?")
+    label = _("Are you on probation or parole (including MSR or PRCS)?")
+    help_text = _(
+        "MSR is mandatory supervised release and PRCS is post release "
+        "community supervision")
     display_label = "Is on probation or parole"
     flip_display_choice_order = True
 
@@ -570,6 +587,7 @@ class DeclarationLetterWhy(DeclarationLetterIntro):
 INTAKE_FIELDS = [
     DateReceived,
     Counties,
+    AffirmCountySelection,
 
     ContactPreferences,
 

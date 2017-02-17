@@ -126,7 +126,7 @@ PDF_FILLABLE_DATA = {
     'First Name': 'Foo',
     'FirstName': 'Foo',
     'Home phone number': '',
-    'How did you hear about the Clean Slate Program': 'A friend',
+    'How did you hear about the Clear My Record Program': 'A friend',
     'If probation where and when?': 'contra costa 2017',
     'Last Name': 'Bar',
     'LastName': 'Bar',

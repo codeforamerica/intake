@@ -1,8 +1,7 @@
-
 from unittest.mock import Mock, patch
 from formation.tests import mock
 from formation.tests.utils import PatchTranslationTestCase
-from formation import validators
+import formation
 
 
 class TestValidChoiceValidator(PatchTranslationTestCase):
@@ -37,3 +36,45 @@ class TestMultipleValidChoiceValidator(PatchTranslationTestCase):
 
     def test_errors_for_any_invalid_choices(self):
         pass
+
+
+class EmailAndPhoneForm(formation.form_base.Form):
+    fields = [
+        formation.fields.PhoneNumberField,
+        formation.fields.EmailField
+    ]
+    validators = [
+        formation.validators.at_least_email_or_phone
+    ]
+
+
+class TestAtLeastEmailOrTextValidator(PatchTranslationTestCase):
+
+    def test_valid_if_both_values(self):
+        form = EmailAndPhoneForm(dict(
+            email='hello@nowhere.com',
+            phone_number='415-444-4444'
+        ))
+        self.assertTrue(form.is_valid())
+
+    def test_valid_if_missing_only_email(self):
+        form = EmailAndPhoneForm(dict(
+            phone_number='415-444-4444'
+        ))
+        self.assertTrue(form.is_valid())
+
+    def test_valid_if_missing_only_phone(self):
+        form = EmailAndPhoneForm(dict(
+            email='hello@nowhere.com'
+        ))
+        self.assertTrue(form.is_valid())
+
+    def test_errors_if_missing_both(self):
+        form = EmailAndPhoneForm({})
+        self.assertFalse(form.is_valid())
+        expected_errors = {
+            key: [formation.validators.AtLeastEmailOrPhoneValidator.message]
+            for key
+            in formation.validators.AtLeastEmailOrPhoneValidator.field_keys
+        }
+        self.assertDictEqual(form.errors, expected_errors)

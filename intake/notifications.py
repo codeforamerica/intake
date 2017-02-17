@@ -276,12 +276,12 @@ slack_submission_transferred = SlackTemplateNotification(
 front_email_daily_app_bundle = FrontEmailNotification(
     subject_template=_(
         "{{current_local_time('%a %b %-d, %Y')}}: "
-        "Online applications to Clean Slate"),
+        "Online applications to Clear My Record"),
     body_template_path='email/app_bundle_email.jinja')
 email_daily_app_bundle = EmailNotification(
     subject_template=_(
         "{{current_local_time('%a %b %-d, %Y')}}: "
-        "Online applications to Clean Slate"),
+        "Online applications to Clear My Record"),
     body_template_path='email/app_bundle_email.jinja')
 
 # submissions, emails
