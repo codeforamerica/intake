@@ -38,7 +38,7 @@
   "fields": {
     "label": "Eligible",
     "display_name": "Eligible",
-    "template": "Good news, you qualify to clear your some convictions on your {{county}} record!",
+    "template": "Good news, you qualify to clear some convictions on your {{county}} record!",
     "help_text": "",
     "slug": "eligible"
   }
