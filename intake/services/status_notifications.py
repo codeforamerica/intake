@@ -1,7 +1,6 @@
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from intake import models, notifications
-import intake.services.submissions as SubmissionsService
 from django.template import loader
 from django.core.urlresolvers import reverse
 

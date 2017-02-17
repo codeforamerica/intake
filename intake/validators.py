@@ -38,30 +38,40 @@ class TemplateFieldValidator:
     """Ensure that a template string will compile and render
     """
 
+    def validate_no_unrendered_variables(self, result):
+        if '{' in result or '}' in result:
+            self.errors.append(
+                ValidationError(
+                    '\n'.join([
+                        'There are curly brackets in the rendered result:',
+                        result])))
+
     def validate_render_with_example_data(self, template):
         """Tests rendering the compiled template with example contexts
         """
-        errors = []
+        self.errors = []
         try:
-            template.render(example_contexts.status_notification_context())
+            result = template.render(
+                example_contexts.status_notification_context())
+            self.validate_no_unrendered_variables(result)
         except Exception as error:
-            errors.append(
+            self.errors.append(
                 ValidationError(
                     "Could not render this template with an example context"))
-            errors.append(ValidationError(error))
+            self.errors.append(ValidationError(error))
         from user_accounts.models import Organization
         for org in Organization.objects.filter(is_receiving_agency=True):
             try:
-                template.render(
+                result = template.render(
                     example_contexts.status_notification_context(
                         organization=org))
+                self.validate_no_unrendered_variables(result)
             except Exception as error:
-                errors.append(
+                self.errors.append(
                     ValidationError(
                         "Could not render this template with {}".format(
                             org.name)))
-                errors.append(ValidationError(error))
-        return errors
+                self.errors.append(ValidationError(error))
 
     def check_compilation(self, data):
         """Tests that a template string can be successfully compiled
@@ -82,9 +92,9 @@ class TemplateFieldValidator:
                 ValidationError("This template failed to compile"),
                 ValidationError(compilation_exception)
             ])
-        errors = self.validate_render_with_example_data(compilation_result)
-        if errors:
-            raise ValidationError(errors)
+        self.validate_render_with_example_data(compilation_result)
+        if self.errors:
+            raise ValidationError(self.errors)
 
 
 contact_info_json = ContactInfoJSON()
