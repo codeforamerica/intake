@@ -1,7 +1,6 @@
 import factory
 from intake import models
 from django.contrib.auth.models import User
-from .status_type import StatusTypeFactory
 
 
 class StatusUpdateFactory(factory.DjangoModelFactory):
@@ -10,7 +9,8 @@ class StatusUpdateFactory(factory.DjangoModelFactory):
     application = factory.Iterator(models.Application.objects.all())
     author = factory.Iterator(
         User.objects.filter(profile__organization__is_receiving_agency=True))
-    additional_information = "just a little note"
+    additional_information = "We may be able to get a fee waived for you"
+    other_next_step = "Come to our Walk-In Clinic"
 
     class Meta:
         model = models.StatusUpdate

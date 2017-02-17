@@ -1,0 +1,44 @@
+  <li class="application-event-block">
+    <div class="application-event-header">
+      <div class="application-event-title">Status Update - {{status_update.status_type.display_name}}</div>
+
+      {{local_time(status_update.created, '%-B %-d, %Y')}}  ({{humanize.naturaltime(status_update.created)}}) by {{status_update.author.first_name}} {{status_update.author.last_name}}
+    </div>
+    <div class="application-event-body">
+      <div class="status-update-details">
+        <div class="col-xs-6 col-md-6">
+          <div class="section-label">Additional information:</div>
+          {{status_update.additional_information}}
+        </div>
+        <div class="col-xs-6 col-md-6">
+          <div class="section-label">Next steps:</div>
+          {% if status_update.next_steps or status_update.other_next_step %}
+            <ul class="event-next-steps">
+                {% for step in status_update.next_steps.all() %}
+                  <li>{{ step.display_name }}</li>
+                {% endfor %}
+                {% if status_update.other_next_step %}
+                <li>{{ status_update.other_next_step }}</li>
+                {% endif %}
+            </ul>
+          {% endif %}
+        </div>
+      </div>
+
+      {# TODO: create more notification objects #}
+      {% if status_update.notification %}
+          {# Need to determine send method in order to show "text sent to" or "email sent to" 
+          Also need to account for multi #}
+          <div class="section-label">Sent to <span class="contact-info">{{contact_info_to_html(status_update.notification.contact_info)}}</span>:</div>
+          <div class="status-notification-message">
+            {{status_update.notification.sent_message}}
+          </div>
+      {% else %}
+          {# this <br/> is a placeholder because of some weird CSS #}
+          <br/>
+          <div class="status-notification-message">
+            <em>No notification sent to applicant. Contact info unavailable or applicant has opted out of email and text message notifications.</em>
+          </div>
+      {% endif %}
+    </div>
+  </li>

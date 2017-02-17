@@ -1,158 +1,176 @@
 [
 {
   "model": "intake.applicant",
-  "pk": 545,
+  "pk": 91,
   "fields": {
     "visitor": null
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 546,
+  "pk": 92,
   "fields": {
     "visitor": null
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 744,
+  "pk": 90,
   "fields": {
-    "applicant": 545,
+    "applicant": 91,
     "duplicate_set": null,
     "answers": {
-      "understands_limits": "yes",
-      "middle_name": "Mark",
-      "on_public_benefits": "yes",
-      "dob": {
-        "day": "22",
-        "year": "1980",
-        "month": "7"
-      },
-      "first_name": "Natalie",
-      "phone_number": "2870192783",
-      "rap_outside_sf": "no",
-      "monthly_income": 3001,
-      "has_suspended_license": "no",
-      "contact_preferences": [
-        "prefers_voicemail",
-        "prefers_snailmail",
-        "prefers_email"
-      ],
-      "being_charged": "no",
-      "serving_sentence": "no",
-      "owes_court_fees": "no",
-      "us_citizen": "yes",
-      "household_size": 4,
-      "finished_half_probation": "not_applicable",
-      "alternate_phone_number": "2347577288",
-      "email": "david45@gmail.com",
-      "additional_information": "I want help",
-      "consent_to_represent": "yes",
-      "on_probation_parole": "yes",
-      "last_name": "Obrien",
-      "preferred_pronouns": "",
-      "how_did_you_hear": "from work",
-      "when_where_outside_sf": "",
       "reduced_probation": "not_applicable",
-      "owns_home": "yes",
+      "last_name": "Wall",
+      "email": "matthew70@yahoo.com",
+      "how_did_you_hear": "from work",
+      "finished_half_probation": "not_applicable",
+      "dob": {
+        "year": "1998",
+        "day": "21",
+        "month": "4"
+      },
+      "being_charged": "no",
+      "alternate_phone_number": "2415647746",
+      "rap_outside_sf": "no",
+      "preferred_pronouns": "",
+      "has_suspended_license": "no",
+      "on_probation_parole": "yes",
+      "owes_court_fees": "yes",
+      "phone_number": "2044011696",
+      "serving_sentence": "no",
+      "us_citizen": "yes",
+      "consent_to_represent": "yes",
+      "monthly_income": 3001,
+      "middle_name": "Eric",
+      "when_where_outside_sf": "",
+      "first_name": "Brian",
       "address": {
-        "zip": "03051",
-        "city": "East Michaelberg",
-        "street": "32138 Tracy Throughway Apt. 786",
-        "state": "PA"
-      }
+        "state": "TX",
+        "city": "South Matthew",
+        "zip": "53335",
+        "street": "316 Virginia Estate Suite 091"
+      },
+      "understands_limits": "yes",
+      "household_size": 2,
+      "owns_home": "yes",
+      "contact_preferences": [
+        "prefers_sms"
+      ],
+      "additional_information": "I want help",
+      "on_public_benefits": "yes"
     },
-    "old_uuid": "34a292d9d3e54c3a8e3193eadea22bc8",
-    "anonymous_name": "Glowing Moon",
-    "date_received": "2017-01-22T01:04:12-08:00"
+    "first_name": "Brian",
+    "last_name": "Wall",
+    "dob": null,
+    "ssn": "",
+    "last_four": "",
+    "drivers_license_or_id": "",
+    "case_number": "",
+    "phone_number": "2044011696",
+    "alternate_phone_number": "2415647746",
+    "email": "matthew70@yahoo.com",
+    "old_uuid": "dbfd369c3a9d407d908d3bbdc29c1d3c",
+    "anonymous_name": "Shining Flounder",
+    "date_received": "2017-02-14T08:13:42-08:00"
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 745,
+  "pk": 91,
   "fields": {
-    "applicant": 546,
+    "applicant": 92,
     "duplicate_set": null,
     "answers": {
-      "understands_limits": "yes",
-      "middle_name": "Eileen",
-      "on_public_benefits": "yes",
-      "dob": {
-        "day": "2",
-        "year": "1994",
-        "month": "7"
-      },
-      "first_name": "Emily",
-      "phone_number": "2009614256",
-      "rap_outside_sf": "no",
-      "monthly_income": 3001,
-      "has_suspended_license": "no",
-      "contact_preferences": [
-        "prefers_email",
-        "prefers_snailmail",
-        "prefers_sms"
-      ],
-      "being_charged": "no",
-      "serving_sentence": "no",
-      "owes_court_fees": "no",
-      "us_citizen": "yes",
-      "household_size": 2,
-      "finished_half_probation": "not_applicable",
-      "alternate_phone_number": "2272796036",
-      "email": "afigueroa@hotmail.com",
-      "additional_information": "I want help",
-      "consent_to_represent": "yes",
-      "on_probation_parole": "yes",
-      "last_name": "Cisneros",
-      "preferred_pronouns": "",
-      "how_did_you_hear": "from work",
-      "when_where_outside_sf": "",
       "reduced_probation": "not_applicable",
-      "owns_home": "yes",
+      "last_name": "Stevens",
+      "email": "davidhines@gmail.com",
+      "how_did_you_hear": "from work",
+      "finished_half_probation": "not_applicable",
+      "dob": {
+        "year": "1973",
+        "day": "19",
+        "month": "12"
+      },
+      "being_charged": "no",
+      "alternate_phone_number": "2556111854",
+      "rap_outside_sf": "no",
+      "preferred_pronouns": "",
+      "has_suspended_license": "yes",
+      "on_probation_parole": "yes",
+      "owes_court_fees": "no",
+      "phone_number": "2651442044",
+      "serving_sentence": "no",
+      "us_citizen": "yes",
+      "consent_to_represent": "yes",
+      "monthly_income": 3001,
+      "middle_name": "Ryan",
+      "when_where_outside_sf": "",
+      "first_name": "Emily",
       "address": {
-        "zip": "05696",
-        "city": "Mathewsbury",
-        "street": "81392 Irwin Ford Suite 807",
-        "state": "OH"
-      }
+        "state": "PR",
+        "city": "Wardfort",
+        "zip": "13595",
+        "street": "9291 Bailey Walks"
+      },
+      "understands_limits": "yes",
+      "household_size": 0,
+      "owns_home": "yes",
+      "contact_preferences": [
+        "prefers_sms",
+        "prefers_email"
+      ],
+      "additional_information": "I want help",
+      "on_public_benefits": "yes"
     },
-    "old_uuid": "df9022cfd12f4868b01ad01890272038",
-    "anonymous_name": "Shining Manatee",
-    "date_received": "2017-01-25T12:34:26-08:00"
+    "first_name": "Emily",
+    "last_name": "Stevens",
+    "dob": null,
+    "ssn": "",
+    "last_four": "",
+    "drivers_license_or_id": "",
+    "case_number": "",
+    "phone_number": "2651442044",
+    "alternate_phone_number": "2556111854",
+    "email": "davidhines@gmail.com",
+    "old_uuid": "b9c8371159be48869bfd47cca2ce1bc9",
+    "anonymous_name": "Galactic Library",
+    "date_received": "2017-02-15T12:14:35-08:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 412,
+  "pk": 123,
   "fields": {
     "organization": [
       "East Bay Community Law Center"
     ],
-    "form_submission": 744
+    "form_submission": 90
   }
 },
 {
   "model": "intake.application",
-  "pk": 413,
+  "pk": 124,
   "fields": {
     "organization": [
       "East Bay Community Law Center"
     ],
-    "form_submission": 745
+    "form_submission": 91
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 112,
+  "pk": 121,
   "fields": {
-    "created": "2017-01-25T20:13:34.188Z",
-    "updated": "2017-01-25T20:13:34.196Z",
+    "created": "2017-02-17T00:59:04.628Z",
+    "updated": "2017-02-17T00:59:04.639Z",
     "status_type": 5,
-    "additional_information": "just a little note",
+    "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "ebclc_user"
     ],
-    "application": 412,
+    "application": 123,
+    "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
     ]
@@ -160,19 +178,46 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 113,
+  "pk": 122,
   "fields": {
-    "created": "2017-01-25T20:13:34.213Z",
-    "updated": "2017-01-25T20:13:34.220Z",
+    "created": "2017-02-17T00:59:04.657Z",
+    "updated": "2017-02-17T00:59:04.663Z",
     "status_type": 6,
-    "additional_information": "just a little note",
+    "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "ebclc_user"
     ],
-    "application": 413,
+    "application": 124,
+    "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
     ]
+  }
+},
+{
+  "model": "intake.statusnotification",
+  "pk": 121,
+  "fields": {
+    "status_update": 121,
+    "contact_info": {
+      "email": "bgolder+borg@codeforamerica.org"
+    },
+    "base_message": "Resistance is futile",
+    "sent_message": "Live long and prosper",
+    "created": "2017-02-17T00:59:05.571Z"
+  }
+},
+{
+  "model": "intake.statusnotification",
+  "pk": 122,
+  "fields": {
+    "status_update": 122,
+    "contact_info": {
+      "email": "bgolder+borg@codeforamerica.org"
+    },
+    "base_message": "Resistance is futile",
+    "sent_message": "Live long and prosper",
+    "created": "2017-02-17T00:59:05.579Z"
   }
 }
 ]

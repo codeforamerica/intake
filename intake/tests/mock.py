@@ -5,7 +5,8 @@ import factory
 import datetime as dt
 from pytz import timezone
 from faker import Factory as FakerFactory
-from intake.tests.factories import StatusUpdateFactory
+from intake.tests.factories import (
+    StatusUpdateFactory, StatusNotificationFactory)
 from django.core.files import File
 from django.core import serializers
 from django.core.management import call_command
@@ -18,6 +19,7 @@ from intake import models, constants
 from intake.constants import PACIFIC_TIME
 from intake.tests import mock_user_agents, mock_referrers
 from intake.services import bundles as BundlesService
+from intake.models.form_submission import FORMSUBMISSION_TEXT_SEARCH_FIELDS
 from user_accounts.tests.mock import OrganizationFactory, create_seed_users
 from unittest.mock import Mock
 Pacific = timezone('US/Pacific')
@@ -370,6 +372,11 @@ def build_seed_submissions():
             if org in (a_pubdef, santa_clara_pubdef, monterey_pubdef):
                 letter = fake.declaration_letter_answers()
                 sub.answers.update(letter)
+            # graduate answers fields for search
+            keys = FORMSUBMISSION_TEXT_SEARCH_FIELDS
+            for key in keys:
+                existing = sub.answers.get(key, "")
+                setattr(sub, key, existing)
             sub.save()
             application = models.Application(
                 organization=org, form_submission=sub)
@@ -398,6 +405,10 @@ def build_seed_submissions():
         for org in target_orgs
     ]
     models.Application.objects.bulk_create(applications)
+    for application in applications:
+        StatusUpdateFactory.create(
+            application=application,
+            author=application.organization.profiles.first().user)
     subs.append(multi_org_sub)
     # fake the date received for each sub
     for sub in subs:
@@ -450,11 +461,15 @@ def serialize_subs(subs, filepath):
         for sub in subs]
     applications = []
     status_updates = []
+    status_notifications = []
     for application_set in application_sets:
         applications.extend(application_set)
     for application in applications:
         status_updates.extend(application.status_updates.all())
+    status_notifications = [StatusNotificationFactory.create(
+        status_update=status_update) for status_update in status_updates]
     with open(filepath, 'w') as f:
-        data = [*applicants, *subs, *applications, *status_updates]
+        data = [*applicants, *subs, *applications,
+                *status_updates, *status_notifications]
         f.write(serializers.serialize(
             'json', data, indent=2, use_natural_foreign_keys=True))

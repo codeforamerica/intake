@@ -1,6 +1,6 @@
 from django.contrib.humanize.templatetags import humanize
 from django.core.urlresolvers import reverse, reverse_lazy
-
+import phonenumbers
 from jinja2 import Environment
 from datetime import datetime
 from pytz import timezone
@@ -41,6 +41,36 @@ def oxford_comma(things, use_or=False):
         return (" " + sep + " ").join(map(str, things))
     return ", ".join(
         list(map(str, things[:-1])) + [sep + " " + str(things[-1])])
+
+
+def format_phone_number(phone_number_string):
+    parsed = phonenumbers.parse(phone_number_string, 'US')
+    return phonenumbers.format_number(
+                parsed, phonenumbers.PhoneNumberFormat.NATIONAL)
+
+
+contact_medium_verb_lookup = dict(
+    email='emailed',
+    sms='texted'
+)
+
+
+def contact_method_verbs(mediums):
+    return oxford_comma([
+        contact_medium_verb_lookup[medium]
+        for medium in mediums
+    ])
+
+
+def contact_info_to_html(contact_info_dict):
+    phone = contact_info_dict.get('sms', '')
+    if phone:
+        phone = format_phone_number(phone)
+    email = contact_info_dict.get('email', '')
+
+    html = oxford_comma([
+        thing for thing in (phone, email) if thing])
+    return mark_safe(html)
 
 
 class Linkifier:

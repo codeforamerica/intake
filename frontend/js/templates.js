@@ -23,8 +23,14 @@ function renderNoteTemplate(note){
   '</div>';
 }
 
+function renderApplicationSearchResult(searchResult){
+  var activeClass = searchResult.selected ? ' active' : '';
+  return '<li class="autocomplete-result'+activeClass+'"><a href="'+searchResult.url+'">'+searchResult.name+'</a></li>';
+}
+
 module.exports = {
   tag: renderTagTemplate,
   tagAutocompleteSearchResult: renderTagAutocompleteResultTemplate,
   note: renderNoteTemplate,
+  searchResult: renderApplicationSearchResult,
 }

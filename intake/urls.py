@@ -6,8 +6,10 @@ from intake.views import (
     legacy_redirect_views,
     application_form_views,
     admin_views,
+    app_detail_views,
     application_note_views,
-    tag_views
+    tag_views,
+    status_update_views
     )
 
 urlpatterns = [
@@ -17,6 +19,10 @@ urlpatterns = [
     url(r'^partners/$', public_views.partner_list, name='intake-partner_list'),
     url(r'^partners/(?P<organization_slug>[\w-]+)/$',
         public_views.partner_detail, name='intake-partner_detail'),
+    url(r'^recommendation-letters/$', public_views.recommendation_letters,
+        name='intake-recommendation_letters'),
+    url(r'^personal-statement/$', public_views.personal_statement,
+        name='intake-personal_statement'),
 
     # public form processing views
     url(r'^apply/$',
@@ -37,8 +43,12 @@ urlpatterns = [
 
     # protected views
     url(r'^application/(?P<submission_id>[0-9]+)/$',
-        login_required(admin_views.app_detail),
+        login_required(app_detail_views.app_detail),
         name='intake-app_detail'),
+
+    url(r'^application/(?P<submission_id>[0-9]+)/history/$',
+        login_required(app_detail_views.app_history),
+        name='intake-app_history'),
 
     url(r'^application/(?P<submission_id>[0-9]+)/pdf/$',
         login_required(admin_views.filled_pdf),
@@ -79,6 +89,19 @@ urlpatterns = [
     url(r'^applications/mark/transferred/$',
         login_required(admin_views.mark_transferred_to_other_org),
         name='intake-mark_transferred_to_other_org'),
+
+    url(r'^applications/(?P<submission_id>[0-9]+)/update-status/$',
+        login_required(status_update_views.create_status_update),
+        name='intake-create_status_update'),
+
+    url(r'^applications/(?P<submission_id>[0-9]+)/review-status/$',
+        login_required(status_update_views.review_status_notification),
+        name='intake-review_status_notification'),
+
+    url(
+        r'^applicant-autocomplete/$',
+        admin_views.applicant_autocomplete,
+        name='applicant-autocomplete',),
 
     # API Views
     url(r'^notes/create/$',

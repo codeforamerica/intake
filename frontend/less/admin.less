@@ -11,6 +11,9 @@
 	margin: 0;
 	font-weight: inherit;
 }
+.pagination-nav{
+	float: right;
+}
 ul.pagination {
 	margin-top: .5em;
 }
@@ -88,7 +91,7 @@ table.table tr > td.org_tags {
 			margin: 0;
 		}
 	}
-	ul.tags-autocomplete_results {
+	ul.tags-autocomplete_results, ul.applicants-autocomplete_results {
 		margin: 0;
 		padding: 0;
 		position: absolute;
@@ -134,4 +137,45 @@ table.table tr > td.org_tags {
 		background-color: @brand-danger;
 		color: #fff;
 	}
+}
+
+.app-detail-nav-bar {
+	overflow: auto;
+	position: relative;
+	margin-top: 1em;
+}
+
+.app-detail-nav-bar ul {
+	padding: 0;
+}
+.app-detail-nav-bar li {
+	display: inline-block;
+	a {
+		display: inline-block;
+		padding: 1em 1em 0em 1em;
+	}
+}
+
+.app-detail-nav-bar li.active a {
+	color: black;
+}
+.app-detail-nav-bar hr {
+	margin-top: 0.75em;
+	margin-bottom: 0;
+	border-top-width: 3px;
+}
+
+.update-status-button {
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+.action_bar h1 {
+	overflow: auto;
+	position: relative;
+}
+.action_bar a.btn {
+	position: absolute;
+	right: 0;
 }

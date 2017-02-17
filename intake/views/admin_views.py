@@ -2,16 +2,18 @@ from django.shortcuts import redirect, get_object_or_404
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import View
 from django.views.generic.base import TemplateView
+from django.utils.safestring import mark_safe
 
-from django.utils.decorators import method_decorator
-from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.db.models import Q
+
 from django.contrib import messages
 from django.http import Http404, HttpResponse
 from django.template.response import TemplateResponse
 
+from dal import autocomplete
 
-from intake import models, notifications, permissions, utils
+
+from intake import models, notifications, forms, utils
 from user_accounts.models import Organization
 from printing.pdf_form_display import PDFFormDisplay
 from intake.aggregate_serializer_fields import get_todays_date
@@ -20,54 +22,8 @@ import intake.services.submissions as SubmissionsService
 import intake.services.bundles as BundlesService
 import intake.services.tags as TagsService
 
-NOT_ALLOWED_MESSAGE = str(
-    "Sorry, you are not allowed to access that client information. "
-    "If you have any questions, please contact us at "
-    "clearmyrecord@codeforamerica.org")
-
-
-def not_allowed(request):
-    messages.error(request, NOT_ALLOWED_MESSAGE)
-    return redirect('intake-app_index')
-
-
-class ViewAppDetailsMixin(PermissionRequiredMixin):
-    permission_required = permissions.CAN_SEE_APP_DETAILS.app_code
-
-
-class ApplicationDetail(ViewAppDetailsMixin, View):
-    """Displays detailed information for an org user.
-    """
-    template_name = "app_detail.jinja"
-
-    def not_allowed(self, request):
-        messages.error(request, NOT_ALLOWED_MESSAGE)
-        return redirect('intake-app_index')
-
-    def mark_viewed(self, request, submission):
-        models.ApplicationLogEntry.log_opened([submission.id], request.user)
-        notifications.slack_submissions_viewed.send(
-            submissions=[submission], user=request.user,
-            bundle_url=submission.get_external_url())
-
-    def get(self, request, submission_id):
-        if request.user.profile.should_see_pdf() and not request.user.is_staff:
-            return redirect(
-                reverse_lazy('intake-filled_pdf',
-                             kwargs=dict(submission_id=submission_id)))
-        submissions = list(SubmissionsService.get_permitted_submissions(
-            request.user, [submission_id]))
-        if not submissions:
-            return self.not_allowed(request)
-        submission = submissions[0]
-        self.mark_viewed(request, submission)
-        display_form, letter_display = submission.get_display_form_for_user(
-            request.user)
-        context = dict(
-            form=display_form,
-            declaration_form=letter_display)
-        response = TemplateResponse(request, self.template_name, context)
-        return response
+from intake.views.base_views import ViewAppDetailsMixin
+from intake.views.app_detail_views import ApplicationDetail, not_allowed
 
 
 class FilledPDF(ApplicationDetail):
@@ -107,17 +63,18 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
     template_name = "app_index.jinja"
 
     def get_context_data(self, **kwargs):
-        is_staff = self.request.user.is_staff
         context = super().get_context_data(**kwargs)
+        is_staff = self.request.user.is_staff
         context['submissions'] = \
-            SubmissionsService.get_permitted_submissions(
-                self.request.user, related_objects=True)
-        # context['page_counter'] = \
-        #     utils.get_page_navigation_counter(
-        #         page=context['submissions'],
-        #         wing_size=9)
+            SubmissionsService.get_paginated_submissions_for_user(
+                self.request.user, self.request.GET.get('page'))
+        context['page_counter'] = \
+            utils.get_page_navigation_counter(
+                page=context['submissions'],
+                wing_size=9)
         context['show_pdf'] = self.request.user.profile.should_see_pdf()
         context['body_class'] = 'admin'
+        context['search_form'] = forms.ApplicationSelectForm()
         if is_staff:
             context['ALL_TAG_NAMES'] = TagsService.get_all_used_tag_names()
         return context
@@ -182,7 +139,7 @@ class ApplicationBundleDetail(ApplicationDetail):
         bundle = get_object_or_404(models.ApplicationBundle, pk=int(bundle_id))
         has_access = request.user.profile.should_have_access_to(bundle)
         if not has_access:
-            return self.not_allowed(request)
+            return not_allowed(request)
         submissions = list(
             request.user.profile.filter_submissions(bundle.submissions.all()))
         forms = [
@@ -328,9 +285,9 @@ class ReferToAnotherOrgView(MarkSubmissionStepView):
     def modify_submissions(self):
         submission = self.submissions[0]
         to_organization_id = int(self.request.GET.get('to_organization_id'))
-        submission.organizations.remove_orgs_from_sub(
-            self.request.user.profile.organization)
-        submission.organizations.add_orgs_to_sub(to_organization_id)
+        submission.organizations.transfer_application(
+            from_org=self.request.user.profile.organization,
+            to_org=to_organization_id)
 
     def notify(self):
         notifications.slack_submission_transferred.send(
@@ -437,14 +394,40 @@ class CaseBundlePrintoutPDFView(ViewAppDetailsMixin, View):
         return response
 
 
+class ApplicantAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = models.Application.objects.filter(
+                organization=self.request.user.profile.organization)
+
+        if self.q:
+            qs = qs.filter(
+                Q(form_submission__first_name__icontains=self.q) |
+                Q(form_submission__last_name__icontains=self.q) |
+                Q(form_submission__ssn__icontains=self.q) |
+                Q(form_submission__last_four__icontains=self.q) |
+                Q(form_submission__drivers_license_or_id__icontains=self.q) |
+                Q(form_submission__phone_number__icontains=self.q) |
+                Q(form_submission__alternate_phone_number__icontains=self.q) |
+                Q(form_submission__email__icontains=self.q) |
+                Q(form_submission__case_number__icontains=self.q)
+            )
+        return qs
+
+    def get_result_value(self, application):
+        return dict(
+            organization=application.organization.name,
+            name=application.form_submission.get_full_name(),
+            url=application.form_submission.get_absolute_url())
+
+
 filled_pdf = FilledPDF.as_view()
 pdf_bundle = FilledPDFBundle.as_view()
 app_index = ApplicationIndex.as_view()
 app_bundle = ApplicationBundle.as_view()
-app_detail = ApplicationDetail.as_view()
 mark_processed = MarkProcessed.as_view()
 mark_transferred_to_other_org = ReferToAnotherOrgView.as_view()
 app_bundle_detail = ApplicationBundleDetail.as_view()
 app_bundle_detail_pdf = ApplicationBundleDetailPDFView.as_view()
 case_printout = CasePrintoutPDFView.as_view()
 case_bundle_printout = CaseBundlePrintoutPDFView.as_view()
+applicant_autocomplete = ApplicantAutocomplete.as_view()

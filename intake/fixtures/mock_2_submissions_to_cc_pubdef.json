@@ -1,141 +1,158 @@
 [
 {
   "model": "intake.applicant",
-  "pk": 541,
+  "pk": 87,
   "fields": {
     "visitor": null
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 542,
+  "pk": 88,
   "fields": {
     "visitor": null
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 740,
+  "pk": 86,
   "fields": {
-    "applicant": 541,
+    "applicant": 87,
     "duplicate_set": null,
     "answers": {
-      "understands_limits": "yes",
+      "serving_sentence": "no",
+      "income_source": "a job",
+      "us_citizen": "yes",
+      "last_name": "Lewis",
       "middle_name": "",
-      "email": "perrykevin@yahoo.com",
-      "dob": {
-        "day": "23",
-        "year": "1974",
-        "month": "5"
-      },
       "how_did_you_hear": "",
-      "first_name": "Charles",
-      "consent_to_represent": "yes",
-      "on_probation_parole": "no",
-      "phone_number": "2536650860",
-      "last_name": "Orr",
-      "additional_information": "",
-      "monthly_income": 2329,
+      "monthly_income": 122,
+      "email": "rjackson@hotmail.com",
       "currently_employed": "yes",
+      "dob": {
+        "year": "1995",
+        "day": "22",
+        "month": "1"
+      },
+      "consent_to_represent": "yes",
+      "phone_number": "2980421784",
+      "first_name": "Sonya",
+      "address": {
+        "state": "MT",
+        "city": "Ryantown",
+        "zip": "67986",
+        "street": "75431 Nicholas Junction"
+      },
+      "understands_limits": "yes",
+      "on_probation_parole": "no",
+      "additional_information": "",
       "contact_preferences": [
-        "prefers_email",
-        "prefers_voicemail",
-        "prefers_snailmail",
         "prefers_sms"
       ],
-      "income_source": "a job",
-      "serving_sentence": "no",
-      "us_citizen": "no",
-      "address": {
-        "zip": "39998",
-        "city": "Jeanetteview",
-        "street": "195 Susan Lodge",
-        "state": "TN"
-      },
-      "monthly_expenses": 2824
+      "monthly_expenses": 2830
     },
-    "old_uuid": "45914cce3bb9438ca4ffe7343869bec4",
-    "anonymous_name": "Caring River",
-    "date_received": "2017-01-21T20:38:22-08:00"
+    "first_name": "Sonya",
+    "last_name": "Lewis",
+    "dob": null,
+    "ssn": "",
+    "last_four": "",
+    "drivers_license_or_id": "",
+    "case_number": "",
+    "phone_number": "2980421784",
+    "alternate_phone_number": "",
+    "email": "rjackson@hotmail.com",
+    "old_uuid": "c9f67491b5234144a3f97ede201ec347",
+    "anonymous_name": "Amicable Armadillo",
+    "date_received": "2017-02-12T10:05:24-08:00"
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 741,
+  "pk": 87,
   "fields": {
-    "applicant": 542,
+    "applicant": 88,
     "duplicate_set": null,
     "answers": {
-      "understands_limits": "yes",
+      "serving_sentence": "no",
+      "income_source": "a job",
+      "us_citizen": "yes",
+      "last_name": "Rose",
       "middle_name": "",
-      "email": "cheryl82@gmail.com",
-      "dob": {
-        "day": "25",
-        "year": "1977",
-        "month": "8"
-      },
       "how_did_you_hear": "",
-      "first_name": "Kristine",
-      "consent_to_represent": "yes",
-      "on_probation_parole": "no",
-      "phone_number": "2812578132",
-      "last_name": "Russell",
-      "additional_information": "",
-      "monthly_income": 3759,
+      "monthly_income": 2037,
+      "email": "bmaldonado@hotmail.com",
       "currently_employed": "no",
+      "dob": {
+        "year": "1984",
+        "day": "26",
+        "month": "6"
+      },
+      "consent_to_represent": "yes",
+      "phone_number": "2604195079",
+      "first_name": "Cathy",
+      "address": {
+        "state": "PA",
+        "city": "South Veronicaville",
+        "zip": "97046",
+        "street": "4669 Brooks Crossroad"
+      },
+      "understands_limits": "yes",
+      "on_probation_parole": "no",
+      "additional_information": "",
       "contact_preferences": [
-        "prefers_snailmail",
         "prefers_sms",
         "prefers_email"
       ],
-      "income_source": "a job",
-      "serving_sentence": "no",
-      "us_citizen": "yes",
-      "address": {
-        "zip": "23463",
-        "city": "Port Danielhaven",
-        "street": "7177 Evans Stream Suite 751",
-        "state": "SC"
-      },
-      "monthly_expenses": 1131
+      "monthly_expenses": 2312
     },
-    "old_uuid": "5e90cc9ae54e40bca8e67916f09558ae",
-    "anonymous_name": "Shining Moon",
-    "date_received": "2017-01-19T22:01:17-08:00"
+    "first_name": "Cathy",
+    "last_name": "Rose",
+    "dob": null,
+    "ssn": "",
+    "last_four": "",
+    "drivers_license_or_id": "",
+    "case_number": "",
+    "phone_number": "2604195079",
+    "alternate_phone_number": "",
+    "email": "bmaldonado@hotmail.com",
+    "old_uuid": "dd4b575c75794745acc3fb7321ba7b55",
+    "anonymous_name": "Pastel Library",
+    "date_received": "2017-02-03T21:13:33-08:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 408,
+  "pk": 119,
   "fields": {
     "organization": [
       "Contra Costa Public Defender"
     ],
-    "form_submission": 740
+    "form_submission": 86
   }
 },
 {
   "model": "intake.application",
-  "pk": 409,
+  "pk": 120,
   "fields": {
     "organization": [
       "Contra Costa Public Defender"
     ],
-    "form_submission": 741
+    "form_submission": 87
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 108,
+  "pk": 117,
   "fields": {
-    "created": "2017-01-25T20:13:34.117Z",
-    "updated": "2017-01-25T20:13:34.125Z",
+    "created": "2017-02-17T00:59:04.466Z",
+    "updated": "2017-02-17T00:59:04.487Z",
     "status_type": 1,
-    "additional_information": "just a little note",
+    "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "cc_pubdef_user"
     ],
-    "application": 408,
+    "application": 119,
+    "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
     ]
@@ -143,19 +160,46 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 109,
+  "pk": 118,
   "fields": {
-    "created": "2017-01-25T20:13:34.136Z",
-    "updated": "2017-01-25T20:13:34.140Z",
+    "created": "2017-02-17T00:59:04.519Z",
+    "updated": "2017-02-17T00:59:04.528Z",
     "status_type": 2,
-    "additional_information": "just a little note",
+    "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "cc_pubdef_user"
     ],
-    "application": 409,
+    "application": 120,
+    "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
     ]
+  }
+},
+{
+  "model": "intake.statusnotification",
+  "pk": 117,
+  "fields": {
+    "status_update": 117,
+    "contact_info": {
+      "email": "bgolder+borg@codeforamerica.org"
+    },
+    "base_message": "Resistance is futile",
+    "sent_message": "Live long and prosper",
+    "created": "2017-02-17T00:59:05.410Z"
+  }
+},
+{
+  "model": "intake.statusnotification",
+  "pk": 118,
+  "fields": {
+    "status_update": 118,
+    "contact_info": {
+      "email": "bgolder+borg@codeforamerica.org"
+    },
+    "base_message": "Resistance is futile",
+    "sent_message": "Live long and prosper",
+    "created": "2017-02-17T00:59:05.422Z"
   }
 }
 ]

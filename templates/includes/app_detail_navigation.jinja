@@ -1,0 +1,29 @@
+<div class="app-detail-nav-bar">
+  <ul>
+    {%- if request.path == url('intake-app_detail', submission_id=submission.id) %}
+    <li role="presentation" class="active">
+      <a href="{{
+        url('intake-app_detail', submission_id=submission.id)
+      }}">Application</a>
+    </li>
+    <li role="presentation">
+      <a href="{{
+          url('intake-app_history', submission_id=submission.id)
+        }}">History</a>
+    </li>
+    {% else %}
+    <li role="presentation">
+      <a href="{{
+        url('intake-app_detail', submission_id=submission.id)
+      }}">Application</a>
+    </li>
+    <li role="presentation" class="active">
+      <a href="{{
+          url('intake-app_history', submission_id=submission.id)
+        }}">History</a>
+    </li>
+    {% endif %}
+  </ul>
+  <a href="{{ url('intake-create_status_update', submission_id=submission.id) }}" class="btn btn-primary update-status-button">Update Status</a>
+  <hr>
+</div>

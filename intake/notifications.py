@@ -1,6 +1,7 @@
 from collections import namedtuple
 import json
 import requests
+from intake.constants import SMS, EMAIL
 from django.core import mail
 from django.conf import settings
 from django.utils.translation import ugettext as _
@@ -75,14 +76,6 @@ class TemplateNotification:
         self._content_base = namedtuple('RenderedContent',
                                         self.templates.keys())
 
-    # def get_context_variables(self):
-    #     return {
-    #         key: jinja.env.parse(
-    #             jinja.env.loader.get_source(
-    #                 jinja.env, path)[0])
-    #     }
-    #     for key in self.templates.keys():
-
     def render(self, **context_args):
         if not self.templates:
             self.init_templates()
@@ -123,15 +116,11 @@ class EmailNotification(TemplateNotification):
         )
 
 
-class FrontNotification(TemplateNotification):
+class SimpleFrontNotification:
 
-    def __init__(self, default_context=None, subject_template='',
-                 body_template_path=''):
-        super().__init__(
-            default_context=default_context,
-            subject_template=subject_template,
-            body_template_path=body_template_path
-        )
+    def __init__(self, channel_id=None):
+        if channel_id:
+            self.channel_id = channel_id
 
     def build_headers(self):
         return {
@@ -154,20 +143,19 @@ REQUEST JSON:
 {payload}
 """.format(details=str(response.json()), payload=payload))
 
-    def send(self, to, **context_args):
-        content = self.render(**context_args)
+    def send(self, to, body, subject=None):
         if isinstance(to, str):
             to = [to]
         data = {
-            'body': content.body.replace('\n', '<br>'),
-            'text': content.body,
+            'body': body.replace('\n', '<br>'),
+            'text': body,
             'to': to,
             'options': {
                 'archive': True
             }
         }
-        if hasattr(content, 'subject') and content.subject:
-            data['subject'] = content.subject
+        if subject:
+            data.update(subject=subject)
         payload = json.dumps(data)
         if check_that_remote_connections_are_okay(
                 'FRONT POST:', payload):
@@ -180,12 +168,48 @@ REQUEST JSON:
             return result
 
 
+class FrontNotification(TemplateNotification, SimpleFrontNotification):
+
+    def __init__(self, default_context=None, subject_template='',
+                 body_template_path=''):
+        super().__init__(
+            default_context=default_context,
+            subject_template=subject_template,
+            body_template_path=body_template_path
+        )
+
+    def send(self, to, **context_args):
+        content = self.render(**context_args)
+        kwargs = dict(body=content.body)
+        if hasattr(content, 'subject') and content.subject:
+            kwargs['subject'] = content.subject
+        return super().send(to, **kwargs)
+
+
 class FrontEmailNotification(FrontNotification):
     channel_id = getattr(settings, 'FRONT_EMAIL_CHANNEL_ID', None)
 
 
 class FrontSMSNotification(FrontNotification):
     channel_id = getattr(settings, 'FRONT_PHONE_CHANNEL_ID', None)
+
+
+front_sms = SimpleFrontNotification(
+    channel_id=getattr(settings, 'FRONT_PHONE_CHANNEL_ID', None))
+
+front_email = SimpleFrontNotification(
+    channel_id=getattr(settings, 'FRONT_EMAIL_CHANNEL_ID', None))
+
+
+def send_simple_front_notification(contact_info, message, subject=None):
+    results = []
+    if SMS in contact_info:
+        results.append(
+            front_sms.send(contact_info[SMS], message))
+    if EMAIL in contact_info:
+        results.append(
+            front_email.send(contact_info[EMAIL], message, subject=subject))
+    return results
 
 
 class BasicSlackNotification:
@@ -282,6 +306,7 @@ email_followup = FrontEmailNotification(
     body_template_path='email/followup.jinja')
 sms_followup = FrontSMSNotification(
     body_template_path='text/followup.jinja')
+
 
 # submission, method
 slack_notification_sent = SlackTemplateNotification(

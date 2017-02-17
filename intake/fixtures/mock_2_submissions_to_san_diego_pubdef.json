@@ -1,146 +1,167 @@
 [
 {
   "model": "intake.applicant",
-  "pk": 553,
+  "pk": 99,
   "fields": {
     "visitor": null
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 554,
+  "pk": 100,
   "fields": {
     "visitor": null
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 752,
+  "pk": 98,
   "fields": {
-    "applicant": 553,
+    "applicant": 99,
     "duplicate_set": null,
     "answers": {
-      "understands_limits": "yes",
-      "middle_name": "Matthew",
+      "last_name": "Dillon",
+      "email": "knightmichael@hotmail.com",
+      "how_did_you_hear": "from work",
+      "where_probation_or_parole": "Solano County",
       "dob": {
-        "day": "7",
-        "year": "1985",
-        "month": "1"
+        "year": "1973",
+        "day": "17",
+        "month": "7"
       },
-      "first_name": "Scott",
-      "phone_number": "2688782116",
-      "rap_outside_sf": "no",
-      "when_where_outside_sf": "",
-      "contact_preferences": [
-        "prefers_snailmail",
-        "prefers_email",
-        "prefers_voicemail"
-      ],
       "being_charged": "no",
-      "serving_sentence": "no",
+      "alternate_phone_number": "2445741710",
+      "rap_outside_sf": "no",
+      "on_probation_parole": "yes",
       "owes_court_fees": "no",
-      "us_citizen": "yes",
-      "case_number": "C5368-081",
-      "alternate_phone_number": "2578451442",
-      "email": "hodgesholly@yahoo.com",
       "additional_information": "I want help",
       "when_probation_or_parole": "2018",
+      "serving_sentence": "no",
+      "us_citizen": "yes",
+      "phone_number": "2484215470",
       "consent_to_represent": "yes",
-      "on_probation_parole": "yes",
-      "where_probation_or_parole": "Solano County",
-      "last_name": "Huffman",
-      "how_did_you_hear": "from work",
+      "middle_name": "Jennifer",
+      "when_where_outside_sf": "",
+      "first_name": "Michele",
       "address": {
-        "zip": "10855",
-        "city": "West Patrickview",
-        "street": "9671 Katherine Field Apt. 840",
-        "state": "NC"
-      }
+        "state": "GA",
+        "city": "West Kennethberg",
+        "zip": "04369",
+        "street": "3860 Raymond Rapids"
+      },
+      "understands_limits": "yes",
+      "case_number": "C6142-601",
+      "contact_preferences": [
+        "prefers_email",
+        "prefers_sms"
+      ]
     },
-    "old_uuid": "62d5581355de4dc9ad90bf8b30322529",
-    "anonymous_name": "Adventurous Giraffe",
-    "date_received": "2017-01-12T08:30:29-08:00"
+    "first_name": "Michele",
+    "last_name": "Dillon",
+    "dob": null,
+    "ssn": "",
+    "last_four": "",
+    "drivers_license_or_id": "",
+    "case_number": "C6142-601",
+    "phone_number": "2484215470",
+    "alternate_phone_number": "2445741710",
+    "email": "knightmichael@hotmail.com",
+    "old_uuid": "bdbdb18b39ea4093aa47daba649b38ec",
+    "anonymous_name": "Colossal Mushroom",
+    "date_received": "2017-02-04T17:24:53-08:00"
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 753,
+  "pk": 99,
   "fields": {
-    "applicant": 554,
+    "applicant": 100,
     "duplicate_set": null,
     "answers": {
-      "understands_limits": "yes",
-      "middle_name": "Thomas",
+      "last_name": "Russell",
+      "email": "osbornemily@gmail.com",
+      "how_did_you_hear": "from work",
+      "where_probation_or_parole": "Solano County",
       "dob": {
-        "day": "28",
-        "year": "1997",
-        "month": "8"
+        "year": "1976",
+        "day": "23",
+        "month": "12"
       },
-      "first_name": "Daniel",
-      "phone_number": "2830005261",
-      "rap_outside_sf": "no",
-      "when_where_outside_sf": "",
-      "contact_preferences": [
-        "prefers_sms"
-      ],
       "being_charged": "no",
-      "serving_sentence": "no",
-      "owes_court_fees": "no",
-      "us_citizen": "yes",
-      "case_number": "C6273-640",
-      "alternate_phone_number": "2842122962",
-      "email": "rodriguezhannah@gmail.com",
+      "alternate_phone_number": "2310224211",
+      "rap_outside_sf": "no",
+      "on_probation_parole": "yes",
+      "owes_court_fees": "yes",
       "additional_information": "I want help",
       "when_probation_or_parole": "2018",
+      "serving_sentence": "no",
+      "us_citizen": "yes",
+      "phone_number": "2298034448",
       "consent_to_represent": "yes",
-      "on_probation_parole": "yes",
-      "where_probation_or_parole": "Solano County",
-      "last_name": "Quinn",
-      "how_did_you_hear": "from work",
+      "middle_name": "Colleen",
+      "when_where_outside_sf": "",
+      "first_name": "Maria",
       "address": {
-        "zip": "90907",
-        "city": "Roachbury",
-        "street": "0843 West Ville",
-        "state": "KY"
-      }
+        "state": "OR",
+        "city": "Lake Tracimouth",
+        "zip": "32228",
+        "street": "845 Tyler Isle"
+      },
+      "understands_limits": "yes",
+      "case_number": "C0260-814",
+      "contact_preferences": [
+        "prefers_email",
+        "prefers_sms"
+      ]
     },
-    "old_uuid": "0f5b46017fbd4d28b4aa2ee1f0e6f1dd",
-    "anonymous_name": "Chartreuse Redwood",
-    "date_received": "2017-01-15T03:11:10-08:00"
+    "first_name": "Maria",
+    "last_name": "Russell",
+    "dob": null,
+    "ssn": "",
+    "last_four": "",
+    "drivers_license_or_id": "",
+    "case_number": "C0260-814",
+    "phone_number": "2298034448",
+    "alternate_phone_number": "2310224211",
+    "email": "osbornemily@gmail.com",
+    "old_uuid": "65a81eafc14e45ffa3a233be517ab81b",
+    "anonymous_name": "Bold Sun",
+    "date_received": "2017-02-13T00:52:10-08:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 420,
+  "pk": 131,
   "fields": {
     "organization": [
       "San Diego County Public Defender"
     ],
-    "form_submission": 752
+    "form_submission": 98
   }
 },
 {
   "model": "intake.application",
-  "pk": 421,
+  "pk": 132,
   "fields": {
     "organization": [
       "San Diego County Public Defender"
     ],
-    "form_submission": 753
+    "form_submission": 99
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 120,
+  "pk": 129,
   "fields": {
-    "created": "2017-01-25T20:13:34.343Z",
-    "updated": "2017-01-25T20:13:34.347Z",
+    "created": "2017-02-17T00:59:04.795Z",
+    "updated": "2017-02-17T00:59:04.802Z",
     "status_type": 6,
-    "additional_information": "just a little note",
+    "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "san_diego_pubdef_user"
     ],
-    "application": 420,
+    "application": 131,
+    "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
     ]
@@ -148,19 +169,46 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 121,
+  "pk": 130,
   "fields": {
-    "created": "2017-01-25T20:13:34.360Z",
-    "updated": "2017-01-25T20:13:34.365Z",
+    "created": "2017-02-17T00:59:04.824Z",
+    "updated": "2017-02-17T00:59:04.830Z",
     "status_type": 7,
-    "additional_information": "just a little note",
+    "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "san_diego_pubdef_user"
     ],
-    "application": 421,
+    "application": 132,
+    "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
     ]
+  }
+},
+{
+  "model": "intake.statusnotification",
+  "pk": 129,
+  "fields": {
+    "status_update": 129,
+    "contact_info": {
+      "email": "bgolder+borg@codeforamerica.org"
+    },
+    "base_message": "Resistance is futile",
+    "sent_message": "Live long and prosper",
+    "created": "2017-02-17T00:59:05.914Z"
+  }
+},
+{
+  "model": "intake.statusnotification",
+  "pk": 130,
+  "fields": {
+    "status_update": 130,
+    "contact_info": {
+      "email": "bgolder+borg@codeforamerica.org"
+    },
+    "base_message": "Resistance is futile",
+    "sent_message": "Live long and prosper",
+    "created": "2017-02-17T00:59:05.920Z"
   }
 }
 ]
