@@ -10,7 +10,7 @@ ALL = (constants.Organizations.ALL, 'Total (All Organizations)')
 
 def sort_status_type_and_next_step_counts(item_counts):
     """item_counts is a counter"""
-    total_count = item_counts.pop(TOTAL)
+    total_count = item_counts.pop(TOTAL, 0)
     sorted_bucket_counts = list(sorted(
         item_counts.items(),
         key=lambda i: i[1],
