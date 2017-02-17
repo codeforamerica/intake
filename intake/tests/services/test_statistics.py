@@ -11,7 +11,7 @@ class TestGetStatusUpdateSuccessMetrics(TestCase):
     def test_returns_expected_data(self):
         number_of_orgs = Organization.objects.filter(
             is_receiving_agency=True).count()
-        with self.assertNumQueries(4):
+        with self.assertNumQueries(5):
             data = statistics.get_status_update_success_metrics()
         data_dict = dict(data)
         self.assertEqual(len(data), number_of_orgs + 1)

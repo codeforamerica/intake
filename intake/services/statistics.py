@@ -52,8 +52,9 @@ def get_status_update_success_metrics():
             update.application.organization.name
         )
         status_type = update.status_type.display_name
-        next_steps = update.next_steps.all().values_list(
-            'display_name', flat=True)
+        next_steps = [
+            next_step.display_name for
+            next_step in update.next_steps.all()]
         if not org_status_type_counts.get(org):
             org_status_type_counts[org] = Counter()
         if not org_status_notification_counts.get(org):
