@@ -91,6 +91,7 @@ class ReviewStatusNotificationFormView(StatusUpdateBase, FormView):
         initial = super().get_initial()
         base_message = \
             StatusNotificationService.get_base_message_from_status_update_data(
+                self.request,
                 self.existing_status_update_data)
         initial.update(sent_message=base_message)
         return initial

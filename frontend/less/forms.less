@@ -30,7 +30,7 @@ section.content.application_form {
 	ol { padding-left: 1.5em; }
 }
 .field {
-	input, textarea {
+	input, textarea, .field-preceding_text {
 		font-weight: 400;
 		font-size: 1.25em;
 	}
@@ -61,6 +61,18 @@ section.content.application_form {
 .field + p { margin-top: 1.5em; }
 form p + p { margin-top: 1.5em; }
 span + .subfield { margin-top: .5em; }
+.field-preceding_text {
+	display: block;
+	padding: 2px;
+	padding-bottom: 0;
+	color: #888;
+	border: 1px solid black;
+	border-bottom: 0;
+}
+.field-preceding_text + .field-input_wrapper textarea {
+	border-top: 0;
+	padding-top: 0;
+}
 .options_list {
 	padding: 0;
 	margin: .25em -.25em;

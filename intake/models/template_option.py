@@ -1,4 +1,6 @@
 from django.db import models
+from intake.validators import template_field_renders_correctly
+from intake.utils import render_template_string
 
 
 class TemplateOptionManager(models.Manager):
@@ -11,16 +13,14 @@ class TemplateOption(models.Model):
 
     label = models.TextField()
     display_name = models.TextField()
-
-    '''
-    template should have an arg for custom validators once we determine
-    what those should look like
-    '''
-    template = models.TextField(blank=True)
-
+    template = models.TextField(
+        blank=True, validators=[template_field_renders_correctly])
     help_text = models.TextField(blank=True)
     slug = models.SlugField(unique=True)
     is_active = models.BooleanField(default=True)
+
+    def render(self, context):
+        return render_template_string(self.template, context)
 
     class Meta:
         abstract = True

@@ -84,6 +84,7 @@ TEMPLATES = [
                 "to_json": "project.jinja2.to_json",
                 "humanize": "project.jinja2.humanize",
                 "contact_method_verbs": "project.jinja2.contact_method_verbs",
+                "format_phone_number": "project.jinja2.format_phone_number",
                 "settings": "django.conf.settings",
                 "local_time": "intake.utils.local_time",
             }

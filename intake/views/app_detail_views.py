@@ -54,6 +54,8 @@ class ApplicationDetail(ViewAppDetailsMixin, TemplateView):
                 organization=self.request.user.profile.organization)
         for application in applications:
             if application.status_updates.exists():
+                # latest_status is cached on the model instance
+                # for easier template randering. It is not saved to the db
                 application.latest_status = \
                     application.status_updates.latest('updated')
         context.update(

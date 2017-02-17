@@ -6,6 +6,13 @@ from pytz import timezone as pytz_timezone
 from intake.constants import (
     PACIFIC_TIME, STAFF_NAME_CHOICES, DEFAULT_ORGANIZATION_ORDER
 )
+from django.template import loader
+
+jinja = None
+
+
+def load_jinja():
+    return loader.engines['jinja']
 
 
 def local_time(dt, fmt=None, tz_name='US/Pacific'):
@@ -102,3 +109,14 @@ def get_page_navigation_counter(page, wing_size=3, gap_symbol='jump'):
         return left_gap + sorted(list(right_side))
     else:
         return left_gap + sorted(list(window)) + right_gap
+
+
+def compile_template_string(template_string):
+    global jinja
+    if not jinja:
+        jinja = load_jinja()
+    return jinja.env.from_string(template_string)
+
+
+def render_template_string(template_string, context):
+    return compile_template_string(template_string).render(context)

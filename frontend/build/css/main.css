@@ -3715,7 +3715,8 @@ section.content.application_form {
   padding-left: 1.5em;
 }
 .field input,
-.field textarea {
+.field textarea,
+.field .field-preceding_text {
   font-weight: 400;
   font-size: 1.25em;
 }
@@ -3761,6 +3762,18 @@ form p + p {
 }
 span + .subfield {
   margin-top: .5em;
+}
+.field-preceding_text {
+  display: block;
+  padding: 2px;
+  padding-bottom: 0;
+  color: #888;
+  border: 1px solid black;
+  border-bottom: 0;
+}
+.field-preceding_text + .field-input_wrapper textarea {
+  border-top: 0;
+  padding-top: 0;
 }
 .options_list {
   padding: 0;
@@ -4443,7 +4456,8 @@ table.table tr > td.org_tags {
 .applications_list div.note-remove > button.btn .glyphicon {
   margin: 0;
 }
-.applications_list ul.tags-autocomplete_results {
+.applications_list ul.tags-autocomplete_results,
+.applications_list ul.applicants-autocomplete_results {
   margin: 0;
   padding: 0;
   position: absolute;
@@ -5035,15 +5049,46 @@ li.application-event-block .application-event-body .status-notification-message 
   margin-top: 0.5em;
 }
 /***Autocomplete (App Index)***/
-a.autocomplete {
-  color: #000;
-}
 .centered-to-header {
   margin-top: 36px;
   margin-bottom: 12px;
 }
-.select2-selection__arrow {
-  display: none;
+ul.applicants-autocomplete_results {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  background-color: #fff;
+  font-size: inherit;
+  margin-top: 1px;
+  max-height: 20em;
+  overflow-y: auto;
+  -webkit-box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+li.autocomplete-result.active {
+  color: #fff;
+  background-color: #069ED6;
+}
+li.autocomplete-result {
+  padding: .2em .6em;
+  border-left: 1px solid #dfdfdf;
+  border-right: 1px solid #dfdfdf;
+  border-bottom: 1px solid #dfdfdf;
+  cursor: pointer;
+}
+li.autocomplete-result .result-match {
+  font-weight: 700;
+}
+li.autocomplete-result:hover {
+  background-color: #069ED6;
+}
+li.autocomplete-result:hover a {
+  color: #fff;
+}
+li.autocomplete-result a {
+  display: block;
 }
 /***Media Queries***/
 @media (max-width: 767px) {
