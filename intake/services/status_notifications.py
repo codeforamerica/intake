@@ -54,7 +54,7 @@ def send_and_save_new_status(request, notification_data, status_update_data):
     status_update.save()
     status_update.next_steps.add(*next_steps)
     sub = status_update_data['application'].form_submission
-    contact_info = SubmissionsService.get_usable_contact_info(sub)
+    contact_info = sub.get_usable_contact_info()
     notification_intro = get_notification_intro(
         status_update_data['author'].profile)
     default_message = '\n\n'.join([
