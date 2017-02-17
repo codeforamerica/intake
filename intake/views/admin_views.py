@@ -2,13 +2,18 @@ from django.shortcuts import redirect, get_object_or_404
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import View
 from django.views.generic.base import TemplateView
+from django.utils.safestring import mark_safe
+
+from django.db.models import Q
 
 from django.contrib import messages
 from django.http import Http404, HttpResponse
 from django.template.response import TemplateResponse
 
+from dal import autocomplete
 
-from intake import models, notifications
+
+from intake import models, notifications, forms, utils
 from user_accounts.models import Organization
 from printing.pdf_form_display import PDFFormDisplay
 from intake.aggregate_serializer_fields import get_todays_date
@@ -61,14 +66,15 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         is_staff = self.request.user.is_staff
         context['submissions'] = \
-            SubmissionsService.get_permitted_submissions(
-                self.request.user, related_objects=True)
-        # context['page_counter'] = \
-        #     utils.get_page_navigation_counter(
-        #         page=context['submissions'],
-        #         wing_size=9)
+            SubmissionsService.get_paginated_submissions_for_user(
+                self.request.user, self.request.GET.get('page'))
+        context['page_counter'] = \
+            utils.get_page_navigation_counter(
+                page=context['submissions'],
+                wing_size=9)
         context['show_pdf'] = self.request.user.profile.should_see_pdf()
         context['body_class'] = 'admin'
+        context['search_form'] = forms.ApplicationSelectForm()
         if is_staff:
             context['ALL_TAG_NAMES'] = TagsService.get_all_used_tag_names()
         return context
@@ -388,6 +394,32 @@ class CaseBundlePrintoutPDFView(ViewAppDetailsMixin, View):
         return response
 
 
+class ApplicantAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = models.Application.objects.filter(
+                organization=self.request.user.profile.organization)
+
+        if self.q:
+            qs = qs.filter(
+                Q(form_submission__first_name__icontains=self.q) |
+                Q(form_submission__last_name__icontains=self.q) |
+                Q(form_submission__ssn__icontains=self.q) |
+                Q(form_submission__last_four__icontains=self.q) |
+                Q(form_submission__drivers_license_or_id__icontains=self.q) |
+                Q(form_submission__phone_number__icontains=self.q) |
+                Q(form_submission__alternate_phone_number__icontains=self.q) |
+                Q(form_submission__email__icontains=self.q) |
+                Q(form_submission__case_number__icontains=self.q)
+            )
+        return qs
+
+    def get_result_value(self, application):
+        return dict(
+            organization=application.organization.name,
+            name=application.form_submission.get_full_name(),
+            url=application.form_submission.get_absolute_url())
+
+
 filled_pdf = FilledPDF.as_view()
 pdf_bundle = FilledPDFBundle.as_view()
 app_index = ApplicationIndex.as_view()
@@ -398,3 +430,4 @@ app_bundle_detail = ApplicationBundleDetail.as_view()
 app_bundle_detail_pdf = ApplicationBundleDetailPDFView.as_view()
 case_printout = CasePrintoutPDFView.as_view()
 case_bundle_printout = CaseBundlePrintoutPDFView.as_view()
+applicant_autocomplete = ApplicantAutocomplete.as_view()

@@ -143,7 +143,7 @@ class CountyNames:
 
 if SCOPE_TO_LIVE_COUNTIES:
     CountyNames.ALL = str(
-        'San Francisco, Alameda, Contra Costa, and Monterey Counties')
+        'San Francisco, Alameda, and Contra Costa Counties')
 
 
 COUNTY_CHOICES = (
@@ -155,9 +155,6 @@ COUNTY_CHOICES = (
         'Alameda County (near Oakland, Berkeley, San Leandro, Hayward, '
         'Fremont, Albany, Newark, Dublin, Union City, Pleasanton, '
         'or Livermore)')),
-    (Counties.MONTEREY, _(
-        'Monterey County (near Salinas, Monterey, Marina, Seaside, '
-        'Prunedale, Castroville, or King City)')),
 )
 if not SCOPE_TO_LIVE_COUNTIES:
     COUNTY_CHOICES += (
@@ -176,6 +173,9 @@ if not SCOPE_TO_LIVE_COUNTIES:
         (Counties.SANTA_CLARA, _(
             'Santa Clara County (near San Jose, Santa Clara, Campbell, '
             'Saratoga, Los Altos, Los Gatos, or Gilroy)')),
+        (Counties.MONTEREY, _(
+            'Monterey County (near Salinas, Monterey, Marina, Seaside, '
+            'Prunedale, Castroville, or King City)')),
     )
 
 COUNTY_CHOICES = sorted(COUNTY_CHOICES, key=lambda item: item[1])

@@ -541,6 +541,50 @@ li.application-event-block{
 
 }
 
+/***Autocomplete (App Index)***/
+.centered-to-header{
+  margin-top: 36px;
+  margin-bottom: 12px;
+}
+
+ul.applicants-autocomplete_results{
+  margin: 0;
+    padding: 0;
+    position: absolute;
+    background-color: #fff;
+    font-size: inherit;
+    margin-top: 1px;
+    max-height: 20em;
+    overflow-y: auto;
+    -webkit-box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.2);
+    z-index: 10;
+  }
+  li.autocomplete-result.active {
+    color: #fff;
+    background-color: @brand-note;
+  }
+  li.autocomplete-result {
+    padding: .2em .6em;
+    border-left: 1px solid #dfdfdf;
+    border-right: 1px solid #dfdfdf;
+    border-bottom: 1px solid #dfdfdf;
+    cursor: pointer;
+    .result-match {
+      font-weight: 700;
+    }
+    &:hover{
+      background-color: @brand-note;
+      a {
+        color: #fff;
+      }
+    }
+    a{
+      display: block;
+    }
+}
+
 /***Media Queries***/
 
 @media (max-width: @screen-xs-max){

@@ -14,6 +14,8 @@ ALLOWED_HOSTS = []
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 INSTALLED_APPS = [
     'django.contrib.sites',
+    'dal',
+    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
