@@ -49,3 +49,48 @@ class TestSendAndSaveNewStatus(TestCase):
         self.assertIn(expected_intro_message, notification.sent_message)
         args = notifications.send_simple_front_notification.call_args[0]
         self.assertIn(expected_intro_message, args[1])
+
+
+class TestGetBaseMessageFromStatusUpdateData(TestCase):
+
+    fixtures = [
+        'counties', 'organizations',
+        'template_options', 'mock_profiles']
+
+    def test_no_next_step_intro_if_no_next_steps(self):
+        mock_request = Mock()
+        org = Organization.objects.filter(is_live=True).last()
+        profile = org.profiles.first()
+        submission = FormSubmissionFactory(organizations=[org])
+        application = submission.applications.first()
+        status_update_data = dict(
+            author=profile.user,
+            application=application,
+            status_type=models.StatusType.objects.first(),
+            next_steps=[],
+            additional_information="")
+        result = services.status_notifications\
+            .get_base_message_from_status_update_data(
+                mock_request, status_update_data
+            )
+        next_step_intro = 'Here are your next steps:'
+        self.assertNotIn(next_step_intro, result)
+
+    def test_next_step_intro_if_next_steps(self):
+        mock_request = Mock()
+        org = Organization.objects.filter(is_live=True).last()
+        profile = org.profiles.first()
+        submission = FormSubmissionFactory(organizations=[org])
+        application = submission.applications.first()
+        status_update_data = dict(
+            author=profile.user,
+            application=application,
+            status_type=models.StatusType.objects.first(),
+            next_steps=[models.NextStep.objects.first()],
+            additional_information="")
+        result = services.status_notifications\
+            .get_base_message_from_status_update_data(
+                mock_request, status_update_data
+            )
+        next_step_intro = 'Here are your next steps:'
+        self.assertIn(next_step_intro, result)
