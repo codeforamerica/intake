@@ -347,8 +347,9 @@ class USCitizen(YesNoField):
     context_key = "us_citizen"
     label = _("Are you a U.S. citizen?")
     help_text = _(
-        "It is important for your attorney to know if you are a "
-        "U.S citizen so they can find the best ways to help you.")
+        "It is important for your attorney to know if you are a U.S citizen "
+        "so they can find the best ways to help you. Your citizenship status "
+        "will not be shared with any law enforcement agencies.")
     display_label = "Is a citizen"
 
 
