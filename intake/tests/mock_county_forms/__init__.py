@@ -269,6 +269,14 @@ class Provider(BaseProvider):
         data.update(overrides)
         return data
 
+    def santa_cruz_pubdef_answers(self, **overrides):
+        data = self.solano_pubdef_answers()
+        data.update(
+            reasons_for_applying=['lost_job', 'homeless'],
+        )
+        data.update(overrides)
+        return data
+
     def all_county_answers(self, **overrides):
         data = {
             **self.sf_county_form_answers(),

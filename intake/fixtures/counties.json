@@ -79,5 +79,14 @@
     "name": "Fresno",
     "description": "Fresno County (near Fresno, Clovis, Sanger, Kingsburg, Mendota, Fowler, Selma, Coalinga, Orange Cove, Reedley, Huron, Kerman)"
   }
+},
+{
+  "model": "intake.county",
+  "pk": 10,
+  "fields": {
+    "slug": "santa_cruz",
+    "name": "Santa Cruz",
+    "description": "Santa Cruz County (near Santa Cruz, Watsonville, Boulder Creek, Scotts Valley, Davenport, Capitola, Soquel, or Aptos)"
+  }
 }
 ]

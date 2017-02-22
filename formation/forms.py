@@ -441,6 +441,22 @@ class SantaClaraCountyFormSpec(SolanoCountyFormSpec):
     ]
 
 
+class SantaCruzCountyFormSpec(SolanoCountyFormSpec):
+    county = Counties.SANTA_CRUZ
+    fields = (SolanoCountyFormSpec.fields | {
+        F.FinancialScreeningNote,
+        F.MonthlyIncome,
+        F.ReasonsForApplying
+    }) - {
+        F.OwesCourtFees,
+        F.RAPOutsideSF,
+        F.WhenWhereOutsideSF
+    }
+    required_fields = SolanoCountyFormSpec.required_fields - {
+        F.OwesCourtFees,
+    }
+
+
 class EBCLCIntakeFormSpec(CombinableOrganizationFormSpec):
     organization = Organizations.EBCLC
     fields = {
@@ -548,6 +564,7 @@ INPUT_FORM_SPECS = [
     SanDiegoCountyFormSpec(),
     SanJoaquinCountyFormSpec(),
     SantaClaraCountyFormSpec(),
+    SantaCruzCountyFormSpec(),
     FresnoCountyFormSpec(),
 ]
 

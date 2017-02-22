@@ -236,7 +236,9 @@ class CaseNumber(CharField):
 class ContactPreferences(MultipleChoiceField):
     context_key = "contact_preferences"
     choices = CONTACT_PREFERENCE_CHOICES
-    label = _('How would you like us to contact you?')
+    label = _(
+        'How would you like Clear My Record to update you about your '
+        'application?')
     help_text = _(
         'An attorney may need to send you official documents in the mail '
         'or call you to help with your case.')
