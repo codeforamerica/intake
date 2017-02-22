@@ -228,6 +228,14 @@ class CaseNumber(CharField):
     label = _("What is your case number, if you know it?")
 
 
+class PFNNumber(CharField):
+    context_key = "pfn_number"
+    label = _("What is your personal file number (PFN), if you know it?")
+    help_text = _(
+        "This is a number that is given to people who have been arrested in "
+        "Santa Clara County that helps attorneys find your case. ")
+
+
 ###
 # Contact Info Questions
 ###
@@ -609,6 +617,7 @@ INTAKE_FIELDS = [
     LastFourOfSocial,
     SocialSecurityNumberField,
     CaseNumber,
+    PFNNumber,
 
     USCitizen,
     IsVeteran,

@@ -427,6 +427,7 @@ class SantaClaraCountyFormSpec(SolanoCountyFormSpec):
         F.IsVeteran,
         F.ReducedProbation,
         F.ReasonsForApplying,
+        F.PFNNumber,
     }
     required_fields = (SolanoCountyFormSpec.required_fields | {
         F.CurrentlyEmployed,
