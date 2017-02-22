@@ -150,7 +150,7 @@ class CountyNames:
 COUNTY_CHOICES = (
     (Counties.SAN_FRANCISCO, _('San Francisco')),
     (Counties.CONTRA_COSTA, _(
-        'Conta Costa County (near Richmond, Concord, Walnut Creek, '
+        'Contra Costa County (near Richmond, Concord, Walnut Creek, '
         'San Ramon, Antioch, or Brentwood)')),
     (Counties.ALAMEDA, _(
         'Alameda County (near Oakland, Berkeley, San Leandro, Hayward, '
@@ -174,11 +174,12 @@ if not SCOPE_TO_LIVE_COUNTIES:
             'San Diego County (near San Diego, Oceanside, Chula Vista, or '
             'Escondido)')),
         (Counties.SAN_JOAQUIN, _(
-            'San Joaquin County (near Lodi, Stockton, Tracy, Manteca, '
-            'Thornton, or Victor)')),
+            'San Joaquin County (near Stockton, Lodi, Tracy, Manteca, Ripon, '
+            'Escalon, Lathrop, or Thornton)')),
         (Counties.SANTA_CLARA, _(
-            'Santa Clara County (near San Jose, Santa Clara, Campbell, '
-            'Saratoga, Los Altos, Los Gatos, or Gilroy)')),
+            'Santa Clara County (near San Jose, Santa Clara, Campbell, Los '
+            'Altos, Los Gatos, Palo Alto, Mountain View, Sunnyvale, Morgan '
+            'View, or Gilroy)')),
         (Counties.SANTA_CRUZ, _(
             'Santa Cruz County (near Santa Cruz, Watsonville, Boulder Creek, '
             'Scotts Valley, Davenport, or Aptos)')),

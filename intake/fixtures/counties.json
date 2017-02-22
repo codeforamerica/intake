@@ -14,7 +14,7 @@
   "fields": {
     "slug": "contracosta",
     "name": "Contra Costa",
-    "description": "Conta Costa County (near Richmond, Concord, Walnut Creek, San Ramon, Antioch, or Brentwood)"
+    "description": "Contra Costa County (near Richmond, Concord, Walnut Creek, San Ramon, Antioch, or Brentwood)"
   }
 },
 {
@@ -59,7 +59,7 @@
   "fields": {
     "slug": "san_joaquin",
     "name": "San Joaquin",
-    "description": "San Joaquin County (near Stockton, Lodi, Tracy, Manteca, Thornton, or Victor)"
+    "description": "San Joaquin County (near Stockton, Lodi, Tracy, Manteca, Ripon, Escalon, Lathrop, or Thornton)"
   }
 },
 {
@@ -68,7 +68,7 @@
   "fields": {
     "slug": "santa_clara",
     "name": "Santa Clara",
-    "description": "Santa Clara County (near San Jose, Santa Clara, Campbell, Saratoga, Los Altos, Los Gatos, or Gilroy)"
+    "description": "Santa Clara County (near San Jose, Santa Clara, Campbell, Los Altos, Los Gatos, Palo Alto, Mountain View, Sunnyvale, Morgan View, or Gilroy)"
   }
 },
 {
