@@ -37,6 +37,10 @@ def get_base_message_from_status_update_data(request, status_update_data):
     other_next_step = status_update_data.get('other_next_step')
     if other_next_step:
         next_step_message += (' ' + other_next_step)
+    if next_step_message:
+        next_step_message = ' '.join([
+            'Here are your next steps:', next_step_message
+        ])
     return ' '.join([
         status_type_message, status_update_data['additional_information'],
         next_step_message])
