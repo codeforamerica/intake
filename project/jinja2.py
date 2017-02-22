@@ -108,6 +108,7 @@ linkify_links = {
     "San Diego County Public Defender": "/partners/san_diego_pubdef/",
     "San Joaquin County Public Defender": "/partners/san_joaquin_pubdef/",
     "Santa Clara County Public Defender": "/partners/santa_clara_pubdef/",
+    "Santa Cruz County Public Defender": "/partners/santa_cruz_pubdef/",
     "Fresno County Public Defender": "/partners/fresno_pubdef/",
     "clearmyrecord@codeforamerica.org": "mailto:clearmyrecord@codeforamerica.org",
     "(415) 301-6005": "tel:14153016005"

@@ -57,7 +57,7 @@
   "model": "auth.user",
   "fields": {
     "password": "pbkdf2_sha256$30000$mQNl2M1ZGrni$/FN7D7xxb84FcvHfIQ1Da/uN9Vdstc57Npw1Vm3BONM=",
-    "last_login": "2017-01-06T07:15:41.420Z",
+    "last_login": "2017-02-22T17:50:04.350Z",
     "is_superuser": true,
     "username": "cfa_user",
     "first_name": "Fake",
@@ -309,6 +309,27 @@
   }
 },
 {
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$30000$5hkm3tMrtLLs$9PqJYU66+Lht54uN6pkJhlAgHFh9/tf+KLXqsRq9Z5A=",
+    "last_login": "2017-02-22T17:51:26Z",
+    "is_superuser": false,
+    "username": "santa_cruz_pubdef_user",
+    "first_name": "Fake",
+    "last_name": "Santa Cruz Pubdef",
+    "email": "bgolder+demo+santa_cruz_pubdef_user@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-02-22T17:51:05.079Z",
+    "groups": [
+      [
+        "application_reviewers"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
   "model": "user_accounts.userprofile",
   "pk": 1,
   "fields": {
@@ -472,6 +493,20 @@
     ],
     "organization": [
       "San Diego County Public Defender"
+    ],
+    "should_get_notifications": true
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 17,
+  "fields": {
+    "name": "Fake Santa Cruz Pubdef",
+    "user": [
+      "santa_cruz_pubdef_user"
+    ],
+    "organization": [
+      "Santa Cruz County Public Defender"
     ],
     "should_get_notifications": true
   }
