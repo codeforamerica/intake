@@ -257,6 +257,7 @@ class PhoneNumberField(PhoneField):
     context_key = "phone_number"
     help_text = _('For example, (555) 555-5555')
     label = _('What is your phone number?')
+    autocomplete = "tel"
 
 
 class AlternatePhoneNumberField(PhoneNumberField):
@@ -286,21 +287,25 @@ class WebsiteField(CharField):
 
 class Street(CharField):
     context_key = "street"
+    autocomplete = "street-address"
 
 
 class City(CharField):
     context_key = "city"
     label = _("City")
+    autocomplete = "locality"
 
 
 class State(CharField):
     context_key = "state"
     label = _("State")
+    autocomplete = "region"
 
 
 class Zip(CharField):
     context_key = "zip"
     label = _("Zip")
+    autocomplete = "postal-code"
 
 
 class AddressField(MultiValueField):
