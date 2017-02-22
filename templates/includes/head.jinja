@@ -4,6 +4,7 @@
 <meta name="csrf-token" content="{{ csrf_token }}">
 
 {% block social_meta %}
+	{% include "includes/social_meta.jinja" %}
 {% endblock social_meta %}
 
 <title>{%- block head_title -%}
