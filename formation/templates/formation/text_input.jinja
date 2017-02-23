@@ -20,6 +20,10 @@
         {%- if field.get_current_value() != None -%}
           {{ field.get_current_value() }}
         {%- endif -%}
+      " autocomplete="
+        {%- if field.get_autocomplete_type() != None -%}
+          {{ field.get_autocomplete_type() }}
+        {%- endif -%}
       ">
       {%- endblock input_widget %}
     </span>

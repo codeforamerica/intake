@@ -134,3 +134,7 @@ class Field(base.BindParseValidate):
 
     def get_display_value(self):
         return self.get_current_value()
+
+    def get_autocomplete_type(self):
+        if hasattr(self, 'autocomplete'):
+            return self.autocomplete
