@@ -1,6 +1,7 @@
+from datetime import timedelta
 from unittest.mock import patch
 from django.core.urlresolvers import reverse
-from django.utils import html as html_utils
+from markupsafe import escape
 from intake import models
 from intake.tests.base_testcases import IntakeDataTestCase
 
@@ -25,7 +26,7 @@ class TestApplicationDetail(AppDetailAccessBaseTests):
     def assertHasDisplayData(self, response, submission):
         for field, value in submission.answers.items():
             if field in self.display_field_checks:
-                escaped_value = html_utils.conditional_escape(value)
+                escaped_value = escape(value)
                 self.assertContains(response, escaped_value)
 
     @patch('intake.notifications.slack_submissions_viewed.send')
@@ -92,7 +93,7 @@ class TestApplicationDetail(AppDetailAccessBaseTests):
         self.be_apubdef_user()
         submission = self.a_pubdef_submissions[0]
         response = self.get_page(submission)
-        transfer_action_url = html_utils.conditional_escape(
+        transfer_action_url = escape(
             submission.get_transfer_action(response.wsgi_request)['url'])
         self.assertContains(response, transfer_action_url)
 
@@ -101,7 +102,7 @@ class TestApplicationDetail(AppDetailAccessBaseTests):
         self.be_apubdef_user()
         submission = self.a_pubdef_submissions[0]
         response = self.get_page(submission)
-        printout_url = html_utils.conditional_escape(
+        printout_url = escape(
             submission.get_case_printout_url())
         self.assertContains(response, printout_url)
 
@@ -115,7 +116,35 @@ class TestApplicationDetail(AppDetailAccessBaseTests):
             application__form_submission=submission
         ).latest('updated').status_type.display_name
         self.assertContains(
-            response, html_utils.conditional_escape(latest_status))
+            response, escape(latest_status))
+
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_agency_user_can_only_see_latest_status_for_their_org(self, slack):
+        user = self.be_apubdef_user()
+        submission = self.combo_submissions[0]
+        statuses = models.StatusUpdate.objects.filter(
+            application__form_submission=submission)
+        latest_status = statuses.filter(
+            application__organization=user.profile.organization,
+            ).latest('updated')
+        latest_status_date = statuses.latest('updated').updated
+        even_later = latest_status_date + timedelta(days=3)
+        other_status = statuses.exclude(
+            application__organization=user.profile.organization,
+        ).first()
+        other_status.updated = even_later
+        other_status.save()
+        response = self.get_page(submission)
+        other_logged_by = 'logged by ' + other_status.author.profile.name
+        other_status_name = other_status.status_type.display_name
+        this_status_logged_by = \
+            'logged by ' + latest_status.author.profile.name
+        this_status_name = latest_status.status_type.display_name
+        self.assertContains(response, escape(this_status_name))
+        self.assertContains(response, escape(this_status_logged_by))
+        self.assertNotContains(response, escape(other_logged_by))
+        if this_status_name != other_status_name:
+            self.assertNotContains(response, escape(other_status_name))
 
 
 class TestApplicationHistory(AppDetailAccessBaseTests):
@@ -169,7 +198,7 @@ class TestApplicationHistory(AppDetailAccessBaseTests):
         submission = self.a_pubdef_submissions[0]
         response = self.get_page(submission)
         self.assertContains(
-            response, html_utils.conditional_escape('Application History'))
+            response, escape('Application History'))
 
     @patch('intake.notifications.slack_submissions_viewed.send')
     def test_user_can_only_see_own_status_updates_in_history(self, slack):

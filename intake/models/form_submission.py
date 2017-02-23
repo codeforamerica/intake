@@ -10,10 +10,23 @@ from django.core.urlresolvers import reverse
 from taggit.managers import TaggableManager
 import intake
 from intake import anonymous_names
+from intake.constants import SMS, EMAIL
 from project.jinja2 import namify
 from formation.forms import (
     display_form_selector, DeclarationLetterDisplay)
 from formation.fields import MonthlyIncome, HouseholdSize, OnPublicBenefits
+
+FORMSUBMISSION_TEXT_SEARCH_FIELDS = [
+        'first_name',
+        'last_name',
+        'ssn',
+        'last_four',
+        'drivers_license_or_id',
+        'case_number',
+        'phone_number',
+        'alternate_phone_number',
+        'email'
+    ]
 
 
 class MissingAnswersError(Exception):
@@ -30,6 +43,8 @@ def gen_uuid():
 
 class FormSubmission(models.Model):
 
+    text_search_fields = FORMSUBMISSION_TEXT_SEARCH_FIELDS
+
     organizations = models.ManyToManyField(
         'user_accounts.Organization', related_name="submissions",
         through='intake.Application')
@@ -40,6 +55,19 @@ class FormSubmission(models.Model):
         'intake.DuplicateSubmissionSet', null=True,
         related_name='submissions')
     answers = JSONField()
+
+    # extracting these values from answers for autocomplete/search
+    first_name = models.TextField(default="")
+    last_name = models.TextField(default="")
+    dob = models.DateField(null=True)
+    ssn = models.TextField(default="")
+    last_four = models.TextField(default="")
+    drivers_license_or_id = models.TextField(default="")
+    case_number = models.TextField(default="")
+    phone_number = models.TextField(default="")
+    alternate_phone_number = models.TextField(default="")
+    email = models.TextField(default="")
+
     # old_uuid is only used for porting legacy applications
     old_uuid = models.CharField(max_length=34, unique=True,
                                 default=gen_uuid)
@@ -157,6 +185,8 @@ class FormSubmission(models.Model):
         address = self.answers.get('address', {})
         if not address:
             return ""
+        if not any(address.values()):
+            return ""
         return "{street}\n{city}, {state}\n{zip}".format(
             **self.answers.get('address', {}))
 
@@ -165,15 +195,34 @@ class FormSubmission(models.Model):
         intake.fields.ContactInfoJSONField
         """
         info = {}
-        for key in self.get_contact_preferences():
+        for key in intake.constants.CONTACT_PREFERENCE_CHECKS:
             short = key[8:]
             field_name, nice, datum = \
                 intake.constants.CONTACT_PREFERENCE_CHECKS[key]
+            value = ''
             if short == 'snailmail':
-                info[short] = self.get_formatted_address()
+                value = self.get_formatted_address()
             else:
-                info[short] = self.answers.get(field_name, '')
+                value = self.answers.get(field_name, '')
+            if value:
+                info[short] = value
         return info
+
+    def get_preferred_contact_info(self):
+        all_mediums = self.get_contact_info()
+        preferred_short_codes = [
+            key[8:]
+            for key in self.answers.get('contact_preferences', [])]
+        return {
+            key: value
+            for key, value in all_mediums.items()
+            if key in preferred_short_codes}
+
+    def get_usable_contact_info(self):
+        return {
+            key: value
+            for key, value in self.get_preferred_contact_info().items()
+            if key in [SMS, EMAIL]}
 
     def get_transfer_action(self, request):
         other_org = request.user.profile.organization.get_transfer_org()
@@ -201,6 +250,10 @@ class FormSubmission(models.Model):
     def get_case_printout_url(self):
         return reverse(
             'intake-case_printout', kwargs=dict(submission_id=self.id))
+
+    def get_case_update_status_url(self):
+        return reverse(
+            'intake-create_status_update', kwargs=dict(submission_id=self.id))
 
     def qualifies_for_fee_waiver(self):
         on_benefits = OnPublicBenefits(self.answers)

@@ -3715,7 +3715,8 @@ section.content.application_form {
   padding-left: 1.5em;
 }
 .field input,
-.field textarea {
+.field textarea,
+.field .field-preceding_text {
   font-weight: 400;
   font-size: 1.25em;
 }
@@ -3761,6 +3762,18 @@ form p + p {
 }
 span + .subfield {
   margin-top: .5em;
+}
+.field-preceding_text {
+  display: block;
+  padding: 2px;
+  padding-bottom: 0;
+  color: #888;
+  border: 1px solid black;
+  border-bottom: 0;
+}
+.field-preceding_text + .field-input_wrapper textarea {
+  border-top: 0;
+  padding-top: 0;
 }
 .options_list {
   padding: 0;
@@ -4096,6 +4109,9 @@ button[type="submit"].action-back .badge {
 .monthly_expenses .field-input_wrapper input {
   text-align: right;
 }
+.sent_message > .warninglist + .field-wrapping_label {
+  margin-top: 0.75em;
+}
 h1.bundle-count {
   font-size: 1.5em;
 }
@@ -4361,6 +4377,9 @@ pre.address {
   margin: 0;
   font-weight: inherit;
 }
+.pagination-nav {
+  float: right;
+}
 ul.pagination {
   margin-top: .5em;
 }
@@ -4440,7 +4459,8 @@ table.table tr > td.org_tags {
 .applications_list div.note-remove > button.btn .glyphicon {
   margin: 0;
 }
-.applications_list ul.tags-autocomplete_results {
+.applications_list ul.tags-autocomplete_results,
+.applications_list ul.applicants-autocomplete_results {
   margin: 0;
   padding: 0;
   position: absolute;
@@ -4947,21 +4967,21 @@ body.admin .top_bar {
 .btn .glyphicon {
   margin-right: .5em;
 }
-/***Rap Sheet Instructions***/
-.rap_sheet_instructions li {
+/***How To Pages (getting your rap + recommendation letters)***/
+.how_to_instructions li {
   margin-bottom: 25px;
 }
-.rap_instructions_details {
+.how_to_instructions_details {
   font-size: 16px;
   margin-top: 10px;
 }
-.rap_instructions_details li {
+.how_to_instructions_details li {
   list-style: circle;
 }
-.rap_contact_info {
+.how_to_contact_info {
   font-weight: 500;
 }
-li.rap_detail {
+li.how_to_detail {
   margin-bottom: 10px;
 }
 .address {
@@ -4971,6 +4991,107 @@ li.rap_detail {
   margin-bottom: 0;
   font-size: 16px;
   font-weight: 500;
+}
+.how_to_bg_warning {
+  font-weight: bold;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 20px;
+  margin-bottom: 25px;
+  margin-top: 25px;
+}
+/***Status Updates (App Detail)***/
+.app_detail-data_display .application-detail-latest-status {
+  background-color: #f6fcff;
+  overflow: auto;
+  padding: 1em;
+}
+.app_detail-data_display .application-detail-latest-status ul.event-next-steps {
+  padding-left: 0;
+  font-size: 16px;
+}
+/***Status Notifications (App History)***/
+li.application-event-block {
+  border: 1px solid #eeeeee;
+  border-radius: 4px;
+  margin-bottom: 3em;
+}
+li.application-event-block .application-event-header {
+  background-color: #007eb9;
+  color: white;
+  border-radius: 4px;
+  padding: 12px;
+  font-size: 12px;
+}
+li.application-event-block .application-event-header .application-event-title {
+  font-size: 18px;
+}
+li.application-event-block .application-event-body {
+  padding: 1em;
+  font-size: 16px;
+}
+li.application-event-block .application-event-body .section-label {
+  color: #777777;
+}
+li.application-event-block .application-event-body .section-label .contact-info {
+  color: #069ED6;
+}
+li.application-event-block .application-event-body ul.event-next-steps {
+  padding-left: 0;
+  font-size: 16px;
+}
+li.application-event-block .application-event-body .status-update-details {
+  clear: both;
+  margin-bottom: 1em;
+  min-height: 60px;
+}
+li.application-event-block .application-event-body .status-notification-message {
+  background-color: #eeeeee;
+  border-radius: 4px;
+  padding: 8px;
+  margin-top: 0.5em;
+}
+/***Autocomplete (App Index)***/
+.centered-to-header {
+  margin-top: 36px;
+  margin-bottom: 12px;
+}
+ul.applicants-autocomplete_results {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  background-color: #fff;
+  font-size: inherit;
+  margin-top: 1px;
+  max-height: 20em;
+  overflow-y: auto;
+  -webkit-box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+li.autocomplete-result.active {
+  color: #fff;
+  background-color: #069ED6;
+}
+li.autocomplete-result {
+  padding: .2em .6em;
+  border-left: 1px solid #dfdfdf;
+  border-right: 1px solid #dfdfdf;
+  border-bottom: 1px solid #dfdfdf;
+  cursor: pointer;
+}
+li.autocomplete-result .result-match {
+  font-weight: 700;
+}
+li.autocomplete-result:hover {
+  background-color: #069ED6;
+}
+li.autocomplete-result:hover a {
+  color: #fff;
+}
+li.autocomplete-result a {
+  display: block;
 }
 /***Media Queries***/
 @media (max-width: 767px) {

@@ -52,6 +52,19 @@ class Counties(MultipleChoiceField):
     choice_display_dict = COUNTY_CHOICE_DISPLAY_DICT
 
 
+class AffirmCountySelection(ConsentCheckbox):
+    context_key = "confirm_county_selection"
+    is_required_error_message = _(
+        "We need your understanding before we can "
+        "help you")
+    label = _(
+        "Do you understand that you should only select the counties that you "
+        "think you have an arrest or conviction in?")
+    agreement_text = _(
+        "Yes, to the best of my memory, I was arrested or convicted in "
+        "these counties")
+
+
 class ConsentNote(FormNote):
     context_key = "consent_note"
     content = mark_safe("""
@@ -86,10 +99,11 @@ class ConsentToRepresent(ConsentCheckbox):
 class UnderstandsLimits(ConsentCheckbox):
     context_key = "understands_limits"
     is_required_error_message = (
-        "We need your undertstanding before we can help you")
+        "We need your understanding before we can help you")
     label = _(
-        "Do you understand that not everyone qualifies for help "
-        "and it might take a few months to finish?")
+        "Do you understand that not everyone qualifies for help, submitting "
+        "this form does not guarantee that you will be represented by one of "
+        "our partners, and it might take a few months to finish?")
     agreement_text = _("Yes, I understand")
     display_label = str(
         "Understands might not qualify and could take a few months")
@@ -191,7 +205,9 @@ class SocialSecurityNumberField(CharField):
 
 class LastFourOfSocial(CharField):
     context_key = "last_four"
-    label = _('What are the last 4 digits of your Social Security Number? (if you have one)')
+    label = _(
+        'What are the last 4 digits of your Social Security Number? '
+        '(if you have one)')
     help_text = _(
         "This helps identify your case from people who have a "
         "similar name.")
@@ -212,6 +228,14 @@ class CaseNumber(CharField):
     label = _("What is your case number, if you know it?")
 
 
+class PFNNumber(CharField):
+    context_key = "pfn_number"
+    label = _("What is your personal file number (PFN), if you know it?")
+    help_text = _(
+        "This is a number that is given to people who have been arrested in "
+        "Santa Clara County that helps attorneys find your case. ")
+
+
 ###
 # Contact Info Questions
 ###
@@ -220,10 +244,13 @@ class CaseNumber(CharField):
 class ContactPreferences(MultipleChoiceField):
     context_key = "contact_preferences"
     choices = CONTACT_PREFERENCE_CHOICES
-    label = _('How would you like us to contact you?')
-    help_text = _('Code for America will use this to update you about '
-                  'your application.')
-    display_label = "Prefers contact via"
+    label = _(
+        'How would you like Clear My Record to update you about your '
+        'application?')
+    help_text = _(
+        'An attorney may need to send you official documents in the mail '
+        'or call you to help with your case.')
+    display_label = "Opted into Clear My Record updates via:"
 
     def get_display_value(self):
         return super().get_display_value(use_or=True)
@@ -240,6 +267,7 @@ class PhoneNumberField(PhoneField):
     context_key = "phone_number"
     help_text = _('For example, (555) 555-5555')
     label = _('What is your phone number?')
+    autocomplete = "tel"
 
 
 class AlternatePhoneNumberField(PhoneNumberField):
@@ -269,21 +297,25 @@ class WebsiteField(CharField):
 
 class Street(CharField):
     context_key = "street"
+    autocomplete = "street-address"
 
 
 class City(CharField):
     context_key = "city"
     label = _("City")
+    autocomplete = "locality"
 
 
 class State(CharField):
     context_key = "state"
     label = _("State")
+    autocomplete = "region"
 
 
 class Zip(CharField):
     context_key = "zip"
     label = _("Zip")
+    autocomplete = "postal-code"
 
 
 class AddressField(MultiValueField):
@@ -320,8 +352,9 @@ class USCitizen(YesNoField):
     context_key = "us_citizen"
     label = _("Are you a U.S. citizen?")
     help_text = _(
-        "It is important for your attorney to know if you are a "
-        "U.S citizen so they can find the best ways to help you.")
+        "It is important for your attorney to know if you are a U.S citizen "
+        "so they can find the best ways to help you. Your citizenship status "
+        "will not be shared with any law enforcement agencies.")
     display_label = "Is a citizen"
 
 
@@ -351,7 +384,10 @@ class ServingSentence(YesNoField):
 
 class OnProbationParole(YesNoField):
     context_key = "on_probation_parole"
-    label = _("Are you on probation or parole?")
+    label = _("Are you on probation or parole (including MSR or PRCS)?")
+    help_text = _(
+        "MSR is mandatory supervised release and PRCS is post release "
+        "community supervision")
     display_label = "Is on probation or parole"
     flip_display_choice_order = True
 
@@ -567,6 +603,7 @@ class DeclarationLetterWhy(DeclarationLetterIntro):
 INTAKE_FIELDS = [
     DateReceived,
     Counties,
+    AffirmCountySelection,
 
     ContactPreferences,
 
@@ -586,6 +623,7 @@ INTAKE_FIELDS = [
     LastFourOfSocial,
     SocialSecurityNumberField,
     CaseNumber,
+    PFNNumber,
 
     USCitizen,
     IsVeteran,

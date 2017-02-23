@@ -1,0 +1,228 @@
+{% extends "public_base_single_column.jinja" %}
+
+
+{%- block header_title -%}
+{{ _("Recommendation Letters") }}
+{%- endblock header_title -%}
+
+{% block column_content %}
+<section class="how_to_intro">
+  <div class="row">
+    <div class="col-xs-12">
+      <h2>{{ _("How to collect recommendation letters") }}</h2>
+      <p>{{ _("If your attorney asked you to submit recommendation letters, please follow these "
+            "instructions. Find 3-5 people to write these letters for you. ") }}
+      </p>
+      <p class="how_to_bg_warning bg-warning">{{ _(" Your case is on hold until your attorney has received all of your recommendation letters.") }}
+    </div>
+  </div>
+</section>
+
+
+<section class="how_to_instructions">
+  <div class="row">
+    <div class="col-xs-12">
+      <h4>
+        <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
+        {{ _(" Who should write your recommendation letters:") }}
+      </h4>
+      <p>{{ _("People who can tell the judge positive things about you should write your recommendation letters. "
+            "They should also be able to say why you deserve to clear your record. Here are some people you might "
+            "ask to write a recommendation letter for you:") }}
+      </p>
+      <ul class="how_to_instructions_details">
+        <li class="how_to_detail">
+          {{ _("Case managers") }}
+        </li>
+        <li class="how_to_detail">
+          {{ _("Counselors") }}
+        </li>
+        <li class="how_to_detail">
+          {{ _("Sponsors") }}
+        </li>
+        <li class="how_to_detail">
+          {{ _("Supervisors") }}
+        </li>
+        <li class="how_to_detail">
+          {{ _("Bosses at work") }}
+        </li>
+        <li class="how_to_detail">
+          {{ _("Co-workers") }}
+        </li>
+        <li class="how_to_detail">
+          {{ _("Teachers") }}
+        </li>
+        <li class="how_to_detail">
+          {{ _("Family members") }}
+        </li>
+        <li class="how_to_detail">
+          {{ _("Friends") }}
+        </li>
+        <li class="how_to_detail">
+          {{ _("Neighbors") }}
+        </li>
+        <li class="how_to_detail">
+          {{ _("Church members") }}
+        </li>
+        <li class="how_to_detail">
+          {{ _("Members of organizations you volunteer at") }}
+        </li>
+        <li class="how_to_detail">
+          {{ _("Other community members") }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<section class="how_to_instructions">
+  <div class="row">
+    <div class="col-xs-12">
+      <h4>
+        <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
+        {{ _("Instructions for writing the letters:") }}
+      </h4>
+      <p>{{ _("Please tell the person who is writing your letter to follow these instructions. "
+            "They should answer all the questions below in their letter and write at least 3-5 "
+            "sentences in each paragraph.") }}
+      </p>
+      <ol class="how_to_instructions">
+        <li>
+          {{ _("Introduction: ") }}
+            <ul class="how_to_instructions_details">
+              <li class="how_to_detail">
+                {{ _("Write the date.") }}
+              </li>
+              <li class="how_to_detail">
+                {{ _("Start the letter with To Whom It May Concern, ") }}
+            </ul>
+        </li>
+        <li>
+          {{ _("First Paragraph (write 3-5 sentences): ") }}
+            <ul class="how_to_instructions_details">
+              <li class="how_to_detail">
+                {{ _("Introduce yourself to the judge. ") }}
+              </li>
+              <li class="how_to_detail">
+                {{ _("Explain how you know the person who is trying to clear their record. ") }}
+            </ul>
+        </li>
+        <li>
+          {{ _("Second Paragraph (write 3-5 sentences): ") }}
+            <ul class="how_to_instructions_details">
+              <li class="how_to_detail">
+                {{ _("What are the positive character traits of the person who is trying "
+                  "to clear their record? For example, you can tell the judge if they are honest, "
+                  "trustworthy, hardworking, or other qualities you find admirable in them. ") }}
+              </li>
+              <li class="how_to_detail">
+                {{ _("Give some examples of when you have seen the character traits you have mentioned "
+                  "during your time spent with the person who is trying to clear their record. ") }}
+              </li>
+            </ul>
+        </li>
+        <li>
+          {{ _("Third Paragraph (write 3-5 sentences): ") }}
+            <ul class="how_to_instructions_details">
+              <li class="how_to_detail">
+                {{ _("Why do you think the judge should allow this person should clear your record? ") }}
+              </li>
+              <li class="how_to_detail">
+                {{ _("How do you think clearing their record would improve their life? ") }}
+              </li>
+            </ul>
+        </li>
+        <li>
+          {{ _("Closing: ") }}
+            <ul class="how_to_instructions_details">
+              <li class="how_to_detail">
+                {{ _("Write Sincerely, ") }}
+              </li>
+              <li class="how_to_detail">
+                {{ _("Print your full name. ") }}
+              </li>
+              <li class="how_to_detail">
+                {{ _("Sign your name. ") }}
+              </li>
+            </ul>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="how_to_instructions">
+  <div class="row">
+    <div class="col-xs-12">
+      <h4>
+        <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
+        {{ _(" Additional documents to include, if you can:") }}
+      </h4>
+      <ul class="how_to_instructions_details">
+        <li class="how_to_detail">
+          {{ _("Copies of certificates from programs you have completed") }}
+        </li>
+        <li class="how_to_detail">
+          {{ _("Copies of diplomas from school you have completed") }}
+        </li>
+        <li class="how_to_detail">
+          {{ _("Copies of awards you have received") }}
+        </li>
+        <li class="how_to_detail">
+          {{ _("Copies of newspaper articles you have been featured in") }}
+        </li>
+        <li class="how_to_detail">
+          {{ _("Any other documents you think show off your good character traits") }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="how_to_instructions">
+  <div class="row">
+    <div class="col-xs-12">
+      <h4>
+        <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
+        {{ _(" Where to send your letters and documents:") }}
+      </h4>
+      <p>{{ _("Please mail all of your recommendation letters to the county who requested them from you. "
+            "You can find their mailing address by visiting the partner pages below.") }}
+      </p>
+      <ul class="how_to_instructions_details">
+        <li class="how_to_detail">
+          <a href="/partners/a_pubdef/">
+            {{ _("Alameda County Public Defender's Office") }}
+          </a>
+        </li>
+        <li class="how_to_detail">
+          <a href="/partners/ebclc/">
+            {{ _("East Bay Community Law Center") }}
+          </a>
+        </li>
+        <li class="how_to_detail">
+          <a href="/partners/cc_pubdef/">
+            {{ _("Contra Costa County Public Defender's Office") }}
+          </a>
+        </li>
+        <li class="how_to_detail">
+          <a href="/partners/fresno_pubdef/">
+            {{ _("Fresno County Public Defender's Office") }}
+          </a>
+        </li>
+        <li class="how_to_detail">
+          <a href="/partners/sf_pubdef/">
+            {{ _("San Francisco County Public Defender's Office") }}
+          </a>
+        </li>
+      </ul>
+      <p class="how_to_bg_warning bg-warning">{{ _(" Your case is on hold until your attorney has received all of your recommendation letters.") }}
+    </div>
+  </div>
+</section>
+
+  {%- include "includes/cmr_contact_info.jinja" %}
+  {%- include "includes/back_to_home_button.jinja" %}
+
+{% endblock column_content %}

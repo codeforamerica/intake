@@ -238,6 +238,9 @@ class ChoiceField(CharField):
         )
 
     def get_display_for_choice(self, value):
+        """Returns the display value for a given choice
+        if not found returns the empty value for this field
+        """
         return self.choice_display_dict.get(value, self.empty_value)
 
     def get_display_choices(self):
@@ -278,9 +281,13 @@ class MultipleChoiceField(ChoiceField):
         return values
 
     def get_display_value(self, use_or=False):
+        """Returns oxford comma list of display values for any valid choices
+        ignores invalid choices
+        """
         return oxford_comma([
             self.get_display_for_choice(choice)
             for choice in self.get_current_value()
+            if self.get_display_for_choice(choice)
         ], use_or)
 
 

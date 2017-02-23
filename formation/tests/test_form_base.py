@@ -98,7 +98,6 @@ class TestForm(PatchTranslationTestCase):
                 'street': '220 Lynch Walk',
                 'zip': '46885'},
             'contact_preferences': [
-                'prefers_voicemail',
                 'prefers_sms',
                 'prefers_email'],
             'currently_employed': 'yes',

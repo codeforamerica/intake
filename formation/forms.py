@@ -3,7 +3,9 @@ from formation.form_base import Form
 from formation.display_form_base import DisplayForm
 from formation import fields as F
 from intake.constants import Counties, Organizations
-from formation.validators import gave_preferred_contact_methods
+from formation.validators import (
+    gave_preferred_contact_methods, at_least_email_or_phone
+)
 
 
 class CombinableCountyFormSpec(CombinableFormSpec):
@@ -210,6 +212,9 @@ class AlamedaCountyFormSpec(CombinableCountyFormSpec):
         F.HowDidYouHear,
         F.AdditionalInformation,
     }
+    validators = [
+        gave_preferred_contact_methods
+    ]
 
 
 class AlamedaPublicDefenderFormSpec(CombinableOrganizationFormSpec):
@@ -306,6 +311,9 @@ class MontereyCountyFormSpec(CombinableCountyFormSpec):
         F.HowDidYouHear,
         F.AdditionalInformation,
     }
+    validators = [
+        gave_preferred_contact_methods
+    ]
 
 
 class SolanoCountyFormSpec(CombinableCountyFormSpec):
@@ -337,7 +345,6 @@ class SolanoCountyFormSpec(CombinableCountyFormSpec):
     required_fields = {
         F.FirstName,
         F.LastName,
-        F.PhoneNumberField,
         F.DateOfBirthField,
         F.OnProbationParole,
         F.OwesCourtFees,
@@ -352,6 +359,10 @@ class SolanoCountyFormSpec(CombinableCountyFormSpec):
         F.HowDidYouHear,
         F.AdditionalInformation
     }
+    validators = [
+        gave_preferred_contact_methods,
+        at_least_email_or_phone
+    ]
 
 
 class SanDiegoCountyFormSpec(SolanoCountyFormSpec):
@@ -359,19 +370,19 @@ class SanDiegoCountyFormSpec(SolanoCountyFormSpec):
     fields = SolanoCountyFormSpec.fields | {
         F.CaseNumber,
     }
-    required_fields = SolanoCountyFormSpec.required_fields - {
-        F.PhoneNumberField
-    }
     optional_fields = SolanoCountyFormSpec.optional_fields | {
         F.CaseNumber
     }
+    validators = [
+        gave_preferred_contact_methods
+    ]
 
 
 class SanJoaquinCountyFormSpec(SolanoCountyFormSpec):
     county = Counties.SAN_JOAQUIN
-    required_fields = SolanoCountyFormSpec.required_fields - {
-        F.PhoneNumberField
-    }
+    validators = [
+        gave_preferred_contact_methods
+    ]
 
 
 class FresnoCountyFormSpec(SolanoCountyFormSpec):
@@ -396,6 +407,9 @@ class FresnoCountyFormSpec(SolanoCountyFormSpec):
     required_fields = SolanoCountyFormSpec.required_fields - {
         F.OwesCourtFees,
     }
+    validators = [
+        gave_preferred_contact_methods
+    ]
 
 
 class SantaClaraCountyFormSpec(SolanoCountyFormSpec):
@@ -413,6 +427,7 @@ class SantaClaraCountyFormSpec(SolanoCountyFormSpec):
         F.IsVeteran,
         F.ReducedProbation,
         F.ReasonsForApplying,
+        F.PFNNumber,
     }
     required_fields = (SolanoCountyFormSpec.required_fields | {
         F.CurrentlyEmployed,
@@ -422,6 +437,25 @@ class SantaClaraCountyFormSpec(SolanoCountyFormSpec):
         F.OnPublicBenefits,
         F.HouseholdSize,
     }) - {F.PhoneNumberField}
+    validators = [
+        gave_preferred_contact_methods
+    ]
+
+
+class SantaCruzCountyFormSpec(SolanoCountyFormSpec):
+    county = Counties.SANTA_CRUZ
+    fields = (SolanoCountyFormSpec.fields | {
+        F.FinancialScreeningNote,
+        F.MonthlyIncome,
+        F.ReasonsForApplying
+    }) - {
+        F.OwesCourtFees,
+        F.RAPOutsideSF,
+        F.WhenWhereOutsideSF
+    }
+    required_fields = SolanoCountyFormSpec.required_fields - {
+        F.OwesCourtFees,
+    }
 
 
 class EBCLCIntakeFormSpec(CombinableOrganizationFormSpec):
@@ -512,8 +546,13 @@ class DeclarationLetterDisplay(DisplayForm):
 
 
 class SelectCountyForm(Form):
-    fields = [F.Counties]
-    required_fields = [F.Counties]
+    fields = [
+        F.Counties,
+        F.AffirmCountySelection
+    ]
+    required_fields = [
+        F.Counties,
+        F.AffirmCountySelection]
 
 
 INPUT_FORM_SPECS = [
@@ -526,6 +565,7 @@ INPUT_FORM_SPECS = [
     SanDiegoCountyFormSpec(),
     SanJoaquinCountyFormSpec(),
     SantaClaraCountyFormSpec(),
+    SantaCruzCountyFormSpec(),
     FresnoCountyFormSpec(),
 ]
 

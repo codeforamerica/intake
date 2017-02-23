@@ -1,15 +1,15 @@
 [
 {
   "model": "intake.applicationbundle",
-  "pk": 182,
+  "pk": 1,
   "fields": {
     "organization": [
       "Contra Costa Public Defender"
     ],
     "bundled_pdf": "",
     "submissions": [
-      782,
-      783
+      2,
+      1
     ]
   }
 }

@@ -19,6 +19,7 @@ from intake import models, constants
 from intake.constants import PACIFIC_TIME
 from intake.tests import mock_user_agents, mock_referrers
 from intake.services import bundles as BundlesService
+from intake.models.form_submission import FORMSUBMISSION_TEXT_SEARCH_FIELDS
 from user_accounts.tests.mock import OrganizationFactory, create_seed_users
 from unittest.mock import Mock
 Pacific = timezone('US/Pacific')
@@ -332,10 +333,12 @@ def build_seed_submissions():
         slug=constants.Organizations.SANTA_CLARA_PUBDEF)
     fresno_pubdef = Organization.objects.get(
         slug=constants.Organizations.FRESNO_PUBDEF)
+    santa_cruz_pubdef = Organization.objects.get(
+        slug=constants.Organizations.SANTA_CRUZ_PUBDEF)
     receiving_orgs = [
         cc_pubdef, a_pubdef, ebclc, sf_pubdef, monterey_pubdef,
         solano_pubdef, san_diego_pubdef, san_joaquin_pubdef,
-        santa_clara_pubdef, fresno_pubdef]
+        santa_clara_pubdef, fresno_pubdef, santa_cruz_pubdef]
     answer_pairs = {
         sf_pubdef.slug: fake.sf_county_form_answers,
         cc_pubdef.slug: fake.contra_costa_county_form_answers,
@@ -346,6 +349,7 @@ def build_seed_submissions():
         san_diego_pubdef.slug: fake.san_diego_pubdef_answers,
         san_joaquin_pubdef.slug: fake.san_joaquin_pubdef_answers,
         santa_clara_pubdef.slug: fake.santa_clara_pubdef_answers,
+        santa_cruz_pubdef.slug: fake.santa_cruz_pubdef_answers,
         fresno_pubdef.slug: fake.fresno_pubdef_answers,
     }
     form_pairs = {
@@ -371,6 +375,11 @@ def build_seed_submissions():
             if org in (a_pubdef, santa_clara_pubdef, monterey_pubdef):
                 letter = fake.declaration_letter_answers()
                 sub.answers.update(letter)
+            # graduate answers fields for search
+            keys = FORMSUBMISSION_TEXT_SEARCH_FIELDS
+            for key in keys:
+                existing = sub.answers.get(key, "")
+                setattr(sub, key, existing)
             sub.save()
             application = models.Application(
                 organization=org, form_submission=sub)
@@ -382,7 +391,7 @@ def build_seed_submissions():
     target_orgs = [
         a_pubdef, cc_pubdef, sf_pubdef, monterey_pubdef, solano_pubdef,
         san_diego_pubdef, san_joaquin_pubdef, santa_clara_pubdef,
-        fresno_pubdef]
+        fresno_pubdef, santa_cruz_pubdef]
     answers = fake.all_county_answers()
     Form = county_form_selector.get_combined_form_class(
         counties=[org.county.slug for org in target_orgs])
@@ -401,7 +410,8 @@ def build_seed_submissions():
     models.Application.objects.bulk_create(applications)
     for application in applications:
         StatusUpdateFactory.create(
-            application=application, author=org.profiles.first().user)
+            application=application,
+            author=application.organization.profiles.first().user)
     subs.append(multi_org_sub)
     # fake the date received for each sub
     for sub in subs:

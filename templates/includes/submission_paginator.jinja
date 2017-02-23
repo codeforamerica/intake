@@ -1,9 +1,9 @@
 {%- if submissions.has_other_pages() %}
 <div class="row">
-  <nav aria-label="Page navigation">
-    <h4 class="page_nav_header">
-      Page {{ submissions.number }} of {{ submissions.paginator.num_pages }}
-    </h4>
+  <nav aria-label="Page navigation" class="pagination-nav">
+    <h5 class="page_nav_header">
+      Showing <strong>{{ submissions.start_index() }} - {{ submissions.end_index() }}</strong> of <strong>{{ submissions.paginator.count }}</strong> applications
+    </h5>
     <ul class="pagination pagination-sm">
       {%- if submissions.has_previous() %}
       <li title="Previous page">

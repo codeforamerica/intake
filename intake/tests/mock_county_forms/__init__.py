@@ -20,12 +20,10 @@ class Provider(BaseProvider):
             "no": 1.0 - chance_of_yes})
 
     def generate_contact_preferences(self):
-        preferences = random.randint(1, 4)
+        preferences = random.randint(1, 2)
         return random.sample([
             'prefers_email',
             'prefers_sms',
-            'prefers_snailmail',
-            'prefers_voicemail',
         ], preferences)
 
     def make_phone_number(self):
@@ -267,6 +265,14 @@ class Provider(BaseProvider):
             case_number=self.generator.numerify("C####-###"),
             dependents=random.randint(0, 5),
             reasons_for_applying=['background_check', 'lost_job', 'housing'],
+        )
+        data.update(overrides)
+        return data
+
+    def santa_cruz_pubdef_answers(self, **overrides):
+        data = self.solano_pubdef_answers()
+        data.update(
+            reasons_for_applying=['lost_job', 'homeless'],
         )
         data.update(overrides)
         return data

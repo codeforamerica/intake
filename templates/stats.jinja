@@ -32,15 +32,15 @@ Numbers for Clear My Record
     <span class="stats-total-annot">this week</span>
   </div>
   <div class="stats-single_figure minutes">
-    <span class="stats-total-number">{{
+    <span class="stats-total-number">{% if org_data.mean_completion_time %}{{
      (org_data.mean_completion_time / 60)|int
-     }} minutes</span>
+     }} minutes{% else %}N/A{% endif %}</span>
     <span class="stats-total-annot">mean completion time</span>
   </div>
   <div class="stats-single_figure minutes">
-    <span class="stats-total-number">{{
+    <span class="stats-total-number">{% if org_data.median_completion_time %}{{
      (org_data.median_completion_time / 60)|int
-     }} minutes</span>
+     }} minutes{% else %}N/A{% endif %}</span>
     <span class="stats-total-annot">median completion time</span>
   </div>
   <div class="stats-single_figure">
@@ -55,6 +55,26 @@ Numbers for Clear My Record
      }}<span class="perc-sign">%</span></span>
     <span class="stats-total-annot">dropoff rate</span>
   </div>
+  {% if org_data.status_updates %}
+  <div class="stats-chart">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Status Updates</th>
+          <th>Count</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for bucket, count in org_data.status_updates %}
+        <tr>
+          <td>{{ bucket }}</td>
+          <td>{{ count }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
   {% if org_data.channels %}
   <div class="stats-chart">
     <table class="table">

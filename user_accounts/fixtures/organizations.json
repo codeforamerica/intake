@@ -45,7 +45,7 @@
     "long_confirmation_message": "You should get a letter in the mail from the San Francisco Public Defender in 2-4 weeks.",
     "short_followup_message": "Did you get a letter in the mail from the SF Public Defender?",
     "long_followup_message": "Have you received your letter in the mail from the San Francisco Public Defender?",
-    "address": "San Francisco Public Defender\r\n555 7th Street, 2nd Floor\r\nSan Francisco, CA\r\n94103",
+    "address": "San Francisco Public Defender\r\nAttention: Clean Slate Unit\r\n555 7th Street, 2nd Floor\r\nSan Francisco, CA\r\n94103",
     "phone_number": "4155539337",
     "email": "",
     "notify_on_weekends": false
@@ -72,7 +72,7 @@
     "long_confirmation_message": "The Contra Costa Public Defender will follow up with you if they need any other information.",
     "short_followup_message": "With the Contra Costa Public Defender, no news is good news. They'll contact you if they need anything. If you want to check your case, call (925) 335-8000 or email cleanslate@pd.cccounty.us",
     "long_followup_message": "With the Contra Costa Public Defender, no news is good news. They will definitely contact you if they need anything. If you'd like to check on your case status, you may call (925) 335-8000 or email cleanslate@pd.cccounty.us",
-    "address": "Contra Costa Public Defender\r\n800 Ferry Street\r\nMartinez, CA\r\n94553",
+    "address": "Contra Costa Public Defender\r\nAttn: Clear My Record Unit\r\n800 Ferry Street\r\nMartinez, CA\r\n94553",
     "phone_number": "9253358000",
     "email": "cleanslate@pd.cccounty.us",
     "notify_on_weekends": false
@@ -99,7 +99,7 @@
     "long_confirmation_message": "Your application for Alameda is not yet compete. If you do not have your California criminal record (RAP sheet), please follow these instructions to request it.\r\nhttp://c4a.me/rap",
     "short_followup_message": "For Alameda County, your next step was to send EBCLC your state RAP sheet, so they could check what you qualify for. How is that going?",
     "long_followup_message": "For Alameda County, your next step was to send your state RAP sheet to East Bay Community Law Center, so they could check what you qualify for. How is that going? Were you able to get your RAP sheet?",
-    "address": "East Bay Community Law Center\r\n2921 Adeline St\r\nBerkeley, CA\r\n94703",
+    "address": "East Bay Community Law Center\r\nAttn: Clean Slate\r\n3130 Shattuck Ave\r\nBerkeley, CA\r\n94705",
     "phone_number": "5105484064",
     "email": "crimrecordshelp@ebclc.org",
     "notify_on_weekends": false
@@ -126,7 +126,7 @@
     "long_confirmation_message": "The Alameda County Public Defender's office will follow up with you if they need any other information.",
     "short_followup_message": "With the Alameda Public Defender, no news is good news. They'll contact you if they need anything. If you want to check your case, call (510) 272-6600 or email cleanslate@acgov.org",
     "long_followup_message": "With the Alameda County Public Defender's Office, no news is good news. They will definitely contact you if they need anything. If you'd like to check on your case status, you may call (510) 272-6600 or email cleanslate@acgov.org.",
-    "address": "",
+    "address": "Alameda Public Defender's Office\r\nAttn: Clear My Record Unit\r\n1401 Lakeside Drive, Suite 400\r\nOakland, CA 94612",
     "phone_number": "5102726600",
     "email": "cleanslate@acgov.org",
     "notify_on_weekends": false
@@ -168,21 +168,21 @@
       "solano"
     ],
     "website": "https://www.solanocounty.com/depts/pubdefender/home.asp",
-    "blurb": "",
+    "blurb": "The Solano County Public Defender's Office helps people with arrests or convictions in Solano County.",
     "is_receiving_agency": true,
     "is_accepting_applications": true,
     "is_checking_notifications": true,
-    "is_live": false,
+    "is_live": true,
     "requires_rap_sheet": false,
     "requires_declaration_letter": false,
     "show_pdf_only": false,
     "short_confirmation_message": "The Solano County Public Defender will contact you in 2-4 weeks with next steps.",
     "long_confirmation_message": "The Solano County Public Defender will contact you in 2-4 weeks with your next steps.",
-    "short_followup_message": "",
-    "long_followup_message": "",
-    "address": "",
-    "phone_number": "",
-    "email": "",
+    "short_followup_message": "Has the Solano Public Defender contacted you and told you your next steps?",
+    "long_followup_message": "Has the Solano County Public Defender contacted you and told you your next steps?",
+    "address": "Solano County Public Defender's Office\r\nAttention: Clear My Record Unit\r\n675 Texas Street, Suite 3500\r\nFairfield, CA 94533",
+    "phone_number": "(707) 784-6700",
+    "email": "publicdefender@solanocounty.com",
     "notify_on_weekends": false
   }
 },
@@ -195,7 +195,7 @@
       "san_diego"
     ],
     "website": "http://www.sandiegocounty.gov/public_defender/",
-    "blurb": "",
+    "blurb": "The San Diego County Public Defender's Office helps people with arrests or convictions in San Diego County.",
     "is_receiving_agency": true,
     "is_accepting_applications": true,
     "is_checking_notifications": true,
@@ -207,9 +207,9 @@
     "long_confirmation_message": "The San Diego County Public Defender will contact you in 2-4 weeks with your next steps.",
     "short_followup_message": "",
     "long_followup_message": "",
-    "address": "",
+    "address": "Department of the Primary Public Defender\r\nAttn: Expungement Paralegal, Clear My Record\r\n450 \"B\" Street, Suite 900\r\nSan Diego, CA 92101",
     "phone_number": "",
-    "email": "",
+    "email": "katherine.braner@sdcounty.ca.gov",
     "notify_on_weekends": false
   }
 },
@@ -222,7 +222,7 @@
       "san_joaquin"
     ],
     "website": "https://www.sjgov.org/pubdefender/",
-    "blurb": "",
+    "blurb": "The San Joaquin County Public Defender's Office helps people with arrests or convictions in San Joaquin County.",
     "is_receiving_agency": true,
     "is_accepting_applications": true,
     "is_checking_notifications": true,
@@ -234,8 +234,8 @@
     "long_confirmation_message": "The San Joaquin County Public Defender will contact you in 2-4 weeks with your next steps.",
     "short_followup_message": "",
     "long_followup_message": "",
-    "address": "",
-    "phone_number": "",
+    "address": "San Joaquin Public Defender's Office\r\nAttention: Clear My Record Unit\r\n102 South San Joaquin Street\r\nStockton, CA 95202",
+    "phone_number": "(209) 468-2730",
     "email": "",
     "notify_on_weekends": false
   }
@@ -249,7 +249,7 @@
       "santa_clara"
     ],
     "website": "https://www.sccgov.org/sites/pdo/Pages/pdo.aspx",
-    "blurb": "",
+    "blurb": "The Santa Clara County Public Defender's Office helps people with arrests or convictions in Santa Clara County.",
     "is_receiving_agency": true,
     "is_accepting_applications": true,
     "is_checking_notifications": true,
@@ -261,7 +261,7 @@
     "long_confirmation_message": "The Santa Clara County Public Defender will contact you in 2-4 weeks with your next steps.",
     "short_followup_message": "",
     "long_followup_message": "",
-    "address": "",
+    "address": "Santa Clara Public Defender's Office\r\nAttention: Clear My Record Unit\r\n120 West Mission Street\r\nSan Jose, CA 95110",
     "phone_number": "408-535-4290",
     "email": "",
     "notify_on_weekends": false
@@ -276,7 +276,34 @@
       "fresno"
     ],
     "website": "http://www.co.fresno.ca.us/Departments.aspx?id=404",
-    "blurb": "",
+    "blurb": "The Fresno County Public Defender's Office helps people with arrests or convictions in Fresno County.",
+    "is_receiving_agency": true,
+    "is_accepting_applications": true,
+    "is_checking_notifications": true,
+    "is_live": true,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": false,
+    "show_pdf_only": false,
+    "short_confirmation_message": "You'll get a letter from the Fresno County Public Defender in 2-4 weeks.",
+    "long_confirmation_message": "You will get a letter in the mail with your next steps from the Fresno County Public Defender in 2-4 weeks.",
+    "short_followup_message": "Has the Fresno Public Defender contacted you and told you your next steps?",
+    "long_followup_message": "Has the Fresno County Public Defender contacted you and told you your next steps?",
+    "address": "Fresno County Public Defender's Office\r\nAttn: Clear My Record Unit\r\n2220 Tulare Street, Suite 300\r\nFresno, CA 93721",
+    "phone_number": "(559) 600-3546",
+    "email": "publicdefender@co.fresno.ca.us",
+    "notify_on_weekends": false
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Santa Cruz County Public Defender",
+    "slug": "santa_cruz_pubdef",
+    "county": [
+      "santa_cruz"
+    ],
+    "website": "http://www.scdefenders.com/",
+    "blurb": "The Santa Cruz County Public Defender's Office helps people with arrests or convictions in Santa Cruz County.",
     "is_receiving_agency": true,
     "is_accepting_applications": true,
     "is_checking_notifications": true,
@@ -284,12 +311,12 @@
     "requires_rap_sheet": false,
     "requires_declaration_letter": false,
     "show_pdf_only": false,
-    "short_confirmation_message": "You'll get a letter from the Fresno County Public Defender in 2-4 weeks.",
-    "long_confirmation_message": "You will get a letter in the mail with your next steps from the Fresno County Public Defender in 2-4 weeks.",
-    "short_followup_message": "",
-    "long_followup_message": "",
+    "short_confirmation_message": "The Santa Cruz County Public Defender will contact you in 2-4 weeks with next steps.",
+    "long_confirmation_message": "The Santa Cruz County Public Defender will contact you in 2-4 weeks with your next steps.",
+    "short_followup_message": "Has the Santa Cruz Public Defender contacted you and told you your next steps?",
+    "long_followup_message": "Has the Santa Cruz Public Defender contacted you and told you your next steps?",
     "address": "",
-    "phone_number": "(559) 600-3546",
+    "phone_number": "(831) 429-1311",
     "email": "",
     "notify_on_weekends": false
   }

@@ -16,7 +16,7 @@ class ValidChoiceValidator:
 
     def set_context(self, field):
         if not hasattr(field, 'choices'):
-            raise exceptions.NoChoicesGivenError(str(
+            raise NoChoicesGivenError(str(
                 "`{}` doesn't have a `choices` attribute.".format(
                     field
                 )))
@@ -62,18 +62,7 @@ class MultipleValidChoiceValidator(ValidChoiceValidator):
                 self.format_error_message(missing_values))
 
 
-class GavePreferredContactMethods:
-    """Implements the validator protocol of Django REST Framework
-        - needs to be callable
-        - receives the parent form through the `set_context(form)` method
-        - if it finds errors, it should raise a ValidationError to return them
-    """
-    message_template = _(
-        "You said you preferred to be contacted through {medium}, but you didn't enter {datum}.")
-
-    def message(self, preference):
-        attributes, medium, datum = CONTACT_PREFERENCE_CHECKS[preference]
-        return self.message_template.format(medium=medium, datum=datum)
+class CheckEmptyFieldValidator:
 
     def set_context(self, form):
         self.context = form
@@ -81,6 +70,21 @@ class GavePreferredContactMethods:
     def field_is_empty(self, field_name):
         field = getattr(self.context, field_name)
         return field.is_empty()
+
+
+class GavePreferredContactMethods(CheckEmptyFieldValidator):
+    """Implements the validator protocol of Django REST Framework
+        - needs to be callable
+        - receives the parent form through the `set_context(form)` method
+        - if it finds errors, it should raise a ValidationError to return them
+    """
+    message_template = _(
+        "You said you preferred to be contacted through {medium}, but "
+        "you didn't enter {datum}.")
+
+    def message(self, preference):
+        attributes, medium, datum = CONTACT_PREFERENCE_CHECKS[preference]
+        return self.message_template.format(medium=medium, datum=datum)
 
     def __call__(self, parsed_data):
         errors = {}
@@ -93,6 +97,29 @@ class GavePreferredContactMethods:
         if errors:
             raise ValidationError(errors)
 
+
+class AtLeastEmailOrPhoneValidator(CheckEmptyFieldValidator):
+
+    message = _(
+        "We need at least one way to contact you. Please enter a phone number "
+        "or an email.")
+
+    field_keys = ['email', 'phone_number']
+
+    def __call__(self, parsed_data):
+        errors = {}
+        all_fields_empty = all([
+            self.field_is_empty(key) for key in self.field_keys])
+        if all_fields_empty:
+            for key in self.field_keys:
+                field_errors = errors.get(key, [])
+                field_errors.append(self.message)
+                errors[key] = field_errors
+        if errors:
+            raise ValidationError(errors)
+
+
+at_least_email_or_phone = AtLeastEmailOrPhoneValidator()
 is_a_valid_choice = ValidChoiceValidator()
 are_valid_choices = MultipleValidChoiceValidator()
 gave_preferred_contact_methods = GavePreferredContactMethods()

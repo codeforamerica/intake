@@ -8,6 +8,7 @@ from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
 from django.utils.html import conditional_escape
 from django.contrib.auth.models import User
+from project.jinja2 import oxford_comma, format_phone_number
 
 
 class OrganizationManager(models.Manager):
@@ -147,4 +148,15 @@ class Organization(models.Model):
 
     def get_last_bundle(self):
         return intake_models.ApplicationBundle.objects.filter(
-            organization=self).latest('id')
+                organization=self).latest('id')
+
+    def get_contact_info_message(self):
+        if not (self.phone_number or self.email):
+            raise ValueError("no email or phone exists for this organization")
+        messages = []
+        if self.phone_number:
+            messages.append(
+                "call {}".format(format_phone_number(self.phone_number)))
+        if self.email:
+            messages.append("email {}".format(self.email))
+        return oxford_comma(messages, use_or=True)

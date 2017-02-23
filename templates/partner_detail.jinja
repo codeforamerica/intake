@@ -40,15 +40,29 @@
   </div>
 {%- endif %}
 
+{%- if organization.address %}
+  <div class="data_display-row">
+  <div class="data_display address">
+    <div class="data_display-label address-name">{{
+      _("Mailing address")
+    }}</div>
+    <pre class="data_display-value">
+      {{- organization.address -}}
+    </pre>
+  </div>
+{%- endif %}
+
 {%- for location in organization.addresses.all() %}
 <div class="data_display-row">
   <div class="data_display address">
     <div class="data_display-label address-name">
       {{ location.name }}
     </div>
+    {%- if location.walk_in_hours %}
     <div class="data_display-label address-walk_in_hours">
       {{ location.walk_in_hours }}
     </div>
+    {%- endif %}
     <pre class="data_display-value">
       {{- location.text -}}
     </pre>

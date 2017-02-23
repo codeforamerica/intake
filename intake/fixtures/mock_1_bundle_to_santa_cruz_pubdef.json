@@ -1,0 +1,16 @@
+[
+{
+  "model": "intake.applicationbundle",
+  "pk": 11,
+  "fields": {
+    "organization": [
+      "Santa Cruz County Public Defender"
+    ],
+    "bundled_pdf": "",
+    "submissions": [
+      22,
+      21
+    ]
+  }
+}
+]
