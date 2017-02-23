@@ -1,7 +1,5 @@
 # Dependencies for production
 -r app.txt
-Django~=1.10
-django-autocomplete-light~=3.2
 dj-database-url~=0.4
 gunicorn~=19.6
 whitenoise~=3.2
