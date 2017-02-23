@@ -2,7 +2,7 @@
     <div class="application-event-header">
       <div class="application-event-title">Status Update - {{status_update.status_type.display_name}}</div>
 
-      {{local_time(status_update.created, '%-B %-d, %Y')}}  ({{humanize.naturaltime(status_update.created)}}) by {{status_update.author.first_name}} {{status_update.author.last_name}}
+      {{local_time(status_update.created, '%-B %-d, %Y')}}  ({{humanize.naturaltime(status_update.created)}}) by {{status_update.author.profile.name}}
     </div>
     <div class="application-event-body">
       <div class="status-update-details">
