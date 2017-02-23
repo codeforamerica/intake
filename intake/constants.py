@@ -65,6 +65,7 @@ class Organizations:
     SAN_JOAQUIN_PUBDEF = 'san_joaquin_pubdef'
     SANTA_CLARA_PUBDEF = 'santa_clara_pubdef'
     FRESNO_PUBDEF = 'fresno_pubdef'
+    SANTA_CRUZ_PUBDEF = 'santa_cruz_pubdef'
 
 DEFAULT_ORGANIZATION_ORDER = [
     Organizations.ALL,
@@ -77,6 +78,7 @@ DEFAULT_ORGANIZATION_ORDER = [
     Organizations.SAN_DIEGO_PUBDEF,
     Organizations.SAN_JOAQUIN_PUBDEF,
     Organizations.SANTA_CLARA_PUBDEF,
+    Organizations.SANTA_CRUZ_PUBDEF,
     Organizations.FRESNO_PUBDEF,
 ]
 
@@ -92,6 +94,7 @@ ORG_NAMES = {
     Organizations.SAN_DIEGO_PUBDEF: _("San Diego County Public Defender"),
     Organizations.SAN_JOAQUIN_PUBDEF: _("San Joaquin County Public Defender"),
     Organizations.SANTA_CLARA_PUBDEF: _("Santa Clara County Public Defender"),
+    Organizations.SANTA_CRUZ_PUBDEF: _("Santa Cruz County Public Defender"),
     Organizations.FRESNO_PUBDEF: _("Fresno County Public Defender"),
 }
 
@@ -108,6 +111,7 @@ PAGE_COMPLETE_SEQUENCES = {
     Organizations.SOLANO_PUBDEF: ["SelectCounty", "CountyApplication"],
     Organizations.SAN_DIEGO_PUBDEF: ["SelectCounty", "CountyApplication"],
     Organizations.SAN_JOAQUIN_PUBDEF: ["SelectCounty", "CountyApplication"],
+    Organizations.SANTA_CRUZ_PUBDEF: ["SelectCounty", "CountyApplication"],
     Organizations.SANTA_CLARA_PUBDEF: [
         "SelectCounty", "CountyApplication",
         "DeclarationLetterView", "DeclarationLetterReviewPage"],
@@ -124,6 +128,7 @@ class Counties:
     SAN_DIEGO = 'san_diego'
     SAN_JOAQUIN = 'san_joaquin'
     SANTA_CLARA = 'santa_clara'
+    SANTA_CRUZ = 'santa_cruz'
     FRESNO = 'fresno'
     OTHER = 'other'
 
@@ -137,6 +142,7 @@ class CountyNames:
     SAN_DIEGO = 'San Diego'
     SAN_JOAQUIN = 'San Joaquin'
     SANTA_CLARA = 'Santa Clara'
+    SANTA_CRUZ = 'Santa Cruz'
     FRESNO = 'Fresno'
     ALL = 'counties throughout California'
 
@@ -144,7 +150,7 @@ class CountyNames:
 COUNTY_CHOICES = (
     (Counties.SAN_FRANCISCO, _('San Francisco')),
     (Counties.CONTRA_COSTA, _(
-        'Conta Costa County (near Richmond, Concord, Walnut Creek, '
+        'Contra Costa County (near Richmond, Concord, Walnut Creek, '
         'San Ramon, Antioch, or Brentwood)')),
     (Counties.ALAMEDA, _(
         'Alameda County (near Oakland, Berkeley, San Leandro, Hayward, '
@@ -168,11 +174,15 @@ if not SCOPE_TO_LIVE_COUNTIES:
             'San Diego County (near San Diego, Oceanside, Chula Vista, or '
             'Escondido)')),
         (Counties.SAN_JOAQUIN, _(
-            'San Joaquin County (near Lodi, Stockton, Tracy, Manteca, '
-            'Thornton, or Victor)')),
+            'San Joaquin County (near Stockton, Lodi, Tracy, Manteca, Ripon, '
+            'Escalon, Lathrop, or Thornton)')),
         (Counties.SANTA_CLARA, _(
-            'Santa Clara County (near San Jose, Santa Clara, Campbell, '
-            'Saratoga, Los Altos, Los Gatos, or Gilroy)')),
+            'Santa Clara County (near San Jose, Santa Clara, Campbell, Los '
+            'Altos, Los Gatos, Palo Alto, Mountain View, Sunnyvale, Morgan '
+            'View, or Gilroy)')),
+        (Counties.SANTA_CRUZ, _(
+            'Santa Cruz County (near Santa Cruz, Watsonville, Boulder Creek, '
+            'Scotts Valley, Davenport, or Aptos)')),
         (Counties.MONTEREY, _(
             'Monterey County (near Salinas, Monterey, Marina, Seaside, '
             'Prunedale, Castroville, or King City)')),
@@ -189,6 +199,7 @@ COUNTY_CHOICE_DISPLAY_DICT = {
     Counties.SAN_DIEGO: CountyNames.SAN_DIEGO,
     Counties.SAN_JOAQUIN: CountyNames.SAN_JOAQUIN,
     Counties.SANTA_CLARA: CountyNames.SANTA_CLARA,
+    Counties.SANTA_CRUZ: CountyNames.SANTA_CRUZ,
     Counties.FRESNO: CountyNames.FRESNO,
 }
 

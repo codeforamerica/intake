@@ -1,15 +1,15 @@
 [
 {
   "model": "intake.applicationbundle",
-  "pk": 48,
+  "pk": 8,
   "fields": {
     "organization": [
       "San Joaquin County Public Defender"
     ],
     "bundled_pdf": "",
     "submissions": [
-      100,
-      101
+      16,
+      15
     ]
   }
 }

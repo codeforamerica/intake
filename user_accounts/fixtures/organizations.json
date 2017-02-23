@@ -178,8 +178,8 @@
     "show_pdf_only": false,
     "short_confirmation_message": "The Solano County Public Defender will contact you in 2-4 weeks with next steps.",
     "long_confirmation_message": "The Solano County Public Defender will contact you in 2-4 weeks with your next steps.",
-    "short_followup_message": "",
-    "long_followup_message": "",
+    "short_followup_message": "Has the Solano Public Defender contacted you and told you your next steps?",
+    "long_followup_message": "Has the Solano County Public Defender contacted you and told you your next steps?",
     "address": "Solano County Public Defender's Office\r\nAttention: Clear My Record Unit\r\n675 Texas Street, Suite 3500\r\nFairfield, CA 94533",
     "phone_number": "(707) 784-6700",
     "email": "publicdefender@solanocounty.com",
@@ -286,11 +286,38 @@
     "show_pdf_only": false,
     "short_confirmation_message": "You'll get a letter from the Fresno County Public Defender in 2-4 weeks.",
     "long_confirmation_message": "You will get a letter in the mail with your next steps from the Fresno County Public Defender in 2-4 weeks.",
-    "short_followup_message": "",
-    "long_followup_message": "",
+    "short_followup_message": "Has the Fresno Public Defender contacted you and told you your next steps?",
+    "long_followup_message": "Has the Fresno County Public Defender contacted you and told you your next steps?",
     "address": "Fresno County Public Defender's Office\r\nAttn: Clear My Record Unit\r\n2220 Tulare Street, Suite 300\r\nFresno, CA 93721",
     "phone_number": "(559) 600-3546",
     "email": "publicdefender@co.fresno.ca.us",
+    "notify_on_weekends": false
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Santa Cruz County Public Defender",
+    "slug": "santa_cruz_pubdef",
+    "county": [
+      "santa_cruz"
+    ],
+    "website": "http://www.scdefenders.com/",
+    "blurb": "The Santa Cruz County Public Defender's Office helps people with arrests or convictions in Santa Cruz County.",
+    "is_receiving_agency": true,
+    "is_accepting_applications": true,
+    "is_checking_notifications": true,
+    "is_live": false,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": false,
+    "show_pdf_only": false,
+    "short_confirmation_message": "The Santa Cruz County Public Defender will contact you in 2-4 weeks with next steps.",
+    "long_confirmation_message": "The Santa Cruz County Public Defender will contact you in 2-4 weeks with your next steps.",
+    "short_followup_message": "Has the Santa Cruz Public Defender contacted you and told you your next steps?",
+    "long_followup_message": "Has the Santa Cruz Public Defender contacted you and told you your next steps?",
+    "address": "",
+    "phone_number": "(831) 429-1311",
+    "email": "",
     "notify_on_weekends": false
   }
 }

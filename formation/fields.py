@@ -228,6 +228,14 @@ class CaseNumber(CharField):
     label = _("What is your case number, if you know it?")
 
 
+class PFNNumber(CharField):
+    context_key = "pfn_number"
+    label = _("What is your personal file number (PFN), if you know it?")
+    help_text = _(
+        "This is a number that is given to people who have been arrested in "
+        "Santa Clara County that helps attorneys find your case. ")
+
+
 ###
 # Contact Info Questions
 ###
@@ -236,7 +244,9 @@ class CaseNumber(CharField):
 class ContactPreferences(MultipleChoiceField):
     context_key = "contact_preferences"
     choices = CONTACT_PREFERENCE_CHOICES
-    label = _('How would you like us to contact you?')
+    label = _(
+        'How would you like Clear My Record to update you about your '
+        'application?')
     help_text = _(
         'An attorney may need to send you official documents in the mail '
         'or call you to help with your case.')
@@ -342,8 +352,9 @@ class USCitizen(YesNoField):
     context_key = "us_citizen"
     label = _("Are you a U.S. citizen?")
     help_text = _(
-        "It is important for your attorney to know if you are a "
-        "U.S citizen so they can find the best ways to help you.")
+        "It is important for your attorney to know if you are a U.S citizen "
+        "so they can find the best ways to help you. Your citizenship status "
+        "will not be shared with any law enforcement agencies.")
     display_label = "Is a citizen"
 
 
@@ -612,6 +623,7 @@ INTAKE_FIELDS = [
     LastFourOfSocial,
     SocialSecurityNumberField,
     CaseNumber,
+    PFNNumber,
 
     USCitizen,
     IsVeteran,
