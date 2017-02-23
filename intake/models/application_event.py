@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone as timezone_utils
 from django.contrib.postgres.fields import JSONField
-from project.external_services import log_to_mixpanel
+from intake.tasks import log_to_mixpanel
 
 import intake
 
@@ -38,7 +38,7 @@ class ApplicationEvent(models.Model):
             data=data or {}
         )
         event.save()
-        log_to_mixpanel(
+        log_to_mixpanel.delay(
             applicant_id, name, data or {})
         return event
 
