@@ -16,4 +16,4 @@ class Application(models.Model):
     def __str__(self):
         sub = str(self.form_submission.id)
         org = self.organization.name
-        return sub+org
+        return sub + org

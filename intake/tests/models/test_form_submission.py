@@ -109,7 +109,7 @@ class TestFormSubmission(TestCase):
             answers=mock.fake.ebclc_answers(
                 on_public_benefits=field_types.NO,
                 household_size=11)
-            )
+        )
         sub.answers['monthly_income'] = \
             (constants.FEE_WAIVER_LEVELS[12] / 12) + 1
         self.assertEqual(sub.qualifies_for_fee_waiver(), False)

@@ -2,6 +2,7 @@
 class PermissionDefinition:
     """A simple python class for hardcoding permissions
     """
+
     def __init__(self, codename, name):
         self.codename = codename
         self.app_code = 'intake.' + self.codename

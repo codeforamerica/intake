@@ -60,7 +60,7 @@ class TestGetSubmissionsDueForFollowups(TestCase):
         old_subs = sorted([
             mock.FormSubmissionFactory.create(date_received=get_old_date())
             for i in range(4)
-            ], key=lambda s: s.date_received)
+        ], key=lambda s: s.date_received)
         new_sub = mock.FormSubmissionFactory.create(
             date_received=get_newer_date())
         # but we only want ones after the second oldest sub
@@ -107,7 +107,7 @@ class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
                 'prefers_snailmail'],
             email='test@testing.com',
             phone_number='5554443333'
-            )
+        )
 
     def cant_contact_answers(self):
         return mock.fake.alameda_pubdef_answers(
@@ -116,7 +116,7 @@ class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
                 'prefers_snailmail'],
             email='test@testing.com',
             phone_number='5554443333'
-            )
+        )
 
     def test_case_when_all_have_usable_contact_info(self):
         orgs = [

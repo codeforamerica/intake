@@ -26,8 +26,8 @@ def get_duration(start, end):
 
 def seconds_to_complete(apps):
     durations = [
-            get_duration(app['started'], app['finished'])
-            for app in apps]
+        get_duration(app['started'], app['finished'])
+        for app in apps]
     return durations
 
 
@@ -77,7 +77,7 @@ class ApplicationAggregateField(serializers.Field):
         field = cls()
         return field.to_representation(
             ApplicantSerializer(qset, many=True).data
-            )
+        )
 
 
 class FinishedCountField(ApplicationAggregateField):
@@ -90,6 +90,7 @@ class FinishedCountField(ApplicationAggregateField):
 
 
 class MeanCompletionTimeField(ApplicationAggregateField):
+
     def filter(self, applications, org):
         """Only include applications that have both finished and started times
         """
@@ -102,6 +103,7 @@ class MeanCompletionTimeField(ApplicationAggregateField):
 
 
 class MedianCompletionTimeField(MeanCompletionTimeField):
+
     def reduce(self, applications):
         return statistics.median(seconds_to_complete(applications))
 
@@ -139,9 +141,9 @@ class WeeklyTotals(ApplicationAggregateField):
         duration = today - self.start_date
         number_of_days = duration.days
         structure = [
-                (today - datetime.timedelta(days=i), [])
-                for i in range(0, number_of_days, 7)
-            ]
+            (today - datetime.timedelta(days=i), [])
+            for i in range(0, number_of_days, 7)
+        ]
         return structure
 
     def filter(self, applications):
@@ -170,9 +172,9 @@ class WeeklyTotals(ApplicationAggregateField):
             dict(
                 date=day.isoformat(),
                 count=len(apps)
-                )
+            )
             for day, apps in reversed(buckets)
-            ]
+        ]
 
 
 class AppsThisWeek(ApplicationAggregateField):
@@ -242,7 +244,7 @@ order by count(*) desc
                 channel=referrer,
                 percent_of_apps=app_count / total,
                 apps=app_count,
-                )
+            )
             hits = hits_lookup.get(referrer)
             if hits:
                 data['hits'] = hits
@@ -309,10 +311,10 @@ class ContactPreferencesCount(ApplicationAggregateField):
         counter = collections.Counter()
         for app in applications:
             keys = tuple(
-                    key.replace('prefers_', '')
-                    for key in
-                    sorted(app.get('contact_preferences', []))
-                )
+                key.replace('prefers_', '')
+                for key in
+                sorted(app.get('contact_preferences', []))
+            )
             counter.update([keys])
         counts = list(counter.items())
         counts.sort(key=lambda a: a[1], reverse=True)

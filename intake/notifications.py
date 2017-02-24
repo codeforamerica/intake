@@ -1,17 +1,17 @@
 from collections import namedtuple
 import json
-import requests
-from intake.constants import SMS, EMAIL
 from django.core import mail
 from django.conf import settings
 from django.utils.translation import ugettext as _
 from django.template import loader
 
+from intake.constants import SMS, EMAIL
 from intake.exceptions import (
     JinjaNotInitializedError,
     DuplicateTemplateError,
     FrontAPIError
 )
+from intake.tasks import celery_request
 
 jinja = loader.engines['jinja']
 
@@ -134,15 +134,6 @@ class SimpleFrontNotification:
         root_url = 'https://api2.frontapp.com/channels/{}/messages'
         return root_url.format(self.channel_id)
 
-    def raise_post_errors(self, response, payload):
-        if response.status_code != 202:
-            raise FrontAPIError("""
-Error:
-{details}
-REQUEST JSON:
-{payload}
-""".format(details=str(response.json()), payload=payload))
-
     def send(self, to, body, subject=None):
         if isinstance(to, str):
             to = [to]
@@ -159,13 +150,11 @@ REQUEST JSON:
         payload = json.dumps(data)
         if check_that_remote_connections_are_okay(
                 'FRONT POST:', payload):
-            result = requests.post(
+            celery_request.delay('POST',
                 url=self.build_api_url_endpoint(),
                 data=payload,
                 headers=self.build_headers()
             )
-            self.raise_post_errors(result, payload)
-            return result
 
 
 class FrontNotification(TemplateNotification, SimpleFrontNotification):
@@ -226,7 +215,7 @@ class BasicSlackNotification:
         })
         if check_that_remote_connections_are_okay(
                 'SLACK POST:', payload):
-            return requests.post(
+            celery_request.delay('POST',
                 url=self.webhook_url,
                 data=payload,
                 headers=self.headers)

@@ -59,7 +59,7 @@ class FillablePDF(models.Model):
             pdf_bytes=self.fill(submission),
             original_pdf=self,
             submission=submission
-            )
+        )
 
     def fill(self, *args, **kwargs):
         parser = get_parser()

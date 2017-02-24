@@ -19,4 +19,4 @@ class StatusUpdate(models.Model):
     def __str__(self):
         app = str(self.application.form_submission.id)
         status_type = self.status_type.display_name
-        return app+status_type
+        return app + status_type
