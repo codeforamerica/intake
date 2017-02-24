@@ -4,14 +4,8 @@ from django.test import TestCase
 
 class TestPDFs(TestCase):
 
-    def test_init_storage(self):
-        from django.core.files.storage import default_storage
-        self.assertEqual(
-            str(default_storage.__class__),
-            "<class 'storages.backends.s3boto.S3BotoStorage'>"
-        )
-
     def test_add_file_to_s3(self):
+        # TODO: this can probably be removed
         from boto.s3.connection import S3Connection
         from boto.s3.key import Key
         access_key = os.environ.get('AWS_ACCESS_KEY_ID')
