@@ -493,7 +493,7 @@ class IsReasonableMonthsWages:
             self.field.add_warning(
                 self.amount_warning.format(
                     self.field.get_display_value())
-                )
+            )
 
 
 class MonthlyIncome(WholeDollarField):

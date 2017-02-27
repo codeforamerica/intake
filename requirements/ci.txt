@@ -1,8 +1,3 @@
 # dependencies for automated testing via Travis CI
 -r prod.txt
-coverage~=4.0
-codeclimate-test-reporter~=0.1
-# factory-boy breaks on later version fo fake-factory
-# we need to pin fake-factory
-fake-factory==0.7.2  
-factory-boy~=2.7
+-r dev.txt

@@ -1,6 +1,9 @@
 from project.settings.base import *
 import dj_database_url
 
+
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+
 SECRET_KEY = os.environ.get('SECRET_KEY', 'something super secret')
 
 # looks for 'DATABASE_URL' environmental variable
@@ -52,3 +55,5 @@ MIXPANEL_KEY = os.environ.get("MIXPANEL_KEY", "")
 USE_DEBUG_TOOLBAR = os.environ.get('USE_DEBUG_TOOLBAR', 0)
 
 LIVE_COUNTY_CHOICES = os.environ.get('LIVE_COUNTY_CHOICES', False)
+
+CELERY_BROKER_URL = os.environ.get('CLOUDAMQP_URL')

@@ -135,6 +135,7 @@ class ApplicationBundleDetail(ApplicationDetail):
 
     Given a bundle id it returns a detail page for ApplicationBundle
     """
+
     def get(self, request, bundle_id):
         bundle = get_object_or_404(models.ApplicationBundle, pk=int(bundle_id))
         has_access = request.user.profile.should_have_access_to(bundle)
@@ -164,6 +165,7 @@ class ApplicationBundleDetailPDFView(ViewAppDetailsMixin, View):
 
     replaces FilledPDFBundle
     """
+
     def get(self, request, bundle_id):
         bundle = get_object_or_404(models.ApplicationBundle, pk=int(bundle_id))
         has_access = request.user.profile.should_have_access_to(bundle)
@@ -305,11 +307,11 @@ def get_applicant_name(form):
     return '{}, {}'.format(
         form.last_name.get_display_value(),
         ' '.join([
-                n for n in [
-                    form.first_name.get_display_value(),
-                    form.middle_name.get_display_value()
-                ] if n
-            ])
+            n for n in [
+                form.first_name.get_display_value(),
+                form.middle_name.get_display_value()
+            ] if n
+        ])
     )
 
 
@@ -325,7 +327,7 @@ def get_printout_for_submission(user, submission):
         form.last_name.get_display_value(),
         form.first_name.get_display_value(),
         submission.id
-        )
+    )
     pdf.seek(0)
     return filename, pdf.read()
 
@@ -355,7 +357,7 @@ def get_concatenated_printout_for_bundle(user, bundle):
     filename = '{}-{}-Applications-CodeForAmerica.pdf'.format(
         today.strftime('%Y-%m-%d'),
         count
-        )
+    )
     pdf_file.seek(0)
     return filename, pdf_file.read()
 
@@ -382,6 +384,7 @@ class CaseBundlePrintoutPDFView(ViewAppDetailsMixin, View):
     """Returns a concatenated PDF of case detail PDFs
     for an org user
     """
+
     def get(self, request, bundle_id):
         bundle = get_object_or_404(
             models.ApplicationBundle,

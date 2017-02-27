@@ -235,7 +235,7 @@ class ChoiceField(CharField):
     def get_display_value(self):
         return self.get_display_for_choice(
             self.get_current_value()
-            )
+        )
 
     def get_display_for_choice(self, value):
         """Returns the display value for a given choice

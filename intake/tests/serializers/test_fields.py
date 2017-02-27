@@ -4,7 +4,7 @@ from django.test import TestCase
 from intake.serializers.fields import (
     made_a_meaningful_attempt_to_apply,
     ContactInfoByPreferenceField
-    )
+)
 
 
 def make_applicant():
@@ -81,7 +81,7 @@ class TestContactInfoByPreferenceField(TestCase):
                 'prefers_voicemail',
                 'prefers_snailmail',
                 'prefers_email'
-                ],
+            ],
             phone_number='4442223333',
             address=dict(
                 street='654 11th St Apt 999',
@@ -98,7 +98,7 @@ class TestContactInfoByPreferenceField(TestCase):
             ('snailmail', '654 11th St Apt 999, Oakland, CA 94449'),
         ]
         results = ContactInfoByPreferenceField(
-            ).to_representation(answers)
+        ).to_representation(answers)
         for key, value in results:
             self.assertTrue(hasattr(value, '__html__'))
         self.assertEqual(results, expected_output)
@@ -107,7 +107,7 @@ class TestContactInfoByPreferenceField(TestCase):
         answers = dict(
             contact_preferences=[
                 'prefers_email'
-                ],
+            ],
             phone_number='4442223333',
             address=dict(
                 street='654 11th St Apt 999',
@@ -121,12 +121,12 @@ class TestContactInfoByPreferenceField(TestCase):
             ('email', 'test@gmail.com'),
         ]
         results = ContactInfoByPreferenceField(
-            ).to_representation(answers)
+        ).to_representation(answers)
         self.assertEqual(results, expected_output)
 
     def test_empty_input_returns_empty_list(self):
         answers = {}
         expected_output = []
         results = ContactInfoByPreferenceField(
-            ).to_representation(answers)
+        ).to_representation(answers)
         self.assertEqual(results, expected_output)

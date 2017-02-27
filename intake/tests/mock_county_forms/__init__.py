@@ -24,7 +24,7 @@ class Provider(BaseProvider):
         return random.sample([
             'prefers_email',
             'prefers_sms',
-            ], preferences)
+        ], preferences)
 
     def make_phone_number(self):
         return self.numerify('2##-###-####')

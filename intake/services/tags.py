@@ -50,8 +50,8 @@ def get_all_used_tag_names():
     """Returns any tag names that are linked to form submissions
     """
     return Tag.objects.annotate(
-            link_count=Count('intake_submissiontaglink_items')
-        ).filter(link_count__gt=0).values_list('name', flat=True)
+        link_count=Count('intake_submissiontaglink_items')
+    ).filter(link_count__gt=0).values_list('name', flat=True)
 
 
 def remove_tag_from_submission(tag_id, submission_id):
@@ -61,4 +61,4 @@ def remove_tag_from_submission(tag_id, submission_id):
             (int(total_deletions), dict(deletion_counts_by_model))
     """
     return SubmissionTagLink.objects.filter(
-            tag_id=tag_id, content_object_id=submission_id).delete()
+        tag_id=tag_id, content_object_id=submission_id).delete()

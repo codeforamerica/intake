@@ -26,8 +26,7 @@ class TestCommand(ExternalNotificationsPatchTestCase):
     def test_expected_weekday_run(self, slack, is_the_weekend):
         is_the_weekend.return_value = False
         org = Organization.objects.get(slug='a_pubdef')
-        dates = [mock.get_old_date() for i in range(464, 469)]
-        dates.sort()
+        dates = sorted([mock.get_old_date() for i in range(464, 469)])
         for date, pk in zip(dates, range(464, 469)):
             applicant = Applicant()
             applicant.save()
@@ -42,7 +41,7 @@ class TestCommand(ExternalNotificationsPatchTestCase):
                         'prefers_sms'],
                     phone='4445551111',
                     email='test@test.com',
-                    ))
+                ))
         command = send_followups.Command()
         command.stdout = Mock()
         command.handle()

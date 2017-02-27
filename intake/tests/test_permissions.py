@@ -6,7 +6,7 @@ class TestPermissions(IntakeDataTestCase):
 
     fixtures = [
         'counties', 'organizations', 'mock_profiles'
-        ]
+    ]
 
     def test_can_see_followup_notes(self):
         user = self.be_cfa_user()

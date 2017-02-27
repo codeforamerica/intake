@@ -1,7 +1,6 @@
 from intake.constants import CountyNames
 
 
-
 class constants:
 
     topbar = "Clear My Record | Get help clearing your criminal record in {}".format(

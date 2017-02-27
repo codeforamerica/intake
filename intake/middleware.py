@@ -52,6 +52,6 @@ class CountUniqueVisitorsMiddleware:
                 referrer=request.session.get('referrer', ''),
                 source=request.session.get('source', ''),
                 ip_address=getattr(request, 'ip_address', '')
-                )
+            )
             visitor.save()
             request.session['visitor_id'] = visitor.id

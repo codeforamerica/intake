@@ -10,7 +10,7 @@ from intake.views import (
     application_note_views,
     tag_views,
     status_update_views
-    )
+)
 
 urlpatterns = [
     # public views

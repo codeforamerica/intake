@@ -167,7 +167,7 @@ class FormSubmission(models.Model):
         display_form.display_template_name = "formation/intake_display.jinja"
         display_form.submission = self
         show_declaration = any(self.organizations.all().values_list(
-                'requires_declaration_letter', flat=True))
+            'requires_declaration_letter', flat=True))
         if show_declaration:
             declaration_letter_form = DeclarationLetterDisplay(
                 init_data, validate=True)
