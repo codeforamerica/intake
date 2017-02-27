@@ -181,8 +181,8 @@ if not SCOPE_TO_LIVE_COUNTIES:
             'Altos, Los Gatos, Palo Alto, Mountain View, Sunnyvale, Morgan '
             'View, or Gilroy)')),
         (Counties.SANTA_CRUZ, _(
-            'Santa Cruz County (near Santa Cruz, Watsonville, Boulder Creek, '
-            'Scotts Valley, Davenport, or Aptos)')),
+            'Santa Cruz County (near Santa Cruz, Watsonville, Capitola, '
+            'Felton, Scotts Valley, Aptos, or Boulder Creek)')),
         (Counties.MONTEREY, _(
             'Monterey County (near Salinas, Monterey, Marina, Seaside, '
             'Prunedale, Castroville, or King City)')),
