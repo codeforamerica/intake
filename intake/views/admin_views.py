@@ -65,18 +65,22 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         is_staff = self.request.user.is_staff
-        context['submissions'] = \
-            SubmissionsService.get_paginated_submissions_for_user(
-                self.request.user, self.request.GET.get('page'))
-        context['page_counter'] = \
-            utils.get_page_navigation_counter(
-                page=context['submissions'],
-                wing_size=9)
         context['show_pdf'] = self.request.user.profile.should_see_pdf()
         context['body_class'] = 'admin'
         context['search_form'] = forms.ApplicationSelectForm()
         if is_staff:
             context['ALL_TAG_NAMES'] = TagsService.get_all_used_tag_names()
+            context['submissions'] = \
+                SubmissionsService.get_permitted_submissions(
+                    self.request.user, related_objects=True)
+        else:
+            context['submissions'] = \
+                SubmissionsService.get_paginated_submissions_for_user(
+                    self.request.user, self.request.GET.get('page'))
+            context['page_counter'] = \
+                utils.get_page_navigation_counter(
+                    page=context['submissions'],
+                    wing_size=9)
         return context
 
 
