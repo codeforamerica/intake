@@ -4,7 +4,7 @@
   <th>Received</th>
   <th>Name</th>
   <th>Contact</th>
-  <th>Orgs</th>
+  <th>Orgs & Statuses</th>
   {%- if perms.intake.view_application_note %}
   <th>Notes</th>
   <th>Tags</th>
@@ -13,9 +13,11 @@
 {% for app in submissions %}
 <tr class="form_submission" data-key="{{ app.id }}">
   <td>
+  {# ID #}
     <a href="{{ app.get_absolute_url() }}">{{ app.id }}</a>
   </td>
   <td>
+  {# Received #}
     <a href="{{ app.get_absolute_url() }}">
       <div class="date_received">
         <div class="date">{{ 
@@ -28,9 +30,11 @@
     </a>
   </td>
   <td>
+  {# Name #}
     {{ app.get_full_name() }}
   </td>
   <td>
+  {# Contact #}
     <div class="phone_number">
       {%- if app.answers.get('phone_number') %}
         +1{{ app.answers.get('phone_number') }}
@@ -43,12 +47,29 @@
     </div>
   </td>
   <td class="org_tags">
+  {# Org & Latest Status #}
+  <table>
     {%- for org in app.organizations.all() %}
-      <div class="org_tag">{{ org.slug.replace('_', ' ') }}</div>
+    <tr>
+      <td class="org_tag">{{ org.slug.replace('_', ' ') }}</td>
+      <td class="org_tag">
+        {% if app.applications.filter(organization=org).first().status_updates.exists() %}
+          {{app.applications.filter(organization=org).first().status_updates.latest('updated').status_type.display_name}}
+        {%- else -%}
+          New
+        {% endif %}
+        <br/>
+        {% if app.applications.filter(organization=org).first().status_updates.exists() %}
+          {{humanize.naturaltime(app.applications.filter(organization=org).first().status_updates.latest('updated').updated)}}
+        {% endif %}
+      </td>
+    </tr>
     {%- endfor %}
+    </table>
   </td>
   {%- if perms.intake.view_application_note %}
   <td class="notes_log-cell">
+  {# Notes #}
     <div class="notes_log">
       {%- if perms.intake.add_application_note %}
       <form class="note-create_form" action="{{ url('intake-create_note') }}" method="post">
@@ -81,6 +102,7 @@
     </div>
   </td>
   <td class="tags-cell">
+  {# Tags #}
     <div class="tags-input_module">
       <div class="tags">
         {%- for tag in app.tags.all() %}
