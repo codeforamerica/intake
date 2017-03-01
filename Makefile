@@ -43,7 +43,6 @@ deploy.demo:
 	git push -f demo HEAD:master
 	heroku run --app cmr-demo make db.seed
 
-
 deploy.prod:
 	git push prod master
 	heroku run --app cmr-prod python manage.py loaddata \

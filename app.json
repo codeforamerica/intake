@@ -1,6 +1,7 @@
 {
   "name": "intake",
   "scripts": {
+    "postdeploy": "make db.seeds"
   },
   "env": {
     "ADMIN_PHONE_NUMBER": {
