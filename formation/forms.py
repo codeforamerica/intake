@@ -465,6 +465,13 @@ class SonomaCountyFormSpec(SolanoCountyFormSpec):
     ]
 
 
+class TulareCountyFormSpec(SolanoCountyFormSpec):
+    county = Counties.TULARE
+    validators = [
+        gave_preferred_contact_methods
+    ]
+
+
 class EBCLCIntakeFormSpec(CombinableOrganizationFormSpec):
     organization = Organizations.EBCLC
     fields = {
@@ -575,6 +582,7 @@ INPUT_FORM_SPECS = [
     SantaCruzCountyFormSpec(),
     FresnoCountyFormSpec(),
     SonomaCountyFormSpec(),
+    TulareCountyFormSpec(),
 ]
 
 DISPLAY_FORM_SPECS = INPUT_FORM_SPECS + [

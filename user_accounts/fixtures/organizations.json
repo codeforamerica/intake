@@ -347,5 +347,32 @@
     "email": "expungements@sonoma-county.org",
     "notify_on_weekends": false
   }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Tulare County Public Defender",
+    "slug": "tulare_pubdef",
+    "county": [
+      "tulare"
+    ],
+    "website": "http://tularecountypublicdefender.com/publicdefender/",
+    "blurb": "The Tulare County Public Defender's Office helps people with arrests or convictions in Tulare County.",
+    "is_receiving_agency": true,
+    "is_accepting_applications": true,
+    "is_checking_notifications": true,
+    "is_live": false,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": false,
+    "show_pdf_only": false,
+    "short_confirmation_message": "The Tulare County Public Defender will contact you in 2-4 weeks with next steps.",
+    "long_confirmation_message": "The Tulare County Public Defender will contact you in 2-4 weeks with your next steps.",
+    "short_followup_message": "Has the Tulare Public Defender contacted you and told you your next steps?",
+    "long_followup_message": "Has the Tulare Public Defender contacted you and told you your next steps?",
+    "address": "Tulare County Public Defender's Office\r\nCourthouse RM G35\r\n221 S Mooney Blvd\r\nVisalia, CA 93291",
+    "phone_number": "(559) 636-4500",
+    "email": "",
+    "notify_on_weekends": false
+  }
 }
 ]

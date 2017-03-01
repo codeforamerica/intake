@@ -351,6 +351,27 @@
   }
 },
 {
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$30000$Mj7zDSw4IaTx$bUSZFAYJaj0qGa+aQI+DdIdQoZQnPlQWx0MC4IJtOkA=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "tulare_pubdef_user",
+    "first_name": "Fake",
+    "last_name": "Tulare Pubdef",
+    "email": "bgolder+demo+tulare_pubdef_user@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-03-01T19:39:36.618Z",
+    "groups": [
+      [
+        "application_reviewers"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
   "model": "user_accounts.userprofile",
   "pk": 1,
   "fields": {
@@ -542,6 +563,20 @@
     ],
     "organization": [
       "Sonoma County Public Defender"
+    ],
+    "should_get_notifications": true
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 19,
+  "fields": {
+    "name": "Fake Tulare Pubdef",
+    "user": [
+      "tulare_pubdef_user"
+    ],
+    "organization": [
+      "Tulare County Public Defender"
     ],
     "should_get_notifications": true
   }
