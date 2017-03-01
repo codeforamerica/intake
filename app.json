@@ -1,6 +1,7 @@
 {
   "name": "intake",
   "scripts": {
+    "postdeploy": "make db.seed"
   },
   "env": {
     "ADMIN_PHONE_NUMBER": {
@@ -31,7 +32,7 @@
       "required": true
     },
     "DJANGO_SETTINGS_MODULE": {
-      "required": true
+     "value": "project.settings.review_app"
     },
     "FRONT_API_TOKEN": {
       "required": true
@@ -70,7 +71,13 @@
       "required": true
     }
   },
-  "formation": {
+  "formations": {
+    "web": {
+      "quantity": 1
+    }
+    "worker": {
+      "quantity": 1
+    }
   },
   "addons": [
     "cloudamqp",
