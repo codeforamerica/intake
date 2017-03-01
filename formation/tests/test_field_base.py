@@ -145,7 +145,7 @@ class TestField(PatchTranslationTestCase):
         self.assertFalse(field.errors)
         self.assertFalse(field.warnings)
 
-    def test_recommended_empty_extra_validator_returns_recommended_warning_only(
+    def test_recommended_empty_extra_validator_returns_only_that_warning_only(
             self):
         from formation.fields import EmailField
         field = EmailField(self.empty, recommended=True, required=False)

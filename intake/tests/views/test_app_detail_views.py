@@ -126,7 +126,7 @@ class TestApplicationDetail(AppDetailAccessBaseTests):
             application__form_submission=submission)
         latest_status = statuses.filter(
             application__organization=user.profile.organization,
-            ).latest('updated')
+        ).latest('updated')
         latest_status_date = statuses.latest('updated').updated
         even_later = latest_status_date + timedelta(days=3)
         other_status = statuses.exclude(

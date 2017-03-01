@@ -17,16 +17,16 @@ from formation.forms import (
 from formation.fields import MonthlyIncome, HouseholdSize, OnPublicBenefits
 
 FORMSUBMISSION_TEXT_SEARCH_FIELDS = [
-        'first_name',
-        'last_name',
-        'ssn',
-        'last_four',
-        'drivers_license_or_id',
-        'case_number',
-        'phone_number',
-        'alternate_phone_number',
-        'email'
-    ]
+    'first_name',
+    'last_name',
+    'ssn',
+    'last_four',
+    'drivers_license_or_id',
+    'case_number',
+    'phone_number',
+    'alternate_phone_number',
+    'email'
+]
 
 
 class MissingAnswersError(Exception):

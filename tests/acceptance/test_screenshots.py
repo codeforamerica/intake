@@ -8,7 +8,8 @@ from django.core.urlresolvers import reverse
 from intake import models, constants
 from tests import base
 from tests import sequence_steps as S
-from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase as AuthCase
+from user_accounts.tests.test_auth_integration \
+    import AuthIntegrationTestCase as AuthCase
 from user_accounts.tests import mock as auth_mock
 from django.contrib.auth import models as auth_models
 from user_accounts import models as accounts_models
