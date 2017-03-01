@@ -236,8 +236,8 @@ class DEVICES:
     Motorola_Droid_Razr_HD = "Motorola Droid Razr HD"
     Nokia_C5_C6_C7_N97_N8_X7 = "Nokia C5, C6, C7, N97, N8, X7"
     Nokia_Lumia_7X0_Lumia_8XX_Lumia_900_N800_N810_N900 = (
-         "Nokia Lumia 7X0, "
-         "Lumia 8XX, Lumia 900, N800, N810, N900"
+        "Nokia Lumia 7X0, "
+        "Lumia 8XX, Lumia 900, N800, N810, N900"
     )
     Samsung_Galaxy_Note_3 = "Samsung Galaxy Note 3"
     Samsung_Galaxy_Note_II = "Samsung Galaxy Note II"
