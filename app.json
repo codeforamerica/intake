@@ -32,7 +32,7 @@
       "required": true
     },
     "DJANGO_SETTINGS_MODULE": {
-     "value": "project.settings.review_app",
+     "value": "project.settings.review_app"
     },
     "FRONT_API_TOKEN": {
       "required": true
