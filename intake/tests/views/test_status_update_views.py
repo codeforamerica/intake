@@ -15,7 +15,7 @@ class StatusUpdateViewBaseTestCase(IntakeDataTestCase):
         'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
         'mock_1_submission_to_multiple_orgs', 'template_options'
-        ]
+    ]
 
     @classmethod
     def setUpClass(cls):
@@ -49,8 +49,8 @@ class StatusUpdateViewBaseTestCase(IntakeDataTestCase):
 
     def get_review_page(self):
         return self.client.get(reverse(
-                'intake-review_status_notification',
-                kwargs=dict(submission_id=self.sub.id)))
+            'intake-review_status_notification',
+            kwargs=dict(submission_id=self.sub.id)))
 
     def confirm_status_update(self, **status_notification_form_inputs):
         return self.client.fill_form(

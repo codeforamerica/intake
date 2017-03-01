@@ -268,7 +268,8 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
         'mock_1_bundle_to_a_pubdef'
     ]
 
-    @patch('intake.views.admin_views.notifications.slack_submissions_viewed.send')
+    @patch(
+        'intake.views.admin_views.notifications.slack_submissions_viewed.send')
     def test_returns_200_on_existing_bundle_id(self, slack):
         """`ApplicationBundleDetailView` return `OK` for existing bundle
 
@@ -282,7 +283,8 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
             kwargs=dict(bundle_id=self.a_pubdef_bundle.id)))
         self.assertEqual(result.status_code, 200)
 
-    @patch('intake.views.admin_views.notifications.slack_submissions_viewed.send')
+    @patch(
+        'intake.views.admin_views.notifications.slack_submissions_viewed.send')
     def test_staff_user_gets_200(self, slack):
         self.be_cfa_user()
         result = self.client.get(reverse(
@@ -340,7 +342,8 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
             kwargs=dict(bundle_id=bundle.id)))
         self.assertContains(result, url)
 
-    @patch('intake.notifications.slack_submissions_viewed.send')
+    @patch(
+        'intake.notifications.slack_submissions_viewed.send')
     def test_agency_user_can_see_transfer_action_links(self, slack):
         self.be_apubdef_user()
         response = self.client.get(
@@ -350,7 +353,8 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
                 sub.get_transfer_action(response.wsgi_request)['url'])
             self.assertContains(response, transfer_action_url)
 
-    @patch('intake.notifications.slack_submissions_viewed.send')
+    @patch(
+        'intake.notifications.slack_submissions_viewed.send')
     def test_user_can_see_app_bundle_printout_link(self, slack):
         self.be_apubdef_user()
         response = self.client.get(self.a_pubdef_bundle.get_absolute_url())
@@ -425,7 +429,8 @@ class TestReferToAnotherOrgView(IntakeDataTestCase):
             base += "&next={}".format(next)
         return base
 
-    @patch('intake.views.admin_views.notifications.slack_submission_transferred.send')
+    @patch('intake.views.admin_views.notifications'
+           '.slack_submission_transferred.send')
     def test_anon_is_rejected(self, slack_action):
         self.be_anonymous()
         response = self.client.get(self.url(
@@ -434,7 +439,8 @@ class TestReferToAnotherOrgView(IntakeDataTestCase):
         self.assertIn(reverse('user_accounts-login'), response.url)
         slack_action.assert_not_called()
 
-    @patch('intake.views.admin_views.notifications.slack_submission_transferred')
+    @patch(
+        'intake.views.admin_views.notifications.slack_submission_transferred')
     def test_org_user_with_no_next_is_redirected_to_app_index(self,
                                                               slack_action):
         self.be_apubdef_user()
@@ -452,8 +458,10 @@ class TestReferToAnotherOrgView(IntakeDataTestCase):
         self.assertContains(index, "You successfully transferred")
         self.assertEqual(len(list(slack_action.mock_calls)), 1)
 
-    @patch('intake.views.admin_views.notifications.slack_submissions_viewed.send')
-    @patch('intake.views.admin_views.notifications.slack_submission_transferred')
+    @patch(
+        'intake.views.admin_views.notifications.slack_submissions_viewed.send')
+    @patch(
+        'intake.views.admin_views.notifications.slack_submission_transferred')
     def test_org_user_with_next_goes_back_to_next(self,
                                                   slack_action,
                                                   slack_viewed):

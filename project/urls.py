@@ -13,7 +13,9 @@ urlpatterns += [
     url(r'^', include('user_accounts.urls')),
     # user accounts
     url(r'^accounts/', include('allauth.urls')),
-    url(r'^invitations/', include('invitations.urls', namespace='invitations')),
+    url(r'^invitations/', include(
+        'invitations.urls', namespace='invitations'
+    )),
 ]
 
 # django debug toolbar

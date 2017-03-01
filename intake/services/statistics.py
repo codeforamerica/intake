@@ -66,7 +66,7 @@ def get_status_update_success_metrics():
         org_status_type_counts.items(),
         key=lambda entry: constants.DEFAULT_ORGANIZATION_ORDER.index(
             entry[0][0])
-        )
+    )
     for org_tuple, counter in sorted_orgs:
         entry = (org_tuple[1], sort_status_type_and_next_step_counts(counter))
         data.append(entry)

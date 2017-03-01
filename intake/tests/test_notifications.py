@@ -229,11 +229,13 @@ They want to be contacted via text message and email
 
     @override_settings(DEFAULT_HOST='something.com')
     def test_render_front_email_daily_app_bundle(self):
-        expected_subject = "current time: Online applications to Clear My Record"
-        expected_body = """As of current time, you have one unopened application to Clear My Record.
-
-You can review and print them at this link:
-    something.com/applications/bundle/1/"""
+        expected_subject = \
+            "current time: Online applications to Clear My Record"
+        # TODO: just check that the templates are handed the proper context
+        expected_body = ("As of current time, you have one unopened "
+                         "application to Clear My Record.\n\n"
+                         "You can review and print them at this link:\n    "
+                         "something.com/applications/bundle/1/")
         request = Mock()
         current_time = Mock(return_value='current time')
         content = notifications.front_email_daily_app_bundle.render(

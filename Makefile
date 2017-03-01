@@ -13,6 +13,11 @@ test:
 		--verbosity 2
 
 
+test.keepdb:
+	./manage.py test $(SCOPE) \
+		--verbosity 2 --keepdb
+
+
 test.coverage:
 	coverage run \
 		./manage.py test $(SCOPE) \

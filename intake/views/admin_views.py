@@ -402,6 +402,7 @@ class CaseBundlePrintoutPDFView(ViewAppDetailsMixin, View):
 
 
 class ApplicantAutocomplete(autocomplete.Select2QuerySetView):
+
     def get_queryset(self):
         if self.request.user.is_staff:
             qs = qs = models.Application.objects.all()

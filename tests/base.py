@@ -120,7 +120,7 @@ class FunctionalTestCase(StaticLiveServerTestCase):
         time.sleep(seconds)
 
 # relevant:
-# http://selenium-python.readthedocs.io/faq.html#how-to-scroll-down-to-the-bottom-of-a-page
+# nopep8 http://selenium-python.readthedocs.io/faq.html#how-to-scroll-down-to-the-bottom-of-a-page
 
 
 class ScreenSequenceTestCase(FunctionalTestCase):
@@ -207,6 +207,7 @@ class TimeProfileTestMixin:
         super().tearDown()
 
 
+# TODO: maybe this should be a config file not python
 class DEVICES:
     Apple_iPhone_3GS = "Apple iPhone 3GS"
     Apple_iPhone_4 = "Apple iPhone 4"
@@ -221,15 +222,23 @@ class DEVICES:
     HTC_Evo_Touch_HD_Desire_HD_Desire = "HTC Evo, Touch HD, Desire HD, Desire"
     HTC_One_X_EVO_LTE = "HTC One X, EVO LTE"
     HTC_Sensation_Evo_3D = "HTC Sensation, Evo 3D"
-    LG_Optimus_2X_Optimus_3D_Optimus_Black = "LG Optimus 2X, Optimus 3D, Optimus Black"
+    LG_Optimus_2X_Optimus_3D_Optimus_Black = \
+        "LG Optimus 2X, Optimus 3D, Optimus Black"
     LG_Optimus_G = "LG Optimus G"
     LG_Optimus_LTE_Optimus_4X_HD = "LG Optimus LTE, Optimus 4X HD"
     LG_Optimus_One = "LG Optimus One"
-    Motorola_Defy_Droid_Droid_X_Milestone = "Motorola Defy, Droid, Droid X, Milestone"
-    Motorola_Droid_3_Droid_4_Droid_Razr_Atrix_4G_Atrix_2 = "Motorola Droid 3, Droid 4, Droid Razr, Atrix 4G, Atrix 2"
+    Motorola_Defy_Droid_Droid_X_Milestone = ("Motorola Defy, Droid, Droid X, "
+                                             "Milestone")
+    Motorola_Droid_3_Droid_4_Droid_Razr_Atrix_4G_Atrix_2 = (
+        "Motorola Droid 3,"
+        " Droid 4, Droid Razr, Atrix 4G, Atrix 2"
+    )
     Motorola_Droid_Razr_HD = "Motorola Droid Razr HD"
     Nokia_C5_C6_C7_N97_N8_X7 = "Nokia C5, C6, C7, N97, N8, X7"
-    Nokia_Lumia_7X0_Lumia_8XX_Lumia_900_N800_N810_N900 = "Nokia Lumia 7X0, Lumia 8XX, Lumia 900, N800, N810, N900"
+    Nokia_Lumia_7X0_Lumia_8XX_Lumia_900_N800_N810_N900 = (
+        "Nokia Lumia 7X0, "
+        "Lumia 8XX, Lumia 900, N800, N810, N900"
+    )
     Samsung_Galaxy_Note_3 = "Samsung Galaxy Note 3"
     Samsung_Galaxy_Note_II = "Samsung Galaxy Note II"
     Samsung_Galaxy_Note = "Samsung Galaxy Note"
@@ -241,7 +250,8 @@ class DEVICES:
     Sony_Xperia_Z_Z1 = "Sony Xperia Z, Z1"
     Amazon_Kindle_Fire_HDX7 = "Amazon Kindle Fire HDX 7″"
     Amazon_Kindle_Fire_HDX8_9 = "Amazon Kindle Fire HDX 8.9″"
-    Amazon_Kindle_Fire_First_Generation = "Amazon Kindle Fire (First Generation)"
+    Amazon_Kindle_Fire_First_Generation = \
+        "Amazon Kindle Fire (First Generation)"
     Apple_iPad_1_2_iPad_Mini = "Apple iPad 1 / 2 / iPad Mini"
     Apple_iPad_3_4 = "Apple iPad 3 / 4"
     BlackBerry_PlayBook = "BlackBerry PlayBook"

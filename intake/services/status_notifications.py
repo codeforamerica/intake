@@ -78,5 +78,5 @@ def send_and_save_new_status(request, notification_data, status_update_data):
         contact_info, edited_message,
         subject="Update from Clear My Record")
     success_message = get_status_update_success_message(
-            sub, status_update.status_type)
+        sub, status_update.status_type)
     messages.success(request, success_message)

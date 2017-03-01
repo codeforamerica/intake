@@ -121,7 +121,7 @@ INVITATIONS_INVITATION_EXPIRY = 14
 INVITATIONS_INVITATION_ONLY = True
 INVITATIONS_SIGNUP_REDIRECT = 'account_signup'
 INVITATIONS_ADAPTER = ACCOUNT_ADAPTER
-ACCOUNT_EMAIL_SUBJECT_PREFIX = ''  # don't prefix emails with the name of the site
+ACCOUNT_EMAIL_SUBJECT_PREFIX = ''  # don't prefix emails with the site name
 INVITATIONS_EMAIL_SUBJECT_PREFIX = ACCOUNT_EMAIL_SUBJECT_PREFIX
 # invitation only, so email confirmation is redundant
 ACCOUNT_EMAIL_VERIFICATION = "none"
@@ -145,14 +145,15 @@ ADMINS = [
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
+        'NAME': ('django.contrib.auth.password_validation'
+                 '.UserAttributeSimilarityValidator'),
+    }, {
+        'NAME': ('django.contrib.auth.password_validation'
+                 '.MinimumLengthValidator'),
+    }, {
+        'NAME': ('django.contrib.auth.password_validation'
+                 '.CommonPasswordValidator'),
+    }
 ]
 
 SITE_ID = 1
