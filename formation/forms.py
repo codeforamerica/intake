@@ -458,6 +458,13 @@ class SantaCruzCountyFormSpec(SolanoCountyFormSpec):
     }
 
 
+class SonomaCountyFormSpec(SolanoCountyFormSpec):
+    county = Counties.SONOMA
+    validators = [
+        gave_preferred_contact_methods
+    ]
+
+
 class EBCLCIntakeFormSpec(CombinableOrganizationFormSpec):
     organization = Organizations.EBCLC
     fields = {
@@ -567,6 +574,7 @@ INPUT_FORM_SPECS = [
     SantaClaraCountyFormSpec(),
     SantaCruzCountyFormSpec(),
     FresnoCountyFormSpec(),
+    SonomaCountyFormSpec(),
 ]
 
 DISPLAY_FORM_SPECS = INPUT_FORM_SPECS + [

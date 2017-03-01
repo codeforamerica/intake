@@ -66,6 +66,7 @@ class Organizations:
     SANTA_CLARA_PUBDEF = 'santa_clara_pubdef'
     FRESNO_PUBDEF = 'fresno_pubdef'
     SANTA_CRUZ_PUBDEF = 'santa_cruz_pubdef'
+    SONOMA_PUBDEF = 'sonoma_pubdef'
 
 DEFAULT_ORGANIZATION_ORDER = [
     Organizations.ALL,
@@ -80,6 +81,7 @@ DEFAULT_ORGANIZATION_ORDER = [
     Organizations.SANTA_CLARA_PUBDEF,
     Organizations.SANTA_CRUZ_PUBDEF,
     Organizations.FRESNO_PUBDEF,
+    Organizations.SONOMA_PUBDEF,
 ]
 
 
@@ -96,6 +98,7 @@ ORG_NAMES = {
     Organizations.SANTA_CLARA_PUBDEF: _("Santa Clara County Public Defender"),
     Organizations.SANTA_CRUZ_PUBDEF: _("Santa Cruz County Public Defender"),
     Organizations.FRESNO_PUBDEF: _("Fresno County Public Defender"),
+    Organizations.SONOMA_PUBDEF: _("Sonoma County Public Defender"),
 }
 
 PAGE_COMPLETE_SEQUENCES = {
@@ -116,6 +119,7 @@ PAGE_COMPLETE_SEQUENCES = {
         "SelectCounty", "CountyApplication",
         "DeclarationLetterView", "DeclarationLetterReviewPage"],
     Organizations.FRESNO_PUBDEF: ["SelectCounty", "CountyApplication"],
+    Organizations.SONOMA_PUBDEF: ["SelectCounty", "CountyApplication"],
 }
 
 
@@ -130,6 +134,7 @@ class Counties:
     SANTA_CLARA = 'santa_clara'
     SANTA_CRUZ = 'santa_cruz'
     FRESNO = 'fresno'
+    SONOMA = 'sonoma'
     OTHER = 'other'
 
 
@@ -144,6 +149,7 @@ class CountyNames:
     SANTA_CLARA = 'Santa Clara'
     SANTA_CRUZ = 'Santa Cruz'
     FRESNO = 'Fresno'
+    SONOMA = 'Sonoma'
     ALL = 'counties throughout California'
 
 
@@ -161,7 +167,7 @@ COUNTY_CHOICES = (
         'Fowler, Selma, Coalinga, Orange Cove, Reedley, Huron, Kerman)')),
     (Counties.SOLANO, _(
         'Solano County (near Vallejo, Fairfield, Vacaville, Benicia, '
-        'Dixon, Rio Vista, or Suisun City)')),
+        'Dixon, Rio Vista, or Suisun City)'))
 )
 
 if SCOPE_TO_LIVE_COUNTIES and len(COUNTY_CHOICES) == 3:
@@ -186,6 +192,9 @@ if not SCOPE_TO_LIVE_COUNTIES:
         (Counties.MONTEREY, _(
             'Monterey County (near Salinas, Monterey, Marina, Seaside, '
             'Prunedale, Castroville, or King City)')),
+        (Counties.SONOMA, _(
+            'Sonoma County (near Santa Rosa, Petaluma, Sonoma, '
+            'Sebastopol, Bodega Bay, Healdsburg, or Cloverdale)'))
     )
 
 COUNTY_CHOICES = sorted(COUNTY_CHOICES, key=lambda item: item[1])
@@ -201,6 +210,7 @@ COUNTY_CHOICE_DISPLAY_DICT = {
     Counties.SANTA_CLARA: CountyNames.SANTA_CLARA,
     Counties.SANTA_CRUZ: CountyNames.SANTA_CRUZ,
     Counties.FRESNO: CountyNames.FRESNO,
+    Counties.SONOMA: CountyNames.SONOMA,
 }
 
 

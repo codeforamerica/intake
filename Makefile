@@ -115,6 +115,7 @@ db.seed:
 		mock_2_submissions_to_santa_clara_pubdef \
 		mock_2_submissions_to_santa_cruz_pubdef \
 		mock_2_submissions_to_fresno_pubdef \
+		mock_2_submissions_to_sonoma_pubdef \
 		mock_1_submission_to_multiple_orgs \
 		mock_1_bundle_to_a_pubdef \
 		mock_1_bundle_to_ebclc \
@@ -127,6 +128,7 @@ db.seed:
 		mock_1_bundle_to_santa_clara_pubdef \
 		mock_1_bundle_to_santa_cruz_pubdef \
 		mock_1_bundle_to_fresno_pubdef \
+		mock_1_bundle_to_sonoma_pubdef \
 		mock_application_events
 
 
