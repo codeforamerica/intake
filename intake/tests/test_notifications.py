@@ -17,6 +17,7 @@ notification_mock_settings = dict(
     FRONT_EMAIL_CHANNEL_ID='email_ch',
     FRONT_PHONE_CHANNEL_ID='phone_ch',
     SLACK_WEBHOOK_URL='slack',
+    CELERY_TASK_ALWAYS_EAGER=True
 )
 
 
