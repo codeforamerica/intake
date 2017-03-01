@@ -88,5 +88,14 @@
     "name": "Santa Cruz",
     "description": "Santa Cruz County (near Santa Cruz, Watsonville, Capitola, Felton, Scotts Valley, Aptos, or Boulder Creek)"
   }
+},
+{
+  "model": "intake.county",
+  "pk": 11,
+  "fields": {
+    "slug": "sonoma",
+    "name": "Sonoma",
+    "description": "Sonoma County (near Santa Rosa, Petaluma, Sonoma, Sebastopol, Bodega Bay, Healdsburg, or Cloverdale)"
+  }
 }
 ]

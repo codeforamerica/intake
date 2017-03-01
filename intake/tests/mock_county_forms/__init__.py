@@ -277,6 +277,9 @@ class Provider(BaseProvider):
         data.update(overrides)
         return data
 
+    def sonoma_pubdef_answers(self, **overrides):
+        return self.solano_pubdef_answers(**overrides)
+
     def all_county_answers(self, **overrides):
         data = {
             **self.sf_county_form_answers(),
@@ -287,6 +290,7 @@ class Provider(BaseProvider):
             **self.san_diego_pubdef_answers(),
             **self.santa_clara_pubdef_answers(),
             **self.fresno_pubdef_answers(),
+            **self.sonoma_pubdef_answers(),
         }
         data.update(overrides)
         return data
