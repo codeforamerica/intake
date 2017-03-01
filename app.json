@@ -1,0 +1,85 @@
+{
+  "name": "intake",
+  "scripts": {
+  },
+  "env": {
+    "ADMIN_PHONE_NUMBER": {
+      "required": true
+    },
+    "ALLOWED_HOSTS": {
+      "required": true
+    },
+    "AWS_ACCESS_KEY_ID": {
+      "required": true
+    },
+    "AWS_SECRET_ACCESS_KEY": {
+      "required": true
+    },
+    "AWS_STORAGE_BUCKET_NAME": {
+      "required": true
+    },
+    "DEFAULT_AGENCY_USER_EMAIL": {
+      "required": true
+    },
+    "DEFAULT_FILE_STORAGE": {
+      "required": true
+    },
+    "DEFAULT_HOST": {
+      "required": true
+    },
+    "DEFAULT_NOTIFICATION_EMAIL": {
+      "required": true
+    },
+    "DJANGO_SETTINGS_MODULE": {
+      "required": true
+    },
+    "FRONT_API_TOKEN": {
+      "required": true
+    },
+    "FRONT_EMAIL_CHANNEL_ID": {
+      "required": true
+    },
+    "FRONT_PHONE_CHANNEL_ID": {
+      "required": true
+    },
+    "IMPORT_DATABASE_URL": {
+      "required": true
+    },
+    "MAIL_DEFAULT_SENDER": {
+      "required": true
+    },
+    "MIXPANEL_KEY": {
+      "required": true
+    },
+    "NEW_RELIC_APP_NAME": {
+      "required": true
+    },
+    "NEW_RELIC_LICENSE_KEY": {
+      "required": true
+    },
+    "NEW_RELIC_LOG": {
+      "required": true
+    },
+    "SECRET_KEY": {
+      "required": true
+    },
+    "SENDGRID_API_KEY": {
+      "required": true
+    },
+    "SLACK_WEBHOOK_URL": {
+      "required": true
+    }
+  },
+  "formation": {
+  },
+  "addons": [
+    "cloudamqp",
+    "newrelic",
+    "heroku-postgresql"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ]
+}
