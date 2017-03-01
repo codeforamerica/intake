@@ -337,10 +337,13 @@ def build_seed_submissions():
         slug=constants.Organizations.SANTA_CRUZ_PUBDEF)
     sonoma_pubdef = Organization.objects.get(
         slug=constants.Organizations.SONOMA_PUBDEF)
+    tulare_pubdef = Organization.objects.get(
+        slug=constants.Organizations.TULARE_PUBDEF)
     receiving_orgs = [
         cc_pubdef, a_pubdef, ebclc, sf_pubdef, monterey_pubdef,
         solano_pubdef, san_diego_pubdef, san_joaquin_pubdef,
-        santa_clara_pubdef, fresno_pubdef, santa_cruz_pubdef, sonoma_pubdef]
+        santa_clara_pubdef, fresno_pubdef, santa_cruz_pubdef, sonoma_pubdef,
+        tulare_pubdef]
     answer_pairs = {
         sf_pubdef.slug: fake.sf_county_form_answers,
         cc_pubdef.slug: fake.contra_costa_county_form_answers,
@@ -354,6 +357,7 @@ def build_seed_submissions():
         santa_cruz_pubdef.slug: fake.santa_cruz_pubdef_answers,
         fresno_pubdef.slug: fake.fresno_pubdef_answers,
         sonoma_pubdef.slug: fake.sonoma_pubdef_answers,
+        tulare_pubdef.slug: fake.tulare_pubdef_answers,
     }
     form_pairs = {
         org.slug: county_form_selector.get_combined_form_class(
@@ -394,7 +398,7 @@ def build_seed_submissions():
     target_orgs = [
         a_pubdef, cc_pubdef, sf_pubdef, monterey_pubdef, solano_pubdef,
         san_diego_pubdef, san_joaquin_pubdef, santa_clara_pubdef,
-        fresno_pubdef, santa_cruz_pubdef, sonoma_pubdef]
+        fresno_pubdef, santa_cruz_pubdef, sonoma_pubdef, tulare_pubdef]
     answers = fake.all_county_answers()
     Form = county_form_selector.get_combined_form_class(
         counties=[org.county.slug for org in target_orgs])
