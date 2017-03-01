@@ -67,6 +67,7 @@ class Organizations:
     FRESNO_PUBDEF = 'fresno_pubdef'
     SANTA_CRUZ_PUBDEF = 'santa_cruz_pubdef'
     SONOMA_PUBDEF = 'sonoma_pubdef'
+    TULARE_PUBDEF = 'tulare_pubdef'
 
 DEFAULT_ORGANIZATION_ORDER = [
     Organizations.ALL,
@@ -82,6 +83,7 @@ DEFAULT_ORGANIZATION_ORDER = [
     Organizations.SANTA_CRUZ_PUBDEF,
     Organizations.FRESNO_PUBDEF,
     Organizations.SONOMA_PUBDEF,
+    Organizations.TULARE_PUBDEF,
 ]
 
 
@@ -99,6 +101,7 @@ ORG_NAMES = {
     Organizations.SANTA_CRUZ_PUBDEF: _("Santa Cruz County Public Defender"),
     Organizations.FRESNO_PUBDEF: _("Fresno County Public Defender"),
     Organizations.SONOMA_PUBDEF: _("Sonoma County Public Defender"),
+    Organizations.TULARE_PUBDEF: _("Tulare County Public Defender"),
 }
 
 PAGE_COMPLETE_SEQUENCES = {
@@ -120,6 +123,7 @@ PAGE_COMPLETE_SEQUENCES = {
         "DeclarationLetterView", "DeclarationLetterReviewPage"],
     Organizations.FRESNO_PUBDEF: ["SelectCounty", "CountyApplication"],
     Organizations.SONOMA_PUBDEF: ["SelectCounty", "CountyApplication"],
+    Organizations.TULARE_PUBDEF: ["SelectCounty", "CountyApplication"],
 }
 
 
@@ -135,6 +139,7 @@ class Counties:
     SANTA_CRUZ = 'santa_cruz'
     FRESNO = 'fresno'
     SONOMA = 'sonoma'
+    TULARE = 'tulare'
     OTHER = 'other'
 
 
@@ -150,6 +155,7 @@ class CountyNames:
     SANTA_CRUZ = 'Santa Cruz'
     FRESNO = 'Fresno'
     SONOMA = 'Sonoma'
+    TULARE = 'Tulare'
     ALL = 'counties throughout California'
 
 
@@ -194,7 +200,10 @@ if not SCOPE_TO_LIVE_COUNTIES:
             'Prunedale, Castroville, or King City)')),
         (Counties.SONOMA, _(
             'Sonoma County (near Santa Rosa, Petaluma, Sonoma, '
-            'Sebastopol, Bodega Bay, Healdsburg, or Cloverdale)'))
+            'Sebastopol, Bodega Bay, Healdsburg, or Cloverdale)')),
+        (Counties.TULARE, _(
+            'Tulare County (near Visalia, Tulare, Porterville, Finuba, '
+            'Lindsay, Farmersville, Exeter, or Woodlake)'))
     )
 
 COUNTY_CHOICES = sorted(COUNTY_CHOICES, key=lambda item: item[1])
@@ -211,6 +220,7 @@ COUNTY_CHOICE_DISPLAY_DICT = {
     Counties.SANTA_CRUZ: CountyNames.SANTA_CRUZ,
     Counties.FRESNO: CountyNames.FRESNO,
     Counties.SONOMA: CountyNames.SONOMA,
+    Counties.TULARE: CountyNames.TULARE,
 }
 
 
