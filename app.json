@@ -71,7 +71,13 @@
       "required": true
     }
   },
-  "formation": {
+  "formations": {
+    "web": {
+      "quantity": 1
+    }
+    "worker": {
+      "quantity": 1
+    }
   },
   "addons": [
     "cloudamqp",
