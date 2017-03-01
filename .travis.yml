@@ -8,7 +8,9 @@ env:
 addons:
   postgresql: "9.4"
 before_script: python ./manage.py collectstatic --noinput
-script: make test.coverage
+script:
+  - pep8
+  - make test.coverage
 after_success:
   - codeclimate-test-reporter
 notifications:
