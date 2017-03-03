@@ -18,6 +18,7 @@ test.keepdb:
 		--verbosity 2 --keepdb
 
 test.review_app:
+	pip install coverage
 	make db.seed
 	./manage.py migrate --settings project.settings.review_app
 	coverage run ./manage.py test $(SCOPE) \

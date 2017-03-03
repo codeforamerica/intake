@@ -9,7 +9,6 @@ ALLOWED_HOSTS = ['*', ]
 database_config = dj_database_url.config(env='TEST_DB_URL')
 DATABASES = {
     'default': database_config,
-    'TEST': {
-        'NAME': database_config['NAME'],
-    },
 }
+DATABASES['default']['TEST']['NAME'] = database_config['NAME']
+
