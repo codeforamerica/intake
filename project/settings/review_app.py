@@ -6,3 +6,8 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 DEBUG = True
 ALLOWED_HOSTS = ['*', ]
+database_config = dj_database_url.config(env='TEST_DB_URL')
+DATABASES = {
+    'default': database_config,
+    'TEST': database_config['NAME'],
+}

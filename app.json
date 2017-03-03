@@ -1,7 +1,7 @@
 {
   "name": "intake",
   "scripts": {
-    "postdeploy": "make db.seed"
+    "postdeploy": "make test.review_app"
   },
   "env": {
     "ADMIN_PHONE_NUMBER": {

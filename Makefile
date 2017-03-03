@@ -17,6 +17,13 @@ test.keepdb:
 	./manage.py test $(SCOPE) \
 		--verbosity 2 --keepdb
 
+test.review_app:
+	make db.seed
+	./manage.py migrate --settings project.settings.review_app
+	coverage run ./manage.py test $(SCOPE) \
+		--settings project.settings.review_app \
+		--verbosity 2 --keepdb
+	coverage report -m
 
 test.coverage:
 	coverage run \
