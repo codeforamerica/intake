@@ -10,5 +10,7 @@ database_config = dj_database_url.config(env='TEST_DB_URL')
 DATABASES = {
     'default': database_config,
 }
-DATABASES['default']['TEST']['NAME'] = database_config['NAME']
+DATABASES['default']['TEST'] = {
+    'NAME': database_config['NAME']
+}
 
