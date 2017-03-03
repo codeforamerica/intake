@@ -148,7 +148,7 @@ class Organization(models.Model):
 
     def get_last_bundle(self):
         return intake_models.ApplicationBundle.objects.filter(
-                organization=self).latest('id')
+            organization=self).latest('id')
 
     def get_contact_info_message(self):
         if not (self.phone_number or self.email):

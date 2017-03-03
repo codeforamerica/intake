@@ -1,0 +1,210 @@
+[
+{
+  "model": "intake.applicant",
+  "pk": 52,
+  "fields": {
+    "visitor": null
+  }
+},
+{
+  "model": "intake.applicant",
+  "pk": 53,
+  "fields": {
+    "visitor": null
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 52,
+  "fields": {
+    "applicant": 52,
+    "duplicate_set": null,
+    "answers": {
+      "address": {
+        "state": "MH",
+        "street": "086 Brooks Isle Suite 909",
+        "city": "Bonnietown",
+        "zip": "39369"
+      },
+      "where_probation_or_parole": "Solano County",
+      "alternate_phone_number": "2622250927",
+      "last_name": "Norman",
+      "first_name": "Beth",
+      "when_where_outside_sf": "",
+      "rap_outside_sf": "no",
+      "serving_sentence": "no",
+      "us_citizen": "yes",
+      "when_probation_or_parole": "2018",
+      "on_probation_parole": "yes",
+      "phone_number": "2842946246",
+      "how_did_you_hear": "from work",
+      "email": "anitagrant@hotmail.com",
+      "contact_preferences": [
+        "prefers_email"
+      ],
+      "middle_name": "Stacey",
+      "being_charged": "no",
+      "dob": {
+        "month": "12",
+        "year": "1997",
+        "day": "21"
+      },
+      "additional_information": "I want help",
+      "owes_court_fees": "yes",
+      "consent_to_represent": "yes",
+      "understands_limits": "yes"
+    },
+    "first_name": "Beth",
+    "last_name": "Norman",
+    "dob": null,
+    "ssn": "",
+    "last_four": "",
+    "drivers_license_or_id": "",
+    "case_number": "",
+    "phone_number": "2842946246",
+    "alternate_phone_number": "2622250927",
+    "email": "anitagrant@hotmail.com",
+    "old_uuid": "24554ef335a74dda859173bc5371a861",
+    "anonymous_name": "Inspiring Albatross",
+    "date_received": "2017-02-24T11:24:40-08:00"
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 53,
+  "fields": {
+    "applicant": 53,
+    "duplicate_set": null,
+    "answers": {
+      "address": {
+        "state": "LA",
+        "street": "484 Lowe Mountains",
+        "city": "Rasmussenview",
+        "zip": "67340"
+      },
+      "where_probation_or_parole": "Solano County",
+      "alternate_phone_number": "2463707033",
+      "last_name": "Taylor",
+      "first_name": "Jose",
+      "when_where_outside_sf": "",
+      "rap_outside_sf": "no",
+      "serving_sentence": "no",
+      "us_citizen": "no",
+      "when_probation_or_parole": "2018",
+      "on_probation_parole": "yes",
+      "phone_number": "2680529709",
+      "how_did_you_hear": "from work",
+      "email": "oquinn@gmail.com",
+      "contact_preferences": [
+        "prefers_email"
+      ],
+      "middle_name": "Erica",
+      "being_charged": "no",
+      "dob": {
+        "month": "2",
+        "year": "1967",
+        "day": "29"
+      },
+      "additional_information": "I want help",
+      "owes_court_fees": "yes",
+      "consent_to_represent": "yes",
+      "understands_limits": "yes"
+    },
+    "first_name": "Jose",
+    "last_name": "Taylor",
+    "dob": null,
+    "ssn": "",
+    "last_four": "",
+    "drivers_license_or_id": "",
+    "case_number": "",
+    "phone_number": "2680529709",
+    "alternate_phone_number": "2463707033",
+    "email": "oquinn@gmail.com",
+    "old_uuid": "cefdd14d885945539283e295186f4303",
+    "anonymous_name": "Green Gecko",
+    "date_received": "2017-02-16T12:34:35-08:00"
+  }
+},
+{
+  "model": "intake.application",
+  "pk": 63,
+  "fields": {
+    "organization": [
+      "Tulare County Public Defender"
+    ],
+    "form_submission": 52
+  }
+},
+{
+  "model": "intake.application",
+  "pk": 64,
+  "fields": {
+    "organization": [
+      "Tulare County Public Defender"
+    ],
+    "form_submission": 53
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 63,
+  "fields": {
+    "created": "2017-03-01T19:45:39.110Z",
+    "updated": "2017-03-01T19:45:39.115Z",
+    "status_type": 4,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "tulare_pubdef_user"
+    ],
+    "application": 63,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 64,
+  "fields": {
+    "created": "2017-03-01T19:45:39.128Z",
+    "updated": "2017-03-01T19:45:39.133Z",
+    "status_type": 5,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "tulare_pubdef_user"
+    ],
+    "application": 64,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusnotification",
+  "pk": 63,
+  "fields": {
+    "status_update": 63,
+    "contact_info": {
+      "email": "bgolder+borg@codeforamerica.org"
+    },
+    "base_message": "Resistance is futile",
+    "sent_message": "Live long and prosper",
+    "created": "2017-03-01T19:45:40.261Z"
+  }
+},
+{
+  "model": "intake.statusnotification",
+  "pk": 64,
+  "fields": {
+    "status_update": 64,
+    "contact_info": {
+      "email": "bgolder+borg@codeforamerica.org"
+    },
+    "base_message": "Resistance is futile",
+    "sent_message": "Live long and prosper",
+    "created": "2017-03-01T19:45:40.265Z"
+  }
+}
+]

@@ -94,7 +94,7 @@ class TestFollowupNotification(TestApplicantNotification):
                 'prefers_voicemail',
                 'prefers_snailmail'],
             phone_number='5554442222',
-            )
+        )
         messages = [org.short_followup_message for org in orgs]
 
         context = notification.get_context(SMS)
@@ -124,7 +124,7 @@ class TestFollowupNotification(TestApplicantNotification):
                 methods=[EMAIL],
                 notification_type='followup',
                 submission=sub
-                )
+            )
 
     def test_sends_expected_notification_calls(self):
         orgs, sub, notification = self.org_notification_and_default_sub()

@@ -18,6 +18,7 @@ class CreateNote(NoteViewMixin, generics.CreateAPIView):
 class DestroyNote(NoteViewMixin, generics.DestroyAPIView):
     """Returns 204 if a note is successfully destroyed
     """
+
     def post(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
 

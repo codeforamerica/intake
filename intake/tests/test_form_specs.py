@@ -2,8 +2,8 @@ from unittest import TestCase as BaseTestCase
 from django.test import TestCase
 from django.contrib.auth.models import User
 from formation.forms import (
-        county_form_selector, SelectCountyForm, DeclarationLetterFormSpec,
-        AlamedaPublicDefenderFormSpec, EBCLCIntakeFormSpec)
+    county_form_selector, SelectCountyForm, DeclarationLetterFormSpec,
+    AlamedaPublicDefenderFormSpec, EBCLCIntakeFormSpec)
 
 from intake.tests import mock
 from intake import constants, models
@@ -103,11 +103,11 @@ class TestOrganizationFormSelector(TestCase):
     def test_can_get_separate_forms_for_EBCLC_and_APD(self):
         from formation.forms import organization_form_selector
         org_form_results = {
-            constants.Organizations.ALAMEDA_PUBDEF: \
-                AlamedaPublicDefenderFormSpec(),
-            constants.Organizations.EBCLC: \
-                EBCLCIntakeFormSpec(),
-            }
+            constants.Organizations.ALAMEDA_PUBDEF:
+            AlamedaPublicDefenderFormSpec(),
+            constants.Organizations.EBCLC:
+            EBCLCIntakeFormSpec(),
+        }
         for org_slug, expected_form_spec in org_form_results.items():
             spec = organization_form_selector.get_combined_form_spec(
                 organizations=[org_slug])

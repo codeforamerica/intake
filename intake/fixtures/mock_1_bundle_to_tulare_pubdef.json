@@ -1,0 +1,16 @@
+[
+{
+  "model": "intake.applicationbundle",
+  "pk": 26,
+  "fields": {
+    "organization": [
+      "Tulare County Public Defender"
+    ],
+    "bundled_pdf": "",
+    "submissions": [
+      52,
+      53
+    ]
+  }
+}
+]

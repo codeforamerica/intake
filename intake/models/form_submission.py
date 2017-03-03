@@ -17,16 +17,16 @@ from formation.forms import (
 from formation.fields import MonthlyIncome, HouseholdSize, OnPublicBenefits
 
 FORMSUBMISSION_TEXT_SEARCH_FIELDS = [
-        'first_name',
-        'last_name',
-        'ssn',
-        'last_four',
-        'drivers_license_or_id',
-        'case_number',
-        'phone_number',
-        'alternate_phone_number',
-        'email'
-    ]
+    'first_name',
+    'last_name',
+    'ssn',
+    'last_four',
+    'drivers_license_or_id',
+    'case_number',
+    'phone_number',
+    'alternate_phone_number',
+    'email'
+]
 
 
 class MissingAnswersError(Exception):
@@ -167,7 +167,7 @@ class FormSubmission(models.Model):
         display_form.display_template_name = "formation/intake_display.jinja"
         display_form.submission = self
         show_declaration = any(self.organizations.all().values_list(
-                'requires_declaration_letter', flat=True))
+            'requires_declaration_letter', flat=True))
         if show_declaration:
             declaration_letter_form = DeclarationLetterDisplay(
                 init_data, validate=True)

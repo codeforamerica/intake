@@ -13,11 +13,11 @@ class PublicStatsSerializer(serializers.Serializer):
 
     def get_scoped_mean_time(self, data):
         return fields.MeanCompletionTimeField(
-            ).to_representation(data['apps'], data['org'])
+        ).to_representation(data['apps'], data['org'])
 
     def get_scoped_median_time(self, data):
         return fields.MedianCompletionTimeField(
-            ).to_representation(data['apps'], data['org'])
+        ).to_representation(data['apps'], data['org'])
 
 
 class PrivateStatsSerializer(PublicStatsSerializer):

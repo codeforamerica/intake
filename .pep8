@@ -1,4 +1,3 @@
 [pep8]
-exclude = migrations,lib
+exclude = migrations,lib,node_modules, mock_serialized_apps.py, mock_user_agents.py, local_settings.py
 max-line-length = 79
-ignore = E501 

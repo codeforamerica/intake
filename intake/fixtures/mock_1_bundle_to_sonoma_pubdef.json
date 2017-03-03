@@ -1,0 +1,16 @@
+[
+{
+  "model": "intake.applicationbundle",
+  "pk": 25,
+  "fields": {
+    "organization": [
+      "Sonoma County Public Defender"
+    ],
+    "bundled_pdf": "",
+    "submissions": [
+      51,
+      50
+    ]
+  }
+}
+]

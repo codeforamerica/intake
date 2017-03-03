@@ -7,7 +7,7 @@ class TestGroups(IntakeDataTestCase):
 
     fixtures = [
         'counties', 'organizations', 'mock_profiles'
-        ]
+    ]
 
     def test_followup_staff_group(self):
         user = self.be_cfa_user()

@@ -18,7 +18,7 @@ class StatusUpdateBase:
 
     def get_session_storage_key(self):
         return 'status_update_form-{application_id}'.format(
-           application_id=self.application.id)
+            application_id=self.application.id)
 
     def get_status_update_from_session(self):
         querydict = utils.get_form_data_from_session(
@@ -59,7 +59,7 @@ class CreateStatusUpdateFormView(StatusUpdateBase, FormView):
         initial.update(
             application=self.application,
             author=self.request.user,
-            )
+        )
         return initial
 
     def set_success_url(self):

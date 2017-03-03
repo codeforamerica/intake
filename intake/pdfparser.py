@@ -95,14 +95,14 @@ class PDFParser:
 
     def _fill(self, pdf_path, output_path, option_check, answers):
         answer_fields = {'fields': []}
+        # TODO: make this less nested
         for k, v in answers.items():
             if k in option_check:
                 if option_check[k]:
                     if v not in option_check[k]:
                         raise InvalidOptionError(
-                            "''{}' is not a valid option for '{}'. Choices: {}".format(
-                                v, k, option_check[k]
-                            ))
+                            "''{}' is not a valid option for '{}'. Choices: {}"
+                            .format(v, k, option_check[k]))
             answer_fields['fields'].append({k: v})
         self.run_command([
             'set_fields',

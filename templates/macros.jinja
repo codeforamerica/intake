@@ -21,7 +21,19 @@
   {{ field.errors }}
   {% endif %}
   <label class="field-wrapping_label">
-    {% if field.field.widget.__class__.__name__ in ["CheckboxInput", "CheckboxSelectMultiple", "RadioSelect"] %}
+    {%- if field.field.__class__.__name__ == 'BooleanField' %}
+      <ul class="checkbox_options options_list">
+        <li>
+          <label class="field-option_label">
+            <input type="checkbox" name="{{ field.html_name }}"
+              {%- if field.value() %} checked="checked"{% endif %}>
+            <span class="option-display_text">
+              {{ field.label }}
+            </span>
+          </label>
+        </li>
+      </ul>
+    {% elif field.field.widget.__class__.__name__ in ["CheckboxInput", "CheckboxSelectMultiple", "RadioSelect"] %}
 
     <fieldset>
       <legend>

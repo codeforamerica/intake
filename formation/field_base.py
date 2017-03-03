@@ -54,7 +54,8 @@ class Field(base.BindParseValidate):
         if the raw input data is not a particular type, it is an indication
         that the field is being used incorrectly
         """
-        message_template = "`{}` needed a `{}` object for parsing. Received a `{}`"
+        message_template = \
+            "`{}` needed a `{}` object for parsing. Received a `{}`"
         if not isinstance(raw_value, type_):
             raise TypeError(message_template.format(
                 self.__class__.__name__, type_, type(raw_value)))
@@ -86,9 +87,12 @@ class Field(base.BindParseValidate):
         HTTP post or dictionary before running parsing and validation
         """
         if not isinstance(raw_data, dict):
-            message = "The raw data passed to `{}` was `{}` type, not dict.".format(
-                self, type(raw_data))
-            message += " Raw data passed to forms and fields must be an instance of dict."
+            message = \
+                "The raw data passed to `{}` was `{}` type, not dict.".format(
+                    self, type(raw_data)
+                )
+            message += (" Raw data passed to forms and fields "
+                        "must be an instance of dict.")
             raise exceptions.RawDataMustBeDictError(message)
         self.raw_input_value = self.extract_raw_value(raw_data)
         super().parse_and_validate(self.raw_input_value)

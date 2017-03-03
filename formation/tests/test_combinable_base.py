@@ -3,7 +3,8 @@ from formation.tests.utils import PatchTranslationTestCase, django_only
 from unittest.mock import Mock, patch
 from formation.tests import mock
 
-from formation.forms import county_form_selector, gave_preferred_contact_methods
+from formation.forms import county_form_selector
+from formation.forms import gave_preferred_contact_methods
 from formation import fields as F
 from intake.constants import Counties
 

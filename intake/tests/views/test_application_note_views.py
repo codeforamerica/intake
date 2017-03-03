@@ -8,10 +8,10 @@ class TestCreateNote(APIViewTestCase):
     def post_new_note(self, user, **kwargs):
         sub_id = mock.make_submission().id
         data = dict(
-                body="Coffee might help",
-                submission=sub_id,
-                user=user.id
-            )
+            body="Coffee might help",
+            submission=sub_id,
+            user=user.id
+        )
         data.update(kwargs)
         return self.client.post(reverse('intake-create_note'), data)
 

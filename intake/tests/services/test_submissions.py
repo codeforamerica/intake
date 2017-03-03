@@ -8,10 +8,10 @@ from intake.tests.base_testcases import (
 from formation.forms import county_form_selector
 from intake.constants import (
     COUNTY_CHOICE_DISPLAY_DICT, Organizations,
-    EMAIL, SMS, VOICEMAIL, SNAILMAIL)
+    EMAIL, SMS)
 from intake.models import (
     Applicant, ApplicationEvent, FormSubmission, ApplicationLogEntry)
-from intake import constants
+from intake import constants, models
 from user_accounts.models import Organization, UserProfile
 
 """
@@ -87,11 +87,15 @@ class TestGetPermittedSubmissions(TestCase):
         org = Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)
         user = org.profiles.first().user
         # who requests all submissions
-        submissions = SubmissionsService.get_permitted_submissions(user)
+        submissions = list(SubmissionsService.get_permitted_submissions(user))
         # make sure they only receive those subs targeted to their org
         for sub in submissions:
             orgs = list(sub.organizations.all())
             self.assertIn(org, orgs)
+        other_submissions = models.FormSubmission.objects.exclude(
+            organizations=org)
+        for other in other_submissions:
+            self.assertNotIn(other, submissions)
 
 
 class TestHaveSameOrgs(TestCase):
@@ -129,7 +133,7 @@ class TestFindDuplicates(TestCase):
 
     fixtures = [
         'counties', 'organizations',
-        ]
+    ]
 
     def test_finds_subs_with_similar_names(self):
         org = Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)
@@ -144,15 +148,15 @@ class TestFindDuplicates(TestCase):
         a = mock.FormSubmissionFactory.create(
             answers=mock.fake.alameda_pubdef_answers(**a_name),
             organizations=[org],
-            )
+        )
         b = mock.FormSubmissionFactory.create(
             answers=mock.fake.alameda_pubdef_answers(**b_name),
             organizations=[org],
-            )
+        )
         c = mock.FormSubmissionFactory.create(
             answers=mock.fake.alameda_pubdef_answers(**b_name),
             organizations=[org],
-            )
+        )
         dups = SubmissionsService.find_duplicates(
             FormSubmission.objects.all())
         pair = dups[0]
@@ -172,11 +176,11 @@ class TestFindDuplicates(TestCase):
         mock.FormSubmissionFactory.create(
             answers=mock.fake.alameda_pubdef_answers(**a_name),
             organizations=[org],
-            )
+        )
         mock.FormSubmissionFactory.create(
             answers=mock.fake.alameda_pubdef_answers(**b_name),
             organizations=[org],
-            )
+        )
         dups = SubmissionsService.find_duplicates(
             FormSubmission.objects.all())
         self.assertFalse(dups)
@@ -235,7 +239,7 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
                 'prefers_sms',
                 'prefers_voicemail',
                 'prefers_snailmail'
-                ],
+            ],
             email='test@gmail.com',
             phone_number='5554442222',
         )
@@ -330,7 +334,7 @@ class TestGetUnopenedSubmissionsForOrg(TestCase):
         a_pubdef = Organization.objects.get(
             slug=constants.Organizations.ALAMEDA_PUBDEF)
         cc_pubdef_user = UserProfile.objects.filter(
-                organization=cc_pubdef).first().user
+            organization=cc_pubdef).first().user
         sub = FormSubmission.objects.annotate(
             org_count=Count('organizations')).filter(org_count__gte=3).first()
         ApplicationLogEntry.log_opened([sub.id], cc_pubdef_user)

@@ -45,7 +45,7 @@ class GetFormSessionDataMixin:
             self.check_session_data_validity()
         except NoCountyCookiesError as err:
             notifications.slack_simple.send(
-                "ApplicationError!\n"+str(err))
+                "ApplicationError!\n" + str(err))
             logger.error(err)
             messages.error(self.request, GENERIC_USER_ERROR_MESSAGE)
             return redirect(reverse('intake-apply'))
@@ -72,7 +72,7 @@ class GetFormSessionDataMixin:
 
     def get_applicant_id(self):
         return getattr(self, 'applicant_id', None) \
-                    or self.request.session.get('applicant_id')
+            or self.request.session.get('applicant_id')
 
 
 class MultiStepFormViewBase(GetFormSessionDataMixin, FormView):
@@ -137,7 +137,7 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
                 user_agent=self.request.META.get('HTTP_USER_AGENT', 'None'),
                 session_data=dict([
                     keyval for keyval in self.request.session.items()]),
-                )
+            )
             error_message = "No Counties in session data: `{}`".format(
                 json.dumps(error_data))
             raise NoCountyCookiesError(error_message)

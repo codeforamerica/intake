@@ -34,7 +34,7 @@ class PartnerDetailView(GlobalTemplateContextMixin, TemplateView):
             is_receiving_agency=True
         )
         organization = get_object_or_404(
-                query, slug=self.organization_slug)
+            query, slug=self.organization_slug)
         return dict(
             organization=organization,
             display_form=OrganizationDetailsDisplayForm(organization))

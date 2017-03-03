@@ -13,6 +13,11 @@ test:
 		--verbosity 2
 
 
+test.keepdb:
+	./manage.py test $(SCOPE) \
+		--verbosity 2 --keepdb
+
+
 test.coverage:
 	coverage run \
 		./manage.py test $(SCOPE) \
@@ -42,7 +47,6 @@ deploy.feature:
 deploy.demo:
 	git push -f demo HEAD:master
 	heroku run --app cmr-demo make db.seed
-
 
 deploy.prod:
 	git push prod master
@@ -115,6 +119,8 @@ db.seed:
 		mock_2_submissions_to_santa_clara_pubdef \
 		mock_2_submissions_to_santa_cruz_pubdef \
 		mock_2_submissions_to_fresno_pubdef \
+		mock_2_submissions_to_sonoma_pubdef \
+		mock_2_submissions_to_tulare_pubdef \
 		mock_1_submission_to_multiple_orgs \
 		mock_1_bundle_to_a_pubdef \
 		mock_1_bundle_to_ebclc \
@@ -127,6 +133,8 @@ db.seed:
 		mock_1_bundle_to_santa_clara_pubdef \
 		mock_1_bundle_to_santa_cruz_pubdef \
 		mock_1_bundle_to_fresno_pubdef \
+		mock_1_bundle_to_sonoma_pubdef \
+		mock_1_bundle_to_tulare_pubdef \
 		mock_application_events
 
 

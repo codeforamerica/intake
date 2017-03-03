@@ -16,10 +16,10 @@ class TestAddTags(APIViewTestCase):
     def post_tags(self, user, **kwargs):
         sub_id = mock.make_submission().id
         data = dict(
-                tags="apple, banana",
-                submission=sub_id,
-                user=user.id
-            )
+            tags="apple, banana",
+            submission=sub_id,
+            user=user.id
+        )
         data.update(kwargs)
         return self.client.post(reverse('intake-add_tags'), data)
 

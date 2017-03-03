@@ -23,7 +23,7 @@ class TestBuildBundledPdfIfNecessary(TestCase):
         cc_pubdef = auth_models.Organization.objects.get(
             slug=constants.Organizations.COCO_PUBDEF)
         sub = SubmissionsService.create_for_organizations(
-                [cc_pubdef], answers={})
+            [cc_pubdef], answers={})
         bundle = BundlesService.create_bundle_from_submissions(
             organization=cc_pubdef, submissions=[sub], skip_pdf=True)
         get_pdfs_mock = Mock()
@@ -39,7 +39,7 @@ class TestBuildBundledPdfIfNecessary(TestCase):
         sf_pubdef = auth_models.Organization.objects.get(
             slug=constants.Organizations.SF_PUBDEF)
         sub = SubmissionsService.create_for_organizations(
-                [sf_pubdef], answers={})
+            [sf_pubdef], answers={})
         fillable = mock.fillable_pdf(organization=sf_pubdef)
         data = b'content'
         filled = models.FilledPDF.create_with_pdf_bytes(
@@ -150,7 +150,7 @@ class TestGetOrgsThatMightNeedABundleEmailToday(TestCase):
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_cc_pubdef', 'template_options'
-        ]
+    ]
 
     @patch('intake.services.bundles.is_the_weekend', not_the_weekend)
     def test_returns_orgs_iff_have_subs_and_profiles(self):

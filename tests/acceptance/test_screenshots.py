@@ -8,7 +8,8 @@ from django.core.urlresolvers import reverse
 from intake import models, constants
 from tests import base
 from tests import sequence_steps as S
-from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase as AuthCase
+from user_accounts.tests.test_auth_integration \
+    import AuthIntegrationTestCase as AuthCase
 from user_accounts.tests import mock as auth_mock
 from django.contrib.auth import models as auth_models
 from user_accounts import models as accounts_models
@@ -26,10 +27,10 @@ class TestWorkflows(base.ScreenSequenceTestCase):
         orgs = accounts_models.Organization.objects.all()
         for org in orgs:
             setattr(self, org.slug, org)
-            setattr(self, org.slug+'_submissions', [])
+            setattr(self, org.slug + '_submissions', [])
             user = auth_models.User.objects.filter(
                 profile__organization=org, email__contains='+').first()
-            setattr(self, org.slug+'_user', user)
+            setattr(self, org.slug + '_user', user)
         org_sets = [
             [self.sf_pubdef],
             [self.sf_pubdef],
@@ -58,11 +59,11 @@ class TestWorkflows(base.ScreenSequenceTestCase):
                 **intake_mock.fake.declaration_letter_answers(),
             }
             sub = models.FormSubmission.create_for_organizations(
-                    organizations=org_set, answers=answers)
+                organizations=org_set, answers=answers)
             self.submissions.append(sub)
             for org in org_set:
                 if org.slug != 'cfa':
-                    attr_name = org.slug+'_submissions'
+                    attr_name = org.slug + '_submissions'
                     org_subs = getattr(self, attr_name)
                     org_subs.append(sub)
                     setattr(self, attr_name, org_subs)

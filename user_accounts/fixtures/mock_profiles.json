@@ -57,7 +57,7 @@
   "model": "auth.user",
   "fields": {
     "password": "pbkdf2_sha256$30000$mQNl2M1ZGrni$/FN7D7xxb84FcvHfIQ1Da/uN9Vdstc57Npw1Vm3BONM=",
-    "last_login": "2017-02-22T17:50:04.350Z",
+    "last_login": "2017-02-28T23:52:00.272Z",
     "is_superuser": true,
     "username": "cfa_user",
     "first_name": "Fake",
@@ -330,6 +330,48 @@
   }
 },
 {
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$30000$W49nv0g2DvJW$bXc6lIz+gPaJfkzE2hy17T13P+J6QthaYW4TV/URYFc=",
+    "last_login": "2017-02-28T23:50:05.016Z",
+    "is_superuser": false,
+    "username": "sonoma_pubdef_user",
+    "first_name": "Fake",
+    "last_name": "Sonoma Pubdef",
+    "email": "bgolder+demo+sonoma_pubdef_user@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-02-28T23:48:42.575Z",
+    "groups": [
+      [
+        "application_reviewers"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$30000$Mj7zDSw4IaTx$bUSZFAYJaj0qGa+aQI+DdIdQoZQnPlQWx0MC4IJtOkA=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "tulare_pubdef_user",
+    "first_name": "Fake",
+    "last_name": "Tulare Pubdef",
+    "email": "bgolder+demo+tulare_pubdef_user@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-03-01T19:39:36.618Z",
+    "groups": [
+      [
+        "application_reviewers"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
   "model": "user_accounts.userprofile",
   "pk": 1,
   "fields": {
@@ -507,6 +549,34 @@
     ],
     "organization": [
       "Santa Cruz County Public Defender"
+    ],
+    "should_get_notifications": true
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 18,
+  "fields": {
+    "name": "Fake Sonoma Pubdef",
+    "user": [
+      "sonoma_pubdef_user"
+    ],
+    "organization": [
+      "Sonoma County Public Defender"
+    ],
+    "should_get_notifications": true
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 19,
+  "fields": {
+    "name": "Fake Tulare Pubdef",
+    "user": [
+      "tulare_pubdef_user"
+    ],
+    "organization": [
+      "Tulare County Public Defender"
     ],
     "should_get_notifications": true
   }

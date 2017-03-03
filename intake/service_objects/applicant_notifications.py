@@ -146,7 +146,7 @@ class FollowupNotification(ApplicantNotification):
             for org in context['organizations']]
         context.update(
             followup_messages=followup_messages
-            )
+        )
         return context
 
 

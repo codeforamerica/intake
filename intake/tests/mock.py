@@ -86,10 +86,10 @@ def make_tag(name="example"):
 
 def make_note(user, submission_id):
     note = models.ApplicationNote(
-            user=user,
-            submission_id=submission_id,
-            body="where is the mustard?",
-        )
+        user=user,
+        submission_id=submission_id,
+        body="where is the mustard?",
+    )
     note.save()
     return note
 
@@ -256,7 +256,7 @@ def fake_app_started(
         applicant_id=applicant.id,
         data=dict(
             counties=counties, referrer=referrer, ip=ip, user_agent=user_agent)
-        )
+    )
     if time:
         event.time = time
     event.save()
@@ -335,10 +335,15 @@ def build_seed_submissions():
         slug=constants.Organizations.FRESNO_PUBDEF)
     santa_cruz_pubdef = Organization.objects.get(
         slug=constants.Organizations.SANTA_CRUZ_PUBDEF)
+    sonoma_pubdef = Organization.objects.get(
+        slug=constants.Organizations.SONOMA_PUBDEF)
+    tulare_pubdef = Organization.objects.get(
+        slug=constants.Organizations.TULARE_PUBDEF)
     receiving_orgs = [
         cc_pubdef, a_pubdef, ebclc, sf_pubdef, monterey_pubdef,
         solano_pubdef, san_diego_pubdef, san_joaquin_pubdef,
-        santa_clara_pubdef, fresno_pubdef, santa_cruz_pubdef]
+        santa_clara_pubdef, fresno_pubdef, santa_cruz_pubdef, sonoma_pubdef,
+        tulare_pubdef]
     answer_pairs = {
         sf_pubdef.slug: fake.sf_county_form_answers,
         cc_pubdef.slug: fake.contra_costa_county_form_answers,
@@ -351,6 +356,8 @@ def build_seed_submissions():
         santa_clara_pubdef.slug: fake.santa_clara_pubdef_answers,
         santa_cruz_pubdef.slug: fake.santa_cruz_pubdef_answers,
         fresno_pubdef.slug: fake.fresno_pubdef_answers,
+        sonoma_pubdef.slug: fake.sonoma_pubdef_answers,
+        tulare_pubdef.slug: fake.tulare_pubdef_answers,
     }
     form_pairs = {
         org.slug: county_form_selector.get_combined_form_class(
@@ -371,7 +378,7 @@ def build_seed_submissions():
             sub = models.FormSubmission(
                 applicant=applicant,
                 answers=form.cleaned_data
-                )
+            )
             if org in (a_pubdef, santa_clara_pubdef, monterey_pubdef):
                 letter = fake.declaration_letter_answers()
                 sub.answers.update(letter)
@@ -391,7 +398,7 @@ def build_seed_submissions():
     target_orgs = [
         a_pubdef, cc_pubdef, sf_pubdef, monterey_pubdef, solano_pubdef,
         san_diego_pubdef, san_joaquin_pubdef, santa_clara_pubdef,
-        fresno_pubdef, santa_cruz_pubdef]
+        fresno_pubdef, santa_cruz_pubdef, sonoma_pubdef, tulare_pubdef]
     answers = fake.all_county_answers()
     Form = county_form_selector.get_combined_form_class(
         counties=[org.county.slug for org in target_orgs])
@@ -400,7 +407,7 @@ def build_seed_submissions():
     applicant.save()
     applicants.append(applicant)
     multi_org_sub = models.FormSubmission(
-            applicant=applicant, answers=form.cleaned_data)
+        applicant=applicant, answers=form.cleaned_data)
     multi_org_sub.answers.update(fake.declaration_letter_answers())
     multi_org_sub.save()
     applications = [

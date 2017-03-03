@@ -17,6 +17,7 @@ notification_mock_settings = dict(
     FRONT_EMAIL_CHANNEL_ID='email_ch',
     FRONT_PHONE_CHANNEL_ID='phone_ch',
     SLACK_WEBHOOK_URL='slack',
+    CELERY_TASK_ALWAYS_EAGER=True
 )
 
 
@@ -46,7 +47,7 @@ class TestNotifications(DjangoTestCase):
         email = mail.outbox[0]
         self.assertEqual(email.subject, "Hello Ben")
 
-    @patch('intake.notifications.requests.post')
+    @patch('intake.tasks.request')
     @patch('intake.notifications.loader.get_template')
     @override_settings(DIVERT_REMOTE_CONNECTIONS=False,
                        **notification_mock_settings)
@@ -80,6 +81,8 @@ class TestNotifications(DjangoTestCase):
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         }
+
+        self.assertTrue(mock_post.called)
         post_kwargs = [*mock_post.call_args][1]
         posted_data = json.loads(post_kwargs['data'])
         self.assertDictEqual(posted_data, expected_data)
@@ -87,13 +90,6 @@ class TestNotifications(DjangoTestCase):
         self.assertEqual(
             post_kwargs['url'],
             'https://api2.frontapp.com/channels/phone_id/messages')
-
-        # make sure we get errors as expected
-        mock_post.return_value = mock.FrontSendMessageResponse.error()
-        with self.assertRaises(notifications.FrontAPIError):
-            front_text.send(
-                to=["+15555555555"],
-                message="Hi")
 
         # check the front email works as expected
         mock_post.reset_mock()
@@ -116,7 +112,7 @@ class TestNotifications(DjangoTestCase):
             'body': 'Hi this is an email message body.',
             'text': 'Hi this is an email message body.',
         })
-
+        self.assertTrue(mock_post.called)
         post_kwargs = [*mock_post.call_args][1]
         posted_data = json.loads(post_kwargs['data'])
         self.assertDictEqual(posted_data, expected_data)
@@ -194,7 +190,7 @@ They want to be contacted via text message and email
         ).message
         self.assertEqual(deleted, expected_submission_deleted_text)
 
-    @patch('intake.notifications.requests.post')
+    @patch('intake.tasks.request')
     @override_settings(DIVERT_REMOTE_CONNECTIONS=False,
                        **notification_mock_settings)
     def test_slack_simple(self, mock_post):
@@ -202,13 +198,14 @@ They want to be contacted via text message and email
         expected_json = '{"text": "Hello slack <&>"}'
         expected_headers = {'Content-type': 'application/json'}
         notifications.slack_simple.send("Hello slack <&>")
+        self.assertTrue(mock_post.called)
         called_kwargs = [*mock_post.call_args][1]
         self.assertEqual(
             called_kwargs['data'], expected_json)
         self.assertDictEqual(
             called_kwargs['headers'], expected_headers)
 
-    @patch('intake.notifications.requests.post')
+    @patch('intake.tasks.request')
     @override_settings(DIVERT_REMOTE_CONNECTIONS=False,
                        **notification_mock_settings)
     def test_slack_send(self, mock_post):
@@ -223,6 +220,7 @@ They want to be contacted via text message and email
             submission_count=self.submission_count,
             request=self.request
         )
+        self.assertTrue(mock_post.called)
         called_kwargs = [*mock_post.call_args][1]
         self.assertEqual(
             called_kwargs['data'], expected_json)
@@ -231,11 +229,13 @@ They want to be contacted via text message and email
 
     @override_settings(DEFAULT_HOST='something.com')
     def test_render_front_email_daily_app_bundle(self):
-        expected_subject = "current time: Online applications to Clear My Record"
-        expected_body = """As of current time, you have one unopened application to Clear My Record.
-
-You can review and print them at this link:
-    something.com/applications/bundle/1/"""
+        expected_subject = \
+            "current time: Online applications to Clear My Record"
+        # TODO: just check that the templates are handed the proper context
+        expected_body = ("As of current time, you have one unopened "
+                         "application to Clear My Record.\n\n"
+                         "You can review and print them at this link:\n    "
+                         "something.com/applications/bundle/1/")
         request = Mock()
         current_time = Mock(return_value='current time')
         content = notifications.front_email_daily_app_bundle.render(

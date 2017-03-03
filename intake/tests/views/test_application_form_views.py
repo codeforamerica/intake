@@ -158,8 +158,8 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
 
     def test_get_county_application_has_no_errors(self):
         self.set_session(form_in_progress={
-                    'counties': [constants.Counties.SAN_FRANCISCO],
-                    'confirm_county_selection': YES})
+            'counties': [constants.Counties.SAN_FRANCISCO],
+            'confirm_county_selection': YES})
         response = self.client.get(reverse('intake-county_application'))
         self.assertEqual(response.status_code, 200)
         self.assertIn('Apply to Clear My Record',
@@ -185,12 +185,12 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
                 counties=[sanfrancisco],
                 confirm_county_selection=YES),
             applicant_id=applicant.id
-            )
+        )
         response = self.client.fill_form(
             reverse('intake-county_application'),
             follow=True,
             **answers
-            )
+        )
         self.assertEqual(
             response.wsgi_request.path, reverse('intake-confirm'))
         form = response.context_data['form']
@@ -692,7 +692,7 @@ class TestThanks(IntakeDataTestCase):
         'counties',
         'organizations',
         'mock_profiles',
-        'mock_2_submissions_to_cc_pubdef', 
+        'mock_2_submissions_to_cc_pubdef',
         'template_options']
 
     def test_anonymous_with_no_application_redirected_to_home(self):

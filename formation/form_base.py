@@ -111,7 +111,7 @@ class Form(base.BindParseValidate):
             setattr(self, field_attribute, [
                 field for field in self.iter_fields()
                 if getattr(field, key, False)
-                ])
+            ])
 
     def non_field_errors(self):
         return self.get_errors_list()

@@ -74,6 +74,7 @@ class TestPartnerDetailView(TestCase):
 
 
 class TestRecommendationLettersView(TestCase):
+
     def test_returns_200(self):
         response = self.client.get(reverse('intake-recommendation_letters'))
         self.assertEqual(response.status_code, 200)

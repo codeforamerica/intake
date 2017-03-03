@@ -32,7 +32,7 @@ def Style(name, font='Helvetica', size=12, leading=None, color=colors.black):
         fontSize=size,
         leading=leading or size * LEADING_FACTOR,
         textColor=color
-        )
+    )
 
 
 LABEL_STYLE = Style('label', 'Helvetica', size=10, color=colors.gray)
@@ -126,7 +126,7 @@ class PDFFormDisplay:
         self.cursor = Position(
             self.frame.left,
             self.height - self.frame.top
-            )
+        )
         self.nice_date = \
             self.form.date_received.get_current_value().strftime("%B %-d, %Y")
 
@@ -285,7 +285,7 @@ class PDFFormDisplay:
         full_name = " ".join([
             self.form.first_name.get_display_value(),
             self.form.last_name.get_display_value()
-            ])
+        ])
         dx, dy = self.draw_paragraph(
             full_name, max_width, max_height, BODY_STYLE)
 
@@ -296,7 +296,7 @@ class PDFFormDisplay:
             self.form.submission.get_external_url(),
             width, u('0.5in'),
             FOOTNOTE_STYLE
-            )
+        )
 
     def render(self, save=True, title=None):
         self.draw_header()

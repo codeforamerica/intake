@@ -86,7 +86,25 @@
   "fields": {
     "slug": "santa_cruz",
     "name": "Santa Cruz",
-    "description": "Santa Cruz County (near Santa Cruz, Watsonville, Boulder Creek, Scotts Valley, Davenport, Capitola, Soquel, or Aptos)"
+    "description": "Santa Cruz County (near Santa Cruz, Watsonville, Capitola, Felton, Scotts Valley, Aptos, or Boulder Creek)"
+  }
+},
+{
+  "model": "intake.county",
+  "pk": 11,
+  "fields": {
+    "slug": "sonoma",
+    "name": "Sonoma",
+    "description": "Sonoma County (near Santa Rosa, Petaluma, Sonoma, Sebastopol, Bodega Bay, Healdsburg, or Cloverdale)"
+  }
+},
+{
+  "model": "intake.county",
+  "pk": 12,
+  "fields": {
+    "slug": "tulare",
+    "name": "Tulare",
+    "description": "Tulare County (near Visalia, Tulare, Porterville, Finuba, Lindsay, Farmersville, Exeter, or Woodlake)"
   }
 }
 ]

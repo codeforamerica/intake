@@ -13,7 +13,7 @@ class AppDetailAccessBaseTests(IntakeDataTestCase):
         'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
         'mock_1_submission_to_multiple_orgs', 'template_options'
-        ]
+    ]
 
 
 class TestApplicationDetail(AppDetailAccessBaseTests):
@@ -114,7 +114,7 @@ class TestApplicationDetail(AppDetailAccessBaseTests):
         latest_status = models.StatusUpdate.objects.filter(
             application__organization=user.profile.organization,
             application__form_submission=submission
-            ).latest('updated').status_type.display_name
+        ).latest('updated').status_type.display_name
         self.assertContains(
             response, escape(latest_status))
 
@@ -126,7 +126,7 @@ class TestApplicationDetail(AppDetailAccessBaseTests):
             application__form_submission=submission)
         latest_status = statuses.filter(
             application__organization=user.profile.organization,
-            ).latest('updated')
+        ).latest('updated')
         latest_status_date = statuses.latest('updated').updated
         even_later = latest_status_date + timedelta(days=3)
         other_status = statuses.exclude(
