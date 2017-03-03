@@ -1,11 +1,13 @@
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
+from django.utils.deconstruct import deconstructible
 from intake.constants import CONTACT_METHOD_CHOICES
 from intake import utils
 from intake.tests import mock_template_field_contexts as example_contexts
 from jinja2.exceptions import TemplateError
 
 
+@deconstructible
 class ContactInfoJSON:
 
     NOT_A_DICT = _("ContactInfoJSON must be a dictionary or inherit from it")
@@ -34,6 +36,7 @@ class ContactInfoJSON:
             self.should_not_have_an_empty_value(info)
 
 
+@deconstructible
 class TemplateFieldValidator:
     """Ensure that a template string will compile and render
     """
