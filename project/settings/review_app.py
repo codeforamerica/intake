@@ -11,4 +11,3 @@ DATABASES = {
     'default': database_config,
 }
 DATABASES['default']['TEST']['NAME'] = database_config['NAME']
-
