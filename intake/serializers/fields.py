@@ -60,14 +60,22 @@ class TruthyValueField(serializers.Field):
 
 class LocalDateField(serializers.DateTimeField):
 
-    def __init__(self, *args, format="%m/%d/%Y", tz=PACIFIC_TIME, **kwargs):
+    def __init__(self, *args, tz=PACIFIC_TIME, **kwargs):
         super().__init__(*args, **kwargs)
-        self.format = format
-        self.tz = PACIFIC_TIME
+        self.tz = tz
 
     def to_representation(self, dt):
-        local = dt.astimezone(self.tz)
-        return local.strftime(self.format)
+        return dt.astimezone(self.tz)
+
+
+class FormattedLocalDateField(LocalDateField):
+
+    def __init__(self, *args, format="%m/%d/%Y", **kwargs):
+        super().__init__(*args, **kwargs)
+        self.format = format
+
+    def to_representation(self, dt):
+        return super().to_representation(dt).strftime(self.format)
 
 
 class DictField(serializers.Field):

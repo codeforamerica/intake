@@ -10,57 +10,61 @@
   <th>Tags</th>
   {%- endif %}
 </tr>
-{% for app in submissions %}
-<tr class="form_submission" data-key="{{ app.id }}">
+{% for sub in submissions %}
+<tr class="form_submission" data-key="{{ sub.id }}">
   <td>
   {# ID #}
-    <a href="{{ app.get_absolute_url() }}">{{ app.id }}</a>
+    <a href="{{ sub.url }}">{{ sub.id }}</a>
   </td>
   <td>
   {# Received #}
-    <a href="{{ app.get_absolute_url() }}">
+    <a href="{{ sub.url }}">
       <div class="date_received">
         <div class="date">{{ 
-          app.get_local_date_received('%b %-d')
+          sub.local_date_received.strftime('%b %-d')
         }}</div>
         <div class="time">{{ 
-          app.get_local_date_received('%-I:%M %p') 
+          sub.local_date_received.strftime('%-I:%M %p') 
         }}</div>
       </div>
     </a>
   </td>
   <td>
   {# Name #}
-    {{ app.get_full_name() }}
+    {{ sub.full_name }}
   </td>
   <td>
   {# Contact #}
     <div class="phone_number">
-      {%- if app.answers.get('phone_number') %}
-        +1{{ app.answers.get('phone_number') }}
+      {%- if sub.phone_number %}
+        +1{{ sub.phone_number }}
       {%- else %}
         -----
       {%- endif %}
     </div>
     <div class="email">
-    {{ app.answers.get('email', '-----') }}
+      {%- if sub.email %}
+        {{ sub.email }}
+      {%- else %}
+        -----
+      {%- endif %}
     </div>
   </td>
   <td class="org_tags">
-  {# Org & Latest Status #}
+  {# Applications & latest status #}
   <table>
-    {%- for org in app.organizations.all() %}
+    {%- for app in sub.applications %}
     <tr>
-      <td class="org_tag">{{ org.slug.replace('_', ' ') }}</td>
+      <td class="org_tag">{{ app.organization }}</td>
       <td class="org_tag">
-        {% if app.applications.filter(organization=org).first().status_updates.exists() %}
-          {{app.applications.filter(organization=org).first().status_updates.latest('updated').status_type.display_name}}
+        {% if app.latest_status %}
+          {{ app.latest_status.status_type }}
         {%- else -%}
           New
         {% endif %}
         <br/>
-        {% if app.applications.filter(organization=org).first().status_updates.exists() %}
-          {{humanize.naturaltime(app.applications.filter(organization=org).first().status_updates.latest('updated').updated)}}
+        {% if app.latest_status %}
+          {{ humanize.naturaltime(app.latest_status.updated) }}
         {% endif %}
       </td>
     </tr>
@@ -73,7 +77,7 @@
     <div class="notes_log">
       {%- if perms.intake.add_application_note %}
       <form class="note-create_form" action="{{ url('intake-create_note') }}" method="post">
-        <input type="hidden" name="submission" value="{{ app.id }}">
+        <input type="hidden" name="submission" value="{{ sub.id }}">
         <input type="hidden" name="user" value="{{ request.user.id }}">
         <input type="text" name="body"><button type="submit" class="btn btn-default btn-sm">
           <span class="glyphicon glyphicon-comment"></span>
@@ -82,13 +86,13 @@
       </form>
       {%- endif %}
       <div class="notes">
-      {%- for note in app.notes.all() %}
+      {%- for note in sub.notes %}
         <div class="note" data-key="{{ note.id }}">
           <div class="note-time">{{
-            local_time(note.created, '%b %-d')
+            note.created
           }}</div>
           <div class="note-body">{{ note.body }}</div>
-          <div class="note-author">-{{ note.user.first_name }}</div>
+          <div class="note-author">-{{ note.user }}</div>
           
           {%- if perms.intake.delete_application_note %}
           <div class="note-remove" title="Delete this note">
@@ -105,7 +109,7 @@
   {# Tags #}
     <div class="tags-input_module">
       <div class="tags">
-        {%- for tag in app.tags.all() %}
+        {%- for tag in sub.tags %}
           <span class="tag label label-default" data-key="{{ tag.id }}">
             <span class="tag-text">{{ tag.name }}</span>
             <span class="glyphicon glyphicon-remove-sign" title="Remove '{{ tag.name }}' tag"></span>
@@ -113,7 +117,7 @@
         {%- endfor %}
       </div>
       <form class="tags-add_tags" action="/tags/add/" method="post">
-        <input type="hidden" name="submission" value="{{ app.id }}">
+        <input type="hidden" name="submission" value="{{ sub.id }}">
         <input type="hidden" name="user" value="{{ request.user.id }}">
         <input name="tags" type="text" autocomplete="off"><ul class="tags-autocomplete_results"></ul><button type="submit" class="btn btn-default btn-sm">
           <span class="glyphicon glyphicon-plus"></span>

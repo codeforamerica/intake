@@ -1,5 +1,6 @@
 from unittest import skipUnless
 from unittest.mock import patch
+from random import randint
 
 from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
@@ -8,6 +9,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from intake import models, constants
 from user_accounts import models as auth_models
 from intake.tests.base_testcases import IntakeDataTestCase, DELUXE_TEST
+from intake.tests.mock import FormSubmissionFactory
 from project.jinja2 import url_with_ids
 
 import intake.services.bundles as BundlesService
@@ -182,6 +184,14 @@ class TestApplicationIndex(IntakeDataTestCase):
             detail_url_link = reverse('intake-app_detail',
                                       kwargs=dict(submission_id=submission.id))
             self.assertNotContains(response, detail_url_link)
+
+    def test_that_number_of_queries_are_reasonable(self):
+        self.be_cfa_user()
+        random_new_subs_count = randint(5, 20)
+        for i in range(random_new_subs_count):
+            FormSubmissionFactory.create()
+        with self.assertNumQueries(18):
+            self.client.get(reverse('intake-app_index'))
 
     def test_that_org_user_can_only_see_apps_to_own_org(self):
         self.be_apubdef_user()

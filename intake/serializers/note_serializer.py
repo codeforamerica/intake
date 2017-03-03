@@ -1,11 +1,11 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from intake import models
-from intake.serializers.fields import (LocalDateField, )
+from intake.serializers.fields import FormattedLocalDateField
 
 
 class ApplicationNoteSerializer(serializers.ModelSerializer):
-    created = LocalDateField(format='%b %-d', required=False)
+    created = FormattedLocalDateField(format='%b %-d', required=False)
     submission = serializers.PrimaryKeyRelatedField(
         queryset=models.FormSubmission.objects.all())
     user = serializers.PrimaryKeyRelatedField(

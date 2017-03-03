@@ -40,7 +40,7 @@ class TestFormSubmission(TestCase):
         result = SubmissionsService.get_permitted_submissions(mock_user)
         self.assertListEqual(list(result), list(subs))
 
-    def test_get_permitted_submisstions_when_not_permitted(self):
+    def test_get_permitted_submissions_when_not_permitted(self):
         cc_pubdef = auth_models.Organization.objects.get(
             slug=constants.Organizations.COCO_PUBDEF)
         sf_pubdef = auth_models.Organization.objects.get(
@@ -51,15 +51,6 @@ class TestFormSubmission(TestCase):
         result = SubmissionsService.get_permitted_submissions(
             mock_user, [submission.id])
         self.assertListEqual(list(result), [])
-
-    def test_get_permitted_submissions_when_staff(self):
-        orgs = auth_models.Organization.objects.all()
-        for org in orgs:
-            SubmissionsService.create_for_organizations([org], answers={})
-        subs = set(models.FormSubmission.objects.all())
-        mock_user = Mock(is_staff=True)
-        result = SubmissionsService.get_permitted_submissions(mock_user)
-        self.assertEqual(set(result), subs)
 
     def test_get_transfer_action_returns_dict(self):
         org = Mock(id=1)

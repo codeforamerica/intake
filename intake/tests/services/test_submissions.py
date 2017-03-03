@@ -8,10 +8,10 @@ from intake.tests.base_testcases import (
 from formation.forms import county_form_selector
 from intake.constants import (
     COUNTY_CHOICE_DISPLAY_DICT, Organizations,
-    EMAIL, SMS, VOICEMAIL, SNAILMAIL)
+    EMAIL, SMS)
 from intake.models import (
     Applicant, ApplicationEvent, FormSubmission, ApplicationLogEntry)
-from intake import constants
+from intake import constants, models
 from user_accounts.models import Organization, UserProfile
 
 """
@@ -87,11 +87,15 @@ class TestGetPermittedSubmissions(TestCase):
         org = Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)
         user = org.profiles.first().user
         # who requests all submissions
-        submissions = SubmissionsService.get_permitted_submissions(user)
+        submissions = list(SubmissionsService.get_permitted_submissions(user))
         # make sure they only receive those subs targeted to their org
         for sub in submissions:
             orgs = list(sub.organizations.all())
             self.assertIn(org, orgs)
+        other_submissions = models.FormSubmission.objects.exclude(
+            organizations=org)
+        for other in other_submissions:
+            self.assertNotIn(other, submissions)
 
 
 class TestHaveSameOrgs(TestCase):

@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import Levenshtein
 
-from intake import models, groups
+from intake import models, serializers
 from intake.constants import SMS, EMAIL
 from intake.service_objects import ConfirmationNotification
 from intake.models.form_submission import FORMSUBMISSION_TEXT_SEARCH_FIELDS
@@ -78,9 +78,7 @@ def fill_pdfs_for_submission(submission):
         fillable.fill_for_submission(submission)
 
 
-def get_paginated_submissions_for_user(
-        user, page_index, max_count_per_page=25, min_count_per_page=5):
-    qset = get_permitted_submissions(user, related_objects=True)
+def paginated(qset, page_index, max_count_per_page=25, min_count_per_page=5):
     paginator = Paginator(
         qset, max_count_per_page, orphans=min_count_per_page)
     try:
@@ -94,21 +92,48 @@ def get_paginated_submissions_for_user(
             return paginator.page(paginator.num_pages)
 
 
-def get_permitted_submissions(user, ids=None, related_objects=False):
-    query = models.FormSubmission.objects
-    if related_objects:
-        prefetch_relations = [
-            'logs__user__profile__organization'
-        ]
-        if user.groups.filter(name=groups.FOLLOWUP_STAFF).exists():
-            prefetch_relations.extend(['notes', 'tags'])
-        query = query.prefetch_related(*prefetch_relations)
-    if ids:
-        query = query.filter(pk__in=ids)
+def get_paginated_submissions_for_org_user(user, page_index):
+    return paginated(get_submissions_for_org_user(user), page_index)
+
+
+def get_permitted_submissions(user, ids=None):
     if user.is_staff:
-        return query.all()
-    org = user.profile.organization
-    return query.filter(organizations=org).distinct()
+        query = get_submissions_for_staff_user()
+    else:
+        query = get_submissions_for_org_user(user)
+    if ids:
+        query = query.filter(id__in=ids)
+    return query
+
+
+def get_submissions_for_org_user(user):
+    return models.FormSubmission.objects.filter(
+        organizations=user.profile.organization
+    ).prefetch_related(
+        'applications',
+        'applications__organization',
+        'applications__status_updates',
+        'applications__status_updates__status_type',
+        'applications__status_updates__next_steps',
+        ).distinct()
+
+
+def get_submissions_for_staff_user():
+    return models.FormSubmission.objects.prefetch_related(
+        'applications',
+        'applications__organization',
+        'applications__status_updates',
+        'applications__status_updates__status_type',
+        'applications__status_updates__next_steps',
+        'notes',
+        'tags'
+    )
+
+
+def get_submissions_for_followups():
+    subs = get_submissions_for_staff_user()
+    return serializers.FormSubmissionFollowupListSerializer(
+        subs, many=True).data
 
 
 def find_duplicates(search_space):
