@@ -71,7 +71,7 @@
       "required": true
     }
   },
-  "formations": {
+  "formation": {
     "web": {
       "quantity": 1
     },
