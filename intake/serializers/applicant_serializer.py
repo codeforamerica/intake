@@ -1,7 +1,7 @@
 from . import fields
 from rest_framework import serializers
 from intake import models
-from .form_submission import FormSubmissionSerializer
+from .form_submission_serializer import FormSubmissionSerializer
 from intake.constants import PACIFIC_TIME
 
 

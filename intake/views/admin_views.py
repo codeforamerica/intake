@@ -2,7 +2,6 @@ from django.shortcuts import redirect, get_object_or_404
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import View
 from django.views.generic.base import TemplateView
-from django.utils.safestring import mark_safe
 
 from django.db.models import Q
 
@@ -71,11 +70,10 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
         if is_staff:
             context['ALL_TAG_NAMES'] = TagsService.get_all_used_tag_names()
             context['submissions'] = \
-                SubmissionsService.get_permitted_submissions(
-                    self.request.user, related_objects=True)
+                SubmissionsService.get_submissions_for_followups()
         else:
             context['submissions'] = \
-                SubmissionsService.get_paginated_submissions_for_user(
+                SubmissionsService.get_paginated_submissions_for_org_user(
                     self.request.user, self.request.GET.get('page'))
             context['page_counter'] = \
                 utils.get_page_navigation_counter(
