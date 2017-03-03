@@ -225,7 +225,7 @@ class FormSubmission(models.Model):
             if key in [SMS, EMAIL]}
 
     def get_transfer_action(self, request):
-        other_org = request.user.profile.organization.get_transfer_org()
+        other_org = request.user.profile.organization.transfer_partners.first()
         if other_org:
             url = reverse(
                 'intake-mark_transferred_to_other_org')

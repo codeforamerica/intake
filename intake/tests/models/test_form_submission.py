@@ -61,7 +61,8 @@ class TestFormSubmission(TestCase):
         org.__str__ = name
         request = Mock()
         request.path = '/applications/bundle/2/'
-        request.user.profile.organization.get_transfer_org.return_value = org
+        request.user.profile.organization\
+            .transfer_partners.first.return_value = org
         submission = self.get_a_sample_sub()
         expected_result = {
             'url': str(
@@ -77,7 +78,8 @@ class TestFormSubmission(TestCase):
 
     def test_get_transfer_action_returns_none(self):
         request = Mock()
-        request.user.profile.organization.get_transfer_org.return_value = None
+        request.user.profile.organization\
+            .transfer_partners.first.return_value = None
         submission = self.get_a_sample_sub()
         self.assertIsNone(
             submission.get_transfer_action(request))
