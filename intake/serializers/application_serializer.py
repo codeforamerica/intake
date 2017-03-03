@@ -1,6 +1,6 @@
 from intake import models
 from rest_framework import serializers
-from .status_update import MinimalStatusUpdateSerializer
+from .status_update_serializer import MinimalStatusUpdateSerializer
 
 
 class ApplicationFollowupListSerializer(serializers.ModelSerializer):

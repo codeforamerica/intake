@@ -53,8 +53,6 @@ class FormSubmissionFollowupListSerializer(serializers.ModelSerializer):
     local_date_received = fields.LocalDateField(source='date_received')
     full_name = serializers.CharField(source='get_full_name', read_only=True)
     url = serializers.CharField(source='get_absolute_url', read_only=True)
-    phone_number = fields.DictKeyField('phone_number', source='answers')
-    email = fields.DictKeyField('email', source='answers')
     applications = ApplicationFollowupListSerializer(many=True)
     notes = ApplicationNoteSerializer(many=True)
     tags = TagSerializer(many=True)

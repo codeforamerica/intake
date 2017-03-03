@@ -114,8 +114,7 @@ def get_submissions_for_org_user(user):
         'applications__organization',
         'applications__status_updates',
         'applications__status_updates__status_type',
-        'applications__status_updates__next_steps',
-        ).distinct()
+    ).distinct()
 
 
 def get_submissions_for_staff_user():
@@ -124,7 +123,6 @@ def get_submissions_for_staff_user():
         'applications__organization',
         'applications__status_updates',
         'applications__status_updates__status_type',
-        'applications__status_updates__next_steps',
         'notes',
         'tags'
     )
