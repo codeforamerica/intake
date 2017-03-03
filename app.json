@@ -83,6 +83,7 @@
     "cloudamqp",
     "newrelic",
     "heroku-postgresql"
+    "heroku-postgresql"
   ],
   "buildpacks": [
     {
