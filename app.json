@@ -82,7 +82,7 @@
   "addons": [
     "cloudamqp",
     "newrelic",
-    "heroku-postgresql"
+    "heroku-postgresql",
     "heroku-postgresql"
   ],
   "buildpacks": [
