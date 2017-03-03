@@ -4408,7 +4408,9 @@ table.followups button[type="submit"] {
   border-top-left-radius: 0;
 }
 .org_tag {
-  display: inline-block;
+  width: 50%;
+  padding: 0.5em;
+  text-align: left;
   font-size: 0.7em;
   text-transform: uppercase;
 }
