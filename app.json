@@ -1,8 +1,5 @@
 {
   "name": "intake",
-  "scripts": {
-    "postdeploy": "make db.seed"
-  },
   "env": {
     "ADMIN_PHONE_NUMBER": {
       "required": true
@@ -32,7 +29,7 @@
       "required": true
     },
     "DJANGO_SETTINGS_MODULE": {
-     "value": "project.settings.review_app"
+     "value": "project.settings.prod"
     },
     "FRONT_API_TOKEN": {
       "required": true
@@ -82,7 +79,11 @@
   "addons": [
     "cloudamqp",
     "newrelic",
-    "heroku-postgresql"
+    "heroku-postgresql",
+    {
+        "plan": "heroku-postgresql",
+	"as": "test_db"
+    }
   ],
   "buildpacks": [
     {
