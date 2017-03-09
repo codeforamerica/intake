@@ -140,7 +140,7 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 ADMINS = [
-    ('Ben', 'bgolder@codeforamerica.org'),
+    ('Ben', 'clearmyrecord-alerts@codeforamerica.org'),
 ]
 
 AUTH_PASSWORD_VALIDATORS = [
