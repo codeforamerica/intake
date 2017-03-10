@@ -86,7 +86,7 @@
     "username": "sf_pubdef_user",
     "first_name": "Fake",
     "last_name": "SFPubDef",
-    "email": "bgolder+demo+sf_pubdef@codeforamerica.org",
+    "email": "bgolder+demo+sf_pubdef_user@codeforamerica.org",
     "is_staff": false,
     "is_active": true,
     "date_joined": "2016-06-13T23:12:25Z",
