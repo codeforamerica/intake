@@ -58,3 +58,6 @@ USE_DEBUG_TOOLBAR = os.environ.get('USE_DEBUG_TOOLBAR', 0)
 LIVE_COUNTY_CHOICES = os.environ.get('LIVE_COUNTY_CHOICES', False)
 
 CELERY_BROKER_URL = os.environ.get('CLOUDAMQP_URL')
+
+GENERATE_DUMMY_DATA = os.environ.get('GENERATE_DUMMY_DATA'. False)
+

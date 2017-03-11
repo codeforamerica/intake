@@ -7,18 +7,6 @@
     "ADMIN_PHONE_NUMBER": {
       "required": true
     },
-    "ALLOWED_HOSTS": {
-      "required": true
-    },
-    "AWS_ACCESS_KEY_ID": {
-      "required": true
-    },
-    "AWS_SECRET_ACCESS_KEY": {
-      "required": true
-    },
-    "AWS_STORAGE_BUCKET_NAME": {
-      "required": true
-    },
     "DEFAULT_AGENCY_USER_EMAIL": {
       "required": true
     },
@@ -32,7 +20,7 @@
       "required": true
     },
     "DJANGO_SETTINGS_MODULE": {
-     "value": "project.settings.prod"
+      "required": true
     },
     "FRONT_API_TOKEN": {
       "required": true
@@ -50,15 +38,6 @@
       "required": true
     },
     "MIXPANEL_KEY": {
-      "required": true
-    },
-    "NEW_RELIC_APP_NAME": {
-      "required": true
-    },
-    "NEW_RELIC_LICENSE_KEY": {
-      "required": true
-    },
-    "NEW_RELIC_LOG": {
       "required": true
     },
     "SECRET_KEY": {
@@ -81,11 +60,12 @@
   },
   "addons": [
     "cloudamqp",
+    "bucketeer",
     "newrelic",
     "heroku-postgresql",
     {
-        "plan": "heroku-postgresql",
-	"as": "test_db"
+      "plan": "heroku-postgresql",
+	  "as": "test_db"
     }
   ],
   "buildpacks": [
