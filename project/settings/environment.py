@@ -59,5 +59,5 @@ LIVE_COUNTY_CHOICES = os.environ.get('LIVE_COUNTY_CHOICES', False)
 
 CELERY_BROKER_URL = os.environ.get('CLOUDAMQP_URL')
 
-GENERATE_DUMMY_DATA = os.environ.get('GENERATE_DUMMY_DATA'. False)
+GENERATE_DUMMY_DATA = os.environ.get('GENERATE_DUMMY_DATA', False)
 
