@@ -19,7 +19,6 @@ test.keepdb:
 
 test.review_app:
 	pip install -r requirements/dev.txt
-	make db.seed
 	./manage.py migrate --settings project.settings.review_app
 	coverage run ./manage.py test $(SCOPE) \
 		--settings project.settings.review_app \
