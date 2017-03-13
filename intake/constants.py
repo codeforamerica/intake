@@ -173,7 +173,10 @@ COUNTY_CHOICES = (
         'Fowler, Selma, Coalinga, Orange Cove, Reedley, Huron, Kerman)')),
     (Counties.SOLANO, _(
         'Solano County (near Vallejo, Fairfield, Vacaville, Benicia, '
-        'Dixon, Rio Vista, or Suisun City)'))
+        'Dixon, Rio Vista, or Suisun City)')),
+    (Counties.SANTA_CRUZ, _(
+        'Santa Cruz County (near Santa Cruz, Watsonville, Capitola, '
+        'Felton, Scotts Valley, Aptos, or Boulder Creek)'))
 )
 
 if SCOPE_TO_LIVE_COUNTIES and len(COUNTY_CHOICES) == 3:
@@ -192,9 +195,6 @@ if not SCOPE_TO_LIVE_COUNTIES:
             'Santa Clara County (near San Jose, Santa Clara, Campbell, Los '
             'Altos, Los Gatos, Palo Alto, Mountain View, Sunnyvale, Morgan '
             'View, or Gilroy)')),
-        (Counties.SANTA_CRUZ, _(
-            'Santa Cruz County (near Santa Cruz, Watsonville, Capitola, '
-            'Felton, Scotts Valley, Aptos, or Boulder Creek)')),
         (Counties.MONTEREY, _(
             'Monterey County (near Salinas, Monterey, Marina, Seaside, '
             'Prunedale, Castroville, or King City)')),
