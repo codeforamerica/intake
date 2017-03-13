@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 
 
 class Application(models.Model):
@@ -12,6 +13,7 @@ class Application(models.Model):
         on_delete=models.PROTECT,
         related_name='applications'
     )
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True)
 
     def __str__(self):
         sub = str(self.form_submission.id)
