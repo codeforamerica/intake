@@ -4,12 +4,9 @@ from . import fields
 
 
 class IncomingTransferSerializer(serializers.ModelSerializer):
-    organization_name = serializers.SerializerMethodField(
-        method_name='get_organization_name')
-    author_name = serializers.SerializerMethodField(
-        method_name='get_author_name')
-    local_date = serializers.SerializerMethodField(
-        method_name='get_transfer_date')
+    organization_name = serializers.SerializerMethodField()
+    author_name = serializers.SerializerMethodField()
+    local_date = serializers.SerializerMethodField()
 
     class Meta:
         model = models.ApplicationTransfer
@@ -21,11 +18,11 @@ class IncomingTransferSerializer(serializers.ModelSerializer):
         ]
 
     def get_organization_name(self, instance):
-        return instance.organization.name
+        return instance.status_update.application.organization.name
 
     def get_author_name(self, instance):
         return instance.status_update.author.profile.name
 
-    def get_transfer_date(self, instance):
+    def get_local_date(self, instance):
         return fields.LocalDateField().to_representation(
             instance.status_update.updated)
