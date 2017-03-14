@@ -5,6 +5,8 @@ from .applicant_serializer import (
     ApplicantSerializer, ApplicationEventSerializer)
 from .note_serializer import ApplicationNoteSerializer
 from .tag_serializer import TagSerializer
+from .pagination import serialize_page
+
 
 __all__ = [
     FormSubmissionSerializer,
@@ -13,5 +15,6 @@ __all__ = [
     ApplicantSerializer,
     ApplicationEventSerializer,
     ApplicationNoteSerializer,
-    TagSerializer
+    TagSerializer,
+    serialize_page
 ]
