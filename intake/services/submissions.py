@@ -1,10 +1,10 @@
 import itertools
 from django.utils.translation import ugettext_lazy as _
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import Levenshtein
 
 from intake import models, serializers
 from intake.constants import SMS, EMAIL
+from .pagination import get_page
 from intake.service_objects import ConfirmationNotification
 from intake.models.form_submission import FORMSUBMISSION_TEXT_SEARCH_FIELDS
 
@@ -78,22 +78,8 @@ def fill_pdfs_for_submission(submission):
         fillable.fill_for_submission(submission)
 
 
-def paginated(qset, page_index, max_count_per_page=25, min_count_per_page=5):
-    paginator = Paginator(
-        qset, max_count_per_page, orphans=min_count_per_page)
-    try:
-        return paginator.page(page_index)
-    except PageNotAnInteger:
-        return paginator.page(1)
-    except EmptyPage:
-        if int(page_index) <= 0:
-            return paginator.page(1)
-        else:
-            return paginator.page(paginator.num_pages)
-
-
 def get_paginated_submissions_for_org_user(user, page_index):
-    return paginated(get_submissions_for_org_user(user), page_index)
+    return get_page(get_submissions_for_org_user(user), page_index)
 
 
 def get_permitted_submissions(user, ids=None):

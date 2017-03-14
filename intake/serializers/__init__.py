@@ -8,7 +8,6 @@ from .app_index_serializers import (
     ApplicationIndexWithTransfersSerializer)
 from .note_serializer import ApplicationNoteSerializer
 from .tag_serializer import TagSerializer
-from .pagination import serialize_page
 
 
 __all__ = [
@@ -20,6 +19,5 @@ __all__ = [
     ApplicationIndexWithTransfersSerializer,
     ApplicationEventSerializer,
     ApplicationNoteSerializer,
-    TagSerializer,
-    serialize_page
+    TagSerializer
 ]
