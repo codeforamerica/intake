@@ -1,9 +1,11 @@
+import random
 from django.test import TestCase
 from django.contrib.auth.models import User
 from user_accounts.models import Organization
 from collections import OrderedDict
 from intake import models
 from intake.tests.base_testcases import ALL_APPLICATION_FIXTURES
+from intake.tests import factories
 import intake.services.applications_service as AppsService
 
 
@@ -37,7 +39,7 @@ class TestGetApplicationsIndexForOrgUser(TestCase):
         application = models.Application.objects.filter(
             organization__county__slug='alameda').first()
         AppsService.transfer_application(
-            user, application, to_org, 'because of subspace interference')
+            user, application, to_org, 'food replicator malfunction')
         with self.assertNumQueries(8):
             results = AppsService.get_applications_index_for_org_user(user, 1)
         self.assertTrue(
@@ -79,7 +81,7 @@ class TestTransferApplication(TestCase):
             profile__organization__slug='a_pubdef').first()
         to_org = Organization.objects.get(slug='ebclc')
         application = models.Application.objects.filter(
-            organization__county__slug='alameda').first()
+            organization__slug='a_pubdef').first()
         AppsService.transfer_application(
             user, application, to_org, 'because of subspace interference')
         new_application = models.Application.objects.filter(
@@ -101,7 +103,45 @@ class TestTransferApplication(TestCase):
             profile__organization__county__slug='alameda').first()
         to_org = Organization.objects.get(slug='ebclc')
         application = models.Application.objects.filter(
-            organization__county__slug='alameda').first()
+            organization__slug='a_pubdef').first()
         with self.assertNumQueries(4):
             AppsService.transfer_application(
                 user, application, to_org, 'there was a temporal anomaly')
+
+
+class TestGetStatusUpdatesForApplicationHistory(TestCase):
+
+    fixtures = ALL_APPLICATION_FIXTURES
+
+    def test_number_of_queries_for_no_transfers(self):
+        application = models.Application.objects.filter(
+            organization__slug='a_pubdef').first()
+        author = User.objects.filter(
+            profile__organization__slug='a_pubdef').first()
+        # make more status updates
+        new_updates_count = random.randint(1, 7)
+        for i in range(new_updates_count):
+            factories.StatusUpdateFactory.create(
+                application=application, author=author)
+        with self.assertNumQueries(9):
+            AppsService.get_serialized_application_history_events(
+                application)
+
+    def test_number_of_queries_if_transferred_in(self):
+        author = User.objects.filter(
+            profile__organization__slug='a_pubdef').first()
+        application = models.Application.objects.filter(
+            organization__slug='a_pubdef').first()
+        to_org = Organization.objects.get(slug='ebclc')
+        receiving_user = User.objects.filter(
+            profile__organization__slug='ebclc').first()
+        transfer = AppsService.transfer_application(
+            author, application, to_org, 'holodeck malfunction')
+        app = transfer.new_application
+        new_updates_count = random.randint(1, 7)
+        for i in range(new_updates_count):
+            factories.StatusUpdateFactory.create(
+                application=app, author=receiving_user)
+        with self.assertNumQueries(10):
+            AppsService.get_serialized_application_history_events(
+                application)

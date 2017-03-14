@@ -1,3 +1,4 @@
+from django.db.models import Q
 from intake import models, serializers
 from . import pagination
 
@@ -56,3 +57,34 @@ def transfer_application(author, application, to_organization, reason):
     application.was_transferred_out = True
     application.save()
     return transfer
+
+
+def get_status_updates_for_application_history(application):
+    # note: this only returns status updates for the latest transfer
+    #   if an app has multiple transfers, older ones will be overlooked
+    are_updates_for_this_app = Q(
+        application=application)
+    queryset = models.StatusUpdate.objects.filter(are_updates_for_this_app)
+    prefetch_tables = [
+        'notification',
+        'status_type',
+        'next_steps',
+        'author__profile',
+        'author__profile__organization',
+    ]
+    if application.organization.can_transfer_applications:
+        transfer = application.incoming_transfers.order_by('-created').first()
+        if transfer:
+            are_updates_prior_to_a_transfer = Q(
+                application_id=transfer.status_update.application_id,
+                updated__lte=transfer.status_update.updated)
+            queryset = models.StatusUpdate.objects.filter(
+                are_updates_for_this_app | are_updates_prior_to_a_transfer
+            )
+            prefetch_tables.append('transfer')
+    return queryset.prefetch_related(*prefetch_tables).order_by('-updated')
+
+
+def get_serialized_application_history_events(application):
+    status_updates = get_status_updates_for_application_history(application)
+    return serializers.StatusUpdateSerializer(status_updates, many=True).data
