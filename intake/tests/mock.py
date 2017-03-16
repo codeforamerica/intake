@@ -13,7 +13,7 @@ from django.utils.datastructures import MultiValueDict
 
 from taggit.models import Tag
 
-from intake import models, constants
+from intake import models, constants, services
 from intake.constants import PACIFIC_TIME
 from intake.tests import mock_user_agents, mock_referrers, factories
 from intake.services import bundles as BundlesService
@@ -281,6 +281,34 @@ def make_mock_submission_event_sequence(applicant):
     return events
 
 
+def make_mock_transfer_sub(from_org, to_org):
+    sub = factories.FormSubmissionWithOrgsFactory.create(
+        organizations=[from_org])
+    application = sub.applications.first()
+    author = from_org.profiles.first().user
+    # make a status_update prior to transfer
+    factories.StatusUpdateWithNotificationFactory.create(
+        application=application, author=author)
+    services.applications_service.transfer_application(
+        author=author, application=application,
+        to_organization=to_org, reason="Transporter malfunction")
+    return sub
+
+
+def make_two_mock_transfers():
+    from user_accounts.models import Organization
+    orgs = Organization.objects.filter(can_transfer_applications=True)
+    org_a = orgs[0]
+    org_b = orgs[1]
+    subs = []
+    subs.append(make_mock_transfer_sub(org_a, org_b))
+    subs.append(make_mock_transfer_sub(org_b, org_a))
+    transfers = models.ApplicationTransfer.objects.filter(
+        new_application__form_submission__in=subs)
+    serialize_subs(
+        subs, fixture_path('mock_2_transfers.json'), transfers)
+
+
 def build_seed_submissions():
     create_seed_users()
     from user_accounts.models import Organization
@@ -336,6 +364,7 @@ def build_seed_submissions():
         events.extend(
             make_mock_submission_event_sequence(applicant))
     dump_as_json(events, fixture_path('mock_application_events.json'))
+    make_two_mock_transfers()
 
 
 def fixture_path(filename):
@@ -349,7 +378,7 @@ def dump_as_json(objs, filepath):
         f.write(data)
 
 
-def serialize_subs(subs, filepath):
+def serialize_subs(subs, filepath, *other_objects):
     applicants = [sub.applicant for sub in subs]
     visitors = [applicant.visitor for applicant in applicants]
     applications = models.Application.objects.filter(
@@ -363,5 +392,7 @@ def serialize_subs(subs, filepath):
     with open(filepath, 'w') as f:
         data = [*visitors, *applicants, *subs, *applications,
                 *status_updates, *status_notifications]
+        for object_set in other_objects:
+            data.extend(object_set)
         f.write(serializers.serialize(
             'json', data, indent=2, use_natural_foreign_keys=True))

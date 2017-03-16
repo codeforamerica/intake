@@ -1,0 +1,330 @@
+[
+{
+  "model": "intake.visitor",
+  "pk": 264,
+  "fields": {
+    "first_visit": "2017-03-16T20:08:34.933Z",
+    "source": "share",
+    "referrer": "http://bajoradefender.org/services/clean-slate/",
+    "ip_address": "48.104.186.127"
+  }
+},
+{
+  "model": "intake.visitor",
+  "pk": 265,
+  "fields": {
+    "first_visit": "2017-03-16T20:08:34.964Z",
+    "source": "share",
+    "referrer": "http://bajoradefender.org/services/clean-slate/",
+    "ip_address": "48.104.186.127"
+  }
+},
+{
+  "model": "intake.applicant",
+  "pk": 449,
+  "fields": {
+    "visitor": 264
+  }
+},
+{
+  "model": "intake.applicant",
+  "pk": 450,
+  "fields": {
+    "visitor": 265
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 446,
+  "fields": {
+    "applicant": 449,
+    "duplicate_set": null,
+    "answers": {
+      "on_probation_parole": "yes",
+      "reduced_probation": "not_applicable",
+      "preferred_pronouns": "",
+      "finished_half_probation": "not_applicable",
+      "owes_court_fees": "yes",
+      "first_name": "Karen",
+      "us_citizen": "yes",
+      "last_name": "Acosta",
+      "contact_preferences": [
+        "prefers_sms",
+        "prefers_email"
+      ],
+      "serving_sentence": "no",
+      "dob": {
+        "month": "9",
+        "day": "25",
+        "year": "1993"
+      },
+      "alternate_phone_number": "2695454396",
+      "additional_information": "I want help",
+      "when_where_outside_sf": "",
+      "being_charged": "no",
+      "email": "javier38@yahoo.com",
+      "household_size": 0,
+      "has_suspended_license": "no",
+      "on_public_benefits": "yes",
+      "phone_number": "2395051315",
+      "rap_outside_sf": "no",
+      "monthly_income": 2999,
+      "understands_limits": "yes",
+      "owns_home": "no",
+      "how_did_you_hear": "from work",
+      "consent_to_represent": "yes",
+      "address": {
+        "street": "2468 Garcia Shores Apt. 315",
+        "city": "Richardfort",
+        "state": "MD",
+        "zip": "85470"
+      },
+      "middle_name": "Leonard"
+    },
+    "first_name": "Karen",
+    "last_name": "Acosta",
+    "dob": null,
+    "ssn": "",
+    "last_four": "",
+    "drivers_license_or_id": "",
+    "case_number": "",
+    "phone_number": "2395051315",
+    "alternate_phone_number": "2695454396",
+    "email": "javier38@yahoo.com",
+    "old_uuid": "66d62c9c63304e5cb37059b57cefcafa",
+    "anonymous_name": "Calm Tree",
+    "date_received": "2017-03-09T18:30:33-08:00"
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 447,
+  "fields": {
+    "applicant": 450,
+    "duplicate_set": null,
+    "answers": {
+      "on_probation_parole": "yes",
+      "reduced_probation": "not_applicable",
+      "preferred_pronouns": "",
+      "finished_half_probation": "not_applicable",
+      "owes_court_fees": "no",
+      "first_name": "Cassidy",
+      "us_citizen": "yes",
+      "last_name": "Fernandez",
+      "contact_preferences": [
+        "prefers_email",
+        "prefers_sms"
+      ],
+      "serving_sentence": "no",
+      "dob": {
+        "month": "12",
+        "day": "18",
+        "year": "1985"
+      },
+      "alternate_phone_number": "2808369292",
+      "additional_information": "I want help",
+      "when_where_outside_sf": "",
+      "being_charged": "no",
+      "email": "kevin70@gmail.com",
+      "household_size": 1,
+      "has_suspended_license": "no",
+      "on_public_benefits": "yes",
+      "phone_number": "2070051902",
+      "rap_outside_sf": "no",
+      "monthly_income": 3001,
+      "understands_limits": "yes",
+      "owns_home": "yes",
+      "how_did_you_hear": "from work",
+      "consent_to_represent": "yes",
+      "address": {
+        "street": "5278 Madden Bypass",
+        "city": "North Angelamouth",
+        "state": "ND",
+        "zip": "20949"
+      },
+      "middle_name": "Frank"
+    },
+    "first_name": "Cassidy",
+    "last_name": "Fernandez",
+    "dob": null,
+    "ssn": "",
+    "last_four": "",
+    "drivers_license_or_id": "",
+    "case_number": "",
+    "phone_number": "2070051902",
+    "alternate_phone_number": "2808369292",
+    "email": "kevin70@gmail.com",
+    "old_uuid": "81addbf48a03460385d7b55505887f53",
+    "anonymous_name": "Camouflaged Star",
+    "date_received": "2017-03-10T19:19:19-08:00"
+  }
+},
+{
+  "model": "intake.application",
+  "pk": 631,
+  "fields": {
+    "created": "2017-03-16T20:08:34.955Z",
+    "updated": "2017-03-16T20:08:34.955Z",
+    "organization": [
+      "East Bay Community Law Center"
+    ],
+    "form_submission": 446,
+    "was_transferred_out": false
+  }
+},
+{
+  "model": "intake.application",
+  "pk": 630,
+  "fields": {
+    "created": "2017-03-16T20:08:34.937Z",
+    "updated": "2017-03-16T20:08:34.958Z",
+    "organization": [
+      "Alameda County Public Defender's Office"
+    ],
+    "form_submission": 446,
+    "was_transferred_out": true
+  }
+},
+{
+  "model": "intake.application",
+  "pk": 633,
+  "fields": {
+    "created": "2017-03-16T20:08:34.986Z",
+    "updated": "2017-03-16T20:08:34.986Z",
+    "organization": [
+      "Alameda County Public Defender's Office"
+    ],
+    "form_submission": 447,
+    "was_transferred_out": false
+  }
+},
+{
+  "model": "intake.application",
+  "pk": 632,
+  "fields": {
+    "created": "2017-03-16T20:08:34.968Z",
+    "updated": "2017-03-16T20:08:34.989Z",
+    "organization": [
+      "East Bay Community Law Center"
+    ],
+    "form_submission": 447,
+    "was_transferred_out": true
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 622,
+  "fields": {
+    "created": "2017-03-16T20:08:34.945Z",
+    "updated": "2017-03-16T20:08:34.953Z",
+    "status_type": 7,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "a_pubdef_user"
+    ],
+    "application": 630,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 623,
+  "fields": {
+    "created": "2017-03-16T20:08:34.954Z",
+    "updated": "2017-03-16T20:08:34.954Z",
+    "status_type": 8,
+    "additional_information": "",
+    "author": [
+      "a_pubdef_user"
+    ],
+    "application": 630,
+    "other_next_step": "",
+    "next_steps": []
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 624,
+  "fields": {
+    "created": "2017-03-16T20:08:34.976Z",
+    "updated": "2017-03-16T20:08:34.984Z",
+    "status_type": 8,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "ebclc_user"
+    ],
+    "application": 632,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 625,
+  "fields": {
+    "created": "2017-03-16T20:08:34.985Z",
+    "updated": "2017-03-16T20:08:34.985Z",
+    "status_type": 8,
+    "additional_information": "",
+    "author": [
+      "ebclc_user"
+    ],
+    "application": 632,
+    "other_next_step": "",
+    "next_steps": []
+  }
+},
+{
+  "model": "intake.statusnotification",
+  "pk": 616,
+  "fields": {
+    "status_update": 622,
+    "contact_info": {
+      "email": "bgolder+borg@codeforamerica.org"
+    },
+    "base_message": "Resistance is futile",
+    "sent_message": "Live long and prosper",
+    "created": "2017-03-16T20:08:34.947Z"
+  }
+},
+{
+  "model": "intake.statusnotification",
+  "pk": 617,
+  "fields": {
+    "status_update": 624,
+    "contact_info": {
+      "email": "bgolder+borg@codeforamerica.org"
+    },
+    "base_message": "Resistance is futile",
+    "sent_message": "Live long and prosper",
+    "created": "2017-03-16T20:08:34.978Z"
+  }
+},
+{
+  "model": "intake.applicationtransfer",
+  "pk": 7,
+  "fields": {
+    "created": "2017-03-16T20:08:34.957Z",
+    "updated": "2017-03-16T20:08:34.957Z",
+    "status_update": 623,
+    "new_application": 631,
+    "reason": "Transporter malfunction"
+  }
+},
+{
+  "model": "intake.applicationtransfer",
+  "pk": 8,
+  "fields": {
+    "created": "2017-03-16T20:08:34.987Z",
+    "updated": "2017-03-16T20:08:34.987Z",
+    "status_update": 625,
+    "new_application": 633,
+    "reason": "Transporter malfunction"
+  }
+}
+]

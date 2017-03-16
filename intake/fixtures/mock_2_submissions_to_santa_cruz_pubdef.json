@@ -1,167 +1,194 @@
 [
 {
-  "model": "intake.applicant",
-  "pk": 48,
+  "model": "intake.visitor",
+  "pk": 255,
   "fields": {
-    "visitor": null
+    "first_visit": "2017-03-16T20:08:33.119Z",
+    "source": "share",
+    "referrer": "http://bajoradefender.org/services/clean-slate/",
+    "ip_address": "48.104.186.127"
+  }
+},
+{
+  "model": "intake.visitor",
+  "pk": 256,
+  "fields": {
+    "first_visit": "2017-03-16T20:08:33.133Z",
+    "source": "share",
+    "referrer": "http://bajoradefender.org/services/clean-slate/",
+    "ip_address": "48.104.186.127"
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 49,
+  "pk": 440,
   "fields": {
-    "visitor": null
+    "visitor": 255
+  }
+},
+{
+  "model": "intake.applicant",
+  "pk": 441,
+  "fields": {
+    "visitor": 256
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 48,
+  "pk": 437,
   "fields": {
-    "applicant": 48,
+    "applicant": 440,
     "duplicate_set": null,
     "answers": {
       "on_probation_parole": "yes",
-      "phone_number": "2395410388",
-      "address": {
-        "state": "AS",
-        "street": "2994 Linda Extensions",
-        "city": "New Mackenzie",
-        "zip": "88843"
-      },
-      "understands_limits": "yes",
-      "where_probation_or_parole": "Solano County",
-      "dob": {
-        "month": "11",
-        "year": "1992",
-        "day": "1"
-      },
-      "additional_information": "I want help",
-      "email": "michael82@gmail.com",
+      "reasons_for_applying": [
+        "lost_job",
+        "homeless"
+      ],
+      "first_name": "Karina",
+      "us_citizen": "yes",
+      "last_name": "Banks",
       "contact_preferences": [
         "prefers_email",
         "prefers_sms"
       ],
-      "middle_name": "Gregory",
-      "being_charged": "no",
-      "last_name": "Medina",
-      "consent_to_represent": "yes",
-      "first_name": "Christopher",
-      "how_did_you_hear": "from work",
-      "us_citizen": "yes",
       "serving_sentence": "no",
-      "reasons_for_applying": [
-        "lost_job",
-        "homeless"
-      ],
-      "alternate_phone_number": "2755940912",
+      "how_did_you_hear": "from work",
+      "alternate_phone_number": "2710209020",
+      "additional_information": "I want help",
+      "monthly_income": 317,
+      "being_charged": "no",
+      "email": "robert05@yahoo.com",
       "when_probation_or_parole": "2018",
-      "monthly_income": 4180
+      "dob": {
+        "month": "8",
+        "day": "8",
+        "year": "1974"
+      },
+      "phone_number": "2057954161",
+      "middle_name": "Joseph",
+      "understands_limits": "yes",
+      "where_probation_or_parole": "Yolo County",
+      "consent_to_represent": "yes",
+      "address": {
+        "street": "125 Crystal Harbors Apt. 331",
+        "city": "Port James",
+        "state": "NV",
+        "zip": "52182"
+      }
     },
-    "first_name": "Christopher",
-    "last_name": "Medina",
+    "first_name": "Karina",
+    "last_name": "Banks",
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
     "case_number": "",
-    "phone_number": "2395410388",
-    "alternate_phone_number": "2755940912",
-    "email": "michael82@gmail.com",
-    "old_uuid": "dca1efe0726e45ad803433f680161cd3",
-    "anonymous_name": "Determined Supernova",
-    "date_received": "2017-02-16T00:02:28-08:00"
+    "phone_number": "2057954161",
+    "alternate_phone_number": "2710209020",
+    "email": "robert05@yahoo.com",
+    "old_uuid": "0a36f7f055d04a24b24bde343479fcd8",
+    "anonymous_name": "Red Lotus",
+    "date_received": "2017-03-15T13:15:11-07:00"
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 49,
+  "pk": 438,
   "fields": {
-    "applicant": 49,
+    "applicant": 441,
     "duplicate_set": null,
     "answers": {
       "on_probation_parole": "yes",
-      "phone_number": "2122184600",
-      "address": {
-        "state": "WI",
-        "street": "979 Jordan Terrace Suite 138",
-        "city": "Simsmouth",
-        "zip": "18562"
-      },
-      "understands_limits": "yes",
-      "where_probation_or_parole": "Solano County",
-      "dob": {
-        "month": "10",
-        "year": "1992",
-        "day": "29"
-      },
-      "additional_information": "I want help",
-      "email": "abowers@gmail.com",
-      "contact_preferences": [
-        "prefers_email"
-      ],
-      "middle_name": "Cindy",
-      "being_charged": "no",
-      "last_name": "Wilson",
-      "consent_to_represent": "yes",
-      "first_name": "Brittany",
-      "how_did_you_hear": "from work",
-      "us_citizen": "yes",
-      "serving_sentence": "no",
       "reasons_for_applying": [
         "lost_job",
         "homeless"
       ],
-      "alternate_phone_number": "2297793549",
+      "first_name": "Ricky",
+      "us_citizen": "yes",
+      "last_name": "Ruiz",
+      "contact_preferences": [
+        "prefers_email",
+        "prefers_sms"
+      ],
+      "serving_sentence": "no",
+      "how_did_you_hear": "from work",
+      "alternate_phone_number": "2585997076",
+      "additional_information": "I want help",
+      "monthly_income": 1074,
+      "being_charged": "no",
+      "email": "jeremyedwards@yahoo.com",
       "when_probation_or_parole": "2018",
-      "monthly_income": 4232
+      "dob": {
+        "month": "6",
+        "day": "2",
+        "year": "1992"
+      },
+      "phone_number": "2197539670",
+      "middle_name": "Donna",
+      "understands_limits": "yes",
+      "where_probation_or_parole": "Yolo County",
+      "consent_to_represent": "yes",
+      "address": {
+        "street": "858 William Plains",
+        "city": "Port Sarahmouth",
+        "state": "GU",
+        "zip": "52069"
+      }
     },
-    "first_name": "Brittany",
-    "last_name": "Wilson",
+    "first_name": "Ricky",
+    "last_name": "Ruiz",
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
     "case_number": "",
-    "phone_number": "2122184600",
-    "alternate_phone_number": "2297793549",
-    "email": "abowers@gmail.com",
-    "old_uuid": "6867ad7632164e05ab77776b23079091",
-    "anonymous_name": "Witty Tadpole",
-    "date_received": "2017-02-27T06:36:28-08:00"
+    "phone_number": "2197539670",
+    "alternate_phone_number": "2585997076",
+    "email": "jeremyedwards@yahoo.com",
+    "old_uuid": "014a9453d22348cf806479cdca086191",
+    "anonymous_name": "Green Gazelle",
+    "date_received": "2017-03-07T15:02:20-08:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 59,
+  "pk": 610,
   "fields": {
+    "created": "2017-03-16T20:08:33.123Z",
+    "updated": "2017-03-16T20:08:33.123Z",
     "organization": [
       "Santa Cruz County Public Defender"
     ],
-    "form_submission": 48
+    "form_submission": 437,
+    "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 60,
+  "pk": 611,
   "fields": {
+    "created": "2017-03-16T20:08:33.137Z",
+    "updated": "2017-03-16T20:08:33.137Z",
     "organization": [
       "Santa Cruz County Public Defender"
     ],
-    "form_submission": 49
+    "form_submission": 438,
+    "was_transferred_out": false
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 59,
+  "pk": 602,
   "fields": {
-    "created": "2017-03-01T19:45:39.038Z",
-    "updated": "2017-03-01T19:45:39.044Z",
-    "status_type": 7,
+    "created": "2017-03-16T20:08:33.538Z",
+    "updated": "2017-03-16T20:08:33.545Z",
+    "status_type": 3,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "santa_cruz_pubdef_user"
     ],
-    "application": 59,
+    "application": 610,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -170,16 +197,16 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 60,
+  "pk": 603,
   "fields": {
-    "created": "2017-03-01T19:45:39.057Z",
-    "updated": "2017-03-01T19:45:39.061Z",
-    "status_type": 1,
+    "created": "2017-03-16T20:08:33.551Z",
+    "updated": "2017-03-16T20:08:33.558Z",
+    "status_type": 4,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "santa_cruz_pubdef_user"
     ],
-    "application": 60,
+    "application": 611,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -188,28 +215,28 @@
 },
 {
   "model": "intake.statusnotification",
-  "pk": 59,
+  "pk": 596,
   "fields": {
-    "status_update": 59,
+    "status_update": 602,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-03-01T19:45:40.126Z"
+    "created": "2017-03-16T20:08:33.539Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 60,
+  "pk": 597,
   "fields": {
-    "status_update": 60,
+    "status_update": 603,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-03-01T19:45:40.132Z"
+    "created": "2017-03-16T20:08:33.552Z"
   }
 }
 ]
