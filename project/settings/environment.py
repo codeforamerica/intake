@@ -16,9 +16,9 @@ ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
 DEFAULT_HOST = os.environ.get('DEFAULT_HOST', 'http://localhost:8000')
 
 # settings for file uploads
-AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', '')
-AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', '')
-AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', '')
+AWS_ACCESS_KEY_ID = os.environ.get('BUCKETEER_AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('BUCKETEER_AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('BUCKETEER_BUCKET_NAME')
 DEFAULT_FILE_STORAGE = os.environ.get(
     'DEFAULT_FILE_STORAGE',
     'django.core.files.storage.FileSystemStorage')
@@ -58,3 +58,5 @@ USE_DEBUG_TOOLBAR = os.environ.get('USE_DEBUG_TOOLBAR', 0)
 LIVE_COUNTY_CHOICES = os.environ.get('LIVE_COUNTY_CHOICES', False)
 
 CELERY_BROKER_URL = os.environ.get('CLOUDAMQP_URL')
+
+GENERATE_DUMMY_DATA = os.environ.get('GENERATE_DUMMY_DATA', False)
