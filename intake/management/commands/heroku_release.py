@@ -21,7 +21,7 @@ class Command(BaseCommand):
             management.call_command('loaddata',
                                     'counties', 'organizations',
                                     'addresses', 'mock_profiles',
-                                    'template_options'
+                                    'template_options',
                                     'mock_2_submissions_to_a_pubdef',
                                     'mock_2_submissions_to_ebclc',
                                     'mock_2_submissions_to_cc_pubdef',
