@@ -1,6 +1,7 @@
 import factory
 from intake import models
 from django.contrib.auth.models import User
+from .status_notification_factory import StatusNotificationFactory
 
 
 class StatusUpdateFactory(factory.DjangoModelFactory):
@@ -25,3 +26,8 @@ class StatusUpdateFactory(factory.DjangoModelFactory):
         instance.next_steps.add(*next_steps)
         instance.save()
         return instance
+
+
+class StatusUpdateWithNotificationFactory(StatusUpdateFactory):
+    notification = factory.RelatedFactory(
+        StatusNotificationFactory, 'status_update')

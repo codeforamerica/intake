@@ -4,8 +4,10 @@ from .form_submission_factory import (
     FormSubmissionFactory, FormSubmissionWithOrgsFactory
 )
 from .status_type import StatusTypeFactory
-from .status_update import StatusUpdateFactory
-from .status_notification import StatusNotificationFactory
+from .status_update_factory import (
+    StatusUpdateFactory, StatusUpdateWithNotificationFactory
+)
+from .status_notification_factory import StatusNotificationFactory
 
 
 __all__ = [
@@ -15,5 +17,6 @@ __all__ = [
     FormSubmissionWithOrgsFactory,
     StatusTypeFactory,
     StatusUpdateFactory,
+    StatusUpdateWithNotificationFactory,
     StatusNotificationFactory
 ]
