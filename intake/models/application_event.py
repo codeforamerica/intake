@@ -19,13 +19,22 @@ class ApplicationEvent(models.Model):
     APPLICATION_SUBMITTED = 'application_submitted'
     APPLICATION_ERRORS = 'application_errors'
     APPLICATION_PAGE_COMPLETE = 'application_page_complete'
-    OPENED = "opened"
-    REFERRED = "referred"
-    PROCESSED = "processed"
-    DELETED = "deleted"
-    CONFIRMATION_SENT = "sent_confirmation"
-    REFERRED_BETWEEN_ORGS = "referred_to_another_org"
-    FOLLOWUP_SENT = "sent_followup"
+    OPENED = 'opened'
+    REFERRED = 'referred'
+    PROCESSED = 'processed'
+    DELETED = 'deleted'
+    CONFIRMATION_SENT = 'sent_confirmation'
+    REFERRED_BETWEEN_ORGS = 'referred_to_another_org'
+    FOLLOWUP_SENT = 'sent_followup'
+    APPLICATION_STATUS_UPDATED = 'application_status_updated'
+
+    # placeholder for tag and annotation events
+    # APPLICATION_TAGGED = 'application_tagged'
+    # APPLICATION_ANNOTATED = 'application_annotated'
+
+    # placeholder for transfer event -- need to merge with
+    # that feature branch first
+    # APPLICATION_TRANSFERRED = 'application_transferred'
 
     class Meta:
         ordering = ['-time']
@@ -38,8 +47,10 @@ class ApplicationEvent(models.Model):
             data=data or {}
         )
         event.save()
+
+        # the mixpanel event gets the UUID instead of the applicant_id
         log_to_mixpanel.delay(
-            applicant_id, name, data or {})
+            event.applicant.uuid, name, data or {})
         return event
 
     @classmethod
@@ -72,6 +83,13 @@ class ApplicationEvent(models.Model):
         return cls.create(
             cls.CONFIRMATION_SENT, applicant_id, contact_info=contact_info,
             message_content=message_content)
+
+    @classmethod
+    def log_status_updated(
+            cls, applicant_id, organization=None, status_type=None):
+        return cls.create(
+            cls.APPLICATION_STATUS_UPDATED, applicant_id,
+            organization=organization, status_type=status_type)
 
     @classmethod
     def log_followup_sent(cls, applicant_id, contact_info, message_content):

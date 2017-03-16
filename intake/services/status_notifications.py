@@ -56,6 +56,11 @@ def send_and_save_new_status(request, notification_data, status_update_data):
     status_update = models.StatusUpdate(**status_update_data)
     status_update.save()
     status_update.next_steps.add(*next_steps)
+    applicant = status_update.application.form_submission.applicant
+    organization = status_update.application.organization.name
+    event = models.ApplicationEvent.log_status_updated(
+        applicant.id, organization=organization,
+        status_type=status_update.status_type.display_name)
     sub = status_update_data['application'].form_submission
     contact_info = sub.get_usable_contact_info()
     notification_intro = get_notification_intro(
