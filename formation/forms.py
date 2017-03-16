@@ -414,28 +414,7 @@ class FresnoCountyFormSpec(SolanoCountyFormSpec):
 
 class SantaClaraCountyFormSpec(SolanoCountyFormSpec):
     county = Counties.SANTA_CLARA
-    fields = {
-        F.ContactPreferences,
-        F.FirstName,
-        F.MiddleName,
-        F.LastName,
-        F.PhoneNumberField,
-        F.AlternatePhoneNumberField,
-        F.EmailField,
-        F.AddressField,
-        F.DateOfBirthField,
-        F.OnProbationParole,
-        F.WhereProbationParole,
-        F.WhenProbationParole,
-        F.OwesCourtFees,
-        F.ServingSentence,
-        F.BeingCharged,
-        F.RAPOutsideSF,
-        F.WhenWhereOutsideSF,
-        F.HowDidYouHear,
-        F.AdditionalInformation,
-        F.UnderstandsLimits,
-        F.ConsentToRepresent,
+    fields = (SolanoCountyFormSpec.fields | {
         F.FinancialScreeningNote,
         F.CurrentlyEmployed,
         F.MonthlyIncome,
@@ -449,6 +428,8 @@ class SantaClaraCountyFormSpec(SolanoCountyFormSpec):
         F.ReducedProbation,
         F.ReasonsForApplying,
         F.PFNNumber,
+    }) - {
+        F.USCitizen,
     }
     required_fields = (SolanoCountyFormSpec.required_fields | {
         F.CurrentlyEmployed,
