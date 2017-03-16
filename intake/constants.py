@@ -187,7 +187,7 @@ if not SCOPE_TO_LIVE_COUNTIES:
     COUNTY_CHOICES += (
         (Counties.SAN_DIEGO, _(
             'San Diego County (near San Diego, Oceanside, Chula Vista, or '
-            'Escondido)')),
+            'El Cajon)')),
         (Counties.SAN_JOAQUIN, _(
             'San Joaquin County (near Stockton, Lodi, Tracy, Manteca, Ripon, '
             'Escalon, Lathrop, or Thornton)')),
