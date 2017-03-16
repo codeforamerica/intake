@@ -12,11 +12,16 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         management.call_command('migrate')
         management.call_command('loaddata',
-                                'counties', 'organizations',
-                                'addresses', 'mock_profiles',
+                                'counties',
+                                'organizations',
+                                'addresses',
+                                'groups',
                                 'template_options')
         if settings.GENERATE_DUMMY_DATA:
             management.call_command('loaddata',
+                                    'counties', 'organizations',
+                                    'addresses', 'mock_profiles',
+                                    'template_options'
                                     'mock_2_submissions_to_a_pubdef',
                                     'mock_2_submissions_to_ebclc',
                                     'mock_2_submissions_to_cc_pubdef',
