@@ -1,28 +1,28 @@
 [
 {
   "model": "intake.applicationevent",
-  "pk": 123,
+  "pk": 1374,
   "fields": {
-    "time": "2017-02-26T19:57:47.010Z",
+    "time": "2017-03-07T21:36:23.299Z",
     "name": "application_started",
-    "applicant": 28,
+    "applicant": 299,
     "data": {
-      "ip": "37.40.110.212",
-      "referrer": "https://www.google.com/",
-      "user_agent": "Mozilla/5.0 (iPad; CPU OS 9_3_5 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13G36 Safari/601.1",
       "counties": [
         "contracosta"
-      ]
+      ],
+      "referrer": null,
+      "ip": "175.249.241.99",
+      "user_agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36"
     }
   }
 },
 {
   "model": "intake.applicationevent",
-  "pk": 124,
+  "pk": 1375,
   "fields": {
-    "time": "2017-02-26T19:57:47.010Z",
+    "time": "2017-03-07T21:36:23.299Z",
     "name": "application_page_complete",
-    "applicant": 28,
+    "applicant": 299,
     "data": {
       "page_name": "SelectCounty"
     }
@@ -30,11 +30,11 @@
 },
 {
   "model": "intake.applicationevent",
-  "pk": 125,
+  "pk": 1376,
   "fields": {
-    "time": "2017-02-26T20:04:36Z",
+    "time": "2017-03-07T21:40:43Z",
     "name": "application_page_complete",
-    "applicant": 28,
+    "applicant": 299,
     "data": {
       "page_name": "CountyApplication"
     }
@@ -42,38 +42,89 @@
 },
 {
   "model": "intake.applicationevent",
-  "pk": 126,
+  "pk": 1377,
   "fields": {
-    "time": "2017-02-26T20:04:36Z",
+    "time": "2017-03-07T21:40:43Z",
     "name": "application_submitted",
-    "applicant": 28,
+    "applicant": 299,
     "data": {}
   }
 },
 {
   "model": "intake.applicationevent",
-  "pk": 127,
+  "pk": 1378,
   "fields": {
-    "time": "2017-02-22T07:15:08.096Z",
+    "time": "2017-03-09T06:24:30.367Z",
     "name": "application_started",
-    "applicant": 29,
+    "applicant": 300,
     "data": {
-      "ip": "70.89.20.52",
+      "counties": [
+        "contracosta"
+      ],
+      "referrer": "http://www.safeandjust.org/county-map",
+      "ip": "12.103.142.17",
+      "user_agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:49.0) Gecko/20100101 Firefox/49.0"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1379,
+  "fields": {
+    "time": "2017-03-09T06:24:30.367Z",
+    "name": "application_page_complete",
+    "applicant": 300,
+    "data": {
+      "page_name": "SelectCounty"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1380,
+  "fields": {
+    "time": "2017-03-09T06:34:22Z",
+    "name": "application_page_complete",
+    "applicant": 300,
+    "data": {
+      "page_name": "CountyApplication"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1381,
+  "fields": {
+    "time": "2017-03-09T06:34:22Z",
+    "name": "application_submitted",
+    "applicant": 300,
+    "data": {}
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1382,
+  "fields": {
+    "time": "2017-03-12T22:30:16.277Z",
+    "name": "application_started",
+    "applicant": 301,
+    "data": {
+      "counties": [
+        "alameda"
+      ],
       "referrer": "https://m.facebook.com/",
-      "user_agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko",
-      "counties": [
-        "contracosta"
-      ]
+      "ip": "75.59.197.131",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36"
     }
   }
 },
 {
   "model": "intake.applicationevent",
-  "pk": 128,
+  "pk": 1383,
   "fields": {
-    "time": "2017-02-22T07:15:08.096Z",
+    "time": "2017-03-12T22:30:16.277Z",
     "name": "application_page_complete",
-    "applicant": 29,
+    "applicant": 301,
     "data": {
       "page_name": "SelectCounty"
     }
@@ -81,11 +132,11 @@
 },
 {
   "model": "intake.applicationevent",
-  "pk": 129,
+  "pk": 1384,
   "fields": {
-    "time": "2017-02-22T07:23:18Z",
+    "time": "2017-03-12T22:31:39.377Z",
     "name": "application_page_complete",
-    "applicant": 29,
+    "applicant": 301,
     "data": {
       "page_name": "CountyApplication"
     }
@@ -93,38 +144,1100 @@
 },
 {
   "model": "intake.applicationevent",
-  "pk": 130,
+  "pk": 1385,
   "fields": {
-    "time": "2017-02-22T07:23:18Z",
+    "time": "2017-03-12T22:33:39.522Z",
+    "name": "application_page_complete",
+    "applicant": 301,
+    "data": {
+      "page_name": "DeclarationLetterView"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1386,
+  "fields": {
+    "time": "2017-03-12T22:35:49Z",
+    "name": "application_page_complete",
+    "applicant": 301,
+    "data": {
+      "page_name": "DeclarationLetterReviewPage"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1387,
+  "fields": {
+    "time": "2017-03-12T22:35:49Z",
     "name": "application_submitted",
-    "applicant": 29,
+    "applicant": 301,
     "data": {}
   }
 },
 {
   "model": "intake.applicationevent",
-  "pk": 131,
+  "pk": 1388,
   "fields": {
-    "time": "2017-02-17T02:11:00.252Z",
+    "time": "2017-03-11T10:49:08.468Z",
     "name": "application_started",
-    "applicant": 30,
+    "applicant": 302,
     "data": {
-      "ip": "150.111.139.87",
+      "counties": [
+        "alameda"
+      ],
+      "referrer": "https://m.facebook.com/",
+      "ip": "27.22.231.7",
+      "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 10_0_2 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) Version/10.0 Mobile/14A456 Safari/602.1"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1389,
+  "fields": {
+    "time": "2017-03-11T10:49:08.468Z",
+    "name": "application_page_complete",
+    "applicant": 302,
+    "data": {
+      "page_name": "SelectCounty"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1390,
+  "fields": {
+    "time": "2017-03-11T10:53:16.787Z",
+    "name": "application_page_complete",
+    "applicant": 302,
+    "data": {
+      "page_name": "CountyApplication"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1391,
+  "fields": {
+    "time": "2017-03-11T10:56:39.932Z",
+    "name": "application_page_complete",
+    "applicant": 302,
+    "data": {
+      "page_name": "DeclarationLetterView"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1392,
+  "fields": {
+    "time": "2017-03-11T11:01:03Z",
+    "name": "application_page_complete",
+    "applicant": 302,
+    "data": {
+      "page_name": "DeclarationLetterReviewPage"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1393,
+  "fields": {
+    "time": "2017-03-11T11:01:03Z",
+    "name": "application_submitted",
+    "applicant": 302,
+    "data": {}
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1394,
+  "fields": {
+    "time": "2017-03-08T13:01:51.973Z",
+    "name": "application_started",
+    "applicant": 303,
+    "data": {
+      "counties": [
+        "alameda"
+      ],
+      "referrer": "http://www.safeandjust.org/county-map",
+      "ip": "142.101.178.176",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12) AppleWebKit/602.1.50 (KHTML, like Gecko) Version/10.0 Safari/602.1.50"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1395,
+  "fields": {
+    "time": "2017-03-08T13:01:51.973Z",
+    "name": "application_page_complete",
+    "applicant": 303,
+    "data": {
+      "page_name": "SelectCounty"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1396,
+  "fields": {
+    "time": "2017-03-08T13:11:44Z",
+    "name": "application_page_complete",
+    "applicant": 303,
+    "data": {
+      "page_name": "CountyApplication"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1397,
+  "fields": {
+    "time": "2017-03-08T13:11:44Z",
+    "name": "application_submitted",
+    "applicant": 303,
+    "data": {}
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1398,
+  "fields": {
+    "time": "2017-03-07T07:30:41.424Z",
+    "name": "application_started",
+    "applicant": 304,
+    "data": {
+      "counties": [
+        "alameda"
+      ],
+      "referrer": null,
+      "ip": "125.142.44.227",
+      "user_agent": "Mozilla/5.0 (Linux; Android 6.0.1; 5056N Build/MMB29M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.124 Mobile Safari/537.36"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1399,
+  "fields": {
+    "time": "2017-03-07T07:30:41.424Z",
+    "name": "application_page_complete",
+    "applicant": 304,
+    "data": {
+      "page_name": "SelectCounty"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1400,
+  "fields": {
+    "time": "2017-03-07T07:36:25Z",
+    "name": "application_page_complete",
+    "applicant": 304,
+    "data": {
+      "page_name": "CountyApplication"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1401,
+  "fields": {
+    "time": "2017-03-07T07:36:25Z",
+    "name": "application_submitted",
+    "applicant": 304,
+    "data": {}
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1402,
+  "fields": {
+    "time": "2017-03-10T11:49:09.616Z",
+    "name": "application_started",
+    "applicant": 305,
+    "data": {
+      "counties": [
+        "sanfrancisco"
+      ],
+      "referrer": "https://t.co/8syieoGr9k",
+      "ip": "145.219.233.130",
+      "user_agent": "Mozilla/5.0 (Linux; Android 5.1.1; SAMSUNG-SM-N920A Build/LMY47X) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.81 Mobile Safari/537.36"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1403,
+  "fields": {
+    "time": "2017-03-10T11:49:09.616Z",
+    "name": "application_page_complete",
+    "applicant": 305,
+    "data": {
+      "page_name": "SelectCounty"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1404,
+  "fields": {
+    "time": "2017-03-10T11:55:22Z",
+    "name": "application_page_complete",
+    "applicant": 305,
+    "data": {
+      "page_name": "CountyApplication"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1405,
+  "fields": {
+    "time": "2017-03-10T11:55:22Z",
+    "name": "application_submitted",
+    "applicant": 305,
+    "data": {}
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1406,
+  "fields": {
+    "time": "2017-03-09T16:32:54.689Z",
+    "name": "application_started",
+    "applicant": 306,
+    "data": {
+      "counties": [
+        "sanfrancisco"
+      ],
+      "referrer": "https://m.facebook.com/",
+      "ip": "158.248.111.96",
+      "user_agent": "Mozilla/5.0 (Linux; Android 6.0.1; 5056N Build/MMB29M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.124 Mobile Safari/537.36"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1407,
+  "fields": {
+    "time": "2017-03-09T16:32:54.689Z",
+    "name": "application_page_complete",
+    "applicant": 306,
+    "data": {
+      "page_name": "SelectCounty"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1408,
+  "fields": {
+    "time": "2017-03-09T16:38:35Z",
+    "name": "application_page_complete",
+    "applicant": 306,
+    "data": {
+      "page_name": "CountyApplication"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1409,
+  "fields": {
+    "time": "2017-03-09T16:38:35Z",
+    "name": "application_submitted",
+    "applicant": 306,
+    "data": {}
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1410,
+  "fields": {
+    "time": "2017-03-15T21:52:14.194Z",
+    "name": "application_started",
+    "applicant": 307,
+    "data": {
+      "counties": [
+        "monterey"
+      ],
+      "referrer": "https://www.codeforamerica.org/products/clear-my-record",
+      "ip": "105.58.157.50",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1411,
+  "fields": {
+    "time": "2017-03-15T21:52:14.194Z",
+    "name": "application_page_complete",
+    "applicant": 307,
+    "data": {
+      "page_name": "SelectCounty"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1412,
+  "fields": {
+    "time": "2017-03-15T21:54:56.188Z",
+    "name": "application_page_complete",
+    "applicant": 307,
+    "data": {
+      "page_name": "CountyApplication"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1413,
+  "fields": {
+    "time": "2017-03-15T21:57:05.585Z",
+    "name": "application_page_complete",
+    "applicant": 307,
+    "data": {
+      "page_name": "DeclarationLetterView"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1414,
+  "fields": {
+    "time": "2017-03-15T21:59:37Z",
+    "name": "application_page_complete",
+    "applicant": 307,
+    "data": {
+      "page_name": "DeclarationLetterReviewPage"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1415,
+  "fields": {
+    "time": "2017-03-15T21:59:37Z",
+    "name": "application_submitted",
+    "applicant": 307,
+    "data": {}
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1416,
+  "fields": {
+    "time": "2017-03-07T14:56:26.829Z",
+    "name": "application_started",
+    "applicant": 308,
+    "data": {
+      "counties": [
+        "monterey"
+      ],
+      "referrer": "https://t.co/8syieoGr9k",
+      "ip": "240.21.124.139",
+      "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 9_3_5 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13G36 Safari/601.1"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1417,
+  "fields": {
+    "time": "2017-03-07T14:56:26.829Z",
+    "name": "application_page_complete",
+    "applicant": 308,
+    "data": {
+      "page_name": "SelectCounty"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1418,
+  "fields": {
+    "time": "2017-03-07T14:58:09.932Z",
+    "name": "application_page_complete",
+    "applicant": 308,
+    "data": {
+      "page_name": "CountyApplication"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1419,
+  "fields": {
+    "time": "2017-03-07T15:01:03.165Z",
+    "name": "application_page_complete",
+    "applicant": 308,
+    "data": {
+      "page_name": "DeclarationLetterView"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1420,
+  "fields": {
+    "time": "2017-03-07T15:02:40Z",
+    "name": "application_page_complete",
+    "applicant": 308,
+    "data": {
+      "page_name": "DeclarationLetterReviewPage"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1421,
+  "fields": {
+    "time": "2017-03-07T15:02:40Z",
+    "name": "application_submitted",
+    "applicant": 308,
+    "data": {}
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1422,
+  "fields": {
+    "time": "2017-03-17T11:07:57.290Z",
+    "name": "application_started",
+    "applicant": 309,
+    "data": {
+      "counties": [
+        "solano"
+      ],
+      "referrer": "http://www.safeandjust.org/county-map",
+      "ip": "172.215.11.83",
+      "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 10_0_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/19.0.133715217 Mobile/14A403 Safari/600.1.4"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1423,
+  "fields": {
+    "time": "2017-03-17T11:07:57.290Z",
+    "name": "application_page_complete",
+    "applicant": 309,
+    "data": {
+      "page_name": "SelectCounty"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1424,
+  "fields": {
+    "time": "2017-03-17T11:15:09Z",
+    "name": "application_page_complete",
+    "applicant": 309,
+    "data": {
+      "page_name": "CountyApplication"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1425,
+  "fields": {
+    "time": "2017-03-17T11:15:09Z",
+    "name": "application_submitted",
+    "applicant": 309,
+    "data": {}
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1426,
+  "fields": {
+    "time": "2017-03-06T04:29:03.557Z",
+    "name": "application_started",
+    "applicant": 310,
+    "data": {
+      "counties": [
+        "solano"
+      ],
+      "referrer": "http://sfpublicdefender.org/",
+      "ip": "221.248.0.64",
+      "user_agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1427,
+  "fields": {
+    "time": "2017-03-06T04:29:03.557Z",
+    "name": "application_page_complete",
+    "applicant": 310,
+    "data": {
+      "page_name": "SelectCounty"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1428,
+  "fields": {
+    "time": "2017-03-06T04:33:36Z",
+    "name": "application_page_complete",
+    "applicant": 310,
+    "data": {
+      "page_name": "CountyApplication"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1429,
+  "fields": {
+    "time": "2017-03-06T04:33:36Z",
+    "name": "application_submitted",
+    "applicant": 310,
+    "data": {}
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1430,
+  "fields": {
+    "time": "2017-03-04T07:52:55.156Z",
+    "name": "application_started",
+    "applicant": 311,
+    "data": {
+      "counties": [
+        "san_diego"
+      ],
+      "referrer": "https://t.co/8syieoGr9k",
+      "ip": "186.10.114.35",
+      "user_agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1431,
+  "fields": {
+    "time": "2017-03-04T07:52:55.156Z",
+    "name": "application_page_complete",
+    "applicant": 311,
+    "data": {
+      "page_name": "SelectCounty"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1432,
+  "fields": {
+    "time": "2017-03-04T08:02:47Z",
+    "name": "application_page_complete",
+    "applicant": 311,
+    "data": {
+      "page_name": "CountyApplication"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1433,
+  "fields": {
+    "time": "2017-03-04T08:02:47Z",
+    "name": "application_submitted",
+    "applicant": 311,
+    "data": {}
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1434,
+  "fields": {
+    "time": "2017-03-09T04:58:03.625Z",
+    "name": "application_started",
+    "applicant": 312,
+    "data": {
+      "counties": [
+        "san_diego"
+      ],
+      "referrer": "http://www.safeandjust.org/county-map",
+      "ip": "88.204.36.37",
+      "user_agent": "Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1435,
+  "fields": {
+    "time": "2017-03-09T04:58:03.625Z",
+    "name": "application_page_complete",
+    "applicant": 312,
+    "data": {
+      "page_name": "SelectCounty"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1436,
+  "fields": {
+    "time": "2017-03-09T05:07:59Z",
+    "name": "application_page_complete",
+    "applicant": 312,
+    "data": {
+      "page_name": "CountyApplication"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1437,
+  "fields": {
+    "time": "2017-03-09T05:07:59Z",
+    "name": "application_submitted",
+    "applicant": 312,
+    "data": {}
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1438,
+  "fields": {
+    "time": "2017-03-04T08:32:01.613Z",
+    "name": "application_started",
+    "applicant": 313,
+    "data": {
+      "counties": [
+        "san_joaquin"
+      ],
+      "referrer": "https://www.google.com/",
+      "ip": "167.139.117.171",
+      "user_agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1439,
+  "fields": {
+    "time": "2017-03-04T08:32:01.613Z",
+    "name": "application_page_complete",
+    "applicant": 313,
+    "data": {
+      "page_name": "SelectCounty"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1440,
+  "fields": {
+    "time": "2017-03-04T08:35:41Z",
+    "name": "application_page_complete",
+    "applicant": 313,
+    "data": {
+      "page_name": "CountyApplication"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1441,
+  "fields": {
+    "time": "2017-03-04T08:35:41Z",
+    "name": "application_submitted",
+    "applicant": 313,
+    "data": {}
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1442,
+  "fields": {
+    "time": "2017-03-13T04:57:44.378Z",
+    "name": "application_started",
+    "applicant": 314,
+    "data": {
+      "counties": [
+        "san_joaquin"
+      ],
+      "referrer": "https://m.facebook.com/",
+      "ip": "145.243.151.124",
+      "user_agent": "Mozilla/5.0 (Linux; Android 5.1.1; SAMSUNG-SM-N920A Build/LMY47X) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.81 Mobile Safari/537.36"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1443,
+  "fields": {
+    "time": "2017-03-13T04:57:44.378Z",
+    "name": "application_page_complete",
+    "applicant": 314,
+    "data": {
+      "page_name": "SelectCounty"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1444,
+  "fields": {
+    "time": "2017-03-13T05:02:50Z",
+    "name": "application_page_complete",
+    "applicant": 314,
+    "data": {
+      "page_name": "CountyApplication"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1445,
+  "fields": {
+    "time": "2017-03-13T05:02:50Z",
+    "name": "application_submitted",
+    "applicant": 314,
+    "data": {}
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1446,
+  "fields": {
+    "time": "2017-03-08T13:25:55.768Z",
+    "name": "application_started",
+    "applicant": 315,
+    "data": {
+      "counties": [
+        "santa_clara"
+      ],
+      "referrer": "https://www.codeforamerica.org/products/clear-my-record",
+      "ip": "241.209.193.205",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1447,
+  "fields": {
+    "time": "2017-03-08T13:25:55.768Z",
+    "name": "application_page_complete",
+    "applicant": 315,
+    "data": {
+      "page_name": "SelectCounty"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1448,
+  "fields": {
+    "time": "2017-03-08T13:26:54.818Z",
+    "name": "application_page_complete",
+    "applicant": 315,
+    "data": {
+      "page_name": "CountyApplication"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1449,
+  "fields": {
+    "time": "2017-03-08T13:28:13.477Z",
+    "name": "application_page_complete",
+    "applicant": 315,
+    "data": {
+      "page_name": "DeclarationLetterView"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1450,
+  "fields": {
+    "time": "2017-03-08T13:29:27Z",
+    "name": "application_page_complete",
+    "applicant": 315,
+    "data": {
+      "page_name": "DeclarationLetterReviewPage"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1451,
+  "fields": {
+    "time": "2017-03-08T13:29:27Z",
+    "name": "application_submitted",
+    "applicant": 315,
+    "data": {}
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1452,
+  "fields": {
+    "time": "2017-03-11T05:17:38.943Z",
+    "name": "application_started",
+    "applicant": 316,
+    "data": {
+      "counties": [
+        "santa_clara"
+      ],
+      "referrer": "https://www.codeforamerica.org/products/clear-my-record",
+      "ip": "112.82.124.103",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1453,
+  "fields": {
+    "time": "2017-03-11T05:17:38.943Z",
+    "name": "application_page_complete",
+    "applicant": 316,
+    "data": {
+      "page_name": "SelectCounty"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1454,
+  "fields": {
+    "time": "2017-03-11T05:19:22.994Z",
+    "name": "application_page_complete",
+    "applicant": 316,
+    "data": {
+      "page_name": "CountyApplication"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1455,
+  "fields": {
+    "time": "2017-03-11T05:20:29.464Z",
+    "name": "application_page_complete",
+    "applicant": 316,
+    "data": {
+      "page_name": "DeclarationLetterView"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1456,
+  "fields": {
+    "time": "2017-03-11T05:22:36Z",
+    "name": "application_page_complete",
+    "applicant": 316,
+    "data": {
+      "page_name": "DeclarationLetterReviewPage"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1457,
+  "fields": {
+    "time": "2017-03-11T05:22:36Z",
+    "name": "application_submitted",
+    "applicant": 316,
+    "data": {}
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1458,
+  "fields": {
+    "time": "2017-03-07T11:12:01.555Z",
+    "name": "application_started",
+    "applicant": 317,
+    "data": {
+      "counties": [
+        "fresno"
+      ],
+      "referrer": "http://sfpublicdefender.org/services/clean-slate/",
+      "ip": "142.77.66.87",
+      "user_agent": "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1459,
+  "fields": {
+    "time": "2017-03-07T11:12:01.555Z",
+    "name": "application_page_complete",
+    "applicant": 317,
+    "data": {
+      "page_name": "SelectCounty"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1460,
+  "fields": {
+    "time": "2017-03-07T11:15:32Z",
+    "name": "application_page_complete",
+    "applicant": 317,
+    "data": {
+      "page_name": "CountyApplication"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1461,
+  "fields": {
+    "time": "2017-03-07T11:15:32Z",
+    "name": "application_submitted",
+    "applicant": 317,
+    "data": {}
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1462,
+  "fields": {
+    "time": "2017-03-09T21:01:42.323Z",
+    "name": "application_started",
+    "applicant": 318,
+    "data": {
+      "counties": [
+        "fresno"
+      ],
+      "referrer": "http://sfpublicdefender.org/services/clean-slate/",
+      "ip": "249.156.139.194",
+      "user_agent": "Mozilla/5.0 (Linux; Android 6.0.1; 5056N Build/MMB29M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.124 Mobile Safari/537.36"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1463,
+  "fields": {
+    "time": "2017-03-09T21:01:42.323Z",
+    "name": "application_page_complete",
+    "applicant": 318,
+    "data": {
+      "page_name": "SelectCounty"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1464,
+  "fields": {
+    "time": "2017-03-09T21:08:37Z",
+    "name": "application_page_complete",
+    "applicant": 318,
+    "data": {
+      "page_name": "CountyApplication"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1465,
+  "fields": {
+    "time": "2017-03-09T21:08:37Z",
+    "name": "application_submitted",
+    "applicant": 318,
+    "data": {}
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1466,
+  "fields": {
+    "time": "2017-03-11T23:37:49.014Z",
+    "name": "application_started",
+    "applicant": 319,
+    "data": {
+      "counties": [
+        "santa_cruz"
+      ],
+      "referrer": "https://www.google.com/",
+      "ip": "5.234.133.51",
+      "user_agent": "Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1467,
+  "fields": {
+    "time": "2017-03-11T23:37:49.014Z",
+    "name": "application_page_complete",
+    "applicant": 319,
+    "data": {
+      "page_name": "SelectCounty"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1468,
+  "fields": {
+    "time": "2017-03-11T23:46:53Z",
+    "name": "application_page_complete",
+    "applicant": 319,
+    "data": {
+      "page_name": "CountyApplication"
+    }
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1469,
+  "fields": {
+    "time": "2017-03-11T23:46:53Z",
+    "name": "application_submitted",
+    "applicant": 319,
+    "data": {}
+  }
+},
+{
+  "model": "intake.applicationevent",
+  "pk": 1470,
+  "fields": {
+    "time": "2017-03-05T23:53:02.619Z",
+    "name": "application_started",
+    "applicant": 320,
+    "data": {
+      "counties": [
+        "santa_cruz"
+      ],
       "referrer": "https://checkrapplicant.zendesk.com/hc/en-us",
-      "user_agent": "Mozilla/5.0 (Linux; Android 6.0.1; SM-G935T Build/MMB29M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.124 Mobile Safari/537.36",
-      "counties": [
-        "alameda"
-      ]
+      "ip": "164.106.29.239",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36"
     }
   }
 },
 {
   "model": "intake.applicationevent",
-  "pk": 132,
+  "pk": 1471,
   "fields": {
-    "time": "2017-02-17T02:11:00.252Z",
+    "time": "2017-03-05T23:53:02.619Z",
     "name": "application_page_complete",
-    "applicant": 30,
+    "applicant": 320,
     "data": {
       "page_name": "SelectCounty"
     }
@@ -132,11 +1245,11 @@
 },
 {
   "model": "intake.applicationevent",
-  "pk": 133,
+  "pk": 1472,
   "fields": {
-    "time": "2017-02-17T02:12:42.835Z",
+    "time": "2017-03-05T23:56:03Z",
     "name": "application_page_complete",
-    "applicant": 30,
+    "applicant": 320,
     "data": {
       "page_name": "CountyApplication"
     }
@@ -144,1151 +1257,38 @@
 },
 {
   "model": "intake.applicationevent",
-  "pk": 134,
+  "pk": 1473,
   "fields": {
-    "time": "2017-02-17T02:15:18.491Z",
-    "name": "application_page_complete",
-    "applicant": 30,
-    "data": {
-      "page_name": "DeclarationLetterView"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 135,
-  "fields": {
-    "time": "2017-02-17T02:17:18Z",
-    "name": "application_page_complete",
-    "applicant": 30,
-    "data": {
-      "page_name": "DeclarationLetterReviewPage"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 136,
-  "fields": {
-    "time": "2017-02-17T02:17:18Z",
+    "time": "2017-03-05T23:56:03Z",
     "name": "application_submitted",
-    "applicant": 30,
+    "applicant": 320,
     "data": {}
   }
 },
 {
   "model": "intake.applicationevent",
-  "pk": 137,
+  "pk": 1474,
   "fields": {
-    "time": "2017-02-24T21:55:03.312Z",
+    "time": "2017-03-10T08:42:52.355Z",
     "name": "application_started",
-    "applicant": 31,
+    "applicant": 321,
     "data": {
-      "ip": "195.235.154.8",
-      "referrer": "http://www.safeandjust.org/county-map",
-      "user_agent": "Mozilla/5.0 (Linux; Android 6.0.1; SM-G920P Build/MMB29K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.81 Mobile Safari/537.36",
-      "counties": [
-        "alameda"
-      ]
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 138,
-  "fields": {
-    "time": "2017-02-24T21:55:03.312Z",
-    "name": "application_page_complete",
-    "applicant": 31,
-    "data": {
-      "page_name": "SelectCounty"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 139,
-  "fields": {
-    "time": "2017-02-24T21:57:03.375Z",
-    "name": "application_page_complete",
-    "applicant": 31,
-    "data": {
-      "page_name": "CountyApplication"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 140,
-  "fields": {
-    "time": "2017-02-24T21:59:18.710Z",
-    "name": "application_page_complete",
-    "applicant": 31,
-    "data": {
-      "page_name": "DeclarationLetterView"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 141,
-  "fields": {
-    "time": "2017-02-24T22:00:50Z",
-    "name": "application_page_complete",
-    "applicant": 31,
-    "data": {
-      "page_name": "DeclarationLetterReviewPage"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 142,
-  "fields": {
-    "time": "2017-02-24T22:00:50Z",
-    "name": "application_submitted",
-    "applicant": 31,
-    "data": {}
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 143,
-  "fields": {
-    "time": "2017-02-28T02:14:52.121Z",
-    "name": "application_started",
-    "applicant": 32,
-    "data": {
-      "ip": "200.152.47.43",
-      "referrer": "https://m.facebook.com/",
-      "user_agent": "Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko",
-      "counties": [
-        "alameda"
-      ]
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 144,
-  "fields": {
-    "time": "2017-02-28T02:14:52.121Z",
-    "name": "application_page_complete",
-    "applicant": 32,
-    "data": {
-      "page_name": "SelectCounty"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 145,
-  "fields": {
-    "time": "2017-02-28T02:18:19Z",
-    "name": "application_page_complete",
-    "applicant": 32,
-    "data": {
-      "page_name": "CountyApplication"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 146,
-  "fields": {
-    "time": "2017-02-28T02:18:19Z",
-    "name": "application_submitted",
-    "applicant": 32,
-    "data": {}
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 147,
-  "fields": {
-    "time": "2017-02-23T14:44:19.403Z",
-    "name": "application_started",
-    "applicant": 33,
-    "data": {
-      "ip": "45.159.17.9",
-      "referrer": "http://www.safeandjust.org/county-map",
-      "user_agent": "Mozilla/5.0 (Linux; Android 6.0.1; SM-G935T Build/MMB29M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.124 Mobile Safari/537.36",
-      "counties": [
-        "alameda"
-      ]
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 148,
-  "fields": {
-    "time": "2017-02-23T14:44:19.403Z",
-    "name": "application_page_complete",
-    "applicant": 33,
-    "data": {
-      "page_name": "SelectCounty"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 149,
-  "fields": {
-    "time": "2017-02-23T14:51:21Z",
-    "name": "application_page_complete",
-    "applicant": 33,
-    "data": {
-      "page_name": "CountyApplication"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 150,
-  "fields": {
-    "time": "2017-02-23T14:51:21Z",
-    "name": "application_submitted",
-    "applicant": 33,
-    "data": {}
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 151,
-  "fields": {
-    "time": "2017-02-26T11:14:42.982Z",
-    "name": "application_started",
-    "applicant": 34,
-    "data": {
-      "ip": "198.89.65.212",
-      "referrer": "https://www.facebook.com/",
-      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36",
-      "counties": [
-        "sanfrancisco"
-      ]
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 152,
-  "fields": {
-    "time": "2017-02-26T11:14:42.982Z",
-    "name": "application_page_complete",
-    "applicant": 34,
-    "data": {
-      "page_name": "SelectCounty"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 153,
-  "fields": {
-    "time": "2017-02-26T11:19:53Z",
-    "name": "application_page_complete",
-    "applicant": 34,
-    "data": {
-      "page_name": "CountyApplication"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 154,
-  "fields": {
-    "time": "2017-02-26T11:19:53Z",
-    "name": "application_submitted",
-    "applicant": 34,
-    "data": {}
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 155,
-  "fields": {
-    "time": "2017-02-26T04:19:11.299Z",
-    "name": "application_started",
-    "applicant": 35,
-    "data": {
-      "ip": "171.207.172.102",
-      "referrer": "https://www.codeforamerica.org/products/clear-my-record",
-      "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 9_3_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13G34 Safari/601.1",
-      "counties": [
-        "sanfrancisco"
-      ]
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 156,
-  "fields": {
-    "time": "2017-02-26T04:19:11.299Z",
-    "name": "application_page_complete",
-    "applicant": 35,
-    "data": {
-      "page_name": "SelectCounty"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 157,
-  "fields": {
-    "time": "2017-02-26T04:30:01Z",
-    "name": "application_page_complete",
-    "applicant": 35,
-    "data": {
-      "page_name": "CountyApplication"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 158,
-  "fields": {
-    "time": "2017-02-26T04:30:01Z",
-    "name": "application_submitted",
-    "applicant": 35,
-    "data": {}
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 159,
-  "fields": {
-    "time": "2017-02-20T09:52:16.750Z",
-    "name": "application_started",
-    "applicant": 36,
-    "data": {
-      "ip": "179.1.242.218",
-      "referrer": "https://t.co/8syieoGr9k",
-      "user_agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:49.0) Gecko/20100101 Firefox/49.0",
-      "counties": [
-        "monterey"
-      ]
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 160,
-  "fields": {
-    "time": "2017-02-20T09:52:16.750Z",
-    "name": "application_page_complete",
-    "applicant": 36,
-    "data": {
-      "page_name": "SelectCounty"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 161,
-  "fields": {
-    "time": "2017-02-20T09:55:18.851Z",
-    "name": "application_page_complete",
-    "applicant": 36,
-    "data": {
-      "page_name": "CountyApplication"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 162,
-  "fields": {
-    "time": "2017-02-20T09:57:48.794Z",
-    "name": "application_page_complete",
-    "applicant": 36,
-    "data": {
-      "page_name": "DeclarationLetterView"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 163,
-  "fields": {
-    "time": "2017-02-20T10:00:17Z",
-    "name": "application_page_complete",
-    "applicant": 36,
-    "data": {
-      "page_name": "DeclarationLetterReviewPage"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 164,
-  "fields": {
-    "time": "2017-02-20T10:00:17Z",
-    "name": "application_submitted",
-    "applicant": 36,
-    "data": {}
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 165,
-  "fields": {
-    "time": "2017-02-22T07:42:42.132Z",
-    "name": "application_started",
-    "applicant": 37,
-    "data": {
-      "ip": "73.87.219.177",
-      "referrer": "http://sfpublicdefender.org/services/clean-slate/",
-      "user_agent": "Mozilla/5.0 (iPad; CPU OS 9_3_5 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13G36 Safari/601.1",
-      "counties": [
-        "monterey"
-      ]
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 166,
-  "fields": {
-    "time": "2017-02-22T07:42:42.132Z",
-    "name": "application_page_complete",
-    "applicant": 37,
-    "data": {
-      "page_name": "SelectCounty"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 167,
-  "fields": {
-    "time": "2017-02-22T07:44:59.208Z",
-    "name": "application_page_complete",
-    "applicant": 37,
-    "data": {
-      "page_name": "CountyApplication"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 168,
-  "fields": {
-    "time": "2017-02-22T07:48:21.727Z",
-    "name": "application_page_complete",
-    "applicant": 37,
-    "data": {
-      "page_name": "DeclarationLetterView"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 169,
-  "fields": {
-    "time": "2017-02-22T07:51:21Z",
-    "name": "application_page_complete",
-    "applicant": 37,
-    "data": {
-      "page_name": "DeclarationLetterReviewPage"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 170,
-  "fields": {
-    "time": "2017-02-22T07:51:21Z",
-    "name": "application_submitted",
-    "applicant": 37,
-    "data": {}
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 171,
-  "fields": {
-    "time": "2017-02-18T06:07:24.456Z",
-    "name": "application_started",
-    "applicant": 38,
-    "data": {
-      "ip": "18.118.155.134",
-      "referrer": "https://t.co/8syieoGr9k",
-      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12) AppleWebKit/602.1.50 (KHTML, like Gecko) Version/10.0 Safari/602.1.50",
-      "counties": [
-        "solano"
-      ]
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 172,
-  "fields": {
-    "time": "2017-02-18T06:07:24.456Z",
-    "name": "application_page_complete",
-    "applicant": 38,
-    "data": {
-      "page_name": "SelectCounty"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 173,
-  "fields": {
-    "time": "2017-02-18T06:15:56Z",
-    "name": "application_page_complete",
-    "applicant": 38,
-    "data": {
-      "page_name": "CountyApplication"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 174,
-  "fields": {
-    "time": "2017-02-18T06:15:56Z",
-    "name": "application_submitted",
-    "applicant": 38,
-    "data": {}
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 175,
-  "fields": {
-    "time": "2017-02-26T04:03:00.266Z",
-    "name": "application_started",
-    "applicant": 39,
-    "data": {
-      "ip": "145.141.130.60",
-      "referrer": "http://sfpublicdefender.org/",
-      "user_agent": "Mozilla/5.0 (Linux; Android 5.1.1; SAMSUNG-SM-N920A Build/LMY47X) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.81 Mobile Safari/537.36",
-      "counties": [
-        "solano"
-      ]
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 176,
-  "fields": {
-    "time": "2017-02-26T04:03:00.266Z",
-    "name": "application_page_complete",
-    "applicant": 39,
-    "data": {
-      "page_name": "SelectCounty"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 177,
-  "fields": {
-    "time": "2017-02-26T04:11:02Z",
-    "name": "application_page_complete",
-    "applicant": 39,
-    "data": {
-      "page_name": "CountyApplication"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 178,
-  "fields": {
-    "time": "2017-02-26T04:11:02Z",
-    "name": "application_submitted",
-    "applicant": 39,
-    "data": {}
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 179,
-  "fields": {
-    "time": "2017-02-18T15:49:00.792Z",
-    "name": "application_started",
-    "applicant": 40,
-    "data": {
-      "ip": "216.138.206.224",
-      "referrer": "https://t.co/8syieoGr9k",
-      "user_agent": "Mozilla/5.0 (Linux; Android 4.4.2; HTC One Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.98 Mobile Safari/537.36",
-      "counties": [
-        "san_diego"
-      ]
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 180,
-  "fields": {
-    "time": "2017-02-18T15:49:00.792Z",
-    "name": "application_page_complete",
-    "applicant": 40,
-    "data": {
-      "page_name": "SelectCounty"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 181,
-  "fields": {
-    "time": "2017-02-18T15:54:32Z",
-    "name": "application_page_complete",
-    "applicant": 40,
-    "data": {
-      "page_name": "CountyApplication"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 182,
-  "fields": {
-    "time": "2017-02-18T15:54:32Z",
-    "name": "application_submitted",
-    "applicant": 40,
-    "data": {}
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 183,
-  "fields": {
-    "time": "2017-02-20T17:33:56.710Z",
-    "name": "application_started",
-    "applicant": 41,
-    "data": {
-      "ip": "57.157.203.152",
-      "referrer": null,
-      "user_agent": "Mozilla/5.0 (Linux; Android 6.0.1; SAMSUNG SM-N920V 4G Build/MMB29K) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/4.0 Chrome/44.0.2403.133 Mobile Safari/537.36",
-      "counties": [
-        "san_diego"
-      ]
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 184,
-  "fields": {
-    "time": "2017-02-20T17:33:56.710Z",
-    "name": "application_page_complete",
-    "applicant": 41,
-    "data": {
-      "page_name": "SelectCounty"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 185,
-  "fields": {
-    "time": "2017-02-20T17:45:16Z",
-    "name": "application_page_complete",
-    "applicant": 41,
-    "data": {
-      "page_name": "CountyApplication"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 186,
-  "fields": {
-    "time": "2017-02-20T17:45:16Z",
-    "name": "application_submitted",
-    "applicant": 41,
-    "data": {}
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 187,
-  "fields": {
-    "time": "2017-02-26T20:24:08.292Z",
-    "name": "application_started",
-    "applicant": 42,
-    "data": {
-      "ip": "61.248.127.230",
-      "referrer": "https://www.facebook.com/",
-      "user_agent": "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36",
-      "counties": [
-        "san_joaquin"
-      ]
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 188,
-  "fields": {
-    "time": "2017-02-26T20:24:08.292Z",
-    "name": "application_page_complete",
-    "applicant": 42,
-    "data": {
-      "page_name": "SelectCounty"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 189,
-  "fields": {
-    "time": "2017-02-26T20:28:17Z",
-    "name": "application_page_complete",
-    "applicant": 42,
-    "data": {
-      "page_name": "CountyApplication"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 190,
-  "fields": {
-    "time": "2017-02-26T20:28:17Z",
-    "name": "application_submitted",
-    "applicant": 42,
-    "data": {}
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 191,
-  "fields": {
-    "time": "2017-02-19T08:05:44.226Z",
-    "name": "application_started",
-    "applicant": 43,
-    "data": {
-      "ip": "124.242.1.166",
-      "referrer": "http://sfpublicdefender.org/services/clean-slate/",
-      "user_agent": "Mozilla/5.0 (Linux; Android 4.4.2; HTC One Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.98 Mobile Safari/537.36",
-      "counties": [
-        "san_joaquin"
-      ]
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 192,
-  "fields": {
-    "time": "2017-02-19T08:05:44.226Z",
-    "name": "application_page_complete",
-    "applicant": 43,
-    "data": {
-      "page_name": "SelectCounty"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 193,
-  "fields": {
-    "time": "2017-02-19T08:10:42Z",
-    "name": "application_page_complete",
-    "applicant": 43,
-    "data": {
-      "page_name": "CountyApplication"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 194,
-  "fields": {
-    "time": "2017-02-19T08:10:42Z",
-    "name": "application_submitted",
-    "applicant": 43,
-    "data": {}
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 195,
-  "fields": {
-    "time": "2017-02-24T20:04:45.540Z",
-    "name": "application_started",
-    "applicant": 44,
-    "data": {
-      "ip": "187.222.108.102",
-      "referrer": "https://t.co/8syieoGr9k",
-      "user_agent": "Mozilla/5.0 (Linux; Android 4.4.2; en-us; SAMSUNG SM-T330NU Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Version/1.5 Chrome/28.0.1500.94 Safari/537.36",
-      "counties": [
-        "santa_clara"
-      ]
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 196,
-  "fields": {
-    "time": "2017-02-24T20:04:45.540Z",
-    "name": "application_page_complete",
-    "applicant": 44,
-    "data": {
-      "page_name": "SelectCounty"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 197,
-  "fields": {
-    "time": "2017-02-24T20:06:47.974Z",
-    "name": "application_page_complete",
-    "applicant": 44,
-    "data": {
-      "page_name": "CountyApplication"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 198,
-  "fields": {
-    "time": "2017-02-24T20:08:44.234Z",
-    "name": "application_page_complete",
-    "applicant": 44,
-    "data": {
-      "page_name": "DeclarationLetterView"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 199,
-  "fields": {
-    "time": "2017-02-24T20:11:19Z",
-    "name": "application_page_complete",
-    "applicant": 44,
-    "data": {
-      "page_name": "DeclarationLetterReviewPage"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 200,
-  "fields": {
-    "time": "2017-02-24T20:11:19Z",
-    "name": "application_submitted",
-    "applicant": 44,
-    "data": {}
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 201,
-  "fields": {
-    "time": "2017-03-01T13:42:35.935Z",
-    "name": "application_started",
-    "applicant": 45,
-    "data": {
-      "ip": "27.121.235.95",
-      "referrer": "http://sfpublicdefender.org/",
-      "user_agent": "Mozilla/5.0 (Linux; Android 6.0.1; SM-G920P Build/MMB29K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.81 Mobile Safari/537.36",
-      "counties": [
-        "santa_clara"
-      ]
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 202,
-  "fields": {
-    "time": "2017-03-01T13:42:35.935Z",
-    "name": "application_page_complete",
-    "applicant": 45,
-    "data": {
-      "page_name": "SelectCounty"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 203,
-  "fields": {
-    "time": "2017-03-01T13:44:05.425Z",
-    "name": "application_page_complete",
-    "applicant": 45,
-    "data": {
-      "page_name": "CountyApplication"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 204,
-  "fields": {
-    "time": "2017-03-01T13:45:17.607Z",
-    "name": "application_page_complete",
-    "applicant": 45,
-    "data": {
-      "page_name": "DeclarationLetterView"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 205,
-  "fields": {
-    "time": "2017-03-01T13:46:22Z",
-    "name": "application_page_complete",
-    "applicant": 45,
-    "data": {
-      "page_name": "DeclarationLetterReviewPage"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 206,
-  "fields": {
-    "time": "2017-03-01T13:46:22Z",
-    "name": "application_submitted",
-    "applicant": 45,
-    "data": {}
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 207,
-  "fields": {
-    "time": "2017-02-28T18:58:35.437Z",
-    "name": "application_started",
-    "applicant": 46,
-    "data": {
-      "ip": "89.164.222.242",
-      "referrer": "http://www.safeandjust.org/county-map",
-      "user_agent": "Mozilla/5.0 (Linux; Android 4.4.2; en-us; SAMSUNG SM-T330NU Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Version/1.5 Chrome/28.0.1500.94 Safari/537.36",
-      "counties": [
-        "fresno"
-      ]
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 208,
-  "fields": {
-    "time": "2017-02-28T18:58:35.437Z",
-    "name": "application_page_complete",
-    "applicant": 46,
-    "data": {
-      "page_name": "SelectCounty"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 209,
-  "fields": {
-    "time": "2017-02-28T19:08:05Z",
-    "name": "application_page_complete",
-    "applicant": 46,
-    "data": {
-      "page_name": "CountyApplication"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 210,
-  "fields": {
-    "time": "2017-02-28T19:08:05Z",
-    "name": "application_submitted",
-    "applicant": 46,
-    "data": {}
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 211,
-  "fields": {
-    "time": "2017-02-24T03:36:43.254Z",
-    "name": "application_started",
-    "applicant": 47,
-    "data": {
-      "ip": "21.240.19.231",
-      "referrer": "https://t.co/8syieoGr9k",
-      "user_agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:49.0) Gecko/20100101 Firefox/49.0",
-      "counties": [
-        "fresno"
-      ]
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 212,
-  "fields": {
-    "time": "2017-02-24T03:36:43.254Z",
-    "name": "application_page_complete",
-    "applicant": 47,
-    "data": {
-      "page_name": "SelectCounty"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 213,
-  "fields": {
-    "time": "2017-02-24T03:42:25Z",
-    "name": "application_page_complete",
-    "applicant": 47,
-    "data": {
-      "page_name": "CountyApplication"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 214,
-  "fields": {
-    "time": "2017-02-24T03:42:25Z",
-    "name": "application_submitted",
-    "applicant": 47,
-    "data": {}
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 215,
-  "fields": {
-    "time": "2017-02-16T07:54:32.920Z",
-    "name": "application_started",
-    "applicant": 48,
-    "data": {
-      "ip": "203.218.145.137",
-      "referrer": "http://sfpublicdefender.org/",
-      "user_agent": "Mozilla/5.0 (Linux; Android 4.4.2; en-us; SAMSUNG SM-T330NU Build/KOT49H) AppleWebKit/537.36 (KHTML, like Gecko) Version/1.5 Chrome/28.0.1500.94 Safari/537.36",
-      "counties": [
-        "santa_cruz"
-      ]
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 216,
-  "fields": {
-    "time": "2017-02-16T07:54:32.920Z",
-    "name": "application_page_complete",
-    "applicant": 48,
-    "data": {
-      "page_name": "SelectCounty"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 217,
-  "fields": {
-    "time": "2017-02-16T08:02:28Z",
-    "name": "application_page_complete",
-    "applicant": 48,
-    "data": {
-      "page_name": "CountyApplication"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 218,
-  "fields": {
-    "time": "2017-02-16T08:02:28Z",
-    "name": "application_submitted",
-    "applicant": 48,
-    "data": {}
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 219,
-  "fields": {
-    "time": "2017-02-27T14:24:42.923Z",
-    "name": "application_started",
-    "applicant": 49,
-    "data": {
-      "ip": "119.124.185.243",
-      "referrer": null,
-      "user_agent": "Mozilla/5.0 (Linux; Android 6.0.1; SM-G920P Build/MMB29K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.81 Mobile Safari/537.36",
-      "counties": [
-        "santa_cruz"
-      ]
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 220,
-  "fields": {
-    "time": "2017-02-27T14:24:42.923Z",
-    "name": "application_page_complete",
-    "applicant": 49,
-    "data": {
-      "page_name": "SelectCounty"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 221,
-  "fields": {
-    "time": "2017-02-27T14:36:28Z",
-    "name": "application_page_complete",
-    "applicant": 49,
-    "data": {
-      "page_name": "CountyApplication"
-    }
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 222,
-  "fields": {
-    "time": "2017-02-27T14:36:28Z",
-    "name": "application_submitted",
-    "applicant": 49,
-    "data": {}
-  }
-},
-{
-  "model": "intake.applicationevent",
-  "pk": 223,
-  "fields": {
-    "time": "2017-02-25T08:24:44.533Z",
-    "name": "application_started",
-    "applicant": 50,
-    "data": {
-      "ip": "150.102.224.187",
-      "referrer": "http://www.safeandjust.org/county-map",
-      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:49.0) Gecko/20100101 Firefox/49.0",
       "counties": [
         "sonoma"
-      ]
+      ],
+      "referrer": "http://www.safeandjust.org/county-map",
+      "ip": "33.108.111.14",
+      "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36"
     }
   }
 },
 {
   "model": "intake.applicationevent",
-  "pk": 224,
+  "pk": 1475,
   "fields": {
-    "time": "2017-02-25T08:24:44.533Z",
+    "time": "2017-03-10T08:42:52.355Z",
     "name": "application_page_complete",
-    "applicant": 50,
+    "applicant": 321,
     "data": {
       "page_name": "SelectCounty"
     }
@@ -1296,11 +1296,11 @@
 },
 {
   "model": "intake.applicationevent",
-  "pk": 225,
+  "pk": 1476,
   "fields": {
-    "time": "2017-02-25T08:30:08Z",
+    "time": "2017-03-10T08:51:42Z",
     "name": "application_page_complete",
-    "applicant": 50,
+    "applicant": 321,
     "data": {
       "page_name": "CountyApplication"
     }
@@ -1308,38 +1308,38 @@
 },
 {
   "model": "intake.applicationevent",
-  "pk": 226,
+  "pk": 1477,
   "fields": {
-    "time": "2017-02-25T08:30:08Z",
+    "time": "2017-03-10T08:51:42Z",
     "name": "application_submitted",
-    "applicant": 50,
+    "applicant": 321,
     "data": {}
   }
 },
 {
   "model": "intake.applicationevent",
-  "pk": 227,
+  "pk": 1478,
   "fields": {
-    "time": "2017-02-25T22:51:56.410Z",
+    "time": "2017-03-09T12:22:51.959Z",
     "name": "application_started",
-    "applicant": 51,
+    "applicant": 322,
     "data": {
-      "ip": "74.123.228.128",
-      "referrer": "https://www.google.com/",
-      "user_agent": "Mozilla/5.0 (Linux; Android 5.1.1; SAMSUNG-SM-N920A Build/LMY47X) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.81 Mobile Safari/537.36",
       "counties": [
         "sonoma"
-      ]
+      ],
+      "referrer": "http://sfpublicdefender.org/services/clean-slate/",
+      "ip": "159.154.49.142",
+      "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 9_3_5 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/53.0.2785.109 Mobile/13G36 Safari/601.1.46"
     }
   }
 },
 {
   "model": "intake.applicationevent",
-  "pk": 228,
+  "pk": 1479,
   "fields": {
-    "time": "2017-02-25T22:51:56.410Z",
+    "time": "2017-03-09T12:22:51.959Z",
     "name": "application_page_complete",
-    "applicant": 51,
+    "applicant": 322,
     "data": {
       "page_name": "SelectCounty"
     }
@@ -1347,11 +1347,11 @@
 },
 {
   "model": "intake.applicationevent",
-  "pk": 229,
+  "pk": 1480,
   "fields": {
-    "time": "2017-02-25T22:56:40Z",
+    "time": "2017-03-09T12:30:24Z",
     "name": "application_page_complete",
-    "applicant": 51,
+    "applicant": 322,
     "data": {
       "page_name": "CountyApplication"
     }
@@ -1359,38 +1359,38 @@
 },
 {
   "model": "intake.applicationevent",
-  "pk": 230,
+  "pk": 1481,
   "fields": {
-    "time": "2017-02-25T22:56:40Z",
+    "time": "2017-03-09T12:30:24Z",
     "name": "application_submitted",
-    "applicant": 51,
+    "applicant": 322,
     "data": {}
   }
 },
 {
   "model": "intake.applicationevent",
-  "pk": 231,
+  "pk": 1482,
   "fields": {
-    "time": "2017-02-24T19:21:24.191Z",
+    "time": "2017-03-10T23:34:02.632Z",
     "name": "application_started",
-    "applicant": 52,
+    "applicant": 323,
     "data": {
-      "ip": "230.108.55.195",
-      "referrer": null,
-      "user_agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:49.0) Gecko/20100101 Firefox/49.0",
       "counties": [
         "tulare"
-      ]
+      ],
+      "referrer": "http://sfpublicdefender.org/",
+      "ip": "85.16.109.172",
+      "user_agent": "Mozilla/5.0 (Linux; Android 6.0.1; SM-G935T Build/MMB29M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.124 Mobile Safari/537.36"
     }
   }
 },
 {
   "model": "intake.applicationevent",
-  "pk": 232,
+  "pk": 1483,
   "fields": {
-    "time": "2017-02-24T19:21:24.191Z",
+    "time": "2017-03-10T23:34:02.632Z",
     "name": "application_page_complete",
-    "applicant": 52,
+    "applicant": 323,
     "data": {
       "page_name": "SelectCounty"
     }
@@ -1398,11 +1398,11 @@
 },
 {
   "model": "intake.applicationevent",
-  "pk": 233,
+  "pk": 1484,
   "fields": {
-    "time": "2017-02-24T19:24:40Z",
+    "time": "2017-03-10T23:45:38Z",
     "name": "application_page_complete",
-    "applicant": 52,
+    "applicant": 323,
     "data": {
       "page_name": "CountyApplication"
     }
@@ -1410,38 +1410,38 @@
 },
 {
   "model": "intake.applicationevent",
-  "pk": 234,
+  "pk": 1485,
   "fields": {
-    "time": "2017-02-24T19:24:40Z",
+    "time": "2017-03-10T23:45:38Z",
     "name": "application_submitted",
-    "applicant": 52,
+    "applicant": 323,
     "data": {}
   }
 },
 {
   "model": "intake.applicationevent",
-  "pk": 235,
+  "pk": 1486,
   "fields": {
-    "time": "2017-02-16T20:26:34.672Z",
+    "time": "2017-03-10T21:08:01.088Z",
     "name": "application_started",
-    "applicant": 53,
+    "applicant": 324,
     "data": {
-      "ip": "138.154.74.231",
-      "referrer": "https://www.codeforamerica.org/products/clear-my-record",
-      "user_agent": "Mozilla/5.0 (Linux; Android 5.1.1; 5054N Build/LMY47V) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.124 Mobile Safari/537.36",
       "counties": [
         "tulare"
-      ]
+      ],
+      "referrer": "http://www.safeandjust.org/county-map",
+      "ip": "37.111.86.51",
+      "user_agent": "Mozilla/5.0 (Linux; Android 6.0.1; 5056N Build/MMB29M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.124 Mobile Safari/537.36"
     }
   }
 },
 {
   "model": "intake.applicationevent",
-  "pk": 236,
+  "pk": 1487,
   "fields": {
-    "time": "2017-02-16T20:26:34.672Z",
+    "time": "2017-03-10T21:08:01.088Z",
     "name": "application_page_complete",
-    "applicant": 53,
+    "applicant": 324,
     "data": {
       "page_name": "SelectCounty"
     }
@@ -1449,11 +1449,11 @@
 },
 {
   "model": "intake.applicationevent",
-  "pk": 237,
+  "pk": 1488,
   "fields": {
-    "time": "2017-02-16T20:34:35Z",
+    "time": "2017-03-10T21:15:15Z",
     "name": "application_page_complete",
-    "applicant": 53,
+    "applicant": 324,
     "data": {
       "page_name": "CountyApplication"
     }
@@ -1461,25 +1461,22 @@
 },
 {
   "model": "intake.applicationevent",
-  "pk": 238,
+  "pk": 1489,
   "fields": {
-    "time": "2017-02-16T20:34:35Z",
+    "time": "2017-03-10T21:15:15Z",
     "name": "application_submitted",
-    "applicant": 53,
+    "applicant": 324,
     "data": {}
   }
 },
 {
   "model": "intake.applicationevent",
-  "pk": 239,
+  "pk": 1490,
   "fields": {
-    "time": "2017-02-16T07:47:27.940Z",
+    "time": "2017-03-05T20:06:49.933Z",
     "name": "application_started",
-    "applicant": 54,
+    "applicant": 325,
     "data": {
-      "ip": "0.25.207.40",
-      "referrer": "https://www.facebook.com/",
-      "user_agent": "Mozilla/5.0 (Linux; Android 6.0.1; 5056N Build/MMB29M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.124 Mobile Safari/537.36",
       "counties": [
         "alameda",
         "contracosta",
@@ -1493,17 +1490,20 @@
         "solano",
         "sonoma",
         "tulare"
-      ]
+      ],
+      "referrer": "https://checkrapplicant.zendesk.com/hc/en-us",
+      "ip": "201.87.197.29",
+      "user_agent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:49.0) Gecko/20100101 Firefox/49.0"
     }
   }
 },
 {
   "model": "intake.applicationevent",
-  "pk": 240,
+  "pk": 1491,
   "fields": {
-    "time": "2017-02-16T07:47:27.940Z",
+    "time": "2017-03-05T20:06:49.933Z",
     "name": "application_page_complete",
-    "applicant": 54,
+    "applicant": 325,
     "data": {
       "page_name": "SelectCounty"
     }
@@ -1511,11 +1511,11 @@
 },
 {
   "model": "intake.applicationevent",
-  "pk": 241,
+  "pk": 1492,
   "fields": {
-    "time": "2017-02-16T07:50:17.274Z",
+    "time": "2017-03-05T20:09:47.571Z",
     "name": "application_page_complete",
-    "applicant": 54,
+    "applicant": 325,
     "data": {
       "page_name": "CountyApplication"
     }
@@ -1523,11 +1523,11 @@
 },
 {
   "model": "intake.applicationevent",
-  "pk": 242,
+  "pk": 1493,
   "fields": {
-    "time": "2017-02-16T07:54:59.779Z",
+    "time": "2017-03-05T20:14:25.736Z",
     "name": "application_page_complete",
-    "applicant": 54,
+    "applicant": 325,
     "data": {
       "page_name": "DeclarationLetterView"
     }
@@ -1535,11 +1535,11 @@
 },
 {
   "model": "intake.applicationevent",
-  "pk": 243,
+  "pk": 1494,
   "fields": {
-    "time": "2017-02-16T07:58:08Z",
+    "time": "2017-03-05T20:18:40Z",
     "name": "application_page_complete",
-    "applicant": 54,
+    "applicant": 325,
     "data": {
       "page_name": "DeclarationLetterReviewPage"
     }
@@ -1547,11 +1547,11 @@
 },
 {
   "model": "intake.applicationevent",
-  "pk": 244,
+  "pk": 1495,
   "fields": {
-    "time": "2017-02-16T07:58:08Z",
+    "time": "2017-03-05T20:18:40Z",
     "name": "application_submitted",
-    "applicant": 54,
+    "applicant": 325,
     "data": {}
   }
 }
