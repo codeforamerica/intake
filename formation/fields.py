@@ -415,7 +415,8 @@ class WhenProbationParole(CharField):
 
 class FinishedHalfProbation(ChoiceField):
     context_key = "finished_half_probation"
-    choices = YES_NO_CHOICES + ((NOT_APPLICABLE, _("Not on probation")),
+    choices = YES_NO_CHOICES + (
+        (NOT_APPLICABLE, _("Not on probation")),
         (I_DONT_KNOW, _("I don't know")),)
     label = _("If you're on probation, have you finished half of your "
               "probation time?")
