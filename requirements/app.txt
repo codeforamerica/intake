@@ -19,4 +19,9 @@ python-Levenshtein~=0.12
 django-taggit~=0.21
 mixpanel~=4.3.1
 django-extensions~=1.7
-celery==4.0.2
+celery~=4.0
+# factory-boy breaks on later version fo fake-factory
+# we need to pin fake-factory
+fake-factory==0.7.2
+factory-boy~=2.7
+
