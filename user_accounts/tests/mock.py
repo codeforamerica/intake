@@ -31,11 +31,6 @@ def fake_user_data(**kwargs):
     return data
 
 
-
-
-
-
-
 def create_user(**attributes):
     name = attributes.get('name', fake.name())
     first_name = attributes.get('first_name', fake.first_name())

@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 from user_accounts.models import Organization
 from collections import OrderedDict
 from intake import models
-from intake.tests.base_testcases import DeluxeTransactionTestCase, ALL_APPLICATION_FIXTURES
+from intake.tests.base_testcases import (
+    DeluxeTransactionTestCase, ALL_APPLICATION_FIXTURES)
 from intake.tests import factories
 import intake.services.applications_service as AppsService
 import intake.services.transfers_service as TransferService

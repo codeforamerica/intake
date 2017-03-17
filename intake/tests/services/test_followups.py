@@ -155,20 +155,20 @@ class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
         for i in range(2):
             applicant = models.Applicant()
             applicant.save()
-            contacted_subs.append(factories.FormSubmissionWithOrgsFactory.create(
-                applicant=applicant,
-                organizations=orgs,
-                answers=self.full_answers(),
-            ))
+            contacted_subs.append(
+                factories.FormSubmissionWithOrgsFactory.create(
+                    applicant=applicant,
+                    organizations=orgs,
+                    answers=self.full_answers()))
         not_contacted_subs = []
         for i in range(2):
             applicant = models.Applicant()
             applicant.save()
-            not_contacted_subs.append(factories.FormSubmissionWithOrgsFactory.create(
-                applicant=applicant,
-                organizations=orgs,
-                answers=self.cant_contact_answers(),
-            ))
+            not_contacted_subs.append(
+                factories.FormSubmissionWithOrgsFactory.create(
+                    applicant=applicant,
+                    organizations=orgs,
+                    answers=self.cant_contact_answers()))
         FollowupsService.send_followup_notifications(
             contacted_subs + not_contacted_subs)
         self.assertEqual(
