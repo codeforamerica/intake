@@ -266,46 +266,6 @@ class MarkProcessed(MarkSubmissionStepView):
             **self.get_notification_context())
 
 
-class ReferToAnotherOrgView(MarkSubmissionStepView):
-
-    transfer_message_template = str(
-        "You successfully transferred {applicant_name}'s application "
-        "to {org_name}. You will no longer see their application."
-    )
-
-    def get_organization_id(self):
-        return int(self.request.GET.get('to_organization_id'))
-
-    def log(self):
-        models.ApplicationLogEntry.log_referred_from_one_org_to_another(
-            self.submission_ids[0],
-            to_organization_id=self.get_organization_id(),
-            user=self.request.user)
-
-    def get_notification_context(self):
-        return dict(
-            submission=self.submissions[0],
-            user=self.request.user)
-
-    def modify_submissions(self):
-        submission = self.submissions[0]
-        to_organization_id = int(self.request.GET.get('to_organization_id'))
-        submission.organizations.transfer_application(
-            from_org=self.request.user.profile.organization,
-            to_org=to_organization_id)
-
-    def notify(self):
-        notifications.slack_submission_transferred.send(
-            **self.get_notification_context())
-
-    def add_message(self):
-        org = Organization.objects.get(pk=self.get_organization_id())
-        message = self.transfer_message_template.format(
-            org_name=org.name,
-            applicant_name=self.submissions[0].get_full_name())
-        messages.success(self.request, message)
-
-
 def get_applicant_name(form):
     return '{}, {}'.format(
         form.last_name.get_display_value(),
@@ -435,7 +395,6 @@ pdf_bundle = FilledPDFBundle.as_view()
 app_index = ApplicationIndex.as_view()
 app_bundle = ApplicationBundle.as_view()
 mark_processed = MarkProcessed.as_view()
-mark_transferred_to_other_org = ReferToAnotherOrgView.as_view()
 app_bundle_detail = ApplicationBundleDetail.as_view()
 app_bundle_detail_pdf = ApplicationBundleDetailPDFView.as_view()
 case_printout = CasePrintoutPDFView.as_view()
