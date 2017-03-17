@@ -16,6 +16,7 @@ from datetime import datetime
 YES = 'yes'
 NO = 'no'
 NOT_APPLICABLE = 'not_applicable'
+I_DONT_KNOW = 'i_dont_know'
 
 YES_NO_CHOICES = (
     (YES, _('Yes')),
