@@ -1,7 +1,7 @@
 from unittest.mock import Mock
 from django.test import TestCase
 
-from intake.tests import mock
+from intake.tests import mock, factories
 from formation import field_types
 import intake.services.submissions as SubmissionsService
 from user_accounts import models as auth_models
@@ -66,10 +66,8 @@ class TestFormSubmission(TestCase):
         submission = self.get_a_sample_sub()
         expected_result = {
             'url': str(
-                "/applications/mark/transferred/"
-                "?ids={}"
-                "&to_organization_id=1"
-                "&next=/applications/bundle/2/".format(submission.id)),
+                "/application/{}/transfer/"
+                "?next=/applications/bundle/2/".format(submission.id)),
             'display': 'Other Public Defender'
         }
         self.assertDictEqual(
@@ -118,7 +116,7 @@ class TestDuplicateSubmissionSet(TestCase):
         dup_set = models.DuplicateSubmissionSet()
         dup_set.save()
         subs = [
-            mock.FormSubmissionFactory.create()
+            factories.FormSubmissionFactory.create()
             for i in range(2)
         ]
         dup_set.submissions.add(*subs)

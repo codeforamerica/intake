@@ -46,20 +46,23 @@ def get_base_message_from_status_update_data(request, status_update_data):
         next_step_message])
 
 
-def get_status_update_success_message(sub, status_type):
+def get_status_update_success_message(full_name, status_type):
     return 'Updated status to "{}" for {}'.format(
-        status_type.display_name, sub.get_full_name())
+        status_type.display_name, full_name)
 
 
-def send_and_save_new_status(request, notification_data, status_update_data):
-    next_steps = status_update_data.pop('next_steps', [])
-    status_update = models.StatusUpdate(**status_update_data)
-    status_update.save()
-    status_update.next_steps.add(*next_steps)
-    sub = status_update_data['application'].form_submission
+def save_and_send_status_notification(
+        request, notification_data, status_update):
+    sub = status_update.application.form_submission
     contact_info = sub.get_usable_contact_info()
     notification_intro = get_notification_intro(
-        status_update_data['author'].profile)
+        status_update.author.profile)
+    status_update_data = vars(status_update)
+    status_update_data.update(
+        author=status_update.author,
+        status_type=status_update.status_type,
+        application=status_update.application,
+        next_steps=list(status_update.next_steps.all()))
     default_message = '\n\n'.join([
         notification_intro,
         get_base_message_from_status_update_data(request, status_update_data)
@@ -77,6 +80,16 @@ def send_and_save_new_status(request, notification_data, status_update_data):
     notifications.send_simple_front_notification(
         contact_info, edited_message,
         subject="Update from Clear My Record")
+
+
+def send_and_save_new_status(request, notification_data, status_update_data):
+    next_steps = status_update_data.pop('next_steps', [])
+    status_update = models.StatusUpdate(**status_update_data)
+    status_update.save()
+    status_update.next_steps.add(*next_steps)
+    save_and_send_status_notification(
+        request, notification_data, status_update)
     success_message = get_status_update_success_message(
-        sub, status_update.status_type)
+        status_update.application.form_submission.get_full_name(),
+        status_update.status_type)
     messages.success(request, success_message)

@@ -5,11 +5,12 @@ from intake.views import (
     stats_views,
     legacy_redirect_views,
     application_form_views,
+    application_transfer_view,
     admin_views,
     app_detail_views,
     application_note_views,
     tag_views,
-    status_update_views
+    status_update_views,
 )
 
 urlpatterns = [
@@ -57,6 +58,10 @@ urlpatterns = [
     url(r'^application/(?P<submission_id>[0-9]+)/printout/$',
         login_required(admin_views.case_printout),
         name='intake-case_printout'),
+
+    url(r'^application/(?P<submission_id>[0-9]+)/transfer/$',
+        login_required(application_transfer_view.transfer_application),
+        name='intake-transfer_application'),
 
     url(r'^applications/$',
         login_required(admin_views.app_index),

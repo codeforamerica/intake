@@ -12,9 +12,10 @@ def get_applications_for_org(organization):
     if organization.can_transfer_applications:
         prefetch_tables += [
             'incoming_transfers',
+            'incoming_transfers__new_application__organization',
             'incoming_transfers__status_update',
             'incoming_transfers__status_update__application',
-            'incoming_transfers__status_update__application__organization',
+            'incoming_transfers__status_update__author__profile__organization',
             'incoming_transfers__status_update__author',
             'incoming_transfers__status_update__author__profile',
         ]
@@ -36,34 +37,10 @@ def get_applications_index_for_org_user(user, page_index):
     return pagination.get_serialized_page(query, serializer, page_index)
 
 
-def transfer_application(author, application, to_organization, reason):
-    """Transfers an application from one organization to another
-    """
-    transfer_status_update = models.StatusUpdate(
-        status_type_id=models.status_type.TRANSFERRED,
-        author_id=author.id,
-        application=application
-    )
-    transfer_status_update.save()
-    new_application = models.Application(
-        form_submission_id=application.form_submission_id,
-        organization=to_organization)
-    new_application.save()
-    transfer = models.ApplicationTransfer(
-        status_update=transfer_status_update,
-        new_application=new_application,
-        reason=reason)
-    transfer.save()
-    application.was_transferred_out = True
-    application.save()
-    return transfer
-
-
 def get_status_updates_for_org_user(application):
     # note: this only returns status updates for the latest transfer
     #   if an app has multiple transfers, older ones will be overlooked
-    are_updates_for_this_app = Q(
-        application=application)
+    are_updates_for_this_app = Q(application=application)
     queryset = models.StatusUpdate.objects.filter(are_updates_for_this_app)
     prefetch_tables = [
         'notification',
@@ -81,7 +58,12 @@ def get_status_updates_for_org_user(application):
             queryset = models.StatusUpdate.objects.filter(
                 are_updates_for_this_app | are_updates_prior_to_a_transfer
             )
-            prefetch_tables.append('transfer')
+            prefetch_tables.extend([
+                'transfer',
+                'transfer__status_update',
+                'transfer__status_update__author__profile',
+                'transfer__status_update__author__profile__organization',
+                'transfer__new_application__organization'])
     return queryset.prefetch_related(*prefetch_tables).order_by('-updated')
 
 
@@ -94,7 +76,11 @@ def get_status_updates_for_staff_user(application):
         'next_steps',
         'author__profile',
         'author__profile__organization',
-        'transfer'
+        'transfer',
+        'transfer__status_update',
+        'transfer__status_update__author__profile',
+        'transfer__status_update__author__profile__organization',
+        'transfer__new_application__organization'
     ).order_by('-updated')
 
 

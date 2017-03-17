@@ -4,10 +4,9 @@ from unittest.mock import patch
 from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from intake.tests import mock
+from intake.tests import mock, factories
 from intake.tests.base_testcases import IntakeDataTestCase, DELUXE_TEST
 from intake import models, constants
-from intake.views import application_form_views
 from formation import fields
 from formation.field_types import YES
 from project.jinja2 import url_with_ids
@@ -202,7 +201,7 @@ class TestViews(IntakeDataTestCase):
         key_params = '?keys=' + '|'.join(old_uuids)
         ported_models = []
         for uuid in old_uuids:
-            instance = mock.FormSubmissionFactory.create(
+            instance = factories.FormSubmissionFactory.create(
                 old_uuid=uuid)
             ported_models.append(instance)
         ported_models_query = models.FormSubmission.objects.filter(

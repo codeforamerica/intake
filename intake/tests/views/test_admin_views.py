@@ -6,10 +6,8 @@ from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from intake import models, constants
-from user_accounts import models as auth_models
 from intake.tests.base_testcases import IntakeDataTestCase, DELUXE_TEST
-from intake.tests.mock import FormSubmissionFactory
+from intake.tests.factories import FormSubmissionFactory
 from project.jinja2 import url_with_ids
 
 import intake.services.bundles as BundlesService
@@ -82,14 +80,14 @@ class TestApplicationDetail(IntakeDataTestCase):
         response = self.get_detail(submission)
         self.assertHasDisplayData(response, submission)
 
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_agency_user_can_see_transfer_action_link(self, slack):
-        self.be_apubdef_user()
-        submission = self.a_pubdef_submissions[0]
-        response = self.get_detail(submission)
-        transfer_action_url = html_utils.conditional_escape(
-            submission.get_transfer_action(response.wsgi_request)['url'])
-        self.assertContains(response, transfer_action_url)
+    # @patch('intake.notifications.slack_submissions_viewed.send')
+    # def test_agency_user_can_see_transfer_action_link(self, slack):
+    #     self.be_apubdef_user()
+    #     submission = self.a_pubdef_submissions[0]
+    #     response = self.get_detail(submission)
+    #     transfer_action_url = html_utils.conditional_escape(
+    #         submission.get_transfer_action(response.wsgi_request)['url'])
+    #     self.assertContains(response, transfer_action_url)
 
     @patch('intake.notifications.slack_submissions_viewed.send')
     def test_agency_user_can_see_case_printout_link(self, slack):
@@ -416,80 +414,80 @@ class TestApplicationBundleDetailPDFView(IntakeDataTestCase):
         self.assertEqual(response.status_code, 404)
 
 
-class TestReferToAnotherOrgView(IntakeDataTestCase):
+# class TestReferToAnotherOrgView(IntakeDataTestCase):
 
-    fixtures = [
-        'counties',
-        'organizations', 'mock_profiles',
-        'mock_2_submissions_to_a_pubdef',
-        'mock_1_bundle_to_a_pubdef', 'template_options']
+#     fixtures = [
+#         'counties',
+#         'organizations', 'mock_profiles',
+#         'mock_2_submissions_to_a_pubdef',
+#         'mock_1_bundle_to_a_pubdef', 'template_options']
 
-    def setUp(self):
-        super().setUp()
-        self.mock_sub_id = self.a_pubdef_submissions[0].id
-        self.mock_bundle_id = self.a_pubdef_bundle.id
+#     def setUp(self):
+#         super().setUp()
+#         self.mock_sub_id = self.a_pubdef_submissions[0].id
+#         self.mock_bundle_id = self.a_pubdef_bundle.id
 
-    def url(self, org_id, sub_id=None, next=None):
-        sub_id = sub_id or self.mock_sub_id
-        base = reverse(
-            'intake-mark_transferred_to_other_org')
-        base += "?ids={sub_id}&to_organization_id={org_id}".format(
-            sub_id=sub_id, org_id=org_id)
-        if next:
-            base += "&next={}".format(next)
-        return base
+#     def url(self, org_id, sub_id=None, next=None):
+#         sub_id = sub_id or self.mock_sub_id
+#         base = reverse(
+#             'intake-mark_transferred_to_other_org')
+#         base += "?ids={sub_id}&to_organization_id={org_id}".format(
+#             sub_id=sub_id, org_id=org_id)
+#         if next:
+#             base += "&next={}".format(next)
+#         return base
 
-    @patch('intake.views.admin_views.notifications'
-           '.slack_submission_transferred.send')
-    def test_anon_is_rejected(self, slack_action):
-        self.be_anonymous()
-        response = self.client.get(self.url(
-            1))
-        self.assertEqual(response.status_code, 302)
-        self.assertIn(reverse('user_accounts-login'), response.url)
-        slack_action.assert_not_called()
+#     @patch('intake.views.admin_views.notifications'
+#            '.slack_submission_transferred.send')
+#     def test_anon_is_rejected(self, slack_action):
+#         self.be_anonymous()
+#         response = self.client.get(self.url(
+#             1))
+#         self.assertEqual(response.status_code, 302)
+#         self.assertIn(reverse('user_accounts-login'), response.url)
+#         slack_action.assert_not_called()
 
-    @patch(
-        'intake.views.admin_views.notifications.slack_submission_transferred')
-    def test_org_user_with_no_next_is_redirected_to_app_index(self,
-                                                              slack_action):
-        self.be_apubdef_user()
-        sub = models.FormSubmission.objects.get(pk=self.mock_sub_id)
-        ebclc = auth_models.Organization.objects.get(
-            slug=constants.Organizations.EBCLC)
-        response = self.client.get(self.url(
-            org_id=ebclc.id))
-        self.assertRedirects(
-            response, reverse('intake-app_index'),
-            fetch_redirect_response=False)
-        sub_url = sub.get_absolute_url()
-        index = self.client.get(response.url)
-        self.assertNotContains(index, sub_url)
-        self.assertContains(index, "You successfully transferred")
-        self.assertEqual(len(list(slack_action.mock_calls)), 1)
+#     @patch(
+#         'intake.views.admin_views.notifications.slack_submission_transferred')
+#     def test_org_user_with_no_next_is_redirected_to_app_index(self,
+#                                                               slack_action):
+#         self.be_apubdef_user()
+#         sub = models.FormSubmission.objects.get(pk=self.mock_sub_id)
+#         ebclc = auth_models.Organization.objects.get(
+#             slug=constants.Organizations.EBCLC)
+#         response = self.client.get(self.url(
+#             org_id=ebclc.id))
+#         self.assertRedirects(
+#             response, reverse('intake-app_index'),
+#             fetch_redirect_response=False)
+#         sub_url = sub.get_absolute_url()
+#         index = self.client.get(response.url)
+#         self.assertNotContains(index, sub_url)
+#         self.assertContains(index, "You successfully transferred")
+#         self.assertEqual(len(list(slack_action.mock_calls)), 1)
 
-    @patch(
-        'intake.views.admin_views.notifications.slack_submissions_viewed.send')
-    @patch(
-        'intake.views.admin_views.notifications.slack_submission_transferred')
-    def test_org_user_with_next_goes_back_to_next(self,
-                                                  slack_action,
-                                                  slack_viewed):
-        self.be_apubdef_user()
-        sub = models.FormSubmission.objects.get(pk=self.mock_sub_id)
-        bundle = models.ApplicationBundle.objects.get(pk=self.mock_bundle_id)
-        ebclc = auth_models.Organization.objects.get(
-            slug=constants.Organizations.EBCLC)
-        response = self.client.get(self.url(
-            org_id=ebclc.id, next=bundle.get_absolute_url()))
-        self.assertRedirects(
-            response, bundle.get_absolute_url(),
-            fetch_redirect_response=False)
-        bundle_page = self.client.get(response.url)
-        self.assertNotContains(
-            bundle_page,
-            "formsubmission-{}".format(sub.id),
-        )
-        self.assertContains(bundle_page, "You successfully transferred")
-        self.assertEqual(len(list(slack_action.mock_calls)), 1)
-        self.assertEqual(len(list(slack_viewed.mock_calls)), 1)
+#     @patch(
+#         'intake.views.admin_views.notifications.slack_submissions_viewed.send')
+#     @patch(
+#         'intake.views.admin_views.notifications.slack_submission_transferred')
+#     def test_org_user_with_next_goes_back_to_next(self,
+#                                                   slack_action,
+#                                                   slack_viewed):
+#         self.be_apubdef_user()
+#         sub = models.FormSubmission.objects.get(pk=self.mock_sub_id)
+#         bundle = models.ApplicationBundle.objects.get(pk=self.mock_bundle_id)
+#         ebclc = auth_models.Organization.objects.get(
+#             slug=constants.Organizations.EBCLC)
+#         response = self.client.get(self.url(
+#             org_id=ebclc.id, next=bundle.get_absolute_url()))
+#         self.assertRedirects(
+#             response, bundle.get_absolute_url(),
+#             fetch_redirect_response=False)
+#         bundle_page = self.client.get(response.url)
+#         self.assertNotContains(
+#             bundle_page,
+#             "formsubmission-{}".format(sub.id),
+#         )
+#         self.assertContains(bundle_page, "You successfully transferred")
+#         self.assertEqual(len(list(slack_action.mock_calls)), 1)
+#         self.assertEqual(len(list(slack_viewed.mock_calls)), 1)

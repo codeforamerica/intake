@@ -30,7 +30,7 @@ section.content.application_form {
 	ol { padding-left: 1.5em; }
 }
 .field {
-	input, textarea, .field-preceding_text {
+	input, textarea, .field-preceding_text, .field-inactive_textarea {
 		font-weight: 400;
 		font-size: 1.25em;
 	}
@@ -68,6 +68,12 @@ span + .subfield { margin-top: .5em; }
 	color: #888;
 	border: 1px solid black;
 	border-bottom: 0;
+}
+.field-inactive_textarea {
+	display: block;
+	padding: 2px;
+	color: #888;
+	border: 1px solid #888;
 }
 .field-preceding_text + .field-input_wrapper textarea {
 	border-top: 0;
