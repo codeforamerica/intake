@@ -374,7 +374,8 @@ class SanDiegoCountyFormSpec(SolanoCountyFormSpec):
         F.CaseNumber
     }
     validators = [
-        gave_preferred_contact_methods
+        gave_preferred_contact_methods,
+        at_least_email_or_phone
     ]
 
 
