@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from user_accounts.models import Organization
 from collections import OrderedDict
 from intake import models
-from intake.tests.base_testcases import ALL_APPLICATION_FIXTURES
+from intake.tests.base_testcases import DeluxeTransactionTestCase, ALL_APPLICATION_FIXTURES
 from intake.tests import factories
 import intake.services.applications_service as AppsService
 import intake.services.transfers_service as TransferService
@@ -73,7 +73,7 @@ class TestGetApplicationsIndexForOrgUser(TestCase):
             transfer['reason'], 'temporal anomalies')
 
 
-class TestGetSerializedApplicationHistoryEvents(TestCase):
+class TestGetSerializedApplicationHistoryEvents(DeluxeTransactionTestCase):
 
     fixtures = ALL_APPLICATION_FIXTURES
 
@@ -87,7 +87,7 @@ class TestGetSerializedApplicationHistoryEvents(TestCase):
         for i in range(new_updates_count):
             factories.StatusUpdateFactory.create(
                 application=application, author=author)
-        with self.assertNumQueries(9):
+        with self.assertNumQueriesLessThanEqual(9):
             AppsService.get_serialized_application_history_events(
                 application, author)
 
@@ -106,6 +106,6 @@ class TestGetSerializedApplicationHistoryEvents(TestCase):
         for i in range(new_updates_count):
             factories.StatusUpdateFactory.create(
                 application=app, author=receiving_user)
-        with self.assertNumQueries(14):
+        with self.assertNumQueriesLessThanEqual(14):
             AppsService.get_serialized_application_history_events(
                 application, receiving_user)

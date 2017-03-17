@@ -47,8 +47,7 @@ def get_status_updates_for_org_user(application):
         'status_type',
         'next_steps',
         'author__profile',
-        'author__profile__organization',
-    ]
+        'author__profile__organization']
     if application.organization.can_transfer_applications:
         transfer = application.incoming_transfers.order_by('-created').first()
         if transfer:
