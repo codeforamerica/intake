@@ -250,10 +250,13 @@ class ChoiceField(CharField):
         """
         return self.choice_display_dict.get(value, self.empty_value)
 
-    def get_display_choices(self):
+    def order_display_choices(self, display_choices):
         if getattr(self, 'flip_display_choice_order', False):
-            return reversed(self.choices)
-        return self.choices
+            return reversed(display_choices)
+        return display_choices
+
+    def get_display_choices(self):
+        return self.order_display_choices(self.choices)
 
     def is_current_choice(self, choice_option):
         return self.get_current_value() == choice_option
@@ -304,6 +307,18 @@ class YesNoField(ChoiceField):
 
     def __bool__(self):
         return self.get_current_value() == YES
+
+
+class YesNoIDontKnowField(ChoiceField):
+    choices = YES_NO_IDK_CHOICES
+
+    def render(self, display=False, **extra_context):
+        if self.get_current_value() in (YES, NO):
+            self.display_template_name = "formation/option_set_display.jinja"
+        return super().render(display, **extra_context)
+
+    def get_display_choices(self):
+        return self.order_display_choices(YES_NO_CHOICES)
 
 
 class MultiValueField(Field):
