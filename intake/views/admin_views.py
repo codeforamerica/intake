@@ -18,6 +18,7 @@ from printing.pdf_form_display import PDFFormDisplay
 from intake.aggregate_serializer_fields import get_todays_date
 
 import intake.services.submissions as SubmissionsService
+import intake.services.applications_service as AppsService
 import intake.services.bundles as BundlesService
 import intake.services.tags as TagsService
 
@@ -69,15 +70,15 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
         context['search_form'] = forms.ApplicationSelectForm()
         if is_staff:
             context['ALL_TAG_NAMES'] = TagsService.get_all_used_tag_names()
-            context['submissions'] = \
+            context['results'] = \
                 SubmissionsService.get_submissions_for_followups()
         else:
-            context['submissions'] = \
-                SubmissionsService.get_paginated_submissions_for_org_user(
+            context['results'] = \
+                AppsService.get_applications_index_for_org_user(
                     self.request.user, self.request.GET.get('page'))
             context['page_counter'] = \
                 utils.get_page_navigation_counter(
-                    page=context['submissions'],
+                    page=context['results'],
                     wing_size=9)
         return context
 

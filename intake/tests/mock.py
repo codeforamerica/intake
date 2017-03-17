@@ -289,9 +289,14 @@ def make_mock_transfer_sub(from_org, to_org):
     # make a status_update prior to transfer
     factories.StatusUpdateWithNotificationFactory.create(
         application=application, author=author)
-    services.applications_service.transfer_application(
+    transfer = services.applications_service.transfer_application(
         author=author, application=application,
         to_organization=to_org, reason="Transporter malfunction")
+    message = 'You case has been transferred to {}.\n{}'.format(
+        to_org.name, to_org.short_confirmation_message)
+    factories.StatusNotificationFactory.create(
+        status_update=transfer.status_update, base_message=message,
+        sent_message=message)
     return sub
 
 

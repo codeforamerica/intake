@@ -109,7 +109,7 @@ class TestTransferApplication(TestCase):
                 user, application, to_org, 'there was a temporal anomaly')
 
 
-class TestGetStatusUpdatesForApplicationHistory(TestCase):
+class TestGetSerializedApplicationHistoryEvents(TestCase):
 
     fixtures = ALL_APPLICATION_FIXTURES
 
@@ -125,7 +125,7 @@ class TestGetStatusUpdatesForApplicationHistory(TestCase):
                 application=application, author=author)
         with self.assertNumQueries(9):
             AppsService.get_serialized_application_history_events(
-                application)
+                application, author)
 
     def test_number_of_queries_if_transferred_in(self):
         author = User.objects.filter(
@@ -144,4 +144,4 @@ class TestGetStatusUpdatesForApplicationHistory(TestCase):
                 application=app, author=receiving_user)
         with self.assertNumQueries(10):
             AppsService.get_serialized_application_history_events(
-                application)
+                application, receiving_user)

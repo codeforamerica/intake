@@ -1,6 +1,7 @@
 from intake import models
 from rest_framework import serializers
 from .fields import LocalDateField
+from .application_transfer_serializer import IncomingTransferSerializer
 
 
 class MinimalStatusUpdateSerializer(serializers.ModelSerializer):
@@ -27,9 +28,12 @@ class StatusNotificationSerializer(serializers.ModelSerializer):
 
 
 class StatusUpdateSerializer(serializers.ModelSerializer):
+    created = LocalDateField()
     notification = StatusNotificationSerializer()
     status_type = serializers.SlugRelatedField(
         read_only=True, slug_field='display_name')
+    next_steps = serializers.SlugRelatedField(
+        read_only=True, slug_field='display_name', many=True)
     author_name = serializers.SerializerMethodField()
     organization_name = serializers.SerializerMethodField()
     transfer = serializers.SerializerMethodField()
@@ -58,5 +62,6 @@ class StatusUpdateSerializer(serializers.ModelSerializer):
     def get_transfer(self, instance):
         # this prevents us from querying for a transfer unless it exists
         if instance.status_type.id == models.status_type.TRANSFERRED:
-            return dict(reason=instance.transfer.reason)
+            return IncomingTransferSerializer().to_representation(
+                instance.transfer)
         return None

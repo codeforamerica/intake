@@ -8,16 +8,19 @@ from .application_transfer_serializer import IncomingTransferSerializer
 
 class FormSubmissionIndexSerializer(serializers.ModelSerializer):
     local_date_received = fields.LocalDateField(source='date_received')
-    full_name = serializers.CharField(source='get_full_name', read_only=True)
     url = serializers.CharField(source='get_absolute_url', read_only=True)
+    printout_url = serializers.CharField(
+        source='get_case_printout_url', read_only=True)
 
     class Meta:
         model = models.FormSubmission
         fields = [
             'id',
             'local_date_received',
-            'full_name',
+            'first_name',
+            'last_name',
             'url',
+            'printout_url',
             'phone_number',
             'email',
         ]

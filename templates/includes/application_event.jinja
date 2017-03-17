@@ -1,21 +1,31 @@
   <li class="application-event-block">
     <div class="application-event-header">
-      <div class="application-event-title">Status Update - {{status_update.status_type.display_name}}</div>
+      <div class="application-event-title">Status Update - {{ status_update.status_type }}</div>
 
-      {{local_time(status_update.created, '%-B %-d, %Y')}}  ({{humanize.naturaltime(status_update.created)}}) by {{status_update.author.profile.name}}
+      {{ local_time(status_update.created, '%-B %-d, %Y') }}  ({{ humanize.naturaltime(status_update.created) }}) by {{status_update.author_name}} at {{ status_update.organization_name }}
     </div>
     <div class="application-event-body">
       <div class="status-update-details">
+        {%- if status_update.transfer %}
+        <div class="col-xs-6 col-md-6">
+          <div class="section-label">Transferred to:</div>
+          {{status_update.transfer.to_organization_name}}
+        </div>
+        <div class="col-xs-6 col-md-6">
+          <div class="section-label">Reason:</div>
+          {{status_update.transfer.reason}}
+        </div>
+        {%- else %}
         <div class="col-xs-6 col-md-6">
           <div class="section-label">Additional information:</div>
-          {{status_update.additional_information}}
+          {{ status_update.additional_information }}
         </div>
         <div class="col-xs-6 col-md-6">
           <div class="section-label">Next steps:</div>
           {% if status_update.next_steps or status_update.other_next_step %}
             <ul class="event-next-steps">
-                {% for step in status_update.next_steps.all() %}
-                  <li>{{ step.display_name }}</li>
+                {% for step in status_update.next_steps %}
+                  <li>{{ step }}</li>
                 {% endfor %}
                 {% if status_update.other_next_step %}
                 <li>{{ status_update.other_next_step }}</li>
@@ -23,6 +33,7 @@
             </ul>
           {% endif %}
         </div>
+        {%- endif %}
       </div>
 
       {# TODO: create more notification objects #}

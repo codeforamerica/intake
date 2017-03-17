@@ -59,7 +59,7 @@ def transfer_application(author, application, to_organization, reason):
     return transfer
 
 
-def get_status_updates_for_application_history(application):
+def get_status_updates_for_org_user(application):
     # note: this only returns status updates for the latest transfer
     #   if an app has multiple transfers, older ones will be overlooked
     are_updates_for_this_app = Q(
@@ -85,6 +85,22 @@ def get_status_updates_for_application_history(application):
     return queryset.prefetch_related(*prefetch_tables).order_by('-updated')
 
 
-def get_serialized_application_history_events(application):
-    status_updates = get_status_updates_for_application_history(application)
+def get_status_updates_for_staff_user(application):
+    return models.StatusUpdate.objects.filter(
+        application__form_submission__id=application.form_submission.id
+    ).prefetch_related(
+        'notification',
+        'status_type',
+        'next_steps',
+        'author__profile',
+        'author__profile__organization',
+        'transfer'
+    ).order_by('-updated')
+
+
+def get_serialized_application_history_events(application, user):
+    if user.is_staff:
+        status_updates = get_status_updates_for_staff_user(application)
+    else:
+        status_updates = get_status_updates_for_org_user(application)
     return serializers.StatusUpdateSerializer(status_updates, many=True).data

@@ -1,0 +1,59 @@
+<tr class="application-listing{%- if app.incoming_transfers %} incoming-tranfer{% endif %}">
+  <td>
+    {# Date #}
+    <a href="{{ app.form_submission.url }}">
+    {{ app.form_submission.local_date_received.strftime('%-m/%-d/%y') }}
+    </a>
+  </td>
+  <td>{# Last Name #} {{ namify(app.form_submission.last_name) }}</td>
+  <td>{# First Name #} {{ namify(app.form_submission.first_name) }}</td>
+  
+  {%- if show_pdf %}
+  <td>
+    {#- Intake PDF #}
+    <a href="{{ 
+      url('intake-filled_pdf',
+        submission_id=app.form_submission.id
+        ) }}" class="btn btn-default btn-sm">
+        <span class="glyphicon glyphicon-file"></span>
+        PDF
+      </a>
+  </td> 
+  {%- endif %}
+  <td>
+    {#- Status #}
+    {%- if app.latest_status %}
+          {{ app.latest_status.status_type }}
+    {%- else -%}
+      New
+      {%- if app.incoming_transfers %}
+      <span class="incoming-transfer-note">
+        (Incoming Transfer)
+      </span>
+      {%- endif %}
+    {%- endif %}
+  </td>
+  <td>
+    {#- Latest Status Update #}
+    {%- if app.latest_status -%}
+      {{- humanize.naturaltime(app.latest_status.updated) -}}
+    {%- else -%}
+      ------------
+    {%- endif -%}
+  </td>
+  <td>
+  {# Actions - Update Status #}
+  <a href="{{ url('intake-create_status_update', submission_id=app.form_submission.id) }}">
+  <span class="glyphicon glyphicon-pencil"></span>
+  Update Status</a>
+  </td>
+  <td>
+    {# Actions - Print #}
+    <a
+      href="{{ app.printout_url }}"
+      target="_blank">
+      <span class="glyphicon glyphicon-print"></span>
+      Print
+    </a>
+  </td>
+</tr>
