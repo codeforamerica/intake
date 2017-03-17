@@ -4,6 +4,9 @@
     "ADMIN_PHONE_NUMBER": {
       "required": true
     },
+    "GENERATE_DUMMY_DATA": {
+      "required": true
+    },
     "DEFAULT_AGENCY_USER_EMAIL": {
       "required": true
     },
