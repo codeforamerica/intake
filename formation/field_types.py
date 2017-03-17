@@ -23,6 +23,12 @@ YES_NO_CHOICES = (
     (NO, _('No')),
 )
 
+YES_NO_IDK_CHOICES = (
+    (YES, _('Yes')),
+    (NO, _('No')),
+    (I_DONT_KNOW, _("I don't know")),
+)
+
 
 def extract_digit_chars(input_string):
     return "".join(char for char in input_string if char in string.digits)

@@ -6,7 +6,7 @@ from formation.field_types import (
     CharField, MultilineCharField, IntegerField, WholeDollarField, ChoiceField,
     YesNoField, MultipleChoiceField, MultiValueField, PhoneField,
     FormNote, DateTimeField, ConsentCheckbox,
-    YES_NO_CHOICES, NOT_APPLICABLE, I_DONT_KNOW
+    YES_NO_CHOICES, NOT_APPLICABLE, YES_NO_IDK_CHOICES
 )
 from intake.constants import (
     COUNTY_CHOICES, CONTACT_PREFERENCE_CHOICES, REASON_FOR_APPLYING_CHOICES,
@@ -372,20 +372,20 @@ class BeingCharged(ChoiceField):
     context_key = "being_charged"
     label = _("Are you currently being charged with a crime?")
     display_label = "Is currently being charged"
-    choices = YES_NO_CHOICES + ((I_DONT_KNOW, _("I don't know")),)
+    choices = YES_NO_IDK_CHOICES
 
     def get_display_choices(self):
-        return YES_NO_CHOICES
+        return YES_NO_IDK_CHOICES
 
 
 class ServingSentence(ChoiceField):
     context_key = "serving_sentence"
     label = _("Are you currently serving a sentence?")
     display_label = "Is serving a sentence"
-    choices = YES_NO_CHOICES + ((I_DONT_KNOW, _("I don't know")),)
+    choices = YES_NO_IDK_CHOICES
 
     def get_display_choices(self):
-        return YES_NO_CHOICES
+        return YES_NO_IDK_CHOICES
 
 
 class OnProbationParole(ChoiceField):
@@ -395,10 +395,10 @@ class OnProbationParole(ChoiceField):
         "MSR is mandatory supervised release and PRCS is post release "
         "community supervision")
     display_label = "Is on probation or parole"
-    choices = YES_NO_CHOICES + ((I_DONT_KNOW, _("I don't know")),)
+    choices = YES_NO_IDK_CHOICES
 
     def get_display_choices(self):
-        return YES_NO_CHOICES
+        return YES_NO_IDK_CHOICES
 
 
 class WhereProbationParole(CharField):
@@ -415,9 +415,7 @@ class WhenProbationParole(CharField):
 
 class FinishedHalfProbation(ChoiceField):
     context_key = "finished_half_probation"
-    choices = YES_NO_CHOICES + (
-        (NOT_APPLICABLE, _("Not on probation")),
-        (I_DONT_KNOW, _("I don't know")),)
+    choices = YES_NO_IDK_CHOICES + ((NOT_APPLICABLE, _("Not on probation")),)
     label = _("If you're on probation, have you finished half of your "
               "probation time?")
     display_label = "Finished half probation"
@@ -428,7 +426,7 @@ class FinishedHalfProbation(ChoiceField):
         return super().render(display, **extra_context)
 
     def get_display_choices(self):
-        return YES_NO_CHOICES
+        return YES_NO_IDK_CHOICES
 
 
 class ReducedProbation(FinishedHalfProbation):
@@ -440,13 +438,13 @@ class ReducedProbation(FinishedHalfProbation):
 
 class RAPOutsideSF(ChoiceField):
     context_key = "rap_outside_sf"
-    choices = YES_NO_CHOICES + ((I_DONT_KNOW, _("I don't know")),)
+    choices = YES_NO_IDK_CHOICES
     label = _(
         "Have you ever been arrested or convicted in any other counties?")
     display_label = "RAP in other counties"
 
     def get_display_choices(self):
-        return YES_NO_CHOICES
+        return YES_NO_IDK_CHOICES
 
 
 class WhenWhereOutsideSF(CharField):
@@ -462,20 +460,20 @@ class HasSuspendedLicense(ChoiceField):
     label = _("Is your driver's license suspended?")
     display_label = "Has suspended license"
     flip_display_choice_order = True
-    choices = YES_NO_CHOICES + ((I_DONT_KNOW, _("I don't know")),)
+    choices = YES_NO_IDK_CHOICES
 
     def get_display_choices(self):
-        return YES_NO_CHOICES
+        return YES_NO_IDK_CHOICES
 
 
 class OwesCourtFees(ChoiceField):
     context_key = "owes_court_fees"
     label = _("Do you owe any court fines or fees?")
     display_label = "Owes court fines/fees"
-    choices = YES_NO_CHOICES + ((I_DONT_KNOW, _("I don't know")),)
+    choices = YES_NO_IDK_CHOICES
 
     def get_display_choices(self):
-        return YES_NO_CHOICES
+        return YES_NO_IDK_CHOICES
 
 
 ###
