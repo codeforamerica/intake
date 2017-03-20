@@ -1,6 +1,6 @@
 from django.core import management
 from django.core.management.base import BaseCommand
-from django.conf import settings
+from project.fixtures_index import ESSENTIAL_DATA_FIXTURES
 
 
 class Command(BaseCommand):
@@ -8,7 +8,4 @@ class Command(BaseCommand):
         "Sets up seeds based on what environment it runs in.")
 
     def handle(self, *args, **kwargs):
-        management.call_command('migrate')
-        management.call_command('load_essential_data')
-        if settings.GENERATE_DUMMY_DATA:
-            management.call_command('load_mock_data')
+        management.call_command('loaddata', *ESSENTIAL_DATA_FIXTURES)
