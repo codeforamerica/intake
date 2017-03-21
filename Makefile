@@ -17,6 +17,7 @@ test.keepdb:
 	./manage.py test $(SCOPE) \
 		--verbosity 2 --keepdb
 
+
 test.review_app:
 	pip install -r requirements/dev.txt
 	./manage.py migrate --settings project.settings.review_app
@@ -24,6 +25,7 @@ test.review_app:
 		--settings project.settings.review_app \
 		--verbosity 2 --keepdb
 	coverage report -m
+
 
 test.coverage:
 	coverage run \
@@ -38,31 +40,9 @@ test.deluxe:
 		--verbosity 2
 
 
-test.acceptance:
-	python ./manage.py test tests.acceptance
-
-
-test.screenshots:
-	python ./manage.py test \
-		tests.acceptance.test_screenshots \
-		--verbosity 2
-
-deploy.feature:
-	git push -f feature HEAD:master
-	heroku run --app cmr-feature make db.seed
-
-deploy.demo:
-	git push -f demo HEAD:master
-	heroku run --app cmr-demo make db.seed
-
-deploy.prod:
-	git push prod master
-	heroku run --app cmr-prod python manage.py loaddata \
-		counties \
-		organizations \
-		addresses \
-		groups \
-		template_options
+db.seed:
+	python ./manage.py load_essential_data
+	python ./manage.py load_mock_data
 
 
 db.setup:
@@ -70,9 +50,10 @@ db.setup:
 	make db.seed
 
 
-db.pull.demo:
-	dropdb intake --if-exists
-	heroku pg:pull --app cmr-demo DATABASE_URL intake
+db.total_rebuild:
+	dropdb intake
+	createdb intake
+	make db.setup
 
 
 db.dump_fixtures:
@@ -104,47 +85,6 @@ db.dump_fixtures:
 	    --indent 2 \
 	    --format json
 
-db.core_seed:
-	python ./manage.py loaddata \
-		counties \
-		organizations \
-		addresses \
-		mock_profiles \
-		template_options
-
-db.seed:
-	make db.core_seed
-	python ./manage.py loaddata \
-		mock_2_submissions_to_a_pubdef \
-		mock_2_submissions_to_ebclc \
-		mock_2_submissions_to_cc_pubdef \
-		mock_2_submissions_to_sf_pubdef \
-		mock_2_submissions_to_monterey_pubdef \
-		mock_2_submissions_to_solano_pubdef \
-		mock_2_submissions_to_san_diego_pubdef \
-		mock_2_submissions_to_san_joaquin_pubdef \
-		mock_2_submissions_to_santa_clara_pubdef \
-		mock_2_submissions_to_santa_cruz_pubdef \
-		mock_2_submissions_to_fresno_pubdef \
-		mock_2_submissions_to_sonoma_pubdef \
-		mock_2_submissions_to_tulare_pubdef \
-		mock_2_transfers \
-		mock_1_submission_to_multiple_orgs \
-		mock_1_bundle_to_a_pubdef \
-		mock_1_bundle_to_ebclc \
-		mock_1_bundle_to_sf_pubdef \
-		mock_1_bundle_to_cc_pubdef \
-		mock_1_bundle_to_monterey_pubdef \
-		mock_1_bundle_to_solano_pubdef \
-		mock_1_bundle_to_san_diego_pubdef \
-		mock_1_bundle_to_san_joaquin_pubdef \
-		mock_1_bundle_to_santa_clara_pubdef \
-		mock_1_bundle_to_santa_cruz_pubdef \
-		mock_1_bundle_to_fresno_pubdef \
-		mock_1_bundle_to_sonoma_pubdef \
-		mock_1_bundle_to_tulare_pubdef \
-		mock_application_events
-
-
-notebook:
-	python ./manage.py shell_plus --notebook
+db.pull.demo:
+	dropdb intake --if-exists
+	heroku pg:pull --app cmr-demo DATABASE_URL intake
