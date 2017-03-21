@@ -65,6 +65,7 @@ class TestApplicationTransferView(IntakeDataTestCase):
         self.assertRedirects(
             response, reverse('intake-app_index'),
             fetch_redirect_response=False)
+        # check for resulting database objects
         transfers = models.ApplicationTransfer.objects.filter(
             new_application__form_submission_id=self.sub.id).distinct()
         self.assertEqual(transfers.count(), 1)
@@ -125,3 +126,28 @@ class TestApplicationTransferView(IntakeDataTestCase):
             fetch_redirect_response=False)
         index = self.client.get(response.url)
         self.assertContains(index, escape(NOT_ALLOWED_MESSAGE))
+
+    def test_anon_user_redirected_to_login(self):
+        self.be_anonymous()
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(reverse('user_accounts-login'), response.url)
+
+    def test_cfa_user_redirected_to_appindex(self):
+        self.be_cfa_user()
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response, reverse('intake-app_index'),
+            fetch_redirect_response=False)
+        index = self.client.get(response.url)
+        self.assertContains(index, escape(NOT_ALLOWED_MESSAGE))
+
+    def test_monitor_user_gets_error(self):
+        self.be_monitor_user()
+        response = self.client.get(self.url)
+        # since monitoring users don't have access to app index
+        # this will create an infinite redirect error (as will most attempts
+        # by monitor users to access restricted URLs)
+        self.assertRedirects(
+            response, reverse('intake-app_index'),
+            fetch_redirect_response=False)
