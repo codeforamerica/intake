@@ -2,10 +2,12 @@ import os
 from unittest.mock import patch
 from django.db.models import Count
 from django.test import TestCase, Client
+from django.db import DEFAULT_DB_ALIAS, connections
 from django.test.utils import setup_test_environment
 from user_accounts.tests.base_testcases import AuthIntegrationTestCase
 from intake import models
 from intake.tests import mock
+from .test_utils import AssertNumQueriesLessThanContext
 
 from project.fixtures_index import (
     ESSENTIAL_DATA_FIXTURES,
@@ -110,3 +112,17 @@ class APIViewTestCase(IntakeDataTestCase):
 
     fixtures = [
         'counties', 'organizations', 'mock_profiles']
+
+
+class DeluxeTransactionTestCase(TestCase):
+
+    def assertNumQueriesLessThanEqual(self, num, func=None, *args, **kwargs):
+        using = kwargs.pop("using", DEFAULT_DB_ALIAS)
+        conn = connections[using]
+
+        context = AssertNumQueriesLessThanContext(self, num, conn)
+        if func is None:
+            return context
+
+        with context:
+            func(*args, **kwargs)

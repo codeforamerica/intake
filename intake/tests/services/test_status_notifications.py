@@ -1,6 +1,5 @@
 from unittest.mock import Mock, patch
-from intake.tests.mock import FormSubmissionFactory
-from intake.tests.mock_utils import SimpleMock
+from intake.tests.factories import FormSubmissionWithOrgsFactory
 from django.test import TestCase
 from intake import services, models
 from user_accounts.models import Organization
@@ -26,7 +25,7 @@ class TestSendAndSaveNewStatus(TestCase):
         mock_request = Mock()
         org = Organization.objects.filter(is_live=True).last()
         profile = org.profiles.first()
-        submission = FormSubmissionFactory(organizations=[org])
+        submission = FormSubmissionWithOrgsFactory(organizations=[org])
         application = submission.applications.first()
         status_update_data = dict(
             author=profile.user,
@@ -36,7 +35,6 @@ class TestSendAndSaveNewStatus(TestCase):
             additional_information="")
         notification_data = dict(
             sent_message="hey there")
-
         services.status_notifications.send_and_save_new_status(
             mock_request, notification_data, status_update_data)
 
@@ -61,7 +59,7 @@ class TestGetBaseMessageFromStatusUpdateData(TestCase):
         mock_request = Mock()
         org = Organization.objects.filter(is_live=True).last()
         profile = org.profiles.first()
-        submission = FormSubmissionFactory(organizations=[org])
+        submission = FormSubmissionWithOrgsFactory(organizations=[org])
         application = submission.applications.first()
         status_update_data = dict(
             author=profile.user,
@@ -80,7 +78,7 @@ class TestGetBaseMessageFromStatusUpdateData(TestCase):
         mock_request = Mock()
         org = Organization.objects.filter(is_live=True).last()
         profile = org.profiles.first()
-        submission = FormSubmissionFactory(organizations=[org])
+        submission = FormSubmissionWithOrgsFactory(organizations=[org])
         application = submission.applications.first()
         status_update_data = dict(
             author=profile.user,

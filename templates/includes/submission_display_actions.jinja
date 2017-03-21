@@ -1,7 +1,9 @@
 {%- if form.submission and request %}
 <ul class="data_display-action_menu">
   {%- set transfer = form.submission.get_transfer_action(request) %}
-  {%- if transfer %}
+  {%- 
+    if transfer and not form.submission.applications.filter(
+      was_transferred_out=True).exists() %}
     <li class="action_menu-item">
       <a title="If this application should not be handled by your organization, you can transfer it to {{ transfer.display }}. You will no longer see this application." href="{{ transfer.url }}" class="action_menu-item_link">
         Transfer this application to {{ transfer.display }}

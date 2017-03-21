@@ -18,6 +18,7 @@ class TemplateOption(models.Model):
     help_text = models.TextField(blank=True)
     slug = models.SlugField(unique=True)
     is_active = models.BooleanField(default=True)
+    is_a_status_update_choice = models.BooleanField(default=True)
 
     def render(self, context):
         return render_template_string(self.template, context)

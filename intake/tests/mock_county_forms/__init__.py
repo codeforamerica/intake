@@ -64,6 +64,9 @@ class Provider(BaseProvider):
         data.update(overrides)
         return data
 
+    def sf_pubdef_answers(self, **kwargs):
+        return self.sf_county_form_answers(**kwargs)
+
     def contra_costa_county_form_answers(self, **overrides):
         data = {
             'contact_preferences': self.generate_contact_preferences(),
@@ -92,6 +95,9 @@ class Provider(BaseProvider):
         }
         data.update(overrides)
         return data
+
+    def cc_pubdef_answers(self, **kwargs):
+        return self.contra_costa_county_form_answers(**kwargs)
 
     def alameda_county_form_answers(self, **overrides):
         data = {
@@ -211,13 +217,16 @@ class Provider(BaseProvider):
         data.update(overrides)
         return data
 
+    def a_pubdef_answers(self, **kwargs):
+        return self.alameda_pubdef_answers(**kwargs)
+
     def monterey_pubdef_answers(self, **overrides):
         data = self.alameda_county_form_answers()
         data.update(
             is_veteran=self.maybe(0.1),
             is_student=self.maybe(0.2),
             when_probation_or_parole='2018',
-            where_probation_or_parole='Solano County',
+            where_probation_or_parole='Yolo County',
         )
         data.update(overrides)
         return data

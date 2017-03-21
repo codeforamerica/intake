@@ -2,7 +2,7 @@ from unittest.mock import Mock, patch
 from django.test import TestCase
 from django.db.models import Count
 import intake.services.submissions as SubmissionsService
-from intake.tests import mock
+from intake.tests import mock, factories
 from intake.tests.base_testcases import (
     ExternalNotificationsPatchTestCase, ALL_APPLICATION_FIXTURES)
 from formation.forms import county_form_selector
@@ -145,15 +145,15 @@ class TestFindDuplicates(TestCase):
             first_name="Joe",
             middle_name="H",
             last_name="Parabole")
-        a = mock.FormSubmissionFactory.create(
+        a = factories.FormSubmissionWithOrgsFactory.create(
             answers=mock.fake.alameda_pubdef_answers(**a_name),
             organizations=[org],
         )
-        b = mock.FormSubmissionFactory.create(
+        b = factories.FormSubmissionWithOrgsFactory.create(
             answers=mock.fake.alameda_pubdef_answers(**b_name),
             organizations=[org],
         )
-        c = mock.FormSubmissionFactory.create(
+        c = factories.FormSubmissionWithOrgsFactory.create(
             answers=mock.fake.alameda_pubdef_answers(**b_name),
             organizations=[org],
         )
@@ -173,11 +173,11 @@ class TestFindDuplicates(TestCase):
             first_name="Joseph",
             middle_name="H",
             last_name="Conic Intersection")
-        mock.FormSubmissionFactory.create(
+        factories.FormSubmissionWithOrgsFactory.create(
             answers=mock.fake.alameda_pubdef_answers(**a_name),
             organizations=[org],
         )
-        mock.FormSubmissionFactory.create(
+        factories.FormSubmissionWithOrgsFactory.create(
             answers=mock.fake.alameda_pubdef_answers(**b_name),
             organizations=[org],
         )
@@ -243,7 +243,7 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
             email='test@gmail.com',
             phone_number='5554442222',
         )
-        sub = mock.FormSubmissionFactory.create(
+        sub = factories.FormSubmissionWithOrgsFactory.create(
             applicant=applicant,
             organizations=self.get_orgs(),
             answers=answers)
@@ -266,7 +266,7 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
             email='test@gmail.com',
             phone_number='5554442222',
         )
-        sub = mock.FormSubmissionFactory.create(
+        sub = factories.FormSubmissionWithOrgsFactory.create(
             applicant=applicant,
             organizations=self.get_orgs(),
             answers=answers)
@@ -289,7 +289,7 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
             email='test@gmail.com',
             phone_number='5554442222',
         )
-        sub = mock.FormSubmissionFactory.create(
+        sub = factories.FormSubmissionWithOrgsFactory.create(
             applicant=applicant,
             organizations=self.get_orgs(),
             answers=answers)

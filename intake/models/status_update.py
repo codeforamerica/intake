@@ -1,4 +1,5 @@
 from django.db import models
+from intake.constants import PACIFIC_TIME
 
 
 class StatusUpdate(models.Model):
@@ -17,6 +18,9 @@ class StatusUpdate(models.Model):
     other_next_step = models.TextField(blank=True)
 
     def __str__(self):
-        app = str(self.application.form_submission.id)
-        status_type = self.status_type.display_name
-        return app + status_type
+        return "Sub {} {} on {} by {}".format(
+            self.application.form_submission.pk,
+            self.status_type.display_name,
+            self.updated.astimezone(
+                PACIFIC_TIME).strftime("%b %-d %Y"),
+            self.author.profile.name)

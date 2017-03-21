@@ -1,0 +1,15 @@
+<div class="application-detail-latest-status">
+  <div class="col-xs-6">
+    <span class="data_display-label">Current Status:</span>
+    <br/>
+    {{application.latest_status.status_type.display_name}} to {{
+      application.latest_status.transfer.new_application.organization.name
+    }}
+     by {{application.latest_status.author.profile.name}}
+  </div>
+  <div class="col-xs-6">
+    <span class="data_display-label">Reason:</span>
+    <br/>
+    {{application.latest_status.transfer.reason}}
+  </div>
+</div>

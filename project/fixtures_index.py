@@ -32,6 +32,10 @@ MOCK_APPLICATION_FIXTURES = (
     'mock_1_submission_to_multiple_orgs',
 )
 
+MOCK_TRANSFER_FIXTURES = (
+    'mock_2_transfers',
+)
+
 # These are fake case events (submitted, opened, processed, etc.)
 # depends on MOCK_APPLICATION_FIXTURES and MOCK_USER_ACCOUNT_FIXTURES
 MOCK_EVENT_FIXTURES = (
@@ -61,6 +65,7 @@ MOCK_BUNDLE_FIXTURES = (
 ALL_MOCK_DATA_FIXTURES = (
     MOCK_USER_ACCOUNT_FIXTURES +
     MOCK_APPLICATION_FIXTURES +
+    MOCK_TRANSFER_FIXTURES +
     MOCK_BUNDLE_FIXTURES +
     MOCK_EVENT_FIXTURES
 )

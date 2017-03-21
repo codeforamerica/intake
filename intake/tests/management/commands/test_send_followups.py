@@ -1,6 +1,6 @@
 from unittest.mock import patch, Mock
 from intake.tests.base_testcases import ExternalNotificationsPatchTestCase
-from intake.tests import mock
+from intake.tests import mock, factories
 from intake.management.commands import send_followups
 from intake.models import Applicant
 from user_accounts.models import Organization
@@ -30,7 +30,7 @@ class TestCommand(ExternalNotificationsPatchTestCase):
         for date, pk in zip(dates, range(464, 469)):
             applicant = Applicant()
             applicant.save()
-            mock.FormSubmissionFactory.create(
+            factories.FormSubmissionWithOrgsFactory.create(
                 id=pk,
                 applicant=applicant,
                 date_received=date,

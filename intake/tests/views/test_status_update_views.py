@@ -98,7 +98,8 @@ class TestStatusUpdateWorkflow(StatusUpdateViewBaseTestCase):
             fetch_redirect_response=False)
         index = self.client.get(response.url)
         expected_message = services.status_notifications \
-            .get_status_update_success_message(self.sub, self.status_type)
+            .get_status_update_success_message(
+                self.sub.get_full_name(), self.status_type)
         self.assertContains(
             index, escape(expected_message))
         self.assertEqual(len(front.mock_calls), 1)

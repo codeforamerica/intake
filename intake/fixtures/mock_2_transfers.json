@@ -1,0 +1,356 @@
+[
+{
+  "model": "intake.visitor",
+  "pk": 325,
+  "fields": {
+    "first_visit": "2017-03-16T23:24:55.723Z",
+    "source": "share",
+    "referrer": "http://bajoradefender.org/services/clean-slate/",
+    "ip_address": "48.104.186.127"
+  }
+},
+{
+  "model": "intake.visitor",
+  "pk": 326,
+  "fields": {
+    "first_visit": "2017-03-16T23:24:55.759Z",
+    "source": "share",
+    "referrer": "http://bajoradefender.org/services/clean-slate/",
+    "ip_address": "48.104.186.127"
+  }
+},
+{
+  "model": "intake.applicant",
+  "pk": 507,
+  "fields": {
+    "visitor": 325
+  }
+},
+{
+  "model": "intake.applicant",
+  "pk": 508,
+  "fields": {
+    "visitor": 326
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 504,
+  "fields": {
+    "applicant": 507,
+    "duplicate_set": null,
+    "answers": {
+      "last_name": "Chen",
+      "finished_half_probation": "not_applicable",
+      "being_charged": "no",
+      "dob": {
+        "year": "1981",
+        "month": "9",
+        "day": "26"
+      },
+      "household_size": 3,
+      "middle_name": "Elizabeth",
+      "contact_preferences": [
+        "prefers_sms",
+        "prefers_email"
+      ],
+      "on_public_benefits": "yes",
+      "additional_information": "I want help",
+      "us_citizen": "yes",
+      "has_suspended_license": "yes",
+      "monthly_income": 2999,
+      "on_probation_parole": "yes",
+      "owes_court_fees": "yes",
+      "owns_home": "no",
+      "email": "harringtonscott@hotmail.com",
+      "reduced_probation": "not_applicable",
+      "when_where_outside_sf": "",
+      "understands_limits": "yes",
+      "address": {
+        "street": "486 Jessica Via Suite 153",
+        "zip": "19501",
+        "city": "Washingtonport",
+        "state": "MD"
+      },
+      "how_did_you_hear": "from work",
+      "first_name": "Daniel",
+      "preferred_pronouns": "",
+      "serving_sentence": "no",
+      "phone_number": "2951448136",
+      "consent_to_represent": "yes",
+      "rap_outside_sf": "no",
+      "alternate_phone_number": "2181822441"
+    },
+    "first_name": "Daniel",
+    "last_name": "Chen",
+    "dob": null,
+    "ssn": "",
+    "last_four": "",
+    "drivers_license_or_id": "",
+    "case_number": "",
+    "phone_number": "2951448136",
+    "alternate_phone_number": "2181822441",
+    "email": "harringtonscott@hotmail.com",
+    "old_uuid": "dcc14572ca8c41f29f987212aceaa25a",
+    "anonymous_name": "Inquisitive Rock",
+    "date_received": "2017-03-03T19:31:46-08:00"
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 505,
+  "fields": {
+    "applicant": 508,
+    "duplicate_set": null,
+    "answers": {
+      "last_name": "Mora",
+      "finished_half_probation": "not_applicable",
+      "being_charged": "no",
+      "dob": {
+        "year": "1985",
+        "month": "10",
+        "day": "5"
+      },
+      "household_size": 4,
+      "middle_name": "George",
+      "contact_preferences": [
+        "prefers_sms",
+        "prefers_email"
+      ],
+      "on_public_benefits": "yes",
+      "additional_information": "I want help",
+      "us_citizen": "no",
+      "has_suspended_license": "no",
+      "monthly_income": 3001,
+      "on_probation_parole": "yes",
+      "owes_court_fees": "yes",
+      "owns_home": "yes",
+      "email": "sierrabyrd@yahoo.com",
+      "reduced_probation": "not_applicable",
+      "when_where_outside_sf": "",
+      "understands_limits": "yes",
+      "address": {
+        "street": "089 Newman Creek Apt. 329",
+        "zip": "66949",
+        "city": "Port Hannah",
+        "state": "KY"
+      },
+      "how_did_you_hear": "from work",
+      "first_name": "Molly",
+      "preferred_pronouns": "",
+      "serving_sentence": "no",
+      "phone_number": "2378470683",
+      "consent_to_represent": "yes",
+      "rap_outside_sf": "no",
+      "alternate_phone_number": "2117069482"
+    },
+    "first_name": "Molly",
+    "last_name": "Mora",
+    "dob": null,
+    "ssn": "",
+    "last_four": "",
+    "drivers_license_or_id": "",
+    "case_number": "",
+    "phone_number": "2378470683",
+    "alternate_phone_number": "2117069482",
+    "email": "sierrabyrd@yahoo.com",
+    "old_uuid": "cbf9c7b126a844689d46c2525511660a",
+    "anonymous_name": "Humming Moose",
+    "date_received": "2017-03-07T14:40:10-08:00"
+  }
+},
+{
+  "model": "intake.application",
+  "pk": 714,
+  "fields": {
+    "created": "2017-03-16T23:24:55.728Z",
+    "updated": "2017-03-16T23:24:55.751Z",
+    "organization": [
+      "Alameda County Public Defender's Office"
+    ],
+    "form_submission": 504,
+    "was_transferred_out": true
+  }
+},
+{
+  "model": "intake.application",
+  "pk": 715,
+  "fields": {
+    "created": "2017-03-16T23:24:55.748Z",
+    "updated": "2017-03-16T23:24:55.748Z",
+    "organization": [
+      "East Bay Community Law Center"
+    ],
+    "form_submission": 504,
+    "was_transferred_out": false
+  }
+},
+{
+  "model": "intake.application",
+  "pk": 716,
+  "fields": {
+    "created": "2017-03-16T23:24:55.762Z",
+    "updated": "2017-03-16T23:24:55.784Z",
+    "organization": [
+      "East Bay Community Law Center"
+    ],
+    "form_submission": 505,
+    "was_transferred_out": true
+  }
+},
+{
+  "model": "intake.application",
+  "pk": 717,
+  "fields": {
+    "created": "2017-03-16T23:24:55.782Z",
+    "updated": "2017-03-16T23:24:55.782Z",
+    "organization": [
+      "Alameda County Public Defender's Office"
+    ],
+    "form_submission": 505,
+    "was_transferred_out": false
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 706,
+  "fields": {
+    "created": "2017-03-16T23:24:55.738Z",
+    "updated": "2017-03-16T23:24:55.746Z",
+    "status_type": 4,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "a_pubdef_user"
+    ],
+    "application": 714,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 707,
+  "fields": {
+    "created": "2017-03-16T23:24:55.747Z",
+    "updated": "2017-03-16T23:24:55.747Z",
+    "status_type": 8,
+    "additional_information": "",
+    "author": [
+      "a_pubdef_user"
+    ],
+    "application": 714,
+    "other_next_step": "",
+    "next_steps": []
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 708,
+  "fields": {
+    "created": "2017-03-16T23:24:55.771Z",
+    "updated": "2017-03-16T23:24:55.779Z",
+    "status_type": 5,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "ebclc_user"
+    ],
+    "application": 716,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 709,
+  "fields": {
+    "created": "2017-03-16T23:24:55.780Z",
+    "updated": "2017-03-16T23:24:55.780Z",
+    "status_type": 8,
+    "additional_information": "",
+    "author": [
+      "ebclc_user"
+    ],
+    "application": 716,
+    "other_next_step": "",
+    "next_steps": []
+  }
+},
+{
+  "model": "intake.statusnotification",
+  "pk": 696,
+  "fields": {
+    "status_update": 706,
+    "contact_info": {
+      "email": "bgolder+borg@codeforamerica.org"
+    },
+    "base_message": "Resistance is futile",
+    "sent_message": "Live long and prosper",
+    "created": "2017-03-16T23:24:55.739Z"
+  }
+},
+{
+  "model": "intake.statusnotification",
+  "pk": 697,
+  "fields": {
+    "status_update": 707,
+    "contact_info": {
+      "email": "bgolder+borg@codeforamerica.org"
+    },
+    "base_message": "You case has been transferred to East Bay Community Law Center.\nNext step in Alameda is to get your CA RAP sheet and send it to EBCLC. More info http://c4a.me/rap",
+    "sent_message": "You case has been transferred to East Bay Community Law Center.\nNext step in Alameda is to get your CA RAP sheet and send it to EBCLC. More info http://c4a.me/rap",
+    "created": "2017-03-16T23:24:55.752Z"
+  }
+},
+{
+  "model": "intake.statusnotification",
+  "pk": 698,
+  "fields": {
+    "status_update": 708,
+    "contact_info": {
+      "email": "bgolder+borg@codeforamerica.org"
+    },
+    "base_message": "Resistance is futile",
+    "sent_message": "Live long and prosper",
+    "created": "2017-03-16T23:24:55.773Z"
+  }
+},
+{
+  "model": "intake.statusnotification",
+  "pk": 699,
+  "fields": {
+    "status_update": 709,
+    "contact_info": {
+      "email": "bgolder+borg@codeforamerica.org"
+    },
+    "base_message": "You case has been transferred to Alameda County Public Defender's Office.\nThe Alameda Public Defender will follow up with you if they need any other information.",
+    "sent_message": "You case has been transferred to Alameda County Public Defender's Office.\nThe Alameda Public Defender will follow up with you if they need any other information.",
+    "created": "2017-03-16T23:24:55.785Z"
+  }
+},
+{
+  "model": "intake.applicationtransfer",
+  "pk": 11,
+  "fields": {
+    "created": "2017-03-16T23:24:55.749Z",
+    "updated": "2017-03-16T23:24:55.749Z",
+    "status_update": 707,
+    "new_application": 715,
+    "reason": "Transporter malfunction"
+  }
+},
+{
+  "model": "intake.applicationtransfer",
+  "pk": 12,
+  "fields": {
+    "created": "2017-03-16T23:24:55.783Z",
+    "updated": "2017-03-16T23:24:55.783Z",
+    "status_update": 709,
+    "new_application": 717,
+    "reason": "Transporter malfunction"
+  }
+}
+]

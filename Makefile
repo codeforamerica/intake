@@ -85,7 +85,6 @@ db.dump_fixtures:
 	    --indent 2 \
 	    --format json
 
-
 db.pull.demo:
 	dropdb intake --if-exists
 	heroku pg:pull --app cmr-demo DATABASE_URL intake
