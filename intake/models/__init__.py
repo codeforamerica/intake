@@ -5,6 +5,7 @@ from .pdfs import (
 from .visitor import Visitor
 from .applicant import Applicant
 from .application import Application
+from .application_transfer import ApplicationTransfer
 from .application_event import ApplicationEvent
 from .application_bundle import ApplicationBundle
 from .application_log_entry import (
@@ -33,6 +34,7 @@ __all__ = [
     CountyManager,
     Applicant,
     Application,
+    ApplicationTransfer,
     ApplicationBundle,
     ApplicationEvent,
     ApplicationNote,
@@ -48,5 +50,5 @@ __all__ = [
     NextStep,
     StatusType,
     StatusUpdate,
-    StatusNotification
+    StatusNotification,
 ]

@@ -208,5 +208,5 @@ class TestApplicationHistory(AppDetailAccessBaseTests):
         status_updates = response.context_data['status_updates']
         for status_update in status_updates:
             self.assertEqual(
-                status_update.application.organization,
-                user.profile.organization)
+                status_update['organization_name'],
+                user.profile.organization.name)

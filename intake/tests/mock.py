@@ -5,8 +5,6 @@ import factory
 import datetime as dt
 from pytz import timezone
 from faker import Factory as FakerFactory
-from intake.tests.factories import (
-    StatusUpdateFactory, StatusNotificationFactory)
 from django.core.files import File
 from django.core import serializers
 from django.core.management import call_command
@@ -15,12 +13,11 @@ from django.utils.datastructures import MultiValueDict
 
 from taggit.models import Tag
 
-from intake import models, constants
+from intake import models, constants, services
 from intake.constants import PACIFIC_TIME
-from intake.tests import mock_user_agents, mock_referrers
+from intake.tests import mock_user_agents, mock_referrers, factories
 from intake.services import bundles as BundlesService
-from intake.models.form_submission import FORMSUBMISSION_TEXT_SEARCH_FIELDS
-from user_accounts.tests.mock import OrganizationFactory, create_seed_users
+from user_accounts.tests.mock import create_seed_users
 from unittest.mock import Mock
 Pacific = timezone('US/Pacific')
 
@@ -75,7 +72,7 @@ NEW_RAW_FORM_DATA = {
 
 
 def make_submission():
-    return FormSubmissionFactory.create()
+    return factories.FormSubmissionWithOrgsFactory.create()
 
 
 def make_tag(name="example"):
@@ -133,31 +130,6 @@ def fake_typeseam_submission_dicts(uuids):
         'date_received': fake.date_time_between('-2w', 'now'),
         'answers': fake.sf_county_form_answers()
     } for uuid in uuids]
-
-
-class FormSubmissionFactory(factory.DjangoModelFactory):
-    date_received = factory.LazyFunction(
-        lambda: local(fake.date_time_between('-2w', 'now')))
-    answers = factory.LazyFunction(
-        lambda: fake.cleaned_sf_county_form_answers())
-
-    class Meta:
-        model = models.FormSubmission
-
-    @factory.post_generation
-    def organizations(self, create, extracted, **kwargs):
-        if not create:
-            return
-        if extracted:
-            self.organizations.add_orgs_to_sub(*[
-                organization for organization in extracted
-            ])
-
-    @classmethod
-    def create(cls, *args, **kwargs):
-        if 'organizations' not in kwargs:
-            kwargs['organizations'] = OrganizationFactory.sample()
-        return super().create(*args, **kwargs)
 
 
 class FillablePDFFactory(factory.DjangoModelFactory):
@@ -309,128 +281,76 @@ def make_mock_submission_event_sequence(applicant):
     return events
 
 
+def make_mock_transfer_sub(from_org, to_org):
+    sub = factories.FormSubmissionWithOrgsFactory.create(
+        organizations=[from_org])
+    application = sub.applications.first()
+    author = from_org.profiles.first().user
+    # make a status_update prior to transfer
+    factories.StatusUpdateWithNotificationFactory.create(
+        application=application, author=author)
+    transfer = services.applications_service.transfer_application(
+        author=author, application=application,
+        to_organization=to_org, reason="Transporter malfunction")
+    message = 'You case has been transferred to {}.\n{}'.format(
+        to_org.name, to_org.short_confirmation_message)
+    factories.StatusNotificationFactory.create(
+        status_update=transfer.status_update, base_message=message,
+        sent_message=message)
+    return sub
+
+
+def make_two_mock_transfers():
+    from user_accounts.models import Organization
+    orgs = Organization.objects.filter(can_transfer_applications=True)
+    org_a = orgs[0]
+    org_b = orgs[1]
+    subs = []
+    subs.append(make_mock_transfer_sub(org_a, org_b))
+    subs.append(make_mock_transfer_sub(org_b, org_a))
+    transfers = models.ApplicationTransfer.objects.filter(
+        new_application__form_submission__in=subs)
+    serialize_subs(
+        subs, fixture_path('mock_2_transfers.json'), transfers)
+
+
 def build_seed_submissions():
     create_seed_users()
     from user_accounts.models import Organization
-    from formation.forms import county_form_selector
-    cc_pubdef = Organization.objects.get(
-        slug=constants.Organizations.COCO_PUBDEF)
-    a_pubdef = Organization.objects.get(
-        slug=constants.Organizations.ALAMEDA_PUBDEF)
-    ebclc = Organization.objects.get(
-        slug=constants.Organizations.EBCLC)
-    sf_pubdef = Organization.objects.get(
-        slug=constants.Organizations.SF_PUBDEF)
-    monterey_pubdef = Organization.objects.get(
-        slug=constants.Organizations.MONTEREY_PUBDEF)
-    solano_pubdef = Organization.objects.get(
-        slug=constants.Organizations.SOLANO_PUBDEF)
-    san_diego_pubdef = Organization.objects.get(
-        slug=constants.Organizations.SAN_DIEGO_PUBDEF)
-    san_joaquin_pubdef = Organization.objects.get(
-        slug=constants.Organizations.SAN_JOAQUIN_PUBDEF)
-    santa_clara_pubdef = Organization.objects.get(
-        slug=constants.Organizations.SANTA_CLARA_PUBDEF)
-    fresno_pubdef = Organization.objects.get(
-        slug=constants.Organizations.FRESNO_PUBDEF)
-    santa_cruz_pubdef = Organization.objects.get(
-        slug=constants.Organizations.SANTA_CRUZ_PUBDEF)
-    sonoma_pubdef = Organization.objects.get(
-        slug=constants.Organizations.SONOMA_PUBDEF)
-    tulare_pubdef = Organization.objects.get(
-        slug=constants.Organizations.TULARE_PUBDEF)
-    receiving_orgs = [
-        cc_pubdef, a_pubdef, ebclc, sf_pubdef, monterey_pubdef,
-        solano_pubdef, san_diego_pubdef, san_joaquin_pubdef,
-        santa_clara_pubdef, fresno_pubdef, santa_cruz_pubdef, sonoma_pubdef,
-        tulare_pubdef]
-    answer_pairs = {
-        sf_pubdef.slug: fake.sf_county_form_answers,
-        cc_pubdef.slug: fake.contra_costa_county_form_answers,
-        ebclc.slug: fake.ebclc_answers,
-        a_pubdef.slug: fake.alameda_pubdef_answers,
-        monterey_pubdef.slug: fake.monterey_pubdef_answers,
-        solano_pubdef.slug: fake.solano_pubdef_answers,
-        san_diego_pubdef.slug: fake.san_diego_pubdef_answers,
-        san_joaquin_pubdef.slug: fake.san_joaquin_pubdef_answers,
-        santa_clara_pubdef.slug: fake.santa_clara_pubdef_answers,
-        santa_cruz_pubdef.slug: fake.santa_cruz_pubdef_answers,
-        fresno_pubdef.slug: fake.fresno_pubdef_answers,
-        sonoma_pubdef.slug: fake.sonoma_pubdef_answers,
-        tulare_pubdef.slug: fake.tulare_pubdef_answers,
-    }
-    form_pairs = {
-        org.slug: county_form_selector.get_combined_form_class(
-            counties=[org.county.slug])
-        for org in receiving_orgs
-    }
-    # make 2 submissions to each org
-    applicants = []
     subs = []
-    for org in receiving_orgs:
+    orgs = Organization.objects.filter(is_receiving_agency=True)
+    for org in orgs:
+        # make 2 submissions to each org
         for i in range(2):
-            raw_answers = answer_pairs[org.slug]()
-            Form = form_pairs[org.slug]
-            form = Form(raw_answers, validate=True)
-            applicant = models.Applicant()
-            applicant.save()
-            applicants.append(applicant)
-            sub = models.FormSubmission(
-                applicant=applicant,
-                answers=form.cleaned_data
-            )
-            if org in (a_pubdef, santa_clara_pubdef, monterey_pubdef):
-                letter = fake.declaration_letter_answers()
-                sub.answers.update(letter)
-            # graduate answers fields for search
-            keys = FORMSUBMISSION_TEXT_SEARCH_FIELDS
-            for key in keys:
-                existing = sub.answers.get(key, "")
-                setattr(sub, key, existing)
-            sub.save()
-            application = models.Application(
-                organization=org, form_submission=sub)
-            application.save()
-            StatusUpdateFactory.create(
-                application=application, author=org.profiles.first().user)
+            sub = factories.FormSubmissionWithOrgsFactory.create(
+                organizations=[org])
             subs.append(sub)
     # make 1 submission to multiple orgs
-    target_orgs = [
-        a_pubdef, cc_pubdef, sf_pubdef, monterey_pubdef, solano_pubdef,
-        san_diego_pubdef, san_joaquin_pubdef, santa_clara_pubdef,
-        fresno_pubdef, santa_cruz_pubdef, sonoma_pubdef, tulare_pubdef]
-    answers = fake.all_county_answers()
-    Form = county_form_selector.get_combined_form_class(
-        counties=[org.county.slug for org in target_orgs])
-    form = Form(answers, validate=True)
-    applicant = models.Applicant()
-    applicant.save()
-    applicants.append(applicant)
-    multi_org_sub = models.FormSubmission(
-        applicant=applicant, answers=form.cleaned_data)
-    multi_org_sub.answers.update(fake.declaration_letter_answers())
-    multi_org_sub.save()
-    applications = [
-        models.Application(organization=org, form_submission=multi_org_sub)
-        for org in target_orgs
-    ]
-    models.Application.objects.bulk_create(applications)
+    target_orgs = Organization.objects.filter(
+        is_receiving_agency=True).exclude(slug__contains='ebclc')
+    multi_org_sub = factories.FormSubmissionWithOrgsFactory.create(
+        organizations=target_orgs)
+    subs.append(multi_org_sub)
+    sub_ids = [sub.id for sub in subs]
+    applications = models.Application.objects.filter(
+        form_submission_id__in=sub_ids)
+
+    applicants = []
+    for sub in subs:
+        applicants.append(sub.applicant)
+
     for application in applications:
-        StatusUpdateFactory.create(
+        factories.StatusUpdateWithNotificationFactory.create(
             application=application,
             author=application.organization.profiles.first().user)
-    subs.append(multi_org_sub)
-    # fake the date received for each sub
-    for sub in subs:
-        sub.date_received = local(fake.date_time_between('-2w', 'now'))
-        sub.save()
-    # make a bundle for each org
-    for org in receiving_orgs:
+
+    for org in orgs:
         org_subs = []
         for sub in subs:
             has_app = sub.applications.filter(organization=org).exists()
             if has_app and sub != multi_org_sub:
                 org_subs.append(sub)
+        # make a bundle for each org
         bundle = BundlesService.create_bundle_from_submissions(
             organization=org,
             submissions=org_subs,
@@ -449,6 +369,7 @@ def build_seed_submissions():
         events.extend(
             make_mock_submission_event_sequence(applicant))
     dump_as_json(events, fixture_path('mock_application_events.json'))
+    make_two_mock_transfers()
 
 
 def fixture_path(filename):
@@ -462,24 +383,21 @@ def dump_as_json(objs, filepath):
         f.write(data)
 
 
-def serialize_subs(subs, filepath):
-    applicants = [
-        models.Applicant.objects.get(id=sub.applicant_id)
-        for sub in subs]
-    application_sets = [
-        models.Application.objects.filter(form_submission=sub)
-        for sub in subs]
-    applications = []
+def serialize_subs(subs, filepath, *other_objects):
+    applicants = [sub.applicant for sub in subs]
+    visitors = [applicant.visitor for applicant in applicants]
+    applications = models.Application.objects.filter(
+        form_submission__in=subs)
     status_updates = []
     status_notifications = []
-    for application_set in application_sets:
-        applications.extend(application_set)
-    for application in applications:
-        status_updates.extend(application.status_updates.all())
-    status_notifications = [StatusNotificationFactory.create(
-        status_update=status_update) for status_update in status_updates]
+    status_updates = models.StatusUpdate.objects.filter(
+        application__in=applications)
+    status_notifications = models.StatusNotification.objects.filter(
+        status_update__in=status_updates)
     with open(filepath, 'w') as f:
-        data = [*applicants, *subs, *applications,
+        data = [*visitors, *applicants, *subs, *applications,
                 *status_updates, *status_notifications]
+        for object_set in other_objects:
+            data.extend(object_set)
         f.write(serializers.serialize(
             'json', data, indent=2, use_natural_foreign_keys=True))

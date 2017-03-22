@@ -15,6 +15,11 @@
 {{ hidden }}
 {% endfor %}
 {% for field in form.visible_fields() %}
+  {{ render_field(field) }}
+{% endfor %}
+{% endmacro %}
+
+{% macro render_field(field) %}
 <div class="field {{ field.html_name }}
   {%- if field.errors %} errors{% endif %}">
   {% if field.errors %}
@@ -102,9 +107,7 @@
     {% endif %}
   </label>
 </div>
-{% endfor %}
 {% endmacro %}
-
 
 {% macro render_warnings(warnings) %}
 {%- if warnings -%}

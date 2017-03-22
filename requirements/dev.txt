@@ -5,8 +5,4 @@ autopep8~=1.2
 pep8~=1.6
 coverage~=4.0
 codeclimate-test-reporter~=0.1
-# factory-boy breaks on later version fo fake-factory
-# we need to pin fake-factory
-fake-factory==0.7.2
-factory-boy~=2.7
 

@@ -16,20 +16,6 @@ class OrganizationManager(models.Manager):
     def get_by_natural_key(self, name):
         return self.get(name=name)
 
-    def transfer_application(self, from_org, to_org):
-        sub = self.extract_sub()
-        self.add_orgs_to_sub(to_org)
-        existing_updates = intake_models.StatusUpdate.objects.filter(
-            application__organization=from_org,
-            application__form_submission=sub)
-        new_application = intake_models.Application.objects.get(
-            organization=to_org,
-            form_submission=sub)
-        for existing_update in existing_updates:
-            existing_update.application = new_application
-            existing_update.save()
-        self.remove_orgs_from_sub(from_org)
-
     def extract_sub(self):
         args, kwargs = self._constructor_args
         if len(args) == 1 and isinstance(
@@ -78,6 +64,9 @@ class Organization(models.Model):
     phone_number = models.TextField(blank=True)
     email = models.TextField(blank=True)
     notify_on_weekends = models.BooleanField(default=False)
+    can_transfer_applications = models.BooleanField(default=False)
+    transfer_partners = models.ManyToManyField(
+        'self', symmetrical=True, blank=True)
 
     class Meta:
         ordering = ['name']
@@ -87,19 +76,6 @@ class Organization(models.Model):
 
     def natural_key(self):
         return (self.__str__(), )
-
-    def get_transfer_org(self):
-        """If this organization is allowed to transfer to another
-        organization, this shoud return the other organization they are
-        allowed to transfer submissions to.
-        """
-        if self.slug == constants.Organizations.ALAMEDA_PUBDEF:
-            return self.__class__.objects.get(
-                slug=constants.Organizations.EBCLC)
-        elif self.slug == constants.Organizations.EBCLC:
-            return self.__class__.objects.get(
-                slug=constants.Organizations.ALAMEDA_PUBDEF)
-        return None
 
     def get_referral_emails(self):
         """Get the emails of users who get notifications for this agency.

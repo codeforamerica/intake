@@ -1,0 +1,61 @@
+{% extends "admin_form_base.jinja" %}
+{% import 'macros.jinja' as macros %}
+
+{%- block header_title -%}
+Transfer Application for {{ submission.get_full_name() }}
+{%- endblock header_title -%}
+
+{% block form %}
+<form id="transfer-application-form" method="POST" action="{{ url('intake-transfer_application', submission_id=submission.id ) }}">
+  {% include "includes/csrf_field.jinja" %}
+  
+  {% if form.non_field_errors() %}
+  {{ form.non_field_errors() }}
+  {% endif %}
+  {% for hidden in form.hidden_fields() %}
+  {{ hidden }}
+  {% endfor %}
+
+  {{ macros.render_field(form['to_organization']) }}
+  {{ macros.render_field(form['reason']) }}
+
+  <div class="field sent_message{% if warning %} warnings{% endif %}">
+      {%- if warning %}
+      <ul class="warninglist">
+        <li class="warning">
+        {{ warning }}
+        {%- if contact_info %}
+        But if you'd like to contact them outside of Clear My Record, here is their contact info:
+        {{ all_contact_info_display_form }}
+        {%- endif %}
+        </li>
+      </ul>
+      {%- endif %}
+      <label class="field-wrapping_label">
+        {%- if usable_contact_info %}
+        <span class="field-display_text">
+          The following message will be {{ contact_method_verbs(usable_contact_info.keys()) }} to the applicant:
+        </span>
+        {%- else %}
+        <span class="field-display_text">
+          Example message
+        </span>
+        {%- endif %}
+      </label>
+      <span class="field-preceding_text">
+        {{ intro_message }}
+      </span>
+      <span class="field-input_wrapper">
+        <textarea name="sent_message">{{ form.sent_message.value() }}</textarea>
+      </span>
+  </div>
+
+  <p>
+    {%- if usable_contact_info %}
+    <input type="submit" value="Transfer & notify applicant" class="btn btn-lg btn-primary">  
+    {%- else %}
+    <input type="submit" value="Transfer" class="btn btn-lg btn-primary"> 
+    {%- endif %}
+  </p>
+</form>
+{% endblock form %}
