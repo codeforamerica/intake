@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from markupsafe import escape
 from intake import models
 from intake.tests.base_testcases import IntakeDataTestCase
+from intake.tests import factories
 
 
 class AppDetailAccessBaseTests(IntakeDataTestCase):
@@ -146,6 +147,14 @@ class TestApplicationDetail(AppDetailAccessBaseTests):
         if this_status_name != other_status_name:
             self.assertNotContains(response, escape(other_status_name))
 
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_shows_new_if_no_status_updates(self, slack):
+        user = self.be_ccpubdef_user()
+        submission = factories.FormSubmissionWithOrgsFactory.create(
+            organizations=[user.profile.organization])
+        response = self.get_page(submission)
+        self.assertContains(response, 'New')
+
 
 class TestApplicationHistory(AppDetailAccessBaseTests):
 
@@ -210,3 +219,11 @@ class TestApplicationHistory(AppDetailAccessBaseTests):
             self.assertEqual(
                 status_update['organization_name'],
                 user.profile.organization.name)
+
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_shows_new_if_no_status_updates(self, slack):
+        user = self.be_ccpubdef_user()
+        submission = factories.FormSubmissionWithOrgsFactory.create(
+            organizations=[user.profile.organization])
+        response = self.get_page(submission)
+        self.assertContains(response, 'New')
