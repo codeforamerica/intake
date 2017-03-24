@@ -25,9 +25,18 @@ def render_application_transfer_message(
 
 def send_application_transfer_notification(transfer_data):
     contact_info = transfer_data['form_submission'].get_usable_contact_info()
-    intro, body = render_application_transfer_message(**transfer_data)
-    notifications.send_simple_front_notification(
-        contact_info, "\n\n".join([intro, body]))
+    if contact_info:
+        intro, body = render_application_transfer_message(**transfer_data)
+        base_message = "\n\n".join([intro, body])
+        sent_message = "\n\n".join(
+            [intro, transfer_data.get('sent_message', body)])
+        notifications.send_simple_front_notification(
+            contact_info, sent_message)
+        return models.StatusNotification(
+            contact_info=contact_info,
+            base_message=base_message,
+            sent_message=sent_message)
+    return None
 
 
 def transfer_application(author, application, to_organization, reason):
@@ -50,13 +59,17 @@ def transfer_application(author, application, to_organization, reason):
     transfer.save()
     application.was_transferred_out = True
     application.save()
-    return transfer
+    return transfer, transfer_status_update, new_application
 
 
 def transfer_application_and_notify_applicant(transfer_data):
-    transfer_application(
+    transfer, status_update, new_app = transfer_application(
         author=transfer_data['author'],
         application=transfer_data['application'],
         to_organization=transfer_data['to_organization'],
         reason=transfer_data.get('reason', ''))
-    send_application_transfer_notification(transfer_data)
+    notification = \
+        send_application_transfer_notification(transfer_data)
+    if notification:
+        notification.status_update_id = status_update.id
+        notification.save()

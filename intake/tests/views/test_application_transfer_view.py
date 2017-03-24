@@ -79,6 +79,8 @@ class TestApplicationTransferView(IntakeDataTestCase):
         self.assertIn(self.from_org, sub_orgs)
         self.assertIn(self.to_org, sub_orgs)
         self.assertTrue(transfer.status_update.application.was_transferred_out)
+        self.assertTrue(transfer.status_update.notification)
+        self.assertTrue(transfer.status_update.notification.contact_info)
         self.assertEqual(len(front.mock_calls), 1)
 
     def test_sees_expected_message(self):
