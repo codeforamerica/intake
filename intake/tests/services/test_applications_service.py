@@ -100,7 +100,7 @@ class TestGetSerializedApplicationHistoryEvents(DeluxeTransactionTestCase):
         to_org = Organization.objects.get(slug='ebclc')
         receiving_user = User.objects.filter(
             profile__organization__slug='ebclc').first()
-        transfer = TransferService.transfer_application(
+        transfer, *other = TransferService.transfer_application(
             author, application, to_org, 'holodeck malfunction')
         app = transfer.new_application
         new_updates_count = random.randint(1, 7)
