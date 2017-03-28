@@ -61,7 +61,9 @@ class TestApplicationTransferView(IntakeDataTestCase):
             models.ApplicationTransfer.objects.filter(
                 new_application__form_submission_id=self.sub.id
             ).distinct().count())
+        # perform the transfer
         response = self.post()
+        # check the response
         self.assertRedirects(
             response, reverse('intake-app_index'),
             fetch_redirect_response=False)
@@ -80,8 +82,26 @@ class TestApplicationTransferView(IntakeDataTestCase):
         self.assertIn(self.to_org, sub_orgs)
         self.assertTrue(transfer.status_update.application.was_transferred_out)
         self.assertTrue(transfer.status_update.notification)
+        notification = transfer.status_update.notification
         self.assertTrue(transfer.status_update.notification.contact_info)
+        sub = transfer.status_update.application.form_submission
+        intro, default_body = \
+            TransferService.render_application_transfer_message(
+                form_submission=sub,
+                author=user,
+                to_organization=self.to_org,
+                from_organization=self.from_org)
+        expected_base_message = "\n\n".join([intro, default_body])
+        expected_sent_message = "\n\n".join(
+            [intro, "we are sending you to the other place"])
+        self.assertEqual(notification.base_message, expected_base_message)
+        self.assertEqual(notification.sent_message, expected_sent_message)
+        self.assertDictEqual(
+            notification.contact_info, sub.get_usable_contact_info())
         self.assertEqual(len(front.mock_calls), 1)
+        front.assert_called_once_with(
+            notification.contact_info, expected_sent_message,
+            subject="Update from Clear My Record")
 
     def test_sees_expected_message(self):
         user = self.be_apubdef_user()

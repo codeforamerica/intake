@@ -27,12 +27,14 @@ class FormSubmissionIndexSerializer(serializers.ModelSerializer):
 
 
 class ApplicationIndexSerializer(LatestStatusBase):
+    local_created = fields.LocalDateField(source='created')
     form_submission = FormSubmissionIndexSerializer()
     status_updates = MinimalStatusUpdateSerializer(many=True)
 
     class Meta:
         model = models.Application
         fields = [
+            'local_created',
             'status_updates',
             'form_submission',
             'was_transferred_out'
@@ -45,6 +47,7 @@ class ApplicationIndexWithTransfersSerializer(ApplicationIndexSerializer):
     class Meta:
         model = models.Application
         fields = [
+            'local_created',
             'status_updates',
             'form_submission',
             'was_transferred_out',

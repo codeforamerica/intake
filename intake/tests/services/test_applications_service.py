@@ -1,4 +1,6 @@
 import random
+from datetime import timedelta
+from django.utils import timezone
 from django.test import TestCase
 from django.contrib.auth.models import User
 from user_accounts.models import Organization
@@ -72,6 +74,16 @@ class TestGetApplicationsIndexForOrgUser(TestCase):
             transfer['author_name'], author.profile.name)
         self.assertEqual(
             transfer['reason'], 'temporal anomalies')
+
+    def test_results_are_in_proper_order(self):
+        user = User.objects.filter(
+            profile__organization__slug='cc_pubdef').first()
+        results = AppsService.get_applications_index_for_org_user(user, 1)
+        future = timezone.now() + timedelta(days=10000)
+        for item in results:
+            date = item['form_submission']['local_date_received']
+            self.assertTrue(date <= future)
+            future = date
 
 
 class TestGetSerializedApplicationHistoryEvents(DeluxeTransactionTestCase):

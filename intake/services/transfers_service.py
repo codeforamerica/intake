@@ -31,7 +31,7 @@ def send_application_transfer_notification(transfer_data):
         sent_message = "\n\n".join(
             [intro, transfer_data.get('sent_message', body)])
         notifications.send_simple_front_notification(
-            contact_info, sent_message)
+            contact_info, sent_message, subject="Update from Clear My Record")
         return models.StatusNotification(
             contact_info=contact_info,
             base_message=base_message,
@@ -40,7 +40,11 @@ def send_application_transfer_notification(transfer_data):
 
 
 def transfer_application(author, application, to_organization, reason):
-    """Transfers an application from one organization to another
+    """Transfers an application from one organization to another.
+    Returns three things as a tuple:
+        - a new ApplicationTransfer instance
+        - a new StatusUpdate instance
+        - a new Application instance for the to_organization
     """
     transfer_status_update = models.StatusUpdate(
         status_type_id=models.status_type.TRANSFERRED,

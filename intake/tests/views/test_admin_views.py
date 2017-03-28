@@ -11,6 +11,7 @@ from intake.tests.factories import FormSubmissionFactory
 from project.jinja2 import url_with_ids
 
 import intake.services.bundles as BundlesService
+from bs4 import BeautifulSoup
 
 
 class TestApplicationDetail(IntakeDataTestCase):
@@ -168,7 +169,8 @@ class TestApplicationIndex(IntakeDataTestCase):
         'mock_2_submissions_to_sf_pubdef',
         'mock_1_submission_to_multiple_orgs',
         'mock_1_bundle_to_sf_pubdef',
-        'mock_1_bundle_to_a_pubdef', 'template_options'
+        'mock_1_bundle_to_a_pubdef', 'template_options',
+        'mock_2_transfers'
     ]
 
     def assertContainsSubmissions(self, response, submissions):
@@ -263,6 +265,29 @@ class TestApplicationIndex(IntakeDataTestCase):
             ).status_updates.latest('updated').status_type.display_name
             self.assertContains(
                 response, html_utils.conditional_escape(status))
+
+    def test_outgoing_transfers_appear_without_update_status_button(self):
+        self.be_apubdef_user()
+        response = self.client.get(reverse('intake-app_index'))
+        soup = BeautifulSoup(response.content.decode('utf-8'), 'html.parser')
+        outgoing_transfer_rows = soup.find_all(class_="outgoing-transfer")
+        self.assertTrue(len(outgoing_transfer_rows))
+        for row in outgoing_transfer_rows:
+            html_text = str(row)
+            self.assertNotIn('Update Status', html_text)
+            self.assertIn('Transferred', html_text)
+
+    def test_incoming_transfers_have_status_button_and_transfer_label(self):
+        self.be_apubdef_user()
+        response = self.client.get(reverse('intake-app_index'))
+        soup = BeautifulSoup(response.content.decode('utf-8'), 'html.parser')
+        incoming_transfer_rows = soup.find_all(class_="incoming-transfer")
+        self.assertTrue(len(incoming_transfer_rows))
+        for row in incoming_transfer_rows:
+            html_text = str(row)
+            self.assertIn('Update Status', html_text)
+            self.assertIn('(Incoming Transfer)', html_text)
+            self.assertIn('New', html_text)
 
 
 class TestApplicationBundleDetail(IntakeDataTestCase):
