@@ -617,13 +617,6 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
         self.assertContains(response, escaped_name)
 
 
-
-
-
-
-
-
-
 class TestDeclarationLetterReviewPage(AuthIntegrationTestCase):
 
     fixtures = ['counties', 'organizations', 'mock_profiles']
