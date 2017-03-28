@@ -176,7 +176,14 @@ COUNTY_CHOICES = (
         'Dixon, Rio Vista, or Suisun City)')),
     (Counties.SANTA_CRUZ, _(
         'Santa Cruz County (near Santa Cruz, Watsonville, Capitola, '
-        'Felton, Scotts Valley, Aptos, or Boulder Creek)'))
+        'Felton, Scotts Valley, Aptos, or Boulder Creek)')),
+    (Counties.SAN_DIEGO, _(
+        'San Diego County (near San Diego, Oceanside, Chula Vista, or '
+        'El Cajon)')),
+    (Counties.SANTA_CLARA, _(
+        'Santa Clara County (near San Jose, Santa Clara, Campbell, Los '
+        'Altos, Los Gatos, Palo Alto, Mountain View, Sunnyvale, Morgan '
+        'View, or Gilroy)')),
 )
 
 if SCOPE_TO_LIVE_COUNTIES and len(COUNTY_CHOICES) == 3:
@@ -185,16 +192,9 @@ if SCOPE_TO_LIVE_COUNTIES and len(COUNTY_CHOICES) == 3:
 
 if not SCOPE_TO_LIVE_COUNTIES:
     COUNTY_CHOICES += (
-        (Counties.SAN_DIEGO, _(
-            'San Diego County (near San Diego, Oceanside, Chula Vista, or '
-            'El Cajon)')),
         (Counties.SAN_JOAQUIN, _(
             'San Joaquin County (near Stockton, Lodi, Tracy, Manteca, Ripon, '
             'Escalon, Lathrop, or Thornton)')),
-        (Counties.SANTA_CLARA, _(
-            'Santa Clara County (near San Jose, Santa Clara, Campbell, Los '
-            'Altos, Los Gatos, Palo Alto, Mountain View, Sunnyvale, Morgan '
-            'View, or Gilroy)')),
         (Counties.MONTEREY, _(
             'Monterey County (near Salinas, Monterey, Marina, Seaside, '
             'Prunedale, Castroville, or King City)')),

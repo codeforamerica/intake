@@ -21,20 +21,29 @@
 },
 {
   "model": "intake.applicant",
+<<<<<<< HEAD
   "pk": 686,
+=======
+  "pk": 309,
+>>>>>>> master
   "fields": {
     "visitor": 653
   }
 },
 {
   "model": "intake.applicant",
+<<<<<<< HEAD
   "pk": 687,
+=======
+  "pk": 310,
+>>>>>>> master
   "fields": {
     "visitor": 654
   }
 },
 {
   "model": "intake.formsubmission",
+<<<<<<< HEAD
   "pk": 869,
   "fields": {
     "applicant": 686,
@@ -77,21 +86,75 @@
     },
     "first_name": "Shannon",
     "last_name": "Williams",
+=======
+  "pk": 312,
+  "fields": {
+    "applicant": 309,
+    "duplicate_set": null,
+    "answers": {
+      "contact_preferences": [
+        "prefers_sms",
+        "prefers_email"
+      ],
+      "first_name": "Carla",
+      "middle_name": "Jesse",
+      "last_name": "Anderson",
+      "phone_number": "2897665138",
+      "alternate_phone_number": "2933913707",
+      "email": "michele99@yahoo.com",
+      "address": {
+        "street": "828 Holmes Groves",
+        "city": "Kevinbury",
+        "state": "WI",
+        "zip": "58974"
+      },
+      "dob": {
+        "month": "2",
+        "day": "6",
+        "year": "1963"
+      },
+      "us_citizen": "yes",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Solano County",
+      "when_probation_or_parole": "2018",
+      "rap_outside_sf": "no",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "no",
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "Carla",
+    "last_name": "Anderson",
+>>>>>>> master
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
     "case_number": "",
+<<<<<<< HEAD
     "phone_number": "2235723370",
     "alternate_phone_number": "2503443585",
     "email": "brittany78@gmail.com",
     "old_uuid": "c6acd632eacb455385da804723d09dde",
     "anonymous_name": "Chartreuse Moth",
     "date_received": "2017-03-13T07:52:06-07:00"
+=======
+    "phone_number": "2897665138",
+    "alternate_phone_number": "2933913707",
+    "email": "michele99@yahoo.com",
+    "old_uuid": "40d8fd6c68da478597c5d9c2b5f12feb",
+    "anonymous_name": "Galactic Oak",
+    "date_received": "2017-03-17T04:15:09-07:00"
+>>>>>>> master
   }
 },
 {
   "model": "intake.formsubmission",
+<<<<<<< HEAD
   "pk": 870,
   "fields": {
     "applicant": 687,
@@ -134,57 +197,138 @@
     },
     "first_name": "Mario",
     "last_name": "Thomas",
+=======
+  "pk": 313,
+  "fields": {
+    "applicant": 310,
+    "duplicate_set": null,
+    "answers": {
+      "contact_preferences": [
+        "prefers_email",
+        "prefers_sms"
+      ],
+      "first_name": "Adriana",
+      "middle_name": "Michael",
+      "last_name": "Rodriguez",
+      "phone_number": "2297742526",
+      "alternate_phone_number": "2198938735",
+      "email": "jill17@gmail.com",
+      "address": {
+        "street": "7894 Nicole Parkways",
+        "city": "Port David",
+        "state": "AZ",
+        "zip": "26953"
+      },
+      "dob": {
+        "month": "7",
+        "day": "9",
+        "year": "1965"
+      },
+      "us_citizen": "no",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Solano County",
+      "when_probation_or_parole": "2018",
+      "rap_outside_sf": "i_dont_know",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "no",
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "Adriana",
+    "last_name": "Rodriguez",
+>>>>>>> master
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
     "case_number": "",
+<<<<<<< HEAD
     "phone_number": "2291788927",
     "alternate_phone_number": "2254222334",
     "email": "krista70@gmail.com",
     "old_uuid": "6366ee79f3bb47f6bf15fbc285e25251",
     "anonymous_name": "Magical Cyborg",
     "date_received": "2017-03-11T10:12:41-08:00"
+=======
+    "phone_number": "2297742526",
+    "alternate_phone_number": "2198938735",
+    "email": "jill17@gmail.com",
+    "old_uuid": "3150b62fb9cb49fbac1502d6d97c3a64",
+    "anonymous_name": "Purple Bison",
+    "date_received": "2017-03-05T20:33:36-08:00"
+>>>>>>> master
   }
 },
 {
   "model": "intake.application",
+<<<<<<< HEAD
   "pk": 818,
+=======
+  "pk": 436,
+>>>>>>> master
   "fields": {
     "created": "2017-03-13T14:52:06Z",
     "updated": "2017-03-25T00:23:05.914Z",
     "organization": [
       "Solano County Public Defender"
     ],
+<<<<<<< HEAD
     "form_submission": 869,
     "was_transferred_out": false
+=======
+    "form_submission": 312
+>>>>>>> master
   }
 },
 {
   "model": "intake.application",
+<<<<<<< HEAD
   "pk": 819,
+=======
+  "pk": 437,
+>>>>>>> master
   "fields": {
     "created": "2017-03-11T18:12:41Z",
     "updated": "2017-03-25T00:23:05.929Z",
     "organization": [
       "Solano County Public Defender"
     ],
+<<<<<<< HEAD
     "form_submission": 870,
     "was_transferred_out": false
+=======
+    "form_submission": 313
+>>>>>>> master
   }
 },
 {
   "model": "intake.statusupdate",
+<<<<<<< HEAD
   "pk": 810,
   "fields": {
     "created": "2017-03-25T00:23:06.346Z",
     "updated": "2017-03-25T00:23:06.354Z",
     "status_type": 7,
+=======
+  "pk": 429,
+  "fields": {
+    "created": "2017-03-17T20:15:15.347Z",
+    "updated": "2017-03-17T20:15:15.354Z",
+    "status_type": 4,
+>>>>>>> master
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "solano_pubdef_user"
     ],
+<<<<<<< HEAD
     "application": 818,
+=======
+    "application": 436,
+>>>>>>> master
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -193,16 +337,28 @@
 },
 {
   "model": "intake.statusupdate",
+<<<<<<< HEAD
   "pk": 811,
   "fields": {
     "created": "2017-03-25T00:23:06.360Z",
     "updated": "2017-03-25T00:23:06.368Z",
     "status_type": 1,
+=======
+  "pk": 430,
+  "fields": {
+    "created": "2017-03-17T20:15:15.369Z",
+    "updated": "2017-03-17T20:15:15.375Z",
+    "status_type": 5,
+>>>>>>> master
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "solano_pubdef_user"
     ],
+<<<<<<< HEAD
     "application": 819,
+=======
+    "application": 437,
+>>>>>>> master
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -211,28 +367,48 @@
 },
 {
   "model": "intake.statusnotification",
+<<<<<<< HEAD
   "pk": 799,
   "fields": {
     "status_update": 810,
+=======
+  "pk": 429,
+  "fields": {
+    "status_update": 429,
+>>>>>>> master
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
+<<<<<<< HEAD
     "created": "2017-03-25T00:23:06.348Z"
+=======
+    "created": "2017-03-17T20:15:16.542Z"
+>>>>>>> master
   }
 },
 {
   "model": "intake.statusnotification",
+<<<<<<< HEAD
   "pk": 800,
   "fields": {
     "status_update": 811,
+=======
+  "pk": 430,
+  "fields": {
+    "status_update": 430,
+>>>>>>> master
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
+<<<<<<< HEAD
     "created": "2017-03-25T00:23:06.362Z"
+=======
+    "created": "2017-03-17T20:15:16.547Z"
+>>>>>>> master
   }
 }
 ]

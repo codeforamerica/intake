@@ -21,20 +21,29 @@
 },
 {
   "model": "intake.applicant",
+<<<<<<< HEAD
   "pk": 680,
+=======
+  "pk": 313,
+>>>>>>> master
   "fields": {
     "visitor": 647
   }
 },
 {
   "model": "intake.applicant",
+<<<<<<< HEAD
   "pk": 681,
+=======
+  "pk": 314,
+>>>>>>> master
   "fields": {
     "visitor": 648
   }
 },
 {
   "model": "intake.formsubmission",
+<<<<<<< HEAD
   "pk": 863,
   "fields": {
     "applicant": 680,
@@ -76,21 +85,74 @@
     },
     "first_name": "Erica",
     "last_name": "Rivera",
+=======
+  "pk": 316,
+  "fields": {
+    "applicant": 313,
+    "duplicate_set": null,
+    "answers": {
+      "contact_preferences": [
+        "prefers_sms"
+      ],
+      "first_name": "James",
+      "middle_name": "Michael",
+      "last_name": "Ortiz",
+      "phone_number": "2708895203",
+      "alternate_phone_number": "2528398297",
+      "email": "williamscaitlin@yahoo.com",
+      "address": {
+        "street": "4410 Angela Streets Apt. 057",
+        "city": "Robertland",
+        "state": "LA",
+        "zip": "07532"
+      },
+      "dob": {
+        "month": "2",
+        "day": "19",
+        "year": "1992"
+      },
+      "us_citizen": "yes",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Solano County",
+      "when_probation_or_parole": "2018",
+      "rap_outside_sf": "no",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "no",
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "James",
+    "last_name": "Ortiz",
+>>>>>>> master
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
     "case_number": "",
+<<<<<<< HEAD
     "phone_number": "2641030812",
     "alternate_phone_number": "2778094516",
     "email": "waltersryan@gmail.com",
     "old_uuid": "4758f4ec84a9478babe1d43fa6c099f6",
     "anonymous_name": "Exuberant Lobster",
     "date_received": "2017-03-14T02:24:41-07:00"
+=======
+    "phone_number": "2708895203",
+    "alternate_phone_number": "2528398297",
+    "email": "williamscaitlin@yahoo.com",
+    "old_uuid": "78feb5d9a04f439fbf0292098411ed01",
+    "anonymous_name": "Magical Marlin",
+    "date_received": "2017-03-04T00:35:41-08:00"
+>>>>>>> master
   }
 },
 {
   "model": "intake.formsubmission",
+<<<<<<< HEAD
   "pk": 864,
   "fields": {
     "applicant": 681,
@@ -132,57 +194,136 @@
     },
     "first_name": "Nicole",
     "last_name": "Cook",
+=======
+  "pk": 317,
+  "fields": {
+    "applicant": 314,
+    "duplicate_set": null,
+    "answers": {
+      "contact_preferences": [
+        "prefers_email"
+      ],
+      "first_name": "Laura",
+      "middle_name": "Melanie",
+      "last_name": "Porter",
+      "phone_number": "2296388897",
+      "alternate_phone_number": "2895506350",
+      "email": "edudley@gmail.com",
+      "address": {
+        "street": "517 Karen Cove Apt. 813",
+        "city": "New Anita",
+        "state": "KY",
+        "zip": "78629"
+      },
+      "dob": {
+        "month": "8",
+        "day": "12",
+        "year": "1993"
+      },
+      "us_citizen": "no",
+      "being_charged": "no",
+      "serving_sentence": "yes",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Solano County",
+      "when_probation_or_parole": "2018",
+      "rap_outside_sf": "no",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "yes",
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "Laura",
+    "last_name": "Porter",
+>>>>>>> master
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
     "case_number": "",
+<<<<<<< HEAD
     "phone_number": "2479962670",
     "alternate_phone_number": "2416184979",
     "email": "huffdonald@hotmail.com",
     "old_uuid": "7fa01423a2e24eddb4dacf32ec0a482b",
     "anonymous_name": "Silver Moose",
     "date_received": "2017-03-23T06:36:50-07:00"
+=======
+    "phone_number": "2296388897",
+    "alternate_phone_number": "2895506350",
+    "email": "edudley@gmail.com",
+    "old_uuid": "1b1771b389264031aca93a61b67699d3",
+    "anonymous_name": "Adventurous Lotus",
+    "date_received": "2017-03-12T22:02:50-07:00"
+>>>>>>> master
   }
 },
 {
   "model": "intake.application",
+<<<<<<< HEAD
   "pk": 812,
+=======
+  "pk": 440,
+>>>>>>> master
   "fields": {
     "created": "2017-03-14T09:24:41Z",
     "updated": "2017-03-25T00:23:05.818Z",
     "organization": [
       "San Joaquin County Public Defender"
     ],
+<<<<<<< HEAD
     "form_submission": 863,
     "was_transferred_out": false
+=======
+    "form_submission": 316
+>>>>>>> master
   }
 },
 {
   "model": "intake.application",
+<<<<<<< HEAD
   "pk": 813,
+=======
+  "pk": 441,
+>>>>>>> master
   "fields": {
     "created": "2017-03-23T13:36:50Z",
     "updated": "2017-03-25T00:23:05.833Z",
     "organization": [
       "San Joaquin County Public Defender"
     ],
+<<<<<<< HEAD
     "form_submission": 864,
     "was_transferred_out": false
+=======
+    "form_submission": 317
+>>>>>>> master
   }
 },
 {
   "model": "intake.statusupdate",
+<<<<<<< HEAD
   "pk": 804,
   "fields": {
     "created": "2017-03-25T00:23:06.264Z",
     "updated": "2017-03-25T00:23:06.273Z",
+=======
+  "pk": 433,
+  "fields": {
+    "created": "2017-03-17T20:15:15.434Z",
+    "updated": "2017-03-17T20:15:15.439Z",
+>>>>>>> master
     "status_type": 1,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "san_joaquin_pubdef_user"
     ],
+<<<<<<< HEAD
     "application": 812,
+=======
+    "application": 440,
+>>>>>>> master
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -191,16 +332,27 @@
 },
 {
   "model": "intake.statusupdate",
+<<<<<<< HEAD
   "pk": 805,
   "fields": {
     "created": "2017-03-25T00:23:06.280Z",
     "updated": "2017-03-25T00:23:06.288Z",
+=======
+  "pk": 434,
+  "fields": {
+    "created": "2017-03-17T20:15:15.454Z",
+    "updated": "2017-03-17T20:15:15.460Z",
+>>>>>>> master
     "status_type": 2,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "san_joaquin_pubdef_user"
     ],
+<<<<<<< HEAD
     "application": 813,
+=======
+    "application": 441,
+>>>>>>> master
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -209,28 +361,48 @@
 },
 {
   "model": "intake.statusnotification",
+<<<<<<< HEAD
   "pk": 793,
   "fields": {
     "status_update": 804,
+=======
+  "pk": 433,
+  "fields": {
+    "status_update": 433,
+>>>>>>> master
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
+<<<<<<< HEAD
     "created": "2017-03-25T00:23:06.266Z"
+=======
+    "created": "2017-03-17T20:15:16.723Z"
+>>>>>>> master
   }
 },
 {
   "model": "intake.statusnotification",
+<<<<<<< HEAD
   "pk": 794,
   "fields": {
     "status_update": 805,
+=======
+  "pk": 434,
+  "fields": {
+    "status_update": 434,
+>>>>>>> master
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
+<<<<<<< HEAD
     "created": "2017-03-25T00:23:06.281Z"
+=======
+    "created": "2017-03-17T20:15:16.729Z"
+>>>>>>> master
   }
 }
 ]

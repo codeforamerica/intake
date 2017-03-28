@@ -21,20 +21,29 @@
 },
 {
   "model": "intake.applicant",
+<<<<<<< HEAD
   "pk": 688,
+=======
+  "pk": 321,
+>>>>>>> master
   "fields": {
     "visitor": 655
   }
 },
 {
   "model": "intake.applicant",
+<<<<<<< HEAD
   "pk": 689,
+=======
+  "pk": 322,
+>>>>>>> master
   "fields": {
     "visitor": 656
   }
 },
 {
   "model": "intake.formsubmission",
+<<<<<<< HEAD
   "pk": 871,
   "fields": {
     "applicant": 688,
@@ -42,9 +51,17 @@
     "answers": {
       "serving_sentence": "no",
       "email": "greenrichard@gmail.com",
+=======
+  "pk": 324,
+  "fields": {
+    "applicant": 321,
+    "duplicate_set": null,
+    "answers": {
+>>>>>>> master
       "contact_preferences": [
         "prefers_sms"
       ],
+<<<<<<< HEAD
       "understands_limits": "yes",
       "us_citizen": "yes",
       "address": {
@@ -76,21 +93,66 @@
     },
     "first_name": "Marc",
     "last_name": "Elliott",
+=======
+      "first_name": "Robin",
+      "middle_name": "Margaret",
+      "last_name": "Garrett",
+      "phone_number": "2750731377",
+      "alternate_phone_number": "2800371251",
+      "email": "hansonkenneth@gmail.com",
+      "address": {
+        "street": "752 Tracy Pike Suite 042",
+        "city": "Port Kristinbury",
+        "state": "NY",
+        "zip": "94374"
+      },
+      "dob": {
+        "month": "6",
+        "day": "7",
+        "year": "1984"
+      },
+      "us_citizen": "yes",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Solano County",
+      "when_probation_or_parole": "2018",
+      "rap_outside_sf": "no",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "yes",
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "Robin",
+    "last_name": "Garrett",
+>>>>>>> master
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
     "case_number": "",
+<<<<<<< HEAD
     "phone_number": "2094044600",
     "alternate_phone_number": "2038451395",
     "email": "greenrichard@gmail.com",
     "old_uuid": "56215fc74b8b454aa33b4e18d4dcea82",
     "anonymous_name": "Caring Cheetah",
     "date_received": "2017-03-11T22:25:41-08:00"
+=======
+    "phone_number": "2750731377",
+    "alternate_phone_number": "2800371251",
+    "email": "hansonkenneth@gmail.com",
+    "old_uuid": "2ea6cb8cf64945e0a4e55e04be716bfd",
+    "anonymous_name": "Caring Albatross",
+    "date_received": "2017-03-10T00:51:42-08:00"
+>>>>>>> master
   }
 },
 {
   "model": "intake.formsubmission",
+<<<<<<< HEAD
   "pk": 872,
   "fields": {
     "applicant": 689,
@@ -132,57 +194,136 @@
     },
     "first_name": "Marie",
     "last_name": "Frank",
+=======
+  "pk": 325,
+  "fields": {
+    "applicant": 322,
+    "duplicate_set": null,
+    "answers": {
+      "contact_preferences": [
+        "prefers_email"
+      ],
+      "first_name": "Benjamin",
+      "middle_name": "Jack",
+      "last_name": "Alvarez",
+      "phone_number": "2271920309",
+      "alternate_phone_number": "2883332282",
+      "email": "macksteven@gmail.com",
+      "address": {
+        "street": "87759 Jacob Plain",
+        "city": "East Robyn",
+        "state": "MS",
+        "zip": "97237"
+      },
+      "dob": {
+        "month": "3",
+        "day": "19",
+        "year": "1973"
+      },
+      "us_citizen": "yes",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Solano County",
+      "when_probation_or_parole": "2018",
+      "rap_outside_sf": "no",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "no",
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "Benjamin",
+    "last_name": "Alvarez",
+>>>>>>> master
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
     "case_number": "",
+<<<<<<< HEAD
     "phone_number": "2699956330",
     "alternate_phone_number": "2944356721",
     "email": "rachelespinoza@hotmail.com",
     "old_uuid": "cd37ab75999c4fb1bc83a635922b4131",
     "anonymous_name": "Blue Island",
     "date_received": "2017-03-23T06:26:42-07:00"
+=======
+    "phone_number": "2271920309",
+    "alternate_phone_number": "2883332282",
+    "email": "macksteven@gmail.com",
+    "old_uuid": "a326af75f4cc413e926f26932897fd22",
+    "anonymous_name": "Deciduous Star",
+    "date_received": "2017-03-09T04:30:24-08:00"
+>>>>>>> master
   }
 },
 {
   "model": "intake.application",
+<<<<<<< HEAD
   "pk": 820,
+=======
+  "pk": 448,
+>>>>>>> master
   "fields": {
     "created": "2017-03-12T06:25:41Z",
     "updated": "2017-03-25T00:23:05.944Z",
     "organization": [
       "Sonoma County Public Defender"
     ],
+<<<<<<< HEAD
     "form_submission": 871,
     "was_transferred_out": false
+=======
+    "form_submission": 324
+>>>>>>> master
   }
 },
 {
   "model": "intake.application",
+<<<<<<< HEAD
   "pk": 821,
+=======
+  "pk": 449,
+>>>>>>> master
   "fields": {
     "created": "2017-03-23T13:26:42Z",
     "updated": "2017-03-25T00:23:05.959Z",
     "organization": [
       "Sonoma County Public Defender"
     ],
+<<<<<<< HEAD
     "form_submission": 872,
     "was_transferred_out": false
+=======
+    "form_submission": 325
+>>>>>>> master
   }
 },
 {
   "model": "intake.statusupdate",
+<<<<<<< HEAD
   "pk": 812,
   "fields": {
     "created": "2017-03-25T00:23:06.374Z",
     "updated": "2017-03-25T00:23:06.382Z",
+=======
+  "pk": 441,
+  "fields": {
+    "created": "2017-03-17T20:15:15.624Z",
+    "updated": "2017-03-17T20:15:15.632Z",
+>>>>>>> master
     "status_type": 2,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "sonoma_pubdef_user"
     ],
+<<<<<<< HEAD
     "application": 820,
+=======
+    "application": 448,
+>>>>>>> master
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -191,16 +332,27 @@
 },
 {
   "model": "intake.statusupdate",
+<<<<<<< HEAD
   "pk": 813,
   "fields": {
     "created": "2017-03-25T00:23:06.387Z",
     "updated": "2017-03-25T00:23:06.394Z",
+=======
+  "pk": 442,
+  "fields": {
+    "created": "2017-03-17T20:15:15.648Z",
+    "updated": "2017-03-17T20:15:15.654Z",
+>>>>>>> master
     "status_type": 3,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "sonoma_pubdef_user"
     ],
+<<<<<<< HEAD
     "application": 821,
+=======
+    "application": 449,
+>>>>>>> master
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -209,28 +361,48 @@
 },
 {
   "model": "intake.statusnotification",
+<<<<<<< HEAD
   "pk": 801,
   "fields": {
     "status_update": 812,
+=======
+  "pk": 441,
+  "fields": {
+    "status_update": 441,
+>>>>>>> master
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
+<<<<<<< HEAD
     "created": "2017-03-25T00:23:06.376Z"
+=======
+    "created": "2017-03-17T20:15:17.129Z"
+>>>>>>> master
   }
 },
 {
   "model": "intake.statusnotification",
+<<<<<<< HEAD
   "pk": 802,
   "fields": {
     "status_update": 813,
+=======
+  "pk": 442,
+  "fields": {
+    "status_update": 442,
+>>>>>>> master
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
+<<<<<<< HEAD
     "created": "2017-03-25T00:23:06.389Z"
+=======
+    "created": "2017-03-17T20:15:17.134Z"
+>>>>>>> master
   }
 }
 ]

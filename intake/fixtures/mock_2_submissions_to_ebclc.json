@@ -21,20 +21,29 @@
 },
 {
   "model": "intake.applicant",
+<<<<<<< HEAD
   "pk": 670,
+=======
+  "pk": 303,
+>>>>>>> master
   "fields": {
     "visitor": 637
   }
 },
 {
   "model": "intake.applicant",
+<<<<<<< HEAD
   "pk": 671,
+=======
+  "pk": 304,
+>>>>>>> master
   "fields": {
     "visitor": 638
   }
 },
 {
   "model": "intake.formsubmission",
+<<<<<<< HEAD
   "pk": 853,
   "fields": {
     "applicant": 670,
@@ -42,10 +51,18 @@
     "answers": {
       "serving_sentence": "no",
       "email": "monicajohnson@yahoo.com",
+=======
+  "pk": 306,
+  "fields": {
+    "applicant": 303,
+    "duplicate_set": null,
+    "answers": {
+>>>>>>> master
       "contact_preferences": [
         "prefers_sms",
         "prefers_email"
       ],
+<<<<<<< HEAD
       "understands_limits": "yes",
       "us_citizen": "no",
       "address": {
@@ -83,21 +100,72 @@
     },
     "first_name": "Cassandra",
     "last_name": "Casey",
+=======
+      "first_name": "John",
+      "middle_name": "Frederick",
+      "last_name": "Mays",
+      "preferred_pronouns": "",
+      "phone_number": "2908802637",
+      "alternate_phone_number": "2512532153",
+      "email": "ramosronald@hotmail.com",
+      "address": {
+        "street": "632 Bob Crescent Suite 212",
+        "city": "Robinsontown",
+        "state": "MP",
+        "zip": "14403"
+      },
+      "dob": {
+        "month": "6",
+        "day": "20",
+        "year": "1973"
+      },
+      "us_citizen": "yes",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "finished_half_probation": "not_applicable",
+      "reduced_probation": "not_applicable",
+      "rap_outside_sf": "no",
+      "when_where_outside_sf": "",
+      "has_suspended_license": "no",
+      "owes_court_fees": "no",
+      "monthly_income": 3001,
+      "on_public_benefits": "yes",
+      "owns_home": "yes",
+      "household_size": 3,
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "John",
+    "last_name": "Mays",
+>>>>>>> master
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
     "case_number": "",
+<<<<<<< HEAD
     "phone_number": "2704021447",
     "alternate_phone_number": "2105951062",
     "email": "monicajohnson@yahoo.com",
     "old_uuid": "76a00f5bb74b4ed7b964206f23bce5c0",
     "anonymous_name": "Perceptive Lake",
     "date_received": "2017-03-19T01:43:42-07:00"
+=======
+    "phone_number": "2908802637",
+    "alternate_phone_number": "2512532153",
+    "email": "ramosronald@hotmail.com",
+    "old_uuid": "3a832a6ca96741d4892e7c1d33f4bcea",
+    "anonymous_name": "Platinum Rock",
+    "date_received": "2017-03-08T05:11:44-08:00"
+>>>>>>> master
   }
 },
 {
   "model": "intake.formsubmission",
+<<<<<<< HEAD
   "pk": 854,
   "fields": {
     "applicant": 671,
@@ -105,10 +173,18 @@
     "answers": {
       "serving_sentence": "no",
       "email": "hineseric@hotmail.com",
+=======
+  "pk": 307,
+  "fields": {
+    "applicant": 304,
+    "duplicate_set": null,
+    "answers": {
+>>>>>>> master
       "contact_preferences": [
         "prefers_email",
         "prefers_sms"
       ],
+<<<<<<< HEAD
       "understands_limits": "yes",
       "us_citizen": "yes",
       "address": {
@@ -146,57 +222,134 @@
     },
     "first_name": "Brian",
     "last_name": "Adams",
+=======
+      "first_name": "Joshua",
+      "middle_name": "Andrea",
+      "last_name": "Payne",
+      "preferred_pronouns": "",
+      "phone_number": "2300497620",
+      "alternate_phone_number": "2442082536",
+      "email": "susansnyder@gmail.com",
+      "address": {
+        "street": "182 Brown Mountain",
+        "city": "Port Stephanie",
+        "state": "MI",
+        "zip": "10553"
+      },
+      "dob": {
+        "month": "6",
+        "day": "20",
+        "year": "1963"
+      },
+      "us_citizen": "yes",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "finished_half_probation": "not_applicable",
+      "reduced_probation": "not_applicable",
+      "rap_outside_sf": "no",
+      "when_where_outside_sf": "",
+      "has_suspended_license": "no",
+      "owes_court_fees": "no",
+      "monthly_income": 3001,
+      "on_public_benefits": "yes",
+      "owns_home": "yes",
+      "household_size": 2,
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "Joshua",
+    "last_name": "Payne",
+>>>>>>> master
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
     "case_number": "",
+<<<<<<< HEAD
     "phone_number": "2615140661",
     "alternate_phone_number": "2675949622",
     "email": "hineseric@hotmail.com",
     "old_uuid": "1ba5624f4958472191b4ef13ee56fb6e",
     "anonymous_name": "Red Adventurer",
     "date_received": "2017-03-21T05:50:08-07:00"
+=======
+    "phone_number": "2300497620",
+    "alternate_phone_number": "2442082536",
+    "email": "susansnyder@gmail.com",
+    "old_uuid": "a7f817d0ec4f442b86be8419391e5735",
+    "anonymous_name": "Cool Chameleon",
+    "date_received": "2017-03-06T23:36:25-08:00"
+>>>>>>> master
   }
 },
 {
   "model": "intake.application",
+<<<<<<< HEAD
   "pk": 802,
+=======
+  "pk": 430,
+>>>>>>> master
   "fields": {
     "created": "2017-03-19T08:43:42Z",
     "updated": "2017-03-25T00:23:05.651Z",
     "organization": [
       "East Bay Community Law Center"
     ],
+<<<<<<< HEAD
     "form_submission": 853,
     "was_transferred_out": false
+=======
+    "form_submission": 306
+>>>>>>> master
   }
 },
 {
   "model": "intake.application",
+<<<<<<< HEAD
   "pk": 803,
+=======
+  "pk": 431,
+>>>>>>> master
   "fields": {
     "created": "2017-03-21T12:50:08Z",
     "updated": "2017-03-25T00:23:05.668Z",
     "organization": [
       "East Bay Community Law Center"
     ],
+<<<<<<< HEAD
     "form_submission": 854,
     "was_transferred_out": false
+=======
+    "form_submission": 307
+>>>>>>> master
   }
 },
 {
   "model": "intake.statusupdate",
+<<<<<<< HEAD
   "pk": 794,
   "fields": {
     "created": "2017-03-25T00:23:06.135Z",
     "updated": "2017-03-25T00:23:06.142Z",
+=======
+  "pk": 423,
+  "fields": {
+    "created": "2017-03-17T20:15:15.215Z",
+    "updated": "2017-03-17T20:15:15.221Z",
+>>>>>>> master
     "status_type": 5,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "ebclc_user"
     ],
+<<<<<<< HEAD
     "application": 802,
+=======
+    "application": 430,
+>>>>>>> master
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -205,16 +358,27 @@
 },
 {
   "model": "intake.statusupdate",
+<<<<<<< HEAD
   "pk": 795,
   "fields": {
     "created": "2017-03-25T00:23:06.148Z",
     "updated": "2017-03-25T00:23:06.156Z",
+=======
+  "pk": 424,
+  "fields": {
+    "created": "2017-03-17T20:15:15.238Z",
+    "updated": "2017-03-17T20:15:15.245Z",
+>>>>>>> master
     "status_type": 6,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "ebclc_user"
     ],
+<<<<<<< HEAD
     "application": 803,
+=======
+    "application": 431,
+>>>>>>> master
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -223,28 +387,48 @@
 },
 {
   "model": "intake.statusnotification",
+<<<<<<< HEAD
   "pk": 783,
   "fields": {
     "status_update": 794,
+=======
+  "pk": 423,
+  "fields": {
+    "status_update": 423,
+>>>>>>> master
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
+<<<<<<< HEAD
     "created": "2017-03-25T00:23:06.137Z"
+=======
+    "created": "2017-03-17T20:15:16.249Z"
+>>>>>>> master
   }
 },
 {
   "model": "intake.statusnotification",
+<<<<<<< HEAD
   "pk": 784,
   "fields": {
     "status_update": 795,
+=======
+  "pk": 424,
+  "fields": {
+    "status_update": 424,
+>>>>>>> master
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
+<<<<<<< HEAD
     "created": "2017-03-25T00:23:06.149Z"
+=======
+    "created": "2017-03-17T20:15:16.255Z"
+>>>>>>> master
   }
 }
 ]

@@ -21,20 +21,29 @@
 },
 {
   "model": "intake.applicant",
+<<<<<<< HEAD
   "pk": 676,
+=======
+  "pk": 311,
+>>>>>>> master
   "fields": {
     "visitor": 643
   }
 },
 {
   "model": "intake.applicant",
+<<<<<<< HEAD
   "pk": 677,
+=======
+  "pk": 312,
+>>>>>>> master
   "fields": {
     "visitor": 644
   }
 },
 {
   "model": "intake.formsubmission",
+<<<<<<< HEAD
   "pk": 859,
   "fields": {
     "applicant": 676,
@@ -77,10 +86,55 @@
     },
     "first_name": "Matthew",
     "last_name": "Rogers",
+=======
+  "pk": 314,
+  "fields": {
+    "applicant": 311,
+    "duplicate_set": null,
+    "answers": {
+      "contact_preferences": [
+        "prefers_email",
+        "prefers_sms"
+      ],
+      "first_name": "Michelle",
+      "middle_name": "Daniel",
+      "last_name": "Mata",
+      "phone_number": "2438087328",
+      "alternate_phone_number": "2986571003",
+      "email": "stephanie04@yahoo.com",
+      "address": {
+        "street": "63895 Peterson Port",
+        "city": "North Susanfurt",
+        "state": "NC",
+        "zip": "85740"
+      },
+      "dob": {
+        "month": "9",
+        "day": "18",
+        "year": "1987"
+      },
+      "case_number": "C3254-809",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Solano County",
+      "when_probation_or_parole": "2018",
+      "rap_outside_sf": "no",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "no",
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "Michelle",
+    "last_name": "Mata",
+>>>>>>> master
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
+<<<<<<< HEAD
     "case_number": "C2344-527",
     "phone_number": "2945098348",
     "alternate_phone_number": "2504376521",
@@ -88,10 +142,20 @@
     "old_uuid": "dae97055d56849ffa33802d11ce7874b",
     "anonymous_name": "Violet Wizard",
     "date_received": "2017-03-19T13:52:30-07:00"
+=======
+    "case_number": "C3254-809",
+    "phone_number": "2438087328",
+    "alternate_phone_number": "2986571003",
+    "email": "stephanie04@yahoo.com",
+    "old_uuid": "2f6a30785d7f4835ab2f7a3fa7dc5c1f",
+    "anonymous_name": "Green Pulsar",
+    "date_received": "2017-03-04T00:02:47-08:00"
+>>>>>>> master
   }
 },
 {
   "model": "intake.formsubmission",
+<<<<<<< HEAD
   "pk": 860,
   "fields": {
     "applicant": 677,
@@ -100,10 +164,18 @@
       "case_number": "C9450-671",
       "serving_sentence": "no",
       "email": "benjaminbeard@yahoo.com",
+=======
+  "pk": 315,
+  "fields": {
+    "applicant": 312,
+    "duplicate_set": null,
+    "answers": {
+>>>>>>> master
       "contact_preferences": [
         "prefers_sms",
         "prefers_email"
       ],
+<<<<<<< HEAD
       "understands_limits": "yes",
       "us_citizen": "no",
       "address": {
@@ -135,10 +207,46 @@
     },
     "first_name": "Brittany",
     "last_name": "Knapp",
+=======
+      "first_name": "Stacy",
+      "middle_name": "Martin",
+      "last_name": "Salas",
+      "phone_number": "2061903724",
+      "alternate_phone_number": "2245507689",
+      "email": "christophersolis@yahoo.com",
+      "address": {
+        "street": "490 Stephanie Ramp Suite 382",
+        "city": "Delacruzburgh",
+        "state": "NV",
+        "zip": "39127"
+      },
+      "dob": {
+        "month": "3",
+        "day": "7",
+        "year": "1961"
+      },
+      "case_number": "C1388-121",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Solano County",
+      "when_probation_or_parole": "2018",
+      "rap_outside_sf": "no",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "no",
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "Stacy",
+    "last_name": "Salas",
+>>>>>>> master
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
+<<<<<<< HEAD
     "case_number": "C9450-671",
     "phone_number": "2344389430",
     "alternate_phone_number": "2599065161",
@@ -146,46 +254,83 @@
     "old_uuid": "dc7a948bddbc4bfab50055702f440856",
     "anonymous_name": "Quiet Butterfly",
     "date_received": "2017-03-17T07:29:38-07:00"
+=======
+    "case_number": "C1388-121",
+    "phone_number": "2061903724",
+    "alternate_phone_number": "2245507689",
+    "email": "christophersolis@yahoo.com",
+    "old_uuid": "3c2978d1b9fb4c9c8e6af9d86160dfd5",
+    "anonymous_name": "Spontaneous Volcano",
+    "date_received": "2017-03-08T21:07:59-08:00"
+>>>>>>> master
   }
 },
 {
   "model": "intake.application",
+<<<<<<< HEAD
   "pk": 808,
+=======
+  "pk": 438,
+>>>>>>> master
   "fields": {
     "created": "2017-03-19T20:52:30Z",
     "updated": "2017-03-25T00:23:05.753Z",
     "organization": [
       "San Diego County Public Defender"
     ],
+<<<<<<< HEAD
     "form_submission": 859,
     "was_transferred_out": false
+=======
+    "form_submission": 314
+>>>>>>> master
   }
 },
 {
   "model": "intake.application",
+<<<<<<< HEAD
   "pk": 809,
+=======
+  "pk": 439,
+>>>>>>> master
   "fields": {
     "created": "2017-03-17T14:29:38Z",
     "updated": "2017-03-25T00:23:05.769Z",
     "organization": [
       "San Diego County Public Defender"
     ],
+<<<<<<< HEAD
     "form_submission": 860,
     "was_transferred_out": false
+=======
+    "form_submission": 315
+>>>>>>> master
   }
 },
 {
   "model": "intake.statusupdate",
+<<<<<<< HEAD
   "pk": 800,
   "fields": {
     "created": "2017-03-25T00:23:06.212Z",
     "updated": "2017-03-25T00:23:06.219Z",
     "status_type": 4,
+=======
+  "pk": 431,
+  "fields": {
+    "created": "2017-03-17T20:15:15.390Z",
+    "updated": "2017-03-17T20:15:15.397Z",
+    "status_type": 6,
+>>>>>>> master
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "san_diego_pubdef_user"
     ],
+<<<<<<< HEAD
     "application": 808,
+=======
+    "application": 438,
+>>>>>>> master
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -194,16 +339,28 @@
 },
 {
   "model": "intake.statusupdate",
+<<<<<<< HEAD
   "pk": 801,
   "fields": {
     "created": "2017-03-25T00:23:06.224Z",
     "updated": "2017-03-25T00:23:06.231Z",
     "status_type": 5,
+=======
+  "pk": 432,
+  "fields": {
+    "created": "2017-03-17T20:15:15.412Z",
+    "updated": "2017-03-17T20:15:15.418Z",
+    "status_type": 7,
+>>>>>>> master
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "san_diego_pubdef_user"
     ],
+<<<<<<< HEAD
     "application": 809,
+=======
+    "application": 439,
+>>>>>>> master
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -212,28 +369,48 @@
 },
 {
   "model": "intake.statusnotification",
+<<<<<<< HEAD
   "pk": 789,
   "fields": {
     "status_update": 800,
+=======
+  "pk": 431,
+  "fields": {
+    "status_update": 431,
+>>>>>>> master
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
+<<<<<<< HEAD
     "created": "2017-03-25T00:23:06.213Z"
+=======
+    "created": "2017-03-17T20:15:16.631Z"
+>>>>>>> master
   }
 },
 {
   "model": "intake.statusnotification",
+<<<<<<< HEAD
   "pk": 790,
   "fields": {
     "status_update": 801,
+=======
+  "pk": 432,
+  "fields": {
+    "status_update": 432,
+>>>>>>> master
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
+<<<<<<< HEAD
     "created": "2017-03-25T00:23:06.226Z"
+=======
+    "created": "2017-03-17T20:15:16.636Z"
+>>>>>>> master
   }
 }
 ]

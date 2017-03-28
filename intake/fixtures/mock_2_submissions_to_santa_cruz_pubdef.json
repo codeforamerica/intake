@@ -21,20 +21,29 @@
 },
 {
   "model": "intake.applicant",
+<<<<<<< HEAD
   "pk": 684,
+=======
+  "pk": 319,
+>>>>>>> master
   "fields": {
     "visitor": 651
   }
 },
 {
   "model": "intake.applicant",
+<<<<<<< HEAD
   "pk": 685,
+=======
+  "pk": 320,
+>>>>>>> master
   "fields": {
     "visitor": 652
   }
 },
 {
   "model": "intake.formsubmission",
+<<<<<<< HEAD
   "pk": 867,
   "fields": {
     "applicant": 684,
@@ -60,10 +69,45 @@
       },
       "phone_number": "2973074000",
       "first_name": "Wesley",
+=======
+  "pk": 322,
+  "fields": {
+    "applicant": 319,
+    "duplicate_set": null,
+    "answers": {
+      "contact_preferences": [
+        "prefers_email"
+      ],
+      "first_name": "Elizabeth",
+      "middle_name": "Brenda",
+      "last_name": "Wilson",
+      "phone_number": "2401117923",
+      "alternate_phone_number": "2961574965",
+      "email": "handerson@gmail.com",
+      "address": {
+        "street": "291 Moran Fort Suite 076",
+        "city": "Teresaberg",
+        "state": "WV",
+        "zip": "70189"
+      },
+      "dob": {
+        "month": "9",
+        "day": "4",
+        "year": "1996"
+      },
+      "us_citizen": "yes",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Solano County",
+      "when_probation_or_parole": "2018",
+      "monthly_income": 5423,
+>>>>>>> master
       "reasons_for_applying": [
         "lost_job",
         "homeless"
       ],
+<<<<<<< HEAD
       "on_probation_parole": "yes",
       "where_probation_or_parole": "Yolo County",
       "when_probation_or_parole": "2018",
@@ -78,21 +122,40 @@
     },
     "first_name": "Wesley",
     "last_name": "Lawson",
+=======
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "Elizabeth",
+    "last_name": "Wilson",
+>>>>>>> master
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
     "case_number": "",
+<<<<<<< HEAD
     "phone_number": "2973074000",
     "alternate_phone_number": "2701423246",
     "email": "woodveronica@yahoo.com",
     "old_uuid": "7f27dee684c04a399a7f4e9bddce7147",
     "anonymous_name": "Conscientious Cuttlefish",
     "date_received": "2017-03-14T14:48:24-07:00"
+=======
+    "phone_number": "2401117923",
+    "alternate_phone_number": "2961574965",
+    "email": "handerson@gmail.com",
+    "old_uuid": "9579d7282e324e5d8304b1467625451e",
+    "anonymous_name": "Adventurous Volcano",
+    "date_received": "2017-03-11T15:46:53-08:00"
+>>>>>>> master
   }
 },
 {
   "model": "intake.formsubmission",
+<<<<<<< HEAD
   "pk": 868,
   "fields": {
     "applicant": 685,
@@ -119,10 +182,46 @@
       },
       "phone_number": "2993540578",
       "first_name": "Rebecca",
+=======
+  "pk": 323,
+  "fields": {
+    "applicant": 320,
+    "duplicate_set": null,
+    "answers": {
+      "contact_preferences": [
+        "prefers_email",
+        "prefers_sms"
+      ],
+      "first_name": "Michael",
+      "middle_name": "Leah",
+      "last_name": "Frye",
+      "phone_number": "2061254320",
+      "alternate_phone_number": "2166481177",
+      "email": "ebaker@hotmail.com",
+      "address": {
+        "street": "944 Andrew Union",
+        "city": "Michellemouth",
+        "state": "SC",
+        "zip": "07943"
+      },
+      "dob": {
+        "month": "9",
+        "day": "23",
+        "year": "1984"
+      },
+      "us_citizen": "yes",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Solano County",
+      "when_probation_or_parole": "2018",
+      "monthly_income": 3617,
+>>>>>>> master
       "reasons_for_applying": [
         "lost_job",
         "homeless"
       ],
+<<<<<<< HEAD
       "on_probation_parole": "yes",
       "where_probation_or_parole": "Yolo County",
       "when_probation_or_parole": "2018",
@@ -137,57 +236,103 @@
     },
     "first_name": "Rebecca",
     "last_name": "Lozano",
+=======
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "Michael",
+    "last_name": "Frye",
+>>>>>>> master
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
     "case_number": "",
+<<<<<<< HEAD
     "phone_number": "2993540578",
     "alternate_phone_number": "2757151063",
     "email": "angelacole@gmail.com",
     "old_uuid": "cb79cd9127aa4a56bc4229745b5b9d40",
     "anonymous_name": "Magical Skyscraper",
     "date_received": "2017-03-23T20:49:23-07:00"
+=======
+    "phone_number": "2061254320",
+    "alternate_phone_number": "2166481177",
+    "email": "ebaker@hotmail.com",
+    "old_uuid": "9c2b8dceed7f4471807dbfda325532b6",
+    "anonymous_name": "Lavender Supernova",
+    "date_received": "2017-03-05T15:56:03-08:00"
+>>>>>>> master
   }
 },
 {
   "model": "intake.application",
+<<<<<<< HEAD
   "pk": 816,
+=======
+  "pk": 446,
+>>>>>>> master
   "fields": {
     "created": "2017-03-14T21:48:24Z",
     "updated": "2017-03-25T00:23:05.882Z",
     "organization": [
       "Santa Cruz County Public Defender"
     ],
+<<<<<<< HEAD
     "form_submission": 867,
     "was_transferred_out": false
+=======
+    "form_submission": 322
+>>>>>>> master
   }
 },
 {
   "model": "intake.application",
+<<<<<<< HEAD
   "pk": 817,
+=======
+  "pk": 447,
+>>>>>>> master
   "fields": {
     "created": "2017-03-24T03:49:23Z",
     "updated": "2017-03-25T00:23:05.898Z",
     "organization": [
       "Santa Cruz County Public Defender"
     ],
+<<<<<<< HEAD
     "form_submission": 868,
     "was_transferred_out": false
+=======
+    "form_submission": 323
+>>>>>>> master
   }
 },
 {
   "model": "intake.statusupdate",
+<<<<<<< HEAD
   "pk": 809,
   "fields": {
     "created": "2017-03-25T00:23:06.333Z",
     "updated": "2017-03-25T00:23:06.341Z",
     "status_type": 6,
+=======
+  "pk": 439,
+  "fields": {
+    "created": "2017-03-17T20:15:15.580Z",
+    "updated": "2017-03-17T20:15:15.588Z",
+    "status_type": 7,
+>>>>>>> master
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "santa_cruz_pubdef_user"
     ],
+<<<<<<< HEAD
     "application": 817,
+=======
+    "application": 446,
+>>>>>>> master
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -196,16 +341,28 @@
 },
 {
   "model": "intake.statusupdate",
+<<<<<<< HEAD
   "pk": 808,
   "fields": {
     "created": "2017-03-25T00:23:06.319Z",
     "updated": "2017-03-25T00:23:06.327Z",
     "status_type": 5,
+=======
+  "pk": 440,
+  "fields": {
+    "created": "2017-03-17T20:15:15.603Z",
+    "updated": "2017-03-17T20:15:15.609Z",
+    "status_type": 1,
+>>>>>>> master
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "santa_cruz_pubdef_user"
     ],
+<<<<<<< HEAD
     "application": 816,
+=======
+    "application": 447,
+>>>>>>> master
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -214,28 +371,48 @@
 },
 {
   "model": "intake.statusnotification",
+<<<<<<< HEAD
   "pk": 797,
   "fields": {
     "status_update": 808,
+=======
+  "pk": 439,
+  "fields": {
+    "status_update": 439,
+>>>>>>> master
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
+<<<<<<< HEAD
     "created": "2017-03-25T00:23:06.321Z"
+=======
+    "created": "2017-03-17T20:15:17.034Z"
+>>>>>>> master
   }
 },
 {
   "model": "intake.statusnotification",
+<<<<<<< HEAD
   "pk": 798,
   "fields": {
     "status_update": 809,
+=======
+  "pk": 440,
+  "fields": {
+    "status_update": 440,
+>>>>>>> master
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
+<<<<<<< HEAD
     "created": "2017-03-25T00:23:06.335Z"
+=======
+    "created": "2017-03-17T20:15:17.039Z"
+>>>>>>> master
   }
 }
 ]
