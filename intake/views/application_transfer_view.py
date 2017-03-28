@@ -14,7 +14,7 @@ class ApplicationTransferView(FormView):
 
     transfer_success_flash_message = str(
         "You successfully transferred {applicant_name}'s application "
-        "to {to_organization}. You will no longer see their application.")
+        "to {to_organization}.")
 
     def dispatch(self, request, submission_id, *args, **kwargs):
         self.next_url = request.GET.get(
