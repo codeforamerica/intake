@@ -1,9 +1,9 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 633,
+  "pk": 1,
   "fields": {
-    "first_visit": "2017-03-25T00:23:05.567Z",
+    "first_visit": "2017-03-28T00:59:56.043Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +11,9 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 634,
+  "pk": 2,
   "fields": {
-    "first_visit": "2017-03-25T00:23:05.590Z",
+    "first_visit": "2017-03-28T00:59:56.071Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,113 +21,57 @@
 },
 {
   "model": "intake.applicant",
-<<<<<<< HEAD
-  "pk": 666,
-=======
-  "pk": 301,
->>>>>>> master
+  "pk": 1,
   "fields": {
-    "visitor": 633
+    "visitor": 1
   }
 },
 {
   "model": "intake.applicant",
-<<<<<<< HEAD
-  "pk": 667,
-=======
-  "pk": 302,
->>>>>>> master
+  "pk": 2,
   "fields": {
-    "visitor": 634
+    "visitor": 2
   }
 },
 {
   "model": "intake.formsubmission",
-<<<<<<< HEAD
-  "pk": 849,
+  "pk": 1,
   "fields": {
-    "applicant": 666,
+    "applicant": 1,
     "duplicate_set": null,
     "answers": {
-      "serving_sentence": "no",
-      "email": "chandlerjeremy@hotmail.com",
       "contact_preferences": [
-        "prefers_sms"
+        "prefers_sms",
+        "prefers_email"
       ],
-      "understands_limits": "yes",
-      "us_citizen": "yes",
-      "address": {
-        "city": "South Mark",
-        "state": "VI",
-        "street": "36142 Amy Shoals Suite 050",
-        "zip": "55437"
-      },
-      "alternate_phone_number": "2291216084",
-      "middle_name": "Richard",
-      "owns_home": "no",
-      "rap_outside_sf": "no",
       "first_name": "Jennifer",
-      "has_suspended_license": "yes",
-      "reduced_probation": "not_applicable",
-      "on_probation_parole": "yes",
-      "last_name": "Ramirez",
-      "owes_court_fees": "no",
-      "consent_to_represent": "yes",
-      "household_size": 0,
-      "being_charged": "no",
-      "finished_half_probation": "not_applicable",
-      "phone_number": "2230928002",
-      "monthly_income": 2999,
-      "how_did_you_hear": "from work",
-      "on_public_benefits": "yes",
-      "dob": {
-        "month": "7",
-        "year": "1979",
-        "day": "30"
-      },
-      "additional_information": "I want help",
+      "middle_name": "Samantha",
+      "last_name": "Holland",
       "preferred_pronouns": "",
-      "when_where_outside_sf": ""
-    },
-    "first_name": "Jennifer",
-    "last_name": "Ramirez",
-=======
-  "pk": 304,
-  "fields": {
-    "applicant": 301,
-    "duplicate_set": null,
-    "answers": {
-      "contact_preferences": [
-        "prefers_sms"
-      ],
-      "first_name": "Patricia",
-      "middle_name": "Sheila",
-      "last_name": "Mason",
-      "preferred_pronouns": "",
-      "phone_number": "2442179820",
-      "alternate_phone_number": "2824505090",
-      "email": "kochcheryl@yahoo.com",
+      "phone_number": "8314207603",
+      "alternate_phone_number": "8314207603",
+      "email": "bgolder+testing@codeforamerica.org",
       "address": {
-        "street": "3063 Mendoza Forges Apt. 913",
-        "city": "North Williamborough",
-        "state": "HI",
-        "zip": "78849"
+        "street": "32126 Mark Extension Suite 156",
+        "city": "West Michaelport",
+        "state": "WA",
+        "zip": "32462"
       },
       "dob": {
-        "month": "2",
-        "day": "17",
-        "year": "1976"
+        "month": "11",
+        "day": "4",
+        "year": "1961"
       },
-      "us_citizen": "yes",
+      "us_citizen": "no",
       "being_charged": "no",
       "serving_sentence": "no",
       "on_probation_parole": "yes",
       "finished_half_probation": "not_applicable",
       "reduced_probation": "not_applicable",
-      "rap_outside_sf": "no",
+      "rap_outside_sf": "yes",
       "when_where_outside_sf": "",
-      "has_suspended_license": "yes",
-      "owes_court_fees": "yes",
+      "has_suspended_license": "no",
+      "owes_court_fees": "no",
       "monthly_income": 2999,
       "on_public_benefits": "yes",
       "owns_home": "no",
@@ -135,116 +79,52 @@
       "how_did_you_hear": "from work",
       "additional_information": "I want help",
       "understands_limits": "yes",
-      "consent_to_represent": "yes",
-      "declaration_letter_intro": "Pariatur atque quia debitis modi pariatur. Et nam laborum ullam molestiae corrupti. Blanditiis ipsam dicta et autem consectetur laboriosam nesciunt fuga.",
-      "declaration_letter_life_changes": "Vero dolorum nisi quisquam repellendus. Mollitia deserunt et sequi incidunt velit. Numquam accusantium maxime fugit pariatur similique eos.",
-      "declaration_letter_activities": "Tempora consequuntur quidem labore ipsa. Doloribus hic voluptatem quos.",
-      "declaration_letter_goals": "Porro ipsum porro repellendus eligendi velit. Excepturi impedit dicta repudiandae natus a nihil. Debitis libero pariatur et nulla corrupti perferendis. Temporibus veniam exercitationem ex voluptatum iusto cumque.",
-      "declaration_letter_why": "Autem mollitia similique accusantium numquam. Labore et nesciunt sit debitis voluptas eum ex corrupti. Laudantium libero asperiores fugit at. Harum libero sit explicabo sit voluptatem soluta est eligendi."
+      "consent_to_represent": "yes"
     },
-    "first_name": "Patricia",
-    "last_name": "Mason",
->>>>>>> master
+    "first_name": "Jennifer",
+    "last_name": "Holland",
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
     "case_number": "",
-<<<<<<< HEAD
-    "phone_number": "2230928002",
-    "alternate_phone_number": "2291216084",
-    "email": "chandlerjeremy@hotmail.com",
-    "old_uuid": "3d5a547d5fc0441c8a0ecf146f52dde7",
-    "anonymous_name": "Red Starship",
-    "date_received": "2017-03-15T00:16:03-07:00"
-=======
-    "phone_number": "2442179820",
-    "alternate_phone_number": "2824505090",
-    "email": "kochcheryl@yahoo.com",
-    "old_uuid": "02911ba5858c4bc480ebf390620aff97",
-    "anonymous_name": "Humming Armadillo",
-    "date_received": "2017-03-12T15:35:49-07:00"
->>>>>>> master
+    "phone_number": "8314207603",
+    "alternate_phone_number": "8314207603",
+    "email": "bgolder+testing@codeforamerica.org",
+    "old_uuid": "2c6643cf2f30443aa0a574ae59d7c13a",
+    "anonymous_name": "Brilliant Cyborg",
+    "date_received": "2017-03-20T00:14:44-07:00"
   }
 },
 {
   "model": "intake.formsubmission",
-<<<<<<< HEAD
-  "pk": 850,
+  "pk": 2,
   "fields": {
-    "applicant": 667,
-    "duplicate_set": null,
-    "answers": {
-      "serving_sentence": "no",
-      "email": "qallen@hotmail.com",
-      "contact_preferences": [
-        "prefers_sms"
-      ],
-      "understands_limits": "yes",
-      "us_citizen": "yes",
-      "address": {
-        "city": "Cervantesshire",
-        "state": "MI",
-        "street": "5814 Gaines Mills",
-        "zip": "49936"
-      },
-      "alternate_phone_number": "2146778752",
-      "middle_name": "Dana",
-      "owns_home": "no",
-      "rap_outside_sf": "no",
-      "first_name": "Joshua",
-      "has_suspended_license": "no",
-      "reduced_probation": "not_applicable",
-      "on_probation_parole": "yes",
-      "last_name": "Santos",
-      "owes_court_fees": "no",
-      "consent_to_represent": "yes",
-      "household_size": 3,
-      "being_charged": "no",
-      "finished_half_probation": "not_applicable",
-      "phone_number": "2778447523",
-      "monthly_income": 2999,
-      "how_did_you_hear": "from work",
-      "on_public_benefits": "yes",
-      "dob": {
-        "month": "10",
-        "year": "1964",
-        "day": "30"
-      },
-      "additional_information": "I want help",
-      "preferred_pronouns": "",
-      "when_where_outside_sf": ""
-    },
-    "first_name": "Joshua",
-    "last_name": "Santos",
-=======
-  "pk": 305,
-  "fields": {
-    "applicant": 302,
+    "applicant": 2,
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
         "prefers_sms"
       ],
-      "first_name": "Thomas",
-      "middle_name": "Mark",
-      "last_name": "Rodriguez",
+      "first_name": "Mark",
+      "middle_name": "Kelly",
+      "last_name": "Miller",
       "preferred_pronouns": "",
-      "phone_number": "2680131769",
-      "alternate_phone_number": "2133891026",
-      "email": "dwebster@gmail.com",
+      "phone_number": "8314207603",
+      "alternate_phone_number": "8314207603",
+      "email": "bgolder+testing@codeforamerica.org",
       "address": {
-        "street": "58301 Joel Vista",
-        "city": "New Tom",
-        "state": "NH",
-        "zip": "04204"
+        "street": "682 Fuller Cove Apt. 847",
+        "city": "Joshuamouth",
+        "state": "DC",
+        "zip": "56817"
       },
       "dob": {
-        "month": "3",
-        "day": "25",
+        "month": "1",
+        "day": "1",
         "year": "1999"
       },
-      "us_citizen": "yes",
+      "us_citizen": "no",
       "being_charged": "no",
       "serving_sentence": "no",
       "on_probation_parole": "yes",
@@ -255,110 +135,67 @@
       "has_suspended_license": "no",
       "owes_court_fees": "no",
       "monthly_income": 2999,
-      "on_public_benefits": "no",
+      "on_public_benefits": "yes",
       "owns_home": "no",
       "household_size": 4,
       "how_did_you_hear": "from work",
       "additional_information": "I want help",
       "understands_limits": "yes",
-      "consent_to_represent": "yes",
-      "declaration_letter_intro": "Ipsam aliquam natus natus optio. Nobis fugit nihil natus quae commodi. Ipsa aspernatur natus quibusdam incidunt consequatur aut debitis.",
-      "declaration_letter_life_changes": "Accusamus dolor eius sunt recusandae temporibus. Dolor in iure debitis voluptate quis tempore. Esse quae explicabo illo reprehenderit. Amet magni assumenda quidem soluta.",
-      "declaration_letter_activities": "Quibusdam totam nesciunt distinctio voluptate. Quaerat ad pariatur explicabo hic sapiente deserunt. Sit molestiae excepturi suscipit nulla atque quas nihil.",
-      "declaration_letter_goals": "Excepturi accusamus deleniti itaque vitae unde doloribus et. Expedita sint ipsam sunt at commodi. Dolores voluptatum excepturi iure aliquam aperiam ipsum. Inventore a a laborum maxime unde fugit quis optio.",
-      "declaration_letter_why": "Reiciendis a veritatis temporibus esse. Illo ipsa esse blanditiis sint ullam. Odit necessitatibus totam amet dolor recusandae fuga sint. Esse quisquam mollitia similique enim repudiandae nisi."
+      "consent_to_represent": "yes"
     },
-    "first_name": "Thomas",
-    "last_name": "Rodriguez",
->>>>>>> master
+    "first_name": "Mark",
+    "last_name": "Miller",
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
     "case_number": "",
-<<<<<<< HEAD
-    "phone_number": "2778447523",
-    "alternate_phone_number": "2146778752",
-    "email": "qallen@hotmail.com",
-    "old_uuid": "b781ab066482486f9cbf375d0c001ae8",
-    "anonymous_name": "Teal Manta Ray",
-    "date_received": "2017-03-20T04:52:51-07:00"
-=======
-    "phone_number": "2680131769",
-    "alternate_phone_number": "2133891026",
-    "email": "dwebster@gmail.com",
-    "old_uuid": "924d3464fa994494ad48cbcd1bfba73d",
-    "anonymous_name": "Stupendous Elephant",
-    "date_received": "2017-03-11T03:01:03-08:00"
->>>>>>> master
+    "phone_number": "8314207603",
+    "alternate_phone_number": "8314207603",
+    "email": "bgolder+testing@codeforamerica.org",
+    "old_uuid": "eae5e1500db24064a2bd2c968d4ea197",
+    "anonymous_name": "Aqua Library",
+    "date_received": "2017-03-22T15:25:36-07:00"
   }
 },
 {
   "model": "intake.application",
-<<<<<<< HEAD
-  "pk": 799,
-=======
-  "pk": 428,
->>>>>>> master
+  "pk": 1,
   "fields": {
-    "created": "2017-03-20T11:52:51Z",
-    "updated": "2017-03-25T00:23:05.601Z",
+    "created": "2017-03-20T07:14:44Z",
+    "updated": "2017-03-28T00:59:56.064Z",
     "organization": [
       "Alameda County Public Defender's Office"
     ],
-<<<<<<< HEAD
-    "form_submission": 850,
+    "form_submission": 1,
     "was_transferred_out": false
-=======
-    "form_submission": 304
->>>>>>> master
   }
 },
 {
   "model": "intake.application",
-<<<<<<< HEAD
-  "pk": 798,
-=======
-  "pk": 429,
->>>>>>> master
+  "pk": 2,
   "fields": {
-    "created": "2017-03-15T07:16:03Z",
-    "updated": "2017-03-25T00:23:05.582Z",
+    "created": "2017-03-22T22:25:36Z",
+    "updated": "2017-03-28T00:59:56.094Z",
     "organization": [
       "Alameda County Public Defender's Office"
     ],
-<<<<<<< HEAD
-    "form_submission": 849,
+    "form_submission": 2,
     "was_transferred_out": false
-=======
-    "form_submission": 305
->>>>>>> master
   }
 },
 {
   "model": "intake.statusupdate",
-<<<<<<< HEAD
-  "pk": 790,
+  "pk": 1,
   "fields": {
-    "created": "2017-03-25T00:23:06.079Z",
-    "updated": "2017-03-25T00:23:06.090Z",
+    "created": "2017-03-28T00:59:56.722Z",
+    "updated": "2017-03-28T00:59:56.739Z",
     "status_type": 1,
-=======
-  "pk": 421,
-  "fields": {
-    "created": "2017-03-17T20:15:15.164Z",
-    "updated": "2017-03-17T20:15:15.171Z",
-    "status_type": 3,
->>>>>>> master
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "a_pubdef_user"
     ],
-<<<<<<< HEAD
-    "application": 799,
-=======
-    "application": 428,
->>>>>>> master
+    "application": 1,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -367,28 +204,16 @@
 },
 {
   "model": "intake.statusupdate",
-<<<<<<< HEAD
-  "pk": 791,
+  "pk": 2,
   "fields": {
-    "created": "2017-03-25T00:23:06.096Z",
-    "updated": "2017-03-25T00:23:06.103Z",
+    "created": "2017-03-28T00:59:56.748Z",
+    "updated": "2017-03-28T00:59:56.766Z",
     "status_type": 2,
-=======
-  "pk": 422,
-  "fields": {
-    "created": "2017-03-17T20:15:15.186Z",
-    "updated": "2017-03-17T20:15:15.197Z",
-    "status_type": 4,
->>>>>>> master
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "a_pubdef_user"
     ],
-<<<<<<< HEAD
-    "application": 798,
-=======
-    "application": 429,
->>>>>>> master
+    "application": 2,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -397,48 +222,28 @@
 },
 {
   "model": "intake.statusnotification",
-<<<<<<< HEAD
-  "pk": 779,
+  "pk": 1,
   "fields": {
-    "status_update": 790,
-=======
-  "pk": 421,
-  "fields": {
-    "status_update": 421,
->>>>>>> master
+    "status_update": 1,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-<<<<<<< HEAD
-    "created": "2017-03-25T00:23:06.081Z"
-=======
-    "created": "2017-03-17T20:15:16.148Z"
->>>>>>> master
+    "created": "2017-03-28T00:59:56.729Z"
   }
 },
 {
   "model": "intake.statusnotification",
-<<<<<<< HEAD
-  "pk": 780,
+  "pk": 2,
   "fields": {
-    "status_update": 791,
-=======
-  "pk": 422,
-  "fields": {
-    "status_update": 422,
->>>>>>> master
+    "status_update": 2,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-<<<<<<< HEAD
-    "created": "2017-03-25T00:23:06.097Z"
-=======
-    "created": "2017-03-17T20:15:16.155Z"
->>>>>>> master
+    "created": "2017-03-28T00:59:56.750Z"
   }
 }
 ]

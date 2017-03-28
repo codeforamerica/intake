@@ -1,9 +1,9 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 639,
+  "pk": 7,
   "fields": {
-    "first_visit": "2017-03-25T00:23:05.676Z",
+    "first_visit": "2017-03-28T00:59:56.200Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +11,9 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 640,
+  "pk": 8,
   "fields": {
-    "first_visit": "2017-03-25T00:23:05.694Z",
+    "first_visit": "2017-03-28T00:59:56.219Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,345 +21,186 @@
 },
 {
   "model": "intake.applicant",
-<<<<<<< HEAD
-  "pk": 672,
-=======
-  "pk": 317,
->>>>>>> master
+  "pk": 7,
   "fields": {
-    "visitor": 639
+    "visitor": 7
   }
 },
 {
   "model": "intake.applicant",
-<<<<<<< HEAD
-  "pk": 673,
-=======
-  "pk": 318,
->>>>>>> master
+  "pk": 8,
   "fields": {
-    "visitor": 640
+    "visitor": 8
   }
 },
 {
   "model": "intake.formsubmission",
-<<<<<<< HEAD
-  "pk": 855,
+  "pk": 7,
   "fields": {
-    "applicant": 672,
-    "duplicate_set": null,
-    "answers": {
-      "case_number": "C7499-557",
-      "serving_sentence": "no",
-      "email": "rosenicole@yahoo.com",
-      "contact_preferences": [
-        "prefers_email",
-        "prefers_sms"
-      ],
-      "understands_limits": "yes",
-      "us_citizen": "no",
-      "dob": {
-        "month": "2",
-        "year": "1969",
-        "day": "17"
-      },
-      "address": {
-        "city": "New Seth",
-        "state": "NV",
-        "street": "79979 Cindy Tunnel Suite 100",
-        "zip": "31243"
-      },
-      "last_four": "7884",
-      "phone_number": "2859641518",
-      "aliases": "Michelle Terrell",
-      "driver_license_or_id": "D4633713",
-      "first_name": "Leonard",
-=======
-  "pk": 320,
-  "fields": {
-    "applicant": 317,
+    "applicant": 7,
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
         "prefers_sms",
         "prefers_email"
       ],
-      "first_name": "Rebecca",
-      "middle_name": "Jonathan",
-      "last_name": "Lewis",
-      "aliases": "Roger Moran",
-      "phone_number": "2810868374",
-      "alternate_phone_number": "2897339276",
-      "email": "nancyrice@yahoo.com",
+      "first_name": "Thomas",
+      "middle_name": "Erik",
+      "last_name": "Stanley",
+      "aliases": "Dennis Galloway MD",
+      "phone_number": "8314207603",
+      "alternate_phone_number": "8314207603",
+      "email": "bgolder+testing@codeforamerica.org",
       "address": {
-        "street": "00147 Collins Crossing",
-        "city": "New Jeremy",
-        "state": "NY",
-        "zip": "09100"
+        "street": "2070 David Ridges",
+        "city": "North Bernard",
+        "state": "FM",
+        "zip": "16146"
       },
       "dob": {
-        "month": "11",
-        "day": "9",
-        "year": "1981"
+        "month": "12",
+        "day": "16",
+        "year": "1986"
       },
-      "driver_license_or_id": "D6663524",
-      "last_four": "3468",
-      "case_number": "C8240-189",
-      "us_citizen": "no",
+      "driver_license_or_id": "D8284429",
+      "last_four": "2356",
+      "case_number": "C2541-264",
+      "us_citizen": "yes",
       "being_charged": "no",
       "serving_sentence": "no",
       "on_probation_parole": "yes",
-      "where_probation_or_parole": "Solano County",
+      "where_probation_or_parole": "Yolo County",
       "when_probation_or_parole": "2018",
-      "monthly_income": 1618,
-      "dependents": 1,
->>>>>>> master
+      "monthly_income": 1762,
+      "dependents": 2,
       "reasons_for_applying": [
         "background_check",
         "lost_job",
         "housing"
       ],
-<<<<<<< HEAD
-      "on_probation_parole": "yes",
-      "last_name": "Cowan",
-      "when_probation_or_parole": "2018",
-      "consent_to_represent": "yes",
-      "dependents": 3,
-      "being_charged": "no",
-      "where_probation_or_parole": "Yolo County",
-      "middle_name": "Kristina",
-      "monthly_income": 1905,
-      "how_did_you_hear": "from work",
-      "alternate_phone_number": "2941899522",
-      "additional_information": "I want help"
-    },
-    "first_name": "Leonard",
-    "last_name": "Cowan",
-    "dob": null,
-    "ssn": "",
-    "last_four": "7884",
-    "drivers_license_or_id": "",
-    "case_number": "C7499-557",
-    "phone_number": "2859641518",
-    "alternate_phone_number": "2941899522",
-    "email": "rosenicole@yahoo.com",
-    "old_uuid": "3cf1570e55884320942859073f753355",
-    "anonymous_name": "Ethereal Moth",
-    "date_received": "2017-03-17T17:09:32-07:00"
-=======
       "how_did_you_hear": "from work",
       "additional_information": "I want help",
       "understands_limits": "yes",
       "consent_to_represent": "yes"
     },
-    "first_name": "Rebecca",
-    "last_name": "Lewis",
+    "first_name": "Thomas",
+    "last_name": "Stanley",
     "dob": null,
     "ssn": "",
-    "last_four": "3468",
+    "last_four": "2356",
     "drivers_license_or_id": "",
-    "case_number": "C8240-189",
-    "phone_number": "2810868374",
-    "alternate_phone_number": "2897339276",
-    "email": "nancyrice@yahoo.com",
-    "old_uuid": "662d9c3655034248b60706f581b4eae9",
-    "anonymous_name": "Determined Octopus",
-    "date_received": "2017-03-07T03:15:32-08:00"
->>>>>>> master
+    "case_number": "C2541-264",
+    "phone_number": "8314207603",
+    "alternate_phone_number": "8314207603",
+    "email": "bgolder+testing@codeforamerica.org",
+    "old_uuid": "d1d76492ecf7434db51391f898154a57",
+    "anonymous_name": "Invisible Planet",
+    "date_received": "2017-03-21T15:29:02-07:00"
   }
 },
 {
   "model": "intake.formsubmission",
-<<<<<<< HEAD
-  "pk": 856,
+  "pk": 8,
   "fields": {
-    "applicant": 673,
-    "duplicate_set": null,
-    "answers": {
-      "case_number": "C2971-709",
-      "serving_sentence": "no",
-      "email": "patriciaacevedo@hotmail.com",
-      "contact_preferences": [
-        "prefers_sms"
-      ],
-      "understands_limits": "yes",
-      "us_citizen": "yes",
-      "dob": {
-        "month": "12",
-        "year": "1968",
-        "day": "7"
-      },
-      "address": {
-        "city": "Whitestad",
-        "state": "NE",
-        "street": "88576 Lori Knolls Suite 269",
-        "zip": "12583"
-      },
-      "last_four": "7175",
-      "phone_number": "2947994397",
-      "aliases": "Alexis Dickerson",
-      "driver_license_or_id": "D1653780",
-      "first_name": "Jennifer",
-=======
-  "pk": 321,
-  "fields": {
-    "applicant": 318,
+    "applicant": 8,
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
         "prefers_email",
         "prefers_sms"
       ],
-      "first_name": "Craig",
-      "middle_name": "Rebecca",
-      "last_name": "Rivera",
-      "aliases": "Shelley Moore",
-      "phone_number": "2271893277",
-      "alternate_phone_number": "2978096539",
-      "email": "pjefferson@hotmail.com",
+      "first_name": "Deborah",
+      "middle_name": "Emily",
+      "last_name": "Peterson",
+      "aliases": "Samuel Strickland",
+      "phone_number": "8314207603",
+      "alternate_phone_number": "8314207603",
+      "email": "bgolder+testing@codeforamerica.org",
       "address": {
-        "street": "4723 Shawna Vista",
-        "city": "Danielland",
-        "state": "MI",
-        "zip": "93579"
+        "street": "45547 Burgess Flat",
+        "city": "Port Christine",
+        "state": "ID",
+        "zip": "94603"
       },
       "dob": {
-        "month": "2",
-        "day": "31",
-        "year": "2000"
+        "month": "9",
+        "day": "28",
+        "year": "1959"
       },
-      "driver_license_or_id": "D4974510",
-      "last_four": "8655",
-      "case_number": "C5288-998",
+      "driver_license_or_id": "D6044870",
+      "last_four": "9539",
+      "case_number": "C3538-546",
       "us_citizen": "yes",
       "being_charged": "no",
       "serving_sentence": "no",
       "on_probation_parole": "yes",
-      "where_probation_or_parole": "Solano County",
+      "where_probation_or_parole": "Yolo County",
       "when_probation_or_parole": "2018",
-      "monthly_income": 3864,
+      "monthly_income": 3467,
       "dependents": 1,
->>>>>>> master
       "reasons_for_applying": [
         "background_check",
         "lost_job",
         "housing"
       ],
-<<<<<<< HEAD
-      "on_probation_parole": "yes",
-      "last_name": "Franco",
-      "when_probation_or_parole": "2018",
-      "consent_to_represent": "yes",
-      "dependents": 3,
-      "being_charged": "no",
-      "where_probation_or_parole": "Yolo County",
-      "middle_name": "Elizabeth",
-      "monthly_income": 5923,
-      "how_did_you_hear": "from work",
-      "alternate_phone_number": "2688027902",
-      "additional_information": "I want help"
-    },
-    "first_name": "Jennifer",
-    "last_name": "Franco",
-    "dob": null,
-    "ssn": "",
-    "last_four": "7175",
-    "drivers_license_or_id": "",
-    "case_number": "C2971-709",
-    "phone_number": "2947994397",
-    "alternate_phone_number": "2688027902",
-    "email": "patriciaacevedo@hotmail.com",
-    "old_uuid": "e305ed69ad4c42ea90bc916bdb1ef6ee",
-    "anonymous_name": "Imaginative Lion",
-    "date_received": "2017-03-11T17:36:23-08:00"
-=======
       "how_did_you_hear": "from work",
       "additional_information": "I want help",
       "understands_limits": "yes",
       "consent_to_represent": "yes"
     },
-    "first_name": "Craig",
-    "last_name": "Rivera",
+    "first_name": "Deborah",
+    "last_name": "Peterson",
     "dob": null,
     "ssn": "",
-    "last_four": "8655",
+    "last_four": "9539",
     "drivers_license_or_id": "",
-    "case_number": "C5288-998",
-    "phone_number": "2271893277",
-    "alternate_phone_number": "2978096539",
-    "email": "pjefferson@hotmail.com",
-    "old_uuid": "269f2b656014435884c7617b434b69aa",
-    "anonymous_name": "Red Cheetah",
-    "date_received": "2017-03-09T13:08:37-08:00"
->>>>>>> master
+    "case_number": "C3538-546",
+    "phone_number": "8314207603",
+    "alternate_phone_number": "8314207603",
+    "email": "bgolder+testing@codeforamerica.org",
+    "old_uuid": "25cfc147dd4f4931ad79f47e2257bbd7",
+    "anonymous_name": "Indigo Flounder",
+    "date_received": "2017-03-26T20:23:42-07:00"
   }
 },
 {
   "model": "intake.application",
-<<<<<<< HEAD
-  "pk": 804,
-=======
-  "pk": 444,
->>>>>>> master
+  "pk": 7,
   "fields": {
-    "created": "2017-03-18T00:09:32Z",
-    "updated": "2017-03-25T00:23:05.685Z",
+    "created": "2017-03-21T22:29:02Z",
+    "updated": "2017-03-28T00:59:56.211Z",
     "organization": [
       "Fresno County Public Defender"
     ],
-<<<<<<< HEAD
-    "form_submission": 855,
+    "form_submission": 7,
     "was_transferred_out": false
-=======
-    "form_submission": 320
->>>>>>> master
   }
 },
 {
   "model": "intake.application",
-<<<<<<< HEAD
-  "pk": 805,
-=======
-  "pk": 445,
->>>>>>> master
+  "pk": 8,
   "fields": {
-    "created": "2017-03-12T01:36:23Z",
-    "updated": "2017-03-25T00:23:05.704Z",
+    "created": "2017-03-27T03:23:42Z",
+    "updated": "2017-03-28T00:59:56.234Z",
     "organization": [
       "Fresno County Public Defender"
     ],
-<<<<<<< HEAD
-    "form_submission": 856,
+    "form_submission": 8,
     "was_transferred_out": false
-=======
-    "form_submission": 321
->>>>>>> master
   }
 },
 {
   "model": "intake.statusupdate",
-<<<<<<< HEAD
-  "pk": 796,
+  "pk": 7,
   "fields": {
-    "created": "2017-03-25T00:23:06.162Z",
-    "updated": "2017-03-25T00:23:06.170Z",
+    "created": "2017-03-28T00:59:56.886Z",
+    "updated": "2017-03-28T00:59:56.899Z",
     "status_type": 7,
-=======
-  "pk": 437,
-  "fields": {
-    "created": "2017-03-17T20:15:15.537Z",
-    "updated": "2017-03-17T20:15:15.542Z",
-    "status_type": 5,
->>>>>>> master
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "fresno_pubdef_user"
     ],
-<<<<<<< HEAD
-    "application": 804,
-=======
-    "application": 444,
->>>>>>> master
+    "application": 7,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -368,28 +209,16 @@
 },
 {
   "model": "intake.statusupdate",
-<<<<<<< HEAD
-  "pk": 797,
+  "pk": 8,
   "fields": {
-    "created": "2017-03-25T00:23:06.175Z",
-    "updated": "2017-03-25T00:23:06.182Z",
+    "created": "2017-03-28T00:59:56.909Z",
+    "updated": "2017-03-28T00:59:56.920Z",
     "status_type": 1,
-=======
-  "pk": 438,
-  "fields": {
-    "created": "2017-03-17T20:15:15.558Z",
-    "updated": "2017-03-17T20:15:15.565Z",
-    "status_type": 6,
->>>>>>> master
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "fresno_pubdef_user"
     ],
-<<<<<<< HEAD
-    "application": 805,
-=======
-    "application": 445,
->>>>>>> master
+    "application": 8,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -398,48 +227,28 @@
 },
 {
   "model": "intake.statusnotification",
-<<<<<<< HEAD
-  "pk": 785,
+  "pk": 7,
   "fields": {
-    "status_update": 796,
-=======
-  "pk": 437,
-  "fields": {
-    "status_update": 437,
->>>>>>> master
+    "status_update": 7,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-<<<<<<< HEAD
-    "created": "2017-03-25T00:23:06.163Z"
-=======
-    "created": "2017-03-17T20:15:16.942Z"
->>>>>>> master
+    "created": "2017-03-28T00:59:56.888Z"
   }
 },
 {
   "model": "intake.statusnotification",
-<<<<<<< HEAD
-  "pk": 786,
+  "pk": 8,
   "fields": {
-    "status_update": 797,
-=======
-  "pk": 438,
-  "fields": {
-    "status_update": 438,
->>>>>>> master
+    "status_update": 8,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-<<<<<<< HEAD
-    "created": "2017-03-25T00:23:06.176Z"
-=======
-    "created": "2017-03-17T20:15:16.947Z"
->>>>>>> master
+    "created": "2017-03-28T00:59:56.911Z"
   }
 }
 ]

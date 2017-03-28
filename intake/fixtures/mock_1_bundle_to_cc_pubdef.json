@@ -1,24 +1,15 @@
 [
 {
   "model": "intake.applicationbundle",
-<<<<<<< HEAD
-  "pk": 238,
-=======
-  "pk": 144,
->>>>>>> master
+  "pk": 2,
   "fields": {
     "organization": [
       "Contra Costa Public Defender"
     ],
     "bundled_pdf": "",
     "submissions": [
-<<<<<<< HEAD
-      851,
-      852
-=======
-      303,
-      302
->>>>>>> master
+      4,
+      3
     ]
   }
 }

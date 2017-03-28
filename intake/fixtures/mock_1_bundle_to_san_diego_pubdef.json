@@ -1,24 +1,15 @@
 [
 {
   "model": "intake.applicationbundle",
-<<<<<<< HEAD
-  "pk": 242,
-=======
-  "pk": 150,
->>>>>>> master
+  "pk": 6,
   "fields": {
     "organization": [
       "San Diego County Public Defender"
     ],
     "bundled_pdf": "",
     "submissions": [
-<<<<<<< HEAD
-      859,
-      860
-=======
-      315,
-      314
->>>>>>> master
+      11,
+      12
     ]
   }
 }

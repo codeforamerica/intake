@@ -1,9 +1,9 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 660,
+  "pk": 28,
   "fields": {
-    "first_visit": "2017-03-25T00:23:07.692Z",
+    "first_visit": "2017-03-28T00:59:59.255Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +11,9 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 661,
+  "pk": 29,
   "fields": {
-    "first_visit": "2017-03-25T00:23:07.729Z",
+    "first_visit": "2017-03-28T00:59:59.317Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,208 +21,208 @@
 },
 {
   "model": "intake.applicant",
-  "pk": 693,
+  "pk": 28,
   "fields": {
-    "visitor": 660
+    "visitor": 28
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 694,
+  "pk": 29,
   "fields": {
-    "visitor": 661
+    "visitor": 29
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 876,
+  "pk": 28,
   "fields": {
-    "applicant": 693,
+    "applicant": 28,
     "duplicate_set": null,
     "answers": {
-      "serving_sentence": "no",
-      "email": "elizabethrivers@gmail.com",
       "contact_preferences": [
-        "prefers_sms",
-        "prefers_email"
+        "prefers_email",
+        "prefers_sms"
       ],
-      "understands_limits": "yes",
-      "us_citizen": "yes",
-      "address": {
-        "city": "Joshuaton",
-        "state": "MS",
-        "street": "15857 Woods Camp Apt. 948",
-        "zip": "31778"
-      },
-      "alternate_phone_number": "2226214088",
-      "middle_name": "Deborah",
-      "owns_home": "no",
-      "rap_outside_sf": "no",
-      "first_name": "Morgan",
-      "has_suspended_license": "yes",
-      "reduced_probation": "not_applicable",
-      "on_probation_parole": "yes",
-      "last_name": "Miller",
-      "owes_court_fees": "yes",
-      "consent_to_represent": "yes",
-      "household_size": 2,
-      "being_charged": "no",
-      "finished_half_probation": "not_applicable",
-      "phone_number": "2510073014",
-      "monthly_income": 2999,
-      "how_did_you_hear": "from work",
-      "on_public_benefits": "yes",
-      "dob": {
-        "month": "12",
-        "year": "1967",
-        "day": "14"
-      },
-      "additional_information": "I want help",
+      "first_name": "David",
+      "middle_name": "Jeremy",
+      "last_name": "Rivas",
       "preferred_pronouns": "",
-      "when_where_outside_sf": ""
-    },
-    "first_name": "Morgan",
-    "last_name": "Miller",
-    "dob": null,
-    "ssn": "",
-    "last_four": "",
-    "drivers_license_or_id": "",
-    "case_number": "",
-    "phone_number": "2510073014",
-    "alternate_phone_number": "2226214088",
-    "email": "elizabethrivers@gmail.com",
-    "old_uuid": "a22a9278453c4074972caf1636336ff4",
-    "anonymous_name": "Galactic Forest",
-    "date_received": "2017-03-20T14:57:22-07:00"
-  }
-},
-{
-  "model": "intake.formsubmission",
-  "pk": 877,
-  "fields": {
-    "applicant": 694,
-    "duplicate_set": null,
-    "answers": {
-      "serving_sentence": "no",
-      "email": "campbellashley@yahoo.com",
-      "contact_preferences": [
-        "prefers_sms",
-        "prefers_email"
-      ],
-      "understands_limits": "yes",
-      "us_citizen": "yes",
+      "phone_number": "8314207603",
+      "alternate_phone_number": "8314207603",
+      "email": "bgolder+testing@codeforamerica.org",
       "address": {
-        "city": "Newtontown",
-        "state": "OK",
-        "street": "70186 Michael Hills Apt. 052",
-        "zip": "03993"
+        "street": "91385 Mullen Junction Suite 940",
+        "city": "Grahamville",
+        "state": "NH",
+        "zip": "47199"
       },
-      "alternate_phone_number": "2904781352",
-      "middle_name": "Scott",
-      "owns_home": "yes",
-      "rap_outside_sf": "no",
-      "first_name": "Tanya",
+      "dob": {
+        "month": "5",
+        "day": "24",
+        "year": "1969"
+      },
+      "us_citizen": "no",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "finished_half_probation": "not_applicable",
+      "reduced_probation": "not_applicable",
+      "rap_outside_sf": "yes",
+      "when_where_outside_sf": "",
       "has_suspended_license": "no",
-      "reduced_probation": "not_applicable",
-      "on_probation_parole": "yes",
-      "last_name": "Martin",
-      "owes_court_fees": "no",
-      "consent_to_represent": "yes",
-      "household_size": 2,
-      "being_charged": "no",
-      "finished_half_probation": "not_applicable",
-      "phone_number": "2015062035",
-      "monthly_income": 3001,
+      "owes_court_fees": "yes",
+      "monthly_income": 2999,
+      "on_public_benefits": "yes",
+      "owns_home": "no",
+      "household_size": 1,
       "how_did_you_hear": "from work",
-      "on_public_benefits": "no",
-      "dob": {
-        "month": "10",
-        "year": "1965",
-        "day": "19"
-      },
       "additional_information": "I want help",
-      "preferred_pronouns": "",
-      "when_where_outside_sf": ""
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
     },
-    "first_name": "Tanya",
-    "last_name": "Martin",
+    "first_name": "David",
+    "last_name": "Rivas",
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
     "case_number": "",
-    "phone_number": "2015062035",
-    "alternate_phone_number": "2904781352",
-    "email": "campbellashley@yahoo.com",
-    "old_uuid": "1717b141fb7744d09e0f12f76eedffe9",
-    "anonymous_name": "Pink Manatee",
-    "date_received": "2017-03-12T16:04:02-07:00"
+    "phone_number": "8314207603",
+    "alternate_phone_number": "8314207603",
+    "email": "bgolder+testing@codeforamerica.org",
+    "old_uuid": "60981cff3fe2456d9c75b7fec2796081",
+    "anonymous_name": "Bold Tundra",
+    "date_received": "2017-03-24T18:00:46-07:00"
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 29,
+  "fields": {
+    "applicant": 29,
+    "duplicate_set": null,
+    "answers": {
+      "contact_preferences": [
+        "prefers_email",
+        "prefers_sms"
+      ],
+      "first_name": "William",
+      "middle_name": "Tammy",
+      "last_name": "Kemp",
+      "preferred_pronouns": "",
+      "phone_number": "8314207603",
+      "alternate_phone_number": "8314207603",
+      "email": "bgolder+testing@codeforamerica.org",
+      "address": {
+        "street": "5176 Reed Plaza Suite 655",
+        "city": "Riceburgh",
+        "state": "WV",
+        "zip": "64142"
+      },
+      "dob": {
+        "month": "6",
+        "day": "30",
+        "year": "1990"
+      },
+      "us_citizen": "yes",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "finished_half_probation": "not_applicable",
+      "reduced_probation": "not_applicable",
+      "rap_outside_sf": "no",
+      "when_where_outside_sf": "",
+      "has_suspended_license": "no",
+      "owes_court_fees": "no",
+      "monthly_income": 3001,
+      "on_public_benefits": "no",
+      "owns_home": "yes",
+      "household_size": 4,
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "William",
+    "last_name": "Kemp",
+    "dob": null,
+    "ssn": "",
+    "last_four": "",
+    "drivers_license_or_id": "",
+    "case_number": "",
+    "phone_number": "8314207603",
+    "alternate_phone_number": "8314207603",
+    "email": "bgolder+testing@codeforamerica.org",
+    "old_uuid": "3d521088ae4e49699e129610ffaf78ad",
+    "anonymous_name": "Amicable Galleon",
+    "date_received": "2017-03-20T10:39:53-07:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 837,
+  "pk": 39,
   "fields": {
-    "created": "2017-03-25T00:23:07.718Z",
-    "updated": "2017-03-25T00:23:07.718Z",
-    "organization": [
-      "East Bay Community Law Center"
-    ],
-    "form_submission": 876,
-    "was_transferred_out": false
-  }
-},
-{
-  "model": "intake.application",
-  "pk": 836,
-  "fields": {
-    "created": "2017-03-20T21:57:22Z",
-    "updated": "2017-03-25T00:23:07.721Z",
+    "created": "2017-03-25T01:00:46Z",
+    "updated": "2017-03-28T00:59:59.301Z",
     "organization": [
       "Alameda County Public Defender's Office"
     ],
-    "form_submission": 876,
+    "form_submission": 28,
     "was_transferred_out": true
   }
 },
 {
   "model": "intake.application",
-  "pk": 839,
+  "pk": 40,
   "fields": {
-    "created": "2017-03-25T00:23:07.756Z",
-    "updated": "2017-03-25T00:23:07.756Z",
+    "created": "2017-03-28T00:59:59.296Z",
+    "updated": "2017-03-28T00:59:59.296Z",
     "organization": [
-      "Alameda County Public Defender's Office"
+      "East Bay Community Law Center"
     ],
-    "form_submission": 877,
+    "form_submission": 28,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 838,
+  "pk": 41,
   "fields": {
-    "created": "2017-03-12T23:04:02Z",
-    "updated": "2017-03-25T00:23:07.758Z",
+    "created": "2017-03-20T17:39:53Z",
+    "updated": "2017-03-28T00:59:59.359Z",
     "organization": [
       "East Bay Community Law Center"
     ],
-    "form_submission": 877,
+    "form_submission": 29,
     "was_transferred_out": true
+  }
+},
+{
+  "model": "intake.application",
+  "pk": 42,
+  "fields": {
+    "created": "2017-03-28T00:59:59.354Z",
+    "updated": "2017-03-28T00:59:59.354Z",
+    "organization": [
+      "Alameda County Public Defender's Office"
+    ],
+    "form_submission": 29,
+    "was_transferred_out": false
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 828,
+  "pk": 39,
   "fields": {
-    "created": "2017-03-25T00:23:07.708Z",
-    "updated": "2017-03-25T00:23:07.715Z",
+    "created": "2017-03-28T00:59:59.281Z",
+    "updated": "2017-03-28T00:59:59.293Z",
     "status_type": 4,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "a_pubdef_user"
     ],
-    "application": 836,
+    "application": 39,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -231,125 +231,125 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 830,
+  "pk": 40,
   "fields": {
-    "created": "2017-03-25T00:23:07.746Z",
-    "updated": "2017-03-25T00:23:07.753Z",
-    "status_type": 5,
-    "additional_information": "We may be able to get a fee waived for you",
-    "author": [
-      "ebclc_user"
-    ],
-    "application": 838,
-    "other_next_step": "Come to our Walk-In Clinic",
-    "next_steps": [
-      1
-    ]
-  }
-},
-{
-  "model": "intake.statusupdate",
-  "pk": 829,
-  "fields": {
-    "created": "2017-03-25T00:23:07.717Z",
-    "updated": "2017-03-25T00:23:07.717Z",
+    "created": "2017-03-28T00:59:59.295Z",
+    "updated": "2017-03-28T00:59:59.295Z",
     "status_type": 8,
     "additional_information": "",
     "author": [
       "a_pubdef_user"
     ],
-    "application": 836,
+    "application": 39,
     "other_next_step": "",
     "next_steps": []
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 831,
+  "pk": 41,
   "fields": {
-    "created": "2017-03-25T00:23:07.755Z",
-    "updated": "2017-03-25T00:23:07.755Z",
+    "created": "2017-03-28T00:59:59.337Z",
+    "updated": "2017-03-28T00:59:59.348Z",
+    "status_type": 5,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "ebclc_user"
+    ],
+    "application": 41,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 42,
+  "fields": {
+    "created": "2017-03-28T00:59:59.353Z",
+    "updated": "2017-03-28T00:59:59.353Z",
     "status_type": 8,
     "additional_information": "",
     "author": [
       "ebclc_user"
     ],
-    "application": 838,
+    "application": 41,
     "other_next_step": "",
     "next_steps": []
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 817,
+  "pk": 39,
   "fields": {
-    "status_update": 828,
+    "status_update": 39,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-03-25T00:23:07.709Z"
+    "created": "2017-03-28T00:59:59.286Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 818,
+  "pk": 40,
   "fields": {
-    "status_update": 829,
+    "status_update": 40,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Your case has been transferred to East Bay Community Law Center.\nNext step in Alameda is to get your CA RAP sheet and send it to EBCLC. More info http://c4a.me/rap",
     "sent_message": "Your case has been transferred to East Bay Community Law Center.\nNext step in Alameda is to get your CA RAP sheet and send it to EBCLC. More info http://c4a.me/rap",
-    "created": "2017-03-25T00:23:07.722Z"
+    "created": "2017-03-28T00:59:59.308Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 819,
+  "pk": 41,
   "fields": {
-    "status_update": 830,
+    "status_update": 41,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-03-25T00:23:07.747Z"
+    "created": "2017-03-28T00:59:59.339Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 820,
+  "pk": 42,
   "fields": {
-    "status_update": 831,
+    "status_update": 42,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Your case has been transferred to Alameda County Public Defender's Office.\nThe Alameda Public Defender will follow up with you if they need any other information.",
     "sent_message": "Your case has been transferred to Alameda County Public Defender's Office.\nThe Alameda Public Defender will follow up with you if they need any other information.",
-    "created": "2017-03-25T00:23:07.760Z"
+    "created": "2017-03-28T00:59:59.368Z"
   }
 },
 {
   "model": "intake.applicationtransfer",
-  "pk": 15,
+  "pk": 1,
   "fields": {
-    "created": "2017-03-25T00:23:07.719Z",
-    "updated": "2017-03-25T00:23:07.719Z",
-    "status_update": 829,
-    "new_application": 837,
+    "created": "2017-03-28T00:59:59.298Z",
+    "updated": "2017-03-28T00:59:59.298Z",
+    "status_update": 40,
+    "new_application": 40,
     "reason": "Transporter malfunction"
   }
 },
 {
   "model": "intake.applicationtransfer",
-  "pk": 16,
+  "pk": 2,
   "fields": {
-    "created": "2017-03-25T00:23:07.757Z",
-    "updated": "2017-03-25T00:23:07.757Z",
-    "status_update": 831,
-    "new_application": 839,
+    "created": "2017-03-28T00:59:59.356Z",
+    "updated": "2017-03-28T00:59:59.356Z",
+    "status_update": 42,
+    "new_application": 42,
     "reason": "Transporter malfunction"
   }
 }

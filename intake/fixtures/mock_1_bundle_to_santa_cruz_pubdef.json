@@ -1,24 +1,15 @@
 [
 {
   "model": "intake.applicationbundle",
-<<<<<<< HEAD
-  "pk": 246,
-=======
-  "pk": 154,
->>>>>>> master
+  "pk": 10,
   "fields": {
     "organization": [
       "Santa Cruz County Public Defender"
     ],
     "bundled_pdf": "",
     "submissions": [
-<<<<<<< HEAD
-      868,
-      867
-=======
-      322,
-      323
->>>>>>> master
+      19,
+      20
     ]
   }
 }
