@@ -225,14 +225,13 @@ class FormSubmission(models.Model):
             if key in [SMS, EMAIL]}
 
     def get_transfer_action(self, request):
-        other_org = request.user.profile.organization.get_transfer_org()
+        other_org = request.user.profile.organization.transfer_partners.first()
         if other_org:
             url = reverse(
-                'intake-mark_transferred_to_other_org')
-            url += "?ids={sub_id}&to_organization_id={org_id}".format(
-                sub_id=self.id, org_id=other_org.id)
+                'intake-transfer_application',
+                kwargs=dict(submission_id=self.id))
             if request.path != self.get_absolute_url():
-                url += "&next={}".format(request.path)
+                url += "?next={}".format(request.path)
             return dict(
                 url=url,
                 display=str(other_org))

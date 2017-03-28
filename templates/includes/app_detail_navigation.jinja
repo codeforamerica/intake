@@ -24,6 +24,8 @@
     </li>
     {% endif %}
   </ul>
+  {%- if not applications[0].was_transferred_out and not request.user.is_staff %}
   <a href="{{ url('intake-create_status_update', submission_id=submission.id) }}" class="btn btn-primary update-status-button">Update Status</a>
+  {%- endif %}
   <hr>
 </div>

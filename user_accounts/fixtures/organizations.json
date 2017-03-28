@@ -102,7 +102,8 @@
     "address": "East Bay Community Law Center\r\nAttn: Clean Slate\r\n3130 Shattuck Ave\r\nBerkeley, CA\r\n94705",
     "phone_number": "5105484064",
     "email": "crimrecordshelp@ebclc.org",
-    "notify_on_weekends": false
+    "notify_on_weekends": false,
+    "can_transfer_applications": true
   }
 },
 {
@@ -129,7 +130,11 @@
     "address": "Alameda Public Defender's Office\r\nAttn: Clear My Record Unit\r\n1401 Lakeside Drive, Suite 400\r\nOakland, CA 94612",
     "phone_number": "5102726600",
     "email": "cleanslate@acgov.org",
-    "notify_on_weekends": false
+    "notify_on_weekends": false,
+    "can_transfer_applications": true,
+    "transfer_partners": [
+        ["East Bay Community Law Center"]
+    ]
   }
 },
 {

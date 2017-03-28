@@ -21,40 +21,19 @@
     <div class="row">
       <div class="app_detail-data_display col-xs-12 col-md-10 col_centered">
       {%- block app_detail_contents -%}
-        {% for application in applications%}
-          {% if application.latest_status %}
-            <div class="application-detail-latest-status">
-              <div class="col-xs-4 col-md-4">
-                <span class="data_display-label">Current Status:</span>
-                <br/>
-                {{application.latest_status.status_type.display_name}}
-                (logged by {{application.latest_status.author.profile.name}})
-              </div>
-              <div class="col-xs-4 col-md-4">
-                <span class="data_display-label">Additional Info:</span>
-                <br/>
-                {{application.latest_status.additional_information}}
-              </div>
-              <div class="col-xs-4 col-md-4">
-                {% if application.latest_status.next_steps or application.latest_status.other_next_step %}
-                  <span class="data_display-label">Applicant's Next Steps:</span>
-                  <br/>
-                  <ul class="event-next-steps">
-                    {% for step in application.latest_status.next_steps.all() %}
-                      <li>{{ step.display_name }}</li>
-                    {% endfor %}
-
-                    {% if application.latest_status.other_next_step %}
-                      <li>{{ application.latest_status.other_next_step }}</li>
-                    {% endif %}
-                  </ul>
-                  <br/>
-                {% endif %}
-              </div>
-            </div>
-          {% endif %}
-        {% endfor %}
-      {% include "formation/intake_display.jinja" %}
+        {%- for application in applications%}
+          {%- if application.latest_status %}
+            {%- if application.latest_status.transfer %}
+              {%- include "includes/latest_status_summary_for_outgoing_transfer.jinja" %}
+            {%- else %}
+              {%- include "includes/latest_status_summary.jinja" %}
+            {%- endif %}
+          {%- elif application.incoming_transfers.exists() %}
+            {%- set transfer = application.incoming_transfers.first() %}
+              {%- include "includes/latest_status_summary_for_incoming_transfer.jinja" %}
+          {%- endif %}
+        {%- endfor %}
+      {%- include "formation/intake_display.jinja" %}
       {%- endblock app_detail_contents -%}
       </div>
     </div>

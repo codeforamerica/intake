@@ -33,7 +33,7 @@ class Provider(BaseProvider):
         ], preferences)
 
     def make_phone_number(self):
-        return self.numerify('2##-###-####')
+        return '8314207603'
 
     def sf_county_form_answers(self, **overrides):
         data = {
@@ -42,7 +42,7 @@ class Provider(BaseProvider):
             'last_name': self.generator.last_name(),
             'contact_preferences': self.generate_contact_preferences(),
             'phone_number': self.make_phone_number(),
-            'email': self.generator.free_email(),
+            'email': 'bgolder+testing@codeforamerica.org',
             'address.street': self.generator.street_address(),
             'address.city': self.generator.city(),
             'address.state': self.generator.state_abbr(),
@@ -70,13 +70,16 @@ class Provider(BaseProvider):
         data.update(overrides)
         return data
 
+    def sf_pubdef_answers(self, **kwargs):
+        return self.sf_county_form_answers(**kwargs)
+
     def contra_costa_county_form_answers(self, **overrides):
         data = {
             'contact_preferences': self.generate_contact_preferences(),
             'first_name': self.generator.first_name(),
             'last_name': self.generator.last_name(),
             'phone_number': self.make_phone_number(),
-            'email': self.generator.free_email(),
+            'email': 'bgolder+testing@codeforamerica.org',
             'dob.day': str(random.randint(1, 31)),
             'dob.month': str(random.randint(1, 12)),
             'dob.year': str(random.randint(1959, 2000)),
@@ -99,6 +102,9 @@ class Provider(BaseProvider):
         data.update(overrides)
         return data
 
+    def cc_pubdef_answers(self, **kwargs):
+        return self.contra_costa_county_form_answers(**kwargs)
+
     def alameda_county_form_answers(self, **overrides):
         data = {
             'contact_preferences': self.generate_contact_preferences(),
@@ -108,7 +114,7 @@ class Provider(BaseProvider):
             'last_name': self.generator.last_name(),
             'phone_number': self.make_phone_number(),
             'alternate_phone_number': self.make_phone_number(),
-            'email': self.generator.free_email(),
+            'email': 'bgolder+testing@codeforamerica.org',
             'dob.day': str(random.randint(1, 31)),
             'dob.month': str(random.randint(1, 12)),
             'dob.year': str(random.randint(1959, 2000)),
@@ -154,7 +160,7 @@ class Provider(BaseProvider):
             'contact_preferences': self.generate_contact_preferences(),
             'first_name': self.generator.first_name(),
             'phone_number': self.make_phone_number(),
-            'email': self.generator.free_email(),
+            'email': 'bgolder+testing@codeforamerica.org',
             'address.street': self.generator.street_address(),
             'address.city': self.generator.city(),
             'address.state': self.generator.state_abbr(),
@@ -171,7 +177,7 @@ class Provider(BaseProvider):
             'last_name': self.generator.last_name(),
             'contact_preferences': self.generate_contact_preferences(),
             'phone_number': self.make_phone_number(),
-            'email': self.generator.free_email(),
+            'email': 'bgolder+testing@codeforamerica.org',
             'address': {
                 'street': self.generator.street_address(),
                 'city': self.generator.city(),
@@ -217,13 +223,16 @@ class Provider(BaseProvider):
         data.update(overrides)
         return data
 
+    def a_pubdef_answers(self, **kwargs):
+        return self.alameda_pubdef_answers(**kwargs)
+
     def monterey_pubdef_answers(self, **overrides):
         data = self.alameda_county_form_answers()
         data.update(
             is_veteran=self.maybe(0.1),
             is_student=self.maybe(0.2),
             when_probation_or_parole='2018',
-            where_probation_or_parole='Solano County',
+            where_probation_or_parole='Yolo County',
         )
         data.update(overrides)
         return data

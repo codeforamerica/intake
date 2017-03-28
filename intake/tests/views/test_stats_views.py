@@ -7,7 +7,7 @@ from intake.tests.mock_serialized_apps import apps as all_apps
 
 from intake.views import stats_views
 from intake import constants, models
-from intake.tests.mock import FormSubmissionFactory
+from intake.tests.factories import FormSubmissionWithOrgsFactory
 from user_accounts.models import Organization
 
 
@@ -78,8 +78,9 @@ class TestStats(IntakeDataTestCase):
             county=models.County.objects.first()
         )
         non_live_org.save()
-        FormSubmissionFactory.create(
-            organizations=[non_live_org])
+        FormSubmissionWithOrgsFactory.create(
+            organizations=[non_live_org],
+            answers={})
         response = self.client.get(reverse('intake-stats'))
         self.assertEqual(response.status_code, 200)
 

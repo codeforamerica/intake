@@ -7,7 +7,7 @@ from django.conf import settings
 import json
 
 
-from intake.tests import mock
+from intake.tests import mock, factories
 
 from intake import notifications
 
@@ -251,7 +251,7 @@ They want to be contacted via text message and email
     def test_render_slack_app_bundle_sent(self):
         # case: submissions
         submissions = [
-            mock.FormSubmissionFactory.build(
+            factories.FormSubmissionFactory.build(
                 id=i + 1, anonymous_name='App')
             for i in range(3)]
         emails = ['email1', 'email2']
@@ -276,7 +276,8 @@ They want to be contacted via text message and email
         self.assertEqual(expected_message, content.message)
 
     def test_render_slack_notification_sent(self):
-        submission = mock.FormSubmissionFactory.build(anonymous_name="App")
+        submission = factories.FormSubmissionFactory.build(
+            anonymous_name="App")
 
         # case: email, sms
         expected = str(
@@ -311,7 +312,8 @@ They want to be contacted via text message and email
         self.assertEqual(expected, result)
 
     def test_render_slack_notification_failed(self):
-        submission = mock.FormSubmissionFactory.build(anonymous_name="App")
+        submission = factories.FormSubmissionFactory.build(
+            anonymous_name="App")
         errors = Mock(**{
             'items.return_value': [
                 ("email", "some errors"),

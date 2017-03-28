@@ -6,13 +6,12 @@ from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from intake import models, constants
-from user_accounts import models as auth_models
 from intake.tests.base_testcases import IntakeDataTestCase, DELUXE_TEST
-from intake.tests.mock import FormSubmissionFactory
+from intake.tests.factories import FormSubmissionFactory
 from project.jinja2 import url_with_ids
 
 import intake.services.bundles as BundlesService
+from bs4 import BeautifulSoup
 
 
 class TestApplicationDetail(IntakeDataTestCase):
@@ -170,7 +169,8 @@ class TestApplicationIndex(IntakeDataTestCase):
         'mock_2_submissions_to_sf_pubdef',
         'mock_1_submission_to_multiple_orgs',
         'mock_1_bundle_to_sf_pubdef',
-        'mock_1_bundle_to_a_pubdef', 'template_options'
+        'mock_1_bundle_to_a_pubdef', 'template_options',
+        'mock_2_transfers'
     ]
 
     def assertContainsSubmissions(self, response, submissions):
@@ -265,6 +265,29 @@ class TestApplicationIndex(IntakeDataTestCase):
             ).status_updates.latest('updated').status_type.display_name
             self.assertContains(
                 response, html_utils.conditional_escape(status))
+
+    def test_outgoing_transfers_appear_without_update_status_button(self):
+        self.be_apubdef_user()
+        response = self.client.get(reverse('intake-app_index'))
+        soup = BeautifulSoup(response.content.decode('utf-8'), 'html.parser')
+        outgoing_transfer_rows = soup.find_all(class_="outgoing-transfer")
+        self.assertTrue(len(outgoing_transfer_rows))
+        for row in outgoing_transfer_rows:
+            html_text = str(row)
+            self.assertNotIn('Update Status', html_text)
+            self.assertIn('Transferred', html_text)
+
+    def test_incoming_transfers_have_status_button_and_transfer_label(self):
+        self.be_apubdef_user()
+        response = self.client.get(reverse('intake-app_index'))
+        soup = BeautifulSoup(response.content.decode('utf-8'), 'html.parser')
+        incoming_transfer_rows = soup.find_all(class_="incoming-transfer")
+        self.assertTrue(len(incoming_transfer_rows))
+        for row in incoming_transfer_rows:
+            html_text = str(row)
+            self.assertIn('Update Status', html_text)
+            self.assertIn('(Incoming Transfer)', html_text)
+            self.assertIn('New', html_text)
 
 
 class TestApplicationBundleDetail(IntakeDataTestCase):
@@ -414,82 +437,3 @@ class TestApplicationBundleDetailPDFView(IntakeDataTestCase):
             skip_pdf=True)
         response = self.client.get(bundle.get_pdf_bundle_url())
         self.assertEqual(response.status_code, 404)
-
-
-class TestReferToAnotherOrgView(IntakeDataTestCase):
-
-    fixtures = [
-        'counties',
-        'organizations', 'mock_profiles',
-        'mock_2_submissions_to_a_pubdef',
-        'mock_1_bundle_to_a_pubdef', 'template_options']
-
-    def setUp(self):
-        super().setUp()
-        self.mock_sub_id = self.a_pubdef_submissions[0].id
-        self.mock_bundle_id = self.a_pubdef_bundle.id
-
-    def url(self, org_id, sub_id=None, next=None):
-        sub_id = sub_id or self.mock_sub_id
-        base = reverse(
-            'intake-mark_transferred_to_other_org')
-        base += "?ids={sub_id}&to_organization_id={org_id}".format(
-            sub_id=sub_id, org_id=org_id)
-        if next:
-            base += "&next={}".format(next)
-        return base
-
-    @patch('intake.views.admin_views.notifications'
-           '.slack_submission_transferred.send')
-    def test_anon_is_rejected(self, slack_action):
-        self.be_anonymous()
-        response = self.client.get(self.url(
-            1))
-        self.assertEqual(response.status_code, 302)
-        self.assertIn(reverse('user_accounts-login'), response.url)
-        slack_action.assert_not_called()
-
-    @patch(
-        'intake.views.admin_views.notifications.slack_submission_transferred')
-    def test_org_user_with_no_next_is_redirected_to_app_index(self,
-                                                              slack_action):
-        self.be_apubdef_user()
-        sub = models.FormSubmission.objects.get(pk=self.mock_sub_id)
-        ebclc = auth_models.Organization.objects.get(
-            slug=constants.Organizations.EBCLC)
-        response = self.client.get(self.url(
-            org_id=ebclc.id))
-        self.assertRedirects(
-            response, reverse('intake-app_index'),
-            fetch_redirect_response=False)
-        sub_url = sub.get_absolute_url()
-        index = self.client.get(response.url)
-        self.assertNotContains(index, sub_url)
-        self.assertContains(index, "You successfully transferred")
-        self.assertEqual(len(list(slack_action.mock_calls)), 1)
-
-    @patch(
-        'intake.views.admin_views.notifications.slack_submissions_viewed.send')
-    @patch(
-        'intake.views.admin_views.notifications.slack_submission_transferred')
-    def test_org_user_with_next_goes_back_to_next(self,
-                                                  slack_action,
-                                                  slack_viewed):
-        self.be_apubdef_user()
-        sub = models.FormSubmission.objects.get(pk=self.mock_sub_id)
-        bundle = models.ApplicationBundle.objects.get(pk=self.mock_bundle_id)
-        ebclc = auth_models.Organization.objects.get(
-            slug=constants.Organizations.EBCLC)
-        response = self.client.get(self.url(
-            org_id=ebclc.id, next=bundle.get_absolute_url()))
-        self.assertRedirects(
-            response, bundle.get_absolute_url(),
-            fetch_redirect_response=False)
-        bundle_page = self.client.get(response.url)
-        self.assertNotContains(
-            bundle_page,
-            "formsubmission-{}".format(sub.id),
-        )
-        self.assertContains(bundle_page, "You successfully transferred")
-        self.assertEqual(len(list(slack_action.mock_calls)), 1)
-        self.assertEqual(len(list(slack_viewed.mock_calls)), 1)

@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 import intake.services.followups as FollowupsService
-from intake.tests import mock
+from intake.tests import mock, factories
 from intake.tests.mock import get_old_date, get_newer_date
 from intake.tests.base_testcases import ExternalNotificationsPatchTestCase
 from intake.constants import Organizations
@@ -25,9 +25,9 @@ class TestGetSubmissionsDueForFollowups(TestCase):
         # value of date_received is correct.
         # I don't know what causes the warning
         # given new submissions and older submissions
-        old_sub = mock.FormSubmissionFactory.create(
+        old_sub = factories.FormSubmissionFactory.create(
             date_received=get_old_date())
-        new_sub = mock.FormSubmissionFactory.create(
+        new_sub = factories.FormSubmissionFactory.create(
             date_received=get_newer_date())
         # we should only get submissions that are newer
         results = FollowupsService.get_submissions_due_for_follow_ups()
@@ -37,11 +37,11 @@ class TestGetSubmissionsDueForFollowups(TestCase):
 
     def test_filters_out_subs_with_previous_followups(self):
         # given old submissions, some with old followups
-        no_followup = mock.FormSubmissionFactory.create(
+        no_followup = factories.FormSubmissionFactory.create(
             date_received=get_old_date())
         applicant = models.Applicant()
         applicant.save()
-        sub_w_followup = mock.FormSubmissionFactory.create(
+        sub_w_followup = factories.FormSubmissionFactory.create(
             date_received=get_old_date(),
             applicant=applicant)
         models.ApplicationEvent.log_followup_sent(
@@ -58,10 +58,11 @@ class TestGetSubmissionsDueForFollowups(TestCase):
     def test_can_start_at_particular_id_to_create_time_interval(self):
         # assume we have 4 old subs, 1 new sub
         old_subs = sorted([
-            mock.FormSubmissionFactory.create(date_received=get_old_date())
+            factories.FormSubmissionFactory.create(
+                date_received=get_old_date())
             for i in range(4)
         ], key=lambda s: s.date_received)
-        new_sub = mock.FormSubmissionFactory.create(
+        new_sub = factories.FormSubmissionFactory.create(
             date_received=get_newer_date())
         # but we only want ones after the second oldest sub
         second_oldest_id = old_subs[1].id
@@ -125,7 +126,7 @@ class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
         for i in range(4):
             applicant = models.Applicant()
             applicant.save()
-            subs.append(mock.FormSubmissionFactory.create(
+            subs.append(factories.FormSubmissionWithOrgsFactory.create(
                 applicant=applicant,
                 organizations=orgs,
                 answers=self.full_answers(),
@@ -154,20 +155,20 @@ class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
         for i in range(2):
             applicant = models.Applicant()
             applicant.save()
-            contacted_subs.append(mock.FormSubmissionFactory.create(
-                applicant=applicant,
-                organizations=orgs,
-                answers=self.full_answers(),
-            ))
+            contacted_subs.append(
+                factories.FormSubmissionWithOrgsFactory.create(
+                    applicant=applicant,
+                    organizations=orgs,
+                    answers=self.full_answers()))
         not_contacted_subs = []
         for i in range(2):
             applicant = models.Applicant()
             applicant.save()
-            not_contacted_subs.append(mock.FormSubmissionFactory.create(
-                applicant=applicant,
-                organizations=orgs,
-                answers=self.cant_contact_answers(),
-            ))
+            not_contacted_subs.append(
+                factories.FormSubmissionWithOrgsFactory.create(
+                    applicant=applicant,
+                    organizations=orgs,
+                    answers=self.cant_contact_answers()))
         FollowupsService.send_followup_notifications(
             contacted_subs + not_contacted_subs)
         self.assertEqual(

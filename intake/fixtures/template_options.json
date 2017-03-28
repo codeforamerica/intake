@@ -58,22 +58,34 @@
   "model": "intake.statustype",
   "pk": 6,
   "fields": {
-    "label": "Outcome - passed",
-    "display_name": "Passed",
-    "template": "Congrats, your request to clear some convictions on your {{county}} record was passed!",
+    "label": "Outcome - granted",
+    "display_name": "Granted",
+    "template": "Congrats, your request to clear some convictions on your {{county}} record was granted!",
     "help_text": "",
-    "slug": "passed"
+    "slug": "granted"
   }
 },
 {
   "model": "intake.statustype",
   "pk": 7,
   "fields": {
-    "label": "Outcome - declined",
-    "display_name": "Declined",
+    "label": "Outcome - denied",
+    "display_name": "Denied",
     "template": "I'm sorry, the judge declined your request to clear some convictions on your {{county}} record.",
     "help_text": "",
-    "slug": "declined"
+    "slug": "denied"
+  }
+},
+{
+  "model": "intake.statustype",
+  "pk": 8,
+  "fields": {
+    "label": "Transferred",
+    "display_name": "Transferred",
+    "template": "Your {{county}} application is now being handled by {{to_organization_name}}. {{to_organization_next_step}}",
+    "help_text": "",
+    "slug": "transferred",
+    "is_a_status_update_choice": false
   }
 },
 {

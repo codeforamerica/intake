@@ -5,11 +5,12 @@ from intake.views import (
     stats_views,
     legacy_redirect_views,
     application_form_views,
+    application_transfer_view,
     admin_views,
     app_detail_views,
     application_note_views,
     tag_views,
-    status_update_views
+    status_update_views,
 )
 
 urlpatterns = [
@@ -58,6 +59,10 @@ urlpatterns = [
         login_required(admin_views.case_printout),
         name='intake-case_printout'),
 
+    url(r'^application/(?P<submission_id>[0-9]+)/transfer/$',
+        login_required(application_transfer_view.transfer_application),
+        name='intake-transfer_application'),
+
     url(r'^applications/$',
         login_required(admin_views.app_index),
         name='intake-app_index'),
@@ -85,10 +90,6 @@ urlpatterns = [
     url(r'^applications/mark/processed/$',
         login_required(admin_views.mark_processed),
         name='intake-mark_processed'),
-
-    url(r'^applications/mark/transferred/$',
-        login_required(admin_views.mark_transferred_to_other_org),
-        name='intake-mark_transferred_to_other_org'),
 
     url(r'^applications/(?P<submission_id>[0-9]+)/update-status/$',
         login_required(status_update_views.create_status_update),

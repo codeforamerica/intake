@@ -1,6 +1,7 @@
 from unittest import TestCase
 from django.core.paginator import Paginator
 from intake import utils
+from django.test.testcases import _AssertNumQueriesContext
 
 
 class TestGetPageNavigationCounter(TestCase):
@@ -64,4 +65,23 @@ class TestGetPageNavigationCounter(TestCase):
                 6: [1, 2, 3, 4, 5, 6, 7],
                 7: [1, 2, 3, 4, 5, 6, 7],
             }
+        )
+
+
+class AssertNumQueriesLessThanContext(_AssertNumQueriesContext):
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        super(_AssertNumQueriesContext, self).__exit__(
+            exc_type, exc_value, traceback)
+        if exc_type is not None:
+            return
+        executed = len(self)
+        self.test_case.assertLessEqual(
+            executed, self.num,
+            "%d queries executed, %d expected\nCaptured queries were:\n%s" % (
+                executed, self.num,
+                '\n'.join(
+                    query['sql'] for query in self.captured_queries
+                )
+            )
         )

@@ -4,6 +4,7 @@ from django.views.generic.base import TemplateView
 from django.contrib import messages
 
 import intake.services.submissions as SubmissionsService
+import intake.services.applications_service as AppsService
 from intake import models, notifications
 from intake.views.base_views import ViewAppDetailsMixin
 
@@ -74,11 +75,10 @@ class ApplicationHistoryView(ApplicationDetail):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         apps = context['applications']
-        status_updates = models.StatusUpdate.objects.filter(
-            application__in=apps
-        ).prefetch_related('notification').order_by('-updated')
-        context.update(
-            status_updates=status_updates)
+        status_updates = \
+            AppsService.get_serialized_application_history_events(
+                apps[0], self.request.user)
+        context.update(status_updates=status_updates)
         return context
 
 

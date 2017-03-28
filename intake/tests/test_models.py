@@ -6,8 +6,7 @@ from unittest.mock import Mock
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 
-
-from intake.tests import mock
+from intake.tests import factories
 from user_accounts.tests.mock import create_fake_auth_models
 from user_accounts import models as auth_models
 from intake import (
@@ -30,7 +29,7 @@ class TestModels(TestCase):
         self.assertEqual(len(call_list), 1)
 
     def test_submission(self):
-        submission = mock.FormSubmissionFactory.create()
+        submission = factories.FormSubmissionFactory.create()
         self.assertEqual(int, type(submission.id))
         self.assertEqual(dict, type(submission.answers))
         self.assertEqual(datetime, type(submission.date_received))
@@ -44,7 +43,7 @@ class TestModels(TestCase):
             models.FormSubmission.objects.get(id=submission.id), submission)
 
     def test_applicationlogentry(self):
-        submission = mock.FormSubmissionFactory.create()
+        submission = factories.FormSubmissionFactory.create()
         log = models.ApplicationLogEntry.objects.create(
             submission=submission,
             user=self.users[0],
@@ -62,7 +61,7 @@ class TestModels(TestCase):
 
     @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
     def test_fillablepdf(self):
-        submission = mock.FormSubmissionFactory.create()
+        submission = factories.FormSubmissionFactory.create()
         from django.core.files import File
         sample_pdf_path = 'tests/sample_pdfs/sample_form.pdf'
         pdf = models.FillablePDF(
@@ -87,12 +86,13 @@ class TestModels(TestCase):
             'prefers_voicemail': 'yes',
         }
         prefers_nothing = {}
-        submission = mock.FormSubmissionFactory.build(
+        submission = factories.FormSubmissionFactory.build(
             answers=prefers_everything)
         contact_preferences = submission.get_nice_contact_preferences()
         for label in ['voicemail', 'text message', 'email', 'paper mail']:
             self.assertIn(label, contact_preferences)
-        submission = mock.FormSubmissionFactory.build(answers=prefers_nothing)
+        submission = factories.FormSubmissionFactory.build(
+            answers=prefers_nothing)
         self.assertListEqual([], submission.get_contact_preferences())
 
     def test_agency_event_logs(self):
@@ -187,7 +187,7 @@ class TestModels(TestCase):
                 contact_info_field.validate(invalid_data, Mock())
 
     def test_applicantcontactedlogentry_model(self):
-        submission = mock.FormSubmissionFactory.create()
+        submission = factories.FormSubmissionFactory.create()
         sent_to = {'email': 'someone@gmail.com'}
         log = models.ApplicantContactedLogEntry.objects.create(
             submission=submission,
@@ -204,7 +204,7 @@ class TestModels(TestCase):
         self.assertEqual(retrieved.message_sent, "hi good job applying, ttyl")
 
     def test_submission_get_preferred_contact_info(self):
-        submission = mock.FormSubmissionFactory.build()
+        submission = factories.FormSubmissionFactory.build()
         # base case: easy
         submission.answers['contact_preferences'] = [
             'prefers_email', 'prefers_sms']

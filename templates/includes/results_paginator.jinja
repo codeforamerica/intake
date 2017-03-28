@@ -1,19 +1,19 @@
-{%- if submissions.has_other_pages() %}
+{%- if results.has_other_pages() %}
 <div class="row">
   <nav aria-label="Page navigation" class="pagination-nav">
     <h5 class="page_nav_header">
-      Showing <strong>{{ submissions.start_index() }} - {{ submissions.end_index() }}</strong> of <strong>{{ submissions.paginator.count }}</strong> applications
+      Showing <strong>{{ results.start_index() }} - {{ results.end_index() }}</strong> of <strong>{{ results.paginator.count }}</strong> applications
     </h5>
     <ul class="pagination pagination-sm">
-      {%- if submissions.has_previous() %}
+      {%- if results.has_previous() %}
       <li title="Previous page">
-        <a href="?page={{ submissions.previous_page_number() }}" aria-label="Previous">
+        <a href="?page={{ results.previous_page_number() }}" aria-label="Previous">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
       {%- endif %}
       {% for page_index in page_counter %}
-        {%- if page_index == submissions.number %}
+        {%- if page_index == results.number %}
         <li class="active">
           <span>{{ page_index }} <span class="sr-only">(current)</span></span>
         </li>
@@ -27,9 +27,9 @@
         </li>
         {%- endif %}
       {% endfor %}
-      {%- if submissions.has_next() %}
+      {%- if results.has_next() %}
       <li title="Next page">
-        <a href="?page={{ submissions.next_page_number() }}" aria-label="Next">
+        <a href="?page={{ results.next_page_number() }}" aria-label="Next">
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>

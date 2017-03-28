@@ -3,10 +3,11 @@ from unittest.mock import patch
 from django.core.urlresolvers import reverse
 from markupsafe import escape
 from intake import models
+from django.contrib.auth.models import User
 from intake.tests.base_testcases import IntakeDataTestCase
 
 
-class AppDetailAccessBaseTests(IntakeDataTestCase):
+class AppDetailFixturesBaseTestCase(IntakeDataTestCase):
     fixtures = [
         'counties',
         'organizations', 'mock_profiles',
@@ -15,13 +16,14 @@ class AppDetailAccessBaseTests(IntakeDataTestCase):
         'mock_1_submission_to_multiple_orgs', 'template_options'
     ]
 
-
-class TestApplicationDetail(AppDetailAccessBaseTests):
-
     def get_page(self, submission):
         url = reverse(
-            'intake-app_detail', kwargs=dict(submission_id=submission.id))
+            self.view_name, kwargs=dict(submission_id=submission.id))
         return self.client.get(url)
+
+
+class TestApplicationDetail(AppDetailFixturesBaseTestCase):
+    view_name = 'intake-app_detail'
 
     def assertHasDisplayData(self, response, submission):
         for field, value in submission.answers.items():
@@ -49,8 +51,9 @@ class TestApplicationDetail(AppDetailAccessBaseTests):
     def test_staff_user_can_get_submission_display(self, slack):
         self.be_cfa_user()
         submission = self.a_pubdef_submissions[0]
-        result = self.get_page(submission)
-        self.assertEqual(result.context_data['submission'], submission)
+        response = self.get_page(submission)
+        self.assertEqual(response.context_data['submission'], submission)
+        self.assertNotContains(response, escape('update-status-button'))
 
     @patch('intake.notifications.slack_submissions_viewed.send')
     def test_user_cant_see_app_detail_for_other_county(self, slack):
@@ -147,12 +150,46 @@ class TestApplicationDetail(AppDetailAccessBaseTests):
             self.assertNotContains(response, escape(other_status_name))
 
 
-class TestApplicationHistory(AppDetailAccessBaseTests):
+class TestAppDetailWithTransfers(AppDetailFixturesBaseTestCase):
 
-    def get_page(self, submission):
-        url = reverse(
-            'intake-app_history', kwargs=dict(submission_id=submission.id))
-        return self.client.get(url)
+    view_name = 'intake-app_detail'
+    fixtures = AppDetailFixturesBaseTestCase.fixtures + [
+        'mock_2_transfers'
+    ]
+
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def check_that_outgoing_transfer_has_expected_info(self, slack):
+        user = self.be_apubdef_user()
+        outgoing_transfer = models.ApplicationTransfer.objects.filter(
+            status_update__application__organization__profiles__user=user
+        ).first()
+        submission = outgoing_transfer.application.form_submission
+        response = self.get_page(submission)
+        expected_message = "Transferred to {} by {}".format(
+            outgoing_transfer.new_application.organization.name,
+            outgoing_transfer.status_update.author.profile.name)
+        self.assertContains(response, escape(expected_message))
+        self.assertContains(response, escape(outgoing_transfer.reason))
+        self.assertNotContains(response, escape('update-status-button'))
+
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def check_that_incoming_transfer_has_expected_info(self, slack):
+        user = User.objects.filter(profile__organization__slug='ebclc').first()
+        self.be_user(user)
+        incoming_transfer = models.ApplicationTransfer.objects.filter(
+            new_application__organization__profiles__user=user).first()
+        submission = incoming_transfer.new_application.form_submission
+        response = self.get_page(submission)
+        expected_message = "Transferred from {} by {}".format(
+            incoming_transfer.status_update.application.organization.name,
+            incoming_transfer.status_update.author.profile.name)
+        self.assertContains(response, escape(expected_message))
+        self.assertContains(response, escape(incoming_transfer.reason))
+
+
+class TestApplicationHistory(AppDetailFixturesBaseTestCase):
+
+    view_name = 'intake-app_history'
 
     @patch('intake.notifications.slack_submissions_viewed.send')
     def test_anonymous_user_is_redirected_to_login_history(self, slack):
@@ -174,8 +211,9 @@ class TestApplicationHistory(AppDetailAccessBaseTests):
     def test_staff_user_can_get_submission_display_history(self, slack):
         self.be_cfa_user()
         submission = self.a_pubdef_submissions[0]
-        result = self.get_page(submission)
-        self.assertEqual(result.context_data['submission'], submission)
+        response = self.get_page(submission)
+        self.assertEqual(response.context_data['submission'], submission)
+        self.assertNotContains(response, escape('update-status-button'))
 
     @patch('intake.notifications.slack_submissions_viewed.send')
     def test_user_cant_see_app_history_for_other_county(self, slack):
@@ -208,5 +246,80 @@ class TestApplicationHistory(AppDetailAccessBaseTests):
         status_updates = response.context_data['status_updates']
         for status_update in status_updates:
             self.assertEqual(
-                status_update.application.organization,
-                user.profile.organization)
+                status_update['organization_name'],
+                user.profile.organization.name)
+
+
+class TestApplicationHistoryWithTransfers(AppDetailFixturesBaseTestCase):
+
+    view_name = 'intake-app_history'
+    fixtures = AppDetailFixturesBaseTestCase.fixtures + [
+        'mock_2_transfers'
+    ]
+
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_has_read_only_view_of_outgoing_transfer(self, slack):
+        user = self.be_apubdef_user()
+        outgoing_transfer = models.ApplicationTransfer.objects.filter(
+            status_update__application__organization__profiles__user=user
+        ).first()
+        status_update = outgoing_transfer.status_update
+        submission = \
+            outgoing_transfer.status_update.application.form_submission
+        response = self.get_page(submission)
+        expected_display_data = [
+            "{} at {}".format(
+                status_update.author.profile.name,
+                status_update.author.profile.organization.name),
+            "Transferred to",
+            outgoing_transfer.new_application.organization.name,
+            outgoing_transfer.reason,
+            status_update.notification.sent_message
+        ]
+        for expected_data in expected_display_data:
+            self.assertContains(response, escape(expected_data))
+        self.assertNotContains(response, escape('update-status-button'))
+
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_can_see_incoming_transfer_event(self, slack):
+        user = User.objects.filter(profile__organization__slug='ebclc').first()
+        self.be_user(user)
+        incoming_transfer = models.ApplicationTransfer.objects.filter(
+            new_application__organization__profiles__user=user).first()
+        status_update = incoming_transfer.status_update
+        submission = incoming_transfer.new_application.form_submission
+        response = self.get_page(submission)
+        expected_display_data = [
+            "{} at {}".format(
+                status_update.author.profile.name,
+                status_update.author.profile.organization.name),
+            "Transferred to",
+            incoming_transfer.new_application.organization.name,
+            incoming_transfer.reason,
+            status_update.notification.sent_message
+        ]
+        for expected_data in expected_display_data:
+            self.assertContains(response, escape(expected_data))
+
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_can_see_prior_status_updates_on_incoming_transfer(self, slack):
+        user = User.objects.filter(profile__organization__slug='ebclc').first()
+        self.be_user(user)
+        incoming_transfer = models.ApplicationTransfer.objects.filter(
+            new_application__organization__profiles__user=user).first()
+        submission = incoming_transfer.new_application.form_submission
+        response = self.get_page(submission)
+        prior_updates = models.StatusUpdate.objects.filter(
+                application__form_submission=submission,
+                created__lt=incoming_transfer.status_update.created
+            ).exclude(transfer=incoming_transfer)
+        for status_update in prior_updates:
+            expected_display_data = [
+                "{} at {}".format(
+                    status_update.author.profile.name,
+                    status_update.author.profile.organization.name),
+                status_update.status_type.display_name,
+                status_update.notification.sent_message
+            ]
+            for expected_data in expected_display_data:
+                self.assertContains(response, escape(expected_data))

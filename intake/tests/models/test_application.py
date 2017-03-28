@@ -4,7 +4,7 @@ from user_accounts import models as user_account_models
 from django.db import IntegrityError
 
 
-class TestApplicant(TestCase):
+class TestApplication(TestCase):
 
     fixtures = [
         'counties',
@@ -32,3 +32,14 @@ class TestApplicant(TestCase):
             organization=organization)
         application.save()
         self.assertTrue(application.id)
+
+    def test_has_intended_default_fields(self):
+        form_submission = models.FormSubmission.objects.first()
+        organization = user_account_models.Organization.objects.get(slug="cfa")
+        application = models.Application(
+            form_submission=form_submission,
+            organization=organization)
+        application.save()
+        self.assertTrue(application.updated)
+        self.assertTrue(application.created)
+        self.assertEqual(application.was_transferred_out, False)
