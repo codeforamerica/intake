@@ -11,6 +11,7 @@ SCOPE=user_accounts intake formation
 test:
 	./manage.py test $(SCOPE) \
 		--verbosity 2
+	pep8
 
 
 test.keepdb:
