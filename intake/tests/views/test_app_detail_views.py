@@ -265,7 +265,8 @@ class TestApplicationHistory(AppDetailFixturesBaseTestCase):
             organizations=[user.profile.organization])
         response = self.get_page(submission)
         self.assertContains(response, 'New')
-        
+
+
 class TestApplicationHistoryWithTransfers(AppDetailFixturesBaseTestCase):
 
     view_name = 'intake-app_history'
