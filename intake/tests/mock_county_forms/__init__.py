@@ -19,6 +19,12 @@ class Provider(BaseProvider):
             "yes": chance_of_yes,
             "no": 1.0 - chance_of_yes})
 
+    def maybe_with_idk(self, chance_of_yes=0.5):
+        return self.random_element({
+            "yes": chance_of_yes,
+            "i_dont_know": chance_of_yes,
+            "no": 1.0 - (2*chance_of_yes)})
+
     def generate_contact_preferences(self):
         preferences = random.randint(1, 2)
         return random.sample([
@@ -27,7 +33,7 @@ class Provider(BaseProvider):
         ], preferences)
 
     def make_phone_number(self):
-        return self.numerify('2##-###-####')
+        return '8314207603'
 
     def sf_county_form_answers(self, **overrides):
         data = {
@@ -36,7 +42,7 @@ class Provider(BaseProvider):
             'last_name': self.generator.last_name(),
             'contact_preferences': self.generate_contact_preferences(),
             'phone_number': self.make_phone_number(),
-            'email': self.generator.free_email(),
+            'email': 'bgolder+testing@codeforamerica.org',
             'address.street': self.generator.street_address(),
             'address.city': self.generator.city(),
             'address.state': self.generator.state_abbr(),
@@ -48,11 +54,11 @@ class Provider(BaseProvider):
             'dob.year': str(random.randint(1959, 2000)),
             'monthly_income': str(random.randint(100, 7000)),
             'monthly_expenses': str(random.randint(100, 3000)),
-            'rap_outside_sf': self.maybe(0.1),
-            'serving_sentence': self.maybe(0.05),
+            'rap_outside_sf': self.maybe_with_idk(0.1),
+            'serving_sentence': self.maybe_with_idk(0.05),
             'ssn': self.numerify('#########'),
             'us_citizen': self.maybe(0.8),
-            'on_probation_parole': self.maybe(0.1),
+            'on_probation_parole': self.maybe_with_idk(0.1),
             'when_probation_or_parole': '',
             'when_where_outside_sf': '',
             'where_probation_or_parole': '',
@@ -73,7 +79,7 @@ class Provider(BaseProvider):
             'first_name': self.generator.first_name(),
             'last_name': self.generator.last_name(),
             'phone_number': self.make_phone_number(),
-            'email': self.generator.free_email(),
+            'email': 'bgolder+testing@codeforamerica.org',
             'dob.day': str(random.randint(1, 31)),
             'dob.month': str(random.randint(1, 12)),
             'dob.year': str(random.randint(1959, 2000)),
@@ -82,8 +88,8 @@ class Provider(BaseProvider):
             'address.city': self.generator.city(),
             'address.state': self.generator.state_abbr(),
             'address.zip': self.generator.zipcode(),
-            'on_probation_parole': self.maybe(0.1),
-            'serving_sentence': self.maybe(0.05),
+            'on_probation_parole': self.maybe_with_idk(0.1),
+            'serving_sentence': self.maybe_with_idk(0.05),
             'currently_employed': self.maybe(0.4),
             'monthly_income': str(random.randint(100, 7000)),
             'monthly_expenses': str(random.randint(100, 3000)),
@@ -108,7 +114,7 @@ class Provider(BaseProvider):
             'last_name': self.generator.last_name(),
             'phone_number': self.make_phone_number(),
             'alternate_phone_number': self.make_phone_number(),
-            'email': self.generator.free_email(),
+            'email': 'bgolder+testing@codeforamerica.org',
             'dob.day': str(random.randint(1, 31)),
             'dob.month': str(random.randint(1, 12)),
             'dob.year': str(random.randint(1959, 2000)),
@@ -118,7 +124,7 @@ class Provider(BaseProvider):
             'address.state': self.generator.state_abbr(),
             'address.zip': self.generator.zipcode(),
             'on_probation_parole': 'yes',
-            'rap_outside_sf': self.maybe(0.1),
+            'rap_outside_sf': self.maybe_with_idk(0.1),
             'finished_half_probation': 'not_applicable',
             'reduced_probation': 'not_applicable',
             'being_charged': self.maybe(0.05),
@@ -154,7 +160,7 @@ class Provider(BaseProvider):
             'contact_preferences': self.generate_contact_preferences(),
             'first_name': self.generator.first_name(),
             'phone_number': self.make_phone_number(),
-            'email': self.generator.free_email(),
+            'email': 'bgolder+testing@codeforamerica.org',
             'address.street': self.generator.street_address(),
             'address.city': self.generator.city(),
             'address.state': self.generator.state_abbr(),
@@ -171,14 +177,14 @@ class Provider(BaseProvider):
             'last_name': self.generator.last_name(),
             'contact_preferences': self.generate_contact_preferences(),
             'phone_number': self.make_phone_number(),
-            'email': self.generator.free_email(),
+            'email': 'bgolder+testing@codeforamerica.org',
             'address': {
                 'street': self.generator.street_address(),
                 'city': self.generator.city(),
                 'state': self.generator.state_abbr(),
                 'zip': self.generator.zipcode(),
             },
-            'being_charged': self.maybe(0.05),
+            'being_charged': self.maybe_with_idk(0.05),
             'currently_employed': self.maybe(0.4),
             'dob': {
                 'day': str(random.randint(1, 31)),
@@ -187,11 +193,11 @@ class Provider(BaseProvider):
             },
             'monthly_expenses': str(random.randint(100, 3000)),
             'monthly_income': str(random.randint(100, 7000)),
-            'rap_outside_sf': self.maybe(0.1),
-            'serving_sentence': self.maybe(0.05),
+            'rap_outside_sf': self.maybe_with_idk(0.1),
+            'serving_sentence': self.maybe_with_idk(0.05),
             'ssn': self.numerify('#########'),
             'us_citizen': self.maybe(0.8),
-            'on_probation_parole': self.maybe(0.1),
+            'on_probation_parole': self.maybe_with_idk(0.1),
             'when_probation_or_parole': '',
             'when_where_outside_sf': '',
             'where_probation_or_parole': '',

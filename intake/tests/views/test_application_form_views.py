@@ -12,6 +12,7 @@ from django.utils import html as html_utils
 from formation import forms, fields
 from formation.field_types import YES
 from intake.views import session_view_base, application_form_views
+from markupsafe import escape
 
 
 class TestFullCountyApplicationSequence(IntakeDataTestCase):
@@ -573,6 +574,47 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
         for letter_answer in mock_letter.values():
             self.assertContains(
                 response, html_utils.conditional_escape(letter_answer))
+
+    @patch(
+        'intake.services.submissions.send_confirmation_notifications')
+    @patch(
+        'intake.views.session_view_base.notifications'
+        '.slack_new_submission.send')
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_that_declaration_letter_properly_escapes_html(self, *patches):
+        # this is a regression test to ensure that html cannot be injected
+        # into declaration letters, and that we don't overescape
+        mock_letter = mock.fake.declaration_letter_answers()
+        mock_answers = mock.fake.alameda_pubdef_answers(
+            first_name="foo", last_name="e2f79c23fcc04ed78fa1ea29f12a0323")
+        html_string = '<img src="omg.gif"> O\'Brien'
+        escaped_name = escape('O\'Brien')
+        for field in mock_letter:
+            mock_letter[field] = html_string
+        self.be_anonymous()
+        self.client.fill_form(
+            reverse('intake-apply'), counties=[constants.Counties.ALAMEDA],
+            confirm_county_selection=YES, follow=True)
+        self.client.fill_form(
+            reverse('intake-county_application'), follow=True, **mock_answers)
+        response = self.client.fill_form(
+            reverse('intake-write_letter'), follow=True, **mock_letter)
+        # check that the html is not in the review page
+        self.assertNotContains(response, html_string)
+        self.assertContains(response, escaped_name)
+        response = self.client.fill_form(
+            reverse('intake-review_letter'),
+            submit_action="approve_letter")
+
+        # check that the html is not in the app detail page
+        self.be_apubdef_user()
+        submission = models.FormSubmission.objects.filter(
+            last_name="e2f79c23fcc04ed78fa1ea29f12a0323").first()
+        response = self.client.get(
+            reverse(
+                'intake-app_detail', kwargs=dict(submission_id=submission.id)))
+        self.assertNotContains(response, html_string)
+        self.assertContains(response, escaped_name)
 
 
 class TestDeclarationLetterReviewPage(AuthIntegrationTestCase):

@@ -1,15 +1,15 @@
 [
 {
   "model": "intake.applicationbundle",
-  "pk": 204,
+  "pk": 7,
   "fields": {
     "organization": [
       "San Francisco Public Defender"
     ],
     "bundled_pdf": "",
     "submissions": [
-      489,
-      490
+      13,
+      14
     ]
   }
 }

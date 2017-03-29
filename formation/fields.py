@@ -4,9 +4,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.validators import EmailValidator, URLValidator
 from formation.field_types import (
     CharField, MultilineCharField, IntegerField, WholeDollarField, ChoiceField,
-    YesNoField, MultipleChoiceField, MultiValueField, PhoneField,
-    FormNote, DateTimeField, ConsentCheckbox,
-    YES_NO_CHOICES, NOT_APPLICABLE
+    YesNoField, YesNoIDontKnowField, MultipleChoiceField, MultiValueField,
+    PhoneField, FormNote, DateTimeField, ConsentCheckbox,
+    YES_NO_CHOICES, NOT_APPLICABLE, YES_NO_IDK_CHOICES
 )
 from intake.constants import (
     COUNTY_CHOICES, CONTACT_PREFERENCE_CHOICES, REASON_FOR_APPLYING_CHOICES,
@@ -368,21 +368,21 @@ class IsStudent(YesNoField):
     label = _("Are you a student?")
 
 
-class BeingCharged(YesNoField):
+class BeingCharged(YesNoIDontKnowField):
     context_key = "being_charged"
     label = _("Are you currently being charged with a crime?")
     display_label = "Is currently being charged"
     flip_display_choice_order = True
 
 
-class ServingSentence(YesNoField):
+class ServingSentence(YesNoIDontKnowField):
     context_key = "serving_sentence"
     label = _("Are you currently serving a sentence?")
     display_label = "Is serving a sentence"
     flip_display_choice_order = True
 
 
-class OnProbationParole(YesNoField):
+class OnProbationParole(YesNoIDontKnowField):
     context_key = "on_probation_parole"
     label = _("Are you on probation or parole (including MSR or PRCS)?")
     help_text = _(
@@ -404,20 +404,12 @@ class WhenProbationParole(CharField):
     display_label = "Until"
 
 
-class FinishedHalfProbation(ChoiceField):
+class FinishedHalfProbation(YesNoIDontKnowField):
     context_key = "finished_half_probation"
-    choices = YES_NO_CHOICES + ((NOT_APPLICABLE, _("Not on probation")),)
+    choices = YES_NO_IDK_CHOICES + ((NOT_APPLICABLE, _("Not on probation")),)
     label = _("If you're on probation, have you finished half of your "
               "probation time?")
     display_label = "Finished half probation"
-
-    def render(self, display=False, **extra_context):
-        if self.get_current_value() != NOT_APPLICABLE:
-            self.display_template_name = "formation/option_set_display.jinja"
-        return super().render(display, **extra_context)
-
-    def get_display_choices(self):
-        return YES_NO_CHOICES
 
 
 class ReducedProbation(FinishedHalfProbation):
@@ -427,7 +419,7 @@ class ReducedProbation(FinishedHalfProbation):
     display_label = "Reduced probation"
 
 
-class RAPOutsideSF(YesNoField):
+class RAPOutsideSF(YesNoIDontKnowField):
     context_key = "rap_outside_sf"
     label = _(
         "Have you ever been arrested or convicted in any other counties?")
@@ -443,14 +435,18 @@ class WhenWhereOutsideSF(CharField):
     display_label = "Where/when"
 
 
-class HasSuspendedLicense(YesNoField):
+class HasSuspendedLicense(ChoiceField):
     context_key = "has_suspended_license"
     label = _("Is your driver's license suspended?")
     display_label = "Has suspended license"
     flip_display_choice_order = True
+    choices = YES_NO_IDK_CHOICES
+
+    def get_display_choices(self):
+        return YES_NO_IDK_CHOICES
 
 
-class OwesCourtFees(YesNoField):
+class OwesCourtFees(YesNoIDontKnowField):
     context_key = "owes_court_fees"
     label = _("Do you owe any court fines or fees?")
     display_label = "Owes court fines/fees"

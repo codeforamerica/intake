@@ -1,16 +1,20 @@
 from intake.translators.base import FormToPDFTranslator
 
 from project.jinja2 import namify
+from formation.field_types import YES, NO
+
+OFF = 'Off'
 
 
 def yesno(s, key=None):
     if not key:
-        return 'Off'
+        return OFF
     result = s.answers.get(key, '')
     if not result:
-        return 'Off'
-    if result in ('yes', 'no'):
+        return OFF
+    if result in (YES, NO):
         return result.capitalize()
+    return OFF
 
 
 def get_formatted_dob(s):
