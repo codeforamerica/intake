@@ -140,6 +140,11 @@ class TestCreateStatusUpdateFormView(StatusUpdateViewBaseTestCase):
                 kwargs=dict(submission_id=self.sub.id)),
             fetch_redirect_response=False)
 
+    def test_does_not_see_incorrect_status_type_options(self):
+        self.be_apubdef_user()
+        response = self.get_create_page()
+        self.assertNotContains(response, 'Transferred')
+
 
 class TestReviewStatusNotificationFormView(StatusUpdateViewBaseTestCase):
 
