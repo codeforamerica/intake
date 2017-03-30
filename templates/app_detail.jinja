@@ -31,6 +31,8 @@
           {%- elif application.incoming_transfers.exists() %}
             {%- set transfer = application.incoming_transfers.first() %}
               {%- include "includes/latest_status_summary_for_incoming_transfer.jinja" %}
+          {%- else %}
+              {%- include "includes/empty_status_summary.jinja" %}
           {%- endif %}
         {%- endfor %}
       {%- include "formation/intake_display.jinja" %}
