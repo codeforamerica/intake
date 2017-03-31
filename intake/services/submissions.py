@@ -6,7 +6,8 @@ from intake import models, serializers
 from intake.constants import SMS, EMAIL
 from .pagination import get_page
 from intake.service_objects import ConfirmationNotification
-from intake.models.form_submission import FORMSUBMISSION_TEXT_SEARCH_FIELDS
+from intake.models.form_submission import (
+    FORMSUBMISSION_TEXT_SEARCH_FIELDS, QUERYABLE_ANSWER_FIELDS)
 
 
 class MissingAnswersError(Exception):
@@ -56,11 +57,15 @@ def create_submission(form, organizations, applicant_id):
         answers=form.cleaned_data,
         applicant_id=applicant_id)
 
-    # extract out searchable fields from answers
-    keys = FORMSUBMISSION_TEXT_SEARCH_FIELDS
+    # extract out fields from answers (searchable and other)
+    keys = FORMSUBMISSION_TEXT_SEARCH_FIELDS + QUERYABLE_ANSWER_FIELDS
     for key in keys:
         existing = submission.answers.get(key, "")
         setattr(submission, key, existing)
+    address = submission.answers['address']
+    for component in address:
+        existing = address.get(component, "")
+        setattr(submission, component, existing)
     submission.save()
 
     submission.organizations.add_orgs_to_sub(*organizations)
