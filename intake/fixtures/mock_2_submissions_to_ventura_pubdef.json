@@ -1,0 +1,268 @@
+[
+{
+  "model": "intake.visitor",
+  "pk": 66,
+  "fields": {
+    "first_visit": "2017-04-04T22:36:17.454Z",
+    "source": "share",
+    "referrer": "http://bajoradefender.org/services/clean-slate/",
+    "ip_address": "48.104.186.127"
+  }
+},
+{
+  "model": "intake.visitor",
+  "pk": 67,
+  "fields": {
+    "first_visit": "2017-04-04T22:36:17.469Z",
+    "source": "share",
+    "referrer": "http://bajoradefender.org/services/clean-slate/",
+    "ip_address": "48.104.186.127"
+  }
+},
+{
+  "model": "intake.applicant",
+  "pk": 63,
+  "fields": {
+    "visitor": 66
+  }
+},
+{
+  "model": "intake.applicant",
+  "pk": 64,
+  "fields": {
+    "visitor": 67
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 63,
+  "fields": {
+    "applicant": 63,
+    "duplicate_set": null,
+    "answers": {
+      "monthly_expenses": 2000,
+      "how_did_you_hear": "from work",
+      "has_children": "yes",
+      "owes_court_fees": "no",
+      "understands_limits": "yes",
+      "middle_name": "Michele",
+      "serving_sentence": "no",
+      "consent_to_represent": "yes",
+      "rap_outside_sf": "no",
+      "case_number": "C4863-639",
+      "first_name": "Michele",
+      "income_source": "a job",
+      "alternate_phone_number": "8314207603",
+      "on_public_benefits": "yes",
+      "on_probation_parole": "yes",
+      "household_size": 1,
+      "additional_information": "I want help",
+      "where_probation_or_parole": "Yolo County",
+      "driver_license_or_id": "D7321545",
+      "when_probation_or_parole": "2018",
+      "monthly_income": 2000,
+      "email": "bgolder+testing@codeforamerica.org",
+      "contact_preferences": [
+        "prefers_email"
+      ],
+      "is_married": "no",
+      "phone_number": "8314207603",
+      "being_charged": "no",
+      "when_where_outside_sf": "",
+      "reasons_for_applying": [
+        "background_check",
+        "lost_job",
+        "housing"
+      ],
+      "dob": {
+        "month": "11",
+        "day": "22",
+        "year": "1973"
+      },
+      "last_name": "Adkins",
+      "currently_employed": "no",
+      "last_four": "9280",
+      "address": {
+        "zip": "83040",
+        "state": "UT",
+        "city": "West Juanfort",
+        "street": "230 Edwards Plain Suite 471"
+      },
+      "owns_home": "no"
+    },
+    "first_name": "Michele",
+    "last_name": "Adkins",
+    "dob": null,
+    "ssn": "",
+    "last_four": "9280",
+    "drivers_license_or_id": "",
+    "case_number": "C4863-639",
+    "phone_number": "8314207603",
+    "alternate_phone_number": "8314207603",
+    "email": "bgolder+testing@codeforamerica.org",
+    "old_uuid": "3370e84a0d9043d184a8985336ee9261",
+    "anonymous_name": "Bold Cuttlefish",
+    "date_received": "2017-03-24T06:11:31-07:00"
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 64,
+  "fields": {
+    "applicant": 64,
+    "duplicate_set": null,
+    "answers": {
+      "monthly_expenses": 2000,
+      "how_did_you_hear": "from work",
+      "has_children": "no",
+      "owes_court_fees": "yes",
+      "understands_limits": "yes",
+      "middle_name": "Jessica",
+      "serving_sentence": "no",
+      "consent_to_represent": "yes",
+      "rap_outside_sf": "no",
+      "case_number": "C3061-747",
+      "first_name": "Jessica",
+      "income_source": "a job",
+      "alternate_phone_number": "8314207603",
+      "on_public_benefits": "yes",
+      "on_probation_parole": "yes",
+      "household_size": 3,
+      "additional_information": "I want help",
+      "where_probation_or_parole": "Yolo County",
+      "driver_license_or_id": "D6920253",
+      "when_probation_or_parole": "2018",
+      "monthly_income": 2000,
+      "email": "bgolder+testing@codeforamerica.org",
+      "contact_preferences": [
+        "prefers_sms"
+      ],
+      "is_married": "no",
+      "phone_number": "8314207603",
+      "being_charged": "yes",
+      "when_where_outside_sf": "",
+      "reasons_for_applying": [
+        "background_check",
+        "lost_job",
+        "housing"
+      ],
+      "dob": {
+        "month": "8",
+        "day": "18",
+        "year": "1985"
+      },
+      "last_name": "Hunter",
+      "currently_employed": "no",
+      "last_four": "3826",
+      "address": {
+        "zip": "99020",
+        "state": "MH",
+        "city": "Bergerview",
+        "street": "60782 Downs Mountain"
+      },
+      "owns_home": "no"
+    },
+    "first_name": "Jessica",
+    "last_name": "Hunter",
+    "dob": null,
+    "ssn": "",
+    "last_four": "3826",
+    "drivers_license_or_id": "",
+    "case_number": "C3061-747",
+    "phone_number": "8314207603",
+    "alternate_phone_number": "8314207603",
+    "email": "bgolder+testing@codeforamerica.org",
+    "old_uuid": "9aab3f66180144628b98d745b100a925",
+    "anonymous_name": "Kind Tower",
+    "date_received": "2017-03-22T02:42:49-07:00"
+  }
+},
+{
+  "model": "intake.application",
+  "pk": 78,
+  "fields": {
+    "created": "2017-03-24T13:11:31Z",
+    "updated": "2017-04-04T22:36:17.463Z",
+    "organization": [
+      "Ventura County Public Defender"
+    ],
+    "form_submission": 63,
+    "was_transferred_out": false
+  }
+},
+{
+  "model": "intake.application",
+  "pk": 79,
+  "fields": {
+    "created": "2017-03-22T09:42:49Z",
+    "updated": "2017-04-04T22:36:17.479Z",
+    "organization": [
+      "Ventura County Public Defender"
+    ],
+    "form_submission": 64,
+    "was_transferred_out": false
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 77,
+  "fields": {
+    "created": "2017-04-04T22:36:17.988Z",
+    "updated": "2017-04-04T22:36:17.995Z",
+    "status_type": 1,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "ventura_pubdef_user"
+    ],
+    "application": 78,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 78,
+  "fields": {
+    "created": "2017-04-04T22:36:18.001Z",
+    "updated": "2017-04-04T22:36:18.008Z",
+    "status_type": 2,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "ventura_pubdef_user"
+    ],
+    "application": 79,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusnotification",
+  "pk": 77,
+  "fields": {
+    "status_update": 77,
+    "contact_info": {
+      "email": "bgolder+borg@codeforamerica.org"
+    },
+    "base_message": "Resistance is futile",
+    "sent_message": "Live long and prosper",
+    "created": "2017-04-04T22:36:17.989Z"
+  }
+},
+{
+  "model": "intake.statusnotification",
+  "pk": 78,
+  "fields": {
+    "status_update": 78,
+    "contact_info": {
+      "email": "bgolder+borg@codeforamerica.org"
+    },
+    "base_message": "Resistance is futile",
+    "sent_message": "Live long and prosper",
+    "created": "2017-04-04T22:36:18.003Z"
+  }
+}
+]

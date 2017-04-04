@@ -13,7 +13,7 @@ from intake import (
 class TestFormSubmission(TestCase):
 
     fixtures = [
-        'counties',
+        'counties', 'groups',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
         'mock_1_submission_to_multiple_orgs', 'template_options']

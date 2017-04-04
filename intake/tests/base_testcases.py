@@ -111,7 +111,7 @@ class APIViewTestCase(IntakeDataTestCase):
     client_class = Client
 
     fixtures = [
-        'counties', 'organizations', 'mock_profiles']
+        'counties', 'organizations', 'groups', 'mock_profiles']
 
 
 class DeluxeTransactionTestCase(TestCase):

@@ -298,6 +298,29 @@ class Provider(BaseProvider):
     def tulare_pubdef_answers(self, **overrides):
         return self.solano_pubdef_answers(**overrides)
 
+    def ventura_pubdef_answers(self, **overrides):
+        data = self.solano_pubdef_answers()
+        data.update(
+            owns_home=self.maybe(0.1),
+            currently_employed=self.maybe(0.3),
+            income_source='a job',
+            monthly_income=2000,
+            monthly_expenses=2000,
+            last_four=self.generator.numerify("####"),
+            driver_license_or_id=self.generator.numerify("D#######"),
+            case_number=self.generator.numerify("C####-###"),
+            is_married=self.maybe(0.4),
+            dependents=random.randint(0, 5),
+            has_children=self.maybe(0.6),
+            reduced_probation=self.maybe(0.1),
+            reasons_for_applying=['background_check', 'lost_job', 'housing'],
+        )
+        data.update(overrides)
+        return data
+
+    def santa_barbara_pubdef_answers(self, **overrides):
+        return self.ventura_pubdef_answers(**overrides)
+
     def all_county_answers(self, **overrides):
         data = {
             **self.sf_county_form_answers(),

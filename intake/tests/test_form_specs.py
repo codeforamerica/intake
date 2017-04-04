@@ -13,7 +13,7 @@ import intake.services.submissions as SubmissionsService
 
 class TestAlamedaCountyForm(TestCase):
 
-    fixtures = ['counties', 'organizations', 'mock_profiles']
+    fixtures = ['counties', 'organizations', 'groups', 'mock_profiles']
 
     def test_records_all_fields(self):
         data = mock.fake.alameda_county_form_answers()

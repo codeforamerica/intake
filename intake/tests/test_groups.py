@@ -6,7 +6,7 @@ from intake import groups
 class TestGroups(IntakeDataTestCase):
 
     fixtures = [
-        'counties', 'organizations', 'mock_profiles'
+        'counties', 'organizations', 'groups', 'mock_profiles'
     ]
 
     def test_followup_staff_group(self):

@@ -5,7 +5,7 @@ from intake import permissions
 class TestPermissions(IntakeDataTestCase):
 
     fixtures = [
-        'counties', 'organizations', 'mock_profiles'
+        'counties', 'groups', 'organizations', 'mock_profiles'
     ]
 
     def test_can_see_followup_notes(self):
