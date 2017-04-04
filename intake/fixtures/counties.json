@@ -106,5 +106,23 @@
     "name": "Tulare",
     "description": "Tulare County (near Visalia, Tulare, Porterville, Finuba, Lindsay, Farmersville, Exeter, or Woodlake)"
   }
+},
+{
+  "model": "intake.county",
+  "pk": 13,
+  "fields": {
+    "slug": "ventura",
+    "name": "Ventura",
+    "description": "Ventura County (near Oxnard, Thousand Oaks, Simi Valley and Ventura)"
+  }
+},
+{
+  "model": "intake.county",
+  "pk": 14,
+  "fields": {
+    "slug": "santa_barbara",
+    "name": "Santa Barbara",
+    "description": "Santa Barbara County (near Santa Maria, Santa Barbara, Lompoc, Goleta)"
+  }
 }
 ]

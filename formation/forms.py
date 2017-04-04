@@ -477,6 +477,74 @@ class TulareCountyFormSpec(SolanoCountyFormSpec):
     ]
 
 
+class VenturaCountyFormSpec(CombinableCountyFormSpec):
+    county = Counties.VENTURA
+    fields = {
+        F.ContactPreferences,
+        F.FirstName,
+        F.MiddleName,
+        F.LastName,
+        F.PhoneNumberField,
+        F.AlternatePhoneNumberField,
+        F.EmailField,
+        F.AddressField,
+        F.OwnsHome,
+        F.FinancialScreeningNote,
+        F.CurrentlyEmployed,
+        F.MonthlyIncome,
+        F.IncomeSource,
+        F.OnPublicBenefits,
+        F.MonthlyExpenses,
+        F.OwnsHome,
+        F.HouseholdSize,
+        F.HasChildren,
+        F.IsMarried,
+        F.DateOfBirthField,
+        F.LastFourOfSocial,
+        F.DriverLicenseOrIDNumber,
+        F.OnProbationParole,
+        F.WhereProbationParole,
+        F.WhenProbationParole,
+        F.OwesCourtFees,
+        F.ServingSentence,
+        F.BeingCharged,
+        F.RAPOutsideSF,
+        F.WhenWhereOutsideSF,
+        F.CaseNumber,
+        F.ReasonsForApplying,
+        F.HowDidYouHear,
+        F.AdditionalInformation,
+        F.UnderstandsLimits,
+        F.ConsentToRepresent,
+    }
+    required_fields = {
+        F.CurrentlyEmployed,
+        F.MonthlyIncome,
+        F.IncomeSource,
+        F.MonthlyExpenses,
+        F.OnPublicBenefits,
+        F.HouseholdSize,
+        F.DateOfBirthField,
+        F.OnProbationParole,
+        F.OwesCourtFees,
+        F.ServingSentence,
+        F.BeingCharged,
+        F.UnderstandsLimits,
+        F.ConsentToRepresent,
+    }
+    validators = [
+        gave_preferred_contact_methods,
+        at_least_email_or_phone
+    ]
+
+
+class SantaBarbaraCountyFormSpec(VenturaCountyFormSpec):
+    county = Counties.SANTA_BARBARA
+    fields = VenturaCountyFormSpec.fields - {
+        F.DriverLicenseOrIDNumber,
+    }
+
+
 class EBCLCIntakeFormSpec(CombinableOrganizationFormSpec):
     organization = Organizations.EBCLC
     fields = {
@@ -495,7 +563,7 @@ class EBCLCIntakeFormSpec(CombinableOrganizationFormSpec):
         F.OwnsHome,
         F.HouseholdSize,
         F.DateOfBirthField,
-        # F.LastFourOfSSN,
+        # F.LastFourOfSocial,
         F.USCitizen,
         F.OnProbationParole,
         F.FinishedHalfProbation,
@@ -588,6 +656,8 @@ INPUT_FORM_SPECS = [
     FresnoCountyFormSpec(),
     SonomaCountyFormSpec(),
     TulareCountyFormSpec(),
+    VenturaCountyFormSpec(),
+    SantaBarbaraCountyFormSpec(),
 ]
 
 DISPLAY_FORM_SPECS = INPUT_FORM_SPECS + [
