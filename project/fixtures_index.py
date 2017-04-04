@@ -9,6 +9,7 @@ ESSENTIAL_DATA_FIXTURES = (
 )
 
 # These contain fake accounts for each org
+# depends on ESSENTIAL_DATA_FIXTURES
 MOCK_USER_ACCOUNT_FIXTURES = (
     'mock_profiles',
 )
@@ -29,6 +30,8 @@ MOCK_APPLICATION_FIXTURES = (
     'mock_2_submissions_to_fresno_pubdef',
     'mock_2_submissions_to_sonoma_pubdef',
     'mock_2_submissions_to_tulare_pubdef',
+    'mock_2_submissions_to_ventura_pubdef',
+    'mock_2_submissions_to_santa_barbara_pubdef',
     'mock_1_submission_to_multiple_orgs',
 )
 
@@ -58,6 +61,8 @@ MOCK_BUNDLE_FIXTURES = (
     'mock_1_bundle_to_fresno_pubdef',
     'mock_1_bundle_to_sonoma_pubdef',
     'mock_1_bundle_to_tulare_pubdef',
+    'mock_1_bundle_to_ventura_pubdef',
+    'mock_1_bundle_to_santa_barbara_pubdef',
 )
 
 # These all the fake mocked data

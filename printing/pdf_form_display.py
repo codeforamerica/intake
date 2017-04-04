@@ -60,6 +60,7 @@ class PDFFormDisplay:
         ['first_name', 'middle_name', 'last_name'],
         ['aliases'],
         ['dob', 'last_four', 'driver_license_or_id', 'ssn', 'case_number'],
+        ['preferred_pronouns'],
         ['contact_preferences'],
         ['phone_number', 'alternate_phone_number'],
         ['email'],

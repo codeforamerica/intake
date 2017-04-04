@@ -7,7 +7,7 @@ from django.db import IntegrityError
 class TestApplication(TestCase):
 
     fixtures = [
-        'counties',
+        'counties', 'groups',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef', 'template_options'
     ]

@@ -17,7 +17,7 @@ from bs4 import BeautifulSoup
 class TestApplicationDetail(IntakeDataTestCase):
 
     fixtures = [
-        'counties',
+        'counties', 'groups',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
@@ -103,7 +103,7 @@ class TestApplicationDetail(IntakeDataTestCase):
 class TestApplicationBundle(IntakeDataTestCase):
 
     fixtures = [
-        'counties',
+        'counties', 'groups',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
@@ -163,7 +163,7 @@ class TestApplicationBundle(IntakeDataTestCase):
 class TestApplicationIndex(IntakeDataTestCase):
 
     fixtures = [
-        'counties',
+        'counties', 'groups',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
@@ -293,7 +293,7 @@ class TestApplicationIndex(IntakeDataTestCase):
 class TestApplicationBundleDetail(IntakeDataTestCase):
 
     fixtures = [
-        'counties',
+        'counties', 'groups',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef', 'template_options',
@@ -399,7 +399,7 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
 @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
 class TestApplicationBundleDetailPDFView(IntakeDataTestCase):
     fixtures = [
-        'counties',
+        'counties', 'groups',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_sf_pubdef', 'template_options',
     ]

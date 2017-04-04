@@ -112,6 +112,8 @@ linkify_links = {
     "Fresno County Public Defender": "/partners/fresno_pubdef/",
     "Sonoma County Public Defender": "/partners/sonoma_pubdef/",
     "Tulare County Public Defender": "/partners/tulare_pubdef/",
+    "Santa Barbara County Public Defender": "/partners/santa_barbara_pubdef/",
+    "Ventura County Public Defender": "/partners/ventura_pubdef/",
     "clearmyrecord@codeforamerica.org":
         "mailto:clearmyrecord@codeforamerica.org",
     "(415) 301-6005": "tel:14153016005"
