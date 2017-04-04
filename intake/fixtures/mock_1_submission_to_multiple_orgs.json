@@ -1,9 +1,9 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 68,
+  "pk": 101,
   "fields": {
-    "first_visit": "2017-04-04T22:36:17.538Z",
+    "first_visit": "2017-04-04T23:26:38.640Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,294 +11,401 @@
 },
 {
   "model": "intake.applicant",
-  "pk": 65,
+  "pk": 98,
   "fields": {
-    "visitor": 68
+    "visitor": 101
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 65,
+  "pk": 98,
   "fields": {
-    "applicant": 65,
+    "applicant": 98,
     "duplicate_set": null,
     "answers": {
+      "is_student": "no",
+      "owes_court_fees": "yes",
+      "declaration_letter_activities": "Odio nemo fugiat vero itaque sint non. Temporibus libero maiores provident tempora. Corrupti odio asperiores libero quasi rerum. Ipsa dolorum tempore eveniet fugit ipsa vitae quia delectus.",
+      "understands_limits": "yes",
+      "has_suspended_license": "no",
+      "declaration_letter_life_changes": "Quia perspiciatis vitae sapiente illo repudiandae culpa hic. Ratione et animi cumque dolore unde fugiat. Aliquam dolore consequatur nesciunt ducimus.",
+      "where_probation_or_parole": "Yolo County",
+      "ssn": "264631536",
+      "currently_employed": "yes",
+      "contact_preferences": [
+        "prefers_email"
+      ],
+      "on_public_benefits": "no",
       "monthly_expenses": 2000,
+      "when_where_outside_sf": "",
+      "driver_license_or_id": "D9065306",
       "finished_half_probation": "not_applicable",
       "how_did_you_hear": "from work",
-      "when_where_outside_sf": "",
-      "owes_court_fees": "yes",
-      "has_suspended_license": "no",
-      "understands_limits": "yes",
-      "is_student": "no",
-      "declaration_letter_goals": "Reiciendis aut nemo voluptas voluptatibus quasi. Porro quibusdam quaerat tempora maiores. Cumque magni aperiam accusantium molestias suscipit rem earum. Voluptates aspernatur nam voluptas voluptatibus.",
-      "middle_name": "Anthony",
-      "income_source": "a job",
-      "dependents": 0,
-      "is_veteran": "no",
-      "serving_sentence": "no",
-      "currently_employed": "no",
-      "rap_outside_sf": "yes",
-      "case_number": "C4219-607",
-      "first_name": "Christine",
-      "on_probation_parole": "yes",
-      "email": "bgolder+testing@codeforamerica.org",
-      "has_children": "no",
-      "on_public_benefits": "yes",
-      "ssn": "139452954",
-      "declaration_letter_activities": "Sapiente architecto beatae enim mollitia consectetur delectus animi. Cumque porro cupiditate ipsa amet possimus architecto distinctio repudiandae. A aliquam recusandae similique libero suscipit ab. Hic aliquam cumque ut possimus.",
-      "household_size": 3,
-      "additional_information": "I want help",
-      "pfn_number": "",
-      "where_probation_or_parole": "Yolo County",
-      "driver_license_or_id": "D2202408",
-      "preferred_pronouns": "",
-      "when_probation_or_parole": "2018",
-      "monthly_income": 2000,
-      "declaration_letter_life_changes": "Perferendis deserunt id a assumenda ducimus delectus enim. Commodi eum soluta repudiandae quis laborum. Saepe doloribus fugiat corrupti.",
-      "alternate_phone_number": "8314207603",
-      "contact_preferences": [
-        "prefers_email",
-        "prefers_sms"
-      ],
-      "is_married": "yes",
-      "aliases": "Sherry Gray",
-      "last_four": "8175",
-      "us_citizen": "yes",
-      "being_charged": "no",
-      "declaration_letter_intro": "Illo ad harum mollitia harum incidunt similique. Laboriosam magni amet fuga labore occaecati nulla modi. Sunt ad deserunt sed repellat.",
       "reasons_for_applying": [
         "background_check",
         "lost_job",
         "housing"
       ],
-      "dob": {
-        "month": "7",
-        "day": "5",
-        "year": "1982"
-      },
-      "last_name": "Gonzalez",
+      "last_four": "7548",
+      "declaration_letter_why": "Sint eaque deleniti consequatur nostrum laboriosam totam accusamus. Tempore quas dignissimos eius quis sed voluptatem deserunt. Nostrum ut molestias officiis deserunt praesentium sequi repellendus.",
       "consent_to_represent": "yes",
+      "being_charged": "no",
+      "case_number": "C8130-077",
+      "household_size": 3,
+      "is_married": "yes",
+      "first_name": "Felicia",
+      "rap_outside_sf": "i_dont_know",
+      "when_probation_or_parole": "2018",
+      "income_source": "a job",
+      "last_name": "Glass",
+      "declaration_letter_intro": "Deserunt impedit quaerat maxime dolore voluptates facilis quas. Consequatur magni quia magnam. Rerum iure repellendus amet porro saepe similique id dolorum.",
+      "is_veteran": "no",
+      "pfn_number": "",
       "owns_home": "no",
-      "declaration_letter_why": "Aperiam libero quod temporibus tempore facere at magnam. Ex explicabo cum itaque enim. Velit consequuntur unde perferendis veritatis at doloribus. Vero molestiae ad eius.",
+      "aliases": "Kayla Carrillo",
       "phone_number": "8314207603",
-      "address": {
-        "zip": "33747",
-        "state": "WA",
-        "city": "Port James",
-        "street": "250 James Coves Suite 907"
+      "middle_name": "Cheryl",
+      "declaration_letter_goals": "Ad aut aspernatur nobis et vel omnis. Placeat odit odio velit saepe inventore tempore aliquid delectus. Sapiente accusamus consequatur sapiente sunt delectus odit voluptate.",
+      "serving_sentence": "no",
+      "has_children": "no",
+      "reduced_probation": "no",
+      "alternate_phone_number": "8314207603",
+      "monthly_income": 2000,
+      "dependents": 1,
+      "on_probation_parole": "yes",
+      "dob": {
+        "month": "5",
+        "day": "16",
+        "year": "1998"
       },
-      "reduced_probation": "no"
+      "us_citizen": "yes",
+      "additional_information": "I want help",
+      "email": "bgolder+testing@codeforamerica.org",
+      "address": {
+        "state": "MN",
+        "city": "Mooretown",
+        "zip": "67664",
+        "street": "4570 Sally Route Suite 856"
+      },
+      "preferred_pronouns": "she"
     },
-    "first_name": "Christine",
-    "last_name": "Gonzalez",
+    "first_name": "Felicia",
+    "last_name": "Glass",
     "dob": null,
-    "ssn": "139452954",
-    "last_four": "8175",
+    "ssn": "264631536",
+    "last_four": "7548",
     "drivers_license_or_id": "",
-    "case_number": "C4219-607",
+    "case_number": "C8130-077",
     "phone_number": "8314207603",
     "alternate_phone_number": "8314207603",
     "email": "bgolder+testing@codeforamerica.org",
-    "old_uuid": "c9d3311b47064ccaac3ccfa95f994566",
-    "anonymous_name": "Kind Chameleon",
-    "date_received": "2017-03-31T00:44:37-07:00"
+    "old_uuid": "b1fbf37ee58f4b2c841b886237b723da",
+    "anonymous_name": "Cosmic Rock",
+    "date_received": "2017-03-26T11:46:28-07:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 80,
+  "pk": 128,
   "fields": {
-    "created": "2017-03-31T07:44:37Z",
-    "updated": "2017-04-04T22:36:17.551Z",
+    "created": "2017-03-26T18:46:28Z",
+    "updated": "2017-04-04T23:26:38.654Z",
     "organization": [
       "Alameda County Public Defender's Office"
     ],
-    "form_submission": 65,
+    "form_submission": 98,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 81,
+  "pk": 129,
   "fields": {
-    "created": "2017-03-31T07:44:37Z",
-    "updated": "2017-04-04T22:36:17.552Z",
+    "created": "2017-03-26T18:46:28Z",
+    "updated": "2017-04-04T23:26:38.656Z",
     "organization": [
       "Contra Costa Public Defender"
     ],
-    "form_submission": 65,
+    "form_submission": 98,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 82,
+  "pk": 130,
   "fields": {
-    "created": "2017-03-31T07:44:37Z",
-    "updated": "2017-04-04T22:36:17.553Z",
+    "created": "2017-03-26T18:46:28Z",
+    "updated": "2017-04-04T23:26:38.658Z",
     "organization": [
       "Fresno County Public Defender"
     ],
-    "form_submission": 65,
+    "form_submission": 98,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 83,
+  "pk": 131,
   "fields": {
-    "created": "2017-03-31T07:44:37Z",
-    "updated": "2017-04-04T22:36:17.555Z",
+    "created": "2017-03-26T18:46:28Z",
+    "updated": "2017-04-04T23:26:38.659Z",
     "organization": [
       "Monterey County Public Defender"
     ],
-    "form_submission": 65,
+    "form_submission": 98,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 84,
+  "pk": 132,
   "fields": {
-    "created": "2017-03-31T07:44:37Z",
-    "updated": "2017-04-04T22:36:17.556Z",
+    "created": "2017-03-26T18:46:28Z",
+    "updated": "2017-04-04T23:26:38.660Z",
     "organization": [
       "San Diego County Public Defender"
     ],
-    "form_submission": 65,
+    "form_submission": 98,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 85,
+  "pk": 133,
   "fields": {
-    "created": "2017-03-31T07:44:37Z",
-    "updated": "2017-04-04T22:36:17.558Z",
+    "created": "2017-03-26T18:46:28Z",
+    "updated": "2017-04-04T23:26:38.662Z",
     "organization": [
       "San Francisco Public Defender"
     ],
-    "form_submission": 65,
+    "form_submission": 98,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 86,
+  "pk": 134,
   "fields": {
-    "created": "2017-03-31T07:44:37Z",
-    "updated": "2017-04-04T22:36:17.559Z",
+    "created": "2017-03-26T18:46:28Z",
+    "updated": "2017-04-04T23:26:38.663Z",
     "organization": [
       "San Joaquin County Public Defender"
     ],
-    "form_submission": 65,
+    "form_submission": 98,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 87,
+  "pk": 135,
   "fields": {
-    "created": "2017-03-31T07:44:37Z",
-    "updated": "2017-04-04T22:36:17.560Z",
+    "created": "2017-03-26T18:46:28Z",
+    "updated": "2017-04-04T23:26:38.664Z",
     "organization": [
       "Santa Barbara County Public Defender"
     ],
-    "form_submission": 65,
+    "form_submission": 98,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 88,
+  "pk": 136,
   "fields": {
-    "created": "2017-03-31T07:44:37Z",
-    "updated": "2017-04-04T22:36:17.561Z",
+    "created": "2017-03-26T18:46:28Z",
+    "updated": "2017-04-04T23:26:38.665Z",
     "organization": [
       "Santa Clara County Public Defender"
     ],
-    "form_submission": 65,
+    "form_submission": 98,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 89,
+  "pk": 137,
   "fields": {
-    "created": "2017-03-31T07:44:37Z",
-    "updated": "2017-04-04T22:36:17.563Z",
+    "created": "2017-03-26T18:46:28Z",
+    "updated": "2017-04-04T23:26:38.666Z",
     "organization": [
       "Santa Cruz County Public Defender"
     ],
-    "form_submission": 65,
+    "form_submission": 98,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 90,
+  "pk": 138,
   "fields": {
-    "created": "2017-03-31T07:44:37Z",
-    "updated": "2017-04-04T22:36:17.564Z",
+    "created": "2017-03-26T18:46:28Z",
+    "updated": "2017-04-04T23:26:38.668Z",
     "organization": [
       "Solano County Public Defender"
     ],
-    "form_submission": 65,
+    "form_submission": 98,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 91,
+  "pk": 139,
   "fields": {
-    "created": "2017-03-31T07:44:37Z",
-    "updated": "2017-04-04T22:36:17.565Z",
+    "created": "2017-03-26T18:46:28Z",
+    "updated": "2017-04-04T23:26:38.669Z",
     "organization": [
       "Sonoma County Public Defender"
     ],
-    "form_submission": 65,
+    "form_submission": 98,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 92,
+  "pk": 140,
   "fields": {
-    "created": "2017-03-31T07:44:37Z",
-    "updated": "2017-04-04T22:36:17.566Z",
+    "created": "2017-03-26T18:46:28Z",
+    "updated": "2017-04-04T23:26:38.670Z",
     "organization": [
       "Tulare County Public Defender"
     ],
-    "form_submission": 65,
+    "form_submission": 98,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 93,
+  "pk": 141,
   "fields": {
-    "created": "2017-03-31T07:44:37Z",
-    "updated": "2017-04-04T22:36:17.568Z",
+    "created": "2017-03-26T18:46:28Z",
+    "updated": "2017-04-04T23:26:38.672Z",
     "organization": [
       "Ventura County Public Defender"
     ],
-    "form_submission": 65,
+    "form_submission": 98,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 85,
+  "pk": 97,
   "fields": {
-    "created": "2017-04-04T22:36:18.104Z",
-    "updated": "2017-04-04T22:36:18.111Z",
+    "created": "2017-04-04T23:26:38.683Z",
+    "updated": "2017-04-04T23:26:38.695Z",
+    "status_type": 1,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "a_pubdef_user"
+    ],
+    "application": 128,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 98,
+  "fields": {
+    "created": "2017-04-04T23:26:38.703Z",
+    "updated": "2017-04-04T23:26:38.710Z",
+    "status_type": 2,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "cc_pubdef_user"
+    ],
+    "application": 129,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 99,
+  "fields": {
+    "created": "2017-04-04T23:26:38.717Z",
+    "updated": "2017-04-04T23:26:38.725Z",
+    "status_type": 3,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "fresno_pubdef_user"
+    ],
+    "application": 130,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 100,
+  "fields": {
+    "created": "2017-04-04T23:26:38.732Z",
+    "updated": "2017-04-04T23:26:38.741Z",
+    "status_type": 4,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "monterey_pubdef_user"
+    ],
+    "application": 131,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 101,
+  "fields": {
+    "created": "2017-04-04T23:26:38.748Z",
+    "updated": "2017-04-04T23:26:38.756Z",
+    "status_type": 5,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "san_diego_pubdef_user"
+    ],
+    "application": 132,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 102,
+  "fields": {
+    "created": "2017-04-04T23:26:38.765Z",
+    "updated": "2017-04-04T23:26:38.791Z",
+    "status_type": 6,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "sf_pubdef_user"
+    ],
+    "application": 133,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 133,
+  "fields": {
+    "created": "2017-04-04T23:26:39.299Z",
+    "updated": "2017-04-04T23:26:39.306Z",
     "status_type": 2,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "san_joaquin_pubdef_user"
     ],
-    "application": 86,
+    "application": 134,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -307,34 +414,16 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 86,
+  "pk": 135,
   "fields": {
-    "created": "2017-04-04T22:36:18.119Z",
-    "updated": "2017-04-04T22:36:18.126Z",
-    "status_type": 3,
-    "additional_information": "We may be able to get a fee waived for you",
-    "author": [
-      "santa_barbara_pubdef_user"
-    ],
-    "application": 87,
-    "other_next_step": "Come to our Walk-In Clinic",
-    "next_steps": [
-      1
-    ]
-  }
-},
-{
-  "model": "intake.statusupdate",
-  "pk": 87,
-  "fields": {
-    "created": "2017-04-04T22:36:18.133Z",
-    "updated": "2017-04-04T22:36:18.141Z",
+    "created": "2017-04-04T23:26:39.327Z",
+    "updated": "2017-04-04T23:26:39.335Z",
     "status_type": 4,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "santa_clara_pubdef_user"
     ],
-    "application": 88,
+    "application": 136,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -343,16 +432,34 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 88,
+  "pk": 134,
   "fields": {
-    "created": "2017-04-04T22:36:18.148Z",
-    "updated": "2017-04-04T22:36:18.155Z",
+    "created": "2017-04-04T23:26:39.314Z",
+    "updated": "2017-04-04T23:26:39.321Z",
+    "status_type": 3,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "santa_barbara_pubdef_user"
+    ],
+    "application": 135,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 136,
+  "fields": {
+    "created": "2017-04-04T23:26:39.342Z",
+    "updated": "2017-04-04T23:26:39.350Z",
     "status_type": 5,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "santa_cruz_pubdef_user"
     ],
-    "application": 89,
+    "application": 137,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -361,34 +468,16 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 79,
+  "pk": 137,
   "fields": {
-    "created": "2017-04-04T22:36:18.015Z",
-    "updated": "2017-04-04T22:36:18.022Z",
-    "status_type": 3,
-    "additional_information": "We may be able to get a fee waived for you",
-    "author": [
-      "a_pubdef_user"
-    ],
-    "application": 80,
-    "other_next_step": "Come to our Walk-In Clinic",
-    "next_steps": [
-      1
-    ]
-  }
-},
-{
-  "model": "intake.statusupdate",
-  "pk": 89,
-  "fields": {
-    "created": "2017-04-04T22:36:18.162Z",
-    "updated": "2017-04-04T22:36:18.170Z",
+    "created": "2017-04-04T23:26:39.357Z",
+    "updated": "2017-04-04T23:26:39.364Z",
     "status_type": 6,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "solano_pubdef_user"
     ],
-    "application": 90,
+    "application": 138,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -397,70 +486,16 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 80,
+  "pk": 138,
   "fields": {
-    "created": "2017-04-04T22:36:18.029Z",
-    "updated": "2017-04-04T22:36:18.036Z",
-    "status_type": 4,
-    "additional_information": "We may be able to get a fee waived for you",
-    "author": [
-      "cc_pubdef_user"
-    ],
-    "application": 81,
-    "other_next_step": "Come to our Walk-In Clinic",
-    "next_steps": [
-      1
-    ]
-  }
-},
-{
-  "model": "intake.statusupdate",
-  "pk": 81,
-  "fields": {
-    "created": "2017-04-04T22:36:18.043Z",
-    "updated": "2017-04-04T22:36:18.051Z",
-    "status_type": 5,
-    "additional_information": "We may be able to get a fee waived for you",
-    "author": [
-      "fresno_pubdef_user"
-    ],
-    "application": 82,
-    "other_next_step": "Come to our Walk-In Clinic",
-    "next_steps": [
-      1
-    ]
-  }
-},
-{
-  "model": "intake.statusupdate",
-  "pk": 82,
-  "fields": {
-    "created": "2017-04-04T22:36:18.059Z",
-    "updated": "2017-04-04T22:36:18.066Z",
-    "status_type": 6,
-    "additional_information": "We may be able to get a fee waived for you",
-    "author": [
-      "monterey_pubdef_user"
-    ],
-    "application": 83,
-    "other_next_step": "Come to our Walk-In Clinic",
-    "next_steps": [
-      1
-    ]
-  }
-},
-{
-  "model": "intake.statusupdate",
-  "pk": 90,
-  "fields": {
-    "created": "2017-04-04T22:36:18.178Z",
-    "updated": "2017-04-04T22:36:18.186Z",
+    "created": "2017-04-04T23:26:39.371Z",
+    "updated": "2017-04-04T23:26:39.379Z",
     "status_type": 7,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "sonoma_pubdef_user"
     ],
-    "application": 91,
+    "application": 139,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -469,52 +504,16 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 83,
+  "pk": 139,
   "fields": {
-    "created": "2017-04-04T22:36:18.074Z",
-    "updated": "2017-04-04T22:36:18.081Z",
-    "status_type": 7,
-    "additional_information": "We may be able to get a fee waived for you",
-    "author": [
-      "san_diego_pubdef_user"
-    ],
-    "application": 84,
-    "other_next_step": "Come to our Walk-In Clinic",
-    "next_steps": [
-      1
-    ]
-  }
-},
-{
-  "model": "intake.statusupdate",
-  "pk": 84,
-  "fields": {
-    "created": "2017-04-04T22:36:18.089Z",
-    "updated": "2017-04-04T22:36:18.096Z",
-    "status_type": 1,
-    "additional_information": "We may be able to get a fee waived for you",
-    "author": [
-      "sf_pubdef_user"
-    ],
-    "application": 85,
-    "other_next_step": "Come to our Walk-In Clinic",
-    "next_steps": [
-      1
-    ]
-  }
-},
-{
-  "model": "intake.statusupdate",
-  "pk": 91,
-  "fields": {
-    "created": "2017-04-04T22:36:18.194Z",
-    "updated": "2017-04-04T22:36:18.204Z",
+    "created": "2017-04-04T23:26:39.386Z",
+    "updated": "2017-04-04T23:26:39.395Z",
     "status_type": 1,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "tulare_pubdef_user"
     ],
-    "application": 92,
+    "application": 140,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -523,16 +522,16 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 92,
+  "pk": 140,
   "fields": {
-    "created": "2017-04-04T22:36:18.212Z",
-    "updated": "2017-04-04T22:36:18.219Z",
+    "created": "2017-04-04T23:26:39.402Z",
+    "updated": "2017-04-04T23:26:39.409Z",
     "status_type": 2,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "ventura_pubdef_user"
     ],
-    "application": 93,
+    "application": 141,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -541,184 +540,184 @@
 },
 {
   "model": "intake.statusnotification",
-  "pk": 85,
+  "pk": 102,
   "fields": {
-    "status_update": 85,
+    "status_update": 102,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-04T22:36:18.105Z"
+    "created": "2017-04-04T23:26:38.767Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 82,
+  "pk": 98,
   "fields": {
-    "status_update": 82,
+    "status_update": 98,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-04T22:36:18.060Z"
+    "created": "2017-04-04T23:26:38.704Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 81,
+  "pk": 99,
   "fields": {
-    "status_update": 81,
+    "status_update": 99,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-04T22:36:18.045Z"
+    "created": "2017-04-04T23:26:38.719Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 83,
+  "pk": 133,
   "fields": {
-    "status_update": 83,
+    "status_update": 133,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-04T22:36:18.075Z"
+    "created": "2017-04-04T23:26:39.301Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 87,
+  "pk": 100,
   "fields": {
-    "status_update": 87,
+    "status_update": 100,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-04T22:36:18.135Z"
+    "created": "2017-04-04T23:26:38.734Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 84,
+  "pk": 97,
   "fields": {
-    "status_update": 84,
+    "status_update": 97,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-04T22:36:18.090Z"
+    "created": "2017-04-04T23:26:38.686Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 88,
+  "pk": 136,
   "fields": {
-    "status_update": 88,
+    "status_update": 136,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-04T22:36:18.150Z"
+    "created": "2017-04-04T23:26:39.344Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 79,
+  "pk": 138,
   "fields": {
-    "status_update": 79,
+    "status_update": 138,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-04T22:36:18.017Z"
+    "created": "2017-04-04T23:26:39.373Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 91,
+  "pk": 140,
   "fields": {
-    "status_update": 91,
+    "status_update": 140,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-04T22:36:18.196Z"
+    "created": "2017-04-04T23:26:39.403Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 92,
+  "pk": 101,
   "fields": {
-    "status_update": 92,
+    "status_update": 101,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-04T22:36:18.213Z"
+    "created": "2017-04-04T23:26:38.750Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 86,
+  "pk": 137,
   "fields": {
-    "status_update": 86,
+    "status_update": 137,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-04T22:36:18.120Z"
+    "created": "2017-04-04T23:26:39.359Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 80,
+  "pk": 134,
   "fields": {
-    "status_update": 80,
+    "status_update": 134,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-04T22:36:18.031Z"
+    "created": "2017-04-04T23:26:39.315Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 90,
+  "pk": 135,
   "fields": {
-    "status_update": 90,
+    "status_update": 135,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-04T22:36:18.180Z"
+    "created": "2017-04-04T23:26:39.329Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 89,
+  "pk": 139,
   "fields": {
-    "status_update": 89,
+    "status_update": 139,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-04T22:36:18.164Z"
+    "created": "2017-04-04T23:26:39.388Z"
   }
 }
 ]

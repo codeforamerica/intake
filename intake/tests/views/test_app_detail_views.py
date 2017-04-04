@@ -3,6 +3,7 @@ from unittest.mock import patch
 from django.core.urlresolvers import reverse
 from markupsafe import escape
 from intake import models
+from user_accounts.models import Organization
 from django.contrib.auth.models import User
 from intake.tests.base_testcases import IntakeDataTestCase
 from intake.tests import factories
@@ -14,6 +15,8 @@ class AppDetailFixturesBaseTestCase(IntakeDataTestCase):
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
+        'mock_2_submissions_to_ebclc',
+        'mock_2_submissions_to_santa_clara_pubdef',
         'mock_1_submission_to_multiple_orgs', 'template_options'
     ]
 
@@ -100,6 +103,26 @@ class TestApplicationDetail(AppDetailFixturesBaseTestCase):
         transfer_action_url = escape(
             submission.get_transfer_action(response.wsgi_request)['url'])
         self.assertContains(response, transfer_action_url)
+
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_ebclc_and_santa_clara_can_see_pref_pronouns(self, slack):
+        ebclc = Organization.objects.get(slug='ebclc')
+        santa_clara = Organization.objects.filter(
+            slug__contains='santa_clara').first()
+        self.be_user(
+            User.objects.filter(profile__organization=ebclc).first())
+        sub = models.FormSubmission.objects.filter(
+            organizations=ebclc).first()
+        response = self.get_page(sub)
+        self.assertContains(
+            response, escape(sub.answers.get('preferred_pronouns')))
+        self.be_user(
+            User.objects.filter(profile__organization=santa_clara).first())
+        sub = models.FormSubmission.objects.filter(
+            organizations=santa_clara).first()
+        response = self.get_page(sub)
+        self.assertContains(
+            response, escape(sub.answers.get('preferred_pronouns')))
 
     @patch('intake.notifications.slack_submissions_viewed.send')
     def test_agency_user_can_see_case_printout_link(self, slack):

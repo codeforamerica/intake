@@ -1,9 +1,9 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 50,
+  "pk": 83,
   "fields": {
-    "first_visit": "2017-04-04T22:36:17.206Z",
+    "first_visit": "2017-04-04T23:26:38.311Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +11,9 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 51,
+  "pk": 84,
   "fields": {
-    "first_visit": "2017-04-04T22:36:17.222Z",
+    "first_visit": "2017-04-04T23:26:38.327Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,173 +21,173 @@
 },
 {
   "model": "intake.applicant",
-  "pk": 47,
+  "pk": 80,
   "fields": {
-    "visitor": 50
+    "visitor": 83
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 48,
+  "pk": 81,
   "fields": {
-    "visitor": 51
+    "visitor": 84
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 47,
+  "pk": 80,
   "fields": {
-    "applicant": 47,
+    "applicant": 80,
     "duplicate_set": null,
     "answers": {
-      "being_charged": "no",
-      "monthly_expenses": 2218,
-      "additional_information": "I want help",
-      "how_did_you_hear": "",
-      "where_probation_or_parole": "",
-      "when_probation_or_parole": "",
-      "understands_limits": "yes",
-      "monthly_income": 3584,
-      "email": "bgolder+testing@codeforamerica.org",
-      "middle_name": "Brent",
-      "ssn": "052274862",
-      "contact_preferences": [
-        "prefers_sms"
-      ],
-      "us_citizen": "yes",
-      "serving_sentence": "i_dont_know",
-      "when_where_outside_sf": "",
-      "consent_to_represent": "yes",
+      "first_name": "Tanner",
       "rap_outside_sf": "no",
-      "last_name": "Chase",
-      "first_name": "Susan",
-      "currently_employed": "yes",
-      "on_probation_parole": "yes",
-      "dob": {
-        "month": "4",
-        "day": "2",
-        "year": "1981"
-      },
-      "phone_number": "8314207603",
-      "address": {
-        "zip": "65371",
-        "state": "NC",
-        "city": "South Tylershire",
-        "street": "6403 Hall Island Suite 892"
-      }
-    },
-    "first_name": "Susan",
-    "last_name": "Chase",
-    "dob": null,
-    "ssn": "052274862",
-    "last_four": "",
-    "drivers_license_or_id": "",
-    "case_number": "",
-    "phone_number": "8314207603",
-    "alternate_phone_number": "",
-    "email": "bgolder+testing@codeforamerica.org",
-    "old_uuid": "f7eeded8c5594c0fa71c143c8e581e3d",
-    "anonymous_name": "Galactic Galleon",
-    "date_received": "2017-03-28T14:44:08-07:00"
-  }
-},
-{
-  "model": "intake.formsubmission",
-  "pk": 48,
-  "fields": {
-    "applicant": 48,
-    "duplicate_set": null,
-    "answers": {
-      "being_charged": "no",
-      "monthly_expenses": 2524,
-      "additional_information": "I want help",
-      "how_did_you_hear": "",
-      "where_probation_or_parole": "",
       "when_probation_or_parole": "",
       "understands_limits": "yes",
-      "monthly_income": 2358,
-      "email": "bgolder+testing@codeforamerica.org",
-      "middle_name": "Scott",
-      "ssn": "346920109",
+      "last_name": "Neal",
+      "where_probation_or_parole": "",
+      "ssn": "800563984",
+      "currently_employed": "no",
       "contact_preferences": [
-        "prefers_sms",
         "prefers_email"
       ],
-      "us_citizen": "yes",
+      "phone_number": "8314207603",
+      "middle_name": "Michael",
       "serving_sentence": "no",
+      "us_citizen": "yes",
       "when_where_outside_sf": "",
-      "consent_to_represent": "yes",
-      "rap_outside_sf": "no",
-      "last_name": "Morgan",
-      "first_name": "Cheryl",
-      "currently_employed": "no",
+      "monthly_income": 5373,
       "on_probation_parole": "no",
       "dob": {
-        "month": "3",
-        "day": "15",
-        "year": "1971"
+        "month": "9",
+        "day": "26",
+        "year": "1997"
       },
-      "phone_number": "8314207603",
+      "monthly_expenses": 416,
+      "how_did_you_hear": "",
+      "additional_information": "I want help",
+      "email": "bgolder+testing@codeforamerica.org",
       "address": {
-        "zip": "21424",
-        "state": "AR",
-        "city": "Calvinville",
-        "street": "55516 Williams Station"
-      }
+        "state": "RI",
+        "city": "Williamsview",
+        "zip": "20007",
+        "street": "97825 Cooley Fields Apt. 047"
+      },
+      "being_charged": "yes",
+      "consent_to_represent": "yes"
     },
-    "first_name": "Cheryl",
-    "last_name": "Morgan",
+    "first_name": "Tanner",
+    "last_name": "Neal",
     "dob": null,
-    "ssn": "346920109",
+    "ssn": "800563984",
     "last_four": "",
     "drivers_license_or_id": "",
     "case_number": "",
     "phone_number": "8314207603",
     "alternate_phone_number": "",
     "email": "bgolder+testing@codeforamerica.org",
-    "old_uuid": "8cfcbf81fb9f41a496edf20de45ab556",
-    "anonymous_name": "Deciduous Swan",
-    "date_received": "2017-04-02T16:56:10-07:00"
+    "old_uuid": "b01d6cef6f7042a4bbf410c330199ea4",
+    "anonymous_name": "Shimmering Fog",
+    "date_received": "2017-04-03T13:28:07-07:00"
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 81,
+  "fields": {
+    "applicant": 81,
+    "duplicate_set": null,
+    "answers": {
+      "first_name": "Bruce",
+      "rap_outside_sf": "yes",
+      "when_probation_or_parole": "",
+      "understands_limits": "yes",
+      "last_name": "Torres",
+      "where_probation_or_parole": "",
+      "ssn": "278330106",
+      "currently_employed": "no",
+      "contact_preferences": [
+        "prefers_email",
+        "prefers_sms"
+      ],
+      "phone_number": "8314207603",
+      "middle_name": "Daniel",
+      "serving_sentence": "no",
+      "us_citizen": "yes",
+      "when_where_outside_sf": "",
+      "monthly_income": 2376,
+      "on_probation_parole": "no",
+      "dob": {
+        "month": "4",
+        "day": "3",
+        "year": "1991"
+      },
+      "monthly_expenses": 776,
+      "how_did_you_hear": "",
+      "additional_information": "I want help",
+      "email": "bgolder+testing@codeforamerica.org",
+      "address": {
+        "state": "KS",
+        "city": "Durhammouth",
+        "zip": "64824",
+        "street": "1525 Joseph Mews"
+      },
+      "being_charged": "no",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "Bruce",
+    "last_name": "Torres",
+    "dob": null,
+    "ssn": "278330106",
+    "last_four": "",
+    "drivers_license_or_id": "",
+    "case_number": "",
+    "phone_number": "8314207603",
+    "alternate_phone_number": "",
+    "email": "bgolder+testing@codeforamerica.org",
+    "old_uuid": "1c1f877bb4034deebac7fa30e1030c9e",
+    "anonymous_name": "Fuzzy Lake",
+    "date_received": "2017-03-25T22:37:21-07:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 62,
+  "pk": 110,
   "fields": {
-    "created": "2017-03-28T21:44:08Z",
-    "updated": "2017-04-04T22:36:17.216Z",
+    "created": "2017-04-03T20:28:07Z",
+    "updated": "2017-04-04T23:26:38.321Z",
     "organization": [
       "San Francisco Public Defender"
     ],
-    "form_submission": 47,
+    "form_submission": 80,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 63,
+  "pk": 111,
   "fields": {
-    "created": "2017-04-02T23:56:10Z",
-    "updated": "2017-04-04T22:36:17.230Z",
+    "created": "2017-03-26T05:37:21Z",
+    "updated": "2017-04-04T23:26:38.337Z",
     "organization": [
       "San Francisco Public Defender"
     ],
-    "form_submission": 48,
+    "form_submission": 81,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 57,
+  "pk": 115,
   "fields": {
-    "created": "2017-04-04T22:36:17.705Z",
-    "updated": "2017-04-04T22:36:17.712Z",
-    "status_type": 2,
+    "created": "2017-04-04T23:26:39.016Z",
+    "updated": "2017-04-04T23:26:39.023Z",
+    "status_type": 5,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "sf_pubdef_user"
     ],
-    "application": 62,
+    "application": 110,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -196,16 +196,16 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 58,
+  "pk": 116,
   "fields": {
-    "created": "2017-04-04T22:36:17.719Z",
-    "updated": "2017-04-04T22:36:17.726Z",
-    "status_type": 3,
+    "created": "2017-04-04T23:26:39.030Z",
+    "updated": "2017-04-04T23:26:39.037Z",
+    "status_type": 6,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "sf_pubdef_user"
     ],
-    "application": 63,
+    "application": 111,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -214,28 +214,28 @@
 },
 {
   "model": "intake.statusnotification",
-  "pk": 57,
+  "pk": 115,
   "fields": {
-    "status_update": 57,
+    "status_update": 115,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-04T22:36:17.706Z"
+    "created": "2017-04-04T23:26:39.018Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 58,
+  "pk": 116,
   "fields": {
-    "status_update": 58,
+    "status_update": 116,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-04T22:36:17.720Z"
+    "created": "2017-04-04T23:26:39.031Z"
   }
 }
 ]
