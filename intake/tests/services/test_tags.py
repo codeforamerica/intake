@@ -10,7 +10,7 @@ from intake.exceptions import UserCannotBeNoneError
 class TestUpdateTagsForSubmission(IntakeDataTestCase):
 
     fixtures = [
-        'counties', 'organizations', 'mock_profiles',
+        'counties', 'organizations', 'groups', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef', 'template_options'
     ]
 

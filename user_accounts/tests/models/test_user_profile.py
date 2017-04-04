@@ -5,7 +5,7 @@ from intake.tests.base_testcases import IntakeDataTestCase
 class TestUserProfile(IntakeDataTestCase):
 
     fixtures = [
-        'counties',
+        'counties', 'groups',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_cc_pubdef',
         'mock_2_submissions_to_sf_pubdef',

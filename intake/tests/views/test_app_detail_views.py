@@ -11,7 +11,7 @@ from intake.tests import factories
 
 class AppDetailFixturesBaseTestCase(IntakeDataTestCase):
     fixtures = [
-        'counties',
+        'counties', 'groups',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
@@ -170,7 +170,7 @@ class TestApplicationDetail(AppDetailFixturesBaseTestCase):
         self.assertContains(response, escape(this_status_name))
         self.assertContains(response, escape(this_status_logged_by))
         self.assertNotContains(response, escape(other_logged_by))
-        if this_status_name != other_status_name:
+        if other_status_name not in this_status_name:
             self.assertNotContains(response, escape(other_status_name))
 
     @patch('intake.notifications.slack_submissions_viewed.send')

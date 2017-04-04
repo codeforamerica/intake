@@ -58,8 +58,7 @@ class FormSubmissionWithOrgsFactory(FormSubmissionFactory):
             kwargs['organizations'] = OrganizationFactory.sample()
         # set answers based on the designated organizations
         if 'answers' not in kwargs:
-            kwargs['answers'] = get_answers_for_orgs(
-                *[org.slug for org in kwargs['organizations']])
+            kwargs['answers'] = get_answers_for_orgs(kwargs['organizations'])
         submission = super().create(*args, **kwargs)
         # adjust created and updated dates of applications to match
         # the form submission's faked date

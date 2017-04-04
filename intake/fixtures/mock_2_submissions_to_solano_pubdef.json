@@ -1,9 +1,9 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 51,
+  "pk": 93,
   "fields": {
-    "first_visit": "2017-04-04T00:31:18.947Z",
+    "first_visit": "2017-04-04T23:26:38.465Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +11,9 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 52,
+  "pk": 94,
   "fields": {
-    "first_visit": "2017-04-04T00:31:18.962Z",
+    "first_visit": "2017-04-04T23:26:38.480Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,119 +21,61 @@
 },
 {
   "model": "intake.applicant",
-  "pk": 51,
+  "pk": 90,
   "fields": {
-    "visitor": 51
+    "visitor": 93
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 52,
+  "pk": 91,
   "fields": {
-    "visitor": 52
+    "visitor": 94
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 50,
+  "pk": 90,
   "fields": {
-    "applicant": 51,
-    "duplicate_set": null,
-    "answers": {
-      "owes_court_fees": "no",
-      "rap_outside_sf": "no",
-      "understands_limits": "yes",
-      "how_did_you_hear": "from work",
-      "being_charged": "yes",
-      "additional_information": "I want help",
-      "middle_name": "Brad",
-      "address": {
-        "zip": "85183",
-        "street": "75574 Lisa Prairie",
-        "city": "Wolfeland",
-        "state": "VT"
-      },
-      "first_name": "Emily",
-      "serving_sentence": "no",
-      "when_where_outside_sf": "",
-      "where_probation_or_parole": "Yolo County",
-      "last_name": "Howe",
-      "alternate_phone_number": "8314207603",
-      "email": "bgolder+testing@codeforamerica.org",
-      "phone_number": "8314207603",
-      "us_citizen": "yes",
-      "dob": {
-        "year": "1968",
-        "month": "5",
-        "day": "10"
-      },
-      "contact_preferences": [
-        "prefers_sms",
-        "prefers_email"
-      ],
-      "consent_to_represent": "yes",
-      "on_probation_parole": "yes",
-      "when_probation_or_parole": "2018"
-    },
-    "first_name": "Emily",
-    "last_name": "Howe",
-    "dob": null,
-    "ssn": "",
-    "last_four": "",
-    "drivers_license_or_id": "",
-    "case_number": "",
-    "phone_number": "8314207603",
-    "alternate_phone_number": "8314207603",
-    "email": "bgolder+testing@codeforamerica.org",
-    "old_uuid": "f993bbc1e9c4485d844dc82c72dc9b0c",
-    "anonymous_name": "Cool Adventurer",
-    "date_received": "2017-03-26T17:42:47-07:00"
-  }
-},
-{
-  "model": "intake.formsubmission",
-  "pk": 51,
-  "fields": {
-    "applicant": 52,
+    "applicant": 90,
     "duplicate_set": null,
     "answers": {
       "owes_court_fees": "yes",
+      "first_name": "Adam",
       "rap_outside_sf": "no",
+      "when_probation_or_parole": "2018",
       "understands_limits": "yes",
-      "how_did_you_hear": "from work",
-      "being_charged": "no",
-      "additional_information": "I want help",
-      "middle_name": "Suzanne",
-      "address": {
-        "zip": "15784",
-        "street": "946 Jill Springs Suite 040",
-        "city": "South Kyle",
-        "state": "PA"
-      },
-      "first_name": "Spencer",
-      "serving_sentence": "no",
-      "when_where_outside_sf": "",
+      "last_name": "Miller",
       "where_probation_or_parole": "Yolo County",
-      "last_name": "Andrews",
-      "alternate_phone_number": "8314207603",
-      "email": "bgolder+testing@codeforamerica.org",
-      "phone_number": "8314207603",
-      "us_citizen": "no",
-      "dob": {
-        "year": "1990",
-        "month": "5",
-        "day": "4"
-      },
       "contact_preferences": [
-        "prefers_email",
-        "prefers_sms"
+        "prefers_email"
       ],
-      "consent_to_represent": "yes",
+      "phone_number": "8314207603",
+      "middle_name": "Gerald",
+      "serving_sentence": "yes",
+      "when_where_outside_sf": "",
+      "alternate_phone_number": "8314207603",
       "on_probation_parole": "yes",
-      "when_probation_or_parole": "2018"
+      "dob": {
+        "month": "7",
+        "day": "12",
+        "year": "1988"
+      },
+      "us_citizen": "yes",
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "email": "bgolder+testing@codeforamerica.org",
+      "address": {
+        "state": "SD",
+        "city": "Austinburgh",
+        "zip": "30213",
+        "street": "6758 Duncan Course"
+      },
+      "being_charged": "no",
+      "consent_to_represent": "yes"
     },
-    "first_name": "Spencer",
-    "last_name": "Andrews",
+    "first_name": "Adam",
+    "last_name": "Miller",
     "dob": null,
     "ssn": "",
     "last_four": "",
@@ -142,49 +84,105 @@
     "phone_number": "8314207603",
     "alternate_phone_number": "8314207603",
     "email": "bgolder+testing@codeforamerica.org",
-    "old_uuid": "988ca6c620314bd089702523152ed988",
-    "anonymous_name": "Cool Narwhal",
-    "date_received": "2017-03-27T13:24:31-07:00"
+    "old_uuid": "cc8763c805544d35a49093dd3167cc9c",
+    "anonymous_name": "Stupendous Tadpole",
+    "date_received": "2017-04-01T12:06:24-07:00"
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 91,
+  "fields": {
+    "applicant": 91,
+    "duplicate_set": null,
+    "answers": {
+      "owes_court_fees": "yes",
+      "first_name": "James",
+      "rap_outside_sf": "no",
+      "when_probation_or_parole": "2018",
+      "understands_limits": "yes",
+      "last_name": "Brooks",
+      "where_probation_or_parole": "Yolo County",
+      "contact_preferences": [
+        "prefers_email"
+      ],
+      "phone_number": "8314207603",
+      "middle_name": "Norma",
+      "serving_sentence": "no",
+      "when_where_outside_sf": "",
+      "alternate_phone_number": "8314207603",
+      "on_probation_parole": "yes",
+      "dob": {
+        "month": "12",
+        "day": "3",
+        "year": "1965"
+      },
+      "us_citizen": "yes",
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "email": "bgolder+testing@codeforamerica.org",
+      "address": {
+        "state": "PA",
+        "city": "North Bryanshire",
+        "zip": "23083",
+        "street": "556 Moody Squares"
+      },
+      "being_charged": "no",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "James",
+    "last_name": "Brooks",
+    "dob": null,
+    "ssn": "",
+    "last_four": "",
+    "drivers_license_or_id": "",
+    "case_number": "",
+    "phone_number": "8314207603",
+    "alternate_phone_number": "8314207603",
+    "email": "bgolder+testing@codeforamerica.org",
+    "old_uuid": "164bca4c6d294159ba5eb1e0a8a2726d",
+    "anonymous_name": "Cerulean Moth",
+    "date_received": "2017-03-31T18:00:55-07:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 63,
+  "pk": 120,
   "fields": {
-    "created": "2017-03-27T00:42:47Z",
-    "updated": "2017-04-04T00:31:18.956Z",
+    "created": "2017-04-01T19:06:24Z",
+    "updated": "2017-04-04T23:26:38.474Z",
     "organization": [
       "Solano County Public Defender"
     ],
-    "form_submission": 50,
+    "form_submission": 90,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 64,
+  "pk": 121,
   "fields": {
-    "created": "2017-03-27T20:24:31Z",
-    "updated": "2017-04-04T00:31:18.971Z",
+    "created": "2017-04-01T01:00:55Z",
+    "updated": "2017-04-04T23:26:38.489Z",
     "organization": [
       "Solano County Public Defender"
     ],
-    "form_submission": 51,
+    "form_submission": 91,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 63,
+  "pk": 126,
   "fields": {
-    "created": "2017-04-04T00:31:19.418Z",
-    "updated": "2017-04-04T00:31:19.428Z",
-    "status_type": 7,
+    "created": "2017-04-04T23:26:39.177Z",
+    "updated": "2017-04-04T23:26:39.185Z",
+    "status_type": 2,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "solano_pubdef_user"
     ],
-    "application": 63,
+    "application": 121,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -193,16 +191,16 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 64,
+  "pk": 125,
   "fields": {
-    "created": "2017-04-04T00:31:19.435Z",
-    "updated": "2017-04-04T00:31:19.442Z",
+    "created": "2017-04-04T23:26:39.161Z",
+    "updated": "2017-04-04T23:26:39.170Z",
     "status_type": 1,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "solano_pubdef_user"
     ],
-    "application": 64,
+    "application": 120,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -211,28 +209,28 @@
 },
 {
   "model": "intake.statusnotification",
-  "pk": 63,
+  "pk": 125,
   "fields": {
-    "status_update": 63,
+    "status_update": 125,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-04T00:31:19.419Z"
+    "created": "2017-04-04T23:26:39.163Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 64,
+  "pk": 126,
   "fields": {
-    "status_update": 64,
+    "status_update": 126,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-04T00:31:19.437Z"
+    "created": "2017-04-04T23:26:39.179Z"
   }
 }
 ]

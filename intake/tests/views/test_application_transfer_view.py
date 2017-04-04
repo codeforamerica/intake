@@ -18,6 +18,7 @@ class TestApplicationTransferView(IntakeDataTestCase):
     fixtures = [
         'counties',
         'organizations',
+        'groups',
         'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
         'mock_1_bundle_to_a_pubdef',
