@@ -431,6 +431,7 @@ class SantaClaraCountyFormSpec(SolanoCountyFormSpec):
         F.ReducedProbation,
         F.ReasonsForApplying,
         F.PFNNumber,
+        F.PreferredPronouns,
     }) - {
         F.USCitizen,
     }

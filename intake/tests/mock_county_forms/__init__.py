@@ -108,7 +108,7 @@ class Provider(BaseProvider):
     def alameda_county_form_answers(self, **overrides):
         data = {
             'contact_preferences': self.generate_contact_preferences(),
-            # 'preferred_pronouns': self.some_choice(GENDER_PRONOUN_CHOICES),
+            'preferred_pronouns': self.some_choice(GENDER_PRONOUN_CHOICES),
             'first_name': self.generator.first_name(),
             'middle_name': self.generator.first_name(),
             'last_name': self.generator.last_name(),
@@ -261,6 +261,7 @@ class Provider(BaseProvider):
         data = self.solano_pubdef_answers()
         data.update(
             currently_employed=self.maybe(0.3),
+            preferred_pronouns=self.some_choice(GENDER_PRONOUN_CHOICES),
             income_source='a job',
             monthly_expenses=2000,
             is_married=self.maybe(0.4),
