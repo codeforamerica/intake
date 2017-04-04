@@ -1,5 +1,5 @@
 # Core dependencies
-Django~=1.10
+Django==1.10
 django-autocomplete-light~=3.2
 psycopg2~=2.6
 Jinja2~=2.8
