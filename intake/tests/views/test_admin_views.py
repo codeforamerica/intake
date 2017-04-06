@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
 from django.core.files.uploadedfile import SimpleUploadedFile
 
+from intake import models
 from intake.tests.base_testcases import IntakeDataTestCase, DELUXE_TEST
 from intake.tests.factories import FormSubmissionFactory
 from project.jinja2 import url_with_ids
@@ -437,3 +438,59 @@ class TestApplicationBundleDetailPDFView(IntakeDataTestCase):
             skip_pdf=True)
         response = self.client.get(bundle.get_pdf_bundle_url())
         self.assertEqual(response.status_code, 404)
+
+
+class TestCaseBundlePrintoutPDFView(IntakeDataTestCase):
+
+    fixtures = TestApplicationDetail.fixtures + [
+        'mock_1_bundle_to_a_pubdef']
+
+    def test_anonymous_users_redirected_to_login(self):
+        self.be_anonymous()
+        bundle = models.ApplicationBundle.objects.first()
+        response = self.client.get(
+            reverse(
+                'intake-case_bundle_printout',
+                kwargs=dict(bundle_id=bundle.id)))
+        self.assertIn(reverse('user_accounts-login'), response.url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_users_from_wrong_org_redirected_to_app_index(self):
+        self.be_ccpubdef_user()
+        bundle = models.ApplicationBundle.objects.filter(
+            organization__slug__contains='a_pubdef').first()
+        response = self.client.get(
+            reverse(
+                'intake-case_bundle_printout',
+                kwargs=dict(bundle_id=bundle.id)))
+        self.assertRedirects(response, reverse('intake-app_index'))
+
+
+class TestCasePrintoutPDFView(IntakeDataTestCase):
+
+    fixtures = TestApplicationDetail.fixtures
+
+    def test_anonymous_users_redirected_to_login(self):
+        self.be_anonymous()
+        sub = self.a_pubdef_submissions[0]
+        response = self.client.get(
+            reverse(
+                'intake-case_printout', kwargs=dict(submission_id=sub.id)))
+        self.assertIn(reverse('user_accounts-login'), response.url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_users_from_wrong_org_redirected_to_app_index(self):
+        self.be_ccpubdef_user()
+        sub = self.a_pubdef_submissions[0]
+        response = self.client.get(
+            reverse(
+                'intake-case_printout', kwargs=dict(submission_id=sub.id)))
+        self.assertRedirects(response, reverse('intake-app_index'))
+
+
+class TestApplicantAutocomplete(IntakeDataTestCase):
+
+    def test_anonymous_users_get_403(self):
+        self.be_anonymous()
+        response = self.client.get(reverse('applicant-autocomplete'))
+        self.assertEqual(response.status_code, 403)
