@@ -14,11 +14,11 @@ def get_mixpanel_client():
     return _mixpanel_client
 
 
-def log_to_mixpanel(user_id, event_name, data):
+def log_to_mixpanel(user_uuid, event_name, data):
     client = get_mixpanel_client()
     divert = getattr(settings, 'DIVERT_REMOTE_CONNECTIONS', False)
     if client and not divert:
         client.track(
-            distinct_id=user_id,
+            distinct_id=user_uuid,
             event_name=event_name,
             properties=data)

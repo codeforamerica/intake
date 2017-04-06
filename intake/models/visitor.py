@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 
 
 class Visitor(models.Model):
@@ -6,3 +7,4 @@ class Visitor(models.Model):
     source = models.TextField(null=True)
     referrer = models.TextField(null=True)
     ip_address = models.TextField(null=True)
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True)

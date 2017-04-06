@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 import intake
 from intake.permissions import (
     CAN_SEE_APP_STATS,
@@ -8,6 +9,7 @@ from intake.permissions import (
 
 class Applicant(models.Model):
     visitor = models.ForeignKey('intake.Visitor', null=True)
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True)
 
     class Meta:
         permissions = (

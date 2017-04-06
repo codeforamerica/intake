@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 from .abstract_base_models import BaseModel
 
 
@@ -13,6 +14,7 @@ class Application(BaseModel):
         on_delete=models.PROTECT,
         related_name='applications'
     )
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True)
     was_transferred_out = models.BooleanField(default=False)
 
     def __str__(self):
