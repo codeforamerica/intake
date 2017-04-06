@@ -91,7 +91,7 @@ def add_cfa_seed_users():
     username = 'monitor_user'
     email = 'bgolder+demo+{}@codeforamerica.org'.format(username)
     user = auth_models.User.objects.filter(username=username).first()
-    name = 'Fake Monitor User',
+    name = 'Fake Monitor User'
     if not user:
         user = auth_models.User.objects.create_user(
             username=username,
