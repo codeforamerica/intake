@@ -1,7 +1,7 @@
 
 import logging
 from urllib.parse import urljoin
-
+from project.jinja2 import externalize_url
 from django.db import models
 from django.utils import timezone as timezone_utils
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -61,4 +61,4 @@ class ApplicationBundle(models.Model):
             kwargs=dict(bundle_id=self.id))
 
     def get_external_url(self):
-        return urljoin(settings.DEFAULT_HOST, self.get_absolute_url())
+        return externalize_url(self.get_absolute_url())
