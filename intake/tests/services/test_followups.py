@@ -46,7 +46,7 @@ class TestGetSubmissionsDueForFollowups(TestCase):
             applicant=applicant)
         models.ApplicationEvent.log_followup_sent(
             applicant.id,
-            contact_info=sub_w_followup.answers['email'],
+            contact_info=dict(email=sub_w_followup.answers['email']),
             message_content="hey how are things going?")
         # if we grab subs that need followups
         results = FollowupsService.get_submissions_due_for_follow_ups()
@@ -75,7 +75,7 @@ class TestGetSubmissionsDueForFollowups(TestCase):
         followed_up_sub.save()
         models.ApplicationEvent.log_followup_sent(
             applicant.id,
-            contact_info=followed_up_sub.answers['email'],
+            contact_info=dict(email=followed_up_sub.answers['email']),
             message_content="hey how are things going?")
         # when we get submissions due for follow ups,
         results = list(FollowupsService.get_submissions_due_for_follow_ups(
