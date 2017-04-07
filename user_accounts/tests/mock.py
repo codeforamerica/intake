@@ -3,6 +3,7 @@ from pytz import timezone
 from user_accounts import models
 from django.contrib.auth import models as auth_models
 from django.utils.text import slugify
+from django.core.management import call_command
 
 
 fake = FakerFactory.create('en_US')
@@ -58,7 +59,59 @@ def create_user_with_profile(organization, **attributes):
     )
 
 
+def add_cfa_seed_users():
+    org = models.Organization.objects.get(slug='cfa')
+    followup_staff = auth_models.Group.objects.get(name='followup_staff')
+    performance_monitors = auth_models.Group.objects.get(
+        name='performance_monitors')
+    application_reviewers = auth_models.Group.objects.get(
+        name='application_reviewers')
+    username = 'cfa_user'
+    email = 'bgolder+demo+{}@codeforamerica.org'.format(username)
+    user = auth_models.User.objects.filter(username=username).first()
+    name = 'Fake CFA'
+    if not user:
+        user = auth_models.User.objects.create_superuser(
+            username=username,
+            first_name='Fake',
+            last_name='CFA',
+            email=email,
+            password=fake_password,
+            is_staff=True,
+            is_superuser=True)
+    if not hasattr(user, 'profile'):
+        models.UserProfile.objects.create(
+            organization=org,
+            name=name,
+            user=user,
+            should_get_notifications=False)
+    followup_staff.user_set.add(user)
+    application_reviewers.user_set.add(user)
+
+    username = 'monitor_user'
+    email = 'bgolder+demo+{}@codeforamerica.org'.format(username)
+    user = auth_models.User.objects.filter(username=username).first()
+    name = 'Fake Monitor User'
+    if not user:
+        user = auth_models.User.objects.create_user(
+            username=username,
+            first_name='Fake',
+            last_name='Monitor User',
+            email=email,
+            password=fake_password,
+            is_staff=False,
+            is_superuser=False)
+    if not hasattr(user, 'profile'):
+        models.UserProfile.objects.create(
+            organization=org,
+            name=name,
+            user=user,
+            should_get_notifications=False)
+    performance_monitors.user_set.add(user)
+
+
 def create_seed_users():
+    users = []
     user_args = {}
     application_reviewers_group = auth_models.Group.objects.get(
         name='application_reviewers')
@@ -89,6 +142,18 @@ def create_seed_users():
                 user=user,
                 should_get_notifications=True)
         application_reviewers_group.user_set.add(user)
+        users.append(user)
+    add_cfa_seed_users()
+    serialize_seed_users()
+
+
+def serialize_seed_users():
+    call_command(
+        'dumpdata', 'auth.User', 'user_accounts.UserProfile',
+        use_natural_primary_keys=True,
+        use_natural_foreign_keys=True,
+        indent=2,
+        output='user_accounts/fixtures/mock_profiles.json')
 
 
 def create_fake_auth_models(num_users_per_org=2):

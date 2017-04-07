@@ -5,13 +5,22 @@ from intake.tests.base_testcases import IntakeDataTestCase
 class TestUserProfile(IntakeDataTestCase):
 
     fixtures = [
-        'counties',
+        'counties', 'groups',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_cc_pubdef',
         'mock_2_submissions_to_sf_pubdef',
         'mock_1_submission_to_multiple_orgs',
         'mock_1_bundle_to_cc_pubdef', 'template_options'
     ]
+
+    def test_shows_org_name_when_printed(self):
+        default_print_display = str(self.sf_pubdef_user.profile)
+        display_name = self.sf_pubdef_user.profile.get_display_name()
+        org_name = self.sf_pubdef_user.profile.organization.name
+        self.assertIn(org_name, default_print_display)
+        self.assertTrue(self.sf_pubdef_user.profile.should_get_notifications)
+        self.assertIn("gets notifications", default_print_display)
+        self.assertIn(org_name, display_name)
 
     def test_user_should_see_pdf(self):
         self.assertTrue(self.sf_pubdef_user.profile.should_see_pdf())

@@ -8,12 +8,25 @@ Account settings
 
 {% block form %}
 			<form action="" method="post">
+			    
+			    <div class="field organization">
+			    	<label class="field-wrapping_label">
+			    		<span class="field-display_text">Organization</span>
+			    		<span class="field-display_value">
+			    			{{ user.profile.organization.name }}
+			    		</span>
+			    		
+			    	</label>
+			    </div>
 					{% csrf_token %}
 			    {{ macros.render_form_fields(form) }}
+		
 			    <p>
 			    	<input class="btn btn-lg btn-primary" type="submit" value="Update" />	
 			    </p>
 			</form>
+
+
 			
 			<ul class="profile_menu">
 				<li class="profile_menu-item">
