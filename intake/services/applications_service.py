@@ -20,8 +20,8 @@ def get_applications_for_org(organization):
             'incoming_transfers__status_update__author__profile',
         ]
     return models.Application.objects.filter(
-            organization=organization
-        ).prefetch_related(*prefetch_tables).order_by('-created').distinct()
+        organization=organization
+    ).prefetch_related(*prefetch_tables).order_by('-created').distinct()
 
 
 def get_applications_index_for_org_user(user, page_index):
