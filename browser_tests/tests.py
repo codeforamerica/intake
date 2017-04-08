@@ -42,7 +42,7 @@ class ExampleTests(BrowserStackTestCase):
         self.selenium.find_element_by_id(
             'apply-now').click()
         self.assertEquals(urljoin(self.live_server_url, 'apply/'),
-            self.selenium.current_url)
+                          self.selenium.current_url)
         submit = self.selenium.find_element_by_css_selector(
             'button[type="submit"]')
         self.assertEquals(submit.text, 'Apply')
