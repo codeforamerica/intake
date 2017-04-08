@@ -101,7 +101,7 @@ class TestGetPermittedSubmissions(TestCase):
 class TestHaveSameOrgs(TestCase):
 
     fixtures = [
-        'counties', 'organizations',  'groups', 'mock_profiles',
+        'counties', 'organizations', 'groups', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_cc_pubdef', 'template_options'
     ]

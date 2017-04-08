@@ -7,6 +7,7 @@ answer_lookup = {}
 
 
 class AnswerGenerator:
+
     def __init__(self, mock_method_form_class_pairs):
         self.mock_method_form_class_pairs = mock_method_form_class_pairs
 
@@ -30,7 +31,7 @@ def populate_answer_lookup():
             raise AttributeError(
                 'There is no mock form answers method for {}'.format(org.slug))
         form_class = county_form_selector.get_combined_form_class(
-                counties=[org.county.slug])
+            counties=[org.county.slug])
         mock_method_form_pairs = {}
         mock_method_form_pairs[answer_mock_method_name] = form_class
         if org.requires_declaration_letter:
