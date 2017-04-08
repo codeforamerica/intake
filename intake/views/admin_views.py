@@ -335,6 +335,9 @@ class CasePrintoutPDFView(ApplicationDetail):
     def get(self, request, submission_id):
         submission = get_object_or_404(
             models.FormSubmission, pk=int(submission_id))
+        if not submission.organizations.filter(
+                id=request.user.profile.organization_id).exists():
+            return not_allowed(request)
         filename, pdf_bytes = get_printout_for_submission(
             request.user,
             submission)
@@ -352,6 +355,8 @@ class CaseBundlePrintoutPDFView(ViewAppDetailsMixin, View):
         bundle = get_object_or_404(
             models.ApplicationBundle,
             pk=int(bundle_id))
+        if bundle.organization_id != request.user.profile.organization_id:
+            return not_allowed(request)
         filename, pdf_bytes = get_concatenated_printout_for_bundle(
             request.user, bundle)
         response = HttpResponse(
@@ -361,6 +366,11 @@ class CaseBundlePrintoutPDFView(ViewAppDetailsMixin, View):
 
 
 class ApplicantAutocomplete(autocomplete.Select2QuerySetView):
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return super().dispatch(request, *args, **kwargs)
+        return HttpResponse(status=403)
 
     def get_queryset(self):
         if self.request.user.is_staff:

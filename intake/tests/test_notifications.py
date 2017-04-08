@@ -1,7 +1,8 @@
 from unittest import TestCase as BaseTestCase
 from unittest.mock import Mock, patch
 from django.test import TestCase as DjangoTestCase, override_settings
-
+from project.jinja2 import external_reverse
+from django.core.urlresolvers import reverse
 from django.core import mail
 from django.conf import settings
 import json
@@ -244,7 +245,9 @@ They want to be contacted via text message and email
             current_local_time=current_time,
             bundle_url="something.com/applications/bundle/1/"
         )
+        app_index_url = external_reverse('intake-app_index')
         self.assertIn(expected_body, content.body)
+        self.assertIn(app_index_url, content.body)
         self.assertEqual(expected_subject, content.subject)
 
     @override_settings(DEFAULT_HOST='something.com')

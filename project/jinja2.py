@@ -1,12 +1,22 @@
 from django.contrib.humanize.templatetags import humanize
 from django.core.urlresolvers import reverse, reverse_lazy
 import phonenumbers
+from django.conf import settings
 from jinja2 import Environment
+from urllib.parse import urljoin
 from datetime import datetime
 from pytz import timezone
 from jinja2 import Markup
 from django.utils.html import mark_safe
 from rest_framework.renderers import JSONRenderer
+
+
+def externalize_url(url):
+    return urljoin(settings.DEFAULT_HOST, url)
+
+
+def external_reverse(view_name):
+    return externalize_url(reverse(view_name))
 
 
 def to_json(data):
