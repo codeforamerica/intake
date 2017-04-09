@@ -15,6 +15,10 @@ def get_submissions_due_for_follow_ups(after_id=None):
     a_month_ago = today - thirty_days
     end_date_criteria = a_month_ago
     date_criteria = Q(date_received__lte=end_date_criteria)
+    has_at_least_one_app_w_no_update = Q(
+        id__in=models.Application.objects.filter(
+            status_updates=None).values_list(
+                'form_submission_id', flat=True))
     if after_id:
         lower_bound = models.FormSubmission.objects.get(
             id=after_id).date_received
@@ -23,7 +27,7 @@ def get_submissions_due_for_follow_ups(after_id=None):
     exclusion_criteria = ~Q(
         applicant__events__name=models.ApplicationEvent.FOLLOWUP_SENT)
     qset = models.FormSubmission.objects.filter(
-        date_criteria & exclusion_criteria
+        has_at_least_one_app_w_no_update & date_criteria & exclusion_criteria
     )
     return qset
 
