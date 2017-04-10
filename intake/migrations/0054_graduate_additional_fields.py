@@ -13,12 +13,14 @@ def copy_answers_to_fields(apps, schema_editor):
     keys = QUERYABLE_ANSWER_FIELDS
     for sub in subs:
         for key in keys:
-            existing = sub.answers.get(key, "")
-            setattr(sub, key, existing)
+            existing = sub.answers.get(key, None)
+            if existing:
+                setattr(sub, key, existing)
         address = sub.answers['address']
         for component in address:
-            existing = address.get(component, "")
-            setattr(sub, component, existing)
+            existing = address.get(component, None)
+            if existing:
+                setattr(sub, component, existing)
         sub.save()
 
 
