@@ -31,14 +31,16 @@ def populate_answer_lookup():
             answer_mock_method_name, form_class)
 
 
-def get_answers_for_org(org_slug):
+def get_answers_for_org(org_slug, **overrides):
     if org_slug not in answer_lookup:
         populate_answer_lookup()
-    return answer_lookup[org_slug]()
+    answers = answer_lookup[org_slug]()
+    answers.update(**overrides)
+    return answers
 
 
-def get_answers_for_orgs(*slugs):
+def get_answers_for_orgs(*slugs, **overrides):
     answers = {}
     for slug in slugs:
-        answers.update(**get_answers_for_org(slug))
+        answers.update(**get_answers_for_org(slug, **overrides))
     return answers
