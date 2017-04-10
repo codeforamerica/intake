@@ -3,6 +3,7 @@ from django.test import TestCase
 import intake.services.followups as FollowupsService
 from intake.tests import mock, factories
 from intake.tests.mock import get_old_date, get_newer_date
+from intake.tests.mock_org_answers import get_answers_for_orgs
 from intake.tests.base_testcases import ExternalNotificationsPatchTestCase
 from intake.constants import Organizations
 from intake import models
@@ -46,7 +47,7 @@ class TestGetSubmissionsDueForFollowups(TestCase):
             applicant=applicant)
         models.ApplicationEvent.log_followup_sent(
             applicant.id,
-            contact_info=sub_w_followup.answers['email'],
+            contact_info=dict(email=sub_w_followup.answers['email']),
             message_content="hey how are things going?")
         # if we grab subs that need followups
         results = FollowupsService.get_submissions_due_for_follow_ups()
@@ -75,7 +76,7 @@ class TestGetSubmissionsDueForFollowups(TestCase):
         followed_up_sub.save()
         models.ApplicationEvent.log_followup_sent(
             applicant.id,
-            contact_info=followed_up_sub.answers['email'],
+            contact_info=dict(email=followed_up_sub.answers['email']),
             message_content="hey how are things going?")
         # when we get submissions due for follow ups,
         results = list(FollowupsService.get_submissions_due_for_follow_ups(
@@ -100,7 +101,9 @@ class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
     fixtures = ['counties', 'organizations']
 
     def full_answers(self):
-        return mock.fake.alameda_pubdef_answers(
+        org = Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)
+        return get_answers_for_orgs(
+            [org],
             contact_preferences=[
                 'prefers_email',
                 'prefers_sms',
@@ -111,7 +114,9 @@ class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
         )
 
     def cant_contact_answers(self):
-        return mock.fake.alameda_pubdef_answers(
+        org = Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)
+        return get_answers_for_orgs(
+            [org],
             contact_preferences=[
                 'prefers_voicemail',
                 'prefers_snailmail'],

@@ -1,9 +1,9 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 21,
+  "pk": 17,
   "fields": {
-    "first_visit": "2017-04-10T19:39:30.838Z",
+    "first_visit": "2017-04-10T19:39:30.730Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +11,9 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 22,
+  "pk": 18,
   "fields": {
-    "first_visit": "2017-04-10T19:39:30.862Z",
+    "first_visit": "2017-04-10T19:39:30.756Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,73 +21,86 @@
 },
 {
   "model": "intake.applicant",
-  "pk": 21,
+  "pk": 17,
   "fields": {
-    "visitor": 21
+    "visitor": 17
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 22,
+  "pk": 18,
   "fields": {
-    "visitor": 22
+    "visitor": 18
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 21,
+  "pk": 17,
   "fields": {
-    "applicant": 21,
+    "applicant": 17,
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
         "prefers_email",
         "prefers_sms"
       ],
-      "first_name": "James",
-      "middle_name": "Monique",
-      "last_name": "Stephenson",
+      "first_name": "John",
+      "middle_name": "Adam",
+      "last_name": "Mack",
       "phone_number": "8314207603",
       "alternate_phone_number": "8314207603",
       "email": "bgolder+testing@codeforamerica.org",
       "address": {
-        "street": "963 Dylan Junction Apt. 078",
-        "city": "New Whitney",
-        "state": "LA",
-        "zip": "06878"
+        "street": "87183 Laura Road Apt. 415",
+        "city": "Curtisbury",
+        "state": "SC",
+        "zip": "66389"
       },
       "dob": {
-        "month": "9",
-        "day": "11",
-        "year": "1997"
+        "month": "8",
+        "day": "28",
+        "year": "1986"
       },
-      "us_citizen": "yes",
+      "last_four": "6702",
+      "case_number": "C9022-372",
       "being_charged": "no",
       "serving_sentence": "no",
       "on_probation_parole": "yes",
       "where_probation_or_parole": "Yolo County",
       "when_probation_or_parole": "2018",
-      "monthly_income": 5550,
+      "rap_outside_sf": "i_dont_know",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "yes",
+      "currently_employed": "yes",
+      "monthly_income": 2000,
+      "income_source": "a job",
+      "on_public_benefits": "yes",
+      "monthly_expenses": 2000,
+      "owns_home": "no",
+      "household_size": 2,
+      "has_children": "yes",
+      "is_married": "no",
       "reasons_for_applying": [
+        "background_check",
         "lost_job",
-        "homeless"
+        "housing"
       ],
       "how_did_you_hear": "from work",
       "additional_information": "I want help",
       "understands_limits": "yes",
       "consent_to_represent": "yes"
     },
-    "first_name": "James",
-    "last_name": "Stephenson",
+    "first_name": "John",
+    "last_name": "Mack",
     "dob": null,
     "ssn": "",
-    "last_four": "",
+    "last_four": "6702",
     "drivers_license_or_id": "",
-    "case_number": "",
+    "case_number": "C9022-372",
     "phone_number": "8314207603",
     "alternate_phone_number": "8314207603",
     "email": "bgolder+testing@codeforamerica.org",
-    "reasons_for_applying": "['lost_job', 'homeless']",
+    "reasons_for_applying": "['background_check', 'lost_job', 'housing']",
     "how_did_you_hear": "from work",
     "additional_information": "I want help",
     "aliases": "",
@@ -95,11 +108,11 @@
     "contact_preferences": "['prefers_email', 'prefers_sms']",
     "preferred_pronouns": "",
     "website": "",
-    "street": "963 Dylan Junction Apt. 078",
-    "city": "New Whitney",
-    "state": "LA",
-    "zip": "06878",
-    "us_citizen": "yes",
+    "street": "87183 Laura Road Apt. 415",
+    "city": "Curtisbury",
+    "state": "SC",
+    "zip": "66389",
+    "us_citizen": "",
     "is_veteran": "",
     "is_student": "",
     "being_charged": "no",
@@ -109,92 +122,106 @@
     "when_probation_or_parole": "2018",
     "finished_half_probation": "",
     "reduced_probation": "",
-    "rap_outside_sf": "",
+    "rap_outside_sf": "i_dont_know",
     "when_where_outside_sf": "",
     "has_suspended_license": "",
-    "owes_court_fees": "",
+    "owes_court_fees": "yes",
     "financial_screening_note": "",
-    "currently_employed": "",
-    "monthly_income": 5550,
-    "income_source": "",
-    "on_public_benefits": "",
-    "owns_home": "",
-    "monthly_expenses": null,
-    "household_size": "",
+    "currently_employed": "yes",
+    "monthly_income": 2000,
+    "income_source": "a job",
+    "on_public_benefits": "yes",
+    "owns_home": "no",
+    "monthly_expenses": 2000,
+    "household_size": 2,
     "dependents": "",
-    "is_married": "",
-    "has_children": "",
-    "old_uuid": "61ec28c1a9d3418d8ec2af26bbc9e576",
-    "anonymous_name": "Caring Thunder",
-    "date_received": "2017-03-31T14:46:57-07:00"
+    "is_married": "no",
+    "has_children": "yes",
+    "old_uuid": "ca74bc60045a4cd2a694454f182cd751",
+    "anonymous_name": "Golden Pony",
+    "date_received": "2017-04-05T22:00:40-07:00"
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 22,
+  "pk": 18,
   "fields": {
-    "applicant": 22,
+    "applicant": 18,
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
+        "prefers_email",
         "prefers_sms"
       ],
-      "first_name": "Bonnie",
+      "first_name": "Shane",
       "middle_name": "Clifford",
-      "last_name": "Velez",
+      "last_name": "Johnson",
       "phone_number": "8314207603",
       "alternate_phone_number": "8314207603",
       "email": "bgolder+testing@codeforamerica.org",
       "address": {
-        "street": "480 Bryant Throughway Suite 342",
-        "city": "Carlosstad",
-        "state": "SD",
-        "zip": "66556"
+        "street": "193 Alyssa Haven Suite 588",
+        "city": "Suzannebury",
+        "state": "CO",
+        "zip": "21765"
       },
       "dob": {
-        "month": "1",
-        "day": "5",
-        "year": "1983"
+        "month": "2",
+        "day": "11",
+        "year": "2000"
       },
-      "us_citizen": "yes",
+      "last_four": "1953",
+      "case_number": "C9806-644",
       "being_charged": "no",
       "serving_sentence": "no",
       "on_probation_parole": "yes",
       "where_probation_or_parole": "Yolo County",
       "when_probation_or_parole": "2018",
-      "monthly_income": 2166,
+      "rap_outside_sf": "no",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "no",
+      "currently_employed": "no",
+      "monthly_income": 2000,
+      "income_source": "a job",
+      "on_public_benefits": "yes",
+      "monthly_expenses": 2000,
+      "owns_home": "no",
+      "household_size": 1,
+      "has_children": "yes",
+      "is_married": "no",
       "reasons_for_applying": [
+        "background_check",
         "lost_job",
-        "homeless"
+        "housing"
       ],
       "how_did_you_hear": "from work",
       "additional_information": "I want help",
       "understands_limits": "yes",
       "consent_to_represent": "yes"
     },
-    "first_name": "Bonnie",
-    "last_name": "Velez",
+    "first_name": "Shane",
+    "last_name": "Johnson",
     "dob": null,
     "ssn": "",
-    "last_four": "",
+    "last_four": "1953",
     "drivers_license_or_id": "",
-    "case_number": "",
+    "case_number": "C9806-644",
     "phone_number": "8314207603",
     "alternate_phone_number": "8314207603",
     "email": "bgolder+testing@codeforamerica.org",
-    "reasons_for_applying": "['lost_job', 'homeless']",
+    "reasons_for_applying": "['background_check', 'lost_job', 'housing']",
     "how_did_you_hear": "from work",
     "additional_information": "I want help",
     "aliases": "",
     "pfn_number": "",
-    "contact_preferences": "['prefers_sms']",
+    "contact_preferences": "['prefers_email', 'prefers_sms']",
     "preferred_pronouns": "",
     "website": "",
-    "street": "480 Bryant Throughway Suite 342",
-    "city": "Carlosstad",
-    "state": "SD",
-    "zip": "66556",
-    "us_citizen": "yes",
+    "street": "193 Alyssa Haven Suite 588",
+    "city": "Suzannebury",
+    "state": "CO",
+    "zip": "21765",
+    "us_citizen": "",
     "is_veteran": "",
     "is_student": "",
     "being_charged": "no",
@@ -204,64 +231,64 @@
     "when_probation_or_parole": "2018",
     "finished_half_probation": "",
     "reduced_probation": "",
-    "rap_outside_sf": "",
+    "rap_outside_sf": "no",
     "when_where_outside_sf": "",
     "has_suspended_license": "",
-    "owes_court_fees": "",
+    "owes_court_fees": "no",
     "financial_screening_note": "",
-    "currently_employed": "",
-    "monthly_income": 2166,
-    "income_source": "",
-    "on_public_benefits": "",
-    "owns_home": "",
-    "monthly_expenses": null,
-    "household_size": "",
+    "currently_employed": "no",
+    "monthly_income": 2000,
+    "income_source": "a job",
+    "on_public_benefits": "yes",
+    "owns_home": "no",
+    "monthly_expenses": 2000,
+    "household_size": 1,
     "dependents": "",
-    "is_married": "",
-    "has_children": "",
-    "old_uuid": "15ce082c29c54c8bba8ee1789c4b796f",
-    "anonymous_name": "Cerulean Starship",
-    "date_received": "2017-04-07T03:00:22-07:00"
+    "is_married": "no",
+    "has_children": "yes",
+    "old_uuid": "188b33d2139c44b4b0213c4e364d960f",
+    "anonymous_name": "Amicable Elephant",
+    "date_received": "2017-04-03T21:00:06-07:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 21,
+  "pk": 17,
   "fields": {
-    "created": "2017-03-31T21:46:57Z",
-    "updated": "2017-04-10T19:39:30.855Z",
+    "created": "2017-04-06T05:00:40Z",
+    "updated": "2017-04-10T19:39:30.749Z",
     "organization": [
-      "Santa Cruz County Public Defender"
+      "Santa Barbara County Public Defender"
     ],
-    "form_submission": 21,
+    "form_submission": 17,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 22,
+  "pk": 18,
   "fields": {
-    "created": "2017-04-07T10:00:22Z",
-    "updated": "2017-04-10T19:39:30.880Z",
+    "created": "2017-04-04T04:00:06Z",
+    "updated": "2017-04-10T19:39:30.778Z",
     "organization": [
-      "Santa Cruz County Public Defender"
+      "Santa Barbara County Public Defender"
     ],
-    "form_submission": 22,
+    "form_submission": 18,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 21,
+  "pk": 18,
   "fields": {
-    "created": "2017-04-10T19:39:31.938Z",
-    "updated": "2017-04-10T19:39:31.958Z",
-    "status_type": 7,
+    "created": "2017-04-10T19:39:31.837Z",
+    "updated": "2017-04-10T19:39:31.846Z",
+    "status_type": 4,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
-      "santa_cruz_pubdef_user"
+      "santa_barbara_pubdef_user"
     ],
-    "application": 21,
+    "application": 18,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -270,16 +297,16 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 22,
+  "pk": 17,
   "fields": {
-    "created": "2017-04-10T19:39:31.967Z",
-    "updated": "2017-04-10T19:39:31.978Z",
-    "status_type": 1,
+    "created": "2017-04-10T19:39:31.809Z",
+    "updated": "2017-04-10T19:39:31.826Z",
+    "status_type": 3,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
-      "santa_cruz_pubdef_user"
+      "santa_barbara_pubdef_user"
     ],
-    "application": 22,
+    "application": 17,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -288,28 +315,28 @@
 },
 {
   "model": "intake.statusnotification",
-  "pk": 21,
+  "pk": 17,
   "fields": {
-    "status_update": 21,
+    "status_update": 17,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-10T19:39:31.941Z"
+    "created": "2017-04-10T19:39:31.813Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 22,
+  "pk": 18,
   "fields": {
-    "status_update": 22,
+    "status_update": 18,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-10T19:39:31.969Z"
+    "created": "2017-04-10T19:39:31.839Z"
   }
 }
 ]

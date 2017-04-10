@@ -135,12 +135,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='formsubmission',
             name='monthly_expenses',
-            field=models.TextField(default=''),
+            field=models.IntegerField(null=True),
         ),
         migrations.AddField(
             model_name='formsubmission',
             name='monthly_income',
-            field=models.TextField(default=''),
+            field=models.IntegerField(null=True),
         ),
         migrations.AddField(
             model_name='formsubmission',

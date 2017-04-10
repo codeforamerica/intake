@@ -1,9 +1,9 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 80,
+  "pk": 23,
   "fields": {
-    "first_visit": "2017-03-31T20:49:03.233Z",
+    "first_visit": "2017-04-10T19:39:30.887Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +11,9 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 81,
+  "pk": 24,
   "fields": {
-    "first_visit": "2017-03-31T20:49:03.264Z",
+    "first_visit": "2017-04-10T19:39:30.916Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,49 +21,49 @@
 },
 {
   "model": "intake.applicant",
-  "pk": 80,
+  "pk": 23,
   "fields": {
-    "visitor": 80
+    "visitor": 23
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 81,
+  "pk": 24,
   "fields": {
-    "visitor": 81
+    "visitor": 24
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 80,
+  "pk": 23,
   "fields": {
-    "applicant": 80,
+    "applicant": 23,
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
-        "prefers_sms",
-        "prefers_email"
+        "prefers_email",
+        "prefers_sms"
       ],
-      "first_name": "Derrick",
-      "middle_name": "Mary",
-      "last_name": "Wolf",
+      "first_name": "Betty",
+      "middle_name": "Brian",
+      "last_name": "Bowman",
       "phone_number": "8314207603",
       "alternate_phone_number": "8314207603",
       "email": "bgolder+testing@codeforamerica.org",
       "address": {
-        "street": "643 Wheeler Creek",
-        "city": "South Brian",
-        "state": "DE",
-        "zip": "79542"
+        "street": "41238 Thomas Orchard Apt. 341",
+        "city": "South Robert",
+        "state": "VT",
+        "zip": "57695"
       },
       "dob": {
-        "month": "11",
-        "day": "17",
-        "year": "1959"
+        "month": "10",
+        "day": "12",
+        "year": "1975"
       },
       "us_citizen": "yes",
       "being_charged": "no",
-      "serving_sentence": "no",
+      "serving_sentence": "yes",
       "on_probation_parole": "yes",
       "where_probation_or_parole": "Yolo County",
       "when_probation_or_parole": "2018",
@@ -75,8 +75,8 @@
       "understands_limits": "yes",
       "consent_to_represent": "yes"
     },
-    "first_name": "Derrick",
-    "last_name": "Wolf",
+    "first_name": "Betty",
+    "last_name": "Bowman",
     "dob": null,
     "ssn": "",
     "last_four": "",
@@ -90,18 +90,18 @@
     "additional_information": "I want help",
     "aliases": "",
     "pfn_number": "",
-    "contact_preferences": "['prefers_sms', 'prefers_email']",
+    "contact_preferences": "['prefers_email', 'prefers_sms']",
     "preferred_pronouns": "",
     "website": "",
-    "street": "643 Wheeler Creek",
-    "city": "South Brian",
-    "state": "DE",
-    "zip": "79542",
+    "street": "41238 Thomas Orchard Apt. 341",
+    "city": "South Robert",
+    "state": "VT",
+    "zip": "57695",
     "us_citizen": "yes",
     "is_veteran": "",
     "is_student": "",
     "being_charged": "no",
-    "serving_sentence": "no",
+    "serving_sentence": "yes",
     "on_probation_parole": "yes",
     "where_probation_or_parole": "Yolo County",
     "when_probation_or_parole": "2018",
@@ -113,49 +113,50 @@
     "owes_court_fees": "yes",
     "financial_screening_note": "",
     "currently_employed": "",
-    "monthly_income": "",
+    "monthly_income": null,
     "income_source": "",
     "on_public_benefits": "",
     "owns_home": "",
-    "monthly_expenses": "",
+    "monthly_expenses": null,
     "household_size": "",
     "dependents": "",
     "is_married": "",
     "has_children": "",
-    "old_uuid": "8450daea5b104b36a4fa44ed4c4f0547",
-    "anonymous_name": "Blue Adventurer",
-    "date_received": "2017-03-19T09:24:45-07:00"
+    "old_uuid": "3cb57727b97e4d55982db7ac31aff72d",
+    "anonymous_name": "Inquisitive Beetle",
+    "date_received": "2017-03-27T23:32:06-07:00"
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 81,
+  "pk": 24,
   "fields": {
-    "applicant": 81,
+    "applicant": 24,
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
-        "prefers_email"
+        "prefers_email",
+        "prefers_sms"
       ],
-      "first_name": "Mark",
-      "middle_name": "Rhonda",
-      "last_name": "Jones",
+      "first_name": "Charles",
+      "middle_name": "Zachary",
+      "last_name": "Fletcher",
       "phone_number": "8314207603",
       "alternate_phone_number": "8314207603",
       "email": "bgolder+testing@codeforamerica.org",
       "address": {
-        "street": "0699 Brian Mills",
-        "city": "Lake Thomas",
-        "state": "AR",
-        "zip": "73376"
+        "street": "26053 Ryan Villages Suite 980",
+        "city": "Dakotatown",
+        "state": "DC",
+        "zip": "23035"
       },
       "dob": {
-        "month": "11",
-        "day": "24",
-        "year": "1960"
+        "month": "6",
+        "day": "7",
+        "year": "1997"
       },
-      "us_citizen": "yes",
-      "being_charged": "yes",
+      "us_citizen": "no",
+      "being_charged": "no",
       "serving_sentence": "no",
       "on_probation_parole": "yes",
       "where_probation_or_parole": "Yolo County",
@@ -168,8 +169,8 @@
       "understands_limits": "yes",
       "consent_to_represent": "yes"
     },
-    "first_name": "Mark",
-    "last_name": "Jones",
+    "first_name": "Charles",
+    "last_name": "Fletcher",
     "dob": null,
     "ssn": "",
     "last_four": "",
@@ -183,17 +184,17 @@
     "additional_information": "I want help",
     "aliases": "",
     "pfn_number": "",
-    "contact_preferences": "['prefers_email']",
+    "contact_preferences": "['prefers_email', 'prefers_sms']",
     "preferred_pronouns": "",
     "website": "",
-    "street": "0699 Brian Mills",
-    "city": "Lake Thomas",
-    "state": "AR",
-    "zip": "73376",
-    "us_citizen": "yes",
+    "street": "26053 Ryan Villages Suite 980",
+    "city": "Dakotatown",
+    "state": "DC",
+    "zip": "23035",
+    "us_citizen": "no",
     "is_veteran": "",
     "is_student": "",
-    "being_charged": "yes",
+    "being_charged": "no",
     "serving_sentence": "no",
     "on_probation_parole": "yes",
     "where_probation_or_parole": "Yolo County",
@@ -206,58 +207,58 @@
     "owes_court_fees": "no",
     "financial_screening_note": "",
     "currently_employed": "",
-    "monthly_income": "",
+    "monthly_income": null,
     "income_source": "",
     "on_public_benefits": "",
     "owns_home": "",
-    "monthly_expenses": "",
+    "monthly_expenses": null,
     "household_size": "",
     "dependents": "",
     "is_married": "",
     "has_children": "",
-    "old_uuid": "303e43d8ae344558b9110aa8bc21becc",
-    "anonymous_name": "Exuberant Octopus",
-    "date_received": "2017-03-25T04:26:46-07:00"
+    "old_uuid": "e6f16145f55549d1b4d2666c19a1772b",
+    "anonymous_name": "Blue Wizard",
+    "date_received": "2017-03-31T07:11:34-07:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 106,
+  "pk": 23,
   "fields": {
-    "created": "2017-03-19T16:24:45Z",
-    "updated": "2017-03-31T20:49:03.254Z",
+    "created": "2017-03-28T06:32:06Z",
+    "updated": "2017-04-10T19:39:30.910Z",
     "organization": [
       "Solano County Public Defender"
     ],
-    "form_submission": 80,
+    "form_submission": 23,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 107,
+  "pk": 24,
   "fields": {
-    "created": "2017-03-25T11:26:46Z",
-    "updated": "2017-03-31T20:49:03.285Z",
+    "created": "2017-03-31T14:11:34Z",
+    "updated": "2017-04-10T19:39:30.930Z",
     "organization": [
       "Solano County Public Defender"
     ],
-    "form_submission": 81,
+    "form_submission": 24,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 105,
+  "pk": 23,
   "fields": {
-    "created": "2017-03-31T20:49:04.086Z",
-    "updated": "2017-03-31T20:49:04.095Z",
-    "status_type": 7,
+    "created": "2017-04-10T19:39:31.995Z",
+    "updated": "2017-04-10T19:39:32.012Z",
+    "status_type": 2,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "solano_pubdef_user"
     ],
-    "application": 106,
+    "application": 23,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -266,16 +267,16 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 106,
+  "pk": 24,
   "fields": {
-    "created": "2017-03-31T20:49:04.111Z",
-    "updated": "2017-03-31T20:49:04.123Z",
-    "status_type": 1,
+    "created": "2017-04-10T19:39:32.022Z",
+    "updated": "2017-04-10T19:39:32.039Z",
+    "status_type": 3,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "solano_pubdef_user"
     ],
-    "application": 107,
+    "application": 24,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -284,28 +285,28 @@
 },
 {
   "model": "intake.statusnotification",
-  "pk": 105,
+  "pk": 23,
   "fields": {
-    "status_update": 105,
+    "status_update": 23,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-03-31T20:49:04.088Z"
+    "created": "2017-04-10T19:39:31.999Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 106,
+  "pk": 24,
   "fields": {
-    "status_update": 106,
+    "status_update": 24,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-03-31T20:49:04.115Z"
+    "created": "2017-04-10T19:39:32.024Z"
   }
 }
 ]

@@ -1,9 +1,9 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 60,
+  "pk": 1,
   "fields": {
-    "first_visit": "2017-03-31T20:49:02.611Z",
+    "first_visit": "2017-04-10T19:39:30.318Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +11,9 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 61,
+  "pk": 2,
   "fields": {
-    "first_visit": "2017-03-31T20:49:02.651Z",
+    "first_visit": "2017-04-10T19:39:30.348Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,46 +21,46 @@
 },
 {
   "model": "intake.applicant",
-  "pk": 60,
+  "pk": 1,
   "fields": {
-    "visitor": 60
+    "visitor": 1
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 61,
+  "pk": 2,
   "fields": {
-    "visitor": 61
+    "visitor": 2
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 60,
+  "pk": 1,
   "fields": {
-    "applicant": 60,
+    "applicant": 1,
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
-        "prefers_sms",
-        "prefers_email"
+        "prefers_email",
+        "prefers_sms"
       ],
-      "first_name": "Sara",
-      "middle_name": "Juan",
-      "last_name": "Perkins",
-      "preferred_pronouns": "",
+      "first_name": "Christian",
+      "middle_name": "Rebecca",
+      "last_name": "Weiss",
+      "preferred_pronouns": "he",
       "phone_number": "8314207603",
       "alternate_phone_number": "8314207603",
       "email": "bgolder+testing@codeforamerica.org",
       "address": {
-        "street": "2949 John Islands",
-        "city": "Lake Dakota",
-        "state": "OK",
-        "zip": "72956"
+        "street": "89195 Holden Port Suite 254",
+        "city": "Webbhaven",
+        "state": "WV",
+        "zip": "35361"
       },
       "dob": {
-        "month": "4",
-        "day": "17",
-        "year": "1998"
+        "month": "9",
+        "day": "12",
+        "year": "1992"
       },
       "us_citizen": "yes",
       "being_charged": "no",
@@ -73,16 +73,21 @@
       "has_suspended_license": "no",
       "owes_court_fees": "yes",
       "monthly_income": 2999,
-      "on_public_benefits": "no",
+      "on_public_benefits": "yes",
       "owns_home": "no",
       "household_size": 2,
       "how_did_you_hear": "from work",
       "additional_information": "I want help",
       "understands_limits": "yes",
-      "consent_to_represent": "yes"
+      "consent_to_represent": "yes",
+      "declaration_letter_intro": "Quae voluptatibus hic asperiores quae earum sequi. Sequi odio quia inventore nesciunt deleniti molestias porro ipsam.",
+      "declaration_letter_life_changes": "Quidem iusto illum quasi illo eveniet repellendus libero. Nobis quaerat pariatur aut.",
+      "declaration_letter_activities": "Atque dolorem laudantium possimus vel amet quis. Magni sit nostrum veritatis esse quidem ea. Corporis libero ratione quisquam ad fugit ullam sint. Quidem quos fugit hic porro deserunt.",
+      "declaration_letter_goals": "Adipisci nisi maxime placeat illum ducimus iusto. Iure porro voluptates in cumque voluptates dolorem. Velit blanditiis nemo culpa quae aut.",
+      "declaration_letter_why": "Aliquid eligendi nemo facere explicabo odio repudiandae. Quam id dicta totam facilis. Modi molestias numquam magnam vel magnam."
     },
-    "first_name": "Sara",
-    "last_name": "Perkins",
+    "first_name": "Christian",
+    "last_name": "Weiss",
     "dob": null,
     "ssn": "",
     "last_four": "",
@@ -96,13 +101,13 @@
     "additional_information": "I want help",
     "aliases": "",
     "pfn_number": "",
-    "contact_preferences": "['prefers_sms', 'prefers_email']",
-    "preferred_pronouns": "",
+    "contact_preferences": "['prefers_email', 'prefers_sms']",
+    "preferred_pronouns": "he",
     "website": "",
-    "street": "2949 John Islands",
-    "city": "Lake Dakota",
-    "state": "OK",
-    "zip": "72956",
+    "street": "89195 Holden Port Suite 254",
+    "city": "Webbhaven",
+    "state": "WV",
+    "zip": "35361",
     "us_citizen": "yes",
     "is_veteran": "",
     "is_student": "",
@@ -121,45 +126,45 @@
     "currently_employed": "",
     "monthly_income": 2999,
     "income_source": "",
-    "on_public_benefits": "no",
+    "on_public_benefits": "yes",
     "owns_home": "no",
-    "monthly_expenses": "",
+    "monthly_expenses": null,
     "household_size": 2,
     "dependents": "",
     "is_married": "",
     "has_children": "",
-    "old_uuid": "ca3b9b7b032b414a98b401518a3fb165",
-    "anonymous_name": "Cosmic Bear",
-    "date_received": "2017-03-22T02:37:31-07:00"
+    "old_uuid": "dca78ad0c3b6408fb3d358d11526e614",
+    "anonymous_name": "Galactic Planet",
+    "date_received": "2017-03-28T20:22:24-07:00"
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 61,
+  "pk": 2,
   "fields": {
-    "applicant": 61,
+    "applicant": 2,
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
-        "prefers_email"
+        "prefers_sms"
       ],
-      "first_name": "Angela",
-      "middle_name": "Carmen",
-      "last_name": "Owen",
-      "preferred_pronouns": "",
+      "first_name": "Sarah",
+      "middle_name": "Tyrone",
+      "last_name": "Johnson",
+      "preferred_pronouns": "none",
       "phone_number": "8314207603",
       "alternate_phone_number": "8314207603",
       "email": "bgolder+testing@codeforamerica.org",
       "address": {
-        "street": "14438 Christina Forges",
-        "city": "Port Jacqueline",
-        "state": "CA",
-        "zip": "88462"
+        "street": "1812 Teresa Drive Apt. 371",
+        "city": "Port Michael",
+        "state": "AL",
+        "zip": "25948"
       },
       "dob": {
-        "month": "10",
-        "day": "20",
-        "year": "1970"
+        "month": "8",
+        "day": "17",
+        "year": "1972"
       },
       "us_citizen": "yes",
       "being_charged": "no",
@@ -172,16 +177,21 @@
       "has_suspended_license": "no",
       "owes_court_fees": "no",
       "monthly_income": 2999,
-      "on_public_benefits": "no",
+      "on_public_benefits": "yes",
       "owns_home": "no",
       "household_size": 2,
       "how_did_you_hear": "from work",
       "additional_information": "I want help",
       "understands_limits": "yes",
-      "consent_to_represent": "yes"
+      "consent_to_represent": "yes",
+      "declaration_letter_intro": "Suscipit non libero maxime nobis. Dicta itaque quos aliquid ratione explicabo reprehenderit ea. Necessitatibus nihil perferendis voluptas libero veniam temporibus velit. Atque beatae adipisci iusto.",
+      "declaration_letter_life_changes": "Aperiam inventore dignissimos deserunt velit suscipit. Veniam impedit sit minus omnis delectus. Placeat veniam quos quo. Asperiores in suscipit sequi eos illum necessitatibus odio.",
+      "declaration_letter_activities": "Expedita illum consequatur animi nemo. Ex recusandae neque expedita deserunt corrupti harum minus. Quod eius dicta maxime consequuntur asperiores dolorum. Iusto animi ea harum assumenda.",
+      "declaration_letter_goals": "Delectus ducimus repellat veritatis odit dolorem numquam. Corporis necessitatibus perferendis sit esse maxime. Nulla deserunt corporis voluptatibus aliquam officiis dolores.",
+      "declaration_letter_why": "Deserunt atque illum blanditiis eius. Soluta aliquam esse optio. Beatae eius repudiandae corrupti ex recusandae cumque. Reiciendis consequuntur ab occaecati at deserunt distinctio."
     },
-    "first_name": "Angela",
-    "last_name": "Owen",
+    "first_name": "Sarah",
+    "last_name": "Johnson",
     "dob": null,
     "ssn": "",
     "last_four": "",
@@ -195,13 +205,13 @@
     "additional_information": "I want help",
     "aliases": "",
     "pfn_number": "",
-    "contact_preferences": "['prefers_email']",
-    "preferred_pronouns": "",
+    "contact_preferences": "['prefers_sms']",
+    "preferred_pronouns": "none",
     "website": "",
-    "street": "14438 Christina Forges",
-    "city": "Port Jacqueline",
-    "state": "CA",
-    "zip": "88462",
+    "street": "1812 Teresa Drive Apt. 371",
+    "city": "Port Michael",
+    "state": "AL",
+    "zip": "25948",
     "us_citizen": "yes",
     "is_veteran": "",
     "is_student": "",
@@ -220,56 +230,56 @@
     "currently_employed": "",
     "monthly_income": 2999,
     "income_source": "",
-    "on_public_benefits": "no",
+    "on_public_benefits": "yes",
     "owns_home": "no",
-    "monthly_expenses": "",
+    "monthly_expenses": null,
     "household_size": 2,
     "dependents": "",
     "is_married": "",
     "has_children": "",
-    "old_uuid": "80eca84ad00846dd819c8175bb56c456",
-    "anonymous_name": "Perceptive Swan",
-    "date_received": "2017-03-26T04:40:59-07:00"
+    "old_uuid": "3ebad66b201a45a4ad1c4eabc0134042",
+    "anonymous_name": "Stupendous Lion",
+    "date_received": "2017-04-05T06:28:31-07:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 86,
+  "pk": 1,
   "fields": {
-    "created": "2017-03-22T09:37:31Z",
-    "updated": "2017-03-31T20:49:02.641Z",
+    "created": "2017-03-29T03:22:24Z",
+    "updated": "2017-04-10T19:39:30.341Z",
     "organization": [
       "Alameda County Public Defender's Office"
     ],
-    "form_submission": 60,
+    "form_submission": 1,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 87,
+  "pk": 2,
   "fields": {
-    "created": "2017-03-26T11:40:59Z",
-    "updated": "2017-03-31T20:49:02.675Z",
+    "created": "2017-04-05T13:28:31Z",
+    "updated": "2017-04-10T19:39:30.366Z",
     "organization": [
       "Alameda County Public Defender's Office"
     ],
-    "form_submission": 61,
+    "form_submission": 2,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 85,
+  "pk": 1,
   "fields": {
-    "created": "2017-03-31T20:49:03.534Z",
-    "updated": "2017-03-31T20:49:03.561Z",
+    "created": "2017-04-10T19:39:31.213Z",
+    "updated": "2017-04-10T19:39:31.234Z",
     "status_type": 1,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "a_pubdef_user"
     ],
-    "application": 86,
+    "application": 1,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -278,16 +288,16 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 86,
+  "pk": 2,
   "fields": {
-    "created": "2017-03-31T20:49:03.577Z",
-    "updated": "2017-03-31T20:49:03.591Z",
+    "created": "2017-04-10T19:39:31.245Z",
+    "updated": "2017-04-10T19:39:31.260Z",
     "status_type": 2,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "a_pubdef_user"
     ],
-    "application": 87,
+    "application": 2,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -296,28 +306,28 @@
 },
 {
   "model": "intake.statusnotification",
-  "pk": 85,
+  "pk": 1,
   "fields": {
-    "status_update": 85,
+    "status_update": 1,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-03-31T20:49:03.545Z"
+    "created": "2017-04-10T19:39:31.219Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 86,
+  "pk": 2,
   "fields": {
-    "status_update": 86,
+    "status_update": 2,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-03-31T20:49:03.581Z"
+    "created": "2017-04-10T19:39:31.247Z"
   }
 }
 ]

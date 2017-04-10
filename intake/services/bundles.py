@@ -1,5 +1,6 @@
 import logging
 import intake
+from project.jinja2 import external_reverse
 from intake import notifications
 from intake.utils import is_the_weekend
 from intake.models import (
@@ -107,10 +108,11 @@ def create_bundles_and_send_notifications_to_orgs():
             notifications.front_email_daily_app_bundle.send(
                 to=emails,
                 count=len(subs),
-                bundle_url=bundle_url)
+                bundle_url=bundle_url,
+                app_index_url=external_reverse('intake-app_index'))
             ApplicationLogEntry.log_referred(ids, user=None, organization=org)
             notifications.slack_app_bundle_sent.send(
                 submissions=subs,
                 emails=emails,
-                bundle_url=bundle_url
+                bundle_url=bundle_url,
             )

@@ -59,6 +59,7 @@ def create_submission(form, organizations, applicant_id):
 
     # extract out fields from answers (searchable and other)
     keys = FORMSUBMISSION_TEXT_SEARCH_FIELDS + QUERYABLE_ANSWER_FIELDS
+    import ipdb; ipdb.set_trace()
     for key in keys:
         existing = submission.answers.get(key, "")
         setattr(submission, key, existing)

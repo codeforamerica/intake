@@ -1,9 +1,9 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 76,
+  "pk": 19,
   "fields": {
-    "first_visit": "2017-03-31T20:49:03.103Z",
+    "first_visit": "2017-04-10T19:39:30.786Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +11,9 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 77,
+  "pk": 20,
   "fields": {
-    "first_visit": "2017-03-31T20:49:03.137Z",
+    "first_visit": "2017-04-10T19:39:30.813Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,44 +21,46 @@
 },
 {
   "model": "intake.applicant",
-  "pk": 76,
+  "pk": 19,
   "fields": {
-    "visitor": 76
+    "visitor": 19
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 77,
+  "pk": 20,
   "fields": {
-    "visitor": 77
+    "visitor": 20
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 76,
+  "pk": 19,
   "fields": {
-    "applicant": 76,
+    "applicant": 19,
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
-        "prefers_sms"
+        "prefers_sms",
+        "prefers_email"
       ],
-      "first_name": "Patrick",
-      "middle_name": "Bob",
-      "last_name": "Murillo",
+      "first_name": "Tyler",
+      "middle_name": "Alyssa",
+      "last_name": "Rivera",
+      "preferred_pronouns": "she",
       "phone_number": "8314207603",
       "alternate_phone_number": "8314207603",
       "email": "bgolder+testing@codeforamerica.org",
       "address": {
-        "street": "043 Ramirez Inlet",
-        "city": "West Pamela",
-        "state": "DE",
-        "zip": "02086"
+        "street": "231 Pamela Vista",
+        "city": "North Elizabeth",
+        "state": "FM",
+        "zip": "09909"
       },
       "dob": {
-        "month": "3",
-        "day": "24",
-        "year": "1977"
+        "month": "10",
+        "day": "6",
+        "year": "1976"
       },
       "pfn_number": "",
       "is_veteran": "no",
@@ -70,13 +72,13 @@
       "reduced_probation": "no",
       "rap_outside_sf": "no",
       "when_where_outside_sf": "",
-      "owes_court_fees": "no",
-      "currently_employed": "yes",
-      "monthly_income": 235,
+      "owes_court_fees": "yes",
+      "currently_employed": "no",
+      "monthly_income": 6232,
       "income_source": "a job",
       "on_public_benefits": "no",
       "monthly_expenses": 2000,
-      "household_size": 2,
+      "household_size": 1,
       "has_children": "yes",
       "is_married": "no",
       "reasons_for_applying": [
@@ -87,10 +89,15 @@
       "how_did_you_hear": "from work",
       "additional_information": "I want help",
       "understands_limits": "yes",
-      "consent_to_represent": "yes"
+      "consent_to_represent": "yes",
+      "declaration_letter_intro": "Corporis in doloremque placeat possimus repudiandae eveniet. Veniam at quae minima eaque eius. Soluta odio minus dolorum ipsam.",
+      "declaration_letter_life_changes": "Reprehenderit neque ratione odio laboriosam odio nihil laboriosam. Labore ab recusandae maxime vel. Aut sequi neque cumque. Occaecati distinctio repudiandae blanditiis soluta dolores quasi sequi.",
+      "declaration_letter_activities": "Ratione atque iusto adipisci omnis necessitatibus officiis. Rerum similique occaecati libero totam illum. Omnis laboriosam error unde sapiente nisi maiores.",
+      "declaration_letter_goals": "Pariatur omnis odit quasi quidem labore voluptas libero. Officiis sequi neque nemo porro perspiciatis accusantium ratione. Accusamus eos exercitationem aspernatur mollitia vel eos. Praesentium nobis dolore recusandae placeat excepturi voluptates expedita.",
+      "declaration_letter_why": "Asperiores libero dignissimos veniam amet delectus maxime suscipit. Sapiente architecto quo ratione perspiciatis ipsam suscipit. Cumque dolor ea rerum voluptatem. Dolorum aut repellendus dignissimos aspernatur similique."
     },
-    "first_name": "Patrick",
-    "last_name": "Murillo",
+    "first_name": "Tyler",
+    "last_name": "Rivera",
     "dob": null,
     "ssn": "",
     "last_four": "",
@@ -104,13 +111,13 @@
     "additional_information": "I want help",
     "aliases": "",
     "pfn_number": "",
-    "contact_preferences": "['prefers_sms']",
-    "preferred_pronouns": "",
+    "contact_preferences": "['prefers_sms', 'prefers_email']",
+    "preferred_pronouns": "she",
     "website": "",
-    "street": "043 Ramirez Inlet",
-    "city": "West Pamela",
-    "state": "DE",
-    "zip": "02086",
+    "street": "231 Pamela Vista",
+    "city": "North Elizabeth",
+    "state": "FM",
+    "zip": "09909",
     "us_citizen": "",
     "is_veteran": "no",
     "is_student": "",
@@ -124,169 +131,176 @@
     "rap_outside_sf": "no",
     "when_where_outside_sf": "",
     "has_suspended_license": "",
-    "owes_court_fees": "no",
+    "owes_court_fees": "yes",
     "financial_screening_note": "",
-    "currently_employed": "yes",
-    "monthly_income": 235,
+    "currently_employed": "no",
+    "monthly_income": 6232,
     "income_source": "a job",
     "on_public_benefits": "no",
+    "owns_home": "",
+    "monthly_expenses": 2000,
+    "household_size": 1,
+    "dependents": "",
+    "is_married": "no",
+    "has_children": "yes",
+    "old_uuid": "1e4785f1bf9749f5aa2c543fe2d034f6",
+    "anonymous_name": "Inspiring Pulsar",
+    "date_received": "2017-04-04T23:58:14-07:00"
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 20,
+  "fields": {
+    "applicant": 20,
+    "duplicate_set": null,
+    "answers": {
+      "contact_preferences": [
+        "prefers_sms",
+        "prefers_email"
+      ],
+      "first_name": "John",
+      "middle_name": "Craig",
+      "last_name": "Werner",
+      "preferred_pronouns": "they",
+      "phone_number": "8314207603",
+      "alternate_phone_number": "8314207603",
+      "email": "bgolder+testing@codeforamerica.org",
+      "address": {
+        "street": "656 Elaine Groves Suite 415",
+        "city": "Lowefurt",
+        "state": "WV",
+        "zip": "07575"
+      },
+      "dob": {
+        "month": "8",
+        "day": "13",
+        "year": "1967"
+      },
+      "pfn_number": "",
+      "is_veteran": "no",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Yolo County",
+      "when_probation_or_parole": "2018",
+      "reduced_probation": "no",
+      "rap_outside_sf": "no",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "yes",
+      "currently_employed": "yes",
+      "monthly_income": 6036,
+      "income_source": "a job",
+      "on_public_benefits": "yes",
+      "monthly_expenses": 2000,
+      "household_size": 2,
+      "has_children": "no",
+      "is_married": "yes",
+      "reasons_for_applying": [
+        "background_check",
+        "lost_job",
+        "housing"
+      ],
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes",
+      "declaration_letter_intro": "Ipsa repudiandae rem perferendis reiciendis in. Cumque perspiciatis corporis consequuntur. Odio dolores doloremque vero delectus nihil quisquam doloremque sapiente. Odio totam provident autem eum sit.",
+      "declaration_letter_life_changes": "Placeat debitis ipsam hic suscipit. Est totam repellendus in asperiores tenetur porro consectetur fugit. Suscipit hic voluptatibus eum ipsam ipsa officiis sit. Dolorum eius esse cum accusamus perspiciatis.",
+      "declaration_letter_activities": "Sit ipsa rerum quibusdam atque sint. Velit quod eaque iusto harum ab nisi quis eaque. Deleniti a unde repellendus pariatur blanditiis porro eius.",
+      "declaration_letter_goals": "Tempore culpa maiores hic alias natus. Praesentium deserunt veniam assumenda modi. Optio omnis dicta dolor unde vero.",
+      "declaration_letter_why": "Sit ab optio aspernatur sapiente dolore deserunt pariatur. Tempore eaque sequi dolorum placeat beatae delectus. Iste occaecati quo fugit. Vitae tenetur voluptates cupiditate ex autem corrupti."
+    },
+    "first_name": "John",
+    "last_name": "Werner",
+    "dob": null,
+    "ssn": "",
+    "last_four": "",
+    "drivers_license_or_id": "",
+    "case_number": "",
+    "phone_number": "8314207603",
+    "alternate_phone_number": "8314207603",
+    "email": "bgolder+testing@codeforamerica.org",
+    "reasons_for_applying": "['background_check', 'lost_job', 'housing']",
+    "how_did_you_hear": "from work",
+    "additional_information": "I want help",
+    "aliases": "",
+    "pfn_number": "",
+    "contact_preferences": "['prefers_sms', 'prefers_email']",
+    "preferred_pronouns": "they",
+    "website": "",
+    "street": "656 Elaine Groves Suite 415",
+    "city": "Lowefurt",
+    "state": "WV",
+    "zip": "07575",
+    "us_citizen": "",
+    "is_veteran": "no",
+    "is_student": "",
+    "being_charged": "no",
+    "serving_sentence": "no",
+    "on_probation_parole": "yes",
+    "where_probation_or_parole": "Yolo County",
+    "when_probation_or_parole": "2018",
+    "finished_half_probation": "",
+    "reduced_probation": "no",
+    "rap_outside_sf": "no",
+    "when_where_outside_sf": "",
+    "has_suspended_license": "",
+    "owes_court_fees": "yes",
+    "financial_screening_note": "",
+    "currently_employed": "yes",
+    "monthly_income": 6036,
+    "income_source": "a job",
+    "on_public_benefits": "yes",
     "owns_home": "",
     "monthly_expenses": 2000,
     "household_size": 2,
     "dependents": "",
-    "is_married": "no",
-    "has_children": "yes",
-    "old_uuid": "fcc3ab05f49546ef8d9b5913923cae23",
-    "anonymous_name": "Determined Tree",
-    "date_received": "2017-03-26T22:40:05-07:00"
-  }
-},
-{
-  "model": "intake.formsubmission",
-  "pk": 77,
-  "fields": {
-    "applicant": 77,
-    "duplicate_set": null,
-    "answers": {
-      "contact_preferences": [
-        "prefers_email"
-      ],
-      "first_name": "Marilyn",
-      "middle_name": "Robert",
-      "last_name": "Gonzalez",
-      "phone_number": "8314207603",
-      "alternate_phone_number": "8314207603",
-      "email": "bgolder+testing@codeforamerica.org",
-      "address": {
-        "street": "775 Jennifer Terrace",
-        "city": "Port Hollymouth",
-        "state": "GA",
-        "zip": "04689"
-      },
-      "dob": {
-        "month": "1",
-        "day": "7",
-        "year": "1965"
-      },
-      "pfn_number": "",
-      "is_veteran": "no",
-      "being_charged": "no",
-      "serving_sentence": "no",
-      "on_probation_parole": "yes",
-      "where_probation_or_parole": "Yolo County",
-      "when_probation_or_parole": "2018",
-      "reduced_probation": "no",
-      "rap_outside_sf": "no",
-      "when_where_outside_sf": "",
-      "owes_court_fees": "no",
-      "currently_employed": "no",
-      "monthly_income": 2787,
-      "income_source": "a job",
-      "on_public_benefits": "no",
-      "monthly_expenses": 2000,
-      "household_size": 4,
-      "has_children": "yes",
-      "is_married": "no",
-      "reasons_for_applying": [
-        "background_check",
-        "lost_job",
-        "housing"
-      ],
-      "how_did_you_hear": "from work",
-      "additional_information": "I want help",
-      "understands_limits": "yes",
-      "consent_to_represent": "yes"
-    },
-    "first_name": "Marilyn",
-    "last_name": "Gonzalez",
-    "dob": null,
-    "ssn": "",
-    "last_four": "",
-    "drivers_license_or_id": "",
-    "case_number": "",
-    "phone_number": "8314207603",
-    "alternate_phone_number": "8314207603",
-    "email": "bgolder+testing@codeforamerica.org",
-    "reasons_for_applying": "['background_check', 'lost_job', 'housing']",
-    "how_did_you_hear": "from work",
-    "additional_information": "I want help",
-    "aliases": "",
-    "pfn_number": "",
-    "contact_preferences": "['prefers_email']",
-    "preferred_pronouns": "",
-    "website": "",
-    "street": "775 Jennifer Terrace",
-    "city": "Port Hollymouth",
-    "state": "GA",
-    "zip": "04689",
-    "us_citizen": "",
-    "is_veteran": "no",
-    "is_student": "",
-    "being_charged": "no",
-    "serving_sentence": "no",
-    "on_probation_parole": "yes",
-    "where_probation_or_parole": "Yolo County",
-    "when_probation_or_parole": "2018",
-    "finished_half_probation": "",
-    "reduced_probation": "no",
-    "rap_outside_sf": "no",
-    "when_where_outside_sf": "",
-    "has_suspended_license": "",
-    "owes_court_fees": "no",
-    "financial_screening_note": "",
-    "currently_employed": "no",
-    "monthly_income": 2787,
-    "income_source": "a job",
-    "on_public_benefits": "no",
-    "owns_home": "",
-    "monthly_expenses": 2000,
-    "household_size": 4,
-    "dependents": "",
-    "is_married": "no",
-    "has_children": "yes",
-    "old_uuid": "0ec536f343594a769d621c5dd3cacb7b",
-    "anonymous_name": "Determined Nebula",
-    "date_received": "2017-03-27T04:01:14-07:00"
+    "is_married": "yes",
+    "has_children": "no",
+    "old_uuid": "ce8122e2b8cc4638a79e5d7d80fb3c4d",
+    "anonymous_name": "Friendly Bear",
+    "date_received": "2017-03-30T09:38:42-07:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 102,
+  "pk": 19,
   "fields": {
-    "created": "2017-03-27T05:40:05Z",
-    "updated": "2017-03-31T20:49:03.125Z",
+    "created": "2017-04-05T06:58:14Z",
+    "updated": "2017-04-10T19:39:30.804Z",
     "organization": [
       "Santa Clara County Public Defender"
     ],
-    "form_submission": 76,
+    "form_submission": 19,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 103,
+  "pk": 20,
   "fields": {
-    "created": "2017-03-27T11:01:14Z",
-    "updated": "2017-03-31T20:49:03.159Z",
+    "created": "2017-03-30T16:38:42Z",
+    "updated": "2017-04-10T19:39:30.832Z",
     "organization": [
       "Santa Clara County Public Defender"
     ],
-    "form_submission": 77,
+    "form_submission": 20,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 101,
+  "pk": 19,
   "fields": {
-    "created": "2017-03-31T20:49:03.983Z",
-    "updated": "2017-03-31T20:49:03.994Z",
-    "status_type": 3,
+    "created": "2017-04-10T19:39:31.886Z",
+    "updated": "2017-04-10T19:39:31.903Z",
+    "status_type": 5,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "santa_clara_pubdef_user"
     ],
-    "application": 102,
+    "application": 19,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -295,16 +309,16 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 102,
+  "pk": 20,
   "fields": {
-    "created": "2017-03-31T20:49:04.011Z",
-    "updated": "2017-03-31T20:49:04.021Z",
-    "status_type": 4,
+    "created": "2017-04-10T19:39:31.913Z",
+    "updated": "2017-04-10T19:39:31.927Z",
+    "status_type": 6,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "santa_clara_pubdef_user"
     ],
-    "application": 103,
+    "application": 20,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -313,28 +327,28 @@
 },
 {
   "model": "intake.statusnotification",
-  "pk": 101,
+  "pk": 19,
   "fields": {
-    "status_update": 101,
+    "status_update": 19,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-03-31T20:49:03.986Z"
+    "created": "2017-04-10T19:39:31.889Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 102,
+  "pk": 20,
   "fields": {
-    "status_update": 102,
+    "status_update": 20,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-03-31T20:49:04.014Z"
+    "created": "2017-04-10T19:39:31.917Z"
   }
 }
 ]

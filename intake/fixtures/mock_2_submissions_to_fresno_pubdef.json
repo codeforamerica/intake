@@ -1,9 +1,9 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 66,
+  "pk": 7,
   "fields": {
-    "first_visit": "2017-03-31T20:49:02.798Z",
+    "first_visit": "2017-04-10T19:39:30.481Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +11,9 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 67,
+  "pk": 8,
   "fields": {
-    "first_visit": "2017-03-31T20:49:02.825Z",
+    "first_visit": "2017-04-10T19:39:30.509Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,157 +21,56 @@
 },
 {
   "model": "intake.applicant",
-  "pk": 66,
+  "pk": 7,
   "fields": {
-    "visitor": 66
+    "visitor": 7
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 67,
+  "pk": 8,
   "fields": {
-    "visitor": 67
+    "visitor": 8
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 66,
+  "pk": 7,
   "fields": {
-    "applicant": 66,
+    "applicant": 7,
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
         "prefers_sms"
       ],
-      "first_name": "Anthony",
-      "middle_name": "Michael",
-      "last_name": "Fuller",
-      "aliases": "Brittany Garcia",
+      "first_name": "Joshua",
+      "middle_name": "Jennifer",
+      "last_name": "Garcia",
+      "aliases": "Angela Patel",
       "phone_number": "8314207603",
       "alternate_phone_number": "8314207603",
       "email": "bgolder+testing@codeforamerica.org",
       "address": {
-        "street": "37187 Davis Rapids",
-        "city": "Nathanstad",
-        "state": "AS",
-        "zip": "09991"
-      },
-      "dob": {
-        "month": "2",
-        "day": "5",
-        "year": "1993"
-      },
-      "driver_license_or_id": "D7839232",
-      "last_four": "2242",
-      "case_number": "C6834-210",
-      "us_citizen": "yes",
-      "being_charged": "no",
-      "serving_sentence": "no",
-      "on_probation_parole": "yes",
-      "where_probation_or_parole": "Yolo County",
-      "when_probation_or_parole": "2018",
-      "monthly_income": 4914,
-      "dependents": 5,
-      "reasons_for_applying": [
-        "background_check",
-        "lost_job",
-        "housing"
-      ],
-      "how_did_you_hear": "from work",
-      "additional_information": "I want help",
-      "understands_limits": "yes",
-      "consent_to_represent": "yes"
-    },
-    "first_name": "Anthony",
-    "last_name": "Fuller",
-    "dob": null,
-    "ssn": "",
-    "last_four": "2242",
-    "drivers_license_or_id": "",
-    "case_number": "C6834-210",
-    "phone_number": "8314207603",
-    "alternate_phone_number": "8314207603",
-    "email": "bgolder+testing@codeforamerica.org",
-    "reasons_for_applying": "['background_check', 'lost_job', 'housing']",
-    "how_did_you_hear": "from work",
-    "additional_information": "I want help",
-    "aliases": "Brittany Garcia",
-    "pfn_number": "",
-    "contact_preferences": "['prefers_sms']",
-    "preferred_pronouns": "",
-    "website": "",
-    "street": "37187 Davis Rapids",
-    "city": "Nathanstad",
-    "state": "AS",
-    "zip": "09991",
-    "us_citizen": "yes",
-    "is_veteran": "",
-    "is_student": "",
-    "being_charged": "no",
-    "serving_sentence": "no",
-    "on_probation_parole": "yes",
-    "where_probation_or_parole": "Yolo County",
-    "when_probation_or_parole": "2018",
-    "finished_half_probation": "",
-    "reduced_probation": "",
-    "rap_outside_sf": "",
-    "when_where_outside_sf": "",
-    "has_suspended_license": "",
-    "owes_court_fees": "",
-    "financial_screening_note": "",
-    "currently_employed": "",
-    "monthly_income": 4914,
-    "income_source": "",
-    "on_public_benefits": "",
-    "owns_home": "",
-    "monthly_expenses": "",
-    "household_size": "",
-    "dependents": 5,
-    "is_married": "",
-    "has_children": "",
-    "old_uuid": "0c7d6837a67a47409a04873f5015dd20",
-    "anonymous_name": "Shining Meerkat",
-    "date_received": "2017-03-19T00:54:08-07:00"
-  }
-},
-{
-  "model": "intake.formsubmission",
-  "pk": 67,
-  "fields": {
-    "applicant": 67,
-    "duplicate_set": null,
-    "answers": {
-      "contact_preferences": [
-        "prefers_email"
-      ],
-      "first_name": "Ashley",
-      "middle_name": "Maria",
-      "last_name": "Humphrey",
-      "aliases": "Jay Brown",
-      "phone_number": "8314207603",
-      "alternate_phone_number": "8314207603",
-      "email": "bgolder+testing@codeforamerica.org",
-      "address": {
-        "street": "221 Travis Branch Apt. 162",
-        "city": "Hansonton",
-        "state": "VI",
-        "zip": "78846"
+        "street": "45873 Brown Via",
+        "city": "Millerbury",
+        "state": "NM",
+        "zip": "84797"
       },
       "dob": {
         "month": "6",
-        "day": "18",
-        "year": "1978"
+        "day": "31",
+        "year": "1994"
       },
-      "driver_license_or_id": "D8514478",
-      "last_four": "2482",
-      "case_number": "C3148-725",
+      "driver_license_or_id": "D9837116",
+      "last_four": "9990",
+      "case_number": "C7032-323",
       "us_citizen": "yes",
       "being_charged": "no",
       "serving_sentence": "no",
       "on_probation_parole": "yes",
       "where_probation_or_parole": "Yolo County",
       "when_probation_or_parole": "2018",
-      "monthly_income": 2747,
+      "monthly_income": 3767,
       "dependents": 4,
       "reasons_for_applying": [
         "background_check",
@@ -183,28 +82,28 @@
       "understands_limits": "yes",
       "consent_to_represent": "yes"
     },
-    "first_name": "Ashley",
-    "last_name": "Humphrey",
+    "first_name": "Joshua",
+    "last_name": "Garcia",
     "dob": null,
     "ssn": "",
-    "last_four": "2482",
+    "last_four": "9990",
     "drivers_license_or_id": "",
-    "case_number": "C3148-725",
+    "case_number": "C7032-323",
     "phone_number": "8314207603",
     "alternate_phone_number": "8314207603",
     "email": "bgolder+testing@codeforamerica.org",
     "reasons_for_applying": "['background_check', 'lost_job', 'housing']",
     "how_did_you_hear": "from work",
     "additional_information": "I want help",
-    "aliases": "Jay Brown",
+    "aliases": "Angela Patel",
     "pfn_number": "",
-    "contact_preferences": "['prefers_email']",
+    "contact_preferences": "['prefers_sms']",
     "preferred_pronouns": "",
     "website": "",
-    "street": "221 Travis Branch Apt. 162",
-    "city": "Hansonton",
-    "state": "VI",
-    "zip": "78846",
+    "street": "45873 Brown Via",
+    "city": "Millerbury",
+    "state": "NM",
+    "zip": "84797",
     "us_citizen": "yes",
     "is_veteran": "",
     "is_student": "",
@@ -221,58 +120,160 @@
     "owes_court_fees": "",
     "financial_screening_note": "",
     "currently_employed": "",
-    "monthly_income": 2747,
+    "monthly_income": 3767,
     "income_source": "",
     "on_public_benefits": "",
     "owns_home": "",
-    "monthly_expenses": "",
+    "monthly_expenses": null,
     "household_size": "",
     "dependents": 4,
     "is_married": "",
     "has_children": "",
-    "old_uuid": "2b39d38d0fc14456bf433c37771aa1c4",
-    "anonymous_name": "Ethereal Tortoise",
-    "date_received": "2017-03-19T16:41:51-07:00"
+    "old_uuid": "564fac98eb2946869a5a87c85f2e9e0e",
+    "anonymous_name": "Inquisitive Giraffe",
+    "date_received": "2017-04-03T20:04:36-07:00"
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 8,
+  "fields": {
+    "applicant": 8,
+    "duplicate_set": null,
+    "answers": {
+      "contact_preferences": [
+        "prefers_sms",
+        "prefers_email"
+      ],
+      "first_name": "Deanna",
+      "middle_name": "Sarah",
+      "last_name": "Ramirez",
+      "aliases": "Tyler Haynes",
+      "phone_number": "8314207603",
+      "alternate_phone_number": "8314207603",
+      "email": "bgolder+testing@codeforamerica.org",
+      "address": {
+        "street": "31928 Robin Shoals",
+        "city": "Kathleenchester",
+        "state": "CO",
+        "zip": "73475"
+      },
+      "dob": {
+        "month": "12",
+        "day": "7",
+        "year": "1960"
+      },
+      "driver_license_or_id": "D0868222",
+      "last_four": "6330",
+      "case_number": "C9885-725",
+      "us_citizen": "no",
+      "being_charged": "yes",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Yolo County",
+      "when_probation_or_parole": "2018",
+      "monthly_income": 4504,
+      "dependents": 5,
+      "reasons_for_applying": [
+        "background_check",
+        "lost_job",
+        "housing"
+      ],
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "Deanna",
+    "last_name": "Ramirez",
+    "dob": null,
+    "ssn": "",
+    "last_four": "6330",
+    "drivers_license_or_id": "",
+    "case_number": "C9885-725",
+    "phone_number": "8314207603",
+    "alternate_phone_number": "8314207603",
+    "email": "bgolder+testing@codeforamerica.org",
+    "reasons_for_applying": "['background_check', 'lost_job', 'housing']",
+    "how_did_you_hear": "from work",
+    "additional_information": "I want help",
+    "aliases": "Tyler Haynes",
+    "pfn_number": "",
+    "contact_preferences": "['prefers_sms', 'prefers_email']",
+    "preferred_pronouns": "",
+    "website": "",
+    "street": "31928 Robin Shoals",
+    "city": "Kathleenchester",
+    "state": "CO",
+    "zip": "73475",
+    "us_citizen": "no",
+    "is_veteran": "",
+    "is_student": "",
+    "being_charged": "yes",
+    "serving_sentence": "no",
+    "on_probation_parole": "yes",
+    "where_probation_or_parole": "Yolo County",
+    "when_probation_or_parole": "2018",
+    "finished_half_probation": "",
+    "reduced_probation": "",
+    "rap_outside_sf": "",
+    "when_where_outside_sf": "",
+    "has_suspended_license": "",
+    "owes_court_fees": "",
+    "financial_screening_note": "",
+    "currently_employed": "",
+    "monthly_income": 4504,
+    "income_source": "",
+    "on_public_benefits": "",
+    "owns_home": "",
+    "monthly_expenses": null,
+    "household_size": "",
+    "dependents": 5,
+    "is_married": "",
+    "has_children": "",
+    "old_uuid": "8dd90e131294456f883606f54b9856f0",
+    "anonymous_name": "Cerulean Flounder",
+    "date_received": "2017-03-28T14:19:06-07:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 92,
+  "pk": 7,
   "fields": {
-    "created": "2017-03-19T07:54:08Z",
-    "updated": "2017-03-31T20:49:02.815Z",
+    "created": "2017-04-04T03:04:36Z",
+    "updated": "2017-04-10T19:39:30.496Z",
     "organization": [
       "Fresno County Public Defender"
     ],
-    "form_submission": 66,
+    "form_submission": 7,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 93,
+  "pk": 8,
   "fields": {
-    "created": "2017-03-19T23:41:51Z",
-    "updated": "2017-03-31T20:49:02.846Z",
+    "created": "2017-03-28T21:19:06Z",
+    "updated": "2017-04-10T19:39:30.523Z",
     "organization": [
       "Fresno County Public Defender"
     ],
-    "form_submission": 67,
+    "form_submission": 8,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 91,
+  "pk": 7,
   "fields": {
-    "created": "2017-03-31T20:49:03.717Z",
-    "updated": "2017-03-31T20:49:03.731Z",
+    "created": "2017-04-10T19:39:31.380Z",
+    "updated": "2017-04-10T19:39:31.396Z",
     "status_type": 7,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "fresno_pubdef_user"
     ],
-    "application": 92,
+    "application": 7,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -281,16 +282,16 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 92,
+  "pk": 8,
   "fields": {
-    "created": "2017-03-31T20:49:03.745Z",
-    "updated": "2017-03-31T20:49:03.759Z",
+    "created": "2017-04-10T19:39:31.407Z",
+    "updated": "2017-04-10T19:39:31.428Z",
     "status_type": 1,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "fresno_pubdef_user"
     ],
-    "application": 93,
+    "application": 8,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -299,28 +300,28 @@
 },
 {
   "model": "intake.statusnotification",
-  "pk": 91,
+  "pk": 7,
   "fields": {
-    "status_update": 91,
+    "status_update": 7,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-03-31T20:49:03.718Z"
+    "created": "2017-04-10T19:39:31.383Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 92,
+  "pk": 8,
   "fields": {
-    "status_update": 92,
+    "status_update": 8,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-03-31T20:49:03.748Z"
+    "created": "2017-04-10T19:39:31.409Z"
   }
 }
 ]

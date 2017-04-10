@@ -3,7 +3,7 @@ import logging
 import random
 from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase
 from intake.tests.base_testcases import IntakeDataTestCase
-
+from intake.tests.mock_org_answers import get_answers_for_orgs
 from unittest.mock import patch, Mock
 from intake.tests import mock
 from intake import models, constants
@@ -473,7 +473,7 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
 
 class TestDeclarationLetterView(AuthIntegrationTestCase):
 
-    fixtures = ['counties', 'organizations', 'mock_profiles']
+    fixtures = ['counties', 'organizations', 'groups', 'mock_profiles']
 
     @patch(
         'intake.services.submissions.send_confirmation_notifications')
@@ -619,7 +619,7 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
 
 class TestDeclarationLetterReviewPage(AuthIntegrationTestCase):
 
-    fixtures = ['counties', 'organizations', 'mock_profiles']
+    fixtures = ['counties', 'organizations', 'groups', 'mock_profiles']
 
     def test_get_with_expected_data(self):
         self.be_anonymous()
@@ -733,6 +733,7 @@ class TestThanks(IntakeDataTestCase):
     fixtures = [
         'counties',
         'organizations',
+        'groups',
         'mock_profiles',
         'mock_2_submissions_to_cc_pubdef',
         'template_options']

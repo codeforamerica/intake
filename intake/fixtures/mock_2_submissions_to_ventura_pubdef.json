@@ -1,9 +1,9 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 21,
+  "pk": 29,
   "fields": {
-    "first_visit": "2017-04-10T19:39:30.838Z",
+    "first_visit": "2017-04-10T19:39:31.042Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +11,9 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 22,
+  "pk": 30,
   "fields": {
-    "first_visit": "2017-04-10T19:39:30.862Z",
+    "first_visit": "2017-04-10T19:39:31.063Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,168 +21,86 @@
 },
 {
   "model": "intake.applicant",
-  "pk": 21,
+  "pk": 29,
   "fields": {
-    "visitor": 21
+    "visitor": 29
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 22,
+  "pk": 30,
   "fields": {
-    "visitor": 22
+    "visitor": 30
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 21,
+  "pk": 29,
   "fields": {
-    "applicant": 21,
+    "applicant": 29,
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
-        "prefers_email",
         "prefers_sms"
       ],
-      "first_name": "James",
-      "middle_name": "Monique",
-      "last_name": "Stephenson",
+      "first_name": "Stacie",
+      "middle_name": "David",
+      "last_name": "Booth",
       "phone_number": "8314207603",
       "alternate_phone_number": "8314207603",
       "email": "bgolder+testing@codeforamerica.org",
       "address": {
-        "street": "963 Dylan Junction Apt. 078",
-        "city": "New Whitney",
-        "state": "LA",
-        "zip": "06878"
+        "street": "46493 Rita Crescent",
+        "city": "New Daniellemouth",
+        "state": "NE",
+        "zip": "82069"
       },
       "dob": {
-        "month": "9",
-        "day": "11",
-        "year": "1997"
+        "month": "5",
+        "day": "25",
+        "year": "1990"
       },
-      "us_citizen": "yes",
+      "driver_license_or_id": "D8618674",
+      "last_four": "9994",
+      "case_number": "C9873-837",
       "being_charged": "no",
       "serving_sentence": "no",
       "on_probation_parole": "yes",
       "where_probation_or_parole": "Yolo County",
       "when_probation_or_parole": "2018",
-      "monthly_income": 5550,
+      "rap_outside_sf": "no",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "no",
+      "currently_employed": "yes",
+      "monthly_income": 2000,
+      "income_source": "a job",
+      "on_public_benefits": "yes",
+      "monthly_expenses": 2000,
+      "owns_home": "no",
+      "household_size": 1,
+      "has_children": "yes",
+      "is_married": "no",
       "reasons_for_applying": [
+        "background_check",
         "lost_job",
-        "homeless"
+        "housing"
       ],
       "how_did_you_hear": "from work",
       "additional_information": "I want help",
       "understands_limits": "yes",
       "consent_to_represent": "yes"
     },
-    "first_name": "James",
-    "last_name": "Stephenson",
+    "first_name": "Stacie",
+    "last_name": "Booth",
     "dob": null,
     "ssn": "",
-    "last_four": "",
+    "last_four": "9994",
     "drivers_license_or_id": "",
-    "case_number": "",
+    "case_number": "C9873-837",
     "phone_number": "8314207603",
     "alternate_phone_number": "8314207603",
     "email": "bgolder+testing@codeforamerica.org",
-    "reasons_for_applying": "['lost_job', 'homeless']",
-    "how_did_you_hear": "from work",
-    "additional_information": "I want help",
-    "aliases": "",
-    "pfn_number": "",
-    "contact_preferences": "['prefers_email', 'prefers_sms']",
-    "preferred_pronouns": "",
-    "website": "",
-    "street": "963 Dylan Junction Apt. 078",
-    "city": "New Whitney",
-    "state": "LA",
-    "zip": "06878",
-    "us_citizen": "yes",
-    "is_veteran": "",
-    "is_student": "",
-    "being_charged": "no",
-    "serving_sentence": "no",
-    "on_probation_parole": "yes",
-    "where_probation_or_parole": "Yolo County",
-    "when_probation_or_parole": "2018",
-    "finished_half_probation": "",
-    "reduced_probation": "",
-    "rap_outside_sf": "",
-    "when_where_outside_sf": "",
-    "has_suspended_license": "",
-    "owes_court_fees": "",
-    "financial_screening_note": "",
-    "currently_employed": "",
-    "monthly_income": 5550,
-    "income_source": "",
-    "on_public_benefits": "",
-    "owns_home": "",
-    "monthly_expenses": null,
-    "household_size": "",
-    "dependents": "",
-    "is_married": "",
-    "has_children": "",
-    "old_uuid": "61ec28c1a9d3418d8ec2af26bbc9e576",
-    "anonymous_name": "Caring Thunder",
-    "date_received": "2017-03-31T14:46:57-07:00"
-  }
-},
-{
-  "model": "intake.formsubmission",
-  "pk": 22,
-  "fields": {
-    "applicant": 22,
-    "duplicate_set": null,
-    "answers": {
-      "contact_preferences": [
-        "prefers_sms"
-      ],
-      "first_name": "Bonnie",
-      "middle_name": "Clifford",
-      "last_name": "Velez",
-      "phone_number": "8314207603",
-      "alternate_phone_number": "8314207603",
-      "email": "bgolder+testing@codeforamerica.org",
-      "address": {
-        "street": "480 Bryant Throughway Suite 342",
-        "city": "Carlosstad",
-        "state": "SD",
-        "zip": "66556"
-      },
-      "dob": {
-        "month": "1",
-        "day": "5",
-        "year": "1983"
-      },
-      "us_citizen": "yes",
-      "being_charged": "no",
-      "serving_sentence": "no",
-      "on_probation_parole": "yes",
-      "where_probation_or_parole": "Yolo County",
-      "when_probation_or_parole": "2018",
-      "monthly_income": 2166,
-      "reasons_for_applying": [
-        "lost_job",
-        "homeless"
-      ],
-      "how_did_you_hear": "from work",
-      "additional_information": "I want help",
-      "understands_limits": "yes",
-      "consent_to_represent": "yes"
-    },
-    "first_name": "Bonnie",
-    "last_name": "Velez",
-    "dob": null,
-    "ssn": "",
-    "last_four": "",
-    "drivers_license_or_id": "",
-    "case_number": "",
-    "phone_number": "8314207603",
-    "alternate_phone_number": "8314207603",
-    "email": "bgolder+testing@codeforamerica.org",
-    "reasons_for_applying": "['lost_job', 'homeless']",
+    "reasons_for_applying": "['background_check', 'lost_job', 'housing']",
     "how_did_you_hear": "from work",
     "additional_information": "I want help",
     "aliases": "",
@@ -190,11 +108,11 @@
     "contact_preferences": "['prefers_sms']",
     "preferred_pronouns": "",
     "website": "",
-    "street": "480 Bryant Throughway Suite 342",
-    "city": "Carlosstad",
-    "state": "SD",
-    "zip": "66556",
-    "us_citizen": "yes",
+    "street": "46493 Rita Crescent",
+    "city": "New Daniellemouth",
+    "state": "NE",
+    "zip": "82069",
+    "us_citizen": "",
     "is_veteran": "",
     "is_student": "",
     "being_charged": "no",
@@ -204,64 +122,174 @@
     "when_probation_or_parole": "2018",
     "finished_half_probation": "",
     "reduced_probation": "",
-    "rap_outside_sf": "",
+    "rap_outside_sf": "no",
     "when_where_outside_sf": "",
     "has_suspended_license": "",
-    "owes_court_fees": "",
+    "owes_court_fees": "no",
     "financial_screening_note": "",
-    "currently_employed": "",
-    "monthly_income": 2166,
-    "income_source": "",
-    "on_public_benefits": "",
-    "owns_home": "",
-    "monthly_expenses": null,
-    "household_size": "",
+    "currently_employed": "yes",
+    "monthly_income": 2000,
+    "income_source": "a job",
+    "on_public_benefits": "yes",
+    "owns_home": "no",
+    "monthly_expenses": 2000,
+    "household_size": 1,
     "dependents": "",
-    "is_married": "",
-    "has_children": "",
-    "old_uuid": "15ce082c29c54c8bba8ee1789c4b796f",
-    "anonymous_name": "Cerulean Starship",
-    "date_received": "2017-04-07T03:00:22-07:00"
+    "is_married": "no",
+    "has_children": "yes",
+    "old_uuid": "1c4adf407eb545729a49862be1cdf38d",
+    "anonymous_name": "Conscientious Armadillo",
+    "date_received": "2017-03-28T14:50:46-07:00"
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 30,
+  "fields": {
+    "applicant": 30,
+    "duplicate_set": null,
+    "answers": {
+      "contact_preferences": [
+        "prefers_sms",
+        "prefers_email"
+      ],
+      "first_name": "Erin",
+      "middle_name": "Nicole",
+      "last_name": "Holmes",
+      "phone_number": "8314207603",
+      "alternate_phone_number": "8314207603",
+      "email": "bgolder+testing@codeforamerica.org",
+      "address": {
+        "street": "5556 Lisa Vista",
+        "city": "Garciaview",
+        "state": "AR",
+        "zip": "31396"
+      },
+      "dob": {
+        "month": "1",
+        "day": "5",
+        "year": "1987"
+      },
+      "driver_license_or_id": "D3106717",
+      "last_four": "5711",
+      "case_number": "C7713-459",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Yolo County",
+      "when_probation_or_parole": "2018",
+      "rap_outside_sf": "no",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "yes",
+      "currently_employed": "no",
+      "monthly_income": 2000,
+      "income_source": "a job",
+      "on_public_benefits": "yes",
+      "monthly_expenses": 2000,
+      "owns_home": "no",
+      "household_size": 3,
+      "has_children": "yes",
+      "is_married": "no",
+      "reasons_for_applying": [
+        "background_check",
+        "lost_job",
+        "housing"
+      ],
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "Erin",
+    "last_name": "Holmes",
+    "dob": null,
+    "ssn": "",
+    "last_four": "5711",
+    "drivers_license_or_id": "",
+    "case_number": "C7713-459",
+    "phone_number": "8314207603",
+    "alternate_phone_number": "8314207603",
+    "email": "bgolder+testing@codeforamerica.org",
+    "reasons_for_applying": "['background_check', 'lost_job', 'housing']",
+    "how_did_you_hear": "from work",
+    "additional_information": "I want help",
+    "aliases": "",
+    "pfn_number": "",
+    "contact_preferences": "['prefers_sms', 'prefers_email']",
+    "preferred_pronouns": "",
+    "website": "",
+    "street": "5556 Lisa Vista",
+    "city": "Garciaview",
+    "state": "AR",
+    "zip": "31396",
+    "us_citizen": "",
+    "is_veteran": "",
+    "is_student": "",
+    "being_charged": "no",
+    "serving_sentence": "no",
+    "on_probation_parole": "yes",
+    "where_probation_or_parole": "Yolo County",
+    "when_probation_or_parole": "2018",
+    "finished_half_probation": "",
+    "reduced_probation": "",
+    "rap_outside_sf": "no",
+    "when_where_outside_sf": "",
+    "has_suspended_license": "",
+    "owes_court_fees": "yes",
+    "financial_screening_note": "",
+    "currently_employed": "no",
+    "monthly_income": 2000,
+    "income_source": "a job",
+    "on_public_benefits": "yes",
+    "owns_home": "no",
+    "monthly_expenses": 2000,
+    "household_size": 3,
+    "dependents": "",
+    "is_married": "no",
+    "has_children": "yes",
+    "old_uuid": "23d7f62cf69542be90e5f1fa00053b91",
+    "anonymous_name": "Inquisitive Cheetah",
+    "date_received": "2017-04-01T04:56:32-07:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 21,
+  "pk": 29,
   "fields": {
-    "created": "2017-03-31T21:46:57Z",
-    "updated": "2017-04-10T19:39:30.855Z",
+    "created": "2017-03-28T21:50:46Z",
+    "updated": "2017-04-10T19:39:31.056Z",
     "organization": [
-      "Santa Cruz County Public Defender"
+      "Ventura County Public Defender"
     ],
-    "form_submission": 21,
+    "form_submission": 29,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 22,
+  "pk": 30,
   "fields": {
-    "created": "2017-04-07T10:00:22Z",
-    "updated": "2017-04-10T19:39:30.880Z",
+    "created": "2017-04-01T11:56:32Z",
+    "updated": "2017-04-10T19:39:31.081Z",
     "organization": [
-      "Santa Cruz County Public Defender"
+      "Ventura County Public Defender"
     ],
-    "form_submission": 22,
+    "form_submission": 30,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 21,
+  "pk": 30,
   "fields": {
-    "created": "2017-04-10T19:39:31.938Z",
-    "updated": "2017-04-10T19:39:31.958Z",
-    "status_type": 7,
+    "created": "2017-04-10T19:39:32.172Z",
+    "updated": "2017-04-10T19:39:32.180Z",
+    "status_type": 2,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
-      "santa_cruz_pubdef_user"
+      "ventura_pubdef_user"
     ],
-    "application": 21,
+    "application": 30,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -270,16 +298,16 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 22,
+  "pk": 29,
   "fields": {
-    "created": "2017-04-10T19:39:31.967Z",
-    "updated": "2017-04-10T19:39:31.978Z",
+    "created": "2017-04-10T19:39:32.146Z",
+    "updated": "2017-04-10T19:39:32.158Z",
     "status_type": 1,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
-      "santa_cruz_pubdef_user"
+      "ventura_pubdef_user"
     ],
-    "application": 22,
+    "application": 29,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -288,28 +316,28 @@
 },
 {
   "model": "intake.statusnotification",
-  "pk": 21,
+  "pk": 29,
   "fields": {
-    "status_update": 21,
+    "status_update": 29,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-10T19:39:31.941Z"
+    "created": "2017-04-10T19:39:32.149Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 22,
+  "pk": 30,
   "fields": {
-    "status_update": 22,
+    "status_update": 30,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-10T19:39:31.969Z"
+    "created": "2017-04-10T19:39:32.173Z"
   }
 }
 ]

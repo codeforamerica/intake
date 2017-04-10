@@ -1,9 +1,9 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 84,
+  "pk": 27,
   "fields": {
-    "first_visit": "2017-03-31T20:49:03.360Z",
+    "first_visit": "2017-04-10T19:39:30.993Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +11,9 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 85,
+  "pk": 28,
   "fields": {
-    "first_visit": "2017-03-31T20:49:03.387Z",
+    "first_visit": "2017-04-10T19:39:31.012Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,155 +21,62 @@
 },
 {
   "model": "intake.applicant",
-  "pk": 84,
+  "pk": 27,
   "fields": {
-    "visitor": 84
+    "visitor": 27
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 85,
+  "pk": 28,
   "fields": {
-    "visitor": 85
+    "visitor": 28
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 84,
+  "pk": 27,
   "fields": {
-    "applicant": 84,
-    "duplicate_set": null,
-    "answers": {
-      "contact_preferences": [
-        "prefers_email"
-      ],
-      "first_name": "Russell",
-      "middle_name": "Jacob",
-      "last_name": "Washington",
-      "phone_number": "8314207603",
-      "alternate_phone_number": "8314207603",
-      "email": "bgolder+testing@codeforamerica.org",
-      "address": {
-        "street": "136 Michael River Apt. 682",
-        "city": "West Kevin",
-        "state": "WA",
-        "zip": "68232"
-      },
-      "dob": {
-        "month": "7",
-        "day": "9",
-        "year": "1994"
-      },
-      "us_citizen": "yes",
-      "being_charged": "no",
-      "serving_sentence": "no",
-      "on_probation_parole": "yes",
-      "where_probation_or_parole": "Yolo County",
-      "when_probation_or_parole": "2018",
-      "rap_outside_sf": "i_dont_know",
-      "when_where_outside_sf": "",
-      "owes_court_fees": "yes",
-      "how_did_you_hear": "from work",
-      "additional_information": "I want help",
-      "understands_limits": "yes",
-      "consent_to_represent": "yes"
-    },
-    "first_name": "Russell",
-    "last_name": "Washington",
-    "dob": null,
-    "ssn": "",
-    "last_four": "",
-    "drivers_license_or_id": "",
-    "case_number": "",
-    "phone_number": "8314207603",
-    "alternate_phone_number": "8314207603",
-    "email": "bgolder+testing@codeforamerica.org",
-    "reasons_for_applying": "",
-    "how_did_you_hear": "from work",
-    "additional_information": "I want help",
-    "aliases": "",
-    "pfn_number": "",
-    "contact_preferences": "['prefers_email']",
-    "preferred_pronouns": "",
-    "website": "",
-    "street": "136 Michael River Apt. 682",
-    "city": "West Kevin",
-    "state": "WA",
-    "zip": "68232",
-    "us_citizen": "yes",
-    "is_veteran": "",
-    "is_student": "",
-    "being_charged": "no",
-    "serving_sentence": "no",
-    "on_probation_parole": "yes",
-    "where_probation_or_parole": "Yolo County",
-    "when_probation_or_parole": "2018",
-    "finished_half_probation": "",
-    "reduced_probation": "",
-    "rap_outside_sf": "i_dont_know",
-    "when_where_outside_sf": "",
-    "has_suspended_license": "",
-    "owes_court_fees": "yes",
-    "financial_screening_note": "",
-    "currently_employed": "",
-    "monthly_income": "",
-    "income_source": "",
-    "on_public_benefits": "",
-    "owns_home": "",
-    "monthly_expenses": "",
-    "household_size": "",
-    "dependents": "",
-    "is_married": "",
-    "has_children": "",
-    "old_uuid": "95cad8fcc4874076bb2a9ee07bd30967",
-    "anonymous_name": "Indigo Platypus",
-    "date_received": "2017-03-27T01:10:54-07:00"
-  }
-},
-{
-  "model": "intake.formsubmission",
-  "pk": 85,
-  "fields": {
-    "applicant": 85,
+    "applicant": 27,
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
         "prefers_sms",
         "prefers_email"
       ],
-      "first_name": "Dustin",
-      "middle_name": "Shannon",
-      "last_name": "Alvarez",
+      "first_name": "Shannon",
+      "middle_name": "Hannah",
+      "last_name": "Cross",
       "phone_number": "8314207603",
       "alternate_phone_number": "8314207603",
       "email": "bgolder+testing@codeforamerica.org",
       "address": {
-        "street": "9682 Taylor Trail",
-        "city": "South Michael",
-        "state": "NH",
-        "zip": "05891"
+        "street": "8610 Young Flats Suite 371",
+        "city": "West Anthony",
+        "state": "IA",
+        "zip": "69374"
       },
       "dob": {
-        "month": "3",
-        "day": "26",
-        "year": "1994"
+        "month": "7",
+        "day": "30",
+        "year": "1969"
       },
       "us_citizen": "yes",
-      "being_charged": "no",
+      "being_charged": "yes",
       "serving_sentence": "no",
       "on_probation_parole": "yes",
       "where_probation_or_parole": "Yolo County",
       "when_probation_or_parole": "2018",
       "rap_outside_sf": "no",
       "when_where_outside_sf": "",
-      "owes_court_fees": "yes",
+      "owes_court_fees": "no",
       "how_did_you_hear": "from work",
       "additional_information": "I want help",
       "understands_limits": "yes",
       "consent_to_represent": "yes"
     },
-    "first_name": "Dustin",
-    "last_name": "Alvarez",
+    "first_name": "Shannon",
+    "last_name": "Cross",
     "dob": null,
     "ssn": "",
     "last_four": "",
@@ -186,10 +93,104 @@
     "contact_preferences": "['prefers_sms', 'prefers_email']",
     "preferred_pronouns": "",
     "website": "",
-    "street": "9682 Taylor Trail",
-    "city": "South Michael",
-    "state": "NH",
-    "zip": "05891",
+    "street": "8610 Young Flats Suite 371",
+    "city": "West Anthony",
+    "state": "IA",
+    "zip": "69374",
+    "us_citizen": "yes",
+    "is_veteran": "",
+    "is_student": "",
+    "being_charged": "yes",
+    "serving_sentence": "no",
+    "on_probation_parole": "yes",
+    "where_probation_or_parole": "Yolo County",
+    "when_probation_or_parole": "2018",
+    "finished_half_probation": "",
+    "reduced_probation": "",
+    "rap_outside_sf": "no",
+    "when_where_outside_sf": "",
+    "has_suspended_license": "",
+    "owes_court_fees": "no",
+    "financial_screening_note": "",
+    "currently_employed": "",
+    "monthly_income": null,
+    "income_source": "",
+    "on_public_benefits": "",
+    "owns_home": "",
+    "monthly_expenses": null,
+    "household_size": "",
+    "dependents": "",
+    "is_married": "",
+    "has_children": "",
+    "old_uuid": "f14f5d8db8b14d4f88c1cefa29730e93",
+    "anonymous_name": "Brave Lotus",
+    "date_received": "2017-04-07T20:48:17-07:00"
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 28,
+  "fields": {
+    "applicant": 28,
+    "duplicate_set": null,
+    "answers": {
+      "contact_preferences": [
+        "prefers_email",
+        "prefers_sms"
+      ],
+      "first_name": "Randy",
+      "middle_name": "William",
+      "last_name": "Schmidt",
+      "phone_number": "8314207603",
+      "alternate_phone_number": "8314207603",
+      "email": "bgolder+testing@codeforamerica.org",
+      "address": {
+        "street": "9385 Michael Summit Apt. 141",
+        "city": "Martinborough",
+        "state": "WY",
+        "zip": "86900"
+      },
+      "dob": {
+        "month": "3",
+        "day": "10",
+        "year": "1967"
+      },
+      "us_citizen": "yes",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Yolo County",
+      "when_probation_or_parole": "2018",
+      "rap_outside_sf": "yes",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "no",
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "Randy",
+    "last_name": "Schmidt",
+    "dob": null,
+    "ssn": "",
+    "last_four": "",
+    "drivers_license_or_id": "",
+    "case_number": "",
+    "phone_number": "8314207603",
+    "alternate_phone_number": "8314207603",
+    "email": "bgolder+testing@codeforamerica.org",
+    "reasons_for_applying": "",
+    "how_did_you_hear": "from work",
+    "additional_information": "I want help",
+    "aliases": "",
+    "pfn_number": "",
+    "contact_preferences": "['prefers_email', 'prefers_sms']",
+    "preferred_pronouns": "",
+    "website": "",
+    "street": "9385 Michael Summit Apt. 141",
+    "city": "Martinborough",
+    "state": "WY",
+    "zip": "86900",
     "us_citizen": "yes",
     "is_veteran": "",
     "is_student": "",
@@ -200,64 +201,64 @@
     "when_probation_or_parole": "2018",
     "finished_half_probation": "",
     "reduced_probation": "",
-    "rap_outside_sf": "no",
+    "rap_outside_sf": "yes",
     "when_where_outside_sf": "",
     "has_suspended_license": "",
-    "owes_court_fees": "yes",
+    "owes_court_fees": "no",
     "financial_screening_note": "",
     "currently_employed": "",
-    "monthly_income": "",
+    "monthly_income": null,
     "income_source": "",
     "on_public_benefits": "",
     "owns_home": "",
-    "monthly_expenses": "",
+    "monthly_expenses": null,
     "household_size": "",
     "dependents": "",
     "is_married": "",
     "has_children": "",
-    "old_uuid": "4d4ae27d16d54a2299f38c15ded3b99a",
-    "anonymous_name": "Imaginative Lake",
-    "date_received": "2017-03-21T06:35:04-07:00"
+    "old_uuid": "d9d63ddab9aa4943bb8b0a94a16af0bf",
+    "anonymous_name": "Brave Porcupine",
+    "date_received": "2017-04-04T22:48:39-07:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 110,
+  "pk": 27,
   "fields": {
-    "created": "2017-03-27T08:10:54Z",
-    "updated": "2017-03-31T20:49:03.376Z",
+    "created": "2017-04-08T03:48:17Z",
+    "updated": "2017-04-10T19:39:31.006Z",
     "organization": [
       "Tulare County Public Defender"
     ],
-    "form_submission": 84,
+    "form_submission": 27,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 111,
+  "pk": 28,
   "fields": {
-    "created": "2017-03-21T13:35:04Z",
-    "updated": "2017-03-31T20:49:03.409Z",
+    "created": "2017-04-05T05:48:39Z",
+    "updated": "2017-04-10T19:39:31.033Z",
     "organization": [
       "Tulare County Public Defender"
     ],
-    "form_submission": 85,
+    "form_submission": 28,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 109,
+  "pk": 27,
   "fields": {
-    "created": "2017-03-31T20:49:04.189Z",
-    "updated": "2017-03-31T20:49:04.200Z",
-    "status_type": 4,
+    "created": "2017-04-10T19:39:32.095Z",
+    "updated": "2017-04-10T19:39:32.110Z",
+    "status_type": 6,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "tulare_pubdef_user"
     ],
-    "application": 110,
+    "application": 27,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -266,16 +267,16 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 110,
+  "pk": 28,
   "fields": {
-    "created": "2017-03-31T20:49:04.215Z",
-    "updated": "2017-03-31T20:49:04.224Z",
-    "status_type": 5,
+    "created": "2017-04-10T19:39:32.121Z",
+    "updated": "2017-04-10T19:39:32.136Z",
+    "status_type": 7,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "tulare_pubdef_user"
     ],
-    "application": 111,
+    "application": 28,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -284,28 +285,28 @@
 },
 {
   "model": "intake.statusnotification",
-  "pk": 109,
+  "pk": 27,
   "fields": {
-    "status_update": 109,
+    "status_update": 27,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-03-31T20:49:04.191Z"
+    "created": "2017-04-10T19:39:32.097Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 110,
+  "pk": 28,
   "fields": {
-    "status_update": 110,
+    "status_update": 28,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-03-31T20:49:04.217Z"
+    "created": "2017-04-10T19:39:32.124Z"
   }
 }
 ]

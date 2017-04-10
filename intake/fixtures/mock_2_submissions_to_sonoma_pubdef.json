@@ -1,9 +1,9 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 82,
+  "pk": 25,
   "fields": {
-    "first_visit": "2017-03-31T20:49:03.293Z",
+    "first_visit": "2017-04-10T19:39:30.938Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +11,9 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 83,
+  "pk": 26,
   "fields": {
-    "first_visit": "2017-03-31T20:49:03.322Z",
+    "first_visit": "2017-04-10T19:39:30.964Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,44 +21,44 @@
 },
 {
   "model": "intake.applicant",
-  "pk": 82,
+  "pk": 25,
   "fields": {
-    "visitor": 82
+    "visitor": 25
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 83,
+  "pk": 26,
   "fields": {
-    "visitor": 83
+    "visitor": 26
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 82,
+  "pk": 25,
   "fields": {
-    "applicant": 82,
+    "applicant": 25,
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
-        "prefers_sms"
+        "prefers_email"
       ],
-      "first_name": "Stephanie",
-      "middle_name": "Gary",
-      "last_name": "Perry",
+      "first_name": "Geoffrey",
+      "middle_name": "Carolyn",
+      "last_name": "Fisher",
       "phone_number": "8314207603",
       "alternate_phone_number": "8314207603",
       "email": "bgolder+testing@codeforamerica.org",
       "address": {
-        "street": "374 Julie Turnpike Suite 809",
-        "city": "Carrillohaven",
-        "state": "OK",
-        "zip": "37347"
+        "street": "17393 Ashley Via",
+        "city": "East Taramouth",
+        "state": "MA",
+        "zip": "04374"
       },
       "dob": {
-        "month": "9",
-        "day": "21",
-        "year": "1967"
+        "month": "1",
+        "day": "26",
+        "year": "1980"
       },
       "us_citizen": "yes",
       "being_charged": "no",
@@ -66,16 +66,109 @@
       "on_probation_parole": "yes",
       "where_probation_or_parole": "Yolo County",
       "when_probation_or_parole": "2018",
-      "rap_outside_sf": "no",
+      "rap_outside_sf": "yes",
       "when_where_outside_sf": "",
-      "owes_court_fees": "yes",
+      "owes_court_fees": "no",
       "how_did_you_hear": "from work",
       "additional_information": "I want help",
       "understands_limits": "yes",
       "consent_to_represent": "yes"
     },
-    "first_name": "Stephanie",
-    "last_name": "Perry",
+    "first_name": "Geoffrey",
+    "last_name": "Fisher",
+    "dob": null,
+    "ssn": "",
+    "last_four": "",
+    "drivers_license_or_id": "",
+    "case_number": "",
+    "phone_number": "8314207603",
+    "alternate_phone_number": "8314207603",
+    "email": "bgolder+testing@codeforamerica.org",
+    "reasons_for_applying": "",
+    "how_did_you_hear": "from work",
+    "additional_information": "I want help",
+    "aliases": "",
+    "pfn_number": "",
+    "contact_preferences": "['prefers_email']",
+    "preferred_pronouns": "",
+    "website": "",
+    "street": "17393 Ashley Via",
+    "city": "East Taramouth",
+    "state": "MA",
+    "zip": "04374",
+    "us_citizen": "yes",
+    "is_veteran": "",
+    "is_student": "",
+    "being_charged": "no",
+    "serving_sentence": "no",
+    "on_probation_parole": "yes",
+    "where_probation_or_parole": "Yolo County",
+    "when_probation_or_parole": "2018",
+    "finished_half_probation": "",
+    "reduced_probation": "",
+    "rap_outside_sf": "yes",
+    "when_where_outside_sf": "",
+    "has_suspended_license": "",
+    "owes_court_fees": "no",
+    "financial_screening_note": "",
+    "currently_employed": "",
+    "monthly_income": null,
+    "income_source": "",
+    "on_public_benefits": "",
+    "owns_home": "",
+    "monthly_expenses": null,
+    "household_size": "",
+    "dependents": "",
+    "is_married": "",
+    "has_children": "",
+    "old_uuid": "7dcb62bf799b41beaf47641132bec5e0",
+    "anonymous_name": "Stupendous Condor",
+    "date_received": "2017-04-06T13:24:06-07:00"
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 26,
+  "fields": {
+    "applicant": 26,
+    "duplicate_set": null,
+    "answers": {
+      "contact_preferences": [
+        "prefers_sms"
+      ],
+      "first_name": "Michael",
+      "middle_name": "Robert",
+      "last_name": "Frazier",
+      "phone_number": "8314207603",
+      "alternate_phone_number": "8314207603",
+      "email": "bgolder+testing@codeforamerica.org",
+      "address": {
+        "street": "8336 Monique Bridge",
+        "city": "Snydermouth",
+        "state": "KS",
+        "zip": "80023"
+      },
+      "dob": {
+        "month": "2",
+        "day": "17",
+        "year": "1992"
+      },
+      "us_citizen": "yes",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Yolo County",
+      "when_probation_or_parole": "2018",
+      "rap_outside_sf": "yes",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "no",
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "Michael",
+    "last_name": "Frazier",
     "dob": null,
     "ssn": "",
     "last_four": "",
@@ -92,10 +185,10 @@
     "contact_preferences": "['prefers_sms']",
     "preferred_pronouns": "",
     "website": "",
-    "street": "374 Julie Turnpike Suite 809",
-    "city": "Carrillohaven",
-    "state": "OK",
-    "zip": "37347",
+    "street": "8336 Monique Bridge",
+    "city": "Snydermouth",
+    "state": "KS",
+    "zip": "80023",
     "us_citizen": "yes",
     "is_veteran": "",
     "is_student": "",
@@ -106,157 +199,64 @@
     "when_probation_or_parole": "2018",
     "finished_half_probation": "",
     "reduced_probation": "",
-    "rap_outside_sf": "no",
+    "rap_outside_sf": "yes",
     "when_where_outside_sf": "",
     "has_suspended_license": "",
-    "owes_court_fees": "yes",
+    "owes_court_fees": "no",
     "financial_screening_note": "",
     "currently_employed": "",
-    "monthly_income": "",
+    "monthly_income": null,
     "income_source": "",
     "on_public_benefits": "",
     "owns_home": "",
-    "monthly_expenses": "",
+    "monthly_expenses": null,
     "household_size": "",
     "dependents": "",
     "is_married": "",
     "has_children": "",
-    "old_uuid": "fc95c4c52ac1484282f96dd5c772ca78",
-    "anonymous_name": "Chartreuse Quetzal",
-    "date_received": "2017-03-19T09:47:25-07:00"
-  }
-},
-{
-  "model": "intake.formsubmission",
-  "pk": 83,
-  "fields": {
-    "applicant": 83,
-    "duplicate_set": null,
-    "answers": {
-      "contact_preferences": [
-        "prefers_sms"
-      ],
-      "first_name": "Tammy",
-      "middle_name": "Thomas",
-      "last_name": "Harmon",
-      "phone_number": "8314207603",
-      "alternate_phone_number": "8314207603",
-      "email": "bgolder+testing@codeforamerica.org",
-      "address": {
-        "street": "116 Leah Garden",
-        "city": "Manuelfort",
-        "state": "OR",
-        "zip": "03565"
-      },
-      "dob": {
-        "month": "6",
-        "day": "31",
-        "year": "1996"
-      },
-      "us_citizen": "yes",
-      "being_charged": "no",
-      "serving_sentence": "no",
-      "on_probation_parole": "yes",
-      "where_probation_or_parole": "Yolo County",
-      "when_probation_or_parole": "2018",
-      "rap_outside_sf": "i_dont_know",
-      "when_where_outside_sf": "",
-      "owes_court_fees": "yes",
-      "how_did_you_hear": "from work",
-      "additional_information": "I want help",
-      "understands_limits": "yes",
-      "consent_to_represent": "yes"
-    },
-    "first_name": "Tammy",
-    "last_name": "Harmon",
-    "dob": null,
-    "ssn": "",
-    "last_four": "",
-    "drivers_license_or_id": "",
-    "case_number": "",
-    "phone_number": "8314207603",
-    "alternate_phone_number": "8314207603",
-    "email": "bgolder+testing@codeforamerica.org",
-    "reasons_for_applying": "",
-    "how_did_you_hear": "from work",
-    "additional_information": "I want help",
-    "aliases": "",
-    "pfn_number": "",
-    "contact_preferences": "['prefers_sms']",
-    "preferred_pronouns": "",
-    "website": "",
-    "street": "116 Leah Garden",
-    "city": "Manuelfort",
-    "state": "OR",
-    "zip": "03565",
-    "us_citizen": "yes",
-    "is_veteran": "",
-    "is_student": "",
-    "being_charged": "no",
-    "serving_sentence": "no",
-    "on_probation_parole": "yes",
-    "where_probation_or_parole": "Yolo County",
-    "when_probation_or_parole": "2018",
-    "finished_half_probation": "",
-    "reduced_probation": "",
-    "rap_outside_sf": "i_dont_know",
-    "when_where_outside_sf": "",
-    "has_suspended_license": "",
-    "owes_court_fees": "yes",
-    "financial_screening_note": "",
-    "currently_employed": "",
-    "monthly_income": "",
-    "income_source": "",
-    "on_public_benefits": "",
-    "owns_home": "",
-    "monthly_expenses": "",
-    "household_size": "",
-    "dependents": "",
-    "is_married": "",
-    "has_children": "",
-    "old_uuid": "ff8213de722c4e32b2a17270c0febeed",
-    "anonymous_name": "Adventurous Sun",
-    "date_received": "2017-03-22T06:09:47-07:00"
+    "old_uuid": "4cb5d59dc28e4c7f8381b45b116f81f8",
+    "anonymous_name": "Brilliant Tiger",
+    "date_received": "2017-04-09T17:35:43-07:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 108,
+  "pk": 25,
   "fields": {
-    "created": "2017-03-19T16:47:25Z",
-    "updated": "2017-03-31T20:49:03.316Z",
+    "created": "2017-04-06T20:24:06Z",
+    "updated": "2017-04-10T19:39:30.957Z",
     "organization": [
       "Sonoma County Public Defender"
     ],
-    "form_submission": 82,
+    "form_submission": 25,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 109,
+  "pk": 26,
   "fields": {
-    "created": "2017-03-22T13:09:47Z",
-    "updated": "2017-03-31T20:49:03.345Z",
+    "created": "2017-04-10T00:35:43Z",
+    "updated": "2017-04-10T19:39:30.981Z",
     "organization": [
       "Sonoma County Public Defender"
     ],
-    "form_submission": 83,
+    "form_submission": 26,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 107,
+  "pk": 25,
   "fields": {
-    "created": "2017-03-31T20:49:04.134Z",
-    "updated": "2017-03-31T20:49:04.144Z",
-    "status_type": 2,
+    "created": "2017-04-10T19:39:32.049Z",
+    "updated": "2017-04-10T19:39:32.063Z",
+    "status_type": 4,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "sonoma_pubdef_user"
     ],
-    "application": 108,
+    "application": 25,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -265,16 +265,16 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 108,
+  "pk": 26,
   "fields": {
-    "created": "2017-03-31T20:49:04.161Z",
-    "updated": "2017-03-31T20:49:04.171Z",
-    "status_type": 3,
+    "created": "2017-04-10T19:39:32.074Z",
+    "updated": "2017-04-10T19:39:32.086Z",
+    "status_type": 5,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "sonoma_pubdef_user"
     ],
-    "application": 109,
+    "application": 26,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -283,28 +283,28 @@
 },
 {
   "model": "intake.statusnotification",
-  "pk": 107,
+  "pk": 25,
   "fields": {
-    "status_update": 107,
+    "status_update": 25,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-03-31T20:49:04.137Z"
+    "created": "2017-04-10T19:39:32.054Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 108,
+  "pk": 26,
   "fields": {
-    "status_update": 108,
+    "status_update": 26,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-03-31T20:49:04.164Z"
+    "created": "2017-04-10T19:39:32.076Z"
   }
 }
 ]

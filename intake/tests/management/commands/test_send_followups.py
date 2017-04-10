@@ -37,7 +37,7 @@ class TestCommand(ExternalNotificationsPatchTestCase):
                 date_received=date,
                 organizations=[org],
                 answers=get_answers_for_orgs(
-                    org.slug,
+                    [org],
                     contact_preferences=[
                         'prefers_email',
                         'prefers_sms'],

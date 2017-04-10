@@ -1,9 +1,9 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 70,
+  "pk": 11,
   "fields": {
-    "first_visit": "2017-03-31T20:49:02.922Z",
+    "first_visit": "2017-04-10T19:39:30.583Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +11,9 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 71,
+  "pk": 12,
   "fields": {
-    "first_visit": "2017-03-31T20:49:02.951Z",
+    "first_visit": "2017-04-10T19:39:30.609Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,139 +21,46 @@
 },
 {
   "model": "intake.applicant",
-  "pk": 70,
+  "pk": 11,
   "fields": {
-    "visitor": 70
+    "visitor": 11
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 71,
+  "pk": 12,
   "fields": {
-    "visitor": 71
+    "visitor": 12
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 70,
+  "pk": 11,
   "fields": {
-    "applicant": 70,
-    "duplicate_set": null,
-    "answers": {
-      "contact_preferences": [
-        "prefers_email"
-      ],
-      "first_name": "Mary",
-      "middle_name": "Daniel",
-      "last_name": "Mcdaniel",
-      "phone_number": "8314207603",
-      "alternate_phone_number": "8314207603",
-      "email": "bgolder+testing@codeforamerica.org",
-      "address": {
-        "street": "86951 Miller Station",
-        "city": "East Janetport",
-        "state": "AK",
-        "zip": "18460"
-      },
-      "dob": {
-        "month": "6",
-        "day": "11",
-        "year": "1973"
-      },
-      "case_number": "C3771-748",
-      "being_charged": "no",
-      "serving_sentence": "no",
-      "on_probation_parole": "yes",
-      "where_probation_or_parole": "Yolo County",
-      "when_probation_or_parole": "2018",
-      "rap_outside_sf": "no",
-      "when_where_outside_sf": "",
-      "owes_court_fees": "no",
-      "how_did_you_hear": "from work",
-      "additional_information": "I want help",
-      "understands_limits": "yes",
-      "consent_to_represent": "yes"
-    },
-    "first_name": "Mary",
-    "last_name": "Mcdaniel",
-    "dob": null,
-    "ssn": "",
-    "last_four": "",
-    "drivers_license_or_id": "",
-    "case_number": "C3771-748",
-    "phone_number": "8314207603",
-    "alternate_phone_number": "8314207603",
-    "email": "bgolder+testing@codeforamerica.org",
-    "reasons_for_applying": "",
-    "how_did_you_hear": "from work",
-    "additional_information": "I want help",
-    "aliases": "",
-    "pfn_number": "",
-    "contact_preferences": "['prefers_email']",
-    "preferred_pronouns": "",
-    "website": "",
-    "street": "86951 Miller Station",
-    "city": "East Janetport",
-    "state": "AK",
-    "zip": "18460",
-    "us_citizen": "",
-    "is_veteran": "",
-    "is_student": "",
-    "being_charged": "no",
-    "serving_sentence": "no",
-    "on_probation_parole": "yes",
-    "where_probation_or_parole": "Yolo County",
-    "when_probation_or_parole": "2018",
-    "finished_half_probation": "",
-    "reduced_probation": "",
-    "rap_outside_sf": "no",
-    "when_where_outside_sf": "",
-    "has_suspended_license": "",
-    "owes_court_fees": "no",
-    "financial_screening_note": "",
-    "currently_employed": "",
-    "monthly_income": "",
-    "income_source": "",
-    "on_public_benefits": "",
-    "owns_home": "",
-    "monthly_expenses": "",
-    "household_size": "",
-    "dependents": "",
-    "is_married": "",
-    "has_children": "",
-    "old_uuid": "9b4556f296d04bf0a86692b2f57d5067",
-    "anonymous_name": "Ethereal Mammoth",
-    "date_received": "2017-03-24T07:38:47-07:00"
-  }
-},
-{
-  "model": "intake.formsubmission",
-  "pk": 71,
-  "fields": {
-    "applicant": 71,
+    "applicant": 11,
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
         "prefers_sms"
       ],
-      "first_name": "Deborah",
-      "middle_name": "Melissa",
-      "last_name": "Hubbard",
+      "first_name": "Omar",
+      "middle_name": "Nicole",
+      "last_name": "Harris",
       "phone_number": "8314207603",
       "alternate_phone_number": "8314207603",
       "email": "bgolder+testing@codeforamerica.org",
       "address": {
-        "street": "272 Kristen Street",
-        "city": "Carneyshire",
-        "state": "AK",
-        "zip": "19928"
+        "street": "95442 Ryan Springs Suite 383",
+        "city": "Annamouth",
+        "state": "WY",
+        "zip": "52363"
       },
       "dob": {
-        "month": "8",
-        "day": "31",
-        "year": "1965"
+        "month": "9",
+        "day": "14",
+        "year": "1971"
       },
-      "case_number": "C8313-577",
+      "case_number": "C7691-720",
       "being_charged": "no",
       "serving_sentence": "no",
       "on_probation_parole": "yes",
@@ -161,19 +68,19 @@
       "when_probation_or_parole": "2018",
       "rap_outside_sf": "no",
       "when_where_outside_sf": "",
-      "owes_court_fees": "no",
+      "owes_court_fees": "yes",
       "how_did_you_hear": "from work",
       "additional_information": "I want help",
       "understands_limits": "yes",
       "consent_to_represent": "yes"
     },
-    "first_name": "Deborah",
-    "last_name": "Hubbard",
+    "first_name": "Omar",
+    "last_name": "Harris",
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
-    "case_number": "C8313-577",
+    "case_number": "C7691-720",
     "phone_number": "8314207603",
     "alternate_phone_number": "8314207603",
     "email": "bgolder+testing@codeforamerica.org",
@@ -185,10 +92,104 @@
     "contact_preferences": "['prefers_sms']",
     "preferred_pronouns": "",
     "website": "",
-    "street": "272 Kristen Street",
-    "city": "Carneyshire",
-    "state": "AK",
-    "zip": "19928",
+    "street": "95442 Ryan Springs Suite 383",
+    "city": "Annamouth",
+    "state": "WY",
+    "zip": "52363",
+    "us_citizen": "",
+    "is_veteran": "",
+    "is_student": "",
+    "being_charged": "no",
+    "serving_sentence": "no",
+    "on_probation_parole": "yes",
+    "where_probation_or_parole": "Yolo County",
+    "when_probation_or_parole": "2018",
+    "finished_half_probation": "",
+    "reduced_probation": "",
+    "rap_outside_sf": "no",
+    "when_where_outside_sf": "",
+    "has_suspended_license": "",
+    "owes_court_fees": "yes",
+    "financial_screening_note": "",
+    "currently_employed": "",
+    "monthly_income": null,
+    "income_source": "",
+    "on_public_benefits": "",
+    "owns_home": "",
+    "monthly_expenses": null,
+    "household_size": "",
+    "dependents": "",
+    "is_married": "",
+    "has_children": "",
+    "old_uuid": "35813bc413e8437caf57b6e4616845f8",
+    "anonymous_name": "Chartreuse Tree",
+    "date_received": "2017-04-03T08:02:04-07:00"
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 12,
+  "fields": {
+    "applicant": 12,
+    "duplicate_set": null,
+    "answers": {
+      "contact_preferences": [
+        "prefers_email",
+        "prefers_sms"
+      ],
+      "first_name": "Tyler",
+      "middle_name": "Jill",
+      "last_name": "Porter",
+      "phone_number": "8314207603",
+      "alternate_phone_number": "8314207603",
+      "email": "bgolder+testing@codeforamerica.org",
+      "address": {
+        "street": "83648 Michael Course Suite 254",
+        "city": "West Christy",
+        "state": "TX",
+        "zip": "50715"
+      },
+      "dob": {
+        "month": "9",
+        "day": "9",
+        "year": "1976"
+      },
+      "case_number": "C3453-930",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Yolo County",
+      "when_probation_or_parole": "2018",
+      "rap_outside_sf": "no",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "no",
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "Tyler",
+    "last_name": "Porter",
+    "dob": null,
+    "ssn": "",
+    "last_four": "",
+    "drivers_license_or_id": "",
+    "case_number": "C3453-930",
+    "phone_number": "8314207603",
+    "alternate_phone_number": "8314207603",
+    "email": "bgolder+testing@codeforamerica.org",
+    "reasons_for_applying": "",
+    "how_did_you_hear": "from work",
+    "additional_information": "I want help",
+    "aliases": "",
+    "pfn_number": "",
+    "contact_preferences": "['prefers_email', 'prefers_sms']",
+    "preferred_pronouns": "",
+    "website": "",
+    "street": "83648 Michael Course Suite 254",
+    "city": "West Christy",
+    "state": "TX",
+    "zip": "50715",
     "us_citizen": "",
     "is_veteran": "",
     "is_student": "",
@@ -205,58 +206,58 @@
     "owes_court_fees": "no",
     "financial_screening_note": "",
     "currently_employed": "",
-    "monthly_income": "",
+    "monthly_income": null,
     "income_source": "",
     "on_public_benefits": "",
     "owns_home": "",
-    "monthly_expenses": "",
+    "monthly_expenses": null,
     "household_size": "",
     "dependents": "",
     "is_married": "",
     "has_children": "",
-    "old_uuid": "fe25db933e57467fa0520ebff65127af",
-    "anonymous_name": "Ethereal Lake",
-    "date_received": "2017-03-27T12:05:08-07:00"
+    "old_uuid": "fea1c2bb417d44419d7bb45eadd3df22",
+    "anonymous_name": "Platinum Tiger",
+    "date_received": "2017-04-02T08:47:07-07:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 96,
+  "pk": 11,
   "fields": {
-    "created": "2017-03-24T14:38:47Z",
-    "updated": "2017-03-31T20:49:02.943Z",
+    "created": "2017-04-03T15:02:04Z",
+    "updated": "2017-04-10T19:39:30.600Z",
     "organization": [
       "San Diego County Public Defender"
     ],
-    "form_submission": 70,
+    "form_submission": 11,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 97,
+  "pk": 12,
   "fields": {
-    "created": "2017-03-27T19:05:08Z",
-    "updated": "2017-03-31T20:49:02.973Z",
+    "created": "2017-04-02T15:47:07Z",
+    "updated": "2017-04-10T19:39:30.623Z",
     "organization": [
       "San Diego County Public Defender"
     ],
-    "form_submission": 71,
+    "form_submission": 12,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 95,
+  "pk": 11,
   "fields": {
-    "created": "2017-03-31T20:49:03.822Z",
-    "updated": "2017-03-31T20:49:03.833Z",
+    "created": "2017-04-10T19:39:31.639Z",
+    "updated": "2017-04-10T19:39:31.655Z",
     "status_type": 4,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "san_diego_pubdef_user"
     ],
-    "application": 96,
+    "application": 11,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -265,16 +266,16 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 96,
+  "pk": 12,
   "fields": {
-    "created": "2017-03-31T20:49:03.845Z",
-    "updated": "2017-03-31T20:49:03.860Z",
+    "created": "2017-04-10T19:39:31.667Z",
+    "updated": "2017-04-10T19:39:31.681Z",
     "status_type": 5,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "san_diego_pubdef_user"
     ],
-    "application": 97,
+    "application": 12,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -283,28 +284,28 @@
 },
 {
   "model": "intake.statusnotification",
-  "pk": 95,
+  "pk": 11,
   "fields": {
-    "status_update": 95,
+    "status_update": 11,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-03-31T20:49:03.825Z"
+    "created": "2017-04-10T19:39:31.642Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 96,
+  "pk": 12,
   "fields": {
-    "status_update": 96,
+    "status_update": 12,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-03-31T20:49:03.846Z"
+    "created": "2017-04-10T19:39:31.670Z"
   }
 }
 ]

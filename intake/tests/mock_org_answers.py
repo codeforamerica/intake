@@ -7,40 +7,49 @@ answer_lookup = {}
 
 
 class AnswerGenerator:
-    def __init__(self, mock_method_name, form_class):
-        self.mock_method_name = mock_method_name
-        self.form_class = form_class
+
+    def __init__(self, mock_method_form_class_pairs):
+        self.mock_method_form_class_pairs = mock_method_form_class_pairs
 
     def __call__(self):
-        raw_answers = getattr(fake, self.mock_method_name)()
-        form = self.form_class(raw_answers, validate=True)
-        return form.cleaned_data
+        cleaned_data = {}
+        for mock_method_name, form_class in \
+                self.mock_method_form_class_pairs.items():
+            raw_answers = getattr(fake, mock_method_name)()
+            form = form_class(raw_answers, validate=True)
+            cleaned_data.update(form.cleaned_data)
+        return cleaned_data
 
 
 def populate_answer_lookup():
     from user_accounts.models import Organization
-    from formation.forms import county_form_selector
+    from formation.forms import county_form_selector, DeclarationLetterFormSpec
+    letter_form_class = DeclarationLetterFormSpec().build_form_class()
     for org in Organization.objects.filter(is_receiving_agency=True):
         answer_mock_method_name = org.slug + '_answers'
         if not hasattr(fake, answer_mock_method_name):
             raise AttributeError(
                 'There is no mock form answers method for {}'.format(org.slug))
         form_class = county_form_selector.get_combined_form_class(
-                counties=[org.county.slug])
-        answer_lookup[org.slug] = AnswerGenerator(
-            answer_mock_method_name, form_class)
+            counties=[org.county.slug])
+        mock_method_form_pairs = {}
+        mock_method_form_pairs[answer_mock_method_name] = form_class
+        if org.requires_declaration_letter:
+            mock_method_form_pairs.update(
+                declaration_letter_answers=letter_form_class)
+        answer_lookup[org.slug] = AnswerGenerator(mock_method_form_pairs)
 
 
-def get_answers_for_org(org_slug, **overrides):
-    if org_slug not in answer_lookup:
+def get_answers_for_org(organization, **overrides):
+    if organization.slug not in answer_lookup:
         populate_answer_lookup()
-    answers = answer_lookup[org_slug]()
+    answers = answer_lookup[organization.slug]()
     answers.update(**overrides)
     return answers
 
 
-def get_answers_for_orgs(*slugs, **overrides):
+def get_answers_for_orgs(organizations, **overrides):
     answers = {}
-    for slug in slugs:
-        answers.update(**get_answers_for_org(slug, **overrides))
+    for organization in organizations:
+        answers.update(**get_answers_for_org(organization, **overrides))
     return answers

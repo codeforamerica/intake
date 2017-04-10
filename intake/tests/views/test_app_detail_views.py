@@ -3,6 +3,7 @@ from unittest.mock import patch
 from django.core.urlresolvers import reverse
 from markupsafe import escape
 from intake import models
+from user_accounts.models import Organization
 from django.contrib.auth.models import User
 from intake.tests.base_testcases import IntakeDataTestCase
 from intake.tests import factories
@@ -10,10 +11,12 @@ from intake.tests import factories
 
 class AppDetailFixturesBaseTestCase(IntakeDataTestCase):
     fixtures = [
-        'counties',
+        'counties', 'groups',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
+        'mock_2_submissions_to_ebclc',
+        'mock_2_submissions_to_santa_clara_pubdef',
         'mock_1_submission_to_multiple_orgs', 'template_options'
     ]
 
@@ -102,6 +105,26 @@ class TestApplicationDetail(AppDetailFixturesBaseTestCase):
         self.assertContains(response, transfer_action_url)
 
     @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_ebclc_and_santa_clara_can_see_pref_pronouns(self, slack):
+        ebclc = Organization.objects.get(slug='ebclc')
+        santa_clara = Organization.objects.filter(
+            slug__contains='santa_clara').first()
+        self.be_user(
+            User.objects.filter(profile__organization=ebclc).first())
+        sub = models.FormSubmission.objects.filter(
+            organizations=ebclc).first()
+        response = self.get_page(sub)
+        self.assertContains(
+            response, escape(sub.answers.get('preferred_pronouns')))
+        self.be_user(
+            User.objects.filter(profile__organization=santa_clara).first())
+        sub = models.FormSubmission.objects.filter(
+            organizations=santa_clara).first()
+        response = self.get_page(sub)
+        self.assertContains(
+            response, escape(sub.answers.get('preferred_pronouns')))
+
+    @patch('intake.notifications.slack_submissions_viewed.send')
     def test_agency_user_can_see_case_printout_link(self, slack):
         self.be_apubdef_user()
         submission = self.a_pubdef_submissions[0]
@@ -147,7 +170,7 @@ class TestApplicationDetail(AppDetailFixturesBaseTestCase):
         self.assertContains(response, escape(this_status_name))
         self.assertContains(response, escape(this_status_logged_by))
         self.assertNotContains(response, escape(other_logged_by))
-        if this_status_name != other_status_name:
+        if other_status_name not in this_status_name:
             self.assertNotContains(response, escape(other_status_name))
 
     @patch('intake.notifications.slack_submissions_viewed.send')
@@ -327,9 +350,9 @@ class TestApplicationHistoryWithTransfers(AppDetailFixturesBaseTestCase):
         submission = incoming_transfer.new_application.form_submission
         response = self.get_page(submission)
         prior_updates = models.StatusUpdate.objects.filter(
-                application__form_submission=submission,
-                created__lt=incoming_transfer.status_update.created
-            ).exclude(transfer=incoming_transfer)
+            application__form_submission=submission,
+            created__lt=incoming_transfer.status_update.created
+        ).exclude(transfer=incoming_transfer)
         for status_update in prior_updates:
             expected_display_data = [
                 "{} at {}".format(
