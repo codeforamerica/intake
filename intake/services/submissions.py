@@ -59,14 +59,15 @@ def create_submission(form, organizations, applicant_id):
 
     # extract out fields from answers (searchable and other)
     keys = FORMSUBMISSION_TEXT_SEARCH_FIELDS + QUERYABLE_ANSWER_FIELDS
-    import ipdb; ipdb.set_trace()
     for key in keys:
-        existing = submission.answers.get(key, "")
-        setattr(submission, key, existing)
+        existing = submission.answers.get(key, None)
+        if existing:
+            setattr(submission, key, existing)
     address = submission.answers['address']
     for component in address:
-        existing = address.get(component, "")
-        setattr(submission, component, existing)
+        existing = address.get(component, None)
+        if existing:
+            setattr(submission, component, existing)
     submission.save()
 
     submission.organizations.add_orgs_to_sub(*organizations)
