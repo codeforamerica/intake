@@ -71,6 +71,21 @@ DOLLAR_FIELDS = [
     'monthly_expenses'
 ]
 
+"""
+Some fields were not extracted from the answers blob;
+UNEXTRACTED FIELDS = [
+    'consent_to_represent',
+    'understands_limits',
+    'address',
+    'declaration_letter_note',
+    'declaration_letter_intro',
+    'declaration_letter_life_changes',
+    'declaration_letter_activities',
+    'declaration_letter_goals',
+    'declaration_letter_why'
+    ]
+"""
+
 
 class MissingAnswersError(Exception):
     pass
@@ -87,7 +102,8 @@ def gen_uuid():
 class FormSubmission(models.Model):
 
     text_search_fields = FORMSUBMISSION_TEXT_SEARCH_FIELDS
-    answer_fields = FORMSUBMISSION_TEXT_SEARCH_FIELDS + QUERYABLE_ANSWER_FIELDS
+    answer_fields = (FORMSUBMISSION_TEXT_SEARCH_FIELDS +
+        QUERYABLE_ANSWER_FIELDS + DOLLAR_FIELDS)
 
     organizations = models.ManyToManyField(
         'user_accounts.Organization', related_name="submissions",
