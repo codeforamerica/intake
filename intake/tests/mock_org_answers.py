@@ -40,14 +40,16 @@ def populate_answer_lookup():
         answer_lookup[org.slug] = AnswerGenerator(mock_method_form_pairs)
 
 
-def get_answers_for_org(organization):
+def get_answers_for_org(organization, **overrides):
     if organization.slug not in answer_lookup:
         populate_answer_lookup()
-    return answer_lookup[organization.slug]()
+    answers = answer_lookup[organization.slug]()
+    answers.update(**overrides)
+    return answers
 
 
-def get_answers_for_orgs(organizations):
+def get_answers_for_orgs(organizations, **overrides):
     answers = {}
     for organization in organizations:
-        answers.update(**get_answers_for_org(organization))
+        answers.update(**get_answers_for_org(organization, **overrides))
     return answers

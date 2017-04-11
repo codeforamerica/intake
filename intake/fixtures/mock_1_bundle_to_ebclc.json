@@ -1,15 +1,15 @@
 [
 {
   "model": "intake.applicationbundle",
-  "pk": 48,
+  "pk": 3,
   "fields": {
     "organization": [
       "East Bay Community Law Center"
     ],
     "bundled_pdf": "",
     "submissions": [
-      105,
-      106
+      5,
+      6
     ]
   }
 }

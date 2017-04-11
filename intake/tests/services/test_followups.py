@@ -3,6 +3,7 @@ from django.test import TestCase
 import intake.services.followups as FollowupsService
 from intake.tests import mock, factories
 from intake.tests.mock import get_old_date, get_newer_date
+from intake.tests.mock_org_answers import get_answers_for_orgs
 from intake.tests.base_testcases import ExternalNotificationsPatchTestCase
 from project.fixtures_index import (
     ESSENTIAL_DATA_FIXTURES,
@@ -151,7 +152,9 @@ class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
             needs_applicant_followups=False, is_receiving_agency=True).first()
 
     def full_answers(self):
-        return mock.fake.alameda_pubdef_answers(
+        org = Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)
+        return get_answers_for_orgs(
+            [org],
             contact_preferences=[
                 'prefers_email',
                 'prefers_sms',
@@ -162,7 +165,9 @@ class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
         )
 
     def cant_contact_answers(self):
-        return mock.fake.alameda_pubdef_answers(
+        org = Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)
+        return get_answers_for_orgs(
+            [org],
             contact_preferences=[
                 'prefers_voicemail',
                 'prefers_snailmail'],

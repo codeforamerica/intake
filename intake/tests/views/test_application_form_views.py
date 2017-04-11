@@ -3,7 +3,7 @@ import logging
 import random
 from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase
 from intake.tests.base_testcases import IntakeDataTestCase
-
+from intake.tests.mock_org_answers import get_answers_for_orgs
 from unittest.mock import patch, Mock
 from intake.tests import mock
 from intake import models, constants

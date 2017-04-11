@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.db.models import Count
 import intake.services.submissions as SubmissionsService
 from intake.tests import mock, factories
+from intake.tests.mock_org_answers import get_answers_for_orgs
 from intake.tests.base_testcases import (
     ExternalNotificationsPatchTestCase, ALL_APPLICATION_FIXTURES)
 from formation.forms import county_form_selector
@@ -146,15 +147,21 @@ class TestFindDuplicates(TestCase):
             middle_name="H",
             last_name="Parabole")
         a = factories.FormSubmissionWithOrgsFactory.create(
-            answers=mock.fake.alameda_pubdef_answers(**a_name),
+            answers=get_answers_for_orgs(
+                [org],
+                **a_name),
             organizations=[org],
         )
         b = factories.FormSubmissionWithOrgsFactory.create(
-            answers=mock.fake.alameda_pubdef_answers(**b_name),
+            answers=get_answers_for_orgs(
+                [org],
+                **b_name),
             organizations=[org],
         )
         c = factories.FormSubmissionWithOrgsFactory.create(
-            answers=mock.fake.alameda_pubdef_answers(**b_name),
+            answers=get_answers_for_orgs(
+                [org],
+                **b_name),
             organizations=[org],
         )
         dups = SubmissionsService.find_duplicates(
@@ -174,11 +181,15 @@ class TestFindDuplicates(TestCase):
             middle_name="H",
             last_name="Conic Intersection")
         factories.FormSubmissionWithOrgsFactory.create(
-            answers=mock.fake.alameda_pubdef_answers(**a_name),
+            answers=get_answers_for_orgs(
+                [org],
+                **a_name),
             organizations=[org],
         )
         factories.FormSubmissionWithOrgsFactory.create(
-            answers=mock.fake.alameda_pubdef_answers(**b_name),
+            answers=get_answers_for_orgs(
+                [org],
+                **b_name),
             organizations=[org],
         )
         dups = SubmissionsService.find_duplicates(
@@ -233,7 +244,8 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
     def test_notifications_slacks_and_logs_for_full_contact_preferences(self):
         applicant = Applicant()
         applicant.save()
-        answers = mock.fake.alameda_pubdef_answers(
+        answers = get_answers_for_orgs(
+            self.get_orgs(),
             contact_preferences=[
                 'prefers_email',
                 'prefers_sms',
@@ -261,7 +273,8 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
     def test_notifications_slacks_and_logs_for_no_contact_preferences(self):
         applicant = Applicant()
         applicant.save()
-        answers = mock.fake.alameda_pubdef_answers(
+        answers = get_answers_for_orgs(
+            self.get_orgs(),
             contact_preferences=[],
             email='test@gmail.com',
             phone_number='5554442222',
@@ -284,7 +297,8 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
     def test_notifications_slacks_and_logs_for_one_contact_preference(self):
         applicant = Applicant()
         applicant.save()
-        answers = mock.fake.alameda_pubdef_answers(
+        answers = get_answers_for_orgs(
+            self.get_orgs(),
             contact_preferences=['prefers_email'],
             email='test@gmail.com',
             phone_number='5554442222',

@@ -79,8 +79,7 @@ class TestStats(IntakeDataTestCase):
         )
         non_live_org.save()
         FormSubmissionWithOrgsFactory.create(
-            organizations=[non_live_org],
-            answers={})
+            organizations=[non_live_org], answers={})
         response = self.client.get(reverse('intake-stats'))
         self.assertEqual(response.status_code, 200)
 
