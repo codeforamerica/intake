@@ -26,7 +26,7 @@ class TestCommand(ExternalNotificationsPatchTestCase):
     @patch('intake.notifications.slack_simple.send')
     def test_expected_weekday_run(self, slack, is_the_weekend):
         is_the_weekend.return_value = False
-        org = Organization.objects.get(slug='a_pubdef')
+        org = Organization.objects.get(slug='ebclc')
         dates = sorted([mock.get_old_date() for i in range(464, 469)])
         for date, pk in zip(dates, range(464, 469)):
             applicant = Applicant()

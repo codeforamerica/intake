@@ -67,6 +67,7 @@ class Organization(models.Model):
     can_transfer_applications = models.BooleanField(default=False)
     transfer_partners = models.ManyToManyField(
         'self', symmetrical=True, blank=True)
+    needs_applicant_followups = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['name']

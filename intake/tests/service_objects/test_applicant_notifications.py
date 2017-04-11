@@ -22,9 +22,8 @@ class TestApplicantNotification(ExternalNotificationsPatchTestCase):
     def many_orgs(self):
         orgs = list(Organization.objects.filter(
                     slug__in=[
-                        Organizations.ALAMEDA_PUBDEF,
                         Organizations.SF_PUBDEF,
-                        Organizations.MONTEREY_PUBDEF]))
+                        Organizations.EBCLC]))
         orgs = utils.sort_orgs_in_default_order(orgs)
         return orgs
 

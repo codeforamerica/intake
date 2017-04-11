@@ -1,11 +1,7 @@
-from unittest.mock import patch
 from intake.tests.base_testcases import (
     IntakeDataTestCase, ALL_APPLICATION_FIXTURES)
-from django.db.models import Count
 from user_accounts import models, exceptions
-from intake import models as intake_models
 from user_accounts.tests import mock
-from intake import constants
 
 
 class TestOrganization(IntakeDataTestCase):
