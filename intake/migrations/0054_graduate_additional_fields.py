@@ -23,19 +23,19 @@ def copy_answers_to_fields(apps, schema_editor):
     subs = FormSubmission.objects.using(db_alias).all()
     keys = QUERYABLE_ANSWER_FIELDS
     money_keys = DOLLAR_FIELDS
+    subs_with_errors = []
     for sub in subs:
         for key in keys:
             existing = sub.answers.get(key, None)
             if existing:
                 setattr(sub, key, existing)
-        subs_with_errors = []
         try:
             money_form = MoneyValidatorForm(sub.answers, validate=True)
             for money_key in money_keys:
                 existing = money_form.cleaned_data.get(money_key, None)
                 if existing:
                     setattr(sub, money_key, existing)
-        except ValueError as err:
+        except Exception as err:
             subs_with_errors.append(sub)
 
         address = sub.answers.get('address')
@@ -50,7 +50,7 @@ def copy_answers_to_fields(apps, schema_editor):
     # reporting out here (issue #705)
     print("Unable to parse dollar amounts for these subs:")
     for sub in subs_with_errors:
-        print("/t{} {}".format(sub.id, sub.answers))
+        print("\t {} {}".format(sub.id, sub.answers))
 
 
 def empty_new_answers_fields(apps, schema_editor):
