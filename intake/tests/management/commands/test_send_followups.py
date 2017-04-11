@@ -1,6 +1,7 @@
 from unittest.mock import patch, Mock
 from intake.tests.base_testcases import ExternalNotificationsPatchTestCase
 from intake.tests import mock, factories
+from intake.tests.mock_org_answers import get_answers_for_orgs
 from intake.management.commands import send_followups
 from intake.models import Applicant
 from user_accounts.models import Organization
@@ -35,7 +36,8 @@ class TestCommand(ExternalNotificationsPatchTestCase):
                 applicant=applicant,
                 date_received=date,
                 organizations=[org],
-                answers=mock.fake.alameda_pubdef_answers(
+                answers=get_answers_for_orgs(
+                    [org],
                     contact_preferences=[
                         'prefers_email',
                         'prefers_sms'],
