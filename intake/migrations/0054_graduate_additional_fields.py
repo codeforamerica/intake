@@ -29,7 +29,7 @@ def copy_answers_to_fields(apps, schema_editor):
             existing = sub.answers.get(key, None)
             if existing:
                 setattr(sub, key, existing)
-        # Known issue: some values cannot be handled correctly by the 
+        # Known issue: some values cannot be handled correctly by the
         # WholeDollarField, reporting out below (issue #705)
         try:
             money_form = MoneyValidatorForm(sub.answers, validate=True)
@@ -119,11 +119,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='formsubmission',
-            name='financial_screening_note',
-            field=models.TextField(default=''),
-        ),
-        migrations.AddField(
-            model_name='formsubmission',
             name='finished_half_probation',
             field=models.TextField(default=''),
         ),
@@ -140,7 +135,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='formsubmission',
             name='household_size',
-            field=models.TextField(default=''),
+            field=models.IntegerField(null=True),
         ),
         migrations.AddField(
             model_name='formsubmission',
@@ -240,11 +235,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='formsubmission',
             name='us_citizen',
-            field=models.TextField(default=''),
-        ),
-        migrations.AddField(
-            model_name='formsubmission',
-            name='website',
             field=models.TextField(default=''),
         ),
         migrations.AddField(

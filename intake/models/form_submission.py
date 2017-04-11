@@ -36,7 +36,6 @@ QUERYABLE_ANSWER_FIELDS = [
     'pfn_number',
     'contact_preferences',
     'preferred_pronouns',
-    'website',
     'street',
     'city',
     'state',
@@ -55,7 +54,6 @@ QUERYABLE_ANSWER_FIELDS = [
     'when_where_outside_sf',
     'has_suspended_license',
     'owes_court_fees',
-    'financial_screening_note',
     'currently_employed',
     'income_source',
     'on_public_benefits',
@@ -65,6 +63,7 @@ QUERYABLE_ANSWER_FIELDS = [
     'is_married',
     'has_children'
 ]
+
 
 DOLLAR_FIELDS = [
     'monthly_income',
@@ -135,7 +134,6 @@ class FormSubmission(models.Model):
     pfn_number = models.TextField(default="")
     contact_preferences = models.TextField(default="")
     preferred_pronouns = models.TextField(default="")
-    website = models.TextField(default="")
     street = models.TextField(default="")
     city = models.TextField(default="")
     state = models.TextField(default="")
@@ -154,14 +152,13 @@ class FormSubmission(models.Model):
     when_where_outside_sf = models.TextField(default="")
     has_suspended_license = models.TextField(default="")
     owes_court_fees = models.TextField(default="")
-    financial_screening_note = models.TextField(default="")
     currently_employed = models.TextField(default="")
     monthly_income = models.IntegerField(null=True)
     income_source = models.TextField(default="")
     on_public_benefits = models.TextField(default="")
     owns_home = models.TextField(default="")
     monthly_expenses = models.IntegerField(null=True)
-    household_size = models.TextField(default="")
+    household_size = models.IntegerField(null=True)
     dependents = models.TextField(default="")
     is_married = models.TextField(default="")
     has_children = models.TextField(default="")
