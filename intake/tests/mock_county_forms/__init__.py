@@ -263,9 +263,11 @@ class Provider(BaseProvider):
             currently_employed=self.maybe(0.3),
             preferred_pronouns=self.some_choice(GENDER_PRONOUN_CHOICES),
             income_source='a job',
+            pfn_number=self.generator.numerify("######"),
             monthly_expenses=2000,
             is_married=self.maybe(0.4),
             has_children=self.maybe(0.6),
+            reduced_probation=self.maybe(0.1),
             reduced_probation=self.maybe(0.1),
             reasons_for_applying=['background_check', 'lost_job', 'housing'],
         )
