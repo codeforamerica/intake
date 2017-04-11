@@ -3,7 +3,7 @@
   "model": "intake.visitor",
   "pk": 11,
   "fields": {
-    "first_visit": "2017-04-10T19:39:30.583Z",
+    "first_visit": "2017-04-11T20:36:25.949Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -13,7 +13,7 @@
   "model": "intake.visitor",
   "pk": 12,
   "fields": {
-    "first_visit": "2017-04-10T19:39:30.609Z",
+    "first_visit": "2017-04-11T20:36:25.965Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -40,47 +40,47 @@
     "applicant": 11,
     "duplicate_set": null,
     "answers": {
-      "contact_preferences": [
-        "prefers_sms"
-      ],
-      "first_name": "Omar",
-      "middle_name": "Nicole",
-      "last_name": "Harris",
-      "phone_number": "8314207603",
-      "alternate_phone_number": "8314207603",
-      "email": "bgolder+testing@codeforamerica.org",
-      "address": {
-        "street": "95442 Ryan Springs Suite 383",
-        "city": "Annamouth",
-        "state": "WY",
-        "zip": "52363"
-      },
-      "dob": {
-        "month": "9",
-        "day": "14",
-        "year": "1971"
-      },
-      "case_number": "C7691-720",
-      "being_charged": "no",
-      "serving_sentence": "no",
       "on_probation_parole": "yes",
       "where_probation_or_parole": "Yolo County",
-      "when_probation_or_parole": "2018",
       "rap_outside_sf": "no",
-      "when_where_outside_sf": "",
+      "contact_preferences": [
+        "prefers_email"
+      ],
+      "when_probation_or_parole": "2018",
+      "dob": {
+        "year": "1982",
+        "day": "23",
+        "month": "3"
+      },
+      "consent_to_represent": "yes",
       "owes_court_fees": "yes",
       "how_did_you_hear": "from work",
+      "middle_name": "Sarah",
+      "email": "bgolder+testing@codeforamerica.org",
+      "first_name": "Aaron",
+      "being_charged": "no",
+      "phone_number": "8314207603",
       "additional_information": "I want help",
+      "last_name": "Underwood",
+      "when_where_outside_sf": "",
+      "alternate_phone_number": "8314207603",
+      "serving_sentence": "no",
       "understands_limits": "yes",
-      "consent_to_represent": "yes"
+      "case_number": "C5813-214",
+      "address": {
+        "zip": "52264",
+        "street": "210 Stacy Parkway Apt. 772",
+        "city": "Wallsborough",
+        "state": "WA"
+      }
     },
-    "first_name": "Omar",
-    "last_name": "Harris",
+    "first_name": "Aaron",
+    "last_name": "Underwood",
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
-    "case_number": "C7691-720",
+    "case_number": "C5813-214",
     "phone_number": "8314207603",
     "alternate_phone_number": "8314207603",
     "email": "bgolder+testing@codeforamerica.org",
@@ -89,13 +89,12 @@
     "additional_information": "I want help",
     "aliases": "",
     "pfn_number": "",
-    "contact_preferences": "['prefers_sms']",
+    "contact_preferences": "['prefers_email']",
     "preferred_pronouns": "",
-    "website": "",
-    "street": "95442 Ryan Springs Suite 383",
-    "city": "Annamouth",
-    "state": "WY",
-    "zip": "52363",
+    "street": "210 Stacy Parkway Apt. 772",
+    "city": "Wallsborough",
+    "state": "WA",
+    "zip": "52264",
     "us_citizen": "",
     "is_veteran": "",
     "is_student": "",
@@ -110,20 +109,19 @@
     "when_where_outside_sf": "",
     "has_suspended_license": "",
     "owes_court_fees": "yes",
-    "financial_screening_note": "",
     "currently_employed": "",
     "monthly_income": null,
     "income_source": "",
     "on_public_benefits": "",
     "owns_home": "",
     "monthly_expenses": null,
-    "household_size": "",
+    "household_size": null,
     "dependents": "",
     "is_married": "",
     "has_children": "",
-    "old_uuid": "35813bc413e8437caf57b6e4616845f8",
-    "anonymous_name": "Chartreuse Tree",
-    "date_received": "2017-04-03T08:02:04-07:00"
+    "old_uuid": "8510af81dc4d445b8660124e7726a020",
+    "anonymous_name": "Inspiring Oak",
+    "date_received": "2017-03-30T12:06:35-07:00"
   }
 },
 {
@@ -133,48 +131,47 @@
     "applicant": 12,
     "duplicate_set": null,
     "answers": {
-      "contact_preferences": [
-        "prefers_email",
-        "prefers_sms"
-      ],
-      "first_name": "Tyler",
-      "middle_name": "Jill",
-      "last_name": "Porter",
-      "phone_number": "8314207603",
-      "alternate_phone_number": "8314207603",
-      "email": "bgolder+testing@codeforamerica.org",
-      "address": {
-        "street": "83648 Michael Course Suite 254",
-        "city": "West Christy",
-        "state": "TX",
-        "zip": "50715"
-      },
-      "dob": {
-        "month": "9",
-        "day": "9",
-        "year": "1976"
-      },
-      "case_number": "C3453-930",
-      "being_charged": "no",
-      "serving_sentence": "no",
       "on_probation_parole": "yes",
       "where_probation_or_parole": "Yolo County",
-      "when_probation_or_parole": "2018",
       "rap_outside_sf": "no",
-      "when_where_outside_sf": "",
+      "contact_preferences": [
+        "prefers_sms"
+      ],
+      "when_probation_or_parole": "2018",
+      "dob": {
+        "year": "1984",
+        "day": "14",
+        "month": "10"
+      },
+      "consent_to_represent": "yes",
       "owes_court_fees": "no",
       "how_did_you_hear": "from work",
+      "middle_name": "David",
+      "email": "bgolder+testing@codeforamerica.org",
+      "first_name": "Michelle",
+      "being_charged": "no",
+      "phone_number": "8314207603",
       "additional_information": "I want help",
+      "last_name": "Jones",
+      "when_where_outside_sf": "",
+      "alternate_phone_number": "8314207603",
+      "serving_sentence": "yes",
       "understands_limits": "yes",
-      "consent_to_represent": "yes"
+      "case_number": "C6278-840",
+      "address": {
+        "zip": "82334",
+        "street": "7420 Brian Estate",
+        "city": "North Williamstad",
+        "state": "GA"
+      }
     },
-    "first_name": "Tyler",
-    "last_name": "Porter",
+    "first_name": "Michelle",
+    "last_name": "Jones",
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
-    "case_number": "C3453-930",
+    "case_number": "C6278-840",
     "phone_number": "8314207603",
     "alternate_phone_number": "8314207603",
     "email": "bgolder+testing@codeforamerica.org",
@@ -183,18 +180,17 @@
     "additional_information": "I want help",
     "aliases": "",
     "pfn_number": "",
-    "contact_preferences": "['prefers_email', 'prefers_sms']",
+    "contact_preferences": "['prefers_sms']",
     "preferred_pronouns": "",
-    "website": "",
-    "street": "83648 Michael Course Suite 254",
-    "city": "West Christy",
-    "state": "TX",
-    "zip": "50715",
+    "street": "7420 Brian Estate",
+    "city": "North Williamstad",
+    "state": "GA",
+    "zip": "82334",
     "us_citizen": "",
     "is_veteran": "",
     "is_student": "",
     "being_charged": "no",
-    "serving_sentence": "no",
+    "serving_sentence": "yes",
     "on_probation_parole": "yes",
     "where_probation_or_parole": "Yolo County",
     "when_probation_or_parole": "2018",
@@ -204,28 +200,27 @@
     "when_where_outside_sf": "",
     "has_suspended_license": "",
     "owes_court_fees": "no",
-    "financial_screening_note": "",
     "currently_employed": "",
     "monthly_income": null,
     "income_source": "",
     "on_public_benefits": "",
     "owns_home": "",
     "monthly_expenses": null,
-    "household_size": "",
+    "household_size": null,
     "dependents": "",
     "is_married": "",
     "has_children": "",
-    "old_uuid": "fea1c2bb417d44419d7bb45eadd3df22",
-    "anonymous_name": "Platinum Tiger",
-    "date_received": "2017-04-02T08:47:07-07:00"
+    "old_uuid": "09c419f8765a49f79e51ecfcb31030bf",
+    "anonymous_name": "Determined Turtle",
+    "date_received": "2017-04-03T00:00:38-07:00"
   }
 },
 {
   "model": "intake.application",
   "pk": 11,
   "fields": {
-    "created": "2017-04-03T15:02:04Z",
-    "updated": "2017-04-10T19:39:30.600Z",
+    "created": "2017-03-30T19:06:35Z",
+    "updated": "2017-04-11T20:36:25.960Z",
     "organization": [
       "San Diego County Public Defender"
     ],
@@ -237,8 +232,8 @@
   "model": "intake.application",
   "pk": 12,
   "fields": {
-    "created": "2017-04-02T15:47:07Z",
-    "updated": "2017-04-10T19:39:30.623Z",
+    "created": "2017-04-03T07:00:38Z",
+    "updated": "2017-04-11T20:36:25.976Z",
     "organization": [
       "San Diego County Public Defender"
     ],
@@ -250,8 +245,8 @@
   "model": "intake.statusupdate",
   "pk": 11,
   "fields": {
-    "created": "2017-04-10T19:39:31.639Z",
-    "updated": "2017-04-10T19:39:31.655Z",
+    "created": "2017-04-11T20:36:26.534Z",
+    "updated": "2017-04-11T20:36:26.542Z",
     "status_type": 4,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
@@ -268,8 +263,8 @@
   "model": "intake.statusupdate",
   "pk": 12,
   "fields": {
-    "created": "2017-04-10T19:39:31.667Z",
-    "updated": "2017-04-10T19:39:31.681Z",
+    "created": "2017-04-11T20:36:26.549Z",
+    "updated": "2017-04-11T20:36:26.556Z",
     "status_type": 5,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
@@ -292,7 +287,7 @@
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-10T19:39:31.642Z"
+    "created": "2017-04-11T20:36:26.535Z"
   }
 },
 {
@@ -305,7 +300,7 @@
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-10T19:39:31.670Z"
+    "created": "2017-04-11T20:36:26.550Z"
   }
 }
 ]

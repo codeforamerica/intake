@@ -230,6 +230,7 @@ class CaseNumber(CharField):
 
 class PFNNumber(CharField):
     context_key = "pfn_number"
+    display_label = "PFN Number"
     label = _("What is your personal file number (PFN), if you know it?")
     help_text = _(
         "This is a number that is given to people who have been arrested in "

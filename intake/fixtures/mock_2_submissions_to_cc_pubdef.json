@@ -3,7 +3,7 @@
   "model": "intake.visitor",
   "pk": 3,
   "fields": {
-    "first_visit": "2017-04-10T19:39:30.376Z",
+    "first_visit": "2017-04-11T20:36:25.807Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -13,7 +13,7 @@
   "model": "intake.visitor",
   "pk": 4,
   "fields": {
-    "first_visit": "2017-04-10T19:39:30.396Z",
+    "first_visit": "2017-04-11T20:36:25.826Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -40,130 +40,39 @@
     "applicant": 3,
     "duplicate_set": null,
     "answers": {
-      "contact_preferences": [
-        "prefers_sms",
-        "prefers_email"
-      ],
-      "first_name": "Brian",
-      "middle_name": "",
-      "last_name": "Young",
-      "phone_number": "8314207603",
-      "email": "bgolder+testing@codeforamerica.org",
-      "address": {
-        "street": "14734 Jackie Fork",
-        "city": "South Maurice",
-        "state": "FL",
-        "zip": "77527"
-      },
-      "dob": {
-        "month": "1",
-        "day": "13",
-        "year": "1978"
-      },
-      "us_citizen": "yes",
-      "serving_sentence": "no",
       "on_probation_parole": "no",
-      "currently_employed": "no",
-      "monthly_income": 6155,
-      "income_source": "a job",
-      "monthly_expenses": 2385,
-      "how_did_you_hear": "",
-      "additional_information": "",
-      "understands_limits": "yes",
-      "consent_to_represent": "yes"
-    },
-    "first_name": "Brian",
-    "last_name": "Young",
-    "dob": null,
-    "ssn": "",
-    "last_four": "",
-    "drivers_license_or_id": "",
-    "case_number": "",
-    "phone_number": "8314207603",
-    "alternate_phone_number": "",
-    "email": "bgolder+testing@codeforamerica.org",
-    "reasons_for_applying": "",
-    "how_did_you_hear": "",
-    "additional_information": "",
-    "aliases": "",
-    "pfn_number": "",
-    "contact_preferences": "['prefers_sms', 'prefers_email']",
-    "preferred_pronouns": "",
-    "website": "",
-    "street": "14734 Jackie Fork",
-    "city": "South Maurice",
-    "state": "FL",
-    "zip": "77527",
-    "us_citizen": "yes",
-    "is_veteran": "",
-    "is_student": "",
-    "being_charged": "",
-    "serving_sentence": "no",
-    "on_probation_parole": "no",
-    "where_probation_or_parole": "",
-    "when_probation_or_parole": "",
-    "finished_half_probation": "",
-    "reduced_probation": "",
-    "rap_outside_sf": "",
-    "when_where_outside_sf": "",
-    "has_suspended_license": "",
-    "owes_court_fees": "",
-    "financial_screening_note": "",
-    "currently_employed": "no",
-    "monthly_income": 6155,
-    "income_source": "a job",
-    "on_public_benefits": "",
-    "owns_home": "",
-    "monthly_expenses": 2385,
-    "household_size": "",
-    "dependents": "",
-    "is_married": "",
-    "has_children": "",
-    "old_uuid": "7d7813937f0e49e9bc7ebc44ea8a97a2",
-    "anonymous_name": "Platinum Sea",
-    "date_received": "2017-04-03T08:07:06-07:00"
-  }
-},
-{
-  "model": "intake.formsubmission",
-  "pk": 4,
-  "fields": {
-    "applicant": 4,
-    "duplicate_set": null,
-    "answers": {
+      "monthly_expenses": 2815,
+      "serving_sentence": "no",
       "contact_preferences": [
         "prefers_sms"
       ],
-      "first_name": "Susan",
-      "middle_name": "",
-      "last_name": "Charles",
-      "phone_number": "8314207603",
-      "email": "bgolder+testing@codeforamerica.org",
-      "address": {
-        "street": "172 Payne Mountain Apt. 895",
-        "city": "East Philipview",
-        "state": "MO",
-        "zip": "66348"
-      },
-      "dob": {
-        "month": "9",
-        "day": "20",
-        "year": "1971"
-      },
-      "us_citizen": "yes",
-      "serving_sentence": "no",
-      "on_probation_parole": "no",
-      "currently_employed": "yes",
-      "monthly_income": 2413,
       "income_source": "a job",
-      "monthly_expenses": 791,
+      "monthly_income": 6579,
+      "currently_employed": "no",
+      "dob": {
+        "year": "1984",
+        "day": "30",
+        "month": "11"
+      },
+      "consent_to_represent": "yes",
       "how_did_you_hear": "",
+      "middle_name": "",
+      "email": "bgolder+testing@codeforamerica.org",
+      "first_name": "Patrick",
+      "phone_number": "8314207603",
       "additional_information": "",
+      "last_name": "Rhodes",
+      "us_citizen": "yes",
       "understands_limits": "yes",
-      "consent_to_represent": "yes"
+      "address": {
+        "zip": "65762",
+        "street": "786 Nicholas Vista",
+        "city": "Leeland",
+        "state": "RI"
+      }
     },
-    "first_name": "Susan",
-    "last_name": "Charles",
+    "first_name": "Patrick",
+    "last_name": "Rhodes",
     "dob": null,
     "ssn": "",
     "last_four": "",
@@ -179,11 +88,10 @@
     "pfn_number": "",
     "contact_preferences": "['prefers_sms']",
     "preferred_pronouns": "",
-    "website": "",
-    "street": "172 Payne Mountain Apt. 895",
-    "city": "East Philipview",
-    "state": "MO",
-    "zip": "66348",
+    "street": "786 Nicholas Vista",
+    "city": "Leeland",
+    "state": "RI",
+    "zip": "65762",
     "us_citizen": "yes",
     "is_veteran": "",
     "is_student": "",
@@ -198,28 +106,116 @@
     "when_where_outside_sf": "",
     "has_suspended_license": "",
     "owes_court_fees": "",
-    "financial_screening_note": "",
-    "currently_employed": "yes",
-    "monthly_income": 2413,
+    "currently_employed": "no",
+    "monthly_income": 6579,
     "income_source": "a job",
     "on_public_benefits": "",
     "owns_home": "",
-    "monthly_expenses": 791,
-    "household_size": "",
+    "monthly_expenses": 2815,
+    "household_size": null,
     "dependents": "",
     "is_married": "",
     "has_children": "",
-    "old_uuid": "578a2a657a7c4ff7866dfdbd5c36c979",
-    "anonymous_name": "Wise Wizard",
-    "date_received": "2017-03-31T08:58:21-07:00"
+    "old_uuid": "95ec998f54fc456ebf77e32d0a04f516",
+    "anonymous_name": "Red Armadillo",
+    "date_received": "2017-03-28T21:05:44-07:00"
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 4,
+  "fields": {
+    "applicant": 4,
+    "duplicate_set": null,
+    "answers": {
+      "on_probation_parole": "no",
+      "monthly_expenses": 2033,
+      "serving_sentence": "no",
+      "contact_preferences": [
+        "prefers_email",
+        "prefers_sms"
+      ],
+      "income_source": "a job",
+      "monthly_income": 177,
+      "currently_employed": "no",
+      "dob": {
+        "year": "1999",
+        "day": "8",
+        "month": "2"
+      },
+      "consent_to_represent": "yes",
+      "how_did_you_hear": "",
+      "middle_name": "",
+      "email": "bgolder+testing@codeforamerica.org",
+      "first_name": "Amy",
+      "phone_number": "8314207603",
+      "additional_information": "",
+      "last_name": "Mann",
+      "us_citizen": "yes",
+      "understands_limits": "yes",
+      "address": {
+        "zip": "80590",
+        "street": "12246 Tran Divide",
+        "city": "Kellychester",
+        "state": "MP"
+      }
+    },
+    "first_name": "Amy",
+    "last_name": "Mann",
+    "dob": null,
+    "ssn": "",
+    "last_four": "",
+    "drivers_license_or_id": "",
+    "case_number": "",
+    "phone_number": "8314207603",
+    "alternate_phone_number": "",
+    "email": "bgolder+testing@codeforamerica.org",
+    "reasons_for_applying": "",
+    "how_did_you_hear": "",
+    "additional_information": "",
+    "aliases": "",
+    "pfn_number": "",
+    "contact_preferences": "['prefers_email', 'prefers_sms']",
+    "preferred_pronouns": "",
+    "street": "12246 Tran Divide",
+    "city": "Kellychester",
+    "state": "MP",
+    "zip": "80590",
+    "us_citizen": "yes",
+    "is_veteran": "",
+    "is_student": "",
+    "being_charged": "",
+    "serving_sentence": "no",
+    "on_probation_parole": "no",
+    "where_probation_or_parole": "",
+    "when_probation_or_parole": "",
+    "finished_half_probation": "",
+    "reduced_probation": "",
+    "rap_outside_sf": "",
+    "when_where_outside_sf": "",
+    "has_suspended_license": "",
+    "owes_court_fees": "",
+    "currently_employed": "no",
+    "monthly_income": 177,
+    "income_source": "a job",
+    "on_public_benefits": "",
+    "owns_home": "",
+    "monthly_expenses": 2033,
+    "household_size": null,
+    "dependents": "",
+    "is_married": "",
+    "has_children": "",
+    "old_uuid": "540186d577594b3cab68d80746d53482",
+    "anonymous_name": "Shining Starship",
+    "date_received": "2017-04-09T08:52:23-07:00"
   }
 },
 {
   "model": "intake.application",
   "pk": 3,
   "fields": {
-    "created": "2017-04-03T15:07:06Z",
-    "updated": "2017-04-10T19:39:30.390Z",
+    "created": "2017-03-29T04:05:44Z",
+    "updated": "2017-04-11T20:36:25.820Z",
     "organization": [
       "Contra Costa Public Defender"
     ],
@@ -231,8 +227,8 @@
   "model": "intake.application",
   "pk": 4,
   "fields": {
-    "created": "2017-03-31T15:58:21Z",
-    "updated": "2017-04-10T19:39:30.419Z",
+    "created": "2017-04-09T15:52:23Z",
+    "updated": "2017-04-11T20:36:25.837Z",
     "organization": [
       "Contra Costa Public Defender"
     ],
@@ -244,8 +240,8 @@
   "model": "intake.statusupdate",
   "pk": 3,
   "fields": {
-    "created": "2017-04-10T19:39:31.270Z",
-    "updated": "2017-04-10T19:39:31.280Z",
+    "created": "2017-04-11T20:36:26.412Z",
+    "updated": "2017-04-11T20:36:26.420Z",
     "status_type": 3,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
@@ -262,8 +258,8 @@
   "model": "intake.statusupdate",
   "pk": 4,
   "fields": {
-    "created": "2017-04-10T19:39:31.293Z",
-    "updated": "2017-04-10T19:39:31.307Z",
+    "created": "2017-04-11T20:36:26.427Z",
+    "updated": "2017-04-11T20:36:26.435Z",
     "status_type": 4,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
@@ -286,7 +282,7 @@
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-10T19:39:31.272Z"
+    "created": "2017-04-11T20:36:26.414Z"
   }
 },
 {
@@ -299,7 +295,7 @@
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-10T19:39:31.295Z"
+    "created": "2017-04-11T20:36:26.429Z"
   }
 }
 ]

@@ -3,7 +3,7 @@
   "model": "intake.visitor",
   "pk": 5,
   "fields": {
-    "first_visit": "2017-04-10T19:39:30.426Z",
+    "first_visit": "2017-04-11T20:36:25.842Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -13,7 +13,7 @@
   "model": "intake.visitor",
   "pk": 6,
   "fields": {
-    "first_visit": "2017-04-10T19:39:30.454Z",
+    "first_visit": "2017-04-11T20:36:25.861Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -40,48 +40,49 @@
     "applicant": 5,
     "duplicate_set": null,
     "answers": {
+      "on_probation_parole": "yes",
+      "being_charged": "no",
       "contact_preferences": [
+        "prefers_email",
         "prefers_sms"
       ],
-      "first_name": "Brianna",
-      "middle_name": "Justin",
-      "last_name": "Solomon",
-      "preferred_pronouns": "they",
-      "phone_number": "8314207603",
-      "alternate_phone_number": "8314207603",
-      "email": "bgolder+testing@codeforamerica.org",
-      "address": {
-        "street": "658 Arnold Flat Suite 223",
-        "city": "New Richard",
-        "state": "OH",
-        "zip": "92909"
-      },
-      "dob": {
-        "month": "2",
-        "day": "13",
-        "year": "1987"
-      },
       "us_citizen": "yes",
-      "being_charged": "no",
-      "serving_sentence": "no",
-      "on_probation_parole": "yes",
-      "finished_half_probation": "not_applicable",
-      "reduced_probation": "not_applicable",
       "rap_outside_sf": "no",
-      "when_where_outside_sf": "",
-      "has_suspended_license": "no",
-      "owes_court_fees": "no",
       "monthly_income": 3001,
-      "on_public_benefits": "yes",
-      "owns_home": "yes",
-      "household_size": 1,
+      "reduced_probation": "not_applicable",
+      "consent_to_represent": "yes",
+      "dob": {
+        "year": "1984",
+        "day": "16",
+        "month": "2"
+      },
+      "preferred_pronouns": "she",
+      "has_suspended_license": "yes",
+      "owes_court_fees": "no",
       "how_did_you_hear": "from work",
+      "middle_name": "William",
+      "email": "bgolder+testing@codeforamerica.org",
+      "first_name": "Brianna",
+      "finished_half_probation": "not_applicable",
+      "phone_number": "8314207603",
       "additional_information": "I want help",
+      "last_name": "Henry",
+      "when_where_outside_sf": "",
+      "owns_home": "yes",
+      "alternate_phone_number": "8314207603",
+      "serving_sentence": "no",
       "understands_limits": "yes",
-      "consent_to_represent": "yes"
+      "household_size": 1,
+      "address": {
+        "zip": "97327",
+        "street": "7621 Ortega Forest",
+        "city": "Sarahside",
+        "state": "CT"
+      },
+      "on_public_benefits": "yes"
     },
     "first_name": "Brianna",
-    "last_name": "Solomon",
+    "last_name": "Henry",
     "dob": null,
     "ssn": "",
     "last_four": "",
@@ -95,13 +96,12 @@
     "additional_information": "I want help",
     "aliases": "",
     "pfn_number": "",
-    "contact_preferences": "['prefers_sms']",
-    "preferred_pronouns": "they",
-    "website": "",
-    "street": "658 Arnold Flat Suite 223",
-    "city": "New Richard",
-    "state": "OH",
-    "zip": "92909",
+    "contact_preferences": "['prefers_email', 'prefers_sms']",
+    "preferred_pronouns": "she",
+    "street": "7621 Ortega Forest",
+    "city": "Sarahside",
+    "state": "CT",
+    "zip": "97327",
     "us_citizen": "yes",
     "is_veteran": "",
     "is_student": "",
@@ -114,9 +114,8 @@
     "reduced_probation": "not_applicable",
     "rap_outside_sf": "no",
     "when_where_outside_sf": "",
-    "has_suspended_license": "no",
+    "has_suspended_license": "yes",
     "owes_court_fees": "no",
-    "financial_screening_note": "",
     "currently_employed": "",
     "monthly_income": 3001,
     "income_source": "",
@@ -127,9 +126,9 @@
     "dependents": "",
     "is_married": "",
     "has_children": "",
-    "old_uuid": "586c9e72c6724b77b1b44942e8ad7e0a",
-    "anonymous_name": "Ethereal Star",
-    "date_received": "2017-04-07T19:43:18-07:00"
+    "old_uuid": "37a3a420f9e64440b36351882ad84e26",
+    "anonymous_name": "Amazing Llama",
+    "date_received": "2017-04-01T17:55:16-07:00"
   }
 },
 {
@@ -139,48 +138,49 @@
     "applicant": 6,
     "duplicate_set": null,
     "answers": {
+      "on_probation_parole": "yes",
+      "being_charged": "no",
       "contact_preferences": [
+        "prefers_sms",
         "prefers_email"
       ],
-      "first_name": "Christopher",
-      "middle_name": "Amy",
-      "last_name": "Kelly",
-      "preferred_pronouns": "none",
-      "phone_number": "8314207603",
-      "alternate_phone_number": "8314207603",
-      "email": "bgolder+testing@codeforamerica.org",
-      "address": {
-        "street": "7890 Johnson Fork Apt. 124",
-        "city": "Riverabury",
-        "state": "AZ",
-        "zip": "72272"
-      },
-      "dob": {
-        "month": "3",
-        "day": "11",
-        "year": "1982"
-      },
       "us_citizen": "yes",
-      "being_charged": "no",
-      "serving_sentence": "no",
-      "on_probation_parole": "yes",
-      "finished_half_probation": "not_applicable",
-      "reduced_probation": "not_applicable",
       "rap_outside_sf": "no",
-      "when_where_outside_sf": "",
-      "has_suspended_license": "no",
-      "owes_court_fees": "yes",
       "monthly_income": 3001,
-      "on_public_benefits": "no",
-      "owns_home": "yes",
-      "household_size": 0,
+      "reduced_probation": "not_applicable",
+      "consent_to_represent": "yes",
+      "dob": {
+        "year": "1998",
+        "day": "6",
+        "month": "5"
+      },
+      "preferred_pronouns": "they",
+      "has_suspended_license": "yes",
+      "owes_court_fees": "no",
       "how_did_you_hear": "from work",
+      "middle_name": "William",
+      "email": "bgolder+testing@codeforamerica.org",
+      "first_name": "Jessica",
+      "finished_half_probation": "not_applicable",
+      "phone_number": "8314207603",
       "additional_information": "I want help",
+      "last_name": "Price",
+      "when_where_outside_sf": "",
+      "owns_home": "yes",
+      "alternate_phone_number": "8314207603",
+      "serving_sentence": "no",
       "understands_limits": "yes",
-      "consent_to_represent": "yes"
+      "household_size": 4,
+      "address": {
+        "zip": "01953",
+        "street": "77811 Sergio Isle Apt. 806",
+        "city": "New Kristine",
+        "state": "MH"
+      },
+      "on_public_benefits": "yes"
     },
-    "first_name": "Christopher",
-    "last_name": "Kelly",
+    "first_name": "Jessica",
+    "last_name": "Price",
     "dob": null,
     "ssn": "",
     "last_four": "",
@@ -194,13 +194,12 @@
     "additional_information": "I want help",
     "aliases": "",
     "pfn_number": "",
-    "contact_preferences": "['prefers_email']",
-    "preferred_pronouns": "none",
-    "website": "",
-    "street": "7890 Johnson Fork Apt. 124",
-    "city": "Riverabury",
-    "state": "AZ",
-    "zip": "72272",
+    "contact_preferences": "['prefers_sms', 'prefers_email']",
+    "preferred_pronouns": "they",
+    "street": "77811 Sergio Isle Apt. 806",
+    "city": "New Kristine",
+    "state": "MH",
+    "zip": "01953",
     "us_citizen": "yes",
     "is_veteran": "",
     "is_student": "",
@@ -213,30 +212,29 @@
     "reduced_probation": "not_applicable",
     "rap_outside_sf": "no",
     "when_where_outside_sf": "",
-    "has_suspended_license": "no",
-    "owes_court_fees": "yes",
-    "financial_screening_note": "",
+    "has_suspended_license": "yes",
+    "owes_court_fees": "no",
     "currently_employed": "",
     "monthly_income": 3001,
     "income_source": "",
-    "on_public_benefits": "no",
+    "on_public_benefits": "yes",
     "owns_home": "yes",
     "monthly_expenses": null,
-    "household_size": 0,
+    "household_size": 4,
     "dependents": "",
     "is_married": "",
     "has_children": "",
-    "old_uuid": "e22a4ccb76fb4c9f9c0ecb2843e2e432",
-    "anonymous_name": "Pink Butterfly",
-    "date_received": "2017-04-03T10:24:21-07:00"
+    "old_uuid": "1dbb65d95f4243d19e571988905f1e68",
+    "anonymous_name": "Indigo Moon",
+    "date_received": "2017-03-30T12:30:13-07:00"
   }
 },
 {
   "model": "intake.application",
   "pk": 5,
   "fields": {
-    "created": "2017-04-08T02:43:18Z",
-    "updated": "2017-04-10T19:39:30.443Z",
+    "created": "2017-04-02T00:55:16Z",
+    "updated": "2017-04-11T20:36:25.855Z",
     "organization": [
       "East Bay Community Law Center"
     ],
@@ -248,8 +246,8 @@
   "model": "intake.application",
   "pk": 6,
   "fields": {
-    "created": "2017-04-03T17:24:21Z",
-    "updated": "2017-04-10T19:39:30.474Z",
+    "created": "2017-03-30T19:30:13Z",
+    "updated": "2017-04-11T20:36:25.872Z",
     "organization": [
       "East Bay Community Law Center"
     ],
@@ -261,8 +259,8 @@
   "model": "intake.statusupdate",
   "pk": 5,
   "fields": {
-    "created": "2017-04-10T19:39:31.316Z",
-    "updated": "2017-04-10T19:39:31.329Z",
+    "created": "2017-04-11T20:36:26.442Z",
+    "updated": "2017-04-11T20:36:26.450Z",
     "status_type": 5,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
@@ -279,8 +277,8 @@
   "model": "intake.statusupdate",
   "pk": 6,
   "fields": {
-    "created": "2017-04-10T19:39:31.346Z",
-    "updated": "2017-04-10T19:39:31.364Z",
+    "created": "2017-04-11T20:36:26.458Z",
+    "updated": "2017-04-11T20:36:26.465Z",
     "status_type": 6,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
@@ -303,7 +301,7 @@
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-10T19:39:31.319Z"
+    "created": "2017-04-11T20:36:26.444Z"
   }
 },
 {
@@ -316,7 +314,7 @@
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-10T19:39:31.354Z"
+    "created": "2017-04-11T20:36:26.460Z"
   }
 }
 ]

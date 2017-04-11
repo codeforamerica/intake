@@ -3,7 +3,7 @@
   "model": "intake.visitor",
   "pk": 21,
   "fields": {
-    "first_visit": "2017-04-10T19:39:30.838Z",
+    "first_visit": "2017-04-11T20:36:26.117Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -13,7 +13,7 @@
   "model": "intake.visitor",
   "pk": 22,
   "fields": {
-    "first_visit": "2017-04-10T19:39:30.862Z",
+    "first_visit": "2017-04-11T20:36:26.133Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -40,45 +40,45 @@
     "applicant": 21,
     "duplicate_set": null,
     "answers": {
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Yolo County",
+      "serving_sentence": "no",
       "contact_preferences": [
         "prefers_email",
         "prefers_sms"
       ],
-      "first_name": "James",
-      "middle_name": "Monique",
-      "last_name": "Stephenson",
-      "phone_number": "8314207603",
-      "alternate_phone_number": "8314207603",
-      "email": "bgolder+testing@codeforamerica.org",
-      "address": {
-        "street": "963 Dylan Junction Apt. 078",
-        "city": "New Whitney",
-        "state": "LA",
-        "zip": "06878"
-      },
-      "dob": {
-        "month": "9",
-        "day": "11",
-        "year": "1997"
-      },
-      "us_citizen": "yes",
-      "being_charged": "no",
-      "serving_sentence": "no",
-      "on_probation_parole": "yes",
-      "where_probation_or_parole": "Yolo County",
       "when_probation_or_parole": "2018",
-      "monthly_income": 5550,
+      "monthly_income": 3353,
+      "dob": {
+        "year": "1959",
+        "day": "11",
+        "month": "11"
+      },
+      "consent_to_represent": "yes",
+      "how_did_you_hear": "from work",
       "reasons_for_applying": [
         "lost_job",
         "homeless"
       ],
-      "how_did_you_hear": "from work",
+      "email": "bgolder+testing@codeforamerica.org",
+      "first_name": "Elaine",
+      "being_charged": "no",
+      "phone_number": "8314207603",
       "additional_information": "I want help",
+      "last_name": "Donaldson",
+      "alternate_phone_number": "8314207603",
+      "us_citizen": "yes",
       "understands_limits": "yes",
-      "consent_to_represent": "yes"
+      "middle_name": "Lisa",
+      "address": {
+        "zip": "03891",
+        "street": "7487 Nathan Ramp Suite 294",
+        "city": "West Elizabeth",
+        "state": "DE"
+      }
     },
-    "first_name": "James",
-    "last_name": "Stephenson",
+    "first_name": "Elaine",
+    "last_name": "Donaldson",
     "dob": null,
     "ssn": "",
     "last_four": "",
@@ -94,11 +94,10 @@
     "pfn_number": "",
     "contact_preferences": "['prefers_email', 'prefers_sms']",
     "preferred_pronouns": "",
-    "website": "",
-    "street": "963 Dylan Junction Apt. 078",
-    "city": "New Whitney",
-    "state": "LA",
-    "zip": "06878",
+    "street": "7487 Nathan Ramp Suite 294",
+    "city": "West Elizabeth",
+    "state": "DE",
+    "zip": "03891",
     "us_citizen": "yes",
     "is_veteran": "",
     "is_student": "",
@@ -113,20 +112,19 @@
     "when_where_outside_sf": "",
     "has_suspended_license": "",
     "owes_court_fees": "",
-    "financial_screening_note": "",
     "currently_employed": "",
-    "monthly_income": 5550,
+    "monthly_income": 3353,
     "income_source": "",
     "on_public_benefits": "",
     "owns_home": "",
     "monthly_expenses": null,
-    "household_size": "",
+    "household_size": null,
     "dependents": "",
     "is_married": "",
     "has_children": "",
-    "old_uuid": "61ec28c1a9d3418d8ec2af26bbc9e576",
-    "anonymous_name": "Caring Thunder",
-    "date_received": "2017-03-31T14:46:57-07:00"
+    "old_uuid": "34a6fa4e89ce46d18e454b64f593d651",
+    "anonymous_name": "Perceptive Llama",
+    "date_received": "2017-03-29T10:32:13-07:00"
   }
 },
 {
@@ -136,44 +134,45 @@
     "applicant": 22,
     "duplicate_set": null,
     "answers": {
-      "contact_preferences": [
-        "prefers_sms"
-      ],
-      "first_name": "Bonnie",
-      "middle_name": "Clifford",
-      "last_name": "Velez",
-      "phone_number": "8314207603",
-      "alternate_phone_number": "8314207603",
-      "email": "bgolder+testing@codeforamerica.org",
-      "address": {
-        "street": "480 Bryant Throughway Suite 342",
-        "city": "Carlosstad",
-        "state": "SD",
-        "zip": "66556"
-      },
-      "dob": {
-        "month": "1",
-        "day": "5",
-        "year": "1983"
-      },
-      "us_citizen": "yes",
-      "being_charged": "no",
-      "serving_sentence": "no",
       "on_probation_parole": "yes",
       "where_probation_or_parole": "Yolo County",
+      "serving_sentence": "no",
+      "contact_preferences": [
+        "prefers_email",
+        "prefers_sms"
+      ],
       "when_probation_or_parole": "2018",
-      "monthly_income": 2166,
+      "monthly_income": 5803,
+      "dob": {
+        "year": "1999",
+        "day": "23",
+        "month": "10"
+      },
+      "consent_to_represent": "yes",
+      "how_did_you_hear": "from work",
       "reasons_for_applying": [
         "lost_job",
         "homeless"
       ],
-      "how_did_you_hear": "from work",
+      "email": "bgolder+testing@codeforamerica.org",
+      "first_name": "Mary",
+      "being_charged": "no",
+      "phone_number": "8314207603",
       "additional_information": "I want help",
+      "last_name": "Taylor",
+      "alternate_phone_number": "8314207603",
+      "us_citizen": "yes",
       "understands_limits": "yes",
-      "consent_to_represent": "yes"
+      "middle_name": "Timothy",
+      "address": {
+        "zip": "38252",
+        "street": "53421 James Mission Suite 777",
+        "city": "North Stevenhaven",
+        "state": "LA"
+      }
     },
-    "first_name": "Bonnie",
-    "last_name": "Velez",
+    "first_name": "Mary",
+    "last_name": "Taylor",
     "dob": null,
     "ssn": "",
     "last_four": "",
@@ -187,13 +186,12 @@
     "additional_information": "I want help",
     "aliases": "",
     "pfn_number": "",
-    "contact_preferences": "['prefers_sms']",
+    "contact_preferences": "['prefers_email', 'prefers_sms']",
     "preferred_pronouns": "",
-    "website": "",
-    "street": "480 Bryant Throughway Suite 342",
-    "city": "Carlosstad",
-    "state": "SD",
-    "zip": "66556",
+    "street": "53421 James Mission Suite 777",
+    "city": "North Stevenhaven",
+    "state": "LA",
+    "zip": "38252",
     "us_citizen": "yes",
     "is_veteran": "",
     "is_student": "",
@@ -208,28 +206,27 @@
     "when_where_outside_sf": "",
     "has_suspended_license": "",
     "owes_court_fees": "",
-    "financial_screening_note": "",
     "currently_employed": "",
-    "monthly_income": 2166,
+    "monthly_income": 5803,
     "income_source": "",
     "on_public_benefits": "",
     "owns_home": "",
     "monthly_expenses": null,
-    "household_size": "",
+    "household_size": null,
     "dependents": "",
     "is_married": "",
     "has_children": "",
-    "old_uuid": "15ce082c29c54c8bba8ee1789c4b796f",
-    "anonymous_name": "Cerulean Starship",
-    "date_received": "2017-04-07T03:00:22-07:00"
+    "old_uuid": "1cef57837ab6408e9739fb93e2586b38",
+    "anonymous_name": "Inspiring Castle",
+    "date_received": "2017-04-03T17:28:33-07:00"
   }
 },
 {
   "model": "intake.application",
   "pk": 21,
   "fields": {
-    "created": "2017-03-31T21:46:57Z",
-    "updated": "2017-04-10T19:39:30.855Z",
+    "created": "2017-03-29T17:32:13Z",
+    "updated": "2017-04-11T20:36:26.127Z",
     "organization": [
       "Santa Cruz County Public Defender"
     ],
@@ -241,8 +238,8 @@
   "model": "intake.application",
   "pk": 22,
   "fields": {
-    "created": "2017-04-07T10:00:22Z",
-    "updated": "2017-04-10T19:39:30.880Z",
+    "created": "2017-04-04T00:28:33Z",
+    "updated": "2017-04-11T20:36:26.143Z",
     "organization": [
       "Santa Cruz County Public Defender"
     ],
@@ -254,8 +251,8 @@
   "model": "intake.statusupdate",
   "pk": 21,
   "fields": {
-    "created": "2017-04-10T19:39:31.938Z",
-    "updated": "2017-04-10T19:39:31.958Z",
+    "created": "2017-04-11T20:36:26.681Z",
+    "updated": "2017-04-11T20:36:26.689Z",
     "status_type": 7,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
@@ -272,8 +269,8 @@
   "model": "intake.statusupdate",
   "pk": 22,
   "fields": {
-    "created": "2017-04-10T19:39:31.967Z",
-    "updated": "2017-04-10T19:39:31.978Z",
+    "created": "2017-04-11T20:36:26.696Z",
+    "updated": "2017-04-11T20:36:26.703Z",
     "status_type": 1,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
@@ -296,7 +293,7 @@
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-10T19:39:31.941Z"
+    "created": "2017-04-11T20:36:26.683Z"
   }
 },
 {
@@ -309,7 +306,7 @@
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-10T19:39:31.969Z"
+    "created": "2017-04-11T20:36:26.697Z"
   }
 }
 ]
