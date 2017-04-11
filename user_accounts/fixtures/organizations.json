@@ -449,5 +449,59 @@
     "notify_on_weekends": false,
     "needs_applicant_followups": false
   }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Ventura County Public Defender",
+    "slug": "ventura_pubdef",
+    "county": [
+      "ventura"
+    ],
+    "website": "https://www.pubdef.countyofventura.org",
+    "blurb": "The Ventura County Public Defender's Office helps people with arrests or convictions in Ventura County.",
+    "is_receiving_agency": true,
+    "is_accepting_applications": true,
+    "is_checking_notifications": true,
+    "is_live": false,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": false,
+    "show_pdf_only": false,
+    "short_confirmation_message": "The Ventura County Public Defender will contact you in 2-4 weeks with next steps.",
+    "long_confirmation_message": "The Ventura County Public Defender will contact you in 2-4 weeks with your next steps.",
+    "short_followup_message": "Has the Ventura Public Defender contacted you and told you your next steps?",
+    "long_followup_message": "Has the Ventura Public Defender contacted you and told you your next steps?",
+    "address": "Ventura County Public Defender's Office\n800 S. Victoria Avenue\nRoom # 207\nVentura, CA 93009",
+    "phone_number": "(805) 654-2201",
+    "email": "",
+    "notify_on_weekends": false
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Santa Barbara County Public Defender",
+    "slug": "santa_barbara_pubdef",
+    "county": [
+      "santa_barbara"
+    ],
+    "website": "https://www.countyofsb.org/defender/",
+    "blurb": "The Santa Barbara County Public Defender's Office helps people with arrests or convictions in Santa Barbara.",
+    "is_receiving_agency": true,
+    "is_accepting_applications": true,
+    "is_checking_notifications": true,
+    "is_live": false,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": false,
+    "show_pdf_only": false,
+    "short_confirmation_message": "The Santa Barbara Public Defender will contact you in 2-4 weeks with next steps.",
+    "long_confirmation_message": "The Santa Barbara Public Defender will contact you in 2-4 weeks with your next steps.",
+    "short_followup_message": "Has the Santa Barbara Public Defender contacted you and told you your next steps?",
+    "long_followup_message": "Has the Santa Barbara Public Defender contacted you and told you your next steps?",
+    "address": "Santa Barbara Office\nCourt House\n1100 Anacapa Street\nSanta Barbara, CA 93101",
+    "phone_number": "(805) 568-3470",
+    "email": "webmaster@publicdefendersb.org",
+    "notify_on_weekends": false
+  }
 }
 ]
