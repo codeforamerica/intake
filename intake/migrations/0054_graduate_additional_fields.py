@@ -28,19 +28,29 @@ def copy_answers_to_fields(apps, schema_editor):
             existing = sub.answers.get(key, None)
             if existing:
                 setattr(sub, key, existing)
+        subs_with_errors = []
+        try:
+            money_form = MoneyValidatorForm(sub.answers, validate=True)
+            for money_key in money_keys:
+                existing = money_form.cleaned_data.get(money_key, None)
+                if existing:
+                    setattr(sub, money_key, existing)
+        except ValueError as err:
+            subs_with_errors.append(sub)
 
-        money_form = MoneyValidatorForm(sub.answers, validate=True)
-        for money_key in money_keys:
-            existing = money_form.cleaned_data.get(money_key, None)
-            if existing:
-                setattr(sub, money_key, existing)
-
-        address = sub.answers['address']
-        for component in address:
-            existing = address.get(component, None)
-            if existing:
-                setattr(sub, component, existing)
+        address = sub.answers.get('address')
+        if address:
+            for component in address:
+                existing = address.get(component, None)
+                if existing:
+                    setattr(sub, component, existing)
         sub.save()
+
+    # Known issue: some values cannot be parsed by the MoneyValidatorForm,
+    # reporting out here (issue #705)
+    print("Unable to parse dollar amounts for these subs:")
+    for sub in subs_with_errors:
+        print("/t{} {}".format(sub.id, sub.answers))
 
 
 def empty_new_answers_fields(apps, schema_editor):
@@ -48,9 +58,12 @@ def empty_new_answers_fields(apps, schema_editor):
     FormSubmission = apps.get_model('intake', 'FormSubmission')
     subs = FormSubmission.objects.using(db_alias).all()
     keys = QUERYABLE_ANSWER_FIELDS
+    money_keys = DOLLAR_FIELDS
     for sub in subs:
         for key in keys:
             setattr(sub, key, "")
+        for money_key in money_keys:
+            setattr(sub, money_key, None)
         sub.save()
 
 """
