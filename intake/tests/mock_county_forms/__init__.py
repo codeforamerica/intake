@@ -268,7 +268,6 @@ class Provider(BaseProvider):
             is_married=self.maybe(0.4),
             has_children=self.maybe(0.6),
             reduced_probation=self.maybe(0.1),
-            reduced_probation=self.maybe(0.1),
             reasons_for_applying=['background_check', 'lost_job', 'housing'],
         )
         data.update(overrides)
