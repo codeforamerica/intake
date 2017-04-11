@@ -102,7 +102,8 @@ def gen_uuid():
 class FormSubmission(models.Model):
 
     text_search_fields = FORMSUBMISSION_TEXT_SEARCH_FIELDS
-    answer_fields = (FORMSUBMISSION_TEXT_SEARCH_FIELDS +
+    answer_fields = (
+        FORMSUBMISSION_TEXT_SEARCH_FIELDS +
         QUERYABLE_ANSWER_FIELDS + DOLLAR_FIELDS)
 
     organizations = models.ManyToManyField(
