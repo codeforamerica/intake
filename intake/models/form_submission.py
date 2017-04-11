@@ -57,15 +57,18 @@ QUERYABLE_ANSWER_FIELDS = [
     'owes_court_fees',
     'financial_screening_note',
     'currently_employed',
-    'monthly_income',
     'income_source',
     'on_public_benefits',
     'owns_home',
-    'monthly_expenses',
     'household_size',
     'dependents',
     'is_married',
     'has_children'
+]
+
+DOLLAR_FIELDS = [
+    'monthly_income',
+    'monthly_expenses'
 ]
 
 

@@ -3,7 +3,18 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
-from intake.models.form_submission import QUERYABLE_ANSWER_FIELDS
+from intake.models.form_submission import (
+    QUERYABLE_ANSWER_FIELDS, DOLLAR_FIELDS)
+
+from formation.fields import MonthlyIncome, MonthlyExpenses
+from formation.form_base import Form
+
+
+class MoneyValidatorForm(Form):
+    fields = [
+        MonthlyIncome,
+        MonthlyExpenses
+    ]
 
 
 def copy_answers_to_fields(apps, schema_editor):
@@ -11,11 +22,19 @@ def copy_answers_to_fields(apps, schema_editor):
     FormSubmission = apps.get_model('intake', 'FormSubmission')
     subs = FormSubmission.objects.using(db_alias).all()
     keys = QUERYABLE_ANSWER_FIELDS
+    money_keys = DOLLAR_FIELDS
     for sub in subs:
         for key in keys:
             existing = sub.answers.get(key, None)
             if existing:
                 setattr(sub, key, existing)
+
+        money_form = MoneyValidatorForm(sub.answers, validate=True)
+        for money_key in money_keys:
+            existing = money_form.cleaned_data.get(money_key, None)
+            if existing:
+                setattr(sub, money_key, existing)
+
         address = sub.answers['address']
         for component in address:
             existing = address.get(component, None)
