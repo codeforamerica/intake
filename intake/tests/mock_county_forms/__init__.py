@@ -23,7 +23,7 @@ class Provider(BaseProvider):
         return self.random_element({
             "yes": chance_of_yes,
             "i_dont_know": chance_of_yes,
-            "no": 1.0 - (2*chance_of_yes)})
+            "no": 1.0 - (2 * chance_of_yes)})
 
     def generate_contact_preferences(self):
         preferences = random.randint(1, 2)
@@ -263,6 +263,7 @@ class Provider(BaseProvider):
             currently_employed=self.maybe(0.3),
             preferred_pronouns=self.some_choice(GENDER_PRONOUN_CHOICES),
             income_source='a job',
+            pfn_number=self.generator.numerify("######"),
             monthly_expenses=2000,
             is_married=self.maybe(0.4),
             has_children=self.maybe(0.6),

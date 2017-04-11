@@ -11,8 +11,8 @@ APPLICATION_TRANSFER_MESSAGE = _(
 
 
 def render_application_transfer_message(
-            form_submission, author, to_organization, from_organization,
-            **kwargs):
+        form_submission, author, to_organization, from_organization,
+        **kwargs):
     intro = TRANSFER_MESSAGE_INTRO.format(
         author_name=author.profile.name,
         from_organization=from_organization.name)

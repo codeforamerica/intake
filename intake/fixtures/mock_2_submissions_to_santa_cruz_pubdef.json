@@ -1,9 +1,9 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 91,
+  "pk": 21,
   "fields": {
-    "first_visit": "2017-04-04T23:26:38.437Z",
+    "first_visit": "2017-04-11T23:32:33.907Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +11,9 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 92,
+  "pk": 22,
   "fields": {
-    "first_visit": "2017-04-04T23:26:38.451Z",
+    "first_visit": "2017-04-11T23:32:33.932Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,122 +21,64 @@
 },
 {
   "model": "intake.applicant",
-  "pk": 88,
+  "pk": 21,
   "fields": {
-    "visitor": 91
+    "visitor": 21
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 89,
+  "pk": 22,
   "fields": {
-    "visitor": 92
+    "visitor": 22
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 88,
+  "pk": 21,
   "fields": {
-    "applicant": 88,
+    "applicant": 21,
     "duplicate_set": null,
     "answers": {
-      "first_name": "Angelica",
-      "when_probation_or_parole": "2018",
-      "understands_limits": "yes",
-      "last_name": "Randall",
-      "reasons_for_applying": [
-        "lost_job",
-        "homeless"
-      ],
-      "where_probation_or_parole": "Yolo County",
       "contact_preferences": [
         "prefers_email",
         "prefers_sms"
       ],
+      "first_name": "Gordon",
+      "middle_name": "Melissa",
+      "last_name": "Brown",
       "phone_number": "8314207603",
-      "middle_name": "John",
-      "serving_sentence": "no",
       "alternate_phone_number": "8314207603",
-      "monthly_income": 2983,
-      "on_probation_parole": "yes",
-      "dob": {
-        "month": "1",
-        "day": "13",
-        "year": "1997"
-      },
-      "us_citizen": "yes",
-      "how_did_you_hear": "from work",
-      "additional_information": "I want help",
       "email": "bgolder+testing@codeforamerica.org",
       "address": {
-        "state": "LA",
-        "city": "West Rodney",
-        "zip": "18424",
-        "street": "03651 Joseph Dale"
+        "street": "56078 Robert Parks Suite 619",
+        "city": "Vazquezville",
+        "state": "IA",
+        "zip": "18632"
       },
+      "dob": {
+        "month": "8",
+        "day": "14",
+        "year": "1979"
+      },
+      "us_citizen": "yes",
       "being_charged": "no",
-      "consent_to_represent": "yes"
-    },
-    "first_name": "Angelica",
-    "last_name": "Randall",
-    "dob": null,
-    "ssn": "",
-    "last_four": "",
-    "drivers_license_or_id": "",
-    "case_number": "",
-    "phone_number": "8314207603",
-    "alternate_phone_number": "8314207603",
-    "email": "bgolder+testing@codeforamerica.org",
-    "old_uuid": "84dc7be9bfbd40a880ea9d7221bf49ac",
-    "anonymous_name": "Galactic Echidna",
-    "date_received": "2017-03-23T20:41:12-07:00"
-  }
-},
-{
-  "model": "intake.formsubmission",
-  "pk": 89,
-  "fields": {
-    "applicant": 89,
-    "duplicate_set": null,
-    "answers": {
-      "first_name": "James",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Yolo County",
       "when_probation_or_parole": "2018",
-      "understands_limits": "yes",
-      "last_name": "Zuniga",
+      "monthly_income": 1443,
       "reasons_for_applying": [
         "lost_job",
         "homeless"
       ],
-      "where_probation_or_parole": "Yolo County",
-      "contact_preferences": [
-        "prefers_sms"
-      ],
-      "phone_number": "8314207603",
-      "middle_name": "Matthew",
-      "serving_sentence": "no",
-      "alternate_phone_number": "8314207603",
-      "monthly_income": 4162,
-      "on_probation_parole": "yes",
-      "dob": {
-        "month": "9",
-        "day": "24",
-        "year": "1993"
-      },
-      "us_citizen": "yes",
       "how_did_you_hear": "from work",
       "additional_information": "I want help",
-      "email": "bgolder+testing@codeforamerica.org",
-      "address": {
-        "state": "AZ",
-        "city": "Sabrinaview",
-        "zip": "28597",
-        "street": "568 Brooke Divide Suite 558"
-      },
-      "being_charged": "no",
+      "understands_limits": "yes",
       "consent_to_represent": "yes"
     },
-    "first_name": "James",
-    "last_name": "Zuniga",
+    "first_name": "Gordon",
+    "last_name": "Brown",
     "dob": null,
     "ssn": "",
     "last_four": "",
@@ -145,67 +87,195 @@
     "phone_number": "8314207603",
     "alternate_phone_number": "8314207603",
     "email": "bgolder+testing@codeforamerica.org",
-    "old_uuid": "6367e0695e154ea9b336a404fce06050",
-    "anonymous_name": "Orange Eagle",
-    "date_received": "2017-04-02T20:58:00-07:00"
+    "reasons_for_applying": "['lost_job', 'homeless']",
+    "how_did_you_hear": "from work",
+    "additional_information": "I want help",
+    "aliases": "",
+    "pfn_number": "",
+    "contact_preferences": "['prefers_email', 'prefers_sms']",
+    "preferred_pronouns": "",
+    "street": "56078 Robert Parks Suite 619",
+    "city": "Vazquezville",
+    "state": "IA",
+    "zip": "18632",
+    "us_citizen": "yes",
+    "is_veteran": "",
+    "is_student": "",
+    "being_charged": "no",
+    "serving_sentence": "no",
+    "on_probation_parole": "yes",
+    "where_probation_or_parole": "Yolo County",
+    "when_probation_or_parole": "2018",
+    "finished_half_probation": "",
+    "reduced_probation": "",
+    "rap_outside_sf": "",
+    "when_where_outside_sf": "",
+    "has_suspended_license": "",
+    "owes_court_fees": "",
+    "currently_employed": "",
+    "monthly_income": 1443,
+    "income_source": "",
+    "on_public_benefits": "",
+    "owns_home": "",
+    "monthly_expenses": null,
+    "household_size": null,
+    "dependents": "",
+    "is_married": "",
+    "has_children": "",
+    "old_uuid": "6f9f91be7caf4eeab829adec556bd6b9",
+    "anonymous_name": "Shining Beetle",
+    "date_received": "2017-04-09T00:38:43-07:00"
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 22,
+  "fields": {
+    "applicant": 22,
+    "duplicate_set": null,
+    "answers": {
+      "contact_preferences": [
+        "prefers_email"
+      ],
+      "first_name": "Frances",
+      "middle_name": "Kevin",
+      "last_name": "Brady",
+      "phone_number": "8314207603",
+      "alternate_phone_number": "8314207603",
+      "email": "bgolder+testing@codeforamerica.org",
+      "address": {
+        "street": "7822 Matthews Pines Apt. 351",
+        "city": "Lewisbury",
+        "state": "PA",
+        "zip": "70471"
+      },
+      "dob": {
+        "month": "10",
+        "day": "11",
+        "year": "1990"
+      },
+      "us_citizen": "yes",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Yolo County",
+      "when_probation_or_parole": "2018",
+      "monthly_income": 3685,
+      "reasons_for_applying": [
+        "lost_job",
+        "homeless"
+      ],
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "Frances",
+    "last_name": "Brady",
+    "dob": null,
+    "ssn": "",
+    "last_four": "",
+    "drivers_license_or_id": "",
+    "case_number": "",
+    "phone_number": "8314207603",
+    "alternate_phone_number": "8314207603",
+    "email": "bgolder+testing@codeforamerica.org",
+    "reasons_for_applying": "['lost_job', 'homeless']",
+    "how_did_you_hear": "from work",
+    "additional_information": "I want help",
+    "aliases": "",
+    "pfn_number": "",
+    "contact_preferences": "['prefers_email']",
+    "preferred_pronouns": "",
+    "street": "7822 Matthews Pines Apt. 351",
+    "city": "Lewisbury",
+    "state": "PA",
+    "zip": "70471",
+    "us_citizen": "yes",
+    "is_veteran": "",
+    "is_student": "",
+    "being_charged": "no",
+    "serving_sentence": "no",
+    "on_probation_parole": "yes",
+    "where_probation_or_parole": "Yolo County",
+    "when_probation_or_parole": "2018",
+    "finished_half_probation": "",
+    "reduced_probation": "",
+    "rap_outside_sf": "",
+    "when_where_outside_sf": "",
+    "has_suspended_license": "",
+    "owes_court_fees": "",
+    "currently_employed": "",
+    "monthly_income": 3685,
+    "income_source": "",
+    "on_public_benefits": "",
+    "owns_home": "",
+    "monthly_expenses": null,
+    "household_size": null,
+    "dependents": "",
+    "is_married": "",
+    "has_children": "",
+    "old_uuid": "40da64d93c3e41b9bab69a3527cba90a",
+    "anonymous_name": "Golden Redwood",
+    "date_received": "2017-03-30T03:25:44-07:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 118,
+  "pk": 21,
   "fields": {
-    "created": "2017-03-24T03:41:12Z",
-    "updated": "2017-04-04T23:26:38.446Z",
+    "created": "2017-04-09T07:38:43Z",
+    "updated": "2017-04-11T23:32:33.922Z",
     "organization": [
       "Santa Cruz County Public Defender"
     ],
-    "form_submission": 88,
+    "form_submission": 21,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 119,
+  "pk": 22,
   "fields": {
-    "created": "2017-04-03T03:58:00Z",
-    "updated": "2017-04-04T23:26:38.460Z",
+    "created": "2017-03-30T10:25:44Z",
+    "updated": "2017-04-11T23:32:33.950Z",
     "organization": [
       "Santa Cruz County Public Defender"
     ],
-    "form_submission": 89,
+    "form_submission": 22,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 123,
+  "pk": 21,
   "fields": {
-    "created": "2017-04-04T23:26:39.130Z",
-    "updated": "2017-04-04T23:26:39.138Z",
-    "status_type": 6,
-    "additional_information": "We may be able to get a fee waived for you",
-    "author": [
-      "santa_cruz_pubdef_user"
-    ],
-    "application": 118,
-    "other_next_step": "Come to our Walk-In Clinic",
-    "next_steps": [
-      1
-    ]
-  }
-},
-{
-  "model": "intake.statusupdate",
-  "pk": 124,
-  "fields": {
-    "created": "2017-04-04T23:26:39.146Z",
-    "updated": "2017-04-04T23:26:39.154Z",
+    "created": "2017-04-11T23:32:35.591Z",
+    "updated": "2017-04-11T23:32:35.694Z",
     "status_type": 7,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "santa_cruz_pubdef_user"
     ],
-    "application": 119,
+    "application": 21,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 22,
+  "fields": {
+    "created": "2017-04-11T23:32:35.724Z",
+    "updated": "2017-04-11T23:32:35.742Z",
+    "status_type": 1,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "santa_cruz_pubdef_user"
+    ],
+    "application": 22,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -214,28 +284,28 @@
 },
 {
   "model": "intake.statusnotification",
-  "pk": 123,
+  "pk": 21,
   "fields": {
-    "status_update": 123,
+    "status_update": 21,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-04T23:26:39.132Z"
+    "created": "2017-04-11T23:32:35.595Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 124,
+  "pk": 22,
   "fields": {
-    "status_update": 124,
+    "status_update": 22,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-04T23:26:39.148Z"
+    "created": "2017-04-11T23:32:35.733Z"
   }
 }
 ]

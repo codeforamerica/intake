@@ -1,9 +1,9 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 87,
+  "pk": 17,
   "fields": {
-    "first_visit": "2017-04-04T23:26:38.374Z",
+    "first_visit": "2017-04-11T23:32:33.792Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +11,9 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 88,
+  "pk": 18,
   "fields": {
-    "first_visit": "2017-04-04T23:26:38.389Z",
+    "first_visit": "2017-04-11T23:32:33.819Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,217 +21,287 @@
 },
 {
   "model": "intake.applicant",
-  "pk": 84,
+  "pk": 17,
   "fields": {
-    "visitor": 87
+    "visitor": 17
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 85,
+  "pk": 18,
   "fields": {
-    "visitor": 88
+    "visitor": 18
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 84,
+  "pk": 17,
   "fields": {
-    "applicant": 84,
+    "applicant": 17,
     "duplicate_set": null,
     "answers": {
-      "owes_court_fees": "yes",
-      "understands_limits": "yes",
-      "where_probation_or_parole": "Yolo County",
-      "currently_employed": "yes",
       "contact_preferences": [
-        "prefers_email"
+        "prefers_sms"
       ],
-      "on_public_benefits": "yes",
+      "first_name": "Gary",
+      "middle_name": "Amber",
+      "last_name": "Hanson",
+      "phone_number": "8314207603",
+      "alternate_phone_number": "8314207603",
+      "email": "bgolder+testing@codeforamerica.org",
+      "address": {
+        "street": "8022 Nelson Isle",
+        "city": "Brookstown",
+        "state": "IA",
+        "zip": "29963"
+      },
+      "dob": {
+        "month": "11",
+        "day": "15",
+        "year": "1976"
+      },
+      "last_four": "2581",
+      "case_number": "C5470-835",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Yolo County",
+      "when_probation_or_parole": "2018",
+      "rap_outside_sf": "i_dont_know",
       "when_where_outside_sf": "",
-      "how_did_you_hear": "from work",
-      "last_four": "5668",
+      "owes_court_fees": "yes",
+      "currently_employed": "yes",
+      "monthly_income": 2000,
+      "income_source": "a job",
+      "on_public_benefits": "no",
+      "monthly_expenses": 2000,
+      "owns_home": "no",
+      "household_size": 3,
+      "has_children": "yes",
+      "is_married": "yes",
       "reasons_for_applying": [
         "background_check",
         "lost_job",
         "housing"
       ],
-      "consent_to_represent": "yes",
-      "case_number": "C2401-613",
-      "household_size": 4,
-      "is_married": "yes",
-      "first_name": "Stacy",
-      "rap_outside_sf": "no",
-      "when_probation_or_parole": "2018",
-      "income_source": "a job",
-      "last_name": "Fitzgerald",
-      "being_charged": "no",
-      "owns_home": "no",
-      "phone_number": "8314207603",
-      "middle_name": "Antonio",
-      "serving_sentence": "no",
-      "has_children": "yes",
-      "alternate_phone_number": "8314207603",
-      "monthly_income": 2000,
-      "on_probation_parole": "yes",
-      "dob": {
-        "month": "5",
-        "day": "1",
-        "year": "1962"
-      },
-      "monthly_expenses": 2000,
+      "how_did_you_hear": "from work",
       "additional_information": "I want help",
-      "email": "bgolder+testing@codeforamerica.org",
-      "address": {
-        "state": "MT",
-        "city": "New Daltonchester",
-        "zip": "48152",
-        "street": "031 Janet Valleys Apt. 579"
-      }
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
     },
-    "first_name": "Stacy",
-    "last_name": "Fitzgerald",
+    "first_name": "Gary",
+    "last_name": "Hanson",
     "dob": null,
     "ssn": "",
-    "last_four": "5668",
+    "last_four": "2581",
     "drivers_license_or_id": "",
-    "case_number": "C2401-613",
+    "case_number": "C5470-835",
     "phone_number": "8314207603",
     "alternate_phone_number": "8314207603",
     "email": "bgolder+testing@codeforamerica.org",
-    "old_uuid": "35a31aa8920a4536892438e8e8832b31",
-    "anonymous_name": "Perceptive Cyborg",
-    "date_received": "2017-03-23T13:16:31-07:00"
+    "reasons_for_applying": "['background_check', 'lost_job', 'housing']",
+    "how_did_you_hear": "from work",
+    "additional_information": "I want help",
+    "aliases": "",
+    "pfn_number": "",
+    "contact_preferences": "['prefers_sms']",
+    "preferred_pronouns": "",
+    "street": "8022 Nelson Isle",
+    "city": "Brookstown",
+    "state": "IA",
+    "zip": "29963",
+    "us_citizen": "",
+    "is_veteran": "",
+    "is_student": "",
+    "being_charged": "no",
+    "serving_sentence": "no",
+    "on_probation_parole": "yes",
+    "where_probation_or_parole": "Yolo County",
+    "when_probation_or_parole": "2018",
+    "finished_half_probation": "",
+    "reduced_probation": "",
+    "rap_outside_sf": "i_dont_know",
+    "when_where_outside_sf": "",
+    "has_suspended_license": "",
+    "owes_court_fees": "yes",
+    "currently_employed": "yes",
+    "monthly_income": 2000,
+    "income_source": "a job",
+    "on_public_benefits": "no",
+    "owns_home": "no",
+    "monthly_expenses": 2000,
+    "household_size": 3,
+    "dependents": "",
+    "is_married": "yes",
+    "has_children": "yes",
+    "old_uuid": "b9740500cfe94557b4d4eaa972d940e4",
+    "anonymous_name": "Wise Hamster",
+    "date_received": "2017-04-05T00:01:09-07:00"
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 85,
+  "pk": 18,
   "fields": {
-    "applicant": 85,
+    "applicant": 18,
     "duplicate_set": null,
     "answers": {
-      "owes_court_fees": "yes",
-      "understands_limits": "yes",
-      "where_probation_or_parole": "Yolo County",
-      "currently_employed": "yes",
       "contact_preferences": [
         "prefers_email",
         "prefers_sms"
       ],
-      "on_public_benefits": "yes",
+      "first_name": "David",
+      "middle_name": "Julian",
+      "last_name": "Schwartz",
+      "phone_number": "8314207603",
+      "alternate_phone_number": "8314207603",
+      "email": "bgolder+testing@codeforamerica.org",
+      "address": {
+        "street": "49566 Daniel Station Apt. 911",
+        "city": "North James",
+        "state": "NM",
+        "zip": "70105"
+      },
+      "dob": {
+        "month": "5",
+        "day": "27",
+        "year": "1980"
+      },
+      "last_four": "9465",
+      "case_number": "C1017-602",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Yolo County",
+      "when_probation_or_parole": "2018",
+      "rap_outside_sf": "no",
       "when_where_outside_sf": "",
-      "how_did_you_hear": "from work",
-      "last_four": "0196",
+      "owes_court_fees": "yes",
+      "currently_employed": "yes",
+      "monthly_income": 2000,
+      "income_source": "a job",
+      "on_public_benefits": "no",
+      "monthly_expenses": 2000,
+      "owns_home": "no",
+      "household_size": 3,
+      "has_children": "no",
+      "is_married": "yes",
       "reasons_for_applying": [
         "background_check",
         "lost_job",
         "housing"
       ],
-      "consent_to_represent": "yes",
-      "case_number": "C8190-144",
-      "household_size": 4,
-      "is_married": "no",
-      "first_name": "Cynthia",
-      "rap_outside_sf": "no",
-      "when_probation_or_parole": "2018",
-      "income_source": "a job",
-      "last_name": "Smith",
-      "being_charged": "no",
-      "owns_home": "no",
-      "phone_number": "8314207603",
-      "middle_name": "Christopher",
-      "serving_sentence": "no",
-      "has_children": "yes",
-      "alternate_phone_number": "8314207603",
-      "monthly_income": 2000,
-      "on_probation_parole": "yes",
-      "dob": {
-        "month": "5",
-        "day": "29",
-        "year": "1979"
-      },
-      "monthly_expenses": 2000,
+      "how_did_you_hear": "from work",
       "additional_information": "I want help",
-      "email": "bgolder+testing@codeforamerica.org",
-      "address": {
-        "state": "OH",
-        "city": "Claybury",
-        "zip": "31184",
-        "street": "94566 Lopez Fields Suite 868"
-      }
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
     },
-    "first_name": "Cynthia",
-    "last_name": "Smith",
+    "first_name": "David",
+    "last_name": "Schwartz",
     "dob": null,
     "ssn": "",
-    "last_four": "0196",
+    "last_four": "9465",
     "drivers_license_or_id": "",
-    "case_number": "C8190-144",
+    "case_number": "C1017-602",
     "phone_number": "8314207603",
     "alternate_phone_number": "8314207603",
     "email": "bgolder+testing@codeforamerica.org",
-    "old_uuid": "3f13f961a8ec44d9aceae2f42ccff878",
-    "anonymous_name": "Spontaneous Tree",
-    "date_received": "2017-03-22T10:58:05-07:00"
+    "reasons_for_applying": "['background_check', 'lost_job', 'housing']",
+    "how_did_you_hear": "from work",
+    "additional_information": "I want help",
+    "aliases": "",
+    "pfn_number": "",
+    "contact_preferences": "['prefers_email', 'prefers_sms']",
+    "preferred_pronouns": "",
+    "street": "49566 Daniel Station Apt. 911",
+    "city": "North James",
+    "state": "NM",
+    "zip": "70105",
+    "us_citizen": "",
+    "is_veteran": "",
+    "is_student": "",
+    "being_charged": "no",
+    "serving_sentence": "no",
+    "on_probation_parole": "yes",
+    "where_probation_or_parole": "Yolo County",
+    "when_probation_or_parole": "2018",
+    "finished_half_probation": "",
+    "reduced_probation": "",
+    "rap_outside_sf": "no",
+    "when_where_outside_sf": "",
+    "has_suspended_license": "",
+    "owes_court_fees": "yes",
+    "currently_employed": "yes",
+    "monthly_income": 2000,
+    "income_source": "a job",
+    "on_public_benefits": "no",
+    "owns_home": "no",
+    "monthly_expenses": 2000,
+    "household_size": 3,
+    "dependents": "",
+    "is_married": "yes",
+    "has_children": "no",
+    "old_uuid": "e2384ae8c2e040b0b2bd514e92122228",
+    "anonymous_name": "Ethereal Puppy",
+    "date_received": "2017-04-09T12:43:11-07:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 114,
+  "pk": 17,
   "fields": {
-    "created": "2017-03-23T20:16:31Z",
-    "updated": "2017-04-04T23:26:38.383Z",
+    "created": "2017-04-05T07:01:09Z",
+    "updated": "2017-04-11T23:32:33.813Z",
     "organization": [
       "Santa Barbara County Public Defender"
     ],
-    "form_submission": 84,
+    "form_submission": 17,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 115,
+  "pk": 18,
   "fields": {
-    "created": "2017-03-22T17:58:05Z",
-    "updated": "2017-04-04T23:26:38.399Z",
+    "created": "2017-04-09T19:43:11Z",
+    "updated": "2017-04-11T23:32:33.838Z",
     "organization": [
       "Santa Barbara County Public Defender"
     ],
-    "form_submission": 85,
+    "form_submission": 18,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 120,
+  "pk": 18,
   "fields": {
-    "created": "2017-04-04T23:26:39.088Z",
-    "updated": "2017-04-04T23:26:39.095Z",
+    "created": "2017-04-11T23:32:35.488Z",
+    "updated": "2017-04-11T23:32:35.511Z",
+    "status_type": 4,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "santa_barbara_pubdef_user"
+    ],
+    "application": 18,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 17,
+  "fields": {
+    "created": "2017-04-11T23:32:35.419Z",
+    "updated": "2017-04-11T23:32:35.432Z",
     "status_type": 3,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "santa_barbara_pubdef_user"
     ],
-    "application": 115,
-    "other_next_step": "Come to our Walk-In Clinic",
-    "next_steps": [
-      1
-    ]
-  }
-},
-{
-  "model": "intake.statusupdate",
-  "pk": 119,
-  "fields": {
-    "created": "2017-04-04T23:26:39.073Z",
-    "updated": "2017-04-04T23:26:39.080Z",
-    "status_type": 2,
-    "additional_information": "We may be able to get a fee waived for you",
-    "author": [
-      "santa_barbara_pubdef_user"
-    ],
-    "application": 114,
+    "application": 17,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -240,28 +310,28 @@
 },
 {
   "model": "intake.statusnotification",
-  "pk": 119,
+  "pk": 17,
   "fields": {
-    "status_update": 119,
+    "status_update": 17,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-04T23:26:39.074Z"
+    "created": "2017-04-11T23:32:35.421Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 120,
+  "pk": 18,
   "fields": {
-    "status_update": 120,
+    "status_update": 18,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-04T23:26:39.089Z"
+    "created": "2017-04-11T23:32:35.499Z"
   }
 }
 ]

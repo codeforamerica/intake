@@ -350,9 +350,9 @@ class TestApplicationHistoryWithTransfers(AppDetailFixturesBaseTestCase):
         submission = incoming_transfer.new_application.form_submission
         response = self.get_page(submission)
         prior_updates = models.StatusUpdate.objects.filter(
-                application__form_submission=submission,
-                created__lt=incoming_transfer.status_update.created
-            ).exclude(transfer=incoming_transfer)
+            application__form_submission=submission,
+            created__lt=incoming_transfer.status_update.created
+        ).exclude(transfer=incoming_transfer)
         for status_update in prior_updates:
             expected_display_data = [
                 "{} at {}".format(
