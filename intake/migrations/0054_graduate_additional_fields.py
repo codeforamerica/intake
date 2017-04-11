@@ -29,6 +29,8 @@ def copy_answers_to_fields(apps, schema_editor):
             existing = sub.answers.get(key, None)
             if existing:
                 setattr(sub, key, existing)
+        # Known issue: some values cannot be handled correctly by the 
+        # WholeDollarField, reporting out below (issue #705)
         try:
             money_form = MoneyValidatorForm(sub.answers, validate=True)
             for money_key in money_keys:
@@ -46,8 +48,7 @@ def copy_answers_to_fields(apps, schema_editor):
                     setattr(sub, component, existing)
         sub.save()
 
-    # Known issue: some values cannot be parsed by the MoneyValidatorForm,
-    # reporting out here (issue #705)
+    # Prints list of subs with errors (see above)
     print("Unable to parse dollar amounts for these subs:")
     for sub in subs_with_errors:
         print("\t {} {}".format(sub.id, sub.answers))
