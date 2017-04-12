@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'taggit',
     'debug_toolbar',
     'django_extensions',
+    'behave_django',
 ]
 
 MIDDLEWARE_CLASSES = [

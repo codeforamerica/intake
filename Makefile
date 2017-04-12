@@ -35,6 +35,13 @@ test.coverage:
 	coverage report -m
 
 
+test.coverage.keepdb:
+	coverage run \
+		./manage.py test $(SCOPE) \
+		--verbosity 2 --keepdb
+	coverage report -m
+
+
 test.deluxe:
 	DELUXE_TEST=1 \
 	./manage.py test $(SCOPE) \
