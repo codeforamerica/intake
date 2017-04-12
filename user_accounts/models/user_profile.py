@@ -15,10 +15,17 @@ class UserProfile(models.Model):
     should_get_notifications = models.BooleanField(default=False)
 
     def get_display_name(self):
-        return self.name or self.user.email
+        name_display = self.name or self.user.email
+        return "{} at {}".format(
+            name_display, self.organization.name)
 
     def __str__(self):
-        return self.get_display_name()
+        display = self.get_display_name()
+        display += ", {}".format(self.user.email)
+        if self.should_get_notifications:
+            self.user.email
+            display += " (gets notifications)"
+        return display
 
     @classmethod
     def create_from_invited_user(cls, user, invitation=None, **kwargs):

@@ -3716,7 +3716,8 @@ section.content.application_form {
 }
 .field input,
 .field textarea,
-.field .field-preceding_text {
+.field .field-preceding_text,
+.field span.field-display_value {
   font-weight: 400;
   font-size: 1.25em;
 }
