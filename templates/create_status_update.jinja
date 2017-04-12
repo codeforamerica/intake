@@ -6,6 +6,9 @@ Update Application Status for {{ submission.get_full_name() }}
 {%- endblock header_title -%}
 
 {% block form %}
+
+{% include "includes/minimal_latest_status_line.jinja" %}
+
 <form id="create-status-form" method="POST" action="{{ url('intake-create_status_update', submission_id=submission.id ) }}">
   {% include "includes/csrf_field.jinja" %}
   {{ macros.render_form_fields(form) }}

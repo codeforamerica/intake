@@ -112,6 +112,22 @@ class TestCreateStatusUpdateFormView(StatusUpdateViewBaseTestCase):
         self.assertIn(
             reverse('user_accounts-login'), self.get_create_page().url)
 
+    def test_shows_previous_status_update_on_create_status_page(self):
+        self.be_apubdef_user()
+        response = self.get_create_page()
+        latest_status = models.StatusUpdate.objects.filter(
+            application__form_submission_id=self.sub.id
+        ).order_by('-created').first()
+        self.assertContains(
+            response, escape(latest_status.status_type.display_name))
+        self.assertContains(
+            response, escape(latest_status.author.profile.name))
+        self.assertContains(
+            response, reverse(
+                'intake-app_history',
+                kwargs=dict(
+                    submission_id=self.sub.id)))
+
     def test_incorrect_org_user_redirected_to_app_index(self):
         self.be_ccpubdef_user()
         response = self.get_create_page()
@@ -242,3 +258,17 @@ class TestReviewStatusNotificationFormView(StatusUpdateViewBaseTestCase):
         expected_intro = services.status_notifications.get_notification_intro(
             status_update_data['author'].profile)
         self.assertContains(response, escape(expected_intro))
+
+    @patch('intake.notifications.send_simple_front_notification')
+    def test_hitting_back_does_not_cause_an_error(self, front):
+        self.be_apubdef_user()
+        response = self.create_status_update(follow=True)
+        response = self.confirm_status_update(
+            sent_message="Everything's coming up Milhouse!")
+        self.client.get(response.url)
+        response = self.get_review_page()
+        self.assertRedirects(
+            response,
+            reverse(
+                'intake-create_status_update',
+                kwargs=dict(submission_id=self.sub.id)))
