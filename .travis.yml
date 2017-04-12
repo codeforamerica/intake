@@ -7,10 +7,6 @@ env:
   - DJANGO_SETTINGS_MODULE='project.settings.ci' DELUXE_TEST=1
 addons:
   postgresql: "9.4"
-  browserstack:
-    username: "clearmyrecord1"
-    access_key:
-      secure: "X/ziDdq3mPfIEGf3ZFhWao1FAAeSwIaI1bMQoceJSP3SOuE8ulZDFmMx2rUZ6EHe2+ofuF+yfeuD50mwT6NI67uRkjHHp8EpwJFeMuSPD4gwCc2s6o7mZ8OKw4dnZTR0aJQ7JzKK70uX9N37lYaTFJt+CY+293YP1J+xsbXmIxZeCpETORdCfIO2CoX9jBfxULMUW8P5jN8ZSn+CWPqMXj2qihlaV8aF6WYk/tGvLtjxbX87fq/8kjpo2bGz6zdVe4+1+zShn/63O2Tv4CgpqZNG2FLvdfADZnTtcLxaaqaO3sKzcuJG3/pniRjymp+BLAB+2AROWshkjjzT9a71OoELT+yT3ATJeLAR31Lovoszpc/HP0pg7Dc95mDdIG+fG+PKM5EZ3j7VRsBIoTDASfm6N4Y1zDCWdKLrE8V/hhxksbPn4jjkpKQWEAIT5uDpkEbsEQC/TvjbrMteMCqg25JFNwXPx1U8uugyrc00SDELoAXly1RWIHaiLNPth7LvJdx2glsasaNO5npM9mlIcfsTCJYWYlXsL5TOvKn51VkKVDRamIe3wdB79Samp0Trd0/tOPKwXOgoeVQKQlb9/6KTDZ8hOwabJf1aDgaMy1TCZ4YUbyFOMf8MUILxjrQ52yQH2Rd0x/6Frxha2H1htW0lsRy3WajDTtC7Zi/A438="
 
 before_script: python ./manage.py collectstatic --noinput
 script:
