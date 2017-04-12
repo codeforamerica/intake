@@ -7,6 +7,7 @@ answer_lookup = {}
 
 
 class AnswerGenerator:
+
     def __init__(self, mock_method_form_class_pairs):
         self.mock_method_form_class_pairs = mock_method_form_class_pairs
 
@@ -30,7 +31,7 @@ def populate_answer_lookup():
             raise AttributeError(
                 'There is no mock form answers method for {}'.format(org.slug))
         form_class = county_form_selector.get_combined_form_class(
-                counties=[org.county.slug])
+            counties=[org.county.slug])
         mock_method_form_pairs = {}
         mock_method_form_pairs[answer_mock_method_name] = form_class
         if org.requires_declaration_letter:
@@ -39,14 +40,16 @@ def populate_answer_lookup():
         answer_lookup[org.slug] = AnswerGenerator(mock_method_form_pairs)
 
 
-def get_answers_for_org(organization):
+def get_answers_for_org(organization, **overrides):
     if organization.slug not in answer_lookup:
         populate_answer_lookup()
-    return answer_lookup[organization.slug]()
+    answers = answer_lookup[organization.slug]()
+    answers.update(**overrides)
+    return answers
 
 
-def get_answers_for_orgs(organizations):
+def get_answers_for_orgs(organizations, **overrides):
     answers = {}
     for organization in organizations:
-        answers.update(**get_answers_for_org(organization))
+        answers.update(**get_answers_for_org(organization, **overrides))
     return answers

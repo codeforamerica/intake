@@ -141,9 +141,14 @@ class FollowupNotification(ApplicantNotification):
     def get_context(self, contact_method):
         context = super().get_context()
         contact_method = self.contact_methods[0]
+        org_ids_for_apps_w_no_status_and_followupable = \
+            self.sub.applications.filter(
+                organization__needs_applicant_followups=True,
+                status_updates=None).values_list('organization_id', flat=True)
         followup_messages = [
             getattr(org, self.get_message_accessor(contact_method))
-            for org in context['organizations']]
+            for org in context['organizations']
+            if org.id in org_ids_for_apps_w_no_status_and_followupable]
         context.update(
             followup_messages=followup_messages
         )

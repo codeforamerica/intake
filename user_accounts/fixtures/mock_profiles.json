@@ -2,113 +2,8 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$30000$X2trq1sOp3mW$vut7TRsYSiS4N8xYpdQ0iMYv8tRtbVxm61Y2XT8yjQ0=",
+    "password": "pbkdf2_sha256$30000$7ojTzaKZ29fK$xhtYOFa8hkYd6nS5wPkXp7QFE5Dm1TgitZkWzIbOlT8=",
     "last_login": null,
-    "is_superuser": false,
-    "username": "sonoma_pubdef_user",
-    "first_name": "Fake",
-    "last_name": "Sonoma Pubdef",
-    "email": "bgolder+demo+sonoma_pubdef_user@codeforamerica.org",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2017-04-04T21:14:45.379Z",
-    "groups": [
-      [
-        "application_reviewers"
-      ]
-    ],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "fields": {
-    "password": "pbkdf2_sha256$30000$kreF33tDKGmI$5yXPAGl8HxB6SnY747Zek4i27ezqTiOQMJg+zJ3MElg=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "san_diego_pubdef_user",
-    "first_name": "Fake",
-    "last_name": "San Diego Pubdef",
-    "email": "bgolder+demo+san_diego_pubdef_user@codeforamerica.org",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2017-04-04T21:14:45.444Z",
-    "groups": [
-      [
-        "application_reviewers"
-      ]
-    ],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "fields": {
-    "password": "pbkdf2_sha256$30000$arfIBBeW4NjZ$LlCu/CSs5mTWqJjyJaZtwEbH/i80EFy8Hyr1VTslO+0=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "solano_pubdef_user",
-    "first_name": "Fake",
-    "last_name": "Solano Pubdef",
-    "email": "bgolder+demo+solano_pubdef_user@codeforamerica.org",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2017-04-04T21:14:45.491Z",
-    "groups": [
-      [
-        "application_reviewers"
-      ]
-    ],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "fields": {
-    "password": "pbkdf2_sha256$30000$k3bo5Hfhl5JK$6oMA/57xLhTj6vuljxv0g4+GyUTFjeI78bg+q6It6dE=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "monterey_pubdef_user",
-    "first_name": "Fake",
-    "last_name": "Monterey Pubdef",
-    "email": "bgolder+demo+monterey_pubdef_user@codeforamerica.org",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2017-04-04T21:14:45.534Z",
-    "groups": [
-      [
-        "application_reviewers"
-      ]
-    ],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "fields": {
-    "password": "pbkdf2_sha256$30000$6u3A23vxcsBg$yiqqwhp+IxUAYiNlFPTIzLsc98CVtYAWlD92j1eHlVs=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "santa_barbara_pubdef_user",
-    "first_name": "Fake",
-    "last_name": "Santa Barbara Pubdef",
-    "email": "bgolder+demo+santa_barbara_pubdef_user@codeforamerica.org",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2017-04-04T21:14:45.579Z",
-    "groups": [
-      [
-        "application_reviewers"
-      ]
-    ],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "fields": {
-    "password": "pbkdf2_sha256$30000$UC87obEeRJar$AWXPGvQDlGkbSUqOb/AarXpCn9vndUNdNFmHw9J3QCU=",
-    "last_login": "2017-04-04T22:16:24.612Z",
     "is_superuser": false,
     "username": "a_pubdef_user",
     "first_name": "Fake",
@@ -116,7 +11,7 @@
     "email": "bgolder+demo+a_pubdef_user@codeforamerica.org",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2017-04-04T21:14:45.627Z",
+    "date_joined": "2017-04-11T23:32:31.835Z",
     "groups": [
       [
         "application_reviewers"
@@ -128,49 +23,7 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$30000$dlWm1tmTZI6N$fcVZYELesWv34zwhq0cZoLkCVAX9dnJ4JvHlsiKLM4U=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "tulare_pubdef_user",
-    "first_name": "Fake",
-    "last_name": "Tulare Pubdef",
-    "email": "bgolder+demo+tulare_pubdef_user@codeforamerica.org",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2017-04-04T21:14:45.675Z",
-    "groups": [
-      [
-        "application_reviewers"
-      ]
-    ],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "fields": {
-    "password": "pbkdf2_sha256$30000$0CtUS3wePfDY$uU3G49pDrRL3aIps1+0V2eBCRkneYZtCao6OxDissFU=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "sf_pubdef_user",
-    "first_name": "Fake",
-    "last_name": "Sf Pubdef",
-    "email": "bgolder+demo+sf_pubdef_user@codeforamerica.org",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2017-04-04T21:14:45.719Z",
-    "groups": [
-      [
-        "application_reviewers"
-      ]
-    ],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "fields": {
-    "password": "pbkdf2_sha256$30000$TgHdzGOW1MYP$T/0HmToNSumZi4C2FAsTTA1hFEta8hEptHcuB/MmD+g=",
+    "password": "pbkdf2_sha256$30000$WHwUW65w2tsx$on5c659cHoKtuS9rw/vZOZ9ICcUqowQizj51rKaLTZg=",
     "last_login": null,
     "is_superuser": false,
     "username": "cc_pubdef_user",
@@ -179,7 +32,7 @@
     "email": "bgolder+demo+cc_pubdef_user@codeforamerica.org",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2017-04-04T21:14:45.763Z",
+    "date_joined": "2017-04-11T23:32:31.899Z",
     "groups": [
       [
         "application_reviewers"
@@ -191,70 +44,7 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$30000$L0Tdkl1jVZsj$zGsozo1TZ+fOqEZLzQ9mZeVatJcKLTV28HKmmhvVOCA=",
-    "last_login": "2017-04-04T22:17:17.762Z",
-    "is_superuser": false,
-    "username": "ventura_pubdef_user",
-    "first_name": "Fake",
-    "last_name": "Ventura Pubdef",
-    "email": "bgolder+demo+ventura_pubdef_user@codeforamerica.org",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2017-04-04T21:14:45.805Z",
-    "groups": [
-      [
-        "application_reviewers"
-      ]
-    ],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "fields": {
-    "password": "pbkdf2_sha256$30000$62JOOd5NOabm$sbACtd6g8i31Nnqc/Cic1nbEr5qITO2CMAdehIqrJb0=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "fresno_pubdef_user",
-    "first_name": "Fake",
-    "last_name": "Fresno Pubdef",
-    "email": "bgolder+demo+fresno_pubdef_user@codeforamerica.org",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2017-04-04T21:14:45.847Z",
-    "groups": [
-      [
-        "application_reviewers"
-      ]
-    ],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "fields": {
-    "password": "pbkdf2_sha256$30000$QrtkuAoVAW7Y$DhP64QIR1qtDMn7Zw5OoIp3rEwBOUx3tnti+DFVqFLo=",
-    "last_login": null,
-    "is_superuser": false,
-    "username": "san_joaquin_pubdef_user",
-    "first_name": "Fake",
-    "last_name": "San Joaquin Pubdef",
-    "email": "bgolder+demo+san_joaquin_pubdef_user@codeforamerica.org",
-    "is_staff": false,
-    "is_active": true,
-    "date_joined": "2017-04-04T21:14:45.891Z",
-    "groups": [
-      [
-        "application_reviewers"
-      ]
-    ],
-    "user_permissions": []
-  }
-},
-{
-  "model": "auth.user",
-  "fields": {
-    "password": "pbkdf2_sha256$30000$NsAs1UND7lZR$5pV2z+arEnhMx/5cxfTYxHAYuZzt89sg87/6Ct+acmI=",
+    "password": "pbkdf2_sha256$30000$BXbmVSDprVe7$+I8CZ2AloTY4RAGR1APs03R3ACn+Tb1ojMKCVVdS4C4=",
     "last_login": null,
     "is_superuser": false,
     "username": "ebclc_user",
@@ -263,7 +53,7 @@
     "email": "bgolder+demo+ebclc_user@codeforamerica.org",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2017-04-04T21:14:45.939Z",
+    "date_joined": "2017-04-11T23:32:31.975Z",
     "groups": [
       [
         "application_reviewers"
@@ -275,16 +65,16 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$30000$EESnGCjVkgbC$yh+1wk7pyO/R7zD0Vk8pWU+AYNChgYaZmnkDEVOOdmM=",
+    "password": "pbkdf2_sha256$30000$Fqt2hFR7aV16$+ATSJPhjmhvYS7X2LsWrNzlcFSGB/ZVJtpvhWpyPOG0=",
     "last_login": null,
     "is_superuser": false,
-    "username": "santa_cruz_pubdef_user",
+    "username": "fresno_pubdef_user",
     "first_name": "Fake",
-    "last_name": "Santa Cruz Pubdef",
-    "email": "bgolder+demo+santa_cruz_pubdef_user@codeforamerica.org",
+    "last_name": "Fresno Pubdef",
+    "email": "bgolder+demo+fresno_pubdef_user@codeforamerica.org",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2017-04-04T21:14:45.983Z",
+    "date_joined": "2017-04-11T23:32:32.047Z",
     "groups": [
       [
         "application_reviewers"
@@ -296,7 +86,112 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$30000$0gpS0AcLLQWb$i12ZpitK+aSKU3bOzyUfueJ1ZdFWTBgHzQ7sN47R6og=",
+    "password": "pbkdf2_sha256$30000$eXMSmQyv1JGW$GXzFpEQs2xomBankiFvAj6qGotminlIj9HwL4M0D6VM=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "monterey_pubdef_user",
+    "first_name": "Fake",
+    "last_name": "Monterey Pubdef",
+    "email": "bgolder+demo+monterey_pubdef_user@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-04-11T23:32:32.122Z",
+    "groups": [
+      [
+        "application_reviewers"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$30000$QmzjieDCPTtT$12z+EAAGxXqpm61Azp4o3wDLAQHH+Y+rkQoye3LDLFA=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "san_diego_pubdef_user",
+    "first_name": "Fake",
+    "last_name": "San Diego Pubdef",
+    "email": "bgolder+demo+san_diego_pubdef_user@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-04-11T23:32:32.193Z",
+    "groups": [
+      [
+        "application_reviewers"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$30000$EsPH77q1IbFk$vVZJHjV6xXQRW7Idpn16sxaum+/4icmCl/KnQ71lEWQ=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sf_pubdef_user",
+    "first_name": "Fake",
+    "last_name": "Sf Pubdef",
+    "email": "bgolder+demo+sf_pubdef_user@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-04-11T23:32:32.264Z",
+    "groups": [
+      [
+        "application_reviewers"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$30000$JJPzS9M4Ak3X$M7gpv5+MfRTKF5bridfENGReRKncYV+rzuR2+/fQDl8=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "san_joaquin_pubdef_user",
+    "first_name": "Fake",
+    "last_name": "San Joaquin Pubdef",
+    "email": "bgolder+demo+san_joaquin_pubdef_user@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-04-11T23:32:32.315Z",
+    "groups": [
+      [
+        "application_reviewers"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$30000$Nt3AfA5GwNaV$q5Y3fKEZGjOaeEO8+DBIooytXxxEYInqdcZ9NH9TCYc=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "santa_barbara_pubdef_user",
+    "first_name": "Fake",
+    "last_name": "Santa Barbara Pubdef",
+    "email": "bgolder+demo+santa_barbara_pubdef_user@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-04-11T23:32:32.368Z",
+    "groups": [
+      [
+        "application_reviewers"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$30000$Uqr0g8cHrWB3$OCNc1plWkS3HX4Ie8BT53T+rUMqCMPBSB9joB/IVft8=",
     "last_login": null,
     "is_superuser": false,
     "username": "santa_clara_pubdef_user",
@@ -305,7 +200,7 @@
     "email": "bgolder+demo+santa_clara_pubdef_user@codeforamerica.org",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2017-04-04T21:14:46.027Z",
+    "date_joined": "2017-04-11T23:32:32.427Z",
     "groups": [
       [
         "application_reviewers"
@@ -317,8 +212,113 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$30000$aFVficzAGdeO$gCJ6uZ8ssT23ZAg6xqGDTsVlWH6+qwfQXl6PwjMhRtk=",
-    "last_login": "2017-04-04T21:58:46.642Z",
+    "password": "pbkdf2_sha256$30000$yXpDHppbQrk1$5cVCYgQhwKwx81nCWEJVxBYFgdxuVXkhjZk6YK+hx9Q=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "santa_cruz_pubdef_user",
+    "first_name": "Fake",
+    "last_name": "Santa Cruz Pubdef",
+    "email": "bgolder+demo+santa_cruz_pubdef_user@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-04-11T23:32:32.485Z",
+    "groups": [
+      [
+        "application_reviewers"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$30000$qK3jmNPUf1lC$+T/zT2i/HsiQ8KGzNeUIMBv2dEElyj0GlUOnV/mer2Q=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "solano_pubdef_user",
+    "first_name": "Fake",
+    "last_name": "Solano Pubdef",
+    "email": "bgolder+demo+solano_pubdef_user@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-04-11T23:32:32.629Z",
+    "groups": [
+      [
+        "application_reviewers"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$30000$NIzwqsto9RQP$B7DmOIYQa+y2TGK1ZW466il2JsklXtCgpJFLgLoTyhM=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "sonoma_pubdef_user",
+    "first_name": "Fake",
+    "last_name": "Sonoma Pubdef",
+    "email": "bgolder+demo+sonoma_pubdef_user@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-04-11T23:32:32.730Z",
+    "groups": [
+      [
+        "application_reviewers"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$30000$nvxxxy8QhWNd$iLd/cazEYvrsdcupm7koTIiCs7Cox87xb8cpLV/IKVM=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "tulare_pubdef_user",
+    "first_name": "Fake",
+    "last_name": "Tulare Pubdef",
+    "email": "bgolder+demo+tulare_pubdef_user@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-04-11T23:32:32.795Z",
+    "groups": [
+      [
+        "application_reviewers"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$30000$Ljo1dMsgT2eX$/NM1PUROzPuxG8g5zT5oKBusSdW1KoW7yDMjVfEz/t4=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "ventura_pubdef_user",
+    "first_name": "Fake",
+    "last_name": "Ventura Pubdef",
+    "email": "bgolder+demo+ventura_pubdef_user@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-04-11T23:32:32.912Z",
+    "groups": [
+      [
+        "application_reviewers"
+      ]
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$30000$LlON1yT7Dtp8$BEd2x3VzITxPKrlMMJvOyv3oZIlIAIUuoOgzTXpafu8=",
+    "last_login": null,
     "is_superuser": true,
     "username": "cfa_user",
     "first_name": "Fake",
@@ -326,7 +326,7 @@
     "email": "bgolder+demo+cfa_user@codeforamerica.org",
     "is_staff": true,
     "is_active": true,
-    "date_joined": "2017-04-04T21:14:46.071Z",
+    "date_joined": "2017-04-11T23:32:32.988Z",
     "groups": [
       [
         "application_reviewers"
@@ -341,7 +341,7 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$30000$68EyEgifNijE$/KzCMNVZ9aGbScnazvg6BVenXTxx6aIxtelC+LsmMCw=",
+    "password": "pbkdf2_sha256$30000$UxV4zpxQsabA$3wWMG2JobOxjGn55JnvqvGZrZfJlVF+hS/l8O9lO6+0=",
     "last_login": null,
     "is_superuser": false,
     "username": "monitor_user",
@@ -350,7 +350,7 @@
     "email": "bgolder+demo+monitor_user@codeforamerica.org",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2017-04-04T21:14:46.114Z",
+    "date_joined": "2017-04-11T23:32:33.036Z",
     "groups": [
       [
         "performance_monitors"
@@ -362,76 +362,6 @@
 {
   "model": "user_accounts.userprofile",
   "pk": 1,
-  "fields": {
-    "name": "Fake Sonoma Pubdef",
-    "user": [
-      "sonoma_pubdef_user"
-    ],
-    "organization": [
-      "Sonoma County Public Defender"
-    ],
-    "should_get_notifications": true
-  }
-},
-{
-  "model": "user_accounts.userprofile",
-  "pk": 2,
-  "fields": {
-    "name": "Fake San Diego Pubdef",
-    "user": [
-      "san_diego_pubdef_user"
-    ],
-    "organization": [
-      "San Diego County Public Defender"
-    ],
-    "should_get_notifications": true
-  }
-},
-{
-  "model": "user_accounts.userprofile",
-  "pk": 3,
-  "fields": {
-    "name": "Fake Solano Pubdef",
-    "user": [
-      "solano_pubdef_user"
-    ],
-    "organization": [
-      "Solano County Public Defender"
-    ],
-    "should_get_notifications": true
-  }
-},
-{
-  "model": "user_accounts.userprofile",
-  "pk": 4,
-  "fields": {
-    "name": "Fake Monterey Pubdef",
-    "user": [
-      "monterey_pubdef_user"
-    ],
-    "organization": [
-      "Monterey County Public Defender"
-    ],
-    "should_get_notifications": true
-  }
-},
-{
-  "model": "user_accounts.userprofile",
-  "pk": 5,
-  "fields": {
-    "name": "Fake Santa Barbara Pubdef",
-    "user": [
-      "santa_barbara_pubdef_user"
-    ],
-    "organization": [
-      "Santa Barbara County Public Defender"
-    ],
-    "should_get_notifications": true
-  }
-},
-{
-  "model": "user_accounts.userprofile",
-  "pk": 6,
   "fields": {
     "name": "Fake A Pubdef",
     "user": [
@@ -445,35 +375,7 @@
 },
 {
   "model": "user_accounts.userprofile",
-  "pk": 7,
-  "fields": {
-    "name": "Fake Tulare Pubdef",
-    "user": [
-      "tulare_pubdef_user"
-    ],
-    "organization": [
-      "Tulare County Public Defender"
-    ],
-    "should_get_notifications": true
-  }
-},
-{
-  "model": "user_accounts.userprofile",
-  "pk": 8,
-  "fields": {
-    "name": "Fake Sf Pubdef",
-    "user": [
-      "sf_pubdef_user"
-    ],
-    "organization": [
-      "San Francisco Public Defender"
-    ],
-    "should_get_notifications": true
-  }
-},
-{
-  "model": "user_accounts.userprofile",
-  "pk": 9,
+  "pk": 2,
   "fields": {
     "name": "Fake Cc Pubdef",
     "user": [
@@ -487,49 +389,7 @@
 },
 {
   "model": "user_accounts.userprofile",
-  "pk": 10,
-  "fields": {
-    "name": "Fake Ventura Pubdef",
-    "user": [
-      "ventura_pubdef_user"
-    ],
-    "organization": [
-      "Ventura County Public Defender"
-    ],
-    "should_get_notifications": true
-  }
-},
-{
-  "model": "user_accounts.userprofile",
-  "pk": 11,
-  "fields": {
-    "name": "Fake Fresno Pubdef",
-    "user": [
-      "fresno_pubdef_user"
-    ],
-    "organization": [
-      "Fresno County Public Defender"
-    ],
-    "should_get_notifications": true
-  }
-},
-{
-  "model": "user_accounts.userprofile",
-  "pk": 12,
-  "fields": {
-    "name": "Fake San Joaquin Pubdef",
-    "user": [
-      "san_joaquin_pubdef_user"
-    ],
-    "organization": [
-      "San Joaquin County Public Defender"
-    ],
-    "should_get_notifications": true
-  }
-},
-{
-  "model": "user_accounts.userprofile",
-  "pk": 13,
+  "pk": 3,
   "fields": {
     "name": "Fake Ebclc",
     "user": [
@@ -543,7 +403,105 @@
 },
 {
   "model": "user_accounts.userprofile",
-  "pk": 14,
+  "pk": 4,
+  "fields": {
+    "name": "Fake Fresno Pubdef",
+    "user": [
+      "fresno_pubdef_user"
+    ],
+    "organization": [
+      "Fresno County Public Defender"
+    ],
+    "should_get_notifications": true
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 5,
+  "fields": {
+    "name": "Fake Monterey Pubdef",
+    "user": [
+      "monterey_pubdef_user"
+    ],
+    "organization": [
+      "Monterey County Public Defender"
+    ],
+    "should_get_notifications": true
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 6,
+  "fields": {
+    "name": "Fake San Diego Pubdef",
+    "user": [
+      "san_diego_pubdef_user"
+    ],
+    "organization": [
+      "San Diego County Public Defender"
+    ],
+    "should_get_notifications": true
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 7,
+  "fields": {
+    "name": "Fake Sf Pubdef",
+    "user": [
+      "sf_pubdef_user"
+    ],
+    "organization": [
+      "San Francisco Public Defender"
+    ],
+    "should_get_notifications": true
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 8,
+  "fields": {
+    "name": "Fake San Joaquin Pubdef",
+    "user": [
+      "san_joaquin_pubdef_user"
+    ],
+    "organization": [
+      "San Joaquin County Public Defender"
+    ],
+    "should_get_notifications": true
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 9,
+  "fields": {
+    "name": "Fake Santa Barbara Pubdef",
+    "user": [
+      "santa_barbara_pubdef_user"
+    ],
+    "organization": [
+      "Santa Barbara County Public Defender"
+    ],
+    "should_get_notifications": true
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 10,
+  "fields": {
+    "name": "Fake Santa Clara Pubdef",
+    "user": [
+      "santa_clara_pubdef_user"
+    ],
+    "organization": [
+      "Santa Clara County Public Defender"
+    ],
+    "should_get_notifications": true
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 11,
   "fields": {
     "name": "Fake Santa Cruz Pubdef",
     "user": [
@@ -557,14 +515,56 @@
 },
 {
   "model": "user_accounts.userprofile",
-  "pk": 15,
+  "pk": 12,
   "fields": {
-    "name": "Fake Santa Clara Pubdef",
+    "name": "Fake Solano Pubdef",
     "user": [
-      "santa_clara_pubdef_user"
+      "solano_pubdef_user"
     ],
     "organization": [
-      "Santa Clara County Public Defender"
+      "Solano County Public Defender"
+    ],
+    "should_get_notifications": true
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 13,
+  "fields": {
+    "name": "Fake Sonoma Pubdef",
+    "user": [
+      "sonoma_pubdef_user"
+    ],
+    "organization": [
+      "Sonoma County Public Defender"
+    ],
+    "should_get_notifications": true
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 14,
+  "fields": {
+    "name": "Fake Tulare Pubdef",
+    "user": [
+      "tulare_pubdef_user"
+    ],
+    "organization": [
+      "Tulare County Public Defender"
+    ],
+    "should_get_notifications": true
+  }
+},
+{
+  "model": "user_accounts.userprofile",
+  "pk": 15,
+  "fields": {
+    "name": "Fake Ventura Pubdef",
+    "user": [
+      "ventura_pubdef_user"
+    ],
+    "organization": [
+      "Ventura County Public Defender"
     ],
     "should_get_notifications": true
   }
@@ -587,7 +587,7 @@
   "model": "user_accounts.userprofile",
   "pk": 17,
   "fields": {
-    "name": "('Fake Monitor User',)",
+    "name": "Fake Monitor User",
     "user": [
       "monitor_user"
     ],

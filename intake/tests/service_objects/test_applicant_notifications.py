@@ -2,6 +2,7 @@ from unittest.mock import patch, Mock
 from user_accounts.models import Organization
 from intake.constants import Organizations
 from intake.tests import mock, factories
+from intake.tests.mock_org_answers import get_answers_for_orgs
 from intake.tests.base_testcases import ExternalNotificationsPatchTestCase
 from intake.tests.services.test_followups import get_old_date
 from intake.service_objects import applicant_notifications
@@ -21,16 +22,16 @@ class TestApplicantNotification(ExternalNotificationsPatchTestCase):
     def many_orgs(self):
         orgs = list(Organization.objects.filter(
                     slug__in=[
-                        Organizations.ALAMEDA_PUBDEF,
                         Organizations.SF_PUBDEF,
-                        Organizations.MONTEREY_PUBDEF]))
+                        Organizations.EBCLC]))
         orgs = utils.sort_orgs_in_default_order(orgs)
         return orgs
 
     def make_full_submission(self, orgs, **answer_overrides):
         applicant = models.Applicant()
         applicant.save()
-        answers = mock.fake.all_county_answers(
+        answers = get_answers_for_orgs(
+            orgs,
             first_name="Hubert",
             contact_preferences=[
                 'prefers_email',

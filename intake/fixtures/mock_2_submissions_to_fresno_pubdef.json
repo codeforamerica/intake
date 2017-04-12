@@ -1,9 +1,9 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 77,
+  "pk": 7,
   "fields": {
-    "first_visit": "2017-04-04T23:26:38.220Z",
+    "first_visit": "2017-04-11T23:32:33.506Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +11,9 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 78,
+  "pk": 8,
   "fields": {
-    "first_visit": "2017-04-04T23:26:38.235Z",
+    "first_visit": "2017-04-11T23:32:33.536Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,203 +21,272 @@
 },
 {
   "model": "intake.applicant",
-  "pk": 74,
+  "pk": 7,
   "fields": {
-    "visitor": 77
+    "visitor": 7
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 75,
+  "pk": 8,
   "fields": {
-    "visitor": 78
+    "visitor": 8
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 74,
+  "pk": 7,
   "fields": {
-    "applicant": 74,
+    "applicant": 7,
     "duplicate_set": null,
     "answers": {
-      "first_name": "Cristian",
+      "contact_preferences": [
+        "prefers_email"
+      ],
+      "first_name": "Lauren",
+      "middle_name": "Kathleen",
+      "last_name": "Gutierrez",
+      "aliases": "Lindsay Jacobs",
+      "phone_number": "8314207603",
+      "alternate_phone_number": "8314207603",
+      "email": "bgolder+testing@codeforamerica.org",
+      "address": {
+        "street": "16980 Crawford Crest",
+        "city": "Port Rebeccaport",
+        "state": "NV",
+        "zip": "45774"
+      },
+      "dob": {
+        "month": "2",
+        "day": "10",
+        "year": "1987"
+      },
+      "driver_license_or_id": "D6676623",
+      "last_four": "9283",
+      "case_number": "C6674-324",
+      "us_citizen": "yes",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Yolo County",
       "when_probation_or_parole": "2018",
-      "driver_license_or_id": "D7891438",
-      "understands_limits": "yes",
-      "last_name": "Taylor",
+      "monthly_income": 6007,
+      "dependents": 4,
       "reasons_for_applying": [
         "background_check",
         "lost_job",
         "housing"
       ],
-      "where_probation_or_parole": "Yolo County",
-      "aliases": "Brian Harris",
-      "phone_number": "8314207603",
-      "middle_name": "Laura",
-      "serving_sentence": "yes",
-      "alternate_phone_number": "8314207603",
-      "monthly_income": 3242,
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "Lauren",
+    "last_name": "Gutierrez",
+    "dob": null,
+    "ssn": "",
+    "last_four": "9283",
+    "drivers_license_or_id": "",
+    "case_number": "C6674-324",
+    "phone_number": "8314207603",
+    "alternate_phone_number": "8314207603",
+    "email": "bgolder+testing@codeforamerica.org",
+    "reasons_for_applying": "['background_check', 'lost_job', 'housing']",
+    "how_did_you_hear": "from work",
+    "additional_information": "I want help",
+    "aliases": "Lindsay Jacobs",
+    "pfn_number": "",
+    "contact_preferences": "['prefers_email']",
+    "preferred_pronouns": "",
+    "street": "16980 Crawford Crest",
+    "city": "Port Rebeccaport",
+    "state": "NV",
+    "zip": "45774",
+    "us_citizen": "yes",
+    "is_veteran": "",
+    "is_student": "",
+    "being_charged": "no",
+    "serving_sentence": "no",
+    "on_probation_parole": "yes",
+    "where_probation_or_parole": "Yolo County",
+    "when_probation_or_parole": "2018",
+    "finished_half_probation": "",
+    "reduced_probation": "",
+    "rap_outside_sf": "",
+    "when_where_outside_sf": "",
+    "has_suspended_license": "",
+    "owes_court_fees": "",
+    "currently_employed": "",
+    "monthly_income": 6007,
+    "income_source": "",
+    "on_public_benefits": "",
+    "owns_home": "",
+    "monthly_expenses": null,
+    "household_size": null,
+    "dependents": 4,
+    "is_married": "",
+    "has_children": "",
+    "old_uuid": "a034384680a04a21b84a7812e2dfafd5",
+    "anonymous_name": "Golden Manta Ray",
+    "date_received": "2017-03-30T16:02:55-07:00"
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 8,
+  "fields": {
+    "applicant": 8,
+    "duplicate_set": null,
+    "answers": {
       "contact_preferences": [
         "prefers_sms"
       ],
-      "on_probation_parole": "yes",
-      "dob": {
-        "month": "3",
-        "day": "29",
-        "year": "1973"
-      },
-      "us_citizen": "no",
-      "how_did_you_hear": "from work",
-      "additional_information": "I want help",
+      "first_name": "Ronald",
+      "middle_name": "Richard",
+      "last_name": "Chan",
+      "aliases": "Anthony Mendez",
+      "phone_number": "8314207603",
+      "alternate_phone_number": "8314207603",
       "email": "bgolder+testing@codeforamerica.org",
-      "last_four": "0002",
       "address": {
-        "state": "AR",
-        "city": "West Edwardstad",
-        "zip": "20411",
-        "street": "242 Jacqueline Expressway Suite 229"
+        "street": "139 Rodriguez Springs Apt. 138",
+        "city": "Chadland",
+        "state": "NY",
+        "zip": "01086"
       },
+      "dob": {
+        "month": "9",
+        "day": "14",
+        "year": "1971"
+      },
+      "driver_license_or_id": "D7591158",
+      "last_four": "6943",
+      "case_number": "C1355-225",
+      "us_citizen": "yes",
       "being_charged": "no",
-      "consent_to_represent": "yes",
-      "case_number": "C5459-436",
-      "dependents": 1
-    },
-    "first_name": "Cristian",
-    "last_name": "Taylor",
-    "dob": null,
-    "ssn": "",
-    "last_four": "0002",
-    "drivers_license_or_id": "",
-    "case_number": "C5459-436",
-    "phone_number": "8314207603",
-    "alternate_phone_number": "8314207603",
-    "email": "bgolder+testing@codeforamerica.org",
-    "old_uuid": "39a9438e99cc459383d41759547b30da",
-    "anonymous_name": "Pastel Flounder",
-    "date_received": "2017-03-29T08:54:08-07:00"
-  }
-},
-{
-  "model": "intake.formsubmission",
-  "pk": 75,
-  "fields": {
-    "applicant": 75,
-    "duplicate_set": null,
-    "answers": {
-      "first_name": "Kaitlyn",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Yolo County",
       "when_probation_or_parole": "2018",
-      "driver_license_or_id": "D2899911",
-      "understands_limits": "yes",
-      "last_name": "Vargas",
+      "monthly_income": 456,
+      "dependents": 2,
       "reasons_for_applying": [
         "background_check",
         "lost_job",
         "housing"
       ],
-      "where_probation_or_parole": "Yolo County",
-      "aliases": "Shannon Ortiz",
-      "phone_number": "8314207603",
-      "middle_name": "Brandon",
-      "serving_sentence": "no",
-      "alternate_phone_number": "8314207603",
-      "monthly_income": 626,
-      "contact_preferences": [
-        "prefers_sms",
-        "prefers_email"
-      ],
-      "on_probation_parole": "yes",
-      "dob": {
-        "month": "9",
-        "day": "23",
-        "year": "1970"
-      },
-      "us_citizen": "no",
       "how_did_you_hear": "from work",
       "additional_information": "I want help",
-      "email": "bgolder+testing@codeforamerica.org",
-      "last_four": "2258",
-      "address": {
-        "state": "NY",
-        "city": "East Robertland",
-        "zip": "36039",
-        "street": "44610 Destiny Island Apt. 821"
-      },
-      "being_charged": "no",
-      "consent_to_represent": "yes",
-      "case_number": "C1626-495",
-      "dependents": 5
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
     },
-    "first_name": "Kaitlyn",
-    "last_name": "Vargas",
+    "first_name": "Ronald",
+    "last_name": "Chan",
     "dob": null,
     "ssn": "",
-    "last_four": "2258",
+    "last_four": "6943",
     "drivers_license_or_id": "",
-    "case_number": "C1626-495",
+    "case_number": "C1355-225",
     "phone_number": "8314207603",
     "alternate_phone_number": "8314207603",
     "email": "bgolder+testing@codeforamerica.org",
-    "old_uuid": "2a70ec1d336f48d5b60d29951ba1c979",
-    "anonymous_name": "Amber Koala",
-    "date_received": "2017-03-22T20:53:43-07:00"
+    "reasons_for_applying": "['background_check', 'lost_job', 'housing']",
+    "how_did_you_hear": "from work",
+    "additional_information": "I want help",
+    "aliases": "Anthony Mendez",
+    "pfn_number": "",
+    "contact_preferences": "['prefers_sms']",
+    "preferred_pronouns": "",
+    "street": "139 Rodriguez Springs Apt. 138",
+    "city": "Chadland",
+    "state": "NY",
+    "zip": "01086",
+    "us_citizen": "yes",
+    "is_veteran": "",
+    "is_student": "",
+    "being_charged": "no",
+    "serving_sentence": "no",
+    "on_probation_parole": "yes",
+    "where_probation_or_parole": "Yolo County",
+    "when_probation_or_parole": "2018",
+    "finished_half_probation": "",
+    "reduced_probation": "",
+    "rap_outside_sf": "",
+    "when_where_outside_sf": "",
+    "has_suspended_license": "",
+    "owes_court_fees": "",
+    "currently_employed": "",
+    "monthly_income": 456,
+    "income_source": "",
+    "on_public_benefits": "",
+    "owns_home": "",
+    "monthly_expenses": null,
+    "household_size": null,
+    "dependents": 2,
+    "is_married": "",
+    "has_children": "",
+    "old_uuid": "cf3e1d4b9a254ebfbe9b38336677ecf1",
+    "anonymous_name": "Imaginative Mountain",
+    "date_received": "2017-04-10T21:39:18-07:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 104,
+  "pk": 7,
   "fields": {
-    "created": "2017-03-29T15:54:08Z",
-    "updated": "2017-04-04T23:26:38.229Z",
+    "created": "2017-03-30T23:02:55Z",
+    "updated": "2017-04-11T23:32:33.527Z",
     "organization": [
       "Fresno County Public Defender"
     ],
-    "form_submission": 74,
+    "form_submission": 7,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 105,
+  "pk": 8,
   "fields": {
-    "created": "2017-03-23T03:53:43Z",
-    "updated": "2017-04-04T23:26:38.244Z",
+    "created": "2017-04-11T04:39:18Z",
+    "updated": "2017-04-11T23:32:33.553Z",
     "organization": [
       "Fresno County Public Defender"
     ],
-    "form_submission": 75,
+    "form_submission": 8,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 109,
+  "pk": 7,
   "fields": {
-    "created": "2017-04-04T23:26:38.887Z",
-    "updated": "2017-04-04T23:26:38.894Z",
-    "status_type": 6,
-    "additional_information": "We may be able to get a fee waived for you",
-    "author": [
-      "fresno_pubdef_user"
-    ],
-    "application": 104,
-    "other_next_step": "Come to our Walk-In Clinic",
-    "next_steps": [
-      1
-    ]
-  }
-},
-{
-  "model": "intake.statusupdate",
-  "pk": 110,
-  "fields": {
-    "created": "2017-04-04T23:26:38.901Z",
-    "updated": "2017-04-04T23:26:38.908Z",
+    "created": "2017-04-11T23:32:34.888Z",
+    "updated": "2017-04-11T23:32:34.904Z",
     "status_type": 7,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "fresno_pubdef_user"
     ],
-    "application": 105,
+    "application": 7,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 8,
+  "fields": {
+    "created": "2017-04-11T23:32:34.923Z",
+    "updated": "2017-04-11T23:32:34.934Z",
+    "status_type": 1,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "fresno_pubdef_user"
+    ],
+    "application": 8,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -226,28 +295,28 @@
 },
 {
   "model": "intake.statusnotification",
-  "pk": 109,
+  "pk": 7,
   "fields": {
-    "status_update": 109,
+    "status_update": 7,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-04T23:26:38.889Z"
+    "created": "2017-04-11T23:32:34.891Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 110,
+  "pk": 8,
   "fields": {
-    "status_update": 110,
+    "status_update": 8,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-04T23:26:38.902Z"
+    "created": "2017-04-11T23:32:34.926Z"
   }
 }
 ]
