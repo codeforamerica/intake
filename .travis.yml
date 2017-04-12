@@ -7,9 +7,11 @@ env:
   - DJANGO_SETTINGS_MODULE='project.settings.ci' DELUXE_TEST=1
 addons:
   postgresql: "9.4"
+
 before_script: python ./manage.py collectstatic --noinput
 script:
   - pep8
+  - ./manage.py behave
   - make test.coverage
 after_success:
   - codeclimate-test-reporter
