@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'storages',
     'formation',
     'taggit',
+    'browser_tests',
     'debug_toolbar',
     'django_extensions',
 ]

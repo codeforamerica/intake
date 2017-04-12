@@ -11,6 +11,7 @@ before_script: python ./manage.py collectstatic --noinput
 script:
   - pep8
   - make test.coverage
+  - ./manage.py test browser_tests
 after_success:
   - codeclimate-test-reporter
 notifications:
