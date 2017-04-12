@@ -27,10 +27,15 @@ class FormSubmissionFactory(factory.DjangoModelFactory):
         submission = super().create(*args, **kwargs)
         # set search fields based on answers
         updated = False
-        for attr_key in models.FormSubmission.text_search_fields:
+        for attr_key in models.FormSubmission.answer_fields:
             if attr_key not in kwargs:
                 if attr_key in submission.answers:
                     value = submission.answers[attr_key]
+                    setattr(submission, attr_key, value)
+                    updated = True
+                address = submission.answers.get('address', {})
+                for attr_key in address:
+                    value = submission.answers['address'][attr_key]
                     setattr(submission, attr_key, value)
                     updated = True
         if updated:

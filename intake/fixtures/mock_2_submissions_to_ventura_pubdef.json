@@ -1,9 +1,9 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 132,
+  "pk": 29,
   "fields": {
-    "first_visit": "2017-04-11T19:03:05.046Z",
+    "first_visit": "2017-04-11T23:32:34.119Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +11,9 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 133,
+  "pk": 30,
   "fields": {
-    "first_visit": "2017-04-11T19:03:05.063Z",
+    "first_visit": "2017-04-11T23:32:34.147Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,220 +21,289 @@
 },
 {
   "model": "intake.applicant",
-  "pk": 129,
+  "pk": 29,
   "fields": {
-    "visitor": 132
+    "visitor": 29
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 130,
+  "pk": 30,
   "fields": {
-    "visitor": 133
+    "visitor": 30
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 129,
+  "pk": 29,
   "fields": {
-    "applicant": 129,
+    "applicant": 29,
     "duplicate_set": null,
     "answers": {
-      "address": {
-        "zip": "44994",
-        "city": "North Willieville",
-        "street": "3956 Dominique Mills Apt. 254",
-        "state": "NV"
-      },
-      "on_probation_parole": "yes",
       "contact_preferences": [
         "prefers_sms",
         "prefers_email"
       ],
-      "consent_to_represent": "yes",
-      "additional_information": "I want help",
-      "middle_name": "Erika",
-      "monthly_expenses": 2000,
-      "has_children": "no",
-      "owes_court_fees": "yes",
-      "dob": {
-        "year": "1968",
-        "day": "26",
-        "month": "11"
-      },
-      "income_source": "a job",
-      "understands_limits": "yes",
-      "when_where_outside_sf": "",
-      "currently_employed": "yes",
-      "email": "bgolder+testing@codeforamerica.org",
-      "is_married": "yes",
+      "first_name": "Nancy",
+      "middle_name": "Andrea",
+      "last_name": "Ruiz",
       "phone_number": "8314207603",
-      "rap_outside_sf": "no",
-      "monthly_income": 2000,
-      "last_name": "Luna",
-      "how_did_you_hear": "from work",
-      "first_name": "Tracy",
       "alternate_phone_number": "8314207603",
-      "last_four": "2432",
+      "email": "bgolder+testing@codeforamerica.org",
+      "address": {
+        "street": "50045 Carter Ridges Apt. 507",
+        "city": "West Christina",
+        "state": "CO",
+        "zip": "37889"
+      },
+      "dob": {
+        "month": "11",
+        "day": "18",
+        "year": "1999"
+      },
+      "driver_license_or_id": "D2924066",
+      "last_four": "2665",
+      "case_number": "C7031-574",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
       "where_probation_or_parole": "Yolo County",
-      "household_size": 2,
+      "when_probation_or_parole": "2018",
+      "rap_outside_sf": "no",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "yes",
+      "currently_employed": "no",
+      "monthly_income": 2000,
+      "income_source": "a job",
+      "on_public_benefits": "yes",
+      "monthly_expenses": 2000,
+      "owns_home": "no",
+      "household_size": 0,
+      "has_children": "yes",
+      "is_married": "no",
       "reasons_for_applying": [
         "background_check",
         "lost_job",
         "housing"
       ],
-      "driver_license_or_id": "D4439821",
-      "case_number": "C3450-296",
-      "on_public_benefits": "yes",
-      "when_probation_or_parole": "2018",
-      "serving_sentence": "no",
-      "being_charged": "no",
-      "owns_home": "no"
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
     },
-    "first_name": "Tracy",
-    "last_name": "Luna",
+    "first_name": "Nancy",
+    "last_name": "Ruiz",
     "dob": null,
     "ssn": "",
-    "last_four": "2432",
+    "last_four": "2665",
     "drivers_license_or_id": "",
-    "case_number": "C3450-296",
+    "case_number": "C7031-574",
     "phone_number": "8314207603",
     "alternate_phone_number": "8314207603",
     "email": "bgolder+testing@codeforamerica.org",
-    "old_uuid": "41b8e30cec8b4046b18707874ac4efd7",
-    "anonymous_name": "Wise Sailboat",
-    "date_received": "2017-04-09T16:37:02-07:00"
+    "reasons_for_applying": "['background_check', 'lost_job', 'housing']",
+    "how_did_you_hear": "from work",
+    "additional_information": "I want help",
+    "aliases": "",
+    "pfn_number": "",
+    "contact_preferences": "['prefers_sms', 'prefers_email']",
+    "preferred_pronouns": "",
+    "street": "50045 Carter Ridges Apt. 507",
+    "city": "West Christina",
+    "state": "CO",
+    "zip": "37889",
+    "us_citizen": "",
+    "is_veteran": "",
+    "is_student": "",
+    "being_charged": "no",
+    "serving_sentence": "no",
+    "on_probation_parole": "yes",
+    "where_probation_or_parole": "Yolo County",
+    "when_probation_or_parole": "2018",
+    "finished_half_probation": "",
+    "reduced_probation": "",
+    "rap_outside_sf": "no",
+    "when_where_outside_sf": "",
+    "has_suspended_license": "",
+    "owes_court_fees": "yes",
+    "currently_employed": "no",
+    "monthly_income": 2000,
+    "income_source": "a job",
+    "on_public_benefits": "yes",
+    "owns_home": "no",
+    "monthly_expenses": 2000,
+    "household_size": 0,
+    "dependents": "",
+    "is_married": "no",
+    "has_children": "yes",
+    "old_uuid": "8a27c60b6fc145cf951290683ef6ab5c",
+    "anonymous_name": "Lavender Marlin",
+    "date_received": "2017-04-10T04:03:44-07:00"
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 130,
+  "pk": 30,
   "fields": {
-    "applicant": 130,
+    "applicant": 30,
     "duplicate_set": null,
     "answers": {
-      "address": {
-        "zip": "85231",
-        "city": "Tonyaside",
-        "street": "9622 Smith Spring Apt. 996",
-        "state": "NE"
-      },
-      "on_probation_parole": "yes",
       "contact_preferences": [
-        "prefers_email",
         "prefers_sms"
       ],
-      "consent_to_represent": "yes",
-      "additional_information": "I want help",
-      "middle_name": "Donald",
-      "monthly_expenses": 2000,
-      "has_children": "yes",
-      "owes_court_fees": "yes",
-      "dob": {
-        "year": "1977",
-        "day": "3",
-        "month": "5"
-      },
-      "income_source": "a job",
-      "understands_limits": "yes",
-      "when_where_outside_sf": "",
-      "currently_employed": "no",
-      "email": "bgolder+testing@codeforamerica.org",
-      "is_married": "no",
+      "first_name": "Michael",
+      "middle_name": "Linda",
+      "last_name": "Vargas",
       "phone_number": "8314207603",
-      "rap_outside_sf": "yes",
-      "monthly_income": 2000,
-      "last_name": "Murphy",
-      "how_did_you_hear": "from work",
-      "first_name": "Ashley",
       "alternate_phone_number": "8314207603",
-      "last_four": "1805",
+      "email": "bgolder+testing@codeforamerica.org",
+      "address": {
+        "street": "75130 Mark Road",
+        "city": "West Davidborough",
+        "state": "CT",
+        "zip": "60633"
+      },
+      "dob": {
+        "month": "12",
+        "day": "13",
+        "year": "1964"
+      },
+      "driver_license_or_id": "D7763034",
+      "last_four": "3187",
+      "case_number": "C8576-727",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
       "where_probation_or_parole": "Yolo County",
-      "household_size": 4,
+      "when_probation_or_parole": "2018",
+      "rap_outside_sf": "no",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "yes",
+      "currently_employed": "no",
+      "monthly_income": 2000,
+      "income_source": "a job",
+      "on_public_benefits": "yes",
+      "monthly_expenses": 2000,
+      "owns_home": "no",
+      "household_size": 1,
+      "has_children": "yes",
+      "is_married": "no",
       "reasons_for_applying": [
         "background_check",
         "lost_job",
         "housing"
       ],
-      "driver_license_or_id": "D7007541",
-      "case_number": "C4113-878",
-      "on_public_benefits": "yes",
-      "when_probation_or_parole": "2018",
-      "serving_sentence": "no",
-      "being_charged": "no",
-      "owns_home": "no"
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
     },
-    "first_name": "Ashley",
-    "last_name": "Murphy",
+    "first_name": "Michael",
+    "last_name": "Vargas",
     "dob": null,
     "ssn": "",
-    "last_four": "1805",
+    "last_four": "3187",
     "drivers_license_or_id": "",
-    "case_number": "C4113-878",
+    "case_number": "C8576-727",
     "phone_number": "8314207603",
     "alternate_phone_number": "8314207603",
     "email": "bgolder+testing@codeforamerica.org",
-    "old_uuid": "f5e128be9c884470bae28547ea7da648",
-    "anonymous_name": "Orange Moth",
-    "date_received": "2017-04-08T06:18:38-07:00"
+    "reasons_for_applying": "['background_check', 'lost_job', 'housing']",
+    "how_did_you_hear": "from work",
+    "additional_information": "I want help",
+    "aliases": "",
+    "pfn_number": "",
+    "contact_preferences": "['prefers_sms']",
+    "preferred_pronouns": "",
+    "street": "75130 Mark Road",
+    "city": "West Davidborough",
+    "state": "CT",
+    "zip": "60633",
+    "us_citizen": "",
+    "is_veteran": "",
+    "is_student": "",
+    "being_charged": "no",
+    "serving_sentence": "no",
+    "on_probation_parole": "yes",
+    "where_probation_or_parole": "Yolo County",
+    "when_probation_or_parole": "2018",
+    "finished_half_probation": "",
+    "reduced_probation": "",
+    "rap_outside_sf": "no",
+    "when_where_outside_sf": "",
+    "has_suspended_license": "",
+    "owes_court_fees": "yes",
+    "currently_employed": "no",
+    "monthly_income": 2000,
+    "income_source": "a job",
+    "on_public_benefits": "yes",
+    "owns_home": "no",
+    "monthly_expenses": 2000,
+    "household_size": 1,
+    "dependents": "",
+    "is_married": "no",
+    "has_children": "yes",
+    "old_uuid": "55164adc87dc41c2b905b12184199168",
+    "anonymous_name": "Chartreuse Cheetah",
+    "date_received": "2017-04-10T08:44:34-07:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 174,
+  "pk": 29,
   "fields": {
-    "created": "2017-04-09T23:37:02Z",
-    "updated": "2017-04-11T19:03:05.057Z",
+    "created": "2017-04-10T11:03:44Z",
+    "updated": "2017-04-11T23:32:34.140Z",
     "organization": [
       "Ventura County Public Defender"
     ],
-    "form_submission": 129,
+    "form_submission": 29,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 175,
+  "pk": 30,
   "fields": {
-    "created": "2017-04-08T13:18:38Z",
-    "updated": "2017-04-11T19:03:05.072Z",
+    "created": "2017-04-10T15:44:34Z",
+    "updated": "2017-04-11T23:32:34.165Z",
     "organization": [
       "Ventura County Public Defender"
     ],
-    "form_submission": 130,
+    "form_submission": 30,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 173,
+  "pk": 30,
   "fields": {
-    "created": "2017-04-11T19:03:05.569Z",
-    "updated": "2017-04-11T19:03:05.577Z",
-    "status_type": 1,
-    "additional_information": "We may be able to get a fee waived for you",
-    "author": [
-      "ventura_pubdef_user"
-    ],
-    "application": 174,
-    "other_next_step": "Come to our Walk-In Clinic",
-    "next_steps": [
-      1
-    ]
-  }
-},
-{
-  "model": "intake.statusupdate",
-  "pk": 174,
-  "fields": {
-    "created": "2017-04-11T19:03:05.583Z",
-    "updated": "2017-04-11T19:03:05.590Z",
+    "created": "2017-04-11T23:32:35.942Z",
+    "updated": "2017-04-11T23:32:35.951Z",
     "status_type": 2,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "ventura_pubdef_user"
     ],
-    "application": 175,
+    "application": 30,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 29,
+  "fields": {
+    "created": "2017-04-11T23:32:35.913Z",
+    "updated": "2017-04-11T23:32:35.926Z",
+    "status_type": 1,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "ventura_pubdef_user"
+    ],
+    "application": 29,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -243,28 +312,28 @@
 },
 {
   "model": "intake.statusnotification",
-  "pk": 173,
+  "pk": 29,
   "fields": {
-    "status_update": 173,
+    "status_update": 29,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-11T19:03:05.571Z"
+    "created": "2017-04-11T23:32:35.917Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 174,
+  "pk": 30,
   "fields": {
-    "status_update": 174,
+    "status_update": 30,
     "contact_info": {
       "email": "bgolder+borg@codeforamerica.org"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-11T19:03:05.585Z"
+    "created": "2017-04-11T23:32:35.944Z"
   }
 }
 ]

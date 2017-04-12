@@ -28,6 +28,63 @@ FORMSUBMISSION_TEXT_SEARCH_FIELDS = [
     'email'
 ]
 
+QUERYABLE_ANSWER_FIELDS = [
+    'reasons_for_applying',
+    'how_did_you_hear',
+    'additional_information',
+    'aliases',
+    'pfn_number',
+    'contact_preferences',
+    'preferred_pronouns',
+    'street',
+    'city',
+    'state',
+    'zip',
+    'us_citizen',
+    'is_veteran',
+    'is_student',
+    'being_charged',
+    'serving_sentence',
+    'on_probation_parole',
+    'where_probation_or_parole',
+    'when_probation_or_parole',
+    'finished_half_probation',
+    'reduced_probation',
+    'rap_outside_sf',
+    'when_where_outside_sf',
+    'has_suspended_license',
+    'owes_court_fees',
+    'currently_employed',
+    'income_source',
+    'on_public_benefits',
+    'owns_home',
+    'household_size',
+    'dependents',
+    'is_married',
+    'has_children'
+]
+
+
+DOLLAR_FIELDS = [
+    'monthly_income',
+    'monthly_expenses'
+]
+
+"""
+Some fields were not extracted from the answers blob;
+UNEXTRACTED FIELDS = [
+    'consent_to_represent',
+    'understands_limits',
+    'address',
+    'declaration_letter_note',
+    'declaration_letter_intro',
+    'declaration_letter_life_changes',
+    'declaration_letter_activities',
+    'declaration_letter_goals',
+    'declaration_letter_why'
+    ]
+"""
+
 
 class MissingAnswersError(Exception):
     pass
@@ -44,6 +101,9 @@ def gen_uuid():
 class FormSubmission(models.Model):
 
     text_search_fields = FORMSUBMISSION_TEXT_SEARCH_FIELDS
+    answer_fields = (
+        FORMSUBMISSION_TEXT_SEARCH_FIELDS +
+        QUERYABLE_ANSWER_FIELDS + DOLLAR_FIELDS)
 
     organizations = models.ManyToManyField(
         'user_accounts.Organization', related_name="submissions",
@@ -56,7 +116,7 @@ class FormSubmission(models.Model):
         related_name='submissions')
     answers = JSONField()
 
-    # extracting these values from answers for autocomplete/search
+    # extracting these values from answers for autocomplete/search/querying
     first_name = models.TextField(default="")
     last_name = models.TextField(default="")
     dob = models.DateField(null=True)
@@ -67,6 +127,41 @@ class FormSubmission(models.Model):
     phone_number = models.TextField(default="")
     alternate_phone_number = models.TextField(default="")
     email = models.TextField(default="")
+    reasons_for_applying = models.TextField(default="")
+    how_did_you_hear = models.TextField(default="")
+    additional_information = models.TextField(default="")
+    aliases = models.TextField(default="")
+    pfn_number = models.TextField(default="")
+    contact_preferences = models.TextField(default="")
+    preferred_pronouns = models.TextField(default="")
+    street = models.TextField(default="")
+    city = models.TextField(default="")
+    state = models.TextField(default="")
+    zip = models.TextField(default="")
+    us_citizen = models.TextField(default="")
+    is_veteran = models.TextField(default="")
+    is_student = models.TextField(default="")
+    being_charged = models.TextField(default="")
+    serving_sentence = models.TextField(default="")
+    on_probation_parole = models.TextField(default="")
+    where_probation_or_parole = models.TextField(default="")
+    when_probation_or_parole = models.TextField(default="")
+    finished_half_probation = models.TextField(default="")
+    reduced_probation = models.TextField(default="")
+    rap_outside_sf = models.TextField(default="")
+    when_where_outside_sf = models.TextField(default="")
+    has_suspended_license = models.TextField(default="")
+    owes_court_fees = models.TextField(default="")
+    currently_employed = models.TextField(default="")
+    monthly_income = models.IntegerField(null=True)
+    income_source = models.TextField(default="")
+    on_public_benefits = models.TextField(default="")
+    owns_home = models.TextField(default="")
+    monthly_expenses = models.IntegerField(null=True)
+    household_size = models.IntegerField(null=True)
+    dependents = models.TextField(default="")
+    is_married = models.TextField(default="")
+    has_children = models.TextField(default="")
 
     # old_uuid is only used for porting legacy applications
     old_uuid = models.CharField(max_length=34, unique=True,
