@@ -43,10 +43,16 @@ class StatusUpdateBase:
         return form.cleaned_data
 
     def check_for_scope_based_redirects(self):
+        """Override in child classes to redirect requests based on instance
+        properties.
+        """
         if not self.application:
             return not_allowed(self.request)
 
     def check_for_session_based_redirects(self):
+        """Override in child classes to redirect requests based on session
+        content
+        """
         return None
 
     def get_existing_form_data(self):
@@ -57,6 +63,11 @@ class StatusUpdateBase:
         raise NotImplementedError('this must be overridden in a subclass')
 
     def dispatch(self, request, submission_id, *args, **kwargs):
+        """
+        Override of dispatch for special cases. Includes hooks to check for
+        object permission and session data (to indicate access). Handles
+        accordingly.
+        """
         self.set_request_scoping_properties(
             request, submission_id, *args, **kwargs)
         response = self.check_for_scope_based_redirects()
@@ -110,6 +121,9 @@ class ReviewStatusNotificationFormView(StatusUpdateBase, FormView):
         self.success_url = reverse('intake-app_index')
 
     def check_for_session_based_redirects(self):
+        """Checks if the session was cleared, if so, redirects to create status
+        page.
+        """
         if 'application' not in self.existing_status_update_data:
             return redirect(reverse(
                 'intake-create_status_update',
