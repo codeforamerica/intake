@@ -12,7 +12,7 @@ def start_local():
     """Code to start browserstack local before start of test."""
     global bs_local
     bs_local = Local()
-    bs_local_args = { "key": ACCESS_KEY, "forcelocal": "true" }
+    bs_local_args = {"key": ACCESS_KEY, "forcelocal": "true"}
     bs_local.start(**bs_local_args)
 
 
@@ -41,6 +41,7 @@ def before_all(context):
         command_executor=url % (USERNAME, ACCESS_KEY)
     )
     context.browser.implicitly_wait(10)
+
 
 def after_all(context):
     context.browser.quit()

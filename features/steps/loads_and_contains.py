@@ -9,13 +9,13 @@ def load_page(context, url):
 
 @then('it should have the "{element_id}" link and say "{text}"')
 def find_with_id_and_assert_text(context, element_id, text):
-    element  = context.browser.find_element_by_id(element_id)
+    element = context.browser.find_element_by_id(element_id)
     context.test.assertEquals(element.text, text)
 
 
 @then('"{element_id}" should deeplink to "{section}"')
 def check_link_goes_to_section_but_stays_on_page(context, element_id, section):
-    element  = context.browser.find_element_by_id(element_id)
+    element = context.browser.find_element_by_id(element_id)
     start_url = urldefrag(context.browser.current_url)
     element.click()
     end_url = urldefrag(context.browser.current_url)
@@ -26,7 +26,7 @@ def check_link_goes_to_section_but_stays_on_page(context, element_id, section):
 @then('"{element_id}" should link to "{url}"')
 def check_link_goes_to_page(context, element_id, url):
     start_url = context.browser.current_url
-    element  = context.browser.find_element_by_id(element_id)
+    element = context.browser.find_element_by_id(element_id)
     element.click()
     end_url = context.browser.current_url
     context.test.assertNotEquals(start_url, end_url)
@@ -34,4 +34,3 @@ def check_link_goes_to_page(context, element_id, url):
         urljoin(context.test.live_server_url, url),
         end_url,
     )
-
