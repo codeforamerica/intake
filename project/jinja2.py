@@ -8,6 +8,7 @@ from datetime import datetime
 from pytz import timezone
 from jinja2 import Markup
 from django.utils.html import mark_safe
+from markupsafe import escape
 from rest_framework.renderers import JSONRenderer
 
 
@@ -91,7 +92,7 @@ class Linkifier:
     def build_link(self, lookup):
         url = self.links[lookup]
         return '<a href="{}">{}</a>'.format(
-            url, lookup)
+            url, escape(lookup))
 
     def __call__(self, content):
         output = content
