@@ -164,6 +164,7 @@ class Thanks(TemplateView, base_views.GetFormSessionDataMixin):
             context.update(
                 organizations=sub.organizations.all()
             )
+        self.clear_session_data('applicant_id')
         return context
 
 
@@ -180,6 +181,7 @@ class RAPSheetInstructions(TemplateView, base_views.GetFormSessionDataMixin):
                 context['organizations'] = submission.organizations.all()
                 context['qualifies_for_fee_waiver'] = \
                     submission.qualifies_for_fee_waiver()
+            self.clear_session_data('applicant_id')
         return context
 
 
