@@ -3,9 +3,8 @@ import logging
 import random
 from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase
 from intake.tests.base_testcases import IntakeDataTestCase
-from intake.tests.mock_org_answers import get_answers_for_orgs
 from unittest.mock import patch, Mock
-from intake.tests import mock
+from intake.tests import mock, factories
 from intake import models, constants
 from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
@@ -34,7 +33,8 @@ class TestFullCountyApplicationSequence(IntakeDataTestCase):
         result = self.client.fill_form(
             reverse('intake-county_application'),
             **mock.fake.sf_county_form_answers())
-        self.assertRedirects(result, reverse('intake-thanks'))
+        self.assertRedirects(
+            result, reverse('intake-thanks'), fetch_redirect_response=False)
         thanks_page = self.client.get(result.url)
         filled_pdf = models.FilledPDF.objects.first()
         self.assertTrue(filled_pdf)
@@ -47,6 +47,8 @@ class TestFullCountyApplicationSequence(IntakeDataTestCase):
         self.assertContains(thanks_page, "Thank")
         self.assertEqual(len(slack.mock_calls), 1)
         send_confirmation.assert_called_once_with(submission)
+        form_data = self.client.session.get('form_in_progress')
+        self.assertFalse(form_data)
 
     @patch('intake.models.pdfs.get_parser')
     @patch(
@@ -242,10 +244,12 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         result = self.client.fill_form(
             reverse('intake-county_application'),
             **answers)
-        self.assertRedirects(result, reverse('intake-thanks'))
+
         applicant_id = self.client.session.get('applicant_id')
         self.assertTrue(applicant_id)
         applicant = models.Applicant.objects.get(id=applicant_id)
+
+        self.assertRedirects(result, reverse('intake-thanks'))
 
         submissions = list(applicant.form_submissions.all())
         self.assertEqual(1, len(submissions))
@@ -699,16 +703,14 @@ class TestDeclarationLetterReviewPage(AuthIntegrationTestCase):
         self.set_session(
             form_in_progress=session_data,
             applicant_id=applicant.id)
+
         response = self.client.fill_form(
             reverse('intake-review_letter'),
             submit_action="approve_letter")
         self.assertRedirects(response, reverse('intake-thanks'))
 
-        applicant_id = self.client.session.get('applicant_id')
-        self.assertTrue(applicant_id)
-
         submissions = list(models.FormSubmission.objects.filter(
-            applicant_id=applicant_id))
+            applicant_id=applicant.id))
         self.assertEqual(len(submissions), 1)
         submission = submissions[0]
         county_slugs = [county.slug for county in submission.get_counties()]
@@ -762,6 +764,17 @@ class TestThanks(IntakeDataTestCase):
         self.set_session(applicant_id=app.id)
         response = self.client.get(reverse('intake-thanks'))
         self.assertEqual(response.status_code, 200)
+
+    def test_session_is_cleared_after_loading_thanks(self):
+        sub = factories.FormSubmissionWithOrgsFactory(
+            organizations=[self.a_pubdef])
+        self.set_session(applicant_id=sub.applicant_id)
+        response = self.client.get(reverse('intake-thanks'))
+        applicant_id = self.client.session.get('applicant_id')
+        self.assertFalse(applicant_id)
+        self.assertEqual(response.status_code, 200)
+        for org in sub.organizations.all():
+            self.assertContains(response, escape(org.name))
 
 
 @override_settings(MIXPANEL_KEY='fake_key')

@@ -54,6 +54,12 @@ class GetFormSessionDataMixin:
     def get_session_data(self):
         return dict(**self.request.session.get(self.session_storage_key, {}))
 
+    def clear_session_data(self, *keys):
+        existing_keys = list(self.request.session.keys())
+        for key_to_delete in [self.session_storage_key, *keys]:
+            if key_to_delete in existing_keys:
+                del self.request.session[key_to_delete]
+
     def get_counties(self):
         session_data = self.get_session_data()
         county_slugs = session_data.get('counties', [])

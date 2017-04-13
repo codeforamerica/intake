@@ -164,6 +164,7 @@ class Thanks(TemplateView, base_views.GetFormSessionDataMixin):
             context.update(
                 organizations=sub.organizations.all()
             )
+        self.clear_session_data('applicant_id')
         return context
 
 
