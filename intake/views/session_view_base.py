@@ -44,15 +44,18 @@ class GetFormSessionDataMixin:
         try:
             self.check_session_data_validity()
         except NoCountyCookiesError as err:
-            notifications.slack_simple.send(
-                "ApplicationError!\n" + str(err))
             logger.error(err)
-            messages.error(self.request, GENERIC_USER_ERROR_MESSAGE)
             return redirect(reverse('intake-apply'))
         return super().dispatch(request, *args, **kwargs)
 
     def get_session_data(self):
         return dict(**self.request.session.get(self.session_storage_key, {}))
+
+    def clear_session_data(self, *keys):
+        existing_keys = list(self.request.session.keys())
+        for key_to_delete in [self.session_storage_key, *keys]:
+            if key_to_delete in existing_keys:
+                del self.request.session[key_to_delete]
 
     def get_counties(self):
         session_data = self.get_session_data()

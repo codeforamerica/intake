@@ -1,0 +1,17 @@
+{#
+  assumes 'application' is in the context
+-#}
+<p class="latest_status_bar">
+  {%- if application.latest_status %}
+    Current status:
+    <a href="{{
+      url('intake-app_history', submission_id=application.form_submission_id)
+    }}" class="status_history_link">
+      {{ application.latest_status.status_type.display_name }}
+      ({{ humanize.naturaltime(application.latest_status.updated) }}
+      by {{ application.latest_status.author.profile.name }})
+    </a>
+  {%- else %}
+    New (no status updates yet)
+  {%- endif %}
+</p>

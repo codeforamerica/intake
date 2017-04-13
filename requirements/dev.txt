@@ -1,9 +1,10 @@
 # dependencies for development and testing
 -r app.txt
-selenium~=2.53
 autopep8~=1.2
 pep8~=1.6
 coverage~=4.0
 codeclimate-test-reporter~=0.1
 beautifulsoup4==4.4.1
+browserstack-local~=1.2.1
+selenium~=3.3.3
 

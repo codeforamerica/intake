@@ -30,14 +30,14 @@ def copy_answers_to_fields(apps, schema_editor):
             if existing:
                 setattr(sub, key, existing)
         # Known issue: some values cannot be handled correctly by the
-        # WholeDollarField, reporting out below (issue #705)
+        # WholeDollarField (issue #705)
         try:
             money_form = MoneyValidatorForm(sub.answers, validate=True)
             for money_key in money_keys:
                 existing = money_form.cleaned_data.get(money_key, None)
                 if existing:
                     setattr(sub, money_key, existing)
-        except Exception as err:
+        except Exception:
             subs_with_errors.append(sub)
 
         address = sub.answers.get('address')
@@ -47,11 +47,6 @@ def copy_answers_to_fields(apps, schema_editor):
                 if existing:
                     setattr(sub, component, existing)
         sub.save()
-
-    # Prints list of subs with errors (see above)
-    print("Unable to parse dollar amounts for these subs:")
-    for sub in subs_with_errors:
-        print("\t {} {}".format(sub.id, sub.answers))
 
 
 def empty_new_answers_fields(apps, schema_editor):

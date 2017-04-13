@@ -13,3 +13,6 @@ if USE_DEBUG_TOOLBAR:
         0, 'debug_toolbar.middleware.DebugToolbarMiddleware',)
 
 CELERY_TASK_ALWAYS_EAGER = True
+
+BROWSER_STACK_ID = os.environ.get('BROWSER_STACK_ID')
+BROWSER_STACK_KEY = os.environ.get('BROWSER_STACK_KEY')
