@@ -462,17 +462,11 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
         county_setting = self.client.session['form_in_progress']['counties']
         self.assertEqual(county_setting, second_choices)
 
-    @patch('intake.notifications.slack_simple.send')
-    def test_no_counties_found_error_sends_slack_and_redirects(self, slack):
+    def test_no_counties_found_error_redirects(self):
         self.be_anonymous()
         response = self.client.get(reverse('intake-county_application'))
         self.assertRedirects(
-            response, reverse('intake-apply'), fetch_redirect_response=False)
-        self.assertTrue(slack.called)
-        response = self.client.get(response.url)
-        expected_flash_message = html_utils.conditional_escape(
-            session_view_base.GENERIC_USER_ERROR_MESSAGE)
-        self.assertContains(response, expected_flash_message)
+            response, reverse('intake-apply'))
 
 
 class TestDeclarationLetterView(AuthIntegrationTestCase):
@@ -547,21 +541,13 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
             result.context_data['form'].get_serialized_errors(),
             event.data['errors'])
 
-    @patch('intake.notifications.slack_simple.send')
-    def test_no_existing_data(self, slack):
+    def test_no_existing_data(self):
         self.be_anonymous()
         with self.assertLogs(
                 'intake.views.session_view_base', level=logging.WARN):
             response = self.client.get(reverse('intake-write_letter'))
-        self.assertTrue(slack.called)
         self.assertRedirects(
-            response, reverse('intake-apply'), fetch_redirect_response=False)
-        final_response = self.client.get(response.url)
-        self.assertContains(
-            final_response, html_utils.conditional_escape(
-                session_view_base.GENERIC_USER_ERROR_MESSAGE
-            ),
-        )
+            response, reverse('intake-apply'))
 
     def test_pulls_in_existing_letter_answers_data(self):
         self.be_anonymous()
@@ -648,21 +634,13 @@ class TestDeclarationLetterReviewPage(AuthIntegrationTestCase):
         self.assertContains(
             response, 'name="submit_action" value="edit_letter"')
 
-    @patch('intake.notifications.slack_simple.send')
-    def test_get_with_no_existing_data(self, slack):
+    def test_get_with_no_existing_data(self):
         self.be_anonymous()
         with self.assertLogs(
                 'intake.views.session_view_base', level=logging.WARN):
             response = self.client.get(reverse('intake-review_letter'))
-        self.assertTrue(slack.called)
         self.assertRedirects(
-            response, reverse('intake-apply'), fetch_redirect_response=False)
-        final_response = self.client.get(response.url)
-        self.assertContains(
-            final_response, html_utils.conditional_escape(
-                session_view_base.GENERIC_USER_ERROR_MESSAGE
-            ),
-        )
+            response, reverse('intake-apply'))
 
     def test_post_edit_letter(self):
         self.be_anonymous()
@@ -803,6 +781,8 @@ class TestRAPSheetInstructions(IntakeDataTestCase):
         self.assertIn('qualifies_for_fee_waiver', response.context_data)
         self.assertIn('organizations', response.context_data)
         submission_mock.qualifies_for_fee_waiver.assert_called_once_with()
+        applicant_id = self.client.session.get('applicant_id')
+        self.assertFalse(applicant_id)
 
     def test_no_error_if_applicant_with_no_sub(self):
         app = models.Applicant()

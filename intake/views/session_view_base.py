@@ -44,10 +44,7 @@ class GetFormSessionDataMixin:
         try:
             self.check_session_data_validity()
         except NoCountyCookiesError as err:
-            notifications.slack_simple.send(
-                "ApplicationError!\n" + str(err))
             logger.error(err)
-            messages.error(self.request, GENERIC_USER_ERROR_MESSAGE)
             return redirect(reverse('intake-apply'))
         return super().dispatch(request, *args, **kwargs)
 
