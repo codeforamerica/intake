@@ -651,6 +651,7 @@ class TestDeclarationLetterReviewPage(AuthIntegrationTestCase):
         for other_data in [counties, mock_answers, mock_letter]:
             session_data.update(other_data)
         self.set_session(
+            counties=[constants.Counties.ALAMEDA],
             form_in_progress=session_data,
             applicant_id=2)
         response = self.client.fill_form(
