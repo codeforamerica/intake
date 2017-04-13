@@ -14,6 +14,11 @@ test:
 	pep8
 
 
+test.behave:
+	./manage.py behave \
+		--keepdb
+
+
 test.keepdb:
 	./manage.py test $(SCOPE) \
 		--verbosity 2 --keepdb
