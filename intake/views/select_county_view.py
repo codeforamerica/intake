@@ -1,27 +1,20 @@
-"""Base classes for views that access session data and process intake forms
-"""
 from formation.forms import SelectCountyForm
 from django.core.urlresolvers import reverse_lazy
-from .applicant_form_mixin import ApplicantFormMixin
-from intake import models
+from .applicant_form_view_base import ApplicantFormViewBase
+import intake.services.applicants as ApplicantsService
+import intake.services.events_service as EventsService
 
-# transition visitor to applicant / fires app started event
 
-
-class SelectCountyView(ApplicantFormMixin):
+class SelectCountyView(ApplicantFormViewBase):
     form_class = SelectCountyForm
     template_name = "forms/county_selection.jinja"
     success_url = reverse_lazy('intake-county_application')
 
     def post(self, request, *args, **kwargs):
-
-        # ApplicantService.add_applicant_to_request(request)
-
+        ApplicantsService.create_new_applicant(request)
         return super().post(request, *args, **kwargs)
 
     def form_valid(self, form):
-        models.ApplicationEvent.log_app_started(
-            self.request.applicant,
-            counties=form.parsed_data['counties'],
-        )
+        EventsService.log_app_started(
+            self.request, counties=form.parsed_data['counties'])
         return super().form_valid(form)

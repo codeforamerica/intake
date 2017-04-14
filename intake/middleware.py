@@ -55,3 +55,5 @@ class CountUniqueVisitorsMiddleware:
             )
             visitor.save()
             request.session['visitor_id'] = visitor.id
+            # should this be stored in request.context_data?
+            request.visitor = visitor
