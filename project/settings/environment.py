@@ -20,10 +20,7 @@ AWS_ACCESS_KEY_ID = os.environ.get('BUCKETEER_AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('BUCKETEER_AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('BUCKETEER_BUCKET_NAME')
 
-if 'FileSystem' in DEFAULT_FILE_STORAGE:
-    MEDIA_ROOT = os.path.join(REPO_DIR, 'project', 'media')
-else:
-    MEDIA_ROOT = ''
+MEDIA_ROOT = ''
 
 # static files location
 STATIC_ROOT = os.environ.get('STATIC_ROOT',
