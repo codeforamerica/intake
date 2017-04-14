@@ -14,3 +14,4 @@ class Command(BaseCommand):
         management.call_command('load_essential_data')
         if getattr(settings, 'GENERATE_DUMMY_DATA', False):
             management.call_command('load_mock_data')
+        management.call_command('smoke_test')
