@@ -48,7 +48,9 @@ def save_form_data_to_session(request, session_key, query_dict):
         key: items
         for key, items in query_dict._iterlists()
     }
-    request.session[session_key] = data_dict
+    existing_data = request.session.get(session_key, {})
+    existing_data.update(data_dict)
+    request.session[session_key] = existing_data
 
 
 def get_form_data_from_session(request, session_key):

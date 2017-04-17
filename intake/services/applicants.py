@@ -8,11 +8,6 @@ def get_applicants_with_multiple_submissions():
     ).filter(sub_count__gt=1)
 
 
-# should these be using request.context_data?
-# should they do a get or create for an applicant id?
-# https://docs.djangoproject.com/en/1.10/ref/request-response/#attributes-set-by-middleware
-
-
 def create_new_applicant(request):
     if not request.applicant:
         applicant = models.Applicant(
