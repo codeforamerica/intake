@@ -16,4 +16,3 @@ class Command(BaseCommand):
         if getattr(settings, 'GENERATE_DUMMY_DATA', False):
             management.call_command('load_mock_data')
         management.call_command('smoke_test')
-
