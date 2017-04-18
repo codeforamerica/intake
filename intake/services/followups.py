@@ -19,7 +19,7 @@ def get_submissions_due_for_follow_ups(after_id=None):
         status_updates=None, organization__needs_applicant_followups=True)
     has_at_least_one_app_w_no_update = Q(
         id__in=apps_that_need_followups.values_list(
-                'form_submission_id', flat=True))
+            'form_submission_id', flat=True))
     if after_id:
         lower_bound = models.FormSubmission.objects.get(
             id=after_id).date_received

@@ -56,14 +56,8 @@ gulp.task('stats_js', function(){
 });
 
 
-gulp.task('less_dev', function(){
-  return gulp.src('./frontend/less/main.less')
-    .pipe(less())
-    .pipe(gulp.dest('./frontend/build/css/'));
-});
 
 gulp.task('watch', function(){
-  gulp.watch('./frontend/less/**/*.less', ['less_dev']);
   gulp.watch('./frontend/js/**/*.js', ['admin_js', 'stats_js']);
 })
 
