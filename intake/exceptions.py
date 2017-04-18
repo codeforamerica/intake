@@ -16,7 +16,7 @@ class UserCannotBeNoneError(Exception):
     pass
 
 
-class NoCountyCookiesError(Exception):
+class NoCountiesInSessionError(Exception):
     pass
 
 

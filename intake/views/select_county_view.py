@@ -10,6 +10,12 @@ class SelectCountyView(ApplicantFormViewBase):
     template_name = "forms/county_selection.jinja"
     success_url = reverse_lazy('intake-county_application')
 
+    def check_for_session_based_redirects(self):
+        """disable ApplicantFormViewBase's check for 'counties' in the session
+            data
+        """
+        pass
+
     def post(self, request, *args, **kwargs):
         ApplicantsService.create_new_applicant(request)
         return super().post(request, *args, **kwargs)
@@ -18,3 +24,6 @@ class SelectCountyView(ApplicantFormViewBase):
         EventsService.log_app_started(
             self.request, counties=form.parsed_data['counties'])
         return super().form_valid(form)
+
+
+select_county = SelectCountyView.as_view()

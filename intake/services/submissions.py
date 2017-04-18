@@ -42,11 +42,15 @@ def create_submission(form, organizations, applicant_id):
     return submission
 
 
-def fill_pdfs_for_submission(submission):
+def fill_pdfs_for_submission(submission, organizations=None):
     """Checks for and creates any needed `FilledPDF` objects
     """
-    fillables = models.FillablePDF.objects.filter(
-        organization__submissions=submission)
+    if organizations:
+        fillables = models.FillablePDF.objects.filter(
+            organization_id__in=[org.id for org in organizations])
+    else:
+        fillables = models.FillablePDF.objects.filter(
+            organization__submissions=submission)
     for fillable in fillables:
         fillable.fill_for_submission(submission)
 

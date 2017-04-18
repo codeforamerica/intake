@@ -427,7 +427,7 @@ class FormNote:
     no input for forms, such as a brief statement.
     """
     content = ""
-    template_string = '<div class="note field-form_note"><p>{}</p></div>'
+    template_string = '<div class="note field-form_note {}"><p>{}</p></div>'
     escape_content = False
 
     def __init__(self, *args, **kwargs):
@@ -442,7 +442,9 @@ class FormNote:
         return self.content
 
     def render(self):
-        return mark_safe(self.template_string.format(self.get_content()))
+        return mark_safe(self.template_string.format(
+            self.context_key,
+            self.get_content()))
 
     def __repr__(self):
         return 'FormNote(content="{}")'.format(self.get_content())

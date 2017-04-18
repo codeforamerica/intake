@@ -1,8 +1,9 @@
 from intake import models
 import intake.services.applicants as ApplicantsService
 
-# just a shortcut
-get_app_id = ApplicantsService.get_applicant_from_request_or_session
+
+def get_app_id(request):
+    return ApplicantsService.get_applicant_from_request_or_session(request).id
 
 
 def log_app_started(request, counties):

@@ -65,6 +65,13 @@ def get_form_data_from_session(request, session_key):
     return qdict
 
 
+def clear_session_data(request, *keys):
+    existing_keys = list(request.session.keys())
+    for key_to_delete in keys:
+        if key_to_delete in existing_keys:
+            del request.session[key_to_delete]
+
+
 def clear_form_data_from_session(request, session_key):
     request.session[session_key] = {}
 

@@ -16,7 +16,7 @@ from user_accounts.models import Organization
 from formation.forms import county_form_selector
 
 import intake.services.submissions as SubmissionsService
-from intake.exceptions import NoCountyCookiesError
+from intake.exceptions import NoCountiesInSessionError
 
 
 logger = logging.getLogger(__name__)
@@ -47,7 +47,7 @@ class GetFormSessionDataMixin:
 
         try:
             self.check_session_data_validity()
-        except NoCountyCookiesError as err:
+        except NoCountiesInSessionError as err:
             logger.error(err)
             return redirect(reverse('intake-apply'))
         return super().dispatch(request, *args, **kwargs)
@@ -140,7 +140,7 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
             )
             error_message = "No Counties in session data: `{}`".format(
                 json.dumps(error_data))
-            raise NoCountyCookiesError(error_message)
+            raise NoCountiesInSessionError(error_message)
 
     def get_form(self, *args):
         if self.form_spec:

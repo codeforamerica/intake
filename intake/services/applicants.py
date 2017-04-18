@@ -9,7 +9,7 @@ def get_applicants_with_multiple_submissions():
 
 
 def create_new_applicant(request):
-    if not request.applicant:
+    if not getattr(request, 'applicant', None):
         applicant = models.Applicant(
             visitor_id=request.visitor.id)
         applicant.save()
@@ -19,10 +19,8 @@ def create_new_applicant(request):
 
 
 def get_applicant_from_request_or_session(request):
-    if not request.applicant:
+    if not getattr(request, 'applicant', None):
         applicant = models.Applicant.objects.filter(
             id=request.session.get('applicant_id')).first()
-        if not applicant:
-            return create_new_applicant(request)
         request.applicant = applicant
     return request.applicant
