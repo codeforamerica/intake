@@ -20,5 +20,9 @@ class NoCountiesInSessionError(Exception):
     pass
 
 
+class NoApplicantInSessionError(Exception):
+    pass
+
+
 class NoFormSpecFoundError(Exception):
     pass

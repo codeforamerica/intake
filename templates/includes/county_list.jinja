@@ -5,8 +5,8 @@
     <div class="col-xs-12 col-sm-8 col-md-6 col_centered">
       <p class="application_county_list">
       <em>
-        {{ _("You are applying for help in") }}
-        {{ oxford_comma(county_list) }}. <a href="{{ url('intake-apply') }}">{{ _("Switch counties") }}</a>.
+        {{ _("You are applying for help in ") -}}
+        {{- oxford_comma(county_list) }}. <a href="{{ url('intake-apply') }}">{{ _("Switch counties") }}</a>.
       </em>
       </p>
     </div>

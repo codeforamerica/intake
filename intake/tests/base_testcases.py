@@ -100,6 +100,7 @@ class ExternalNotificationsPatchTestCase(TestCase):
 
     def tearDown(self):
         self.notifications_patcher.stop()
+        super().tearDown()
 
 
 class APIViewTestCase(IntakeDataTestCase):

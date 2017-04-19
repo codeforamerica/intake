@@ -65,14 +65,14 @@ class ApplicationEvent(models.Model):
 
     @classmethod
     def log_app_started(
-            cls, applicant_id, counties,
-            referrer=None, ip=None, user_agent=None):
+            cls, applicant_id, counties, referrer=None, user_agent=None,
+            source=None):
         return cls.create(
             cls.APPLICATION_STARTED, applicant_id,
             counties=counties,
             referrer=referrer,
-            ip=ip,
-            user_agent=user_agent)
+            user_agent=user_agent,
+            source=source)
 
     @classmethod
     def log_app_errors(cls, applicant_id, errors=None):

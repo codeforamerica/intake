@@ -37,7 +37,7 @@ class RAPSheetInstructionsView(TemplateView):
         if applicant:
             submission = \
                 SubmissionsService.get_latest_submission_from_applicant(
-                    self.request.applicant.id)
+                    applicant.id)
             if submission:
                 context['organizations'] = submission.organizations.all()
                 context['qualifies_for_fee_waiver'] = \

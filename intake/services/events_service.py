@@ -7,8 +7,14 @@ def get_app_id(request):
 
 
 def log_app_started(request, counties):
+    applicant = ApplicantsService.get_applicant_from_request_or_session(
+        request)
     return models.ApplicationEvent.log_app_started(
-        applicant_id=get_app_id(request), counties=counties)
+        applicant_id=applicant.id,
+        counties=counties,
+        referrer=applicant.visitor.referrer,
+        source=applicant.visitor.source,
+        user_agent=request.META.get('HTTP_USER_AGENT'))
 
 
 def log_form_page_complete(request, page_name):

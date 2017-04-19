@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
 from formation import forms, fields
 from formation.field_types import YES
-from intake.views import session_view_base, application_form_views
+from intake.views import county_application_view
 from markupsafe import escape
 
 
@@ -51,24 +51,20 @@ class TestFullCountyApplicationSequence(IntakeDataTestCase):
         self.assertFalse(form_data)
 
     @patch('intake.models.pdfs.get_parser')
-    @patch(
-        'intake.views.session_view_base.SubmissionsService'
-        '.send_confirmation_notifications')
-    @patch(
-        'intake.views.session_view_base.notifications'
-        '.slack_new_submission.send')
+    @patch('intake.services.submissions.send_confirmation_notifications')
+    @patch('intake.notifications.slack_new_submission.send')
     def test_apply_to_sf_with_name_only(
             self, slack, send_confirmation, get_parser):
         get_parser.return_value.fill_pdf.return_value = b'a pdf'
         self.be_anonymous()
-        result = self.client.fill_form(
+        response = self.client.fill_form(
             reverse('intake-apply'),
             counties=['sanfrancisco'],
             confirm_county_selection=YES,
             follow=True
         )
         # this should raise warnings
-        result = self.client.fill_form(
+        response = self.client.fill_form(
             reverse('intake-county_application'),
             first_name="Foo",
             last_name="Bar",
@@ -76,21 +72,21 @@ class TestFullCountyApplicationSequence(IntakeDataTestCase):
             understands_limits='yes',
         )
         self.assertRedirects(
-            result, reverse('intake-confirm'), fetch_redirect_response=False)
-        result = self.client.get(result.url)
-        self.assertContains(result, "Foo")
-        self.assertContains(result, "Bar")
+            response, reverse('intake-confirm'), fetch_redirect_response=False)
+        response = self.client.get(response.url)
+        self.assertContains(response, "Foo")
+        self.assertContains(response, "Bar")
         self.assertContains(
-            result, fields.AddressField.is_recommended_error_message)
+            response, fields.AddressField.is_recommended_error_message)
         self.assertContains(
-            result,
+            response,
             fields.SocialSecurityNumberField.is_recommended_error_message)
         self.assertContains(
-            result, fields.DateOfBirthField.is_recommended_error_message)
+            response, fields.DateOfBirthField.is_recommended_error_message)
         self.assertContains(
-            result, application_form_views.Confirm.incoming_message)
+            response, str(county_application_view.WARNING_FLASH_MESSAGE))
         slack.assert_not_called()
-        result = self.client.fill_form(
+        response = self.client.fill_form(
             reverse('intake-confirm'),
             first_name="Foo",
             last_name="Bar",
@@ -101,7 +97,7 @@ class TestFullCountyApplicationSequence(IntakeDataTestCase):
         submission = models.FormSubmission.objects.filter(
             answers__first_name="Foo",
             answers__last_name="Bar").first()
-        self.assertEqual(result.wsgi_request.path, reverse('intake-thanks'))
+        self.assertEqual(response.wsgi_request.path, reverse('intake-thanks'))
         self.assertEqual(len(slack.mock_calls), 1)
         send_confirmation.assert_called_once_with(submission)
 
@@ -121,12 +117,12 @@ class TestSelectCountyView(AuthIntegrationTestCase):
 
     def test_anonymous_user_can_submit_county_selection(self):
         self.be_anonymous()
-        result = self.client.fill_form(
+        response = self.client.fill_form(
             reverse('intake-apply'),
             counties=['contracosta'],
             confirm_county_selection=YES,
             headers={'HTTP_USER_AGENT': 'tester'})
-        self.assertRedirects(result, reverse('intake-county_application'))
+        self.assertRedirects(response, reverse('intake-county_application'))
         applicant_id = self.client.session.get('applicant_id')
         self.assertTrue(applicant_id)
         applicant = models.Applicant.objects.get(id=applicant_id)
@@ -134,12 +130,11 @@ class TestSelectCountyView(AuthIntegrationTestCase):
         self.assertTrue(applicant.visitor_id)
         visitor = models.Visitor.objects.get(id=applicant.visitor_id)
         self.assertTrue(visitor)
-        events = list(applicant.events.all())
-        self.assertEqual(len(events), 1)
+        events = list(applicant.events.order_by('time'))
+        self.assertEqual(len(events), 2)
         event = events[0]
         self.assertEqual(event.name,
                          models.ApplicationEvent.APPLICATION_STARTED)
-        self.assertIn('ip', event.data)
         self.assertIn('user_agent', event.data)
         self.assertEqual(event.data['user_agent'], 'tester')
         self.assertIn('referrer', event.data)
@@ -147,10 +142,10 @@ class TestSelectCountyView(AuthIntegrationTestCase):
 
     def test_anonymous_user_cannot_submit_empty_county_selection(self):
         self.be_anonymous()
-        result = self.client.fill_form(
+        response = self.client.fill_form(
             reverse('intake-apply'))
-        self.assertEqual(result.status_code, 200)
-        form = result.context_data['form']
+        self.assertEqual(response.status_code, 200)
+        form = response.context_data['form']
         self.assertFalse(form.is_valid())
         self.assertTrue(form.errors)
 
@@ -160,9 +155,11 @@ class TestMultiCountyApplication(AuthIntegrationTestCase):
     fixtures = ['counties', 'organizations']
 
     def test_get_county_application_has_no_errors(self):
+        applicant = factories.ApplicantFactory.create()
         self.set_session(form_in_progress={
             'counties': [constants.Counties.SAN_FRANCISCO],
-            'confirm_county_selection': YES})
+            'confirm_county_selection': YES},
+            applicant_id=applicant.id)
         response = self.client.get(reverse('intake-county_application'))
         self.assertEqual(response.status_code, 200)
         self.assertIn('Apply to Clear My Record',
@@ -498,7 +495,7 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
         for key, value in declaration_answers.items():
             self.assertIn(key, form_data)
             session_value = form_data[key]
-            self.assertEqual(session_value, value)
+            self.assertEqual(session_value, [value])
 
         slack.assert_not_called()
         send_confirmation.assert_not_called()
@@ -544,13 +541,15 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
     def test_no_existing_data(self):
         self.be_anonymous()
         with self.assertLogs(
-                'intake.views.session_view_base', level=logging.WARN):
+                'intake.views.applicant_form_view_base', level=logging.WARN):
             response = self.client.get(reverse('intake-write_letter'))
         self.assertRedirects(
             response, reverse('intake-apply'))
 
     def test_pulls_in_existing_letter_answers_data(self):
         self.be_anonymous()
+        applicant_id = factories.ApplicantFactory.create().id
+        self.set_session(applicant_id=applicant_id)
         mock_letter = mock.fake.declaration_letter_answers()
         mock_answers = mock.fake.alameda_pubdef_answers(
             first_name="foo", last_name="bar")
@@ -558,8 +557,7 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
         session_data = {}
         for other_data in [counties, mock_answers, mock_letter]:
             session_data.update(other_data)
-        self.set_session(
-            form_in_progress=session_data)
+        self.set_querydictifiable_session(form_in_progress=session_data)
         response = self.client.get(reverse('intake-write_letter'))
         for letter_answer in mock_letter.values():
             self.assertContains(
@@ -568,14 +566,13 @@ class TestDeclarationLetterView(AuthIntegrationTestCase):
     @patch(
         'intake.services.submissions.send_confirmation_notifications')
     @patch(
-        'intake.views.session_view_base.notifications'
-        '.slack_new_submission.send')
+        'intake.notifications.slack_new_submission.send')
     @patch('intake.notifications.slack_submissions_viewed.send')
     def test_that_declaration_letter_properly_escapes_html(self, *patches):
         # this is a regression test to ensure that html cannot be injected
         # into declaration letters, and that we don't overescape
         mock_letter = mock.fake.declaration_letter_answers()
-        mock_answers = mock.fake.alameda_pubdef_answers(
+        mock_answers = mock.fake.a_pubdef_answers(
             first_name="foo", last_name="e2f79c23fcc04ed78fa1ea29f12a0323")
         html_string = '<img src="omg.gif"> O\'Brien'
         escaped_name = escape('O\'Brien')
@@ -613,6 +610,8 @@ class TestDeclarationLetterReviewPage(AuthIntegrationTestCase):
 
     def test_get_with_expected_data(self):
         self.be_anonymous()
+        applicant_id = factories.ApplicantFactory.create().id
+        self.set_session(applicant_id=applicant_id)
         mock_letter = mock.fake.declaration_letter_answers()
         mock_answers = mock.fake.alameda_pubdef_answers(
             first_name="foo", last_name="bar")
@@ -620,8 +619,7 @@ class TestDeclarationLetterReviewPage(AuthIntegrationTestCase):
         session_data = {}
         for other_data in [counties, mock_answers, mock_letter]:
             session_data.update(other_data)
-        self.set_session(
-            form_in_progress=session_data)
+        self.set_querydictifiable_session(form_in_progress=session_data)
         response = self.client.get(reverse('intake-review_letter'))
         self.assertContains(response, 'To Whom It May Concern')
         for portion in mock_letter.values():
@@ -637,23 +635,23 @@ class TestDeclarationLetterReviewPage(AuthIntegrationTestCase):
     def test_get_with_no_existing_data(self):
         self.be_anonymous()
         with self.assertLogs(
-                'intake.views.session_view_base', level=logging.WARN):
+                'intake.views.applicant_form_view_base', level=logging.WARN):
             response = self.client.get(reverse('intake-review_letter'))
         self.assertRedirects(
             response, reverse('intake-apply'))
 
     def test_post_edit_letter(self):
         self.be_anonymous()
+        applicant_id = factories.ApplicantFactory.create().id
+        self.set_session(applicant_id=applicant_id)
         mock_letter = mock.fake.declaration_letter_answers()
         mock_answers = mock.fake.alameda_pubdef_answers()
         counties = {'counties': constants.Counties.ALAMEDA}
         session_data = {}
         for other_data in [counties, mock_answers, mock_letter]:
             session_data.update(other_data)
-        self.set_session(
-            counties=[constants.Counties.ALAMEDA],
-            form_in_progress=session_data,
-            applicant_id=2)
+        self.set_querydictifiable_session(form_in_progress=session_data)
+        self.set_session(counties=[constants.Counties.ALAMEDA])
         response = self.client.fill_form(
             reverse('intake-review_letter'),
             submit_action="edit_letter")
@@ -679,9 +677,8 @@ class TestDeclarationLetterReviewPage(AuthIntegrationTestCase):
         session_data = {}
         for other_data in [counties, mock_answers, mock_letter]:
             session_data.update(other_data)
-        self.set_session(
-            form_in_progress=session_data,
-            applicant_id=applicant.id)
+        self.set_querydictifiable_session(form_in_progress=session_data)
+        self.set_session(applicant_id=applicant.id)
 
         response = self.client.fill_form(
             reverse('intake-review_letter'),
@@ -766,14 +763,11 @@ class TestRAPSheetInstructions(IntakeDataTestCase):
         # make sure there aren't any unrendered variables
         self.assertNotContains(response, "{{")
 
+    @patch('intake.services.submissions.get_latest_submission_from_applicant')
     @patch(
-        'intake.views.application_form_views'
-        '.get_last_submission_of_applicant_if_exists')
-    @patch(
-        'intake.views.application_form_views.RAPSheetInstructions'
-        '.get_applicant_id')
-    def test_pulls_relevant_info_if_session_data(self, get_app_id, get_sub):
-        get_app_id.return_value = 1
+        'intake.services.applicants.get_applicant_from_request_or_session')
+    def test_pulls_relevant_info_if_session_data(self, get_app, get_sub):
+        get_app.return_value = Mock(id=1)
         submission_mock = Mock()
         submission_mock.organizations.all.return_value = [
             'an_org', 'another_org']

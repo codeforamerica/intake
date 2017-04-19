@@ -49,8 +49,8 @@ REASON_FOR_APPLYING_CHOICES = (
     ('other', _('My reason is not listed')),
 )
 
-APPROVE_LETTER = 'edit_letter'
-EDIT_LETTER = 'approve_letter'
+APPROVE_LETTER = 'approve_letter'
+EDIT_LETTER = 'edit_letter'
 
 DECLARATION_LETTER_REVIEW_CHOICES = (
     (EDIT_LETTER, _('Edit letter')),

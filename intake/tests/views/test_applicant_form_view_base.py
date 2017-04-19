@@ -1,47 +1,77 @@
+import logging
 from unittest.mock import patch, Mock
+from django.core.urlresolvers import reverse
 from project.fixtures_index import ESSENTIAL_DATA_FIXTURES
 from user_accounts.tests.base_testcases import AuthIntegrationTestCase
 from intake.views.applicant_form_view_base import ApplicantFormViewBase
 from intake import models
+from user_accounts.models import Organization
+from intake.tests.mock import fake
+from intake.tests import factories
 
 
 class ApplicantFormViewBaseTestCase(AuthIntegrationTestCase):
     fixtures = ESSENTIAL_DATA_FIXTURES
 
-    def set_form_session_data(self, **data):
-        querydictifiable_data = {}
-        for key, value in data.items():
-            if not isinstance(value, list):
-                value = [value]
-            querydictifiable_data[key] = value
-        self.set_session(**{
-            ApplicantFormViewBase.session_key: querydictifiable_data})
+    def setUp(self):
+        super().setUp()
+        self.send_confirmations_patcher = patch(
+            'intake.services.submissions.send_confirmation_notifications')
+        self.slack_new_submission_patcher = patch(
+            'intake.notifications.slack_new_submission.send')
+        self.send_confirmations = self.send_confirmations_patcher.start()
+        self.slack_new_submission = self.slack_new_submission_patcher.start()
+
+    def tearDown(self):
+        self.send_confirmations_patcher.stop()
+        self.slack_new_submission_patcher.stop()
+        super().tearDown()
+
+    def set_form_session_data(self, create_applicant=True, **data):
+        applicant = data.pop('applicant', None)
+        if create_applicant and not applicant:
+            applicant = factories.ApplicantFactory.create()
+        if applicant:
+            self.set_session(applicant_id=applicant.id)
+        self.set_querydictifiable_session(**{
+            ApplicantFormViewBase.session_key: data})
+
+    def get_form_session_data(self):
+        return self.client.session.get(ApplicantFormViewBase.session_key)
 
 
 class TestApplicantFormViewBase(ApplicantFormViewBaseTestCase):
 
-    def redirects_if_empty_counties_in_session(self):
+    def test_redirects_if_empty_counties_in_session(self):
         mock_view_instance = Mock(session_data={'counties': []})
-        result = ApplicantFormViewBase.check_for_session_based_redirects(
-            mock_view_instance)
-        import ipdb; ipdb.set_trace()
+        with self.assertLogs(
+                'intake.views.applicant_form_view_base', level=logging.WARN):
+            response = ApplicantFormViewBase.check_for_session_based_redirects(
+                mock_view_instance)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('intake-apply'))
 
-    def redirects_if_no_counties_in_session(self):
+    def test_redirects_if_no_counties_in_session(self):
         mock_view_instance = Mock(session_data={})
-        result = ApplicantFormViewBase.check_for_session_based_redirects(
-            mock_view_instance)
+        with self.assertLogs(
+                'intake.views.applicant_form_view_base', level=logging.WARN):
+            response = ApplicantFormViewBase.check_for_session_based_redirects(
+                mock_view_instance)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('intake-apply'))
 
-    def doesnt_redirect_if_has_counties_in_session(self):
+    def test_doesnt_redirect_if_has_counties_in_session(self):
         mock_view_instance = Mock(
             session_data={'counties': ['alameda', 'contracosta']})
-        result = ApplicantFormViewBase.check_for_session_based_redirects(
+        response = ApplicantFormViewBase.check_for_session_based_redirects(
             mock_view_instance)
+        self.assertEqual(response, None)
 
-    @patch('intake.models.county.Count.get_receiving_agency')
+    @patch('intake.models.County.get_receiving_agency')
     def test_get_receiving_organizations_if_no_attribute(self, get_agency):
         counties = models.County.objects.all()[:2]
         orgs = [
-            models.Organization.objects.filter(county_id=county.id).first()
+            Organization.objects.filter(county_id=county.id).first()
             for county in counties]
         get_agency.side_effect = orgs
         mock_view_instance = Mock(
@@ -51,13 +81,13 @@ class TestApplicantFormViewBase(ApplicantFormViewBaseTestCase):
         self.assertEqual(get_agency.call_count, 2)
         self.assertListEqual(orgs, results)
         self.assertListEqual(
-            orgs, mock_view_instance.receiving_organization)
+            orgs, mock_view_instance.receiving_organizations)
 
-    @patch('intake.models.county.Count.get_receiving_agency')
+    @patch('intake.models.County.get_receiving_agency')
     def test_get_receiving_organizations_if_exists(self, get_agency):
         counties = models.County.objects.all()[:2]
         orgs = [
-            models.Organization.objects.filter(county_id=county.id).first()
+            Organization.objects.filter(county_id=county.id).first()
             for county in counties]
         get_agency.side_effect = orgs
         mock_view_instance = Mock(
@@ -67,7 +97,20 @@ class TestApplicantFormViewBase(ApplicantFormViewBaseTestCase):
         self.assertEqual(get_agency.call_count, 0)
         self.assertListEqual(orgs, results)
         self.assertListEqual(
-            orgs, mock_view_instance.receiving_organization)
+            orgs, mock_view_instance.receiving_organizations)
 
-    def test_finalize_application_actions(self):
-        pass
+    @patch('intake.services.events_service.log_form_page_complete')
+    @patch('intake.services.messages_service.flash_success')
+    @patch('intake.services.submissions.fill_pdfs_for_submission')
+    @patch('intake.services.submissions.create_submission')
+    def test_finalize_application_actions(
+            self, create_sub, fill_pdfs, flash_success, log_page_complete):
+        self.set_form_session_data(counties=['contracosta'])
+        answers = fake.contra_costa_county_form_answers()
+        self.client.fill_form(
+            reverse('intake-county_application'), **answers)
+        self.assertEqual(create_sub.call_count, 1)
+        self.assertEqual(fill_pdfs.call_count, 1)
+        self.assertEqual(self.slack_new_submission.call_count, 1)
+        self.assertEqual(self.send_confirmations.call_count, 1)
+        self.assertEqual(flash_success.call_count, 1)

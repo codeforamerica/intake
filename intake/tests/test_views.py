@@ -37,12 +37,14 @@ class TestViews(IntakeDataTestCase):
 
     def test_confirm_view(self):
         self.be_anonymous()
+        applicant = factories.ApplicantFactory.create()
         base_data = dict(
             counties=['sanfrancisco'],
             confirm_county_selection=YES,
             **mock.NEW_RAW_FORM_DATA)
         self.set_session(
-            form_in_progress=base_data)
+            form_in_progress=base_data,
+            applicant_id=applicant.id)
         response = self.client.get(reverse('intake-confirm'))
         self.assertContains(response, base_data['first_name'][0])
         self.assertContains(response, base_data['last_name'][0])

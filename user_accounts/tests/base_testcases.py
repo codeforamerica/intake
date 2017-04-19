@@ -62,6 +62,15 @@ class AuthIntegrationTestCase(TestCase):
             session[key] = value
         session.save()
 
+    def set_querydictifiable_session(self, **data):
+        for session_key, dict_like_object in data.items():
+            querydictifiable_data = {}
+            for key, value in dict_like_object.items():
+                if not isinstance(value, list):
+                    value = [value]
+                querydictifiable_data[key] = value
+            self.set_session(**{session_key: querydictifiable_data})
+
     def be_superuser(self):
         self.client.login(**self.example_superuser)
 
