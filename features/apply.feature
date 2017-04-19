@@ -1,21 +1,12 @@
-Feature: HomePage Loads
-  Scenario:
-    Given that "/" loads
-     Then it should have the "apply-now" link and say "Apply now"
-      And it should have the "learn-more" link and say "Learn more"
-      And "learn-more" should deeplink to "learn_more_section"
-      And "apply-now" should link to "apply/"
-
-Feature: Successful Application
-  Scenario:
+Feature: User can Apply to CMR
+  Scenario: User Successfully applies to Contra Costa
     Given that "apply/" loads
-     When checkbox option "contracosta" is clicked
-      And checkbox option "confirm_county_selection" is clicked
-      And submit button is clicked
-     Then it should load "application/"
-      And it should say "You are applying for help in Contra Costa County."
-     # you should see the counties that you are applying to
-     # you should be able input a set of answers
+     When the "counties" checkbox option "contracosta" is clicked
+      And the "confirm_county_selection" checkbox option "yes" is clicked
+      #And submit button in form "county_form" is clicked
+     #Then it should load "application/"
+      #And "application_county_list" should say "You are applying for help in Contra Costa County."
+      # you should be able input a set of answers
       #   'contact_preferences' (multi checkbox) 'prefers_email',
       #   'first_name': "",
       #   'last_name': "",,
@@ -39,5 +30,4 @@ Feature: Successful Application
       #   'understands_limits': 'yes',
       #   'how_did_you_hear': text '',
       #   'additional_information': text '',
-     }
-     # 
+

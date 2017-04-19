@@ -2,6 +2,7 @@ from behave import given, when, then
 from urllib.parse import urljoin, urlparse, urldefrag
 
 
+@then('it should load "{url}"')
 @given('that "{url}" loads')
 def load_page(context, url):
     context.browser.get(urljoin(context.test.live_server_url, url))
@@ -34,3 +35,27 @@ def check_link_goes_to_page(context, element_id, url):
         urljoin(context.test.live_server_url, url),
         end_url,
     )
+
+
+@when('the "{checkbox_name}" checkbox option "{checkbox_value}" is clicked')
+def click_checkbox(context, checkbox_name, checkbox_value):
+    selector = "input[name='%s'][value='%s'][type='checkbox']" % (
+        checkbox_name,
+        checkbox_value,
+    )
+    checkbox = context.browser.find_element_by_css_selector(selector)
+    checkbox.click()
+
+
+@when('submit button in form "{form_class}" is clicked')
+def click_checkbox(context, form_class):
+    selector = "form.%s button[type='submit']" % (
+        form_class,
+    )
+    checkbox = context.browser.find_element_by_css_selector(selector)
+    checkbox.click()
+
+@then('"{element_class}" should say "{text}"')
+def element_contains_text(context, element_class, text):
+    element = context.browser.find_element_by_class(element_class)
+    context.test.assertTrue(text in element.text)
