@@ -739,7 +739,7 @@ class TestThanks(IntakeDataTestCase):
         app.save()
         self.set_session(applicant_id=app.id)
         response = self.client.get(reverse('intake-thanks'))
-        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response, reverse('intake-home'))
 
     def test_session_is_cleared_after_loading_thanks(self):
         sub = factories.FormSubmissionWithOrgsFactory(

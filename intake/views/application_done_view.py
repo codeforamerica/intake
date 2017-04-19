@@ -14,15 +14,16 @@ class ThanksView(TemplateView):
             request)
         if not applicant:
             return redirect(reverse('intake-home'))
+        self.submission = \
+            SubmissionsService.get_latest_submission_from_applicant(
+                applicant.id)
+        if not self.submission:
+            return redirect(reverse('intake-home'))
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self):
         context = super().get_context_data()
-        submission = SubmissionsService.get_latest_submission_from_applicant(
-            self.request.applicant.id)
-        if submission:
-            context.update(
-                organizations=submission.organizations.all())
+        context.update(organizations=self.submission.organizations.all())
         clear_form_session_data(self.request)
         return context
 

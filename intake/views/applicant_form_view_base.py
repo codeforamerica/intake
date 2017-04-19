@@ -54,13 +54,13 @@ class ApplicantFormViewBase(FormView):
         self.applicant = \
             ApplicantsService.get_applicant_from_request_or_session(request)
         response = self.check_for_session_based_redirects()
+        if response:
+            return response
         self.county_slugs = self.session_data.getlist('counties', [])
         self.counties = models.County.objects.filter(
             slug__in=self.county_slugs)
         self.formatted_county_names = [
             county.name + " County" for county in self.counties]
-        if response:
-            return response
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, *args, **kwargs):

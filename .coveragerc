@@ -6,7 +6,10 @@ source =
 	formation
 omit = 
 	*/tests/*
-	project/settings/prod.py
+	project/settings/*
+	project/heroku_wsgi.py
 	project/wsgi.py
 	intake/translators/clean_slate.py
 	*/migrations/*
+	intake/views/session_view_base.py
+	intake/views/application_form_views.py

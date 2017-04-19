@@ -18,7 +18,7 @@ class TestThanksView(ApplicantFormViewBaseTestCase):
         applicant = factories.ApplicantFactory.create()
         self.set_session(applicant_id=applicant.id)
         response = self.client.get(reverse(self.view_name))
-        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response, reverse('intake-home'))
 
     def test_applicant_with_submission(self):
         submission = factories.FormSubmissionWithOrgsFactory.create(
