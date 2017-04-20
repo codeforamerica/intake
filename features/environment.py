@@ -54,7 +54,7 @@ def before_all(context):
         command_executor=url % (USERNAME, ACCESS_KEY)
     )
     context.browser.implicitly_wait(10)
-    settings.DIVERT_REMOTE_CONNECTIONS=True
+    settings.DIVERT_REMOTE_CONNECTIONS = True
 
 
 def after_all(context):
