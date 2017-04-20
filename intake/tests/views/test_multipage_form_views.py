@@ -3,6 +3,7 @@ from unittest.mock import patch
 from intake.tests import mock
 from intake import models
 from django.core.urlresolvers import reverse
+from formation import fields
 from formation.field_types import YES
 from intake.views import county_application_view
 
