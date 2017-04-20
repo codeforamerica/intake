@@ -1,16 +1,10 @@
-from django.test import override_settings
-import logging
-from user_accounts.tests.test_auth_integration import AuthIntegrationTestCase
 from intake.tests.base_testcases import IntakeDataTestCase
-from unittest.mock import patch, Mock
-from intake.tests import mock, factories
-from intake import models, constants
+from unittest.mock import patch
+from intake.tests import mock
+from intake import models
 from django.core.urlresolvers import reverse
-from django.utils import html as html_utils
-from formation import forms, fields
 from formation.field_types import YES
 from intake.views import county_application_view
-from markupsafe import escape
 
 """
     This is formerly test_application_form_views.py; it was renamed after all
