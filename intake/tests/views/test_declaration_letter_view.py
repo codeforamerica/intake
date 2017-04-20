@@ -1,10 +1,12 @@
-from unittest.mock import patch
-from intake.tests.views.test_applicant_form_view_base \
-    import ApplicantFormViewBaseTestCase
 from django.core.urlresolvers import reverse
-from intake.tests import mock
 from formation import fields
 from markupsafe import escape
+from unittest.mock import patch
+from intake import models, constants
+from intake.tests import mock
+from intake.tests.views.test_applicant_form_view_base \
+    import ApplicantFormViewBaseTestCase
+
 
 # these actually probably work independent of the existing county application
 # form answers in session
@@ -13,6 +15,7 @@ from markupsafe import escape
 
 class TestWriteDeclarationLetterView(ApplicantFormViewBaseTestCase):
     view_name = 'intake-write_letter'
+    fixtures = ['counties', 'organizations', 'groups', 'mock_profiles']
 
     def test_renders_declaration_letter_form(self):
         self.set_form_session_data(
@@ -93,6 +96,46 @@ class TestWriteDeclarationLetterView(ApplicantFormViewBaseTestCase):
             reverse(self.view_name), **mock.fake.declaration_letter_answers(
                 declaration_letter_intro=''))
         self.assertEqual(event_log.call_count, 1)
+
+    @patch(
+        'intake.services.submissions.send_confirmation_notifications')
+    @patch(
+        'intake.notifications.slack_new_submission.send')
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_that_declaration_letter_properly_escapes_html(self, *patches):
+        # this is a regression test to ensure that html cannot be injected
+        # into declaration letters, and that we don't overescape
+        mock_letter = mock.fake.declaration_letter_answers()
+        mock_answers = mock.fake.a_pubdef_answers(
+            first_name="foo", last_name="e2f79c23fcc04ed78fa1ea29f12a0323")
+        html_string = '<img src="omg.gif"> O\'Brien'
+        escaped_name = escape('O\'Brien')
+        for field in mock_letter:
+            mock_letter[field] = html_string
+        self.be_anonymous()
+        self.client.fill_form(
+            reverse('intake-apply'), counties=[constants.Counties.ALAMEDA],
+            confirm_county_selection='yes', follow=True)
+        self.client.fill_form(
+            reverse('intake-county_application'), follow=True, **mock_answers)
+        response = self.client.fill_form(
+            reverse('intake-write_letter'), follow=True, **mock_letter)
+        # check that the html is not in the review page
+        self.assertNotContains(response, html_string)
+        self.assertContains(response, escaped_name)
+        response = self.client.fill_form(
+            reverse('intake-review_letter'),
+            submit_action="approve_letter")
+
+        # check that the html is not in the app detail page
+        self.be_apubdef_user()
+        submission = models.FormSubmission.objects.filter(
+            last_name="e2f79c23fcc04ed78fa1ea29f12a0323").first()
+        response = self.client.get(
+            reverse(
+                'intake-app_detail', kwargs=dict(submission_id=submission.id)))
+        self.assertNotContains(response, html_string)
+        self.assertContains(response, escaped_name)
 
 
 class TestReviewDeclarationLetterView(ApplicantFormViewBaseTestCase):

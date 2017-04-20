@@ -4,7 +4,7 @@ from intake.views.applicant_form_view_base import ApplicantFormViewBase
 from intake.tests.views.test_applicant_form_view_base \
     import ApplicantFormViewBaseTestCase
 from django.http.request import QueryDict
-from intake import utils
+from intake import utils, models, constants
 from formation import fields
 from markupsafe import escape
 
@@ -90,3 +90,39 @@ class TestSelectCountyView(ApplicantFormViewBaseTestCase):
         form = response.context_data['form']
         self.assertTrue(form.is_bound())
         self.assertInHTML(checked_input, response.rendered_content)
+
+    def test_anonymous_user_can_access_county_view(self):
+        self.be_anonymous()
+        county_view = self.client.get(
+            reverse('intake-apply'))
+        for slug, description in constants.COUNTY_CHOICES:
+            self.assertContains(county_view, slug)
+            self.assertContains(county_view, escape(description))
+
+        applicant_id = self.client.session.get('applicant_id')
+        self.assertIsNone(applicant_id)
+
+    def test_anonymous_user_can_submit_county_selection(self):
+        self.be_anonymous()
+        response = self.client.fill_form(
+            reverse('intake-apply'),
+            counties=['contracosta'],
+            confirm_county_selection='yes',
+            headers={'HTTP_USER_AGENT': 'tester'})
+        self.assertRedirects(response, reverse('intake-county_application'))
+        applicant_id = self.client.session.get('applicant_id')
+        self.assertTrue(applicant_id)
+        applicant = models.Applicant.objects.get(id=applicant_id)
+        self.assertTrue(applicant)
+        self.assertTrue(applicant.visitor_id)
+        visitor = models.Visitor.objects.get(id=applicant.visitor_id)
+        self.assertTrue(visitor)
+        events = list(applicant.events.order_by('time'))
+        self.assertEqual(len(events), 2)
+        event = events[0]
+        self.assertEqual(event.name,
+                         models.ApplicationEvent.APPLICATION_STARTED)
+        self.assertIn('user_agent', event.data)
+        self.assertEqual(event.data['user_agent'], 'tester')
+        self.assertIn('referrer', event.data)
+        self.assertEqual(event.data['counties'], ['contracosta'])
