@@ -22,7 +22,7 @@ class TestFullCountyApplicationSequence(IntakeDataTestCase):
     @patch('intake.models.pdfs.get_parser')
     @patch('intake.services.submissions.send_confirmation_notifications')
     @patch(
-        'intake.views.session_view_base.notifications'
+        'intake.views.applicant_form_view_base.notifications'
         '.slack_new_submission.send')
     def test_anonymous_user_can_fill_out_app_and_reach_thanks_page(
             self, slack, send_confirmation, get_parser):

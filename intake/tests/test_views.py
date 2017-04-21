@@ -165,7 +165,7 @@ class TestViews(IntakeDataTestCase):
         self.assertEqual(bundle.status_code, 200)
 
     @patch(
-        'intake.views.session_view_base.notifications'
+        'intake.views.applicant_form_view_base.notifications'
         '.slack_submissions_processed.send')
     def test_agency_user_can_mark_apps_as_processed(self, slack):
         self.be_sfpubdef_user()

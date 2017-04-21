@@ -163,7 +163,7 @@ class TestCountyApplicationView(TestCountyApplicationNoWarningsView):
     @patch(
         'intake.services.submissions.send_confirmation_notifications')
     @patch(
-        'intake.views.session_view_base.notifications'
+        'intake.views.applicant_form_view_base.notifications'
         '.slack_new_submission.send')
     def test_validation_warnings(self, slack, send_confirmation):
         applicant = factories.ApplicantFactory.create()
