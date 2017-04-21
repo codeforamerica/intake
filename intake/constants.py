@@ -49,6 +49,15 @@ REASON_FOR_APPLYING_CHOICES = (
     ('other', _('My reason is not listed')),
 )
 
+APPROVE_LETTER = 'approve_letter'
+EDIT_LETTER = 'edit_letter'
+
+DECLARATION_LETTER_REVIEW_CHOICES = (
+    (EDIT_LETTER, _('Edit letter')),
+    (APPROVE_LETTER, _('Approve letter')),
+)
+
+
 STAFF_NAME_CHOICES = ['Jazmyn', 'Ben']
 
 

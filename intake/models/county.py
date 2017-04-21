@@ -26,7 +26,7 @@ class County(models.Model):
         # if alameda
         if self.slug == constants.Counties.ALAMEDA:
             # if under 3000 and not owns home
-            income = answers.get('monthly_income')
+            income = answers.get('monthly_income', None)
             owns_home = answers.get('owns_home')
             if income < 3000 and owns_home == field_types.NO:
                 # return alameda pub def
