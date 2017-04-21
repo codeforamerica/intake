@@ -6,25 +6,28 @@ class PrepopulatedModelFactory:
     This class creates a factory from an existing populated table.
     """
 
-    def __init__(self, queryset):
-        self.queryset = queryset
-        self.row_count = None
+    @classmethod
+    def get_queryset(cls):
+        raise NotImplementedError("override get_queryset in subclasses")
 
-    def ensure_table_is_populated(self):
-        self.objects = list(self.queryset)
-        self.row_count = len(self.objects)
-        if not self.row_count:
+    @classmethod
+    def get_table_count(cls):
+        count = cls.get_queryset().count()
+        if not count:
             raise Exception(
                 "`{}` table is not yet populated.".format(
-                    self.queryset.model.__name__))
+                    cls.get_queryset().model.__name__))
+        return count
 
-    def choice(self):
-        self.ensure_table_is_populated()
-        return random.choice(self.objects)
+    @classmethod
+    def choice(cls):
+        cls.get_table_count()
+        return random.choice(set(cls.get_queryset()))
 
-    def sample(self, count=None, zero_is_okay=False):
-        self.ensure_table_is_populated()
+    @classmethod
+    def sample(cls, count=None, zero_is_okay=False):
+        row_count = cls.get_table_count()
         if not count:
             lower_limit = 0 if zero_is_okay else 1
-            count = random.randint(lower_limit, self.row_count)
-        return random.sample(self.objects, count)
+            count = random.randint(lower_limit, row_count)
+        return random.sample(set(cls.get_queryset()), count)
