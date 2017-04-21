@@ -10,7 +10,7 @@ from formation.field_types import (
 )
 from intake.constants import (
     COUNTY_CHOICES, CONTACT_PREFERENCE_CHOICES, REASON_FOR_APPLYING_CHOICES,
-    GENDER_PRONOUN_CHOICES,
+    GENDER_PRONOUN_CHOICES, DECLARATION_LETTER_REVIEW_CHOICES,
     COUNTY_CHOICE_DISPLAY_DICT
 )
 from project.jinja2 import namify
@@ -124,6 +124,11 @@ class HowDidYouHear(CharField):
 class AdditionalInformation(CharField):
     context_key = "additional_information"
     label = _("Is there anything else you would like us to know?")
+
+
+class DeclarationLetterReviewActions(ChoiceField):
+    context_key = 'submit_action'
+    choices = DECLARATION_LETTER_REVIEW_CHOICES
 
 
 ###

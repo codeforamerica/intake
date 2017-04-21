@@ -16,7 +16,7 @@ from user_accounts.models import Organization
 from formation.forms import county_form_selector
 
 import intake.services.submissions as SubmissionsService
-from intake.exceptions import NoCountyCookiesError
+from intake.exceptions import NoCountiesInSessionError
 
 
 logger = logging.getLogger(__name__)
@@ -41,9 +41,13 @@ class GetFormSessionDataMixin:
         """Wrap super().dispatch to catch and handle errors
         """
         self.session_data = self.get_session_data()
+        self.counties = models.County.objects.filter(
+            slug__in=self.session_data.get("counties", [])).all()
+        self.county_slugs = [county.slug for county in self.counties]
+
         try:
             self.check_session_data_validity()
-        except NoCountyCookiesError as err:
+        except NoCountiesInSessionError as err:
             logger.error(err)
             return redirect(reverse('intake-apply'))
         return super().dispatch(request, *args, **kwargs)
@@ -57,20 +61,14 @@ class GetFormSessionDataMixin:
             if key_to_delete in existing_keys:
                 del self.request.session[key_to_delete]
 
-    def get_counties(self):
-        session_data = self.get_session_data()
-        county_slugs = session_data.get('counties', [])
-        return models.County.objects.filter(slug__in=county_slugs).all()
-
     def get_organizations(self):
         org_slugs = self.get_session_data().get('organizations', [])
         return Organization.objects.filter(slug__in=org_slugs)
 
     def get_county_context(self):
-        counties = self.get_counties()
         return dict(
-            counties=counties,
-            county_list=[county.name + " County" for county in counties]
+            counties=self.counties,
+            county_list=[county.name + " County" for county in self.counties]
         )
 
     def get_applicant_id(self):
@@ -132,8 +130,7 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
     form_spec = None
 
     def check_session_data_validity(self):
-        counties = self.session_data.get('counties', [])
-        if not counties:
+        if not self.counties:
             error_data = dict(
                 referrer=self.request.session.get('referrer', None),
                 path=self.request.path,
@@ -143,37 +140,33 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
             )
             error_message = "No Counties in session data: `{}`".format(
                 json.dumps(error_data))
-            raise NoCountyCookiesError(error_message)
+            raise NoCountiesInSessionError(error_message)
 
     def get_form(self, *args):
         if self.form_spec:
-            form_class_specification = self.form_spec
+            form_class = self.form_spec.build_form_class()
         else:
-            county_slugs = self.session_data.get('counties', [])
-            form_class_specification = \
-                county_form_selector.get_combined_form_spec(
-                    counties=county_slugs)
-        CombinedFormClass = form_class_specification.build_form_class()
+            form_class = \
+                county_form_selector.get_combined_form_class(
+                    counties=self.county_slugs)
         if self.request.method in ('POST', 'PUT'):
-            return CombinedFormClass(data=self.request.POST)
+            return form_class(data=self.request.POST)
         elif self.request.method == 'GET':
-            form_input_keys = set(CombinedFormClass.get_field_keys())
+            form_input_keys = set(form_class.get_field_keys())
             session_data_keys = set(self.session_data.keys())
             session_and_form_overlap = \
                 session_data_keys & form_input_keys
             if session_and_form_overlap:
-                return CombinedFormClass(data=self.session_data, validate=True)
+                return form_class(data=self.session_data, validate=True)
             else:
                 # we have a new empty form with no saved session
-                return CombinedFormClass()
+                return form_class()
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        county_slugs = self.session_data.get('counties', [])
-        counties = models.County.objects.filter(slug__in=county_slugs).all()
         context.update(
-            counties=counties,
-            county_list=[county.name + " County" for county in counties])
+            counties=self.counties,
+            county_list=[county.name + " County" for county in self.counties])
         return context
 
     def create_confirmations_for_user(self, submission):
@@ -191,10 +184,9 @@ class MultiCountyApplicationBase(MultiStepFormViewBase):
             messages.success(self.request, message)
 
     def get_orgs_for_answers(self, answers):
-        counties = self.get_counties()
         return [
             county.get_receiving_agency(answers)
-            for county in counties]
+            for county in self.counties]
 
     def save_submission(self, form, organizations):
         """Save the submission data

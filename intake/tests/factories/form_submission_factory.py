@@ -1,8 +1,10 @@
 import factory
 import faker
+import random
 from intake import models, constants
 from intake.tests.mock_org_answers import get_answers_for_orgs
 from .applicant_factory import ApplicantFactory
+from user_accounts.models import Organization
 from user_accounts.tests.factories import OrganizationFactory
 
 fake = faker.Factory.create(

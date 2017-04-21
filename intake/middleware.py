@@ -55,3 +55,6 @@ class CountUniqueVisitorsMiddleware:
             )
             visitor.save()
             request.session['visitor_id'] = visitor.id
+        else:
+            visitor = Visitor.objects.get(id=visitor_id)
+        request.visitor = visitor
