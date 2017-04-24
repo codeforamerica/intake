@@ -264,3 +264,5 @@ def is_multicounty(applicant):
         if len(sub.organizations.all()) > 1:
             return True
     return False
+
+
