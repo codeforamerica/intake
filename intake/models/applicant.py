@@ -1,9 +1,5 @@
 from django.db import models
 import intake
-from intake.permissions import (
-    CAN_SEE_APP_STATS,
-    CAN_SEE_APP_DETAILS
-)
 
 
 class Applicant(models.Model):
@@ -24,3 +20,6 @@ class Applicant(models.Model):
             applicant_id=self.id,
             **data
         )
+
+    def get_uuid(self):
+        return self.visitor.uuid.hex
