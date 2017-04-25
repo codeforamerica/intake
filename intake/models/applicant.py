@@ -20,3 +20,6 @@ class Applicant(models.Model):
             applicant_id=self.id,
             **data
         )
+
+    def get_uuid(self):
+        return self.visitor.uuid.hex

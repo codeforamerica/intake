@@ -8,3 +8,6 @@ class Visitor(models.Model):
     source = models.TextField(null=True)
     referrer = models.TextField(null=True)
     ip_address = models.TextField(null=True)
+
+    def get_uuid(self):
+        return self.uuid.hex
