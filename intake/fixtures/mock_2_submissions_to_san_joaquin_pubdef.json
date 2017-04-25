@@ -1,9 +1,9 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 82,
+  "pk": 115,
   "fields": {
-    "first_visit": "2017-04-25T01:52:09.028Z",
+    "first_visit": "2017-04-25T17:41:54.637Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +11,9 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 83,
+  "pk": 116,
   "fields": {
-    "first_visit": "2017-04-25T01:52:09.048Z",
+    "first_visit": "2017-04-25T17:41:54.665Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,46 +21,137 @@
 },
 {
   "model": "intake.applicant",
-  "pk": 82,
+  "pk": 115,
   "fields": {
-    "visitor": 82
+    "visitor": 115
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 83,
+  "pk": 116,
   "fields": {
-    "visitor": 83
+    "visitor": 116
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 81,
+  "pk": 114,
   "fields": {
-    "applicant": 82,
+    "applicant": 115,
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
         "prefers_email"
       ],
-      "first_name": "Crystal",
-      "middle_name": "Scott",
-      "last_name": "Davis",
-      "phone_number": "8314207603",
-      "alternate_phone_number": "8314207603",
+      "first_name": "Kristy",
+      "middle_name": "Steven",
+      "last_name": "Miller",
+      "phone_number": "4152124848",
+      "alternate_phone_number": "4152124848",
       "email": "cmrtestuser@gmail.com",
       "address": {
-        "street": "228 Elizabeth Glens Apt. 101",
-        "city": "South Dean",
-        "state": "AK",
-        "zip": "27738"
+        "street": "1535 Charles Ports Apt. 240",
+        "city": "Morenotown",
+        "state": "MP",
+        "zip": "02268"
       },
       "dob": {
-        "month": "11",
-        "day": "19",
-        "year": "1975"
+        "month": "12",
+        "day": "3",
+        "year": "1959"
       },
       "us_citizen": "yes",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Yolo County",
+      "when_probation_or_parole": "2018",
+      "rap_outside_sf": "yes",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "no",
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "Kristy",
+    "last_name": "Miller",
+    "dob": null,
+    "ssn": "",
+    "last_four": "",
+    "drivers_license_or_id": "",
+    "case_number": "",
+    "phone_number": "4152124848",
+    "alternate_phone_number": "4152124848",
+    "email": "cmrtestuser@gmail.com",
+    "reasons_for_applying": "",
+    "how_did_you_hear": "from work",
+    "additional_information": "I want help",
+    "aliases": "",
+    "pfn_number": "",
+    "contact_preferences": "['prefers_email']",
+    "preferred_pronouns": "",
+    "street": "1535 Charles Ports Apt. 240",
+    "city": "Morenotown",
+    "state": "MP",
+    "zip": "02268",
+    "us_citizen": "yes",
+    "is_veteran": "",
+    "is_student": "",
+    "being_charged": "no",
+    "serving_sentence": "no",
+    "on_probation_parole": "yes",
+    "where_probation_or_parole": "Yolo County",
+    "when_probation_or_parole": "2018",
+    "finished_half_probation": "",
+    "reduced_probation": "",
+    "rap_outside_sf": "yes",
+    "when_where_outside_sf": "",
+    "has_suspended_license": "",
+    "owes_court_fees": "no",
+    "currently_employed": "",
+    "monthly_income": null,
+    "income_source": "",
+    "on_public_benefits": "",
+    "owns_home": "",
+    "monthly_expenses": null,
+    "household_size": null,
+    "dependents": "",
+    "is_married": "",
+    "has_children": "",
+    "old_uuid": "169466ce657c439bb070d0a1c09b6a14",
+    "anonymous_name": "Green Starship",
+    "date_received": "2017-04-22T01:14:34-07:00"
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 115,
+  "fields": {
+    "applicant": 116,
+    "duplicate_set": null,
+    "answers": {
+      "contact_preferences": [
+        "prefers_sms"
+      ],
+      "first_name": "Scott",
+      "middle_name": "Mary",
+      "last_name": "Pitts",
+      "phone_number": "4152124848",
+      "alternate_phone_number": "4152124848",
+      "email": "cmrtestuser@gmail.com",
+      "address": {
+        "street": "1587 Kayla Oval",
+        "city": "West Nancy",
+        "state": "WV",
+        "zip": "54163"
+      },
+      "dob": {
+        "month": "9",
+        "day": "9",
+        "year": "1966"
+      },
+      "us_citizen": "no",
       "being_charged": "no",
       "serving_sentence": "no",
       "on_probation_parole": "yes",
@@ -74,28 +165,28 @@
       "understands_limits": "yes",
       "consent_to_represent": "yes"
     },
-    "first_name": "Crystal",
-    "last_name": "Davis",
+    "first_name": "Scott",
+    "last_name": "Pitts",
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
     "case_number": "",
-    "phone_number": "8314207603",
-    "alternate_phone_number": "8314207603",
+    "phone_number": "4152124848",
+    "alternate_phone_number": "4152124848",
     "email": "cmrtestuser@gmail.com",
     "reasons_for_applying": "",
     "how_did_you_hear": "from work",
     "additional_information": "I want help",
     "aliases": "",
     "pfn_number": "",
-    "contact_preferences": "['prefers_email']",
+    "contact_preferences": "['prefers_sms']",
     "preferred_pronouns": "",
-    "street": "228 Elizabeth Glens Apt. 101",
-    "city": "South Dean",
-    "state": "AK",
-    "zip": "27738",
-    "us_citizen": "yes",
+    "street": "1587 Kayla Oval",
+    "city": "West Nancy",
+    "state": "WV",
+    "zip": "54163",
+    "us_citizen": "no",
     "is_veteran": "",
     "is_student": "",
     "being_charged": "no",
@@ -119,158 +210,67 @@
     "dependents": "",
     "is_married": "",
     "has_children": "",
-    "old_uuid": "ce56637402954388b7eb0d258dd7f4d4",
-    "anonymous_name": "Shimmering Tulip",
-    "date_received": "2017-04-19T07:35:50-07:00"
-  }
-},
-{
-  "model": "intake.formsubmission",
-  "pk": 82,
-  "fields": {
-    "applicant": 83,
-    "duplicate_set": null,
-    "answers": {
-      "contact_preferences": [
-        "prefers_email"
-      ],
-      "first_name": "Shawn",
-      "middle_name": "Joshua",
-      "last_name": "Arnold",
-      "phone_number": "8314207603",
-      "alternate_phone_number": "8314207603",
-      "email": "cmrtestuser@gmail.com",
-      "address": {
-        "street": "7733 Derek Rest",
-        "city": "Turnerhaven",
-        "state": "CT",
-        "zip": "51192"
-      },
-      "dob": {
-        "month": "10",
-        "day": "30",
-        "year": "1980"
-      },
-      "us_citizen": "yes",
-      "being_charged": "no",
-      "serving_sentence": "no",
-      "on_probation_parole": "yes",
-      "where_probation_or_parole": "Yolo County",
-      "when_probation_or_parole": "2018",
-      "rap_outside_sf": "no",
-      "when_where_outside_sf": "",
-      "owes_court_fees": "no",
-      "how_did_you_hear": "from work",
-      "additional_information": "I want help",
-      "understands_limits": "yes",
-      "consent_to_represent": "yes"
-    },
-    "first_name": "Shawn",
-    "last_name": "Arnold",
-    "dob": null,
-    "ssn": "",
-    "last_four": "",
-    "drivers_license_or_id": "",
-    "case_number": "",
-    "phone_number": "8314207603",
-    "alternate_phone_number": "8314207603",
-    "email": "cmrtestuser@gmail.com",
-    "reasons_for_applying": "",
-    "how_did_you_hear": "from work",
-    "additional_information": "I want help",
-    "aliases": "",
-    "pfn_number": "",
-    "contact_preferences": "['prefers_email']",
-    "preferred_pronouns": "",
-    "street": "7733 Derek Rest",
-    "city": "Turnerhaven",
-    "state": "CT",
-    "zip": "51192",
-    "us_citizen": "yes",
-    "is_veteran": "",
-    "is_student": "",
-    "being_charged": "no",
-    "serving_sentence": "no",
-    "on_probation_parole": "yes",
-    "where_probation_or_parole": "Yolo County",
-    "when_probation_or_parole": "2018",
-    "finished_half_probation": "",
-    "reduced_probation": "",
-    "rap_outside_sf": "no",
-    "when_where_outside_sf": "",
-    "has_suspended_license": "",
-    "owes_court_fees": "no",
-    "currently_employed": "",
-    "monthly_income": null,
-    "income_source": "",
-    "on_public_benefits": "",
-    "owns_home": "",
-    "monthly_expenses": null,
-    "household_size": null,
-    "dependents": "",
-    "is_married": "",
-    "has_children": "",
-    "old_uuid": "b70370dbe5a8433f8f775742725bfe00",
-    "anonymous_name": "Orange Lion",
-    "date_received": "2017-04-15T15:30:13-07:00"
+    "old_uuid": "09b31b41a8bd42d081e73ec51cbecd9f",
+    "anonymous_name": "Caring Swan",
+    "date_received": "2017-04-13T14:04:12-07:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 111,
+  "pk": 159,
   "fields": {
-    "created": "2017-04-19T14:35:50Z",
-    "updated": "2017-04-25T01:52:09.042Z",
+    "created": "2017-04-22T08:14:34Z",
+    "updated": "2017-04-25T17:41:54.654Z",
     "organization": [
       "San Joaquin County Public Defender"
     ],
-    "form_submission": 81,
+    "form_submission": 114,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 112,
+  "pk": 160,
   "fields": {
-    "created": "2017-04-15T22:30:13Z",
-    "updated": "2017-04-25T01:52:09.063Z",
+    "created": "2017-04-13T21:04:12Z",
+    "updated": "2017-04-25T17:41:54.709Z",
     "organization": [
       "San Joaquin County Public Defender"
     ],
-    "form_submission": 82,
+    "form_submission": 115,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 111,
+  "pk": 160,
   "fields": {
-    "created": "2017-04-25T01:52:11.515Z",
-    "updated": "2017-04-25T01:52:11.659Z",
-    "status_type": 1,
-    "additional_information": "We may be able to get a fee waived for you",
-    "author": [
-      "san_joaquin_pubdef_user"
-    ],
-    "application": 111,
-    "other_next_step": "Come to our Walk-In Clinic",
-    "next_steps": [
-      1
-    ]
-  }
-},
-{
-  "model": "intake.statusupdate",
-  "pk": 112,
-  "fields": {
-    "created": "2017-04-25T01:52:11.686Z",
-    "updated": "2017-04-25T01:52:11.702Z",
+    "created": "2017-04-25T17:41:58.856Z",
+    "updated": "2017-04-25T17:41:58.878Z",
     "status_type": 2,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "san_joaquin_pubdef_user"
     ],
-    "application": 112,
+    "application": 160,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 159,
+  "fields": {
+    "created": "2017-04-25T17:41:58.825Z",
+    "updated": "2017-04-25T17:41:58.838Z",
+    "status_type": 1,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "san_joaquin_pubdef_user"
+    ],
+    "application": 159,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -279,28 +279,28 @@
 },
 {
   "model": "intake.statusnotification",
-  "pk": 111,
+  "pk": 159,
   "fields": {
-    "status_update": 111,
+    "status_update": 159,
     "contact_info": {
       "email": "cmrtestuser+notification@gmail.com"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-25T01:52:11.519Z"
+    "created": "2017-04-25T17:41:58.827Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 112,
+  "pk": 160,
   "fields": {
-    "status_update": 112,
+    "status_update": 160,
     "contact_info": {
       "email": "cmrtestuser+notification@gmail.com"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-25T01:52:11.689Z"
+    "created": "2017-04-25T17:41:58.859Z"
   }
 }
 ]

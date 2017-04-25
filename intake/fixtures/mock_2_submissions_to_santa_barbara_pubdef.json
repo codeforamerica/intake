@@ -1,9 +1,9 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 84,
+  "pk": 117,
   "fields": {
-    "first_visit": "2017-04-25T01:52:09.074Z",
+    "first_visit": "2017-04-25T17:41:54.717Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +11,9 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 85,
+  "pk": 118,
   "fields": {
-    "first_visit": "2017-04-25T01:52:09.098Z",
+    "first_visit": "2017-04-25T17:41:54.769Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,160 +21,53 @@
 },
 {
   "model": "intake.applicant",
-  "pk": 84,
+  "pk": 117,
   "fields": {
-    "visitor": 84
+    "visitor": 117
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 85,
+  "pk": 118,
   "fields": {
-    "visitor": 85
+    "visitor": 118
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 83,
+  "pk": 116,
   "fields": {
-    "applicant": 84,
+    "applicant": 117,
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
         "prefers_sms"
       ],
-      "first_name": "Lauren",
-      "middle_name": "David",
-      "last_name": "Perry",
-      "phone_number": "8314207603",
-      "alternate_phone_number": "8314207603",
+      "first_name": "Curtis",
+      "middle_name": "Charles",
+      "last_name": "Hale",
+      "phone_number": "4152124848",
+      "alternate_phone_number": "4152124848",
       "email": "cmrtestuser@gmail.com",
       "address": {
-        "street": "87590 Clark River Apt. 463",
-        "city": "New Charlesville",
-        "state": "VA",
-        "zip": "26046"
+        "street": "8209 Renee Center Suite 451",
+        "city": "South Dawn",
+        "state": "VI",
+        "zip": "90645"
       },
       "dob": {
-        "month": "7",
-        "day": "16",
-        "year": "1971"
+        "month": "10",
+        "day": "12",
+        "year": "1968"
       },
-      "last_four": "7216",
-      "case_number": "C8548-008",
+      "last_four": "3978",
+      "case_number": "C0957-869",
       "being_charged": "no",
       "serving_sentence": "no",
       "on_probation_parole": "yes",
       "where_probation_or_parole": "Yolo County",
       "when_probation_or_parole": "2018",
-      "rap_outside_sf": "yes",
-      "when_where_outside_sf": "",
-      "owes_court_fees": "yes",
-      "currently_employed": "no",
-      "monthly_income": 2000,
-      "income_source": "a job",
-      "on_public_benefits": "no",
-      "monthly_expenses": 2000,
-      "owns_home": "no",
-      "household_size": 1,
-      "has_children": "yes",
-      "is_married": "no",
-      "reasons_for_applying": [
-        "background_check",
-        "lost_job",
-        "housing"
-      ],
-      "how_did_you_hear": "from work",
-      "additional_information": "I want help",
-      "understands_limits": "yes",
-      "consent_to_represent": "yes"
-    },
-    "first_name": "Lauren",
-    "last_name": "Perry",
-    "dob": null,
-    "ssn": "",
-    "last_four": "7216",
-    "drivers_license_or_id": "",
-    "case_number": "C8548-008",
-    "phone_number": "8314207603",
-    "alternate_phone_number": "8314207603",
-    "email": "cmrtestuser@gmail.com",
-    "reasons_for_applying": "['background_check', 'lost_job', 'housing']",
-    "how_did_you_hear": "from work",
-    "additional_information": "I want help",
-    "aliases": "",
-    "pfn_number": "",
-    "contact_preferences": "['prefers_sms']",
-    "preferred_pronouns": "",
-    "street": "87590 Clark River Apt. 463",
-    "city": "New Charlesville",
-    "state": "VA",
-    "zip": "26046",
-    "us_citizen": "",
-    "is_veteran": "",
-    "is_student": "",
-    "being_charged": "no",
-    "serving_sentence": "no",
-    "on_probation_parole": "yes",
-    "where_probation_or_parole": "Yolo County",
-    "when_probation_or_parole": "2018",
-    "finished_half_probation": "",
-    "reduced_probation": "",
-    "rap_outside_sf": "yes",
-    "when_where_outside_sf": "",
-    "has_suspended_license": "",
-    "owes_court_fees": "yes",
-    "currently_employed": "no",
-    "monthly_income": 2000,
-    "income_source": "a job",
-    "on_public_benefits": "no",
-    "owns_home": "no",
-    "monthly_expenses": 2000,
-    "household_size": 1,
-    "dependents": "",
-    "is_married": "no",
-    "has_children": "yes",
-    "old_uuid": "ad8c1514028f4da9b25f653961746ce0",
-    "anonymous_name": "Gregarious Museum",
-    "date_received": "2017-04-11T03:26:56-07:00"
-  }
-},
-{
-  "model": "intake.formsubmission",
-  "pk": 84,
-  "fields": {
-    "applicant": 85,
-    "duplicate_set": null,
-    "answers": {
-      "contact_preferences": [
-        "prefers_sms",
-        "prefers_email"
-      ],
-      "first_name": "Jane",
-      "middle_name": "Christopher",
-      "last_name": "Mccoy",
-      "phone_number": "8314207603",
-      "alternate_phone_number": "8314207603",
-      "email": "cmrtestuser@gmail.com",
-      "address": {
-        "street": "68026 May Coves",
-        "city": "Lake Jeff",
-        "state": "MD",
-        "zip": "31898"
-      },
-      "dob": {
-        "month": "5",
-        "day": "11",
-        "year": "1982"
-      },
-      "last_four": "3074",
-      "case_number": "C2271-010",
-      "being_charged": "no",
-      "serving_sentence": "no",
-      "on_probation_parole": "yes",
-      "where_probation_or_parole": "Yolo County",
-      "when_probation_or_parole": "2018",
-      "rap_outside_sf": "yes",
+      "rap_outside_sf": "no",
       "when_where_outside_sf": "",
       "owes_court_fees": "no",
       "currently_employed": "no",
@@ -183,8 +76,8 @@
       "on_public_benefits": "yes",
       "monthly_expenses": 2000,
       "owns_home": "no",
-      "household_size": 0,
-      "has_children": "yes",
+      "household_size": 1,
+      "has_children": "no",
       "is_married": "no",
       "reasons_for_applying": [
         "background_check",
@@ -196,27 +89,27 @@
       "understands_limits": "yes",
       "consent_to_represent": "yes"
     },
-    "first_name": "Jane",
-    "last_name": "Mccoy",
+    "first_name": "Curtis",
+    "last_name": "Hale",
     "dob": null,
     "ssn": "",
-    "last_four": "3074",
+    "last_four": "3978",
     "drivers_license_or_id": "",
-    "case_number": "C2271-010",
-    "phone_number": "8314207603",
-    "alternate_phone_number": "8314207603",
+    "case_number": "C0957-869",
+    "phone_number": "4152124848",
+    "alternate_phone_number": "4152124848",
     "email": "cmrtestuser@gmail.com",
     "reasons_for_applying": "['background_check', 'lost_job', 'housing']",
     "how_did_you_hear": "from work",
     "additional_information": "I want help",
     "aliases": "",
     "pfn_number": "",
-    "contact_preferences": "['prefers_sms', 'prefers_email']",
+    "contact_preferences": "['prefers_sms']",
     "preferred_pronouns": "",
-    "street": "68026 May Coves",
-    "city": "Lake Jeff",
-    "state": "MD",
-    "zip": "31898",
+    "street": "8209 Renee Center Suite 451",
+    "city": "South Dawn",
+    "state": "VI",
+    "zip": "90645",
     "us_citizen": "",
     "is_veteran": "",
     "is_student": "",
@@ -227,7 +120,7 @@
     "when_probation_or_parole": "2018",
     "finished_half_probation": "",
     "reduced_probation": "",
-    "rap_outside_sf": "yes",
+    "rap_outside_sf": "no",
     "when_where_outside_sf": "",
     "has_suspended_license": "",
     "owes_court_fees": "no",
@@ -237,71 +130,177 @@
     "on_public_benefits": "yes",
     "owns_home": "no",
     "monthly_expenses": 2000,
-    "household_size": 0,
+    "household_size": 1,
     "dependents": "",
     "is_married": "no",
-    "has_children": "yes",
-    "old_uuid": "09694dbaedeb4f52902f95057a9c617f",
-    "anonymous_name": "Orange Marlin",
-    "date_received": "2017-04-24T08:53:57-07:00"
+    "has_children": "no",
+    "old_uuid": "329e15ef01144171a3ed35cb068c4db0",
+    "anonymous_name": "Quiet Marlin",
+    "date_received": "2017-04-24T07:48:48-07:00"
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 117,
+  "fields": {
+    "applicant": 118,
+    "duplicate_set": null,
+    "answers": {
+      "contact_preferences": [
+        "prefers_sms"
+      ],
+      "first_name": "William",
+      "middle_name": "Kevin",
+      "last_name": "Johnson",
+      "phone_number": "4152124848",
+      "alternate_phone_number": "4152124848",
+      "email": "cmrtestuser@gmail.com",
+      "address": {
+        "street": "8197 Sanders Cliff",
+        "city": "Jameston",
+        "state": "NY",
+        "zip": "19403"
+      },
+      "dob": {
+        "month": "9",
+        "day": "19",
+        "year": "1980"
+      },
+      "last_four": "8241",
+      "case_number": "C4012-477",
+      "being_charged": "yes",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Yolo County",
+      "when_probation_or_parole": "2018",
+      "rap_outside_sf": "no",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "yes",
+      "currently_employed": "no",
+      "monthly_income": 2000,
+      "income_source": "a job",
+      "on_public_benefits": "yes",
+      "monthly_expenses": 2000,
+      "owns_home": "no",
+      "household_size": 0,
+      "has_children": "no",
+      "is_married": "yes",
+      "reasons_for_applying": [
+        "background_check",
+        "lost_job",
+        "housing"
+      ],
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "William",
+    "last_name": "Johnson",
+    "dob": null,
+    "ssn": "",
+    "last_four": "8241",
+    "drivers_license_or_id": "",
+    "case_number": "C4012-477",
+    "phone_number": "4152124848",
+    "alternate_phone_number": "4152124848",
+    "email": "cmrtestuser@gmail.com",
+    "reasons_for_applying": "['background_check', 'lost_job', 'housing']",
+    "how_did_you_hear": "from work",
+    "additional_information": "I want help",
+    "aliases": "",
+    "pfn_number": "",
+    "contact_preferences": "['prefers_sms']",
+    "preferred_pronouns": "",
+    "street": "8197 Sanders Cliff",
+    "city": "Jameston",
+    "state": "NY",
+    "zip": "19403",
+    "us_citizen": "",
+    "is_veteran": "",
+    "is_student": "",
+    "being_charged": "yes",
+    "serving_sentence": "no",
+    "on_probation_parole": "yes",
+    "where_probation_or_parole": "Yolo County",
+    "when_probation_or_parole": "2018",
+    "finished_half_probation": "",
+    "reduced_probation": "",
+    "rap_outside_sf": "no",
+    "when_where_outside_sf": "",
+    "has_suspended_license": "",
+    "owes_court_fees": "yes",
+    "currently_employed": "no",
+    "monthly_income": 2000,
+    "income_source": "a job",
+    "on_public_benefits": "yes",
+    "owns_home": "no",
+    "monthly_expenses": 2000,
+    "household_size": 0,
+    "dependents": "",
+    "is_married": "yes",
+    "has_children": "no",
+    "old_uuid": "e6a17db92eea46fb86b3df5ec65abb23",
+    "anonymous_name": "Brave Fog",
+    "date_received": "2017-04-12T18:47:52-07:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 113,
+  "pk": 161,
   "fields": {
-    "created": "2017-04-11T10:26:56Z",
-    "updated": "2017-04-25T01:52:09.091Z",
+    "created": "2017-04-24T14:48:48Z",
+    "updated": "2017-04-25T17:41:54.757Z",
     "organization": [
       "Santa Barbara County Public Defender"
     ],
-    "form_submission": 83,
+    "form_submission": 116,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 114,
+  "pk": 162,
   "fields": {
-    "created": "2017-04-24T15:53:57Z",
-    "updated": "2017-04-25T01:52:09.113Z",
+    "created": "2017-04-13T01:47:52Z",
+    "updated": "2017-04-25T17:41:54.786Z",
     "organization": [
       "Santa Barbara County Public Defender"
     ],
-    "form_submission": 84,
+    "form_submission": 117,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 113,
+  "pk": 162,
   "fields": {
-    "created": "2017-04-25T01:52:11.755Z",
-    "updated": "2017-04-25T01:52:11.955Z",
-    "status_type": 3,
-    "additional_information": "We may be able to get a fee waived for you",
-    "author": [
-      "santa_barbara_pubdef_user"
-    ],
-    "application": 113,
-    "other_next_step": "Come to our Walk-In Clinic",
-    "next_steps": [
-      1
-    ]
-  }
-},
-{
-  "model": "intake.statusupdate",
-  "pk": 114,
-  "fields": {
-    "created": "2017-04-25T01:52:11.986Z",
-    "updated": "2017-04-25T01:52:12.059Z",
+    "created": "2017-04-25T17:41:59.041Z",
+    "updated": "2017-04-25T17:41:59.160Z",
     "status_type": 4,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "santa_barbara_pubdef_user"
     ],
-    "application": 114,
+    "application": 162,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 161,
+  "fields": {
+    "created": "2017-04-25T17:41:58.935Z",
+    "updated": "2017-04-25T17:41:58.988Z",
+    "status_type": 3,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "santa_barbara_pubdef_user"
+    ],
+    "application": 161,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -310,28 +309,28 @@
 },
 {
   "model": "intake.statusnotification",
-  "pk": 113,
+  "pk": 161,
   "fields": {
-    "status_update": 113,
+    "status_update": 161,
     "contact_info": {
       "email": "cmrtestuser+notification@gmail.com"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-25T01:52:11.767Z"
+    "created": "2017-04-25T17:41:58.941Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 114,
+  "pk": 162,
   "fields": {
-    "status_update": 114,
+    "status_update": 162,
     "contact_info": {
       "email": "cmrtestuser+notification@gmail.com"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-25T01:52:11.989Z"
+    "created": "2017-04-25T17:41:59.062Z"
   }
 }
 ]

@@ -1,9 +1,9 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 92,
+  "pk": 125,
   "fields": {
-    "first_visit": "2017-04-25T01:52:09.267Z",
+    "first_visit": "2017-04-25T17:41:55.363Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +11,9 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 93,
+  "pk": 126,
   "fields": {
-    "first_visit": "2017-04-25T01:52:09.291Z",
+    "first_visit": "2017-04-25T17:41:55.492Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,44 +21,45 @@
 },
 {
   "model": "intake.applicant",
-  "pk": 92,
+  "pk": 125,
   "fields": {
-    "visitor": 92
+    "visitor": 125
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 93,
+  "pk": 126,
   "fields": {
-    "visitor": 93
+    "visitor": 126
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 91,
+  "pk": 124,
   "fields": {
-    "applicant": 92,
+    "applicant": 125,
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
-        "prefers_sms"
+        "prefers_sms",
+        "prefers_email"
       ],
-      "first_name": "Aaron",
-      "middle_name": "Rebecca",
-      "last_name": "Miller",
-      "phone_number": "8314207603",
-      "alternate_phone_number": "8314207603",
+      "first_name": "Justin",
+      "middle_name": "James",
+      "last_name": "Lynch",
+      "phone_number": "4152124848",
+      "alternate_phone_number": "4152124848",
       "email": "cmrtestuser@gmail.com",
       "address": {
-        "street": "409 Sara Harbors",
-        "city": "Smithborough",
-        "state": "RI",
-        "zip": "24668"
+        "street": "247 Estrada Court",
+        "city": "Harrismouth",
+        "state": "NM",
+        "zip": "56949"
       },
       "dob": {
-        "month": "10",
-        "day": "25",
-        "year": "1979"
+        "month": "7",
+        "day": "4",
+        "year": "1961"
       },
       "us_citizen": "yes",
       "being_charged": "no",
@@ -68,33 +69,33 @@
       "when_probation_or_parole": "2018",
       "rap_outside_sf": "yes",
       "when_where_outside_sf": "",
-      "owes_court_fees": "yes",
+      "owes_court_fees": "no",
       "how_did_you_hear": "from work",
       "additional_information": "I want help",
       "understands_limits": "yes",
       "consent_to_represent": "yes"
     },
-    "first_name": "Aaron",
-    "last_name": "Miller",
+    "first_name": "Justin",
+    "last_name": "Lynch",
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
     "case_number": "",
-    "phone_number": "8314207603",
-    "alternate_phone_number": "8314207603",
+    "phone_number": "4152124848",
+    "alternate_phone_number": "4152124848",
     "email": "cmrtestuser@gmail.com",
     "reasons_for_applying": "",
     "how_did_you_hear": "from work",
     "additional_information": "I want help",
     "aliases": "",
     "pfn_number": "",
-    "contact_preferences": "['prefers_sms']",
+    "contact_preferences": "['prefers_sms', 'prefers_email']",
     "preferred_pronouns": "",
-    "street": "409 Sara Harbors",
-    "city": "Smithborough",
-    "state": "RI",
-    "zip": "24668",
+    "street": "247 Estrada Court",
+    "city": "Harrismouth",
+    "state": "NM",
+    "zip": "56949",
     "us_citizen": "yes",
     "is_veteran": "",
     "is_student": "",
@@ -108,97 +109,6 @@
     "rap_outside_sf": "yes",
     "when_where_outside_sf": "",
     "has_suspended_license": "",
-    "owes_court_fees": "yes",
-    "currently_employed": "",
-    "monthly_income": null,
-    "income_source": "",
-    "on_public_benefits": "",
-    "owns_home": "",
-    "monthly_expenses": null,
-    "household_size": null,
-    "dependents": "",
-    "is_married": "",
-    "has_children": "",
-    "old_uuid": "00a92bc3e976422e945d1305e15dd775",
-    "anonymous_name": "Calm Mammoth",
-    "date_received": "2017-04-19T06:29:36-07:00"
-  }
-},
-{
-  "model": "intake.formsubmission",
-  "pk": 92,
-  "fields": {
-    "applicant": 93,
-    "duplicate_set": null,
-    "answers": {
-      "contact_preferences": [
-        "prefers_sms"
-      ],
-      "first_name": "Joshua",
-      "middle_name": "Victoria",
-      "last_name": "Cox",
-      "phone_number": "8314207603",
-      "alternate_phone_number": "8314207603",
-      "email": "cmrtestuser@gmail.com",
-      "address": {
-        "street": "15470 Hurst Knoll Apt. 105",
-        "city": "East Erica",
-        "state": "WI",
-        "zip": "80228"
-      },
-      "dob": {
-        "month": "4",
-        "day": "16",
-        "year": "1962"
-      },
-      "us_citizen": "no",
-      "being_charged": "no",
-      "serving_sentence": "no",
-      "on_probation_parole": "yes",
-      "where_probation_or_parole": "Yolo County",
-      "when_probation_or_parole": "2018",
-      "rap_outside_sf": "no",
-      "when_where_outside_sf": "",
-      "owes_court_fees": "no",
-      "how_did_you_hear": "from work",
-      "additional_information": "I want help",
-      "understands_limits": "yes",
-      "consent_to_represent": "yes"
-    },
-    "first_name": "Joshua",
-    "last_name": "Cox",
-    "dob": null,
-    "ssn": "",
-    "last_four": "",
-    "drivers_license_or_id": "",
-    "case_number": "",
-    "phone_number": "8314207603",
-    "alternate_phone_number": "8314207603",
-    "email": "cmrtestuser@gmail.com",
-    "reasons_for_applying": "",
-    "how_did_you_hear": "from work",
-    "additional_information": "I want help",
-    "aliases": "",
-    "pfn_number": "",
-    "contact_preferences": "['prefers_sms']",
-    "preferred_pronouns": "",
-    "street": "15470 Hurst Knoll Apt. 105",
-    "city": "East Erica",
-    "state": "WI",
-    "zip": "80228",
-    "us_citizen": "no",
-    "is_veteran": "",
-    "is_student": "",
-    "being_charged": "no",
-    "serving_sentence": "no",
-    "on_probation_parole": "yes",
-    "where_probation_or_parole": "Yolo County",
-    "when_probation_or_parole": "2018",
-    "finished_half_probation": "",
-    "reduced_probation": "",
-    "rap_outside_sf": "no",
-    "when_where_outside_sf": "",
-    "has_suspended_license": "",
     "owes_court_fees": "no",
     "currently_employed": "",
     "monthly_income": null,
@@ -210,49 +120,141 @@
     "dependents": "",
     "is_married": "",
     "has_children": "",
-    "old_uuid": "554a47df3f3243a699dfef2638c1f742",
-    "anonymous_name": "Ethereal Galleon",
-    "date_received": "2017-04-15T19:48:51-07:00"
+    "old_uuid": "53671ef8afda4bd4aa19705d00829ed9",
+    "anonymous_name": "Chartreuse Galleon",
+    "date_received": "2017-04-19T06:46:31-07:00"
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 125,
+  "fields": {
+    "applicant": 126,
+    "duplicate_set": null,
+    "answers": {
+      "contact_preferences": [
+        "prefers_email",
+        "prefers_sms"
+      ],
+      "first_name": "Sierra",
+      "middle_name": "Christopher",
+      "last_name": "Becker",
+      "phone_number": "4152124848",
+      "alternate_phone_number": "4152124848",
+      "email": "cmrtestuser@gmail.com",
+      "address": {
+        "street": "14388 Samantha Course Apt. 133",
+        "city": "South Pamelabury",
+        "state": "NM",
+        "zip": "82333"
+      },
+      "dob": {
+        "month": "4",
+        "day": "31",
+        "year": "1961"
+      },
+      "us_citizen": "yes",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Yolo County",
+      "when_probation_or_parole": "2018",
+      "rap_outside_sf": "i_dont_know",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "yes",
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "Sierra",
+    "last_name": "Becker",
+    "dob": null,
+    "ssn": "",
+    "last_four": "",
+    "drivers_license_or_id": "",
+    "case_number": "",
+    "phone_number": "4152124848",
+    "alternate_phone_number": "4152124848",
+    "email": "cmrtestuser@gmail.com",
+    "reasons_for_applying": "",
+    "how_did_you_hear": "from work",
+    "additional_information": "I want help",
+    "aliases": "",
+    "pfn_number": "",
+    "contact_preferences": "['prefers_email', 'prefers_sms']",
+    "preferred_pronouns": "",
+    "street": "14388 Samantha Course Apt. 133",
+    "city": "South Pamelabury",
+    "state": "NM",
+    "zip": "82333",
+    "us_citizen": "yes",
+    "is_veteran": "",
+    "is_student": "",
+    "being_charged": "no",
+    "serving_sentence": "no",
+    "on_probation_parole": "yes",
+    "where_probation_or_parole": "Yolo County",
+    "when_probation_or_parole": "2018",
+    "finished_half_probation": "",
+    "reduced_probation": "",
+    "rap_outside_sf": "i_dont_know",
+    "when_where_outside_sf": "",
+    "has_suspended_license": "",
+    "owes_court_fees": "yes",
+    "currently_employed": "",
+    "monthly_income": null,
+    "income_source": "",
+    "on_public_benefits": "",
+    "owns_home": "",
+    "monthly_expenses": null,
+    "household_size": null,
+    "dependents": "",
+    "is_married": "",
+    "has_children": "",
+    "old_uuid": "33bb4f730f6e44449b2f36eecf60166c",
+    "anonymous_name": "Mysterious Swan",
+    "date_received": "2017-04-12T06:20:12-07:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 121,
+  "pk": 169,
   "fields": {
-    "created": "2017-04-19T13:29:36Z",
-    "updated": "2017-04-25T01:52:09.285Z",
+    "created": "2017-04-19T13:46:31Z",
+    "updated": "2017-04-25T17:41:55.454Z",
     "organization": [
       "Sonoma County Public Defender"
     ],
-    "form_submission": 91,
+    "form_submission": 124,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 122,
+  "pk": 170,
   "fields": {
-    "created": "2017-04-16T02:48:51Z",
-    "updated": "2017-04-25T01:52:09.308Z",
+    "created": "2017-04-12T13:20:12Z",
+    "updated": "2017-04-25T17:41:55.573Z",
     "organization": [
       "Sonoma County Public Defender"
     ],
-    "form_submission": 92,
+    "form_submission": 125,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 121,
+  "pk": 169,
   "fields": {
-    "created": "2017-04-25T01:52:13.185Z",
-    "updated": "2017-04-25T01:52:13.325Z",
+    "created": "2017-04-25T17:42:00.145Z",
+    "updated": "2017-04-25T17:42:00.197Z",
     "status_type": 4,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "sonoma_pubdef_user"
     ],
-    "application": 121,
+    "application": 169,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -261,16 +263,16 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 122,
+  "pk": 170,
   "fields": {
-    "created": "2017-04-25T01:52:13.359Z",
-    "updated": "2017-04-25T01:52:13.382Z",
+    "created": "2017-04-25T17:42:00.281Z",
+    "updated": "2017-04-25T17:42:00.318Z",
     "status_type": 5,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "sonoma_pubdef_user"
     ],
-    "application": 122,
+    "application": 170,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -279,28 +281,28 @@
 },
 {
   "model": "intake.statusnotification",
-  "pk": 121,
+  "pk": 169,
   "fields": {
-    "status_update": 121,
+    "status_update": 169,
     "contact_info": {
       "email": "cmrtestuser+notification@gmail.com"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-25T01:52:13.220Z"
+    "created": "2017-04-25T17:42:00.157Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 122,
+  "pk": 170,
   "fields": {
-    "status_update": 122,
+    "status_update": 170,
     "contact_info": {
       "email": "cmrtestuser+notification@gmail.com"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-25T01:52:13.361Z"
+    "created": "2017-04-25T17:42:00.287Z"
   }
 }
 ]

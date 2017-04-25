@@ -1,9 +1,9 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 70,
+  "pk": 103,
   "fields": {
-    "first_visit": "2017-04-25T01:52:08.707Z",
+    "first_visit": "2017-04-25T17:41:54.145Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +11,9 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 71,
+  "pk": 104,
   "fields": {
-    "first_visit": "2017-04-25T01:52:08.730Z",
+    "first_visit": "2017-04-25T17:41:54.188Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,154 +21,65 @@
 },
 {
   "model": "intake.applicant",
-  "pk": 70,
+  "pk": 103,
   "fields": {
-    "visitor": 70
+    "visitor": 103
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 71,
+  "pk": 104,
   "fields": {
-    "visitor": 71
+    "visitor": 104
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 69,
+  "pk": 102,
   "fields": {
-    "applicant": 70,
-    "duplicate_set": null,
-    "answers": {
-      "contact_preferences": [
-        "prefers_sms",
-        "prefers_email"
-      ],
-      "first_name": "Stephanie",
-      "middle_name": "",
-      "last_name": "Alexander",
-      "phone_number": "8314207603",
-      "email": "cmrtestuser@gmail.com",
-      "address": {
-        "street": "1091 Hendricks Station",
-        "city": "Rowebury",
-        "state": "NE",
-        "zip": "94015"
-      },
-      "dob": {
-        "month": "9",
-        "day": "30",
-        "year": "1998"
-      },
-      "us_citizen": "yes",
-      "serving_sentence": "yes",
-      "on_probation_parole": "no",
-      "currently_employed": "yes",
-      "monthly_income": 3514,
-      "income_source": "a job",
-      "monthly_expenses": 1273,
-      "how_did_you_hear": "",
-      "additional_information": "",
-      "understands_limits": "yes",
-      "consent_to_represent": "yes"
-    },
-    "first_name": "Stephanie",
-    "last_name": "Alexander",
-    "dob": null,
-    "ssn": "",
-    "last_four": "",
-    "drivers_license_or_id": "",
-    "case_number": "",
-    "phone_number": "8314207603",
-    "alternate_phone_number": "",
-    "email": "cmrtestuser@gmail.com",
-    "reasons_for_applying": "",
-    "how_did_you_hear": "",
-    "additional_information": "",
-    "aliases": "",
-    "pfn_number": "",
-    "contact_preferences": "['prefers_sms', 'prefers_email']",
-    "preferred_pronouns": "",
-    "street": "1091 Hendricks Station",
-    "city": "Rowebury",
-    "state": "NE",
-    "zip": "94015",
-    "us_citizen": "yes",
-    "is_veteran": "",
-    "is_student": "",
-    "being_charged": "",
-    "serving_sentence": "yes",
-    "on_probation_parole": "no",
-    "where_probation_or_parole": "",
-    "when_probation_or_parole": "",
-    "finished_half_probation": "",
-    "reduced_probation": "",
-    "rap_outside_sf": "",
-    "when_where_outside_sf": "",
-    "has_suspended_license": "",
-    "owes_court_fees": "",
-    "currently_employed": "yes",
-    "monthly_income": 3514,
-    "income_source": "a job",
-    "on_public_benefits": "",
-    "owns_home": "",
-    "monthly_expenses": 1273,
-    "household_size": null,
-    "dependents": "",
-    "is_married": "",
-    "has_children": "",
-    "old_uuid": "c1e9c005bdee4d28997b435c73e32251",
-    "anonymous_name": "Amicable Sequoia",
-    "date_received": "2017-04-16T15:21:35-07:00"
-  }
-},
-{
-  "model": "intake.formsubmission",
-  "pk": 70,
-  "fields": {
-    "applicant": 71,
+    "applicant": 103,
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
         "prefers_email",
         "prefers_sms"
       ],
-      "first_name": "Amber",
+      "first_name": "Timothy",
       "middle_name": "",
-      "last_name": "King",
-      "phone_number": "8314207603",
+      "last_name": "Fuller",
+      "phone_number": "4152124848",
       "email": "cmrtestuser@gmail.com",
       "address": {
-        "street": "2627 Morgan Ways",
-        "city": "Allisonburgh",
-        "state": "VA",
-        "zip": "91092"
+        "street": "8290 Kelli Mills",
+        "city": "New Lisastad",
+        "state": "UT",
+        "zip": "61498"
       },
       "dob": {
-        "month": "7",
-        "day": "13",
-        "year": "1960"
+        "month": "5",
+        "day": "5",
+        "year": "1985"
       },
-      "us_citizen": "no",
+      "us_citizen": "yes",
       "serving_sentence": "no",
-      "on_probation_parole": "no",
-      "currently_employed": "no",
-      "monthly_income": 6702,
+      "on_probation_parole": "yes",
+      "currently_employed": "yes",
+      "monthly_income": 5510,
       "income_source": "a job",
-      "monthly_expenses": 1809,
+      "monthly_expenses": 2179,
       "how_did_you_hear": "",
       "additional_information": "",
       "understands_limits": "yes",
       "consent_to_represent": "yes"
     },
-    "first_name": "Amber",
-    "last_name": "King",
+    "first_name": "Timothy",
+    "last_name": "Fuller",
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
     "case_number": "",
-    "phone_number": "8314207603",
+    "phone_number": "4152124848",
     "alternate_phone_number": "",
     "email": "cmrtestuser@gmail.com",
     "reasons_for_applying": "",
@@ -178,10 +89,99 @@
     "pfn_number": "",
     "contact_preferences": "['prefers_email', 'prefers_sms']",
     "preferred_pronouns": "",
-    "street": "2627 Morgan Ways",
-    "city": "Allisonburgh",
-    "state": "VA",
-    "zip": "91092",
+    "street": "8290 Kelli Mills",
+    "city": "New Lisastad",
+    "state": "UT",
+    "zip": "61498",
+    "us_citizen": "yes",
+    "is_veteran": "",
+    "is_student": "",
+    "being_charged": "",
+    "serving_sentence": "no",
+    "on_probation_parole": "yes",
+    "where_probation_or_parole": "",
+    "when_probation_or_parole": "",
+    "finished_half_probation": "",
+    "reduced_probation": "",
+    "rap_outside_sf": "",
+    "when_where_outside_sf": "",
+    "has_suspended_license": "",
+    "owes_court_fees": "",
+    "currently_employed": "yes",
+    "monthly_income": 5510,
+    "income_source": "a job",
+    "on_public_benefits": "",
+    "owns_home": "",
+    "monthly_expenses": 2179,
+    "household_size": null,
+    "dependents": "",
+    "is_married": "",
+    "has_children": "",
+    "old_uuid": "0d6f9db5821142ea9c6218dd02a2f06d",
+    "anonymous_name": "Ethereal Mammoth",
+    "date_received": "2017-04-16T15:55:39-07:00"
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 103,
+  "fields": {
+    "applicant": 104,
+    "duplicate_set": null,
+    "answers": {
+      "contact_preferences": [
+        "prefers_sms",
+        "prefers_email"
+      ],
+      "first_name": "Patricia",
+      "middle_name": "",
+      "last_name": "Scott",
+      "phone_number": "4152124848",
+      "email": "cmrtestuser@gmail.com",
+      "address": {
+        "street": "421 Adrian Ranch Suite 234",
+        "city": "Leefurt",
+        "state": "ID",
+        "zip": "32259"
+      },
+      "dob": {
+        "month": "6",
+        "day": "16",
+        "year": "1974"
+      },
+      "us_citizen": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "no",
+      "currently_employed": "yes",
+      "monthly_income": 6751,
+      "income_source": "a job",
+      "monthly_expenses": 1182,
+      "how_did_you_hear": "",
+      "additional_information": "",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "Patricia",
+    "last_name": "Scott",
+    "dob": null,
+    "ssn": "",
+    "last_four": "",
+    "drivers_license_or_id": "",
+    "case_number": "",
+    "phone_number": "4152124848",
+    "alternate_phone_number": "",
+    "email": "cmrtestuser@gmail.com",
+    "reasons_for_applying": "",
+    "how_did_you_hear": "",
+    "additional_information": "",
+    "aliases": "",
+    "pfn_number": "",
+    "contact_preferences": "['prefers_sms', 'prefers_email']",
+    "preferred_pronouns": "",
+    "street": "421 Adrian Ranch Suite 234",
+    "city": "Leefurt",
+    "state": "ID",
+    "zip": "32259",
     "us_citizen": "no",
     "is_veteran": "",
     "is_student": "",
@@ -196,59 +196,59 @@
     "when_where_outside_sf": "",
     "has_suspended_license": "",
     "owes_court_fees": "",
-    "currently_employed": "no",
-    "monthly_income": 6702,
+    "currently_employed": "yes",
+    "monthly_income": 6751,
     "income_source": "a job",
     "on_public_benefits": "",
     "owns_home": "",
-    "monthly_expenses": 1809,
+    "monthly_expenses": 1182,
     "household_size": null,
     "dependents": "",
     "is_married": "",
     "has_children": "",
-    "old_uuid": "173fb4c2e10d44e5a275b58c9ea4eda4",
-    "anonymous_name": "Quiet Squirrel",
-    "date_received": "2017-04-18T07:33:31-07:00"
+    "old_uuid": "326a987f125a4badba9f1774304d1a38",
+    "anonymous_name": "Brave Swan",
+    "date_received": "2017-04-24T22:11:34-07:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 99,
+  "pk": 147,
   "fields": {
-    "created": "2017-04-16T22:21:35Z",
-    "updated": "2017-04-25T01:52:08.723Z",
+    "created": "2017-04-16T22:55:39Z",
+    "updated": "2017-04-25T17:41:54.171Z",
     "organization": [
       "Contra Costa Public Defender"
     ],
-    "form_submission": 69,
+    "form_submission": 102,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 100,
+  "pk": 148,
   "fields": {
-    "created": "2017-04-18T14:33:31Z",
-    "updated": "2017-04-25T01:52:08.749Z",
+    "created": "2017-04-25T05:11:34Z",
+    "updated": "2017-04-25T17:41:54.204Z",
     "organization": [
       "Contra Costa Public Defender"
     ],
-    "form_submission": 70,
+    "form_submission": 103,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 99,
+  "pk": 147,
   "fields": {
-    "created": "2017-04-25T01:52:09.728Z",
-    "updated": "2017-04-25T01:52:09.765Z",
+    "created": "2017-04-25T17:41:57.293Z",
+    "updated": "2017-04-25T17:41:57.338Z",
     "status_type": 3,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "cc_pubdef_user"
     ],
-    "application": 99,
+    "application": 147,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -257,16 +257,16 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 100,
+  "pk": 148,
   "fields": {
-    "created": "2017-04-25T01:52:09.786Z",
-    "updated": "2017-04-25T01:52:09.818Z",
+    "created": "2017-04-25T17:41:57.376Z",
+    "updated": "2017-04-25T17:41:57.420Z",
     "status_type": 4,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "cc_pubdef_user"
     ],
-    "application": 100,
+    "application": 148,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -275,28 +275,28 @@
 },
 {
   "model": "intake.statusnotification",
-  "pk": 99,
+  "pk": 147,
   "fields": {
-    "status_update": 99,
+    "status_update": 147,
     "contact_info": {
       "email": "cmrtestuser+notification@gmail.com"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-25T01:52:09.734Z"
+    "created": "2017-04-25T17:41:57.299Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 100,
+  "pk": 148,
   "fields": {
-    "status_update": 100,
+    "status_update": 148,
     "contact_info": {
       "email": "cmrtestuser+notification@gmail.com"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-25T01:52:09.789Z"
+    "created": "2017-04-25T17:41:57.392Z"
   }
 }
 ]
