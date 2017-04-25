@@ -41,6 +41,12 @@ class ApplicationEvent(models.Model):
     class Meta:
         ordering = ['-time']
 
+    def __str__(self):
+        return '{} {} {}'.format(
+            self.time.strftime('%Y-%m-%d %H:%M:%S'),
+            self.name,
+            str(self.data))
+
     def send_filtered_data_to_mixpanel(self):
         filtered_data = {}
         for key, value in self.data.items():
