@@ -1,9 +1,5 @@
 from django.db import models
 import intake
-from intake.permissions import (
-    CAN_SEE_APP_STATS,
-    CAN_SEE_APP_DETAILS
-)
 
 
 class Applicant(models.Model):
