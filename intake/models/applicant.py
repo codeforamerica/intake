@@ -3,7 +3,7 @@ import intake
 
 
 class Applicant(models.Model):
-    visitor = models.ForeignKey('intake.Visitor', null=True)
+    visitor = models.OneToOneField('intake.Visitor')
 
     class Meta:
         permissions = (
