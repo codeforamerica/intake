@@ -34,7 +34,7 @@ def roll_up_duplicate_applicants_per_visitor(visitor):
         for event in applicant.events.all():
             event.applicant_id = first.id
             event.save()
-        for sub in applicant.submissions.all():
+        for sub in applicant.form_submissions.all():
             sub.applicant_id = first.id
             sub.save()
         applicant.delete()
