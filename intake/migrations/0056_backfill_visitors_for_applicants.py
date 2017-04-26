@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
+from django.db.models import Count
 
 
 def add_visitors_for_applicants(apps, schema_editor):
@@ -17,10 +18,26 @@ def add_visitors_for_applicants(apps, schema_editor):
             visitor.save()
             app.visitor_id = visitor.id
             app.save()
-            first_app_event = ApplicationEvent.objects.filter(
+            first_app_event = ApplicationEvent.objects.using(db_alias).filter(
                 applicant_id=app.id).order_by('time').first()
             visitor.first_visit = first_app_event.time
             visitor.save()
+    for visitor in Visitor.objects.using(db_alias).annotate(
+            applicant_count=Count('applicant')).filter(applicant_count__gt=1):
+        roll_up_duplicate_applicants_per_visitor(visitor)
+
+
+def roll_up_duplicate_applicants_per_visitor(visitor):
+    applicants = visitor.applicant_set.all()
+    first = applicants.first()
+    for applicant in applicants.exclude(id=first.id):
+        for event in applicant.events.all():
+            event.applicant_id = first.id
+            event.save()
+        for sub in applicant.submissions.all():
+            sub.applicant_id = first.id
+            sub.save()
+        applicant.delete()
 
 
 def dont_erase_visitors(apps, schema_editor):
