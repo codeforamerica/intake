@@ -4,7 +4,7 @@ import dj_database_url
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-SECRET_KEY = os.environ.get('SECRET_KEY', 'something super secret')
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # looks for 'DATABASE_URL' environmental variable
 DATABASES = {
@@ -23,8 +23,7 @@ AWS_STORAGE_BUCKET_NAME = os.environ.get('BUCKETEER_BUCKET_NAME')
 MEDIA_ROOT = ''
 
 # static files location
-STATIC_ROOT = os.environ.get('STATIC_ROOT',
-                             os.path.join(REPO_DIR, 'project', 'static'))
+STATIC_ROOT = os.path.join(REPO_DIR, 'staticfiles')
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
