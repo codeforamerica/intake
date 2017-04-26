@@ -18,6 +18,21 @@ class TestApplicant(TestCase):
         applicant.save()
         self.assertTrue(applicant.id)
 
+    def test_getuuid_returns_same_uuid_as_corresponding_visitor(self):
+        visitor = factories.VisitorFactory()
+        applicant = models.Applicant(visitor_id=visitor.id)
+        applicant.save()
+        self.assertEqual(applicant.get_uuid(), visitor.get_uuid())
+
+    def test_there_can_be_only_one_applicant_per_visitor(self):
+        # aka highlander test
+        applicant = factories.ApplicantFactory()
+        visitor = applicant.visitor
+        second_applicant = models.Applicant(visitor_id=visitor.id)
+        with self.assertRaises(IntegrityError):
+            second_applicant.save()
+        self.assertEqual(visitor.applicant, applicant)
+
     def test_can_log_event(self):
         applicant = factories.ApplicantFactory()
         event_name = "im_being_tested"
