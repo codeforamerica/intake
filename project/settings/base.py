@@ -195,7 +195,3 @@ COMPRESS_OFFLINE = True
 def COMPRESS_JINJA2_GET_ENVIRONMENT():
     from django.template import engines
     return engines["jinja"].env
-
-STATICFILES_DIRS = [
-    os.path.join(REPO_DIR, 'frontend', 'build'),
-]
