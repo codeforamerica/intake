@@ -138,5 +138,8 @@ class ApplicationEvent(models.Model):
         return events
 
     def __str__(self):
-        return "ApplicationEvent(applicant_id={},name={},data={})".format(
-            self.applicant_id, self.name, str(self.data))
+        return 'Applicant(id={})\t{}\t{}\t{}'.format(
+            self.applicant_id,
+            self.time.strftime('%Y-%m-%d %H:%M:%S'),
+            self.name,
+            str(self.data))

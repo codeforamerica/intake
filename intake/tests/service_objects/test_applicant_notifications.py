@@ -1,7 +1,7 @@
 from unittest.mock import patch, Mock
 from user_accounts.models import Organization
 from intake.constants import Organizations
-from intake.tests import mock, factories
+from intake.tests import factories
 from intake.tests.mock_org_answers import get_answers_for_orgs
 from intake.tests.base_testcases import ExternalNotificationsPatchTestCase
 from intake.tests.services.test_followups import get_old_date
@@ -28,8 +28,6 @@ class TestApplicantNotification(ExternalNotificationsPatchTestCase):
         return orgs
 
     def make_full_submission(self, orgs, **answer_overrides):
-        applicant = models.Applicant()
-        applicant.save()
         answers = get_answers_for_orgs(
             orgs,
             first_name="Hubert",
@@ -47,8 +45,7 @@ class TestApplicantNotification(ExternalNotificationsPatchTestCase):
             date_received=get_old_date(),
             anonymous_name="Cerulean Beetle",
             organizations=orgs,
-            answers=answers,
-            applicant=applicant
+            answers=answers
         )
 
     def org_notification_and_default_sub(self, **answer_overrides):
