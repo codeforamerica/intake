@@ -22,9 +22,6 @@ AWS_STORAGE_BUCKET_NAME = os.environ.get('BUCKETEER_BUCKET_NAME')
 
 MEDIA_ROOT = ''
 
-# static files location
-STATIC_ROOT = os.path.join(REPO_DIR, 'staticfiles')
-
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 # Email settings
