@@ -541,8 +541,8 @@ class VenturaCountyFormSpec(CombinableCountyFormSpec):
 
 class SantaBarbaraCountyFormSpec(VenturaCountyFormSpec):
     county = Counties.SANTA_BARBARA
-    fields = VenturaCountyFormSpec.fields - {
-        F.DriverLicenseOrIDNumber,
+    fields = (VenturaCountyFormSpec.fields | {F.Aliases}) - {
+        F.LastFourOfSocial,
     }
 
 
