@@ -633,6 +633,11 @@ class DeclarationLetterDisplay(DisplayForm):
     ]
 
 
+class DeclarationLetterReviewForm(Form):
+    fields = [F.DeclarationLetterReviewActions]
+    required_fields = [F.DeclarationLetterReviewActions]
+
+
 class SelectCountyForm(Form):
     fields = [
         F.Counties,

@@ -197,6 +197,12 @@ class BindParseValidate(Renderable):
             except ValidationError as error:
                 self.handle_django_validation_error(error)
 
+    @property
+    def data(self):
+        """This mimicks django's Form api
+        """
+        return self.raw_input_data
+
     def __repr__(self):
         template = "{klass}(bound={bound})"
         return template.format(
