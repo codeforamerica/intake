@@ -100,3 +100,5 @@ class TestGetFormDataFromSession(TestCase):
         fetched = utils.get_form_data_from_session(
             request, 'form_in_progress')
         self.assertEqual(fetched['confirm_county_selection'], 'yes')
+        self.assertEqual(
+            fetched.getlist('counties'), ['alameda', 'contracosta'])
