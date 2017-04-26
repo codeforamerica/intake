@@ -56,7 +56,7 @@ MIDDLEWARE_CLASSES = [
 ]
 
 ROOT_URLCONF = 'project.urls'
-
+print(REPO_DIR)
 TEMPLATES = [
     {
         'NAME': 'jinja',
