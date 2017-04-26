@@ -187,6 +187,8 @@ STATICFILES_FINDERS = [
 
 COMPRESS_PRECOMPILERS = (
     ('text/less', 'lessc {infile} {outfile}'),
+    ('text/browserify',
+        'node_modules/.bin/browserify {infile} -d --output {outfile}'),
 )
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
