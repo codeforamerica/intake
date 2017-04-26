@@ -7,5 +7,5 @@ class Command(collectstatic.Command):
 
     def handle(self, *args, **options):
         call_command('compress',
-                engine="jinja2", extension=["jinja"], interactive=False)
+                     engine="jinja2", extension=["jinja"], interactive=False)
         super(Command, self).handle(*args, **options)
