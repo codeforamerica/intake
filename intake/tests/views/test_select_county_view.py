@@ -1,12 +1,13 @@
 from unittest.mock import patch
 from django.core.urlresolvers import reverse
+from markupsafe import escape
 from intake.views.applicant_form_view_base import ApplicantFormViewBase
-from intake.tests.views.test_applicant_form_view_base \
-    import ApplicantFormViewBaseTestCase
 from django.http.request import QueryDict
 from intake import utils, models, constants
 from formation import fields
-from markupsafe import escape
+from intake.tests.views.test_applicant_form_view_base \
+    import ApplicantFormViewBaseTestCase
+from intake.tests import factories
 
 
 class TestSelectCountyView(ApplicantFormViewBaseTestCase):
@@ -126,3 +127,18 @@ class TestSelectCountyView(ApplicantFormViewBaseTestCase):
         self.assertEqual(event.data['user_agent'], 'tester')
         self.assertIn('referrer', event.data)
         self.assertEqual(event.data['counties'], ['contracosta'])
+
+    def test_creates_applicant(self):
+        response = self.client.fill_form(
+            reverse('intake-apply'), counties=['alameda', 'contracosta'],
+            confirm_county_selection='yes')
+        self.assertTrue(response.wsgi_request.applicant.id)
+
+    def test_create_applicant_with_existing_visitor_and_applicant(self):
+        existing_applicant = factories.ApplicantFactory()
+        self.set_session(visitor_id=existing_applicant.visitor.id)
+        response = self.client.fill_form(
+            reverse('intake-apply'), counties=['alameda', 'contracosta'],
+            confirm_county_selection='yes')
+        self.assertEqual(
+            response.wsgi_request.applicant, existing_applicant)
