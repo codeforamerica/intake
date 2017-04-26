@@ -8,8 +8,9 @@ install:
   - npm install
   - pip install -r requirements/ci.txt
 env:
+  - DJANGO_SETTINGS_MODULE='project.settings.ci'
+  - DELUXE_TEST=1
   - SECRET_KEY='not so secret key'
-  - DJANGO_SETTINGS_MODULE='project.settings.ci' DELUXE_TEST=1
 addons:
   postgresql: "9.4"
 
