@@ -2,7 +2,11 @@
 language: python
 python:
   - "3.5"
-install: pip install -r requirements/ci.txt
+before_install:
+  - nvm install 6.5
+install:
+  - npm install
+  - pip install -r requirements/ci.txt
 env:
   - DJANGO_SETTINGS_MODULE='project.settings.ci' DELUXE_TEST=1
 addons:
