@@ -19,19 +19,14 @@ DEFAULT_HOST = os.environ.get('DEFAULT_HOST', 'http://localhost:8000')
 AWS_ACCESS_KEY_ID = os.environ.get('BUCKETEER_AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('BUCKETEER_AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('BUCKETEER_BUCKET_NAME')
-DEFAULT_FILE_STORAGE = os.environ.get(
-    'DEFAULT_FILE_STORAGE',
-    'django.core.files.storage.FileSystemStorage')
-# set to 'storages.backends.s3boto.S3BotoStorage' for prod
 
-if 'FileSystem' in DEFAULT_FILE_STORAGE:
-    MEDIA_ROOT = os.path.join(REPO_DIR, 'project', 'media')
-else:
-    MEDIA_ROOT = ''
+MEDIA_ROOT = ''
 
 # static files location
 STATIC_ROOT = os.environ.get('STATIC_ROOT',
                              os.path.join(REPO_DIR, 'project', 'static'))
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 # Email settings
 EMAIL_BACKEND = "sgbackend.SendGridBackend"
