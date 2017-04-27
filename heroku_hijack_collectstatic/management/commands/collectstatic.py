@@ -12,8 +12,6 @@ class Command(collectstatic.Command):
         print(settings.DEFAULT_FILE_STORAGE)
         print(settings.STATICFILES_STORAGE)
         from subprocess import Popen
-        Popen('ls -la', shell=True)
-        Popen('ls -la staticfiles', shell=True)
-        Popen('ls -la staticfiles/intake/less', shell=True)
+        Popen('find /  -name "stats_entry.js"', shell=True)
         call_command('compress',
                      engine="jinja2", extension=["jinja"], interactive=False)
