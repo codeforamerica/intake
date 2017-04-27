@@ -7,8 +7,7 @@ def ok(request, *args, **kwargs):
 
 
 def error(request, *args, **kwargs):
-    response = HttpResponse(status=500)
-    return response
+    return HttpResponse(status=500)
 
 
 urlpatterns = [
