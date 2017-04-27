@@ -7,6 +7,10 @@ class Command(collectstatic.Command):
 
     def handle(self, *args, **options):
         super(Command, self).handle(*args, **options)
+        from django.conf import settings
+        print(settings.STATIC_ROOT)
+        print(settings.DEFAULT_FILE_STORAGE)
+        print(settings.STATICFILES_STORAGE)
         from subprocess import Popen
         Popen('ls -la', shell=True)
         Popen('ls -la staticfiles', shell=True)
