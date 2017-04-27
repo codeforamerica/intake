@@ -33,6 +33,7 @@ class TestThanksView(ApplicantFormViewBaseTestCase):
 
     def test_clears_session_data(self):
         submission = factories.FormSubmissionWithOrgsFactory.create()
+        self.set_session(visitor_id=submission.applicant.visitor.id)
         self.set_form_session_data(
             counties=['alameda', 'contracosta'],
             applicant=submission.applicant,
@@ -43,7 +44,9 @@ class TestThanksView(ApplicantFormViewBaseTestCase):
         form_data = self.get_form_session_data()
         self.assertEqual(form_data, None)
         applicant_id = self.client.session.get('applicant_id', None)
+        visitor_id = self.client.session.get('visitor_id', None)
         self.assertEqual(applicant_id, None)
+        self.assertEqual(visitor_id, None)
 
     def test_shows_flash_messages(self):
         self.set_form_session_data(counties=['contracosta'])
@@ -74,6 +77,7 @@ class TestRAPSheetInstructionsView(ApplicantFormViewBaseTestCase):
 
     def test_clears_session_data(self):
         submission = factories.FormSubmissionWithOrgsFactory.create()
+        self.set_session(visitor_id=submission.applicant.visitor.id)
         self.set_form_session_data(
             counties=['alameda', 'contracosta'],
             applicant=submission.applicant,
@@ -84,7 +88,9 @@ class TestRAPSheetInstructionsView(ApplicantFormViewBaseTestCase):
         form_data = self.get_form_session_data()
         self.assertEqual(form_data, None)
         applicant_id = self.client.session.get('applicant_id', None)
+        visitor_id = self.client.session.get('visitor_id', None)
         self.assertEqual(applicant_id, None)
+        self.assertEqual(visitor_id, None)
 
     def test_applicant_with_submission(self):
         submission = factories.FormSubmissionWithOrgsFactory.create(

@@ -29,11 +29,8 @@ class TestCommand(ExternalNotificationsPatchTestCase):
         org = Organization.objects.get(slug='ebclc')
         dates = sorted([mock.get_old_date() for i in range(464, 469)])
         for date, pk in zip(dates, range(464, 469)):
-            applicant = Applicant()
-            applicant.save()
             factories.FormSubmissionWithOrgsFactory.create(
                 id=pk,
-                applicant=applicant,
                 date_received=date,
                 organizations=[org],
                 answers=get_answers_for_orgs(

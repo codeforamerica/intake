@@ -11,7 +11,7 @@ from intake.constants import (
     COUNTY_CHOICE_DISPLAY_DICT, Organizations,
     EMAIL, SMS)
 from intake.models import (
-    Applicant, ApplicationEvent, FormSubmission, ApplicationLogEntry)
+    ApplicationEvent, FormSubmission, ApplicationLogEntry)
 from intake import constants, models
 from user_accounts.models import Organization, UserProfile
 
@@ -32,8 +32,7 @@ class TestCreateSubmissions(TestCase):
 
     def test_can_create_with_form_orgs_and_app_id(self):
         # given an applicant, some orgs, and a validated form
-        applicant = Applicant()
-        applicant.save()
+        applicant = factories.ApplicantFactory()
         organizations = list(Organization.objects.all()[:2])
         Form = county_form_selector.get_combined_form_class(
             counties=ALL_COUNTY_SLUGS)
@@ -53,8 +52,7 @@ class TestCreateSubmissions(TestCase):
             set(organizations))
 
     def test_create_sub_with_existing_duplicate(self):
-        applicant = Applicant()
-        applicant.save()
+        applicant = factories.ApplicantFactory()
         answers = mock.fake.all_county_answers()
         org = Organization.objects.filter(is_receiving_agency=True).first()
         Form = county_form_selector.get_combined_form_class(
@@ -242,8 +240,7 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
         return [Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)]
 
     def test_notifications_slacks_and_logs_for_full_contact_preferences(self):
-        applicant = Applicant()
-        applicant.save()
+        applicant = factories.ApplicantFactory()
         answers = get_answers_for_orgs(
             self.get_orgs(),
             contact_preferences=[
@@ -271,8 +268,7 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
                 name=ApplicationEvent.CONFIRMATION_SENT).count(), 2)
 
     def test_notifications_slacks_and_logs_for_no_contact_preferences(self):
-        applicant = Applicant()
-        applicant.save()
+        applicant = factories.ApplicantFactory()
         answers = get_answers_for_orgs(
             self.get_orgs(),
             contact_preferences=[],
@@ -295,8 +291,7 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
                 name=ApplicationEvent.CONFIRMATION_SENT).count(), 0)
 
     def test_notifications_slacks_and_logs_for_one_contact_preference(self):
-        applicant = Applicant()
-        applicant.save()
+        applicant = factories.ApplicantFactory()
         answers = get_answers_for_orgs(
             self.get_orgs(),
             contact_preferences=['prefers_email'],

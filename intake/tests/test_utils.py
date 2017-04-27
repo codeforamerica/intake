@@ -2,6 +2,7 @@ from unittest import TestCase
 from django.core.paginator import Paginator
 from intake import utils
 from django.test.testcases import _AssertNumQueriesContext
+from django.test import RequestFactory
 
 
 class TestGetPageNavigationCounter(TestCase):
@@ -85,3 +86,19 @@ class AssertNumQueriesLessThanContext(_AssertNumQueriesContext):
                 )
             )
         )
+
+
+class TestGetFormDataFromSession(TestCase):
+
+    def test_get_old_formatted_form_data_from_session(self):
+        old_session_data = {
+            'counties': ['alameda', 'contracosta'],
+            'confirm_county_selection': 'yes'}
+        request = RequestFactory().get('/apply')
+        request.session = {'form_in_progress': old_session_data}
+        # store this @ session key before calling get_form_data_from_session
+        fetched = utils.get_form_data_from_session(
+            request, 'form_in_progress')
+        self.assertEqual(fetched['confirm_county_selection'], 'yes')
+        self.assertEqual(
+            fetched.getlist('counties'), ['alameda', 'contracosta'])

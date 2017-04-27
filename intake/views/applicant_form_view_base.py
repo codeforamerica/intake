@@ -114,4 +114,5 @@ class ApplicantFormViewBase(FormView):
 
 def clear_form_session_data(request):
     utils.clear_session_data(
-        request, ApplicantFormViewBase.session_key, 'applicant_id')
+        request, ApplicantFormViewBase.session_key, 'applicant_id',
+        'visitor_id')
