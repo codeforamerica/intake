@@ -12,6 +12,7 @@ urlpatterns += [
     # user account overrides
     url(r'^', include('user_accounts.urls')),
     # user accounts
+    url(r'^health/', include('health_check.urls')),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^invitations/', include(
         'invitations.urls', namespace='invitations'
