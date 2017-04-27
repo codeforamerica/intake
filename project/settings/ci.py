@@ -14,5 +14,8 @@ if USE_DEBUG_TOOLBAR:
 
 CELERY_TASK_ALWAYS_EAGER = True
 
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+MEDIA_ROOT = os.path.join(REPO_DIR, 'project', 'media')
+
 BROWSER_STACK_ID = os.environ.get('BROWSER_STACK_ID')
 BROWSER_STACK_KEY = os.environ.get('BROWSER_STACK_KEY')

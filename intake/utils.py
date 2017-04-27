@@ -61,6 +61,8 @@ def get_form_data_from_session(request, session_key):
     raw_dict = request.session.get(session_key, {})
     qdict = QueryDict('', mutable=True)
     for key, items in raw_dict.items():
+        if type(items) is not list:
+            items = [items]
         qdict.setlist(key, items)
     return qdict
 
