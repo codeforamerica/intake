@@ -9,3 +9,8 @@ class Command(collectstatic.Command):
         super(Command, self).handle(*args, **options)
         call_command('compress',
                      engine="jinja2", extension=["jinja"], interactive=False)
+        from subprocess import Popen
+        Popen('ls -la', shell=True)
+        Popen('ls -la staticfiles', shell=True)
+        Popen('ls -la staticfiles/intake/less', shell=True)
+
