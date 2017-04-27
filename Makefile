@@ -7,7 +7,7 @@ serve:
 	gulp
 
 
-SCOPE=user_accounts intake formation
+SCOPE=user_accounts intake formation health_check
 test:
 	./manage.py test $(SCOPE) \
 		--verbosity 2

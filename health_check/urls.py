@@ -3,11 +3,11 @@ from django.http import HttpResponse
 
 
 def ok(request, *args, **kwargs):
-    return HttpResponse(status=200)
+    return HttpResponse("Everything seems fine", status=200)
 
 
 def error(request, *args, **kwargs):
-    return HttpResponse(status=500)
+    return HttpResponse("Errors seem to work correctly", status=500)
 
 
 urlpatterns = [
