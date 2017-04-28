@@ -499,7 +499,6 @@ class VenturaCountyFormSpec(CombinableCountyFormSpec):
         F.OwnsHome,
         F.HouseholdSize,
         F.HasChildren,
-        F.IsMarried,
         F.DateOfBirthField,
         F.LastFourOfSocial,
         F.DriverLicenseOrIDNumber,
@@ -540,8 +539,9 @@ class VenturaCountyFormSpec(CombinableCountyFormSpec):
 
 class SantaBarbaraCountyFormSpec(VenturaCountyFormSpec):
     county = Counties.SANTA_BARBARA
-    fields = (VenturaCountyFormSpec.fields |
-    {F.ReasonsForApplying}) - {
+    fields = (VenturaCountyFormSpec.fields | {
+        F.ReasonsForApplying,
+        F.IsMarried}) - {
         F.DriverLicenseOrIDNumber,
     }
 
