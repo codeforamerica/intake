@@ -14,6 +14,7 @@ class Application(BaseModel):
         related_name='applications'
     )
     was_transferred_out = models.BooleanField(default=False)
+    has_been_opened = models.BooleanField(default=False)
 
     def __str__(self):
         return "Sub {} ({}) to {} on {}".format(
