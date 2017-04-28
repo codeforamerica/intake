@@ -8,10 +8,9 @@ class Command(collectstatic.Command):
 
     def handle(self, *args, **options):
         super(Command, self).handle(*args, **options)
-        if settings.COMPRESS_OFFLINE:
-            call_command(
-                'compress',
-                engine="jinja2",
-                extension=["jinja"],
-                interactive=False,
-            )
+        call_command(
+            'compress',
+            engine="jinja2",
+            extension=["jinja"],
+            interactive=False,
+        )

@@ -201,4 +201,3 @@ def COMPRESS_JINJA2_GET_ENVIRONMENT():
 
 # static files location
 STATIC_ROOT = os.path.join(REPO_DIR, 'staticfiles')
-
