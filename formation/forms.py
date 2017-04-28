@@ -505,7 +505,6 @@ class VenturaCountyFormSpec(CombinableCountyFormSpec):
         F.DriverLicenseOrIDNumber,
         F.OnProbationParole,
         F.WhereProbationParole,
-        F.WhenProbationParole,
         F.OwesCourtFees,
         F.ServingSentence,
         F.BeingCharged,
@@ -542,7 +541,8 @@ class SantaBarbaraCountyFormSpec(VenturaCountyFormSpec):
     county = Counties.SANTA_BARBARA
     fields = (VenturaCountyFormSpec.fields | {
         F.ReasonsForApplying,
-        F.IsMarried}) - {
+        F.IsMarried,
+        F.WhenProbationParole}) - {
         F.DriverLicenseOrIDNumber,
         F.IsVeteran,
     }
