@@ -512,7 +512,6 @@ class VenturaCountyFormSpec(CombinableCountyFormSpec):
         F.RAPOutsideSF,
         F.WhenWhereOutsideSF,
         F.CaseNumber,
-        F.ReasonsForApplying,
         F.HowDidYouHear,
         F.AdditionalInformation,
         F.UnderstandsLimits,
@@ -541,7 +540,8 @@ class VenturaCountyFormSpec(CombinableCountyFormSpec):
 
 class SantaBarbaraCountyFormSpec(VenturaCountyFormSpec):
     county = Counties.SANTA_BARBARA
-    fields = VenturaCountyFormSpec.fields - {
+    fields = (VenturaCountyFormSpec.fields |
+    {F.ReasonsForApplying}) - {
         F.DriverLicenseOrIDNumber,
     }
 
