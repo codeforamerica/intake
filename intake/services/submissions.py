@@ -224,9 +224,9 @@ def create_for_counties(counties, **kwargs):
 
 
 def get_unopened_submissions_for_org(organization):
-    opened_sub_ids = models.ApplicationLogEntry.objects.filter(
-        event_type=models.ApplicationLogEntry.OPENED,
-        user__profile__organization=organization,
-        submission_id__isnull=False
-    ).values_list('submission_id', flat=True)
-    return organization.submissions.all().exclude(pk__in=opened_sub_ids)
+    unopened_app_ids = models.Application.objects.filter(
+        has_been_opened=False, organization_id=organization.id
+    ).values_list(
+        'id', flat=True)
+    return organization.submissions.filter(
+        applications__id__in=unopened_app_ids)
