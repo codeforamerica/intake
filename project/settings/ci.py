@@ -9,6 +9,8 @@ DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 STATICFILES_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 MEDIA_ROOT = os.path.join(REPO_DIR, 'project', 'media')
-
+STATIC_ROOT = os.path.join(REPO_DIR, 'staticfiles')
+print(MEDIA_ROOT)
+print(STATIC_ROOT)
 BROWSER_STACK_ID = os.environ.get('BROWSER_STACK_ID')
 BROWSER_STACK_KEY = os.environ.get('BROWSER_STACK_KEY')
