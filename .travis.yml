@@ -7,12 +7,18 @@ before_install:
 install:
   - npm install
   - pip install -r requirements/ci.txt
-  - python ./manage.py collectstatic --noinput
 env:
   - DJANGO_SETTINGS_MODULE='project.settings.ci' DELUXE_TEST=1 SECRET_KEY='not so secret key'
 addons:
   postgresql: "9.4"
 
+before_script:
+  - python ./manage.py collectstatic --noinput
+  - python ./manage.py compress --engine jinja2 --extension jinja
+  - ls -la .
+  - ls -la ./staticfiles
+  - ls -la ./staticfiles/intake/js
+  - ls -la ./staticfiles/intake/less
 script:
   - pep8
   - make test.coverage.keepdb
