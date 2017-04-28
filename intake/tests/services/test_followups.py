@@ -56,7 +56,7 @@ class TestGetSubmissionsDueForFollowups(TestCase):
             date_received=get_old_date(),
             applicant=applicant, organizations=[self.followup_org])
         models.ApplicationEvent.log_followup_sent(
-            applicant.id,
+            applicant.id, sub_w_followup,
             contact_info=dict(email=sub_w_followup.answers['email']),
             message_content="hey how are things going?")
         # if we grab subs that need followups
@@ -86,6 +86,7 @@ class TestGetSubmissionsDueForFollowups(TestCase):
         followed_up_sub.save()
         models.ApplicationEvent.log_followup_sent(
             applicant.id,
+            followed_up_sub,
             contact_info=dict(email=followed_up_sub.answers['email']),
             message_content="hey how are things going?")
         # when we get submissions due for follow ups,
