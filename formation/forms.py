@@ -499,6 +499,7 @@ class VenturaCountyFormSpec(CombinableCountyFormSpec):
         F.OwnsHome,
         F.HouseholdSize,
         F.HasChildren,
+        F.IsVeteran,
         F.DateOfBirthField,
         F.LastFourOfSocial,
         F.DriverLicenseOrIDNumber,
@@ -543,6 +544,7 @@ class SantaBarbaraCountyFormSpec(VenturaCountyFormSpec):
         F.ReasonsForApplying,
         F.IsMarried}) - {
         F.DriverLicenseOrIDNumber,
+        F.IsVeteran,
     }
 
 
