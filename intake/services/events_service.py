@@ -1,5 +1,5 @@
 import logging
-from django.utils import timezone
+# from django.utils import timezone
 from intake import models
 import intake.services.applicants as ApplicantsService
 from intake.tasks import log_to_mixpanel
@@ -14,7 +14,9 @@ logger = logging.getLogger(__name__)
 
 timestamp_format = '%Y-%m-%d %H:%M:%S.%f'
 
+
 def format_and_log(**data):
+    pass
     # format as string
 
     # get now and format
@@ -80,20 +82,42 @@ def log_app_index_viewed(user, applications):
 
 
 def log_event(name, tracking_id):
+    """
+    this is likely where we would log events that go to std_out / the
+    debugger log, but which do not go to mixpanel and which do not fit
+    neatly into the other defined event groups
+    """
     pass
 
 
 def log_application_event():
+    """
+    this is for events that happen once an application has been created,
+    i.e. status updates
+    """
     pass
 
 
 def log_applicant_event():
+    """
+    this is for events that relate to an applicant, generally includes those
+    relating to the process of completing a formsubmission or reciving a
+    followup
+    """
     pass
 
 
 def log_visitor_event():
+    """
+    this is for events that relate to visitors who have not yet started an
+    application, i.e. page views
+    """
     pass
 
 
 def log_user_event():
+    """
+    this is for events relating to CFA or org users, such as opening an app,
+    and may form the base for the audit log eventually
+    """
     pass
