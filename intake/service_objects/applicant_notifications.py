@@ -73,7 +73,7 @@ class ApplicantNotification:
             message_content=message_content)
         self.messages.append(message_info)
         self.application_event_log_function(
-            self.sub.applicant_id, **message_info)
+            self.sub.applicant_id, self.sub, **message_info)
 
     def send_notification_message(self, contact_method):
         context = self.get_context(contact_method)
