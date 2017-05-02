@@ -27,14 +27,10 @@ def format_and_log(log_type, level='INFO', **data):
     formatted_key_values = [
         "{}={}".format(key, value) for key, value in data.items()]
     formatted_log = "\t".join([
-        timezone.now(),
+        timezone.now().strftime(timestamp_format),
         level,
         log_type,
         *formatted_key_values
     ])
-    print("______________________LOGGING_HAPPENING_HERE______________________")
     print(formatted_log)
-    # format as string
-
-    # get now and format
-    # pass to logger
+    # figure out where to send/save this
