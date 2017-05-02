@@ -1,8 +1,7 @@
-import logging
-# from django.utils import timezone
 from intake import models
 import intake.services.applicants as ApplicantsService
-from intake.tasks import log_to_mixpanel
+import project.services.logging_service as LoggingService
+from project.services.mixpanel_service import log_to_mixpanel
 
 """
 Tab separated? Space separated?
@@ -17,24 +16,12 @@ Goals:
 
 """
 
-logger = logging.getLogger(__name__)
-
-timestamp_format = '%Y-%m-%d %H:%M:%S.%f'
-
-
-def format_and_log(**data):
-    pass
-    # format as string
-
-    # get now and format
-    # pass to logger
-
 
 def get_app_id(request):
     return ApplicantsService.get_applicant_from_request_or_session(request).id
 
 
-def log_app_started(request, counties):
+def app_started(request, counties):
     applicant = ApplicantsService.get_applicant_from_request_or_session(
         request)
     return models.ApplicationEvent.log_app_started(
@@ -45,27 +32,27 @@ def log_app_started(request, counties):
         user_agent=request.META.get('HTTP_USER_AGENT'))
 
 
-def log_form_page_complete(request, page_name):
+def form_page_complete(request, page_name):
     """page_name should be the class name of the view instance.
     """
     return models.ApplicationEvent.log_page_complete(
         applicant_id=get_app_id(request), page_name=page_name)
 
 
-def log_form_validation_errors(request, errors):
+def form_validation_errors(request, errors):
     return models.ApplicationEvent.log_app_errors(
         applicant_id=get_app_id(request), errors=errors)
 
 
-def log_page_viewed(visitor, page_name):
+def page_viewed(visitor, page_name):
     name = 'page_viewed'
-    format_and_log(
+    LoggingService.format_and_log(
         visitor_uuid=visitor.get_uuid(), action=name, page_name=page_name)
     log_to_mixpanel(
         visitor.get_uuid(), event_name=name, page_name=page_name)
 
 
-def log_status_updated(status_update):
+def status_update_sent(status_update):
     event_kwargs = dict(
         distinct_id=status_update.application.form_submission.get_uuid(),
         event_name='app_status_updated',
@@ -83,14 +70,14 @@ def log_status_updated(status_update):
     log_to_mixpanel(**event_kwargs)
 
 
-def log_app_index_viewed(user, applications):
+def app_index_viewed(user, applications):
     name = 'app_index_viewed'
-    format_and_log(
+    LoggingService.format_and_log(
         user_id=user.id, action=name, applications_displayed=[
             app.id for app in applications])
 
 
-def log_event(name, tracking_id):
+def event(name, tracking_id):
     """
     this is likely where we would log events that go to std_out / the
     debugger log, but which do not go to mixpanel and which do not fit
@@ -99,7 +86,7 @@ def log_event(name, tracking_id):
     pass
 
 
-def log_application_event():
+def application_event():
     """
     this is for events that happen once an application has been created,
     i.e. status updates
@@ -107,7 +94,7 @@ def log_application_event():
     pass
 
 
-def log_applicant_event():
+def applicant_event():
     """
     this is for events that relate to an applicant, generally includes those
     relating to the process of completing a formsubmission or reciving a
@@ -116,7 +103,7 @@ def log_applicant_event():
     pass
 
 
-def log_visitor_event():
+def visitor_event():
     """
     this is for events that relate to visitors who have not yet started an
     application, i.e. page views
@@ -124,7 +111,7 @@ def log_visitor_event():
     pass
 
 
-def log_user_event():
+def user_event():
     """
     this is for events relating to CFA or org users, such as opening an app,
     and may form the base for the audit log eventually

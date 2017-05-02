@@ -95,7 +95,7 @@ def send_and_save_new_status(request, notification_data, status_update_data):
     status_update.next_steps.add(*next_steps)
     save_and_send_status_notification(
         request, notification_data, status_update)
-    EventsService.log_status_update_sent(status_update)
+    EventsService.status_update_sent(status_update)
     success_message = get_status_update_success_message(
         status_update.application.form_submission.get_full_name(),
         status_update.status_type)
