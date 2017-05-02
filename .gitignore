@@ -21,6 +21,7 @@ pip-selfcheck.json
 db.sqlite3
 node_modules
 staticfiles
+intake/static/intake/fonts
 project/media
 local_settings.py
 *.pdf

@@ -201,6 +201,10 @@ def build_precompilers(path):
     )
 
 
+#Build Compress with Node Modules
+NODE_MODULES_PATH = os.path.join(REPO_DIR, 'node_modules')
+COMPRESS_PRECOMPILERS = build_precompilers(NODE_MODULES_PATH)
+
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
 
