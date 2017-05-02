@@ -50,3 +50,5 @@ CELERY_BROKER_URL = 'amqp://localhost'
 
 BROWSER_STACK_ID = 'username'
 BROWSER_STACK_KEY = 'insert key here'
+
+COMPRESS_OFFLINE = False
