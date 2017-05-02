@@ -349,6 +349,10 @@ class FormSubmission(models.Model):
         return reverse(
             'intake-create_status_update', kwargs=dict(submission_id=self.id))
 
+    def get_uuid(self):
+        """returns the _applicant/visitor_ uuid for funnel tracking"""
+        return self.applicant.get_uuid()
+
     def qualifies_for_fee_waiver(self):
         on_benefits = OnPublicBenefits(self.answers)
         if on_benefits.is_valid():

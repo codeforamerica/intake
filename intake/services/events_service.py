@@ -5,9 +5,16 @@ import intake.services.applicants as ApplicantsService
 from intake.tasks import log_to_mixpanel
 
 """
-key=value key2="value2"
+Tab separated? Space separated?
+key=valuekey2="value2"
 page_name="/url/"
 https://docs.djangoproject.com/en/1.11/topics/logging/#making-logging-calls
+
+Goals:
+- everything that goes to mixpanel is logged to stdout
+- we can add lots of properties on the fly easily to both mixpanel & std out
+- easy to add new calls in the codebase
+
 """
 
 logger = logging.getLogger(__name__)
@@ -58,20 +65,22 @@ def log_page_viewed(visitor, page_name):
         visitor.get_uuid(), event_name=name, page_name=page_name)
 
 
-def log_status_updated(application, status_update):
-    name = 'status_updated'
-    format_and_log(
-        applicant_uuid=application.form_submisssion.applicant.get_uuid(),
-        user_id=status_update.author.id,
-        action=name, status_type=status_update.status_type.display_name,
+def log_status_updated(status_update):
+    event_kwargs = dict(
+        distinct_id=status_update.application.form_submission.get_uuid(),
+        event_name='app_status_updated',
+        user_email=status_update.author.email,
+        application_id=status_update.application.id,
+        status_type=status_update.status_type.display_name,
         next_steps=[
-            step.display_name for step in status_update.next_steps.all()])
-    log_to_mixpanel(
-        applicant_uuid=application.form_submisssion.applicant.get_uuid(),
-        event_name=name, user_uuid=status_update.author.get_uuid(),
-        action=name, status_type=status_update.status_type.display_name,
-        next_steps=[
-            step.display_name for step in status_update.next_steps.all()])
+            step.display_name for step in status_update.next_steps.all()],
+        has_additional_info=bool(status_update.additional_information),
+        organization_name=status_update.author.profile.organization.name)
+    if hasattr(status_update, 'notification'):
+        event_kwargs.update(
+            notification_contact_info_types=list(
+                status_update.notification.contact_info.keys()))
+    log_to_mixpanel(**event_kwargs)
 
 
 def log_app_index_viewed(user, applications):

@@ -3,6 +3,8 @@ from django.utils.translation import ugettext_lazy as _
 from intake import models, notifications
 from django.template import loader
 from django.core.urlresolvers import reverse
+import intake.services.events_service as EventsService
+
 
 jinja = loader.engines['jinja']
 
@@ -53,6 +55,10 @@ def get_status_update_success_message(full_name, status_type):
 
 def save_and_send_status_notification(
         request, notification_data, status_update):
+    """Called by send_and_save_new_status,
+
+    Responsible for the 'notification'portion of a status update.
+    """
     sub = status_update.application.form_submission
     contact_info = sub.get_usable_contact_info()
     notification_intro = get_notification_intro(
@@ -79,7 +85,7 @@ def save_and_send_status_notification(
     status_notification.save()
     notifications.send_simple_front_notification(
         contact_info, edited_message,
-        subject="Update from Clear My Record")
+        subject="Update from Clear My Reord")
 
 
 def send_and_save_new_status(request, notification_data, status_update_data):
@@ -89,6 +95,7 @@ def send_and_save_new_status(request, notification_data, status_update_data):
     status_update.next_steps.add(*next_steps)
     save_and_send_status_notification(
         request, notification_data, status_update)
+    EventsService.log_status_update_sent(status_update)
     success_message = get_status_update_success_message(
         status_update.application.form_submission.get_full_name(),
         status_update.status_type)
