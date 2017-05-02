@@ -1,5 +1,4 @@
 from behave import given, when, then
-from django.conf import settings
 from urllib.parse import urljoin, urlparse, urldefrag
 
 
@@ -12,6 +11,16 @@ def load_page(context, url):
 def test_page_loads(context, url):
     browser_url = urlparse(context.browser.current_url)
     context.test.assertEquals(url, browser_url.path[1:])
+
+
+@given('it loads css')
+@then('it should load css')
+def test_css_loads(context):
+    selector = 'link[type="text/css"]'
+    element = context.browser.find_element_by_css_selector(selector)
+    css_url = urlparse(element.get_attribute('href'))
+    domain_url = urlparse(context.test.live_server_url)
+    context.test.assertTrue(css_url.hostname, domain_url.hostname)
 
 
 @then('it should have the "{element_id}" link and say "{text}"')

@@ -1,10 +1,12 @@
 Feature: User can Apply to CMR
   Scenario: User Successfully applies to Contra Costa
     Given that "apply/" loads
+      And it loads css
      When the "counties" checkbox option "contracosta" is clicked
       And the "confirm_county_selection" checkbox option "yes" is clicked
       And submit button in form "county_form" is clicked
      Then it should load "application/"
+      And it should load css
       And "application_county_list" should say "You are applying for help in Contra Costa County."
      When the "contact_preferences" checkbox option "prefers_email" is clicked
       And the "first_name" text input is set to "Jane"
@@ -31,5 +33,6 @@ Feature: User can Apply to CMR
       And the "additional_information" text input is set to "So cool"
       And submit button in form "county_form" is clicked
      Then it should load "thanks/"
+      And it should load css
       And "next_step" should say "Contra Costa County"
 
