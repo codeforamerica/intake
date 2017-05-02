@@ -13,3 +13,7 @@ STATIC_ROOT = os.path.join(REPO_DIR, 'staticfiles')
 
 BROWSER_STACK_ID = os.environ.get('BROWSER_STACK_ID')
 BROWSER_STACK_KEY = os.environ.get('BROWSER_STACK_KEY')
+
+#Build Compress with Node Modules
+NODE_MODULES_PATH = os.path.join(REPO_DIR, 'node_modules')
+COMPRESS_PRECOMPILERS = build_precompilers(NODE_MODULES_PATH)

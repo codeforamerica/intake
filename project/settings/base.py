@@ -186,11 +186,21 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
 
-COMPRESS_PRECOMPILERS = (
-    ('text/less', 'node_modules/.bin/lessc {infile} {outfile}'),
-    ('text/browserify',
-        'node_modules/.bin/browserify {infile} -d --output {outfile}'),
-)
+
+def build_precompilers(path):
+    less_command = os.path.join(path, '.bin/lessc')
+    exec_less = '%s --include-path=%s {infile} {outfile}' % (
+        less_command,
+        path,
+    )
+    browserify_command = os.path.join(path, '.bin/browserify')
+    exec_browserify = '%s {infile} -d --output {outfile}' % browserify_command
+    return (
+        ('text/less', exec_less),
+        ('text/browserify', exec_browserify)
+    )
+
+
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
 
