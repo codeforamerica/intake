@@ -35,7 +35,7 @@
 
 
 {% block scripts %}
-{%- if ALL_TAG_NAMES %}
+{%- if intake/ALL_TAG_NAMES %}
 <script type="text/json" name="tags_json">{{ to_json(ALL_TAG_NAMES) }}</script>
 {%- endif %}
 {% compress 'js' %}

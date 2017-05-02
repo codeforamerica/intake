@@ -195,7 +195,7 @@ def build_precompilers(path):
         path,
     )
     browserify_command = os.path.join(path, '.bin/browserify')
-    exec_browserify = '%s {infile} -d --output {outfile}' % browserify_command
+    exec_browserify = '%s {infile} -d --outfile {outfile}' % browserify_command
     return (
         ('text/less', exec_less),
         ('text/browserify', exec_browserify)
