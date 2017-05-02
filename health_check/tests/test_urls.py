@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from user_accounts.tests.mock import fake_superuser, fake_password
 
+
 class TestURLPatterns(TestCase):
 
     def test_ok(self):
