@@ -4,14 +4,17 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
 
-
+disallow = [
+    '/admin',
+    '/health/',
+    '/invitations/',
+    '/accounts/',
+    settings.STATIC_URL,
+]
+disallow_txt = '\n'.join(['Disallow: %s' % d for d in disallow])
 robots_txt = """User-agent: *
-Disallow: /admin
-Disallow: /health/
-Disallow: /invitations/
-Disallow: /accounts/
-Disallow: %s
-""" % (settings.STATIC_URL,)
+%s
+""" % (disallow_txt)
 
 urlpatterns = [
     url(r'^', include('intake.urls')),
