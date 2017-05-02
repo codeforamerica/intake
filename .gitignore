@@ -22,6 +22,5 @@ db.sqlite3
 node_modules
 staticfiles
 project/media
-intake/static/intake/fonts
 local_settings.py
 *.pdf
