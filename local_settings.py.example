@@ -31,9 +31,6 @@ DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 MEDIA_ROOT = os.path.join(REPO_DIR, 'project', 'media')
 
-# static files location
-STATIC_ROOT = os.path.join(REPO_DIR, 'project', 'static')
-
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
@@ -53,3 +50,5 @@ CELERY_BROKER_URL = 'amqp://localhost'
 
 BROWSER_STACK_ID = 'username'
 BROWSER_STACK_KEY = 'insert key here'
+
+COMPRESS_OFFLINE = False

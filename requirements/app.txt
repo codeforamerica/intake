@@ -21,6 +21,7 @@ django-taggit~=0.21
 mixpanel~=4.3.1
 django-extensions~=1.7
 celery~=4.0
+django-compressor==2.1.1
 # factory-boy breaks on later version fo fake-factory
 # we need to pin fake-factory
 fake-factory==0.7.2
