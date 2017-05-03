@@ -3,8 +3,10 @@ language: python
 python:
   - "3.5"
 before_install:
+  - rvm install 2.2.1
   - nvm install 6.5
 install:
+  - bundle install
   - npm install
   - pip install -r requirements/ci.txt
 env:
@@ -13,6 +15,7 @@ addons:
   postgresql: "9.4"
 before_script:
   - python ./manage.py collectstatic --noinput
+  - which sass
 script:
   - pep8
   - make test.coverage.keepdb
