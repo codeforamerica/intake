@@ -400,7 +400,7 @@ class OnProbationParole(YesNoIDontKnowField):
 
 class WhereProbationParole(CharField):
     context_key = "where_probation_or_parole"
-    label = _("If you are on probation or parole, where is it?")
+    label = _("If you are on probation or parole, what county is it in?")
     display_label = "Where"
 
 
