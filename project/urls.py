@@ -5,8 +5,6 @@ from django.contrib import admin
 from robots_txt.views import robots_view
 
 
-
-
 # Make sure to keep this up to date
 allow = [
     '/$',

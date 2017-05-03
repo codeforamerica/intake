@@ -1,6 +1,7 @@
 from django.test import SimpleTestCase, RequestFactory
 from . import views
 
+
 class RobotsTestCase(SimpleTestCase):
 
     def test_robots_txt_factory(self):
@@ -9,4 +10,3 @@ class RobotsTestCase(SimpleTestCase):
         response = view({})
         self.assertContains(response, 'Allow: one')
         self.assertContains(response, 'Allow: two')
-
