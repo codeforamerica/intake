@@ -4,25 +4,31 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
 
-disallow = [
-    '/admin',
-    '/health/',
-    '/invitations/',
-    '/accounts/',
-    settings.STATIC_URL,
+
+# Make sure to keep this up to date
+allow = [
+    '/$',
+    '/apply/',
+    '/stats/',
+    '/partners/*',
+    '/privacy/',
+    '/personal-statement/',
+    '/recommendation-letters',
+    '/gettings-your-rap/',
 ]
-disallow_txt = '\n'.join(['Disallow: %s' % d for d in disallow])
+allow_txt = '\n'.join(['Allow: %s' % d for d in allow])
 robots_txt = """User-agent: *
 %s
-""" % (disallow_txt)
+Disallow:/
+""" % (allow_txt)
 
+
+# Remember to update robots.txt above
 urlpatterns = [
     url(r'^', include('intake.urls')),
-    # user account overrides
-    url(r'^', include('user_accounts.urls')),
-    # user accounts
+    url(r'^', include('user_accounts.urls')), # user account overrides
     url(r'^health/', include('health_check.urls')),
-    url(r'^accounts/', include('allauth.urls')),
+    url(r'^accounts/', include('allauth.urls')), # user accounts
     url(r'^invitations/', include(
         'invitations.urls', namespace='invitations')),
     url(r'^admin/', admin.site.urls),
