@@ -7,7 +7,7 @@ serve:
 	./manage.py runserver
 
 
-SCOPE=user_accounts intake formation health_check
+SCOPE=user_accounts intake formation health_check robots_txt
 test:
 	./manage.py test $(SCOPE) \
 		--verbosity 2

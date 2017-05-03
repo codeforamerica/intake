@@ -1,8 +1,10 @@
-from django.http import HttpResponse
 from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
+from robots_txt.views import robots_view
+
+
 
 
 # Make sure to keep this up to date
@@ -13,18 +15,13 @@ allow = [
     '/partners/*',
     '/privacy/',
     '/personal-statement/',
-    '/recommendation-letters',
+    '/recommendation-letters/',
     '/gettings-your-rap/',
 ]
-allow_txt = '\n'.join(['Allow: %s' % d for d in allow])
-robots_txt = """User-agent: *
-%s
-Disallow:/
-""" % (allow_txt)
-
 
 # Remember to update robots.txt above
 urlpatterns = [
+    url(r'^robots\.txt$', robots_view(allow)),
     url(r'^', include('intake.urls')),
     url(r'^', include('user_accounts.urls')),  # user account overrides
     url(r'^health/', include('health_check.urls')),
@@ -32,8 +29,6 @@ urlpatterns = [
     url(r'^invitations/', include(
         'invitations.urls', namespace='invitations')),
     url(r'^admin/', admin.site.urls),
-    url(r'^robots\.txt$', lambda r: HttpResponse(
-        robots_txt, content_type='text/plain')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 # django debug toolbar

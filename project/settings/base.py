@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'health_check',
     'intake',
     'user_accounts',
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'compressor',
     'behave_django',
+    'robots_txt',
 ]
 
 MIDDLEWARE_CLASSES = [

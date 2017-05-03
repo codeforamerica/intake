@@ -16,6 +16,8 @@ from intake.views import (
     status_update_views,
 )
 
+
+# Remember to update robots.txt in project/urls/py
 urlpatterns = [
     # public views
     url(r'^$', public_views.home, name='intake-home'),
