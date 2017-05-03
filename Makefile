@@ -101,3 +101,10 @@ db.dump_fixtures:
 db.pull.demo:
 	dropdb intake --if-exists
 	heroku pg:pull --app cmr-demo DATABASE_URL intake
+
+styles:
+	sass \
+	    --require bourbon \
+	    --require normalize-scss \
+	    --require neat \
+	    intake/static/intake/scss/main.scss out.css

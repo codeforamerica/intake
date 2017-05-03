@@ -14,8 +14,8 @@ env:
 addons:
   postgresql: "9.4"
 before_script:
+  - make styles
   - python ./manage.py collectstatic --noinput
-  - which sass
 script:
   - pep8
   - make test.coverage.keepdb
