@@ -44,18 +44,98 @@ def form_validation_errors(request, errors):
         applicant_id=get_app_id(request), errors=errors)
 
 
-def page_viewed(visitor, page_name):
-    name = 'page_viewed'
-    LoggingService.format_and_log(
-        visitor_uuid=visitor.get_uuid(), action=name, page_name=page_name)
+# ### NEW EVENTS ###
+
+
+def page_viewed(visitor, url):
+    event_name = 'page_viewed'
     log_to_mixpanel(
-        visitor.get_uuid(), event_name=name, page_name=page_name)
+        distinct_id=visitor.get_uuid(),
+        event_name=event_name,
+        url=url,
+        referrer=visitor.referrer,
+        source=visitor.source)
+
+
+def site_entered(visitor, url):
+    event_name = 'site_entered'
+    log_to_mixpanel(
+        distinct_id=visitor.get_uuid(),
+        event_name=event_name,
+        url=url,
+        referrer=visitor.referrer,
+        source=visitor.source)
+
+
+def app_transferred(old_application, new_application, user):
+    event_name = 'app_transferred'
+    log_to_mixpanel(
+        distinct_id=old_application.form_submission.get_uuid(),
+        event_name=event_name,
+        user_email=user.email,
+        from_application_id=old_application.id,
+        to_application_id=new_application.id,
+        from_organization_name=old_application.organization.name,
+        to_organization_name=new_application.organization.name)
+
+
+def tags_added(tag_links):
+    event_name = 'app_tag_added'
+    for tag_link in tag_links:
+        log_to_mixpanel(
+            distinct_id=tag_link.content_object.get_uuid(),
+            event_name=event_name,
+            tag_name=tag_link.tag.name,
+            author_email=tag_link.user.email)
+
+
+def note_added(submission, user):
+    event_name = 'app_note_added'
+    log_to_mixpanel(
+        distinct_id=submission.get_uuid(),
+        event_name=event_name,
+        author_email=user.email)
+
+
+def followup_sent(submission, contact_methods):
+    event_name = 'app_followup_sent'
+    log_to_mixpanel(
+        distinct_id=submission.get_uuid(),
+        event_name=event_name,
+        contact_info_types=contact_methods)
+
+
+def app_opened(application, user):
+    event_name = 'app_opened'
+    log_to_mixpanel(
+        distinct_id=application.form_submission.get_uuid(),
+        event_name=event_name,
+        application_id=application.id,
+        application_organization_name=application.organization.name,
+        user_email=user.email,
+        user_organization_name=user.profile.organization.name)
+
+
+def bundle_opened(bundle, user):
+    event_name = 'app_bundle_opened'
+    for submission in bundle.submissions.all():
+        application = submission.applications.filter(
+                organization_id=bundle.organization_id).first()
+        log_to_mixpanel(
+            distinct_id=submission.get_uuid(),
+            event_name=event_name,
+            application_id=application.id,
+            bundle_id=bundle.id,
+            bundle_organization_name=bundle.organization.name,
+            user_email=user.email,
+            user_organization_name=user.profile.organization.name)
 
 
 def status_update_sent(status_update):
+    event_name = 'app_status_updated'
     event_kwargs = dict(
+        event_name=event_name,
         distinct_id=status_update.application.form_submission.get_uuid(),
-        event_name='app_status_updated',
         user_email=status_update.author.email,
         application_id=status_update.application.id,
         status_type=status_update.status_type.display_name,
@@ -68,52 +148,3 @@ def status_update_sent(status_update):
             notification_contact_info_types=list(
                 status_update.notification.contact_info.keys()))
     log_to_mixpanel(**event_kwargs)
-
-
-def app_index_viewed(user, applications):
-    name = 'app_index_viewed'
-    LoggingService.format_and_log(
-        user_id=user.id, action=name, applications_displayed=[
-            app.id for app in applications])
-
-
-def event(name, tracking_id):
-    """
-    this is likely where we would log events that go to std_out / the
-    debugger log, but which do not go to mixpanel and which do not fit
-    neatly into the other defined event groups
-    """
-    pass
-
-
-def application_event():
-    """
-    this is for events that happen once an application has been created,
-    i.e. status updates
-    """
-    pass
-
-
-def applicant_event():
-    """
-    this is for events that relate to an applicant, generally includes those
-    relating to the process of completing a formsubmission or reciving a
-    followup
-    """
-    pass
-
-
-def visitor_event():
-    """
-    this is for events that relate to visitors who have not yet started an
-    application, i.e. page views
-    """
-    pass
-
-
-def user_event():
-    """
-    this is for events relating to CFA or org users, such as opening an app,
-    and may form the base for the audit log eventually
-    """
-    pass
