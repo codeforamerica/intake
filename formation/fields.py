@@ -521,7 +521,7 @@ class OnPublicBenefits(YesNoField):
 
 class OwnsHome(YesNoField):
     context_key = "owns_home"
-    label = _("Do you own your home?")
+    label = _("Do you own a home or rental property?")
 
 
 class MonthlyExpenses(WholeDollarField):
