@@ -115,6 +115,7 @@ class FormSubmission(models.Model):
         'intake.DuplicateSubmissionSet', null=True,
         related_name='submissions')
     answers = JSONField()
+    has_been_sent_followup = models.BooleanField(default=False)
 
     # extracting these values from answers for autocomplete/search/querying
     first_name = models.TextField(default="")

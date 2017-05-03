@@ -38,6 +38,8 @@
 {%- if ALL_TAG_NAMES %}
 <script type="text/json" name="tags_json">{{ to_json(ALL_TAG_NAMES) }}</script>
 {%- endif %}
-<script src="{{ static('js/admin.js')}}"></script>
+{% compress 'js' %}
+  <script type="text/browserify" src="{{ static('intake/js/admin_entry.js')}}"></script>
+{% endcompress %}
 {% endblock scripts %}
 
