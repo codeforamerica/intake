@@ -336,7 +336,8 @@ class TestGetUnopenedSubmissionsForOrg(TestCase):
             else:
                 self.assertEqual(subs.count(), 3)
 
-    def test_returns_apps_opened_by_other_org(self):
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_returns_apps_opened_by_other_org(self, slack):
         # assume we have a multi-org app opened by a user from one org
         cc_pubdef = Organization.objects.get(
             slug=constants.Organizations.COCO_PUBDEF)
@@ -346,7 +347,7 @@ class TestGetUnopenedSubmissionsForOrg(TestCase):
             organization=cc_pubdef).first().user
         sub = FormSubmission.objects.annotate(
             org_count=Count('organizations')).filter(org_count__gte=3).first()
-        ApplicationLogEntry.log_opened([sub.id], cc_pubdef_user)
+        SubmissionsService.mark_opened(sub, cc_pubdef_user)
         # assert that it shows up in unopened apps
         self.assertEqual(
             True,

@@ -5,6 +5,7 @@ from django.contrib import messages
 
 import intake.services.submissions as SubmissionsService
 import intake.services.applications_service as AppsService
+import intake.services.events_service as EventsService
 from intake import models, notifications
 from intake.views.base_views import ViewAppDetailsMixin
 
@@ -25,11 +26,9 @@ class ApplicationDetail(ViewAppDetailsMixin, TemplateView):
     """
     template_name = "app_detail.jinja"
 
-    def mark_viewed(self, request, submission):
-        models.ApplicationLogEntry.log_opened([submission.id], request.user)
-        notifications.slack_submissions_viewed.send(
-            submissions=[submission], user=request.user,
-            bundle_url=submission.get_external_url())
+    def mark_viewed(self, submission, applications):
+        Submis
+
 
     def get(self, request, submission_id):
         if request.user.profile.should_see_pdf() and not request.user.is_staff:
@@ -45,7 +44,6 @@ class ApplicationDetail(ViewAppDetailsMixin, TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         submission = self.submissions[0]
-        self.mark_viewed(self.request, submission)
         display_form, letter_display = submission.get_display_form_for_user(
             self.request.user)
         applications = models.Application.objects.filter(
@@ -64,6 +62,7 @@ class ApplicationDetail(ViewAppDetailsMixin, TemplateView):
             submission=submission,
             declaration_form=letter_display,
             applications=applications)
+        SubmissionsService.mark_opened(submission, self.request.user)
         return context
 
 

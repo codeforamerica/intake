@@ -78,9 +78,6 @@ def form_submitted(submission):
         )
 
 
-# ### NEW EVENTS ###
-
-
 def page_viewed(visitor, url):
     event_name = 'page_viewed'
     log_to_mixpanel(
@@ -139,15 +136,16 @@ def followup_sent(submission, contact_methods):
         contact_info_types=contact_methods)
 
 
-def app_opened(application, user):
+def apps_opened(applications, user):
     event_name = 'app_opened'
-    log_to_mixpanel(
-        distinct_id=application.form_submission.get_uuid(),
-        event_name=event_name,
-        application_id=application.id,
-        application_organization_name=application.organization.name,
-        user_email=user.email,
-        user_organization_name=user.profile.organization.name)
+    for application in applications:
+        log_to_mixpanel(
+            distinct_id=application.form_submission.get_uuid(),
+            event_name=event_name,
+            application_id=application.id,
+            application_organization_name=application.organization.name,
+            user_email=user.email,
+            user_organization_name=user.profile.organization.name)
 
 
 def bundle_opened(bundle, user):

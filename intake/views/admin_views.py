@@ -5,7 +5,6 @@ from django.views.generic.base import TemplateView
 
 from django.db.models import Q
 
-from django.contrib import messages
 from django.http import Http404, HttpResponse
 from django.template.response import TemplateResponse
 
@@ -13,7 +12,6 @@ from dal import autocomplete
 
 
 from intake import models, notifications, forms, utils
-from user_accounts.models import Organization
 from printing.pdf_form_display import PDFFormDisplay
 from intake.aggregate_serializer_fields import get_todays_date
 

@@ -2,7 +2,7 @@ import itertools
 from django.utils.translation import ugettext_lazy as _
 import Levenshtein
 import intake.services.events_service as EventsService
-from intake import models, serializers
+from intake import models, serializers, notifications
 from intake.constants import SMS, EMAIL
 from .pagination import get_page
 from intake.service_objects import ConfirmationNotification
@@ -100,6 +100,16 @@ def get_submissions_for_followups():
     subs = get_submissions_for_staff_user()
     return serializers.FormSubmissionFollowupListSerializer(
         subs, many=True).data
+
+
+def mark_opened(submission, user):
+    submission.applications.filter(
+        organization__profiles__user=user
+    ).distinct().update(has_been_opened=True)
+    EventsService.apps_opened(submission.applications.all(), user)
+    notifications.slack_submissions_viewed.send(
+        submissions=[submission], user=user,
+        bundle_url=submission.get_external_url())
 
 
 def check_for_existing_duplicates(submission, applicant_id):
