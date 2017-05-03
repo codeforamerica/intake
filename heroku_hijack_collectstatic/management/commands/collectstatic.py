@@ -15,3 +15,4 @@ class Command(collectstatic.Command):
         #     extension=["jinja"],
         #     interactive=False,
         # )
+        pass
