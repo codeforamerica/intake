@@ -14,7 +14,6 @@ env:
 addons:
   postgresql: "9.4"
 before_script:
-  - make styles
   - python ./manage.py collectstatic --noinput
 script:
   - pep8
