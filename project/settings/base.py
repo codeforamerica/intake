@@ -196,8 +196,9 @@ def build_precompilers(path):
     )
     browserify_command = os.path.join(path, '.bin/browserify')
     exec_browserify = '%s {infile} -d --outfile {outfile}' % browserify_command
+    # giving complete path to sass does not change the result
     exec_sass = str(
-        '/app/vendor/bundle/bin/sass '
+        'sass '
         '--require bourbon '
         '--require normalize-scss '
         '--require neat '
