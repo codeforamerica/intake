@@ -26,9 +26,9 @@ Disallow:/
 # Remember to update robots.txt above
 urlpatterns = [
     url(r'^', include('intake.urls')),
-    url(r'^', include('user_accounts.urls')), # user account overrides
+    url(r'^', include('user_accounts.urls')),  # user account overrides
     url(r'^health/', include('health_check.urls')),
-    url(r'^accounts/', include('allauth.urls')), # user accounts
+    url(r'^accounts/', include('allauth.urls')),  # user accounts
     url(r'^invitations/', include(
         'invitations.urls', namespace='invitations')),
     url(r'^admin/', admin.site.urls),
