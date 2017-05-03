@@ -497,8 +497,7 @@ class VenturaCountyFormSpec(CombinableCountyFormSpec):
         F.OnPublicBenefits,
         F.MonthlyExpenses,
         F.OwnsHome,
-        F.HouseholdSize,
-        F.HasChildren,
+        F.HowManyDependents,
         F.IsVeteran,
         F.DateOfBirthField,
         F.LastFourOfSocial,
@@ -542,9 +541,12 @@ class SantaBarbaraCountyFormSpec(VenturaCountyFormSpec):
     fields = (VenturaCountyFormSpec.fields | {
         F.ReasonsForApplying,
         F.IsMarried,
-        F.WhenProbationParole}) - {
+        F.WhenProbationParole,
+        F.HouseholdSize,
+        F.HasChildren}) - {
         F.DriverLicenseOrIDNumber,
         F.IsVeteran,
+        F.HowManyDependents,
     }
 
 
