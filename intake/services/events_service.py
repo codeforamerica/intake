@@ -21,11 +21,13 @@ def get_app_id(request):
     return ApplicantsService.get_applicant_from_request_or_session(request).id
 
 
-def app_started(request, counties):
+def form_started(request, counties):
+    event_name = 'application_started'
     applicant = ApplicantsService.get_applicant_from_request_or_session(
         request)
-    return models.ApplicationEvent.log_app_started(
-        applicant_id=applicant.id,
+    log_to_mixpanel(
+        distinct_id=applicant.get_uuid(),
+        event_name=event_name,
         counties=counties,
         referrer=applicant.visitor.referrer,
         source=applicant.visitor.source,
@@ -35,13 +37,45 @@ def app_started(request, counties):
 def form_page_complete(request, page_name):
     """page_name should be the class name of the view instance.
     """
-    return models.ApplicationEvent.log_page_complete(
-        applicant_id=get_app_id(request), page_name=page_name)
+    event_name = 'application_page_complete'
+    applicant = ApplicantsService.get_applicant_from_request_or_session(
+        request)
+    log_to_mixpanel(
+        distinct_id=applicant.get_uuid(),
+        event_name=event_name,
+        url=request.path,
+        page_name=page_name)
 
 
-def form_validation_errors(request, errors):
-    return models.ApplicationEvent.log_app_errors(
-        applicant_id=get_app_id(request), errors=errors)
+def form_validation_failed(view, request, errors):
+    """
+    security concerns addressed here:
+    MP gets just keys (avoid PII)
+    std_out gets k-v pair for errors, but misses application identifiers
+    """
+    event_name = 'application_errors'
+    applicant = ApplicantsService.get_applicant_from_request_or_session(
+        request)
+    for error_key, errors in errors.items():
+        log_to_mixpanel(
+            distinct_id=applicant.get_uuid(),
+            event_name=event_name,
+            url=request.path,
+            view_name=view.__class__.__name__,
+            error=error_key)
+        LoggingService.format_and_log(
+            event_name, url=request.path, view_name=view.__class__.__name__,
+            field=error_key, errors=errors)
+
+
+def form_submitted(submission):
+    event_name = 'application_submitted'
+    log_to_mixpanel(
+        distinct_id=submission.get_uuid(),
+        event_name=event_name,
+        organizations=list(
+            submission.organizations.values_list('name', flat=True))
+        )
 
 
 # ### NEW EVENTS ###
@@ -131,11 +165,11 @@ def bundle_opened(bundle, user):
             user_organization_name=user.profile.organization.name)
 
 
-def status_update_sent(status_update):
+def status_updated(status_update):
     event_name = 'app_status_updated'
     event_kwargs = dict(
-        event_name=event_name,
         distinct_id=status_update.application.form_submission.get_uuid(),
+        event_name=event_name,
         user_email=status_update.author.email,
         application_id=status_update.application.id,
         status_type=status_update.status_type.display_name,

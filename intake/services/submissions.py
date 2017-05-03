@@ -1,7 +1,7 @@
 import itertools
 from django.utils.translation import ugettext_lazy as _
 import Levenshtein
-
+import intake.services.events_service as EventsService
 from intake import models, serializers
 from intake.constants import SMS, EMAIL
 from .pagination import get_page
@@ -38,7 +38,7 @@ def create_submission(form, organizations, applicant_id):
 
     submission.organizations.add_orgs_to_sub(*organizations)
     link_with_any_duplicates(submission, applicant_id)
-    models.ApplicationEvent.log_app_submitted(applicant_id)
+    EventsService.form_submitted(submission)
     return submission
 
 
