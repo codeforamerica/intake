@@ -1,0 +1,78 @@
+.template--homepage {
+  .main-header {
+    position: relative;
+    background: linear-gradient(0, rgba(#000000, 0) 0%, rgba(#000000, .5) 99%);
+    border: 0;
+    z-index: 2;
+    padding-bottom: 4em;
+    margin-bottom: -7.5em;
+    overflow: visible;
+    .toolbar__item {
+      color: #fff;
+    }
+  }
+
+  .main-header__title a {
+    color: #FFFFFF;
+    
+    &:before {
+      @include retina-bg(gcf_logomark_white, 100% auto);
+    }
+  }
+
+  .slab--hero {
+    position: relative;
+    background: rgba(shade($color-dark-grey, 80%), .6);
+    
+    color: #FFFFFF;
+
+    padding: {
+      top: 7em;
+      bottom: 4em;
+    }
+
+    @include media($tablet-up) {
+      background: linear-gradient(242deg, rgba(#FFFFFF, 0) 0%, rgba(#000000, .5) 99%);
+      padding: {
+        top: 9em;
+        bottom: 7em;
+      }
+    }
+
+    h1 {
+      max-width: 10em;
+    }
+
+    &:before {
+      content: '';
+      display: block;
+      z-index: -1;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: image-url('GCF104-lennie-jane-family_mobile.jpg');
+      background-size: cover;
+      background-position: top center;
+      @include media($tablet-up) {
+        background-image: image-url('GCF104-lennie-jane-family.jpg');
+      }
+    }
+
+    p {
+      margin-bottom: 2em;
+      font-weight: 500;
+    }
+  }
+
+  .slab--steps {
+    .grid__item {
+      margin-bottom: 4em;
+      @include media($tablet-up) {
+        margin-bottom: 0;
+      }
+    }
+    
+  }
+}

@@ -1,0 +1,164 @@
+p {
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+h1, .h1 {
+  font-size: $font-size-h1;
+  line-height: $line-height-display;
+  font-weight: 600;
+  margin-top: 1.5em;
+  margin-bottom: .5em;
+  &:first-child {
+    margin-top: 0em;
+  }
+}
+
+h2, .h2 {
+  font-size: $font-size-h2;
+  font-weight: 600;
+  line-height: $line-height-display;
+  margin-top: 1.5em;
+  margin-bottom: .5em;
+  &:first-child {
+    margin-top: 0em;
+  }
+}
+
+h3, .h3 {
+  font-size: $font-size-h3;
+  font-weight: 300;
+  line-height: $line-height-normal;
+  margin-top: 1.5em;
+  margin-bottom: .5em;
+  &:first-child {
+    margin-top: 0em;
+  }
+}
+
+h4, .h4 {
+  font-size: $font-size-h4;
+  font-weight: 600;
+  line-height: $line-height-display;
+  margin-top: 1.5em;
+  margin-bottom: .5em;
+  &:first-child {
+    margin-top: 0em;
+  }
+}
+
+a {
+  color: $color-teal;
+  &:hover {
+    color: shade($color-teal, 20%);
+  }
+}
+
+.link--subtle {
+  color: inherit;
+}
+
+.text--small {
+    font-size: $font-size-small;
+    line-height: $line-height-normal;
+}
+
+.text--caps {
+  font-size: .8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+  line-height: $line-height-normal;
+}
+
+.text--centered {
+  text-align: center;
+}
+
+.text--right {
+  text-align: right;
+}
+
+ol, ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.text--help {
+  font-size: $font-size-small;
+  line-height: $line-height-normal;
+  color: $color-dark-grey;
+}
+
+.text--warning {
+  font-size: $font-size-small;
+  line-height: $line-height-normal;
+  color: $color-orange;
+}
+
+.text--error {
+  font-size: $font-size-small;
+  line-height: $line-height-normal;
+  color: $color-red;
+}
+
+.text--pullquote {
+  font-weight: 300;
+  font-size: $font-size-h3;
+  line-height: $line-height-normal;
+  margin-bottom: .5em;
+}
+
+.text--teal {
+  color: $color-teal;
+}
+
+.list--padded {
+  li {
+    margin-bottom: 1em;
+  }
+}
+
+.list--bulleted {
+  list-style: disc;
+  padding-left: 2.5em;
+  li {
+    margin-bottom: .5em;
+  }
+}
+
+.list--numbered {
+  list-style: decimal;
+  padding-left: 2.5em;
+  li {
+    margin-bottom: .5em;
+  }
+}
+
+.list--checkmark {
+  li {
+    position: relative;
+    padding-left: 4em;
+    margin-bottom: 4em;
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      top: .25em;
+      width: 2em;
+      height: 2em;
+      background-repeat: no-repeat;
+      @include retina-bg(illustration_success, 2em auto);
+      background-size: 2em auto;
+    }
+  }
+}
+
+table {
+  margin-bottom: 1em;
+}
+
+td {
+  padding-right: 1em;
+}

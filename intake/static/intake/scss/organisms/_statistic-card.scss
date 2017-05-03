@@ -1,0 +1,13 @@
+.statistic-card {
+  @extend .card;
+}
+
+.statistic-card__label {
+  @extend .text--help;
+  margin-bottom: .5em;
+}
+
+.statistic-card__number {
+  @extend .h1;
+  margin-top: 0;
+}

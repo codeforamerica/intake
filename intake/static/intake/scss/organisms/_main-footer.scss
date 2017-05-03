@@ -1,0 +1,53 @@
+body {
+  margin-bottom: $footer-height*1.5;
+  @include media($tablet-up) {
+    margin-bottom: $footer-height;
+  }
+  
+}
+
+.main-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: $footer-height*1.5;
+  color: $color-grey;
+  background-color: $color-darkest-grey;   
+  padding: 2em $site-margins/2;
+  font-weight: 600;
+
+  @include media($tablet-up) {
+    padding: 2em $site-margins;
+    height: $footer-height;
+  }
+}
+
+.main-footer__legal {
+  font-size: $font-size-small;
+  p {
+    @include clearfix();
+    margin-bottom: 0em;
+  }
+}
+
+.main-footer__cfa-logo {
+  margin-top: 2em;
+
+  @include media($tablet-up) {
+    margin-top: 1em;
+    float: right;
+  }
+}
+
+.main-footer .select:before {
+  color: $color-dark-grey;
+}
+
+.main-footer .select__element {
+  border-radius: 0;
+}
+
+.main-footer .select__element:focus {
+  border-color: $color-dark-grey;
+}

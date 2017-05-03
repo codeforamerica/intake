@@ -1,0 +1,28 @@
+* {
+  box-sizing: border-box;
+}
+
+
+html {
+  position: relative;
+  background-color: $color-background;
+  font-size: $em-base;  
+  -webkit-font-smoothing: antialiased;
+  min-height: 100%;
+}
+
+body {
+  font-size: $font-size-normal;
+  font-family: $font-system;
+  line-height: $line-height-normal;
+}
+
+.page-wrapper {
+  overflow: hidden;
+  padding-left: $site-margins/2;
+  padding-right: $site-margins/2;    
+  @include media($tablet-up) {
+    padding-left: $site-margins;
+    padding-right: $site-margins;
+  }
+}
