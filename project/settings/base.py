@@ -188,18 +188,18 @@ STATICFILES_FINDERS = [
 ]
 
 
-def build_precompilers(path):
-    less_command = os.path.join(path, '.bin/lessc')
+def build_precompilers(node_path, ruby_path):
+    less_command = os.path.join(node_path, '.bin/lessc')
     exec_less = '%s --include-path=%s {infile} {outfile}' % (
         less_command,
-        path,
+        node_path,
     )
-    browserify_command = os.path.join(path, '.bin/browserify')
+    browserify_command = os.path.join(node_path, '.bin/browserify')
     exec_browserify = '%s {infile} -d --outfile {outfile}' % browserify_command
     # giving complete path to sass does not change the result
-    exec_sass = str(
-        'sass '
-        '--require bourbon '
+    sass_path = os.path.join(ruby_path, 'bundle/bin/sass')
+    exec_sass = sass_path + str(
+        ' --require bourbon '
         '--require normalize-scss '
         '--require neat '
         '{infile} {outfile}')
@@ -212,7 +212,8 @@ def build_precompilers(path):
 
 # Build Compress with Node Modules
 NODE_MODULES_PATH = os.path.join(REPO_DIR, 'node_modules')
-COMPRESS_PRECOMPILERS = build_precompilers(NODE_MODULES_PATH)
+RUBY_VENDOR_PATH = os.path.join(REPO_DIR, 'vendor')
+COMPRESS_PRECOMPILERS = build_precompilers(NODE_MODULES_PATH, RUBY_VENDOR_PATH)
 
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
