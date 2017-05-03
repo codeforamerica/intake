@@ -2,11 +2,8 @@
 <html>
   <head>
     {% include "includes/head.jinja" %}
-    {% compress 'css' %}
-      <link rel="stylesheet" type="text/less" href="{{ static('intake/less/main.less') }}">
-    {% endcompress %}
-    {% block extra_css_links %}
-    {% endblock extra_css_links %}
+    {% block css %}
+    {% endblock css %}
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -15,17 +12,14 @@
     })(window,document,'script','dataLayer','GTM-TVDP7Z6');</script>
     <!-- End Google Tag Manager -->
   </head>
+
   <body class="{%- block body_class -%}admin{%- endblock body_class -%}">
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TVDP7Z6"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
+
     {% block body %}
-      {% include "includes/header.jinja" %}
-      {% block main %}
-        {% block content %}
-        {% endblock content %}
-      {% endblock main %}
     {% endblock body %}
 
     {% block scripts %}
