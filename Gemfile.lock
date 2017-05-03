@@ -21,5 +21,8 @@ DEPENDENCIES
   normalize-scss
   sass
 
+RUBY VERSION
+   ruby 2.2.1p85
+
 BUNDLED WITH
-   1.14.6
+   1.13.7
