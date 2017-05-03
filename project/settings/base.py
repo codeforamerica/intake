@@ -196,9 +196,12 @@ def build_precompilers(path):
     )
     browserify_command = os.path.join(path, '.bin/browserify')
     exec_browserify = '%s {infile} -d --outfile {outfile}' % browserify_command
-    exec_sass = 'sass %s {infile} {outfile}' % ' '.join([
-        '--require %s' % dep
-        for dep in ('bourbon', 'normalize-scss', 'neat')])
+    exec_sass = str(
+        'sass '
+        '--require bourbon '
+        '--require normalize-scss '
+        '--require neat '
+        '{infile} {outfile}')
     return (
         ('text/scss', exec_sass),
         ('text/less', exec_less),
