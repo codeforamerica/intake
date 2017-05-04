@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'intake',
     'user_accounts',
+    'phone',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
