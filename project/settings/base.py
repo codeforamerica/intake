@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'health_check',
     'intake',
     'user_accounts',
+    'phone',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
