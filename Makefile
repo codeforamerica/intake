@@ -4,7 +4,7 @@ install:
 
 
 serve:
-	gulp
+	./manage.py runserver
 
 
 SCOPE=user_accounts intake formation health_check
