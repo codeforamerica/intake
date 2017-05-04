@@ -15,6 +15,8 @@ DATABASES = {
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
 DEFAULT_HOST = os.environ.get('DEFAULT_HOST', 'http://localhost:8000')
 
+# settings for twilio
+
 # settings for file uploads
 AWS_ACCESS_KEY_ID = os.environ.get('BUCKETEER_AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('BUCKETEER_AWS_SECRET_ACCESS_KEY')
@@ -40,6 +42,9 @@ MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", "admin@localhost")
 DEFAULT_FROM_EMAIL = MAIL_DEFAULT_SENDER
 DEFAULT_NOTIFICATION_EMAIL = os.environ.get(
     "DEFAULT_NOTIFICATION_EMAIL", "user@localhost")
+
+# Twilio API
+TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN")
 
 # Slack Web hook
 SLACK_WEBHOOK_URL = os.environ.get("SLACK_WEBHOOK_URL")
