@@ -2,24 +2,11 @@ from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
-from robots_txt.views import robots_view
+from url_robots.views import robots_txt
 
 
-# Make sure to keep this up to date
-allow = [
-    '/$',
-    '/apply/',
-    '/stats/',
-    '/partners/*',
-    '/privacy/',
-    '/personal-statement/',
-    '/recommendation-letters/',
-    '/gettings-your-rap/',
-]
-
-# Remember to update robots.txt above
 urlpatterns = [
-    url(r'^robots\.txt$', robots_view(allow)),
+    url(r'^robots\.txt$', robots_txt),
     url(r'^', include('intake.urls')),
     url(r'^', include('user_accounts.urls')),  # user account overrides
     url(r'^health/', include('health_check.urls')),

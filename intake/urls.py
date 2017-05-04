@@ -1,38 +1,40 @@
-from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
+from url_robots.utils import url
 from intake.views import (
-    public_views,
-    stats_views,
-    legacy_redirect_views,
-    select_county_view,
-    county_application_view,
-    declaration_letter_view,
-    application_done_view,
-    application_transfer_view,
-    admin_views,
-    app_detail_views,
-    application_note_views,
-    tag_views,
-    status_update_views,
-)
+                             public_views,
+                             stats_views,
+                             legacy_redirect_views,
+                             select_county_view,
+                             county_application_view,
+                             declaration_letter_view,
+                             application_done_view,
+                             application_transfer_view,
+                             admin_views,
+                             app_detail_views,
+                             application_note_views,
+                             tag_views,
+                             status_update_views,
+                         )
 
 
-# Remember to update robots.txt in project/urls/py
 urlpatterns = [
     # public views
-    url(r'^$', public_views.home, name='intake-home'),
-    url(r'^privacy/$', public_views.privacy, name='intake-privacy'),
-    url(r'^partners/$', public_views.partner_list, name='intake-partner_list'),
+    url(r'^$', public_views.home, name='intake-home', robots_allow=True),
+    url(r'^privacy/$', public_views.privacy,
+        name='intake-privacy', robots_allow=True),
+    url(r'^partners/$', public_views.partner_list,
+        name='intake-partner_list', robots_allow=True),
     url(r'^partners/(?P<organization_slug>[\w-]+)/$',
-        public_views.partner_detail, name='intake-partner_detail'),
+        public_views.partner_detail,
+        name='intake-partner_detail', robots_allow=True),
     url(r'^recommendation-letters/$', public_views.recommendation_letters,
-        name='intake-recommendation_letters'),
+        name='intake-recommendation_letters' ,robots_allow=True),
     url(r'^personal-statement/$', public_views.personal_statement,
-        name='intake-personal_statement'),
+        name='intake-personal_statement', robots_allow=True),
 
     # public form processing views
-    url(r'^apply/$',
-        select_county_view.select_county, name='intake-apply'),
+    url(r'^apply/$', select_county_view.select_county,
+        name='intake-apply', robots_allow=True),
     url(r'^application/$', county_application_view.county_application,
         name='intake-county_application'),
     url(r'^application/letter/$',
@@ -41,12 +43,12 @@ urlpatterns = [
         declaration_letter_view.review_letter, name='intake-review_letter'),
     url(r'^confirm/$', county_application_view.confirm, name='intake-confirm'),
     url(r'^thanks/$', application_done_view.thanks, name='intake-thanks'),
-    url(r'^getting_your_rap/$',
-        application_done_view.rap_sheet_info, name='intake-rap_sheet'),
+    url(r'^getting_your_rap/$', application_done_view.rap_sheet_info,
+        name='intake-rap_sheet', robots_allow=True),
 
     # stats views
-    url(r'^stats/$', stats_views.stats, name='intake-stats'),
-
+    url(r'^stats/$', stats_views.stats,
+        name='intake-stats', robots_allow=True),
     # protected views
     url(r'^application/(?P<submission_id>[0-9]+)/$',
         login_required(app_detail_views.app_detail),

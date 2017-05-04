@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'health_check',
     'intake',
+    'url_robots',
     'user_accounts',
     'allauth',
     'allauth.account',
@@ -40,7 +41,6 @@ INSTALLED_APPS = [
     'django_extensions',
     'compressor',
     'behave_django',
-    'robots_txt',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -101,7 +101,9 @@ TEMPLATES = [
     },
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(REPO_DIR, 'project', 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
