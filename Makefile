@@ -4,10 +4,10 @@ install:
 
 
 serve:
-	gulp
+	./manage.py runserver
 
 
-SCOPE=user_accounts intake formation health_check
+SCOPE=user_accounts intake formation health_check phone
 test:
 	./manage.py test $(SCOPE) \
 		--verbosity 2

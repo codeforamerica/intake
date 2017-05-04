@@ -33,8 +33,11 @@ EMAIL_BACKEND = "sgbackend.SendGridBackend"
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", "admin@localhost")
 DEFAULT_FROM_EMAIL = MAIL_DEFAULT_SENDER
-DEFAULT_NOTIFICATION_EMAIL = os.environ.get(
-    "DEFAULT_NOTIFICATION_EMAIL", "user@localhost")
+VOICEMAIL_NOTIFICATION_EMAIL = os.environ.get(
+    'VOICEMAIL_NOTIFICATION_EMAIL')
+
+# Twilio API
+TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN")
 
 # Slack Web hook
 SLACK_WEBHOOK_URL = os.environ.get("SLACK_WEBHOOK_URL")
