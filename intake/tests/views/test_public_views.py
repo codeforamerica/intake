@@ -21,11 +21,6 @@ class TestPartnershipsView(TestCase):
         response = self.client.get(reverse('intake-partnerships'))
         self.assertEqual(response.status_code, 200)
 
-    def test_includes_built_sass(self):
-        response = self.client.get(reverse('intake-partnerships'))
-        css_fragment = '<link rel="stylesheet" href="/static/CACHE/css/'
-        self.assertContains(response, css_fragment)
-
 
 class TestPartnerListView(TestCase):
     fixtures = ['counties', 'organizations']
