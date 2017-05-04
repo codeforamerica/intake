@@ -4,7 +4,13 @@ var templates = require('./templates');
 
 function sendSearchQuery(searchTerm){
     var searchUrl = '/applicant-autocomplete/?q=' + searchTerm;
-    $.get(searchUrl, handleSearchResults);
+    $.get(searchUrl, handleSearchResults
+      ).fail(function(jqXHR){
+        if(jqXHR.status == 403){
+          location.reload();
+        }
+      }
+    );
 }
 
 function handleKeyupInSearchInput(e){

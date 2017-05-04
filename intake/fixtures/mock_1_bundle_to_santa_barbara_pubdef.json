@@ -1,0 +1,16 @@
+[
+{
+  "model": "intake.applicationbundle",
+  "pk": 54,
+  "fields": {
+    "organization": [
+      "Santa Barbara County Public Defender"
+    ],
+    "bundled_pdf": "",
+    "submissions": [
+      116,
+      117
+    ]
+  }
+}
+]

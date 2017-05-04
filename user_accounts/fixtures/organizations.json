@@ -21,7 +21,8 @@
     "address": "",
     "phone_number": "",
     "email": "",
-    "notify_on_weekends": false
+    "notify_on_weekends": false,
+    "needs_applicant_followups": false
   }
 },
 {
@@ -48,7 +49,8 @@
     "address": "San Francisco Public Defender\r\nAttention: Clean Slate Unit\r\n555 7th Street, 2nd Floor\r\nSan Francisco, CA\r\n94103",
     "phone_number": "4155539337",
     "email": "",
-    "notify_on_weekends": false
+    "notify_on_weekends": false,
+    "needs_applicant_followups": true
   }
 },
 {
@@ -75,7 +77,8 @@
     "address": "Contra Costa Public Defender\r\nAttn: Clear My Record Unit\r\n800 Ferry Street\r\nMartinez, CA\r\n94553",
     "phone_number": "9253358000",
     "email": "cleanslate@pd.cccounty.us",
-    "notify_on_weekends": false
+    "notify_on_weekends": false,
+    "needs_applicant_followups": false
   }
 },
 {
@@ -103,6 +106,7 @@
     "phone_number": "5105484064",
     "email": "crimrecordshelp@ebclc.org",
     "notify_on_weekends": false,
+    "needs_applicant_followups": true,
     "can_transfer_applications": true
   }
 },
@@ -131,6 +135,7 @@
     "phone_number": "5102726600",
     "email": "cleanslate@acgov.org",
     "notify_on_weekends": false,
+    "needs_applicant_followups": false,
     "can_transfer_applications": true,
     "transfer_partners": [
         ["East Bay Community Law Center"]
@@ -161,7 +166,8 @@
     "address": "111 W. Alisal Street\r\nSalinas, CA 93901",
     "phone_number": "(831) 755-5058",
     "email": "",
-    "notify_on_weekends": false
+    "notify_on_weekends": false,
+    "needs_applicant_followups": false
   }
 },
 {
@@ -188,7 +194,8 @@
     "address": "Solano County Public Defender's Office\r\nAttention: Clear My Record Unit\r\n675 Texas Street, Suite 3500\r\nFairfield, CA 94533",
     "phone_number": "(707) 784-6700",
     "email": "publicdefender@solanocounty.com",
-    "notify_on_weekends": false
+    "notify_on_weekends": false,
+    "needs_applicant_followups": false
   }
 },
 {
@@ -215,7 +222,8 @@
     "address": "Department of the Primary Public Defender\r\nAttn: Expungement Paralegal, Clear My Record\r\n450 \"B\" Street, Suite 900\r\nSan Diego, CA 92101",
     "phone_number": "",
     "email": "katherine.braner@sdcounty.ca.gov",
-    "notify_on_weekends": false
+    "notify_on_weekends": false,
+    "needs_applicant_followups": false
   }
 },
 {
@@ -242,7 +250,8 @@
     "address": "San Joaquin Public Defender's Office\r\nAttention: Clear My Record Unit\r\n102 South San Joaquin Street\r\nStockton, CA 95202",
     "phone_number": "(209) 468-2730",
     "email": "",
-    "notify_on_weekends": false
+    "notify_on_weekends": false,
+    "needs_applicant_followups": false
   }
 },
 {
@@ -269,7 +278,8 @@
     "address": "Santa Clara Public Defender's Office\r\nAttention: Clear My Record Unit\r\n120 West Mission Street\r\nSan Jose, CA 95110",
     "phone_number": "408-535-4290",
     "email": "",
-    "notify_on_weekends": false
+    "notify_on_weekends": false,
+    "needs_applicant_followups": false
   }
 },
 {
@@ -296,7 +306,8 @@
     "address": "Fresno County Public Defender's Office\r\nAttn: Clear My Record Unit\r\n2220 Tulare Street, Suite 300\r\nFresno, CA 93721",
     "phone_number": "(559) 600-3546",
     "email": "publicdefender@co.fresno.ca.us",
-    "notify_on_weekends": false
+    "notify_on_weekends": false,
+    "needs_applicant_followups": false
   }
 },
 {
@@ -323,7 +334,8 @@
     "address": "",
     "phone_number": "(831) 429-1311",
     "email": "",
-    "notify_on_weekends": false
+    "notify_on_weekends": false,
+    "needs_applicant_followups": false
   }
 },
 {
@@ -350,7 +362,8 @@
     "address": "Sonoma County Public Defender's Office\r\n600 Administration Drive\r\nFirst Floor - Room 111\r\nSanta Rosa, CA 95403",
     "phone_number": "(707) 565-2791",
     "email": "expungements@sonoma-county.org",
-    "notify_on_weekends": false
+    "notify_on_weekends": false,
+    "needs_applicant_followups": false
   }
 },
 {
@@ -377,6 +390,117 @@
     "address": "Tulare County Public Defender's Office\r\nCourthouse RM G35\r\n221 S Mooney Blvd\r\nVisalia, CA 93291",
     "phone_number": "(559) 636-4500",
     "email": "",
+    "notify_on_weekends": false,
+    "needs_applicant_followups": false
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Ventura County Public Defender",
+    "slug": "ventura_pubdef",
+    "county": [
+      "ventura"
+    ],
+    "website": "https://www.pubdef.countyofventura.org",
+    "blurb": "The Ventura County Public Defender's Office helps people with arrests or convictions in Ventura County.",
+    "is_receiving_agency": true,
+    "is_accepting_applications": true,
+    "is_checking_notifications": true,
+    "is_live": false,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": false,
+    "show_pdf_only": false,
+    "short_confirmation_message": "The Ventura County Public Defender will contact you in 2-4 weeks with next steps.",
+    "long_confirmation_message": "The Ventura County Public Defender will contact you in 2-4 weeks with your next steps.",
+    "short_followup_message": "Has the Ventura Public Defender contacted you and told you your next steps?",
+    "long_followup_message": "Has the Ventura Public Defender contacted you and told you your next steps?",
+    "address": "Ventura County Public Defender's Office\n800 S. Victoria Avenue\nRoom # 207\nVentura, CA 93009",
+    "phone_number": "(805) 654-2201",
+    "email": "",
+    "notify_on_weekends": false,
+    "needs_applicant_followups": false
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Santa Barbara County Public Defender",
+    "slug": "santa_barbara_pubdef",
+    "county": [
+      "santa_barbara"
+    ],
+    "website": "https://www.countyofsb.org/defender/",
+    "blurb": "The Santa Barbara County Public Defender's Office helps people with arrests or convictions in Santa Barbara.",
+    "is_receiving_agency": true,
+    "is_accepting_applications": true,
+    "is_checking_notifications": true,
+    "is_live": false,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": false,
+    "show_pdf_only": false,
+    "short_confirmation_message": "The Santa Barbara Public Defender will contact you in 2-4 weeks with next steps.",
+    "long_confirmation_message": "The Santa Barbara Public Defender will contact you in 2-4 weeks with your next steps.",
+    "short_followup_message": "Has the Santa Barbara Public Defender contacted you and told you your next steps?",
+    "long_followup_message": "Has the Santa Barbara Public Defender contacted you and told you your next steps?",
+    "address": "Santa Barbara Office\nCourt House\n1100 Anacapa Street\nSanta Barbara, CA 93101",
+    "phone_number": "(805) 568-3470",
+    "email": "webmaster@publicdefendersb.org",
+    "notify_on_weekends": false,
+    "needs_applicant_followups": false
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Ventura County Public Defender",
+    "slug": "ventura_pubdef",
+    "county": [
+      "ventura"
+    ],
+    "website": "https://www.pubdef.countyofventura.org",
+    "blurb": "The Ventura County Public Defender's Office helps people with arrests or convictions in Ventura County.",
+    "is_receiving_agency": true,
+    "is_accepting_applications": true,
+    "is_checking_notifications": true,
+    "is_live": false,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": false,
+    "show_pdf_only": false,
+    "short_confirmation_message": "The Ventura County Public Defender will contact you in 2-4 weeks with next steps.",
+    "long_confirmation_message": "The Ventura County Public Defender will contact you in 2-4 weeks with your next steps.",
+    "short_followup_message": "Has the Ventura Public Defender contacted you and told you your next steps?",
+    "long_followup_message": "Has the Ventura Public Defender contacted you and told you your next steps?",
+    "address": "Ventura County Public Defender's Office\n800 S. Victoria Avenue\nRoom # 207\nVentura, CA 93009",
+    "phone_number": "(805) 654-2201",
+    "email": "",
+    "notify_on_weekends": false
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Santa Barbara County Public Defender",
+    "slug": "santa_barbara_pubdef",
+    "county": [
+      "santa_barbara"
+    ],
+    "website": "https://www.countyofsb.org/defender/",
+    "blurb": "The Santa Barbara County Public Defender's Office helps people with arrests or convictions in Santa Barbara.",
+    "is_receiving_agency": true,
+    "is_accepting_applications": true,
+    "is_checking_notifications": true,
+    "is_live": false,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": false,
+    "show_pdf_only": false,
+    "short_confirmation_message": "The Santa Barbara Public Defender will contact you in 2-4 weeks with next steps.",
+    "long_confirmation_message": "The Santa Barbara Public Defender will contact you in 2-4 weeks with your next steps.",
+    "short_followup_message": "Has the Santa Barbara Public Defender contacted you and told you your next steps?",
+    "long_followup_message": "Has the Santa Barbara Public Defender contacted you and told you your next steps?",
+    "address": "Santa Barbara Office\nCourt House\n1100 Anacapa Street\nSanta Barbara, CA 93101",
+    "phone_number": "(805) 568-3470",
+    "email": "webmaster@publicdefendersb.org",
     "notify_on_weekends": false
   }
 }

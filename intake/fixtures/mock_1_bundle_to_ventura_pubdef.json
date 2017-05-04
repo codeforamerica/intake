@@ -1,0 +1,16 @@
+[
+{
+  "model": "intake.applicationbundle",
+  "pk": 60,
+  "fields": {
+    "organization": [
+      "Ventura County Public Defender"
+    ],
+    "bundled_pdf": "",
+    "submissions": [
+      129,
+      128
+    ]
+  }
+}
+]

@@ -6,6 +6,17 @@ from intake.tasks import log_to_mixpanel
 import intake
 
 
+def remove_pii_from_contact_info(contact_info):
+    return list(contact_info.keys())
+
+PII_FILTERS = dict(
+    contact_info=remove_pii_from_contact_info)
+
+PII_EXCLUSIONS = (
+    'message_content',
+)
+
+
 class ApplicationEvent(models.Model):
 
     time = models.DateTimeField(default=timezone_utils.now)
@@ -30,6 +41,17 @@ class ApplicationEvent(models.Model):
     class Meta:
         ordering = ['-time']
 
+    def send_filtered_data_to_mixpanel(self):
+        filtered_data = {}
+        for key, value in self.data.items():
+            if key in PII_FILTERS:
+                filtered_data[key] = PII_FILTERS[key](value)
+            else:
+                if key not in PII_EXCLUSIONS:
+                    filtered_data[key] = value
+        log_to_mixpanel.delay(
+            self.applicant_id, self.name, filtered_data)
+
     @classmethod
     def create(cls, name, applicant_id, **data):
         event = cls(
@@ -38,20 +60,19 @@ class ApplicationEvent(models.Model):
             data=data or {}
         )
         event.save()
-        log_to_mixpanel.delay(
-            applicant_id, name, data or {})
+        event.send_filtered_data_to_mixpanel()
         return event
 
     @classmethod
     def log_app_started(
-            cls, applicant_id, counties,
-            referrer=None, ip=None, user_agent=None):
+            cls, applicant_id, counties, referrer=None, user_agent=None,
+            source=None):
         return cls.create(
             cls.APPLICATION_STARTED, applicant_id,
             counties=counties,
             referrer=referrer,
-            ip=ip,
-            user_agent=user_agent)
+            user_agent=user_agent,
+            source=source)
 
     @classmethod
     def log_app_errors(cls, applicant_id, errors=None):
@@ -117,5 +138,8 @@ class ApplicationEvent(models.Model):
         return events
 
     def __str__(self):
-        return "ApplicationEvent(applicant_id={},name={},data={})".format(
-            self.applicant_id, self.name, str(self.data))
+        return 'Applicant(id={})\t{}\t{}\t{}'.format(
+            self.applicant_id,
+            self.time.strftime('%Y-%m-%d %H:%M:%S'),
+            self.name,
+            str(self.data))

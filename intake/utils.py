@@ -43,11 +43,14 @@ def sort_orgs_in_default_order(orgs):
 
 
 def save_form_data_to_session(request, session_key, query_dict):
+    # this should update data, not simply overwrite it.
     data_dict = {
         key: items
         for key, items in query_dict._iterlists()
     }
-    request.session[session_key] = data_dict
+    existing_data = request.session.get(session_key, {})
+    existing_data.update(data_dict)
+    request.session[session_key] = existing_data
 
 
 def get_form_data_from_session(request, session_key):
@@ -58,8 +61,17 @@ def get_form_data_from_session(request, session_key):
     raw_dict = request.session.get(session_key, {})
     qdict = QueryDict('', mutable=True)
     for key, items in raw_dict.items():
+        if type(items) is not list:
+            items = [items]
         qdict.setlist(key, items)
     return qdict
+
+
+def clear_session_data(request, *keys):
+    existing_keys = list(request.session.keys())
+    for key_to_delete in keys:
+        if key_to_delete in existing_keys:
+            del request.session[key_to_delete]
 
 
 def clear_form_data_from_session(request, session_key):

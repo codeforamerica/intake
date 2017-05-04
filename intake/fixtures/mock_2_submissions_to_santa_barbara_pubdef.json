@@ -1,0 +1,336 @@
+[
+{
+  "model": "intake.visitor",
+  "pk": 117,
+  "fields": {
+    "first_visit": "2017-04-25T17:41:54.717Z",
+    "source": "share",
+    "referrer": "http://bajoradefender.org/services/clean-slate/",
+    "ip_address": "48.104.186.127"
+  }
+},
+{
+  "model": "intake.visitor",
+  "pk": 118,
+  "fields": {
+    "first_visit": "2017-04-25T17:41:54.769Z",
+    "source": "share",
+    "referrer": "http://bajoradefender.org/services/clean-slate/",
+    "ip_address": "48.104.186.127"
+  }
+},
+{
+  "model": "intake.applicant",
+  "pk": 117,
+  "fields": {
+    "visitor": 117
+  }
+},
+{
+  "model": "intake.applicant",
+  "pk": 118,
+  "fields": {
+    "visitor": 118
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 116,
+  "fields": {
+    "applicant": 117,
+    "duplicate_set": null,
+    "answers": {
+      "contact_preferences": [
+        "prefers_sms"
+      ],
+      "first_name": "Curtis",
+      "middle_name": "Charles",
+      "last_name": "Hale",
+      "phone_number": "4152124848",
+      "alternate_phone_number": "4152124848",
+      "email": "cmrtestuser@gmail.com",
+      "address": {
+        "street": "8209 Renee Center Suite 451",
+        "city": "South Dawn",
+        "state": "VI",
+        "zip": "90645"
+      },
+      "dob": {
+        "month": "10",
+        "day": "12",
+        "year": "1968"
+      },
+      "last_four": "3978",
+      "case_number": "C0957-869",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Yolo County",
+      "when_probation_or_parole": "2018",
+      "rap_outside_sf": "no",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "no",
+      "currently_employed": "no",
+      "monthly_income": 2000,
+      "income_source": "a job",
+      "on_public_benefits": "yes",
+      "monthly_expenses": 2000,
+      "owns_home": "no",
+      "household_size": 1,
+      "has_children": "no",
+      "is_married": "no",
+      "reasons_for_applying": [
+        "background_check",
+        "lost_job",
+        "housing"
+      ],
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "Curtis",
+    "last_name": "Hale",
+    "dob": null,
+    "ssn": "",
+    "last_four": "3978",
+    "drivers_license_or_id": "",
+    "case_number": "C0957-869",
+    "phone_number": "4152124848",
+    "alternate_phone_number": "4152124848",
+    "email": "cmrtestuser@gmail.com",
+    "reasons_for_applying": "['background_check', 'lost_job', 'housing']",
+    "how_did_you_hear": "from work",
+    "additional_information": "I want help",
+    "aliases": "",
+    "pfn_number": "",
+    "contact_preferences": "['prefers_sms']",
+    "preferred_pronouns": "",
+    "street": "8209 Renee Center Suite 451",
+    "city": "South Dawn",
+    "state": "VI",
+    "zip": "90645",
+    "us_citizen": "",
+    "is_veteran": "",
+    "is_student": "",
+    "being_charged": "no",
+    "serving_sentence": "no",
+    "on_probation_parole": "yes",
+    "where_probation_or_parole": "Yolo County",
+    "when_probation_or_parole": "2018",
+    "finished_half_probation": "",
+    "reduced_probation": "",
+    "rap_outside_sf": "no",
+    "when_where_outside_sf": "",
+    "has_suspended_license": "",
+    "owes_court_fees": "no",
+    "currently_employed": "no",
+    "monthly_income": 2000,
+    "income_source": "a job",
+    "on_public_benefits": "yes",
+    "owns_home": "no",
+    "monthly_expenses": 2000,
+    "household_size": 1,
+    "dependents": "",
+    "is_married": "no",
+    "has_children": "no",
+    "old_uuid": "329e15ef01144171a3ed35cb068c4db0",
+    "anonymous_name": "Quiet Marlin",
+    "date_received": "2017-04-24T07:48:48-07:00"
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 117,
+  "fields": {
+    "applicant": 118,
+    "duplicate_set": null,
+    "answers": {
+      "contact_preferences": [
+        "prefers_sms"
+      ],
+      "first_name": "William",
+      "middle_name": "Kevin",
+      "last_name": "Johnson",
+      "phone_number": "4152124848",
+      "alternate_phone_number": "4152124848",
+      "email": "cmrtestuser@gmail.com",
+      "address": {
+        "street": "8197 Sanders Cliff",
+        "city": "Jameston",
+        "state": "NY",
+        "zip": "19403"
+      },
+      "dob": {
+        "month": "9",
+        "day": "19",
+        "year": "1980"
+      },
+      "last_four": "8241",
+      "case_number": "C4012-477",
+      "being_charged": "yes",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Yolo County",
+      "when_probation_or_parole": "2018",
+      "rap_outside_sf": "no",
+      "when_where_outside_sf": "",
+      "owes_court_fees": "yes",
+      "currently_employed": "no",
+      "monthly_income": 2000,
+      "income_source": "a job",
+      "on_public_benefits": "yes",
+      "monthly_expenses": 2000,
+      "owns_home": "no",
+      "household_size": 0,
+      "has_children": "no",
+      "is_married": "yes",
+      "reasons_for_applying": [
+        "background_check",
+        "lost_job",
+        "housing"
+      ],
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "first_name": "William",
+    "last_name": "Johnson",
+    "dob": null,
+    "ssn": "",
+    "last_four": "8241",
+    "drivers_license_or_id": "",
+    "case_number": "C4012-477",
+    "phone_number": "4152124848",
+    "alternate_phone_number": "4152124848",
+    "email": "cmrtestuser@gmail.com",
+    "reasons_for_applying": "['background_check', 'lost_job', 'housing']",
+    "how_did_you_hear": "from work",
+    "additional_information": "I want help",
+    "aliases": "",
+    "pfn_number": "",
+    "contact_preferences": "['prefers_sms']",
+    "preferred_pronouns": "",
+    "street": "8197 Sanders Cliff",
+    "city": "Jameston",
+    "state": "NY",
+    "zip": "19403",
+    "us_citizen": "",
+    "is_veteran": "",
+    "is_student": "",
+    "being_charged": "yes",
+    "serving_sentence": "no",
+    "on_probation_parole": "yes",
+    "where_probation_or_parole": "Yolo County",
+    "when_probation_or_parole": "2018",
+    "finished_half_probation": "",
+    "reduced_probation": "",
+    "rap_outside_sf": "no",
+    "when_where_outside_sf": "",
+    "has_suspended_license": "",
+    "owes_court_fees": "yes",
+    "currently_employed": "no",
+    "monthly_income": 2000,
+    "income_source": "a job",
+    "on_public_benefits": "yes",
+    "owns_home": "no",
+    "monthly_expenses": 2000,
+    "household_size": 0,
+    "dependents": "",
+    "is_married": "yes",
+    "has_children": "no",
+    "old_uuid": "e6a17db92eea46fb86b3df5ec65abb23",
+    "anonymous_name": "Brave Fog",
+    "date_received": "2017-04-12T18:47:52-07:00"
+  }
+},
+{
+  "model": "intake.application",
+  "pk": 161,
+  "fields": {
+    "created": "2017-04-24T14:48:48Z",
+    "updated": "2017-04-25T17:41:54.757Z",
+    "organization": [
+      "Santa Barbara County Public Defender"
+    ],
+    "form_submission": 116,
+    "was_transferred_out": false
+  }
+},
+{
+  "model": "intake.application",
+  "pk": 162,
+  "fields": {
+    "created": "2017-04-13T01:47:52Z",
+    "updated": "2017-04-25T17:41:54.786Z",
+    "organization": [
+      "Santa Barbara County Public Defender"
+    ],
+    "form_submission": 117,
+    "was_transferred_out": false
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 162,
+  "fields": {
+    "created": "2017-04-25T17:41:59.041Z",
+    "updated": "2017-04-25T17:41:59.160Z",
+    "status_type": 4,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "santa_barbara_pubdef_user"
+    ],
+    "application": 162,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 161,
+  "fields": {
+    "created": "2017-04-25T17:41:58.935Z",
+    "updated": "2017-04-25T17:41:58.988Z",
+    "status_type": 3,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "santa_barbara_pubdef_user"
+    ],
+    "application": 161,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusnotification",
+  "pk": 161,
+  "fields": {
+    "status_update": 161,
+    "contact_info": {
+      "email": "cmrtestuser+notification@gmail.com"
+    },
+    "base_message": "Resistance is futile",
+    "sent_message": "Live long and prosper",
+    "created": "2017-04-25T17:41:58.941Z"
+  }
+},
+{
+  "model": "intake.statusnotification",
+  "pk": 162,
+  "fields": {
+    "status_update": 162,
+    "contact_info": {
+      "email": "cmrtestuser+notification@gmail.com"
+    },
+    "base_message": "Resistance is futile",
+    "sent_message": "Live long and prosper",
+    "created": "2017-04-25T17:41:59.062Z"
+  }
+}
+]

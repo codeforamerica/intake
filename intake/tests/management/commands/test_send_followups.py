@@ -1,6 +1,7 @@
 from unittest.mock import patch, Mock
 from intake.tests.base_testcases import ExternalNotificationsPatchTestCase
 from intake.tests import mock, factories
+from intake.tests.mock_org_answers import get_answers_for_orgs
 from intake.management.commands import send_followups
 from intake.models import Applicant
 from user_accounts.models import Organization
@@ -25,17 +26,15 @@ class TestCommand(ExternalNotificationsPatchTestCase):
     @patch('intake.notifications.slack_simple.send')
     def test_expected_weekday_run(self, slack, is_the_weekend):
         is_the_weekend.return_value = False
-        org = Organization.objects.get(slug='a_pubdef')
+        org = Organization.objects.get(slug='ebclc')
         dates = sorted([mock.get_old_date() for i in range(464, 469)])
         for date, pk in zip(dates, range(464, 469)):
-            applicant = Applicant()
-            applicant.save()
             factories.FormSubmissionWithOrgsFactory.create(
                 id=pk,
-                applicant=applicant,
                 date_received=date,
                 organizations=[org],
-                answers=mock.fake.alameda_pubdef_answers(
+                answers=get_answers_for_orgs(
+                    [org],
                     contact_preferences=[
                         'prefers_email',
                         'prefers_sms'],

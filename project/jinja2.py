@@ -1,12 +1,23 @@
 from django.contrib.humanize.templatetags import humanize
 from django.core.urlresolvers import reverse, reverse_lazy
 import phonenumbers
+from django.conf import settings
 from jinja2 import Environment
+from urllib.parse import urljoin
 from datetime import datetime
 from pytz import timezone
 from jinja2 import Markup
 from django.utils.html import mark_safe
+from markupsafe import escape
 from rest_framework.renderers import JSONRenderer
+
+
+def externalize_url(url):
+    return urljoin(settings.DEFAULT_HOST, url)
+
+
+def external_reverse(view_name):
+    return externalize_url(reverse(view_name))
 
 
 def to_json(data):
@@ -81,7 +92,7 @@ class Linkifier:
     def build_link(self, lookup):
         url = self.links[lookup]
         return '<a href="{}">{}</a>'.format(
-            url, lookup)
+            url, escape(lookup))
 
     def __call__(self, content):
         output = content
@@ -112,6 +123,8 @@ linkify_links = {
     "Fresno County Public Defender": "/partners/fresno_pubdef/",
     "Sonoma County Public Defender": "/partners/sonoma_pubdef/",
     "Tulare County Public Defender": "/partners/tulare_pubdef/",
+    "Santa Barbara County Public Defender": "/partners/santa_barbara_pubdef/",
+    "Ventura County Public Defender": "/partners/ventura_pubdef/",
     "clearmyrecord@codeforamerica.org":
         "mailto:clearmyrecord@codeforamerica.org",
     "(415) 301-6005": "tel:14153016005"

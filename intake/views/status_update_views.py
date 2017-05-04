@@ -4,6 +4,7 @@ from intake.forms import (
 from intake import models, utils
 from django.views.generic.edit import FormView
 from django.core.urlresolvers import reverse
+from django.shortcuts import redirect
 from intake.views.app_detail_views import not_allowed
 
 import intake.services.status_notifications as StatusNotificationService
@@ -16,6 +17,20 @@ WARNING_MESSAGE = str(
 
 class StatusUpdateBase:
 
+    def set_request_scoping_properties(self, request, submission_id, **kwargs):
+        self.request = request
+        submission_id = int(submission_id)
+        self.application = models.Application.objects.filter(
+            form_submission=submission_id,
+            organization=request.user.profile.organization).first()
+        if self.application:
+            self.application.latest_status = \
+                models.StatusUpdate.objects.filter(
+                    application_id=self.application.id
+                ).order_by('-created').first()
+        self.submission = models.FormSubmission.objects.filter(
+            id=submission_id).first()
+
     def get_session_storage_key(self):
         return 'status_update_form-{application_id}'.format(
             application_id=self.application.id)
@@ -27,6 +42,19 @@ class StatusUpdateBase:
         form.is_valid()
         return form.cleaned_data
 
+    def check_for_scope_based_redirects(self):
+        """Override in child classes to redirect requests based on instance
+        properties.
+        """
+        if not self.application:
+            return not_allowed(self.request)
+
+    def check_for_session_based_redirects(self):
+        """Override in child classes to redirect requests based on session
+        content
+        """
+        return None
+
     def get_existing_form_data(self):
         return self.request.session.get(
             self.get_session_storage_key())
@@ -35,16 +63,21 @@ class StatusUpdateBase:
         raise NotImplementedError('this must be overridden in a subclass')
 
     def dispatch(self, request, submission_id, *args, **kwargs):
-        submission_id = int(submission_id)
-        self.application = models.Application.objects.filter(
-            form_submission=submission_id,
-            organization=request.user.profile.organization).first()
-        if not self.application:
-            return not_allowed(request)
-        self.submission = models.FormSubmission.objects.get(
-            id=submission_id)
+        """
+        Override of dispatch for special cases. Includes hooks to check for
+        object permission and session data (to indicate access). Handles
+        accordingly.
+        """
+        self.set_request_scoping_properties(
+            request, submission_id, *args, **kwargs)
+        response = self.check_for_scope_based_redirects()
+        if response:
+            return response
         self.existing_status_update_data = \
             self.get_status_update_from_session()
+        response = self.check_for_session_based_redirects()
+        if response:
+            return response
         self.set_success_url()
         return super().dispatch(request, *args, **kwargs)
 
@@ -86,6 +119,15 @@ class ReviewStatusNotificationFormView(StatusUpdateBase, FormView):
 
     def set_success_url(self):
         self.success_url = reverse('intake-app_index')
+
+    def check_for_session_based_redirects(self):
+        """Checks if the session was cleared, if so, redirects to create status
+        page.
+        """
+        if 'application' not in self.existing_status_update_data:
+            return redirect(reverse(
+                'intake-create_status_update',
+                kwargs=dict(submission_id=self.submission.id)))
 
     def get_initial(self):
         initial = super().get_initial()

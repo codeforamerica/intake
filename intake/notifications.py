@@ -261,7 +261,7 @@ slack_submission_transferred = SlackTemplateNotification(
     {'action': 'transferred'},
     message_template_path="slack/submission_action.jinja")
 
-# count, bundle
+# count, bundle, bundle_url, app_index_url
 front_email_daily_app_bundle = FrontEmailNotification(
     subject_template=_(
         "{{current_local_time('%a %b %-d, %Y')}}: "

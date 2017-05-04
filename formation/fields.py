@@ -10,7 +10,7 @@ from formation.field_types import (
 )
 from intake.constants import (
     COUNTY_CHOICES, CONTACT_PREFERENCE_CHOICES, REASON_FOR_APPLYING_CHOICES,
-    GENDER_PRONOUN_CHOICES,
+    GENDER_PRONOUN_CHOICES, DECLARATION_LETTER_REVIEW_CHOICES,
     COUNTY_CHOICE_DISPLAY_DICT
 )
 from project.jinja2 import namify
@@ -126,6 +126,11 @@ class AdditionalInformation(CharField):
     label = _("Is there anything else you would like us to know?")
 
 
+class DeclarationLetterReviewActions(ChoiceField):
+    context_key = 'submit_action'
+    choices = DECLARATION_LETTER_REVIEW_CHOICES
+
+
 ###
 # Identification Questions
 ###
@@ -230,6 +235,7 @@ class CaseNumber(CharField):
 
 class PFNNumber(CharField):
     context_key = "pfn_number"
+    display_label = "PFN Number"
     label = _("What is your personal file number (PFN), if you know it?")
     help_text = _(
         "This is a number that is given to people who have been arrested in "

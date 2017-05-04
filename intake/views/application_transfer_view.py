@@ -35,10 +35,10 @@ class ApplicationTransferView(FormView):
     def get_initial(self):
         initial = super().get_initial()
         intro, body = TransferService.render_application_transfer_message(
-                form_submission=self.submission,
-                author=self.author,
-                to_organization=self.to_organization,
-                from_organization=self.from_organization)
+            form_submission=self.submission,
+            author=self.author,
+            to_organization=self.to_organization,
+            from_organization=self.from_organization)
         self.message_intro = intro
         initial.update(
             to_organization=self.to_organization,

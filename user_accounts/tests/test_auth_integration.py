@@ -14,7 +14,7 @@ from user_accounts.tests.base_testcases import AuthIntegrationTestCase
 
 class TestUserAccounts(AuthIntegrationTestCase):
 
-    fixtures = ['counties', 'organizations', 'mock_profiles']
+    fixtures = ['counties', 'organizations', 'groups', 'mock_profiles']
 
     def test_invite_form_has_the_right_fields(self):
         form = InviteForm()
@@ -96,10 +96,7 @@ class TestUserAccounts(AuthIntegrationTestCase):
         users = User.objects.filter(email=self.example_user['email'])
         self.assertEqual(len(users), 1)
         self.assertTrue(users[0].is_authenticated)
-        self.assertEqual(
-            get_user_display(
-                users[0]),
-            self.example_user['email'])
+        self.assertIn(self.example_user['email'], get_user_display(users[0]))
         self.assertIn(self.groups[0], users[0].groups.all())
 
     def test_user_can_add_info_in_profile_view(self):

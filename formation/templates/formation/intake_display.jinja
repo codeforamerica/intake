@@ -25,7 +25,13 @@
       {{ form.driver_license_or_id_display }}
       {{ form.ssn_display }}
       {{ form.case_number_display }}
+      {{ form.pfn_number_display }}
     </div>
+
+    <div class="data_display-row demographic">
+      {{ form.preferred_pronouns_display }}
+    </div>
+
   </div>
 
   <div class="data_display-section contact_info">
@@ -48,7 +54,7 @@
   <div class="data_display-section case_status">
     <h3 class="data_display-section_header">Case Information</h3>
     <div class="data_display-stack">
-      {{ form.us_citizen }}
+      {{ form.us_citizen_display }}
       {{ form.is_veteran_display }}
       {{ form.is_student_display }}
     </div>

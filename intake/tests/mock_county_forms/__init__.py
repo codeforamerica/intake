@@ -23,7 +23,7 @@ class Provider(BaseProvider):
         return self.random_element({
             "yes": chance_of_yes,
             "i_dont_know": chance_of_yes,
-            "no": 1.0 - (2*chance_of_yes)})
+            "no": 1.0 - (2 * chance_of_yes)})
 
     def generate_contact_preferences(self):
         preferences = random.randint(1, 2)
@@ -33,7 +33,7 @@ class Provider(BaseProvider):
         ], preferences)
 
     def make_phone_number(self):
-        return '8314207603'
+        return '4152124848'
 
     def sf_county_form_answers(self, **overrides):
         data = {
@@ -42,7 +42,7 @@ class Provider(BaseProvider):
             'last_name': self.generator.last_name(),
             'contact_preferences': self.generate_contact_preferences(),
             'phone_number': self.make_phone_number(),
-            'email': 'bgolder+testing@codeforamerica.org',
+            'email': 'cmrtestuser@gmail.com',
             'address.street': self.generator.street_address(),
             'address.city': self.generator.city(),
             'address.state': self.generator.state_abbr(),
@@ -79,7 +79,7 @@ class Provider(BaseProvider):
             'first_name': self.generator.first_name(),
             'last_name': self.generator.last_name(),
             'phone_number': self.make_phone_number(),
-            'email': 'bgolder+testing@codeforamerica.org',
+            'email': 'cmrtestuser@gmail.com',
             'dob.day': str(random.randint(1, 31)),
             'dob.month': str(random.randint(1, 12)),
             'dob.year': str(random.randint(1959, 2000)),
@@ -108,13 +108,13 @@ class Provider(BaseProvider):
     def alameda_county_form_answers(self, **overrides):
         data = {
             'contact_preferences': self.generate_contact_preferences(),
-            # 'preferred_pronouns': self.some_choice(GENDER_PRONOUN_CHOICES),
+            'preferred_pronouns': self.some_choice(GENDER_PRONOUN_CHOICES),
             'first_name': self.generator.first_name(),
             'middle_name': self.generator.first_name(),
             'last_name': self.generator.last_name(),
             'phone_number': self.make_phone_number(),
             'alternate_phone_number': self.make_phone_number(),
-            'email': 'bgolder+testing@codeforamerica.org',
+            'email': 'cmrtestuser@gmail.com',
             'dob.day': str(random.randint(1, 31)),
             'dob.month': str(random.randint(1, 12)),
             'dob.year': str(random.randint(1959, 2000)),
@@ -160,7 +160,7 @@ class Provider(BaseProvider):
             'contact_preferences': self.generate_contact_preferences(),
             'first_name': self.generator.first_name(),
             'phone_number': self.make_phone_number(),
-            'email': 'bgolder+testing@codeforamerica.org',
+            'email': 'cmrtestuser@gmail.com',
             'address.street': self.generator.street_address(),
             'address.city': self.generator.city(),
             'address.state': self.generator.state_abbr(),
@@ -177,7 +177,7 @@ class Provider(BaseProvider):
             'last_name': self.generator.last_name(),
             'contact_preferences': self.generate_contact_preferences(),
             'phone_number': self.make_phone_number(),
-            'email': 'bgolder+testing@codeforamerica.org',
+            'email': 'cmrtestuser@gmail.com',
             'address': {
                 'street': self.generator.street_address(),
                 'city': self.generator.city(),
@@ -261,7 +261,9 @@ class Provider(BaseProvider):
         data = self.solano_pubdef_answers()
         data.update(
             currently_employed=self.maybe(0.3),
+            preferred_pronouns=self.some_choice(GENDER_PRONOUN_CHOICES),
             income_source='a job',
+            pfn_number=self.generator.numerify("######"),
             monthly_expenses=2000,
             is_married=self.maybe(0.4),
             has_children=self.maybe(0.6),
@@ -297,6 +299,29 @@ class Provider(BaseProvider):
 
     def tulare_pubdef_answers(self, **overrides):
         return self.solano_pubdef_answers(**overrides)
+
+    def ventura_pubdef_answers(self, **overrides):
+        data = self.solano_pubdef_answers()
+        data.update(
+            owns_home=self.maybe(0.1),
+            currently_employed=self.maybe(0.3),
+            income_source='a job',
+            monthly_income=2000,
+            monthly_expenses=2000,
+            last_four=self.generator.numerify("####"),
+            driver_license_or_id=self.generator.numerify("D#######"),
+            case_number=self.generator.numerify("C####-###"),
+            is_married=self.maybe(0.4),
+            dependents=random.randint(0, 5),
+            has_children=self.maybe(0.6),
+            reduced_probation=self.maybe(0.1),
+            reasons_for_applying=['background_check', 'lost_job', 'housing'],
+        )
+        data.update(overrides)
+        return data
+
+    def santa_barbara_pubdef_answers(self, **overrides):
+        return self.ventura_pubdef_answers(**overrides)
 
     def all_county_answers(self, **overrides):
         data = {

@@ -49,6 +49,15 @@ REASON_FOR_APPLYING_CHOICES = (
     ('other', _('My reason is not listed')),
 )
 
+APPROVE_LETTER = 'approve_letter'
+EDIT_LETTER = 'edit_letter'
+
+DECLARATION_LETTER_REVIEW_CHOICES = (
+    (EDIT_LETTER, _('Edit letter')),
+    (APPROVE_LETTER, _('Approve letter')),
+)
+
+
 STAFF_NAME_CHOICES = ['Jazmyn', 'Ben']
 
 
@@ -68,6 +77,8 @@ class Organizations:
     SANTA_CRUZ_PUBDEF = 'santa_cruz_pubdef'
     SONOMA_PUBDEF = 'sonoma_pubdef'
     TULARE_PUBDEF = 'tulare_pubdef'
+    VENTURA_PUBDEF = 'ventura_pubdef'
+    SANTA_BARBARA_PUBDEF = 'santa_barbara_pubdef'
 
 DEFAULT_ORGANIZATION_ORDER = [
     Organizations.ALL,
@@ -84,6 +95,8 @@ DEFAULT_ORGANIZATION_ORDER = [
     Organizations.FRESNO_PUBDEF,
     Organizations.SONOMA_PUBDEF,
     Organizations.TULARE_PUBDEF,
+    Organizations.VENTURA_PUBDEF,
+    Organizations.SANTA_BARBARA_PUBDEF,
 ]
 
 
@@ -102,6 +115,9 @@ ORG_NAMES = {
     Organizations.FRESNO_PUBDEF: _("Fresno County Public Defender"),
     Organizations.SONOMA_PUBDEF: _("Sonoma County Public Defender"),
     Organizations.TULARE_PUBDEF: _("Tulare County Public Defender"),
+    Organizations.VENTURA_PUBDEF: _("Ventura County Public Defender"),
+    Organizations.SANTA_BARBARA_PUBDEF: _(
+        "Santa Barbara County Public Defender"),
 }
 
 PAGE_COMPLETE_SEQUENCES = {
@@ -124,6 +140,8 @@ PAGE_COMPLETE_SEQUENCES = {
     Organizations.FRESNO_PUBDEF: ["SelectCounty", "CountyApplication"],
     Organizations.SONOMA_PUBDEF: ["SelectCounty", "CountyApplication"],
     Organizations.TULARE_PUBDEF: ["SelectCounty", "CountyApplication"],
+    Organizations.VENTURA_PUBDEF: ["SelectCounty", "CountyApplication"],
+    Organizations.SANTA_BARBARA_PUBDEF: ["SelectCounty", "CountyApplication"],
 }
 
 
@@ -140,6 +158,8 @@ class Counties:
     FRESNO = 'fresno'
     SONOMA = 'sonoma'
     TULARE = 'tulare'
+    VENTURA = 'ventura'
+    SANTA_BARBARA = 'santa_barbara'
     OTHER = 'other'
 
 
@@ -156,6 +176,8 @@ class CountyNames:
     FRESNO = 'Fresno'
     SONOMA = 'Sonoma'
     TULARE = 'Tulare'
+    VENTURA = 'Ventura'
+    SANTA_BARBARA = 'Santa Barbara'
     ALL = 'counties throughout California'
 
 
@@ -203,7 +225,13 @@ if not SCOPE_TO_LIVE_COUNTIES:
             'Sebastopol, Bodega Bay, Healdsburg, or Cloverdale)')),
         (Counties.TULARE, _(
             'Tulare County (near Visalia, Tulare, Porterville, Finuba, '
-            'Lindsay, Farmersville, Exeter, or Woodlake)'))
+            'Lindsay, Farmersville, Exeter, or Woodlake)')),
+        (Counties.VENTURA, _(
+            'Ventura County (near Oxnard, Thousand Oaks, Simi Valley and '
+            'Ventura)')),
+        (Counties.SANTA_BARBARA, _(
+            'Santa Barbara County (near Santa Maria, Santa Barbara, Lompoc, '
+            'Goleta)'))
     )
 
 COUNTY_CHOICES = sorted(COUNTY_CHOICES, key=lambda item: item[1])
@@ -221,6 +249,8 @@ COUNTY_CHOICE_DISPLAY_DICT = {
     Counties.FRESNO: CountyNames.FRESNO,
     Counties.SONOMA: CountyNames.SONOMA,
     Counties.TULARE: CountyNames.TULARE,
+    Counties.VENTURA: CountyNames.VENTURA,
+    Counties.SANTA_BARBARA: CountyNames.SANTA_BARBARA,
 }
 
 

@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'health_check',
     'intake',
     'user_accounts',
     'phone',
@@ -35,6 +36,7 @@ INSTALLED_APPS = [
     'taggit',
     'debug_toolbar',
     'django_extensions',
+    'behave_django',
 ]
 
 MIDDLEWARE_CLASSES = [

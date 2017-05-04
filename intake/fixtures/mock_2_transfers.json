@@ -1,9 +1,9 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 28,
+  "pk": 132,
   "fields": {
-    "first_visit": "2017-03-28T00:59:59.255Z",
+    "first_visit": "2017-04-25T17:42:06.025Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +11,9 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 29,
+  "pk": 133,
   "fields": {
-    "first_visit": "2017-03-28T00:59:59.317Z",
+    "first_visit": "2017-04-25T17:42:06.243Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,48 +21,48 @@
 },
 {
   "model": "intake.applicant",
-  "pk": 28,
+  "pk": 132,
   "fields": {
-    "visitor": 28
+    "visitor": 132
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 29,
+  "pk": 133,
   "fields": {
-    "visitor": 29
+    "visitor": 133
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 28,
+  "pk": 131,
   "fields": {
-    "applicant": 28,
+    "applicant": 132,
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
         "prefers_email",
         "prefers_sms"
       ],
-      "first_name": "David",
-      "middle_name": "Jeremy",
-      "last_name": "Rivas",
-      "preferred_pronouns": "",
-      "phone_number": "8314207603",
-      "alternate_phone_number": "8314207603",
-      "email": "bgolder+testing@codeforamerica.org",
+      "first_name": "Katie",
+      "middle_name": "Christopher",
+      "last_name": "Patel",
+      "preferred_pronouns": "they",
+      "phone_number": "4152124848",
+      "alternate_phone_number": "4152124848",
+      "email": "cmrtestuser@gmail.com",
       "address": {
-        "street": "91385 Mullen Junction Suite 940",
-        "city": "Grahamville",
-        "state": "NH",
-        "zip": "47199"
+        "street": "289 Harris Station",
+        "city": "Port Kathrynside",
+        "state": "AL",
+        "zip": "47870"
       },
       "dob": {
-        "month": "5",
-        "day": "24",
-        "year": "1969"
+        "month": "2",
+        "day": "10",
+        "year": "1985"
       },
-      "us_citizen": "no",
+      "us_citizen": "yes",
       "being_charged": "no",
       "serving_sentence": "no",
       "on_probation_parole": "yes",
@@ -73,57 +73,97 @@
       "has_suspended_license": "no",
       "owes_court_fees": "yes",
       "monthly_income": 2999,
-      "on_public_benefits": "yes",
+      "on_public_benefits": "no",
       "owns_home": "no",
-      "household_size": 1,
+      "household_size": 0,
       "how_did_you_hear": "from work",
       "additional_information": "I want help",
       "understands_limits": "yes",
-      "consent_to_represent": "yes"
+      "consent_to_represent": "yes",
+      "declaration_letter_intro": "Eaque rerum molestiae deleniti sed aspernatur doloremque ipsam. Magni aspernatur accusamus voluptatem reiciendis aspernatur dolores. Vel cumque suscipit beatae. Aliquam velit assumenda omnis ad eius culpa mollitia vel.",
+      "declaration_letter_life_changes": "Nostrum corporis voluptas illum quos omnis magnam. Iure vero asperiores illum deleniti quia placeat. Vel eligendi repellat voluptates quaerat dolores distinctio officiis. Occaecati itaque aliquam ex repellat ab qui vitae.",
+      "declaration_letter_activities": "Modi asperiores dignissimos atque distinctio quas libero error. Quibusdam sunt sunt ipsam perspiciatis voluptate ab eum.",
+      "declaration_letter_goals": "Aspernatur esse architecto sit voluptas magnam. Et quidem ullam fugiat. Illo repellat sint pariatur tempore recusandae quod.",
+      "declaration_letter_why": "Ducimus facilis a nesciunt neque. Quia velit sit ullam repellendus commodi deleniti. Quidem facilis reiciendis reiciendis delectus aliquam saepe id. Incidunt doloribus sed perspiciatis rem maiores."
     },
-    "first_name": "David",
-    "last_name": "Rivas",
+    "first_name": "Katie",
+    "last_name": "Patel",
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
     "case_number": "",
-    "phone_number": "8314207603",
-    "alternate_phone_number": "8314207603",
-    "email": "bgolder+testing@codeforamerica.org",
-    "old_uuid": "60981cff3fe2456d9c75b7fec2796081",
-    "anonymous_name": "Bold Tundra",
-    "date_received": "2017-03-24T18:00:46-07:00"
+    "phone_number": "4152124848",
+    "alternate_phone_number": "4152124848",
+    "email": "cmrtestuser@gmail.com",
+    "reasons_for_applying": "",
+    "how_did_you_hear": "from work",
+    "additional_information": "I want help",
+    "aliases": "",
+    "pfn_number": "",
+    "contact_preferences": "['prefers_email', 'prefers_sms']",
+    "preferred_pronouns": "they",
+    "street": "289 Harris Station",
+    "city": "Port Kathrynside",
+    "state": "AL",
+    "zip": "47870",
+    "us_citizen": "yes",
+    "is_veteran": "",
+    "is_student": "",
+    "being_charged": "no",
+    "serving_sentence": "no",
+    "on_probation_parole": "yes",
+    "where_probation_or_parole": "",
+    "when_probation_or_parole": "",
+    "finished_half_probation": "not_applicable",
+    "reduced_probation": "not_applicable",
+    "rap_outside_sf": "yes",
+    "when_where_outside_sf": "",
+    "has_suspended_license": "no",
+    "owes_court_fees": "yes",
+    "currently_employed": "",
+    "monthly_income": 2999,
+    "income_source": "",
+    "on_public_benefits": "no",
+    "owns_home": "no",
+    "monthly_expenses": null,
+    "household_size": 0,
+    "dependents": "",
+    "is_married": "",
+    "has_children": "",
+    "old_uuid": "d9f1eb4df527480599add92131b7972c",
+    "anonymous_name": "Cosmic Thunder",
+    "date_received": "2017-04-17T06:22:38-07:00"
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 29,
+  "pk": 132,
   "fields": {
-    "applicant": 29,
+    "applicant": 133,
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
         "prefers_email",
         "prefers_sms"
       ],
-      "first_name": "William",
-      "middle_name": "Tammy",
-      "last_name": "Kemp",
-      "preferred_pronouns": "",
-      "phone_number": "8314207603",
-      "alternate_phone_number": "8314207603",
-      "email": "bgolder+testing@codeforamerica.org",
+      "first_name": "Brian",
+      "middle_name": "Alexis",
+      "last_name": "Huffman",
+      "preferred_pronouns": "none",
+      "phone_number": "4152124848",
+      "alternate_phone_number": "4152124848",
+      "email": "cmrtestuser@gmail.com",
       "address": {
-        "street": "5176 Reed Plaza Suite 655",
-        "city": "Riceburgh",
-        "state": "WV",
-        "zip": "64142"
+        "street": "0811 West Oval",
+        "city": "Davidside",
+        "state": "WY",
+        "zip": "19314"
       },
       "dob": {
-        "month": "6",
-        "day": "30",
-        "year": "1990"
+        "month": "1",
+        "day": "28",
+        "year": "1965"
       },
       "us_citizen": "yes",
       "being_charged": "no",
@@ -133,7 +173,7 @@
       "reduced_probation": "not_applicable",
       "rap_outside_sf": "no",
       "when_where_outside_sf": "",
-      "has_suspended_license": "no",
+      "has_suspended_license": "yes",
       "owes_court_fees": "no",
       "monthly_income": 3001,
       "on_public_benefits": "no",
@@ -144,85 +184,154 @@
       "understands_limits": "yes",
       "consent_to_represent": "yes"
     },
-    "first_name": "William",
-    "last_name": "Kemp",
+    "first_name": "Brian",
+    "last_name": "Huffman",
     "dob": null,
     "ssn": "",
     "last_four": "",
     "drivers_license_or_id": "",
     "case_number": "",
-    "phone_number": "8314207603",
-    "alternate_phone_number": "8314207603",
-    "email": "bgolder+testing@codeforamerica.org",
-    "old_uuid": "3d521088ae4e49699e129610ffaf78ad",
-    "anonymous_name": "Amicable Galleon",
-    "date_received": "2017-03-20T10:39:53-07:00"
+    "phone_number": "4152124848",
+    "alternate_phone_number": "4152124848",
+    "email": "cmrtestuser@gmail.com",
+    "reasons_for_applying": "",
+    "how_did_you_hear": "from work",
+    "additional_information": "I want help",
+    "aliases": "",
+    "pfn_number": "",
+    "contact_preferences": "['prefers_email', 'prefers_sms']",
+    "preferred_pronouns": "none",
+    "street": "0811 West Oval",
+    "city": "Davidside",
+    "state": "WY",
+    "zip": "19314",
+    "us_citizen": "yes",
+    "is_veteran": "",
+    "is_student": "",
+    "being_charged": "no",
+    "serving_sentence": "no",
+    "on_probation_parole": "yes",
+    "where_probation_or_parole": "",
+    "when_probation_or_parole": "",
+    "finished_half_probation": "not_applicable",
+    "reduced_probation": "not_applicable",
+    "rap_outside_sf": "no",
+    "when_where_outside_sf": "",
+    "has_suspended_license": "yes",
+    "owes_court_fees": "no",
+    "currently_employed": "",
+    "monthly_income": 3001,
+    "income_source": "",
+    "on_public_benefits": "no",
+    "owns_home": "yes",
+    "monthly_expenses": null,
+    "household_size": 4,
+    "dependents": "",
+    "is_married": "",
+    "has_children": "",
+    "old_uuid": "8c33da97d11a4087ad4ca87a9c735d62",
+    "anonymous_name": "Golden Tortoise",
+    "date_received": "2017-04-17T22:00:57-07:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 39,
+  "pk": 190,
   "fields": {
-    "created": "2017-03-25T01:00:46Z",
-    "updated": "2017-03-28T00:59:59.301Z",
-    "organization": [
-      "Alameda County Public Defender's Office"
-    ],
-    "form_submission": 28,
-    "was_transferred_out": true
-  }
-},
-{
-  "model": "intake.application",
-  "pk": 40,
-  "fields": {
-    "created": "2017-03-28T00:59:59.296Z",
-    "updated": "2017-03-28T00:59:59.296Z",
+    "created": "2017-04-25T17:42:06.192Z",
+    "updated": "2017-04-25T17:42:06.193Z",
     "organization": [
       "East Bay Community Law Center"
     ],
-    "form_submission": 28,
+    "form_submission": 131,
     "was_transferred_out": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 41,
+  "pk": 189,
   "fields": {
-    "created": "2017-03-20T17:39:53Z",
-    "updated": "2017-03-28T00:59:59.359Z",
+    "created": "2017-04-17T13:22:38Z",
+    "updated": "2017-04-25T17:42:06.202Z",
     "organization": [
-      "East Bay Community Law Center"
+      "Alameda County Public Defender's Office"
     ],
-    "form_submission": 29,
+    "form_submission": 131,
     "was_transferred_out": true
   }
 },
 {
   "model": "intake.application",
-  "pk": 42,
+  "pk": 192,
   "fields": {
-    "created": "2017-03-28T00:59:59.354Z",
-    "updated": "2017-03-28T00:59:59.354Z",
+    "created": "2017-04-25T17:42:06.353Z",
+    "updated": "2017-04-25T17:42:06.353Z",
     "organization": [
       "Alameda County Public Defender's Office"
     ],
-    "form_submission": 29,
+    "form_submission": 132,
     "was_transferred_out": false
+  }
+},
+{
+  "model": "intake.application",
+  "pk": 191,
+  "fields": {
+    "created": "2017-04-18T05:00:57Z",
+    "updated": "2017-04-25T17:42:06.366Z",
+    "organization": [
+      "East Bay Community Law Center"
+    ],
+    "form_submission": 132,
+    "was_transferred_out": true
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 39,
+  "pk": 189,
   "fields": {
-    "created": "2017-03-28T00:59:59.281Z",
-    "updated": "2017-03-28T00:59:59.293Z",
+    "created": "2017-04-25T17:42:06.177Z",
+    "updated": "2017-04-25T17:42:06.187Z",
+    "status_type": 3,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "a_pubdef_user"
+    ],
+    "application": 189,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 190,
+  "fields": {
+    "created": "2017-04-25T17:42:06.190Z",
+    "updated": "2017-04-25T17:42:06.190Z",
+    "status_type": 8,
+    "additional_information": "",
+    "author": [
+      "a_pubdef_user"
+    ],
+    "application": 189,
+    "other_next_step": "",
+    "next_steps": []
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 191,
+  "fields": {
+    "created": "2017-04-25T17:42:06.325Z",
+    "updated": "2017-04-25T17:42:06.346Z",
     "status_type": 4,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
-      "a_pubdef_user"
+      "ebclc_user"
     ],
-    "application": 39,
+    "application": 191,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -231,125 +340,91 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 40,
+  "pk": 192,
   "fields": {
-    "created": "2017-03-28T00:59:59.295Z",
-    "updated": "2017-03-28T00:59:59.295Z",
-    "status_type": 8,
-    "additional_information": "",
-    "author": [
-      "a_pubdef_user"
-    ],
-    "application": 39,
-    "other_next_step": "",
-    "next_steps": []
-  }
-},
-{
-  "model": "intake.statusupdate",
-  "pk": 41,
-  "fields": {
-    "created": "2017-03-28T00:59:59.337Z",
-    "updated": "2017-03-28T00:59:59.348Z",
-    "status_type": 5,
-    "additional_information": "We may be able to get a fee waived for you",
-    "author": [
-      "ebclc_user"
-    ],
-    "application": 41,
-    "other_next_step": "Come to our Walk-In Clinic",
-    "next_steps": [
-      1
-    ]
-  }
-},
-{
-  "model": "intake.statusupdate",
-  "pk": 42,
-  "fields": {
-    "created": "2017-03-28T00:59:59.353Z",
-    "updated": "2017-03-28T00:59:59.353Z",
+    "created": "2017-04-25T17:42:06.349Z",
+    "updated": "2017-04-25T17:42:06.349Z",
     "status_type": 8,
     "additional_information": "",
     "author": [
       "ebclc_user"
     ],
-    "application": 41,
+    "application": 191,
     "other_next_step": "",
     "next_steps": []
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 39,
+  "pk": 189,
   "fields": {
-    "status_update": 39,
+    "status_update": 189,
     "contact_info": {
-      "email": "bgolder+borg@codeforamerica.org"
+      "email": "cmrtestuser+notification@gmail.com"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-03-28T00:59:59.286Z"
+    "created": "2017-04-25T17:42:06.180Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 40,
+  "pk": 190,
   "fields": {
-    "status_update": 40,
+    "status_update": 190,
     "contact_info": {
-      "email": "bgolder+borg@codeforamerica.org"
+      "email": "cmrtestuser+notification@gmail.com"
     },
     "base_message": "Your case has been transferred to East Bay Community Law Center.\nNext step in Alameda is to get your CA RAP sheet and send it to EBCLC. More info http://c4a.me/rap",
     "sent_message": "Your case has been transferred to East Bay Community Law Center.\nNext step in Alameda is to get your CA RAP sheet and send it to EBCLC. More info http://c4a.me/rap",
-    "created": "2017-03-28T00:59:59.308Z"
+    "created": "2017-04-25T17:42:06.220Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 41,
+  "pk": 191,
   "fields": {
-    "status_update": 41,
+    "status_update": 191,
     "contact_info": {
-      "email": "bgolder+borg@codeforamerica.org"
+      "email": "cmrtestuser+notification@gmail.com"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-03-28T00:59:59.339Z"
+    "created": "2017-04-25T17:42:06.330Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 42,
+  "pk": 192,
   "fields": {
-    "status_update": 42,
+    "status_update": 192,
     "contact_info": {
-      "email": "bgolder+borg@codeforamerica.org"
+      "email": "cmrtestuser+notification@gmail.com"
     },
     "base_message": "Your case has been transferred to Alameda County Public Defender's Office.\nThe Alameda Public Defender will follow up with you if they need any other information.",
     "sent_message": "Your case has been transferred to Alameda County Public Defender's Office.\nThe Alameda Public Defender will follow up with you if they need any other information.",
-    "created": "2017-03-28T00:59:59.368Z"
+    "created": "2017-04-25T17:42:06.379Z"
   }
 },
 {
   "model": "intake.applicationtransfer",
-  "pk": 1,
+  "pk": 7,
   "fields": {
-    "created": "2017-03-28T00:59:59.298Z",
-    "updated": "2017-03-28T00:59:59.298Z",
-    "status_update": 40,
-    "new_application": 40,
+    "created": "2017-04-25T17:42:06.196Z",
+    "updated": "2017-04-25T17:42:06.197Z",
+    "status_update": 190,
+    "new_application": 190,
     "reason": "Transporter malfunction"
   }
 },
 {
   "model": "intake.applicationtransfer",
-  "pk": 2,
+  "pk": 8,
   "fields": {
-    "created": "2017-03-28T00:59:59.356Z",
-    "updated": "2017-03-28T00:59:59.356Z",
-    "status_update": 42,
-    "new_application": 42,
+    "created": "2017-04-25T17:42:06.359Z",
+    "updated": "2017-04-25T17:42:06.359Z",
+    "status_update": 192,
+    "new_application": 192,
     "reason": "Transporter malfunction"
   }
 }

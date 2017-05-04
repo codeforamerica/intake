@@ -146,7 +146,7 @@ class TestBuildBundledPdfIfNecessary(TestCase):
 class TestGetOrgsThatMightNeedABundleEmailToday(TestCase):
 
     fixtures = [
-        'counties',
+        'counties', 'groups',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_cc_pubdef', 'template_options'
@@ -207,7 +207,7 @@ class TestGetOrgsThatMightNeedABundleEmailToday(TestCase):
 class TestCreateBundlesAndSendNotificationsToOrgs(TestCase):
 
     fixtures = [
-        'counties',
+        'counties', 'groups',
         'organizations', 'mock_profiles',
         'mock_2_submissions_to_cc_pubdef',
         'mock_2_submissions_to_a_pubdef', 'template_options'

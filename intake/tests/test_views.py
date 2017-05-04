@@ -19,6 +19,7 @@ class TestViews(IntakeDataTestCase):
     fixtures = [
         'counties',
         'organizations',
+        'groups',
         'mock_profiles',
         'mock_2_submissions_to_sf_pubdef', 'template_options']
 
@@ -36,12 +37,14 @@ class TestViews(IntakeDataTestCase):
 
     def test_confirm_view(self):
         self.be_anonymous()
+        applicant = factories.ApplicantFactory.create()
         base_data = dict(
             counties=['sanfrancisco'],
             confirm_county_selection=YES,
             **mock.NEW_RAW_FORM_DATA)
         self.set_session(
-            form_in_progress=base_data)
+            form_in_progress=base_data,
+            applicant_id=applicant.id)
         response = self.client.get(reverse('intake-confirm'))
         self.assertContains(response, base_data['first_name'][0])
         self.assertContains(response, base_data['last_name'][0])
@@ -162,7 +165,7 @@ class TestViews(IntakeDataTestCase):
         self.assertEqual(bundle.status_code, 200)
 
     @patch(
-        'intake.views.session_view_base.notifications'
+        'intake.views.applicant_form_view_base.notifications'
         '.slack_submissions_processed.send')
     def test_agency_user_can_mark_apps_as_processed(self, slack):
         self.be_sfpubdef_user()

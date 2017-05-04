@@ -6,47 +6,12 @@ from intake import models, serializers
 from intake.constants import SMS, EMAIL
 from .pagination import get_page
 from intake.service_objects import ConfirmationNotification
-from intake.models.form_submission import FORMSUBMISSION_TEXT_SEARCH_FIELDS
+from intake.models.form_submission import (
+    FORMSUBMISSION_TEXT_SEARCH_FIELDS, QUERYABLE_ANSWER_FIELDS, DOLLAR_FIELDS)
 
 
 class MissingAnswersError(Exception):
     pass
-
-
-def check_for_existing_duplicates(submission, applicant_id):
-    dups = []
-    other_subs = models.FormSubmission.objects.filter(
-        applicant_id=applicant_id).exclude(id=submission.id)
-    for other in other_subs:
-        if are_duplicates(submission, other):
-            dups.append(other)
-    return dups
-
-
-def link_with_any_duplicates(submission, applicant_id):
-    """Links submission with any duplicates from the same applicant
-
-    If duplicates are found, returns the DuplicateSubmissionSet id
-    If no duplicates are found, returns False
-    """
-    duplicates = check_for_existing_duplicates(submission, applicant_id)
-    if duplicates:
-        dup_set_id = None
-        unadded_duplicates = []
-        for dup in duplicates:
-            if dup.duplicate_set_id:
-                dup_set_id = dup.duplicate_set_id
-            else:
-                unadded_duplicates.append(dup)
-        if not dup_set_id:
-            new_dup_set = models.DuplicateSubmissionSet()
-            new_dup_set.save()
-            new_dup_set.submissions.add(*unadded_duplicates)
-            dup_set_id = new_dup_set.id
-        submission.duplicate_set_id = dup_set_id
-        submission.save()
-        return dup_set_id
-    return False
 
 
 def create_submission(form, organizations, applicant_id):
@@ -56,11 +21,19 @@ def create_submission(form, organizations, applicant_id):
         answers=form.cleaned_data,
         applicant_id=applicant_id)
 
-    # extract out searchable fields from answers
-    keys = FORMSUBMISSION_TEXT_SEARCH_FIELDS
+    # extract out fields from answers (searchable and other)
+    keys = (
+        FORMSUBMISSION_TEXT_SEARCH_FIELDS + QUERYABLE_ANSWER_FIELDS +
+        DOLLAR_FIELDS)
     for key in keys:
-        existing = submission.answers.get(key, "")
-        setattr(submission, key, existing)
+        existing = submission.answers.get(key, None)
+        if existing:
+            setattr(submission, key, existing)
+    address = submission.answers['address']
+    for component in address:
+        existing = address.get(component, None)
+        if existing:
+            setattr(submission, component, existing)
     submission.save()
 
     submission.organizations.add_orgs_to_sub(*organizations)
@@ -69,13 +42,22 @@ def create_submission(form, organizations, applicant_id):
     return submission
 
 
-def fill_pdfs_for_submission(submission):
+def fill_pdfs_for_submission(submission, organizations=None):
     """Checks for and creates any needed `FilledPDF` objects
     """
-    fillables = models.FillablePDF.objects.filter(
-        organization__submissions=submission)
+    if organizations:
+        fillables = models.FillablePDF.objects.filter(
+            organization_id__in=[org.id for org in organizations])
+    else:
+        fillables = models.FillablePDF.objects.filter(
+            organization__submissions=submission)
     for fillable in fillables:
         fillable.fill_for_submission(submission)
+
+
+def get_latest_submission_from_applicant(applicant_id):
+    return models.FormSubmission.objects.filter(
+        applicant_id=applicant_id).order_by('-date_received').first()
 
 
 def get_paginated_submissions_for_org_user(user, page_index):
@@ -118,6 +100,42 @@ def get_submissions_for_followups():
     subs = get_submissions_for_staff_user()
     return serializers.FormSubmissionFollowupListSerializer(
         subs, many=True).data
+
+
+def check_for_existing_duplicates(submission, applicant_id):
+    dups = []
+    other_subs = models.FormSubmission.objects.filter(
+        applicant_id=applicant_id).exclude(id=submission.id)
+    for other in other_subs:
+        if are_duplicates(submission, other):
+            dups.append(other)
+    return dups
+
+
+def link_with_any_duplicates(submission, applicant_id):
+    """Links submission with any duplicates from the same applicant
+
+    If duplicates are found, returns the DuplicateSubmissionSet id
+    If no duplicates are found, returns False
+    """
+    duplicates = check_for_existing_duplicates(submission, applicant_id)
+    if duplicates:
+        dup_set_id = None
+        unadded_duplicates = []
+        for dup in duplicates:
+            if dup.duplicate_set_id:
+                dup_set_id = dup.duplicate_set_id
+            else:
+                unadded_duplicates.append(dup)
+        if not dup_set_id:
+            new_dup_set = models.DuplicateSubmissionSet()
+            new_dup_set.save()
+            new_dup_set.submissions.add(*unadded_duplicates)
+            dup_set_id = new_dup_set.id
+        submission.duplicate_set_id = dup_set_id
+        submission.save()
+        return dup_set_id
+    return False
 
 
 def find_duplicates(search_space):

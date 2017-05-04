@@ -7,11 +7,16 @@ serve:
 	./manage.py runserver
 
 
-SCOPE=user_accounts intake formation
+SCOPE=user_accounts intake formation health_check
 test:
 	./manage.py test $(SCOPE) \
 		--verbosity 2
 	pep8
+
+
+test.behave:
+	./manage.py behave \
+		--keepdb
 
 
 test.keepdb:
@@ -32,6 +37,13 @@ test.coverage:
 	coverage run \
 		./manage.py test $(SCOPE) \
 		--verbosity 2
+	coverage report -m
+
+
+test.coverage.keepdb:
+	coverage run \
+		./manage.py test $(SCOPE) \
+		--verbosity 2 --keepdb
 	coverage report -m
 
 
