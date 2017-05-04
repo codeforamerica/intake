@@ -10,6 +10,9 @@
     "DJANGO_SETTINGS_MODULE": {
       "required": true
     },
+    "TWILIO_AUTH_TOKEN": {
+      "required": true
+    },
     "FRONT_API_TOKEN": {
       "required": true
     },

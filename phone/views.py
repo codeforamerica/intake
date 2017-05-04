@@ -28,7 +28,7 @@ class TwilioBaseView(View):
             raise Http404
 
     def post_valid(self, request):
-        raise NotImplementedError("Should be overriden in subclasses")
+        raise NotImplementedError("Should be overwritten in subclasses")
 
 
 class HandleIncomingCallView(TwilioBaseView):
@@ -66,7 +66,7 @@ class HandleVoicemailRecordingView(TwilioBaseView):
             "Listen to the recording at\n    {}").format(
                 from_number, time_received, recording_url)
         send_mail(
-            subject="New voicemail {}".format(time_received, from_number),
+            subject="New voicemail {}".format(time_received),
             message=body,
             from_email=settings.MAIL_DEFAULT_SENDER,
             recipient_list=[settings.VOICEMAIL_NOTIFICATION_EMAIL])
