@@ -41,16 +41,5 @@
     display: inline-block;
     color: #000;
     padding-left: 1.8em;
-    &:before {
-      @include retina-bg(gcf_logomark_color, 100% auto);
-      background-repeat: no-repeat;
-      content: '';
-      display: inline-block;
-      position: absolute;
-      top: -.1em;
-      left: 0;
-      width: 24px;
-      height: 24px;
-    }
   }
 }

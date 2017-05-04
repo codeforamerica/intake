@@ -135,26 +135,6 @@ ol, ul {
   }
 }
 
-.list--checkmark {
-  li {
-    position: relative;
-    padding-left: 4em;
-    margin-bottom: 4em;
-    &:before {
-      content: '';
-      display: block;
-      position: absolute;
-      left: 0;
-      top: .25em;
-      width: 2em;
-      height: 2em;
-      background-repeat: no-repeat;
-      @include retina-bg(illustration_success, 2em auto);
-      background-size: 2em auto;
-    }
-  }
-}
-
 table {
   margin-bottom: 1em;
 }
