@@ -15,6 +15,8 @@ DATABASES = {
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
 DEFAULT_HOST = os.environ.get('DEFAULT_HOST', 'http://localhost:8000')
 
+# settings for twilio
+
 # settings for file uploads
 AWS_ACCESS_KEY_ID = os.environ.get('BUCKETEER_AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('BUCKETEER_AWS_SECRET_ACCESS_KEY')
