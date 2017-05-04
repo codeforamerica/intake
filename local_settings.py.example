@@ -39,7 +39,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 MAIL_DEFAULT_SENDER = "admin@localhost"
 DEFAULT_NOTIFICATION_EMAIL = "user@localhost"
-
+VOICEMAIL_NOTIFICATION_EMAIL = 'user@localhost'
 
 DIVERT_REMOTE_CONNECTIONS = True
 

@@ -5,27 +5,30 @@ from django.core import mail
 
 
 class TestHandleIncomingCallView(TestCase):
-    expected_twiml_response = str(
-        '<?xml version="1.0" encoding="UTF-8"?>'
-        '<Response>'
-        '<Play>/static/voicemail/CMR_voicemail_greeting.mp3</Play>'
-        '<Record '
-        'action="https://testserver/phone/handle-new-message" '
-        'method="POST" />'
-        '</Response>'
-    )
+    expected_twiml_fragments = [
+        str(
+            '<?xml version="1.0" encoding="UTF-8"?>'
+            '<Response>'
+            '<Play>/static/voicemail/CMR_voicemail_greeting.mp3</Play>'
+            '<Record '
+            'action="https://'), str('phone/handle-new-message" '
+                                     'method="POST" />'
+                                     '</Response>')]
 
     def test_get(self):
         response = self.client.get(reverse('phone-handle_incoming_call'))
         # should return 405 NOT ALLOWED
         self.assertEqual(response.status_code, 405)
 
+    @patch('phone.views.static')
     @patch('phone.views.is_valid_twilio_request')
-    def test_successful_post(self, is_valid):
+    def test_successful_post(self, is_valid, static):
+        static.return_value = '/static/voicemail/CMR_voicemail_greeting.mp3'
         is_valid.return_value = True
         response = self.client.post(reverse('phone-handle_incoming_call'), {})
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, self.expected_twiml_response)
+        for fragment in self.expected_twiml_fragments:
+            self.assertContains(response, fragment)
         is_valid.assert_called_once_with(response.wsgi_request)
 
     @patch('phone.views.is_valid_twilio_request')
@@ -71,3 +74,8 @@ Listen to the recording at
             reverse('phone-handle_new_message'), self.post_data)
         self.assertEqual(response.status_code, 404)
         is_valid.assert_called_once_with(response.wsgi_request)
+
+    def test_get(self):
+        response = self.client.get(reverse('phone-handle_new_message'))
+        # should return 405 NOT ALLOWED
+        self.assertEqual(response.status_code, 405)
