@@ -11,6 +11,7 @@ urlpatterns += [
     url(r'^', include('intake.urls')),
     # user account overrides
     url(r'^', include('user_accounts.urls')),
+    url(r'^phone/', include('phone.urls')),
     # user accounts
     url(r'^health/', include('health_check.urls')),
     url(r'^accounts/', include('allauth.urls')),
