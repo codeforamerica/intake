@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'intake',
     'url_robots',
     'user_accounts',
+    'phone',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
