@@ -1,19 +1,10 @@
 {
   "name": "intake",
   "env": {
-    "ADMIN_PHONE_NUMBER": {
-      "required": true
-    },
-    "DEFAULT_AGENCY_USER_EMAIL": {
-      "required": true
-    },
     "DEFAULT_FILE_STORAGE": {
       "required": true
     },
     "DEFAULT_HOST": {
-      "required": true
-    },
-    "DEFAULT_NOTIFICATION_EMAIL": {
       "required": true
     },
     "DJANGO_SETTINGS_MODULE": {
@@ -32,6 +23,9 @@
       "required": true
     },
     "MAIL_DEFAULT_SENDER": {
+      "required": true
+    },
+    "VOICEMAIL_NOTIFICATION_EMAIL": {
       "required": true
     },
     "MIXPANEL_KEY": {

@@ -38,8 +38,7 @@ STATIC_ROOT = os.path.join(REPO_DIR, 'project', 'static')
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 MAIL_DEFAULT_SENDER = "admin@localhost"
-DEFAULT_NOTIFICATION_EMAIL = "user@localhost"
-VOICEMAIL_NOTIFICATION_EMAIL = 'user@localhost'
+VOICEMAIL_NOTIFICATION_EMAIL = 'youremail@example.horse'
 
 DIVERT_REMOTE_CONNECTIONS = True
 
