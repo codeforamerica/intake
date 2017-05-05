@@ -1,20 +1,20 @@
 from django.contrib.auth.decorators import login_required
 from url_robots.utils import url
 from intake.views import (
-                             public_views,
-                             stats_views,
-                             legacy_redirect_views,
-                             select_county_view,
-                             county_application_view,
-                             declaration_letter_view,
-                             application_done_view,
-                             application_transfer_view,
-                             admin_views,
-                             app_detail_views,
-                             application_note_views,
-                             tag_views,
-                             status_update_views,
-                         )
+    public_views,
+    stats_views,
+    legacy_redirect_views,
+    select_county_view,
+    county_application_view,
+    declaration_letter_view,
+    application_done_view,
+    application_transfer_view,
+    admin_views,
+    app_detail_views,
+    application_note_views,
+    tag_views,
+    status_update_views,
+)
 
 
 urlpatterns = [
@@ -28,7 +28,7 @@ urlpatterns = [
         public_views.partner_detail,
         name='intake-partner_detail', robots_allow=True),
     url(r'^recommendation-letters/$', public_views.recommendation_letters,
-        name='intake-recommendation_letters' ,robots_allow=True),
+        name='intake-recommendation_letters', robots_allow=True),
     url(r'^personal-statement/$', public_views.personal_statement,
         name='intake-personal_statement', robots_allow=True),
 
