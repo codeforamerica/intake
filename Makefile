@@ -8,7 +8,7 @@ serve:
 
 
 
-SCOPE=user_accounts intake formation health_check phone robots_txt
+SCOPE=user_accounts intake formation health_check phone
 
 test:
 	./manage.py test $(SCOPE) \
