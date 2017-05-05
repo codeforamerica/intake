@@ -1,4 +1,4 @@
-from unittest.mock import patch
+import logging
 from django.core.urlresolvers import reverse
 from markupsafe import escape
 from intake.views.applicant_form_view_base import ApplicantFormViewBase
@@ -8,6 +8,7 @@ from formation import fields
 from intake.tests.views.test_applicant_form_view_base \
     import ApplicantFormViewBaseTestCase
 from intake.tests import factories
+from project.tests.assertions import assertInLogsCount, assertInLogs
 
 
 class TestSelectCountyView(ApplicantFormViewBaseTestCase):
@@ -52,12 +53,18 @@ class TestSelectCountyView(ApplicantFormViewBaseTestCase):
         self.assertContains(
             response, escape(fields.Counties.is_required_error_message))
 
-    @patch('intake.services.events_service.log_form_page_complete')
-    def test_logs_page_complete_event(self, event_log):
-        self.client.fill_form(
-            reverse('intake-apply'), counties=['alameda', 'contracosta'],
-            confirm_county_selection='yes')
-        self.assertEqual(event_log.call_count, 1)
+    def test_logs_page_complete_and_application_started(self):
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            self.client.fill_form(
+                reverse('intake-apply'), counties=['alameda', 'contracosta'],
+                confirm_county_selection='yes')
+        assertInLogsCount(
+            logs, {
+                'event_name=application_page_complete': 1,
+                'event_name=application_started': 1,
+                })
+        assertInLogs(logs, 'alameda', 'contracosta')
 
     def test_saves_form_data_to_session(self):
         self.client.fill_form(
@@ -69,11 +76,14 @@ class TestSelectCountyView(ApplicantFormViewBaseTestCase):
         self.assertEqual(
             form_data.get('confirm_county_selection'), ['yes'])
 
-    @patch('intake.services.events_service.log_form_validation_errors')
-    def test_logs_validation_errors_event(self, event_log):
-        self.client.fill_form(
-            reverse('intake-apply'), confirm_county_selection='yes')
-        self.assertEqual(event_log.call_count, 1)
+    def test_logs_validation_errors_event(self):
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            response = self.client.fill_form(
+                reverse('intake-apply'), confirm_county_selection='yes')
+        assertInLogs(logs, 'application_errors')
+        assertInLogs(
+            logs, 'distinct_id=' + response.wsgi_request.visitor.get_uuid())
 
     def test_shows_error_messages_in_flash(self):
         response = self.client.fill_form(
@@ -105,11 +115,13 @@ class TestSelectCountyView(ApplicantFormViewBaseTestCase):
 
     def test_anonymous_user_can_submit_county_selection(self):
         self.be_anonymous()
-        response = self.client.fill_form(
-            reverse('intake-apply'),
-            counties=['contracosta'],
-            confirm_county_selection='yes',
-            headers={'HTTP_USER_AGENT': 'tester'})
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            response = self.client.fill_form(
+                reverse('intake-apply'),
+                counties=['contracosta'],
+                confirm_county_selection='yes',
+                headers={'HTTP_USER_AGENT': 'tester'})
         self.assertRedirects(response, reverse('intake-county_application'))
         applicant_id = self.client.session.get('applicant_id')
         self.assertTrue(applicant_id)
@@ -118,15 +130,18 @@ class TestSelectCountyView(ApplicantFormViewBaseTestCase):
         self.assertTrue(applicant.visitor_id)
         visitor = models.Visitor.objects.get(id=applicant.visitor_id)
         self.assertTrue(visitor)
-        events = list(applicant.events.order_by('time'))
-        self.assertEqual(len(events), 2)
-        event = events[0]
-        self.assertEqual(event.name,
-                         models.ApplicationEvent.APPLICATION_STARTED)
-        self.assertIn('user_agent', event.data)
-        self.assertEqual(event.data['user_agent'], 'tester')
-        self.assertIn('referrer', event.data)
-        self.assertEqual(event.data['counties'], ['contracosta'])
+        self.assertEqual(len(logs.output), 4)
+        assertInLogsCount(logs, {
+            'event_name=site_entered': 1,
+            'event_name=page_viewed': 1,
+            'event_name=application_started': 1,
+            'event_name=application_page_complete': 1,
+            'call_to_mixpanel': 4,
+            'distinct_id=' + visitor.get_uuid(): 4,
+        })
+        assertInLogs(
+            logs, 'user_agent', 'referrer', 'source', 'counties', 'contracosta'
+        )
 
     def test_creates_applicant(self):
         response = self.client.fill_form(
