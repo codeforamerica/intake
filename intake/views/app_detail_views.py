@@ -2,11 +2,9 @@ from django.shortcuts import redirect
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.contrib import messages
-
 import intake.services.submissions as SubmissionsService
 import intake.services.applications_service as AppsService
-import intake.services.events_service as EventsService
-from intake import models, notifications
+from intake import models
 from intake.views.base_views import ViewAppDetailsMixin
 
 
@@ -25,10 +23,6 @@ class ApplicationDetail(ViewAppDetailsMixin, TemplateView):
     """Displays detailed information for an org user.
     """
     template_name = "app_detail.jinja"
-
-    def mark_viewed(self, submission, applications):
-        Submis
-
 
     def get(self, request, submission_id):
         if request.user.profile.should_see_pdf() and not request.user.is_staff:

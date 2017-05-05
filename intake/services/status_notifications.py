@@ -85,7 +85,7 @@ def save_and_send_status_notification(
     status_notification.save()
     notifications.send_simple_front_notification(
         contact_info, edited_message,
-        subject="Update from Clear My Reord")
+        subject="Update from Clear My Record")
 
 
 def send_and_save_new_status(request, notification_data, status_update_data):

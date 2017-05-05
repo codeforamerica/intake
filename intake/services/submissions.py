@@ -212,7 +212,7 @@ def get_confirmation_flash_messages(confirmation_notification):
 def send_confirmation_notifications(sub):
     confirmation_notification = ConfirmationNotification(sub)
     confirmation_notification.send()
-    if confirmation_notification.messages:
+    if confirmation_notification.successes:
         EventsService.confirmation_sent(
             sub, confirmation_notification.contact_methods)
     return get_confirmation_flash_messages(confirmation_notification)

@@ -5,13 +5,14 @@ from random import randint
 from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
 from django.core.files.uploadedfile import SimpleUploadedFile
-
+import logging
 from intake import models
 from intake.tests.base_testcases import IntakeDataTestCase, DELUXE_TEST
 from intake.tests.factories import FormSubmissionFactory
 from project.jinja2 import url_with_ids
 
 import intake.services.bundles as BundlesService
+from project.tests.assertions import assertInLogsCount
 from bs4 import BeautifulSoup
 
 
@@ -41,9 +42,12 @@ class TestApplicationDetail(IntakeDataTestCase):
     def test_logged_in_user_can_get_submission_display(self, slack):
         self.be_apubdef_user()
         submission = self.a_pubdef_submissions[0]
-        response = self.get_detail(submission)
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            response = self.get_detail(submission)
         self.assertEqual(response.context_data['form'].submission, submission)
         self.assertHasDisplayData(response, submission)
+        assertInLogsCount(logs, {'event_name=app_opened': 1})
 
     @patch('intake.notifications.slack_submissions_viewed.send')
     def test_staff_user_can_get_submission_display(self, slack):
@@ -312,10 +316,14 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
         assert that 200 OK is returned
         """
         self.be_apubdef_user()
-        result = self.client.get(reverse(
-            'intake-app_bundle_detail',
-            kwargs=dict(bundle_id=self.a_pubdef_bundle.id)))
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            result = self.client.get(reverse(
+                'intake-app_bundle_detail',
+                kwargs=dict(bundle_id=self.a_pubdef_bundle.id)))
         self.assertEqual(result.status_code, 200)
+        assertInLogsCount(logs, {
+            'app_bundle_opened': self.a_pubdef_bundle.submissions.count()})
 
     @patch(
         'intake.views.admin_views.notifications.slack_submissions_viewed.send')

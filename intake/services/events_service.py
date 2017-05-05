@@ -2,23 +2,6 @@ import intake.services.applicants as ApplicantsService
 import project.services.logging_service as LoggingService
 from project.services.mixpanel_service import log_to_mixpanel
 
-"""
-Tab separated? Space separated?
-key=valuekey2="value2"
-page_name="/url/"
-https://docs.djangoproject.com/en/1.11/topics/logging/#making-logging-calls
-
-Goals:
-- everything that goes to mixpanel is logged to stdout
-- we can add lots of properties on the fly easily to both mixpanel & std out
-- easy to add new calls in the codebase
-
-"""
-
-
-def get_app_id(request):
-    return ApplicantsService.get_applicant_from_request_or_session(request).id
-
 
 def form_started(request, counties):
     event_name = 'application_started'
@@ -158,12 +141,9 @@ def apps_opened(applications, user):
 def bundle_opened(bundle, user):
     event_name = 'app_bundle_opened'
     for submission in bundle.submissions.all():
-        application = submission.applications.filter(
-                organization_id=bundle.organization_id).first()
         log_to_mixpanel(
             distinct_id=submission.get_uuid(),
             event_name=event_name,
-            application_id=application.id,
             bundle_id=bundle.id,
             bundle_organization_name=bundle.organization.name,
             user_email=user.email,

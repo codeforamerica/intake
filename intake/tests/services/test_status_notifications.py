@@ -1,8 +1,10 @@
+import logging
 from unittest.mock import Mock, patch
 from intake.tests.factories import FormSubmissionWithOrgsFactory
 from django.test import TestCase
 from intake import services, models
 from user_accounts.models import Organization
+from project.tests.assertions import assertInLogsCount
 
 
 class TestSendAndSaveNewStatus(TestCase):
@@ -35,9 +37,10 @@ class TestSendAndSaveNewStatus(TestCase):
             additional_information="")
         notification_data = dict(
             sent_message="hey there")
-        services.status_notifications.send_and_save_new_status(
-            mock_request, notification_data, status_update_data)
-
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            services.status_notifications.send_and_save_new_status(
+                mock_request, notification_data, status_update_data)
         expected_intro_message = \
             services.status_notifications.get_notification_intro(profile)
         latest_update = models.StatusUpdate.objects.filter(
@@ -47,6 +50,7 @@ class TestSendAndSaveNewStatus(TestCase):
         self.assertIn(expected_intro_message, notification.sent_message)
         args = notifications.send_simple_front_notification.call_args[0]
         self.assertIn(expected_intro_message, args[1])
+        assertInLogsCount(logs, {'event_name=app_status_updated': 1})
 
 
 class TestGetBaseMessageFromStatusUpdateData(TestCase):

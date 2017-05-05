@@ -40,9 +40,11 @@ def send_followup_notifications(submissions):
     for submission in submissions:
         followup_notification = FollowupNotification(submission)
         followup_notification.send()
-        if followup_notification.messages:
+        if followup_notification.successes:
             EventsService.followup_sent(
                 submission, followup_notification.contact_methods)
+            submission.has_been_sent_followup = True
+            submission.save()
         notifications.append(followup_notification)
     return notifications
 
