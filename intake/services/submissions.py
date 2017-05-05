@@ -38,7 +38,6 @@ def create_submission(form, organizations, applicant_id):
 
     submission.organizations.add_orgs_to_sub(*organizations)
     link_with_any_duplicates(submission, applicant_id)
-    EventsService.form_submitted(submission)
     return submission
 
 

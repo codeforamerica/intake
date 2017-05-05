@@ -98,6 +98,7 @@ class ApplicantFormViewBase(FormView):
         organizations = self.get_receiving_organizations(form)
         submission = SubmissionsService.create_submission(
             form, organizations, self.applicant.id)
+        EventsService.form_submitted(submission)
         SubmissionsService.fill_pdfs_for_submission(
             submission, organizations=organizations)
         number = models.FormSubmission.objects.count()
