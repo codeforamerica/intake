@@ -1,4 +1,3 @@
-from intake import models
 import intake.services.applicants as ApplicantsService
 import project.services.logging_service as LoggingService
 from project.services.mixpanel_service import log_to_mixpanel
@@ -130,6 +129,14 @@ def note_added(submission, user):
 
 def followup_sent(submission, contact_methods):
     event_name = 'app_followup_sent'
+    log_to_mixpanel(
+        distinct_id=submission.get_uuid(),
+        event_name=event_name,
+        contact_info_types=contact_methods)
+
+
+def confirmation_sent(submission, contact_methods):
+    event_name = 'app_confirmation_sent'
     log_to_mixpanel(
         distinct_id=submission.get_uuid(),
         event_name=event_name,
