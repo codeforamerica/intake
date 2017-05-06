@@ -235,7 +235,7 @@ LOGGING = {
         },
     },
     'loggers': {
-        'project.services.logging_service': {
+        'project': {
             'handlers': ['console'],
             'level': 'INFO',
         },
