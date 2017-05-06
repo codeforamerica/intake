@@ -39,6 +39,7 @@ class CountyApplicationNoWarningsView(ApplicantFormViewBase):
 class CountyApplicationView(CountyApplicationNoWarningsView):
     """County application page that checks for validation warnings.
     """
+
     def form_valid(self, form):
         """If no errors, check for warnings, redirect to confirmation if needed
         """
