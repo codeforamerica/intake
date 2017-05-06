@@ -50,7 +50,7 @@ class FilledPDF(ApplicationDetail):
                     organization=org)
             fillable_pdf = fillables.first()
             pdf = fillable_pdf.fill_for_submission(submission)
-        self.mark_viewed(request, submission)
+        SubmissionsService.mark_opened(submission, request.user)
         response = HttpResponse(pdf.pdf,
                                 content_type='application/pdf')
         return response
