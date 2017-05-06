@@ -1,4 +1,5 @@
 import os
+import sys
 from django_jinja.builtins import DEFAULT_EXTENSIONS
 
 REPO_DIR = os.path.dirname(
@@ -221,3 +222,22 @@ def COMPRESS_JINJA2_GET_ENVIRONMENT():
 
 # static files location
 STATIC_ROOT = os.path.join(REPO_DIR, 'staticfiles')
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+        },
+    },
+    'loggers': {
+        'project.services.logging_service': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+    },
+}
