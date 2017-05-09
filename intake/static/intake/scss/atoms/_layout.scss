@@ -1,0 +1,62 @@
+.slab {
+  @include full-bleed();
+  position: relative;
+  padding: {
+    top: 2em;
+    bottom: 2em;
+  }
+	border-bottom: 1px solid $color-tan;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.slab--white {
+  background-color: #FFFFFF;
+}
+
+.slab--teal {
+  background-color: rgba($color-teal, .05);
+}
+
+.slab--padded {
+    padding: {
+        top: 3em;
+        bottom: 3em;
+    }
+}
+
+.slab--not-padded {
+  padding: {
+    top: 0;
+    bottom: 0;
+  }
+}
+
+.slab--bleed {
+  overflow: hidden;
+}
+
+.card {
+    border: 2px solid $color-tan;
+    padding: 1.5em $site-margins/2;
+    background-color: #FFFFFF;
+    margin-bottom: 2em;
+    > *:last-child {
+        margin-bottom: 0;
+    }
+
+    @include media($tablet-up) {
+      padding: 1.5em 2em;
+    }
+}
+
+.textwell {
+  padding: 2em;
+  max-height: 30rem;
+  border: 2px solid $color-tan;
+  overflow: auto;
+  text-align: left;
+  margin-bottom: 1em;
+}

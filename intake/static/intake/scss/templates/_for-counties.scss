@@ -1,0 +1,119 @@
+.template--for-counties {
+  .slab--header {
+    .media-box__content {
+      max-width: 18em;
+    }
+
+    .media-box__media {
+      display: none;
+      @include media($tablet-up) {
+        display: block;
+      }
+    }
+    h1 {
+      @include media($tablet-up) {
+        margin-top: 1em;
+      }
+    }
+  }
+
+  .slab--faq {
+    padding: {
+      top: 0;
+      bottom: 0;
+    }
+    position: relative;
+    &:before {
+      display: none;
+      position: absolute;
+      content: '';
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 1px;
+      border-left: 1px solid $color-tan;
+      @include media($tablet-up) {
+        display: block;
+      }
+    }
+  }
+
+  .county-seal-list {
+    text-align: center;
+    max-width: 35em;
+    margin: 0 auto;
+  }
+
+  .county-seal {
+    margin: 0 1em 1em 1em;
+    display: inline-block;
+    text-align: center;
+  }
+
+
+  .faq {
+    
+    padding: {
+      top: 3em;
+      bottom: 3em;
+    }
+
+
+
+    border-bottom: 1px solid $color-tan;
+    @include media($tablet-up) {
+      border-bottom: 0;
+    }
+
+    &:last-child {
+      border-bottom: 0;
+    }
+
+    &:nth-child(2n) {
+      @include media($tablet-up) {
+        padding-left: $site-margins;
+      }
+    }
+    &:nth-child(2n-1) {
+      
+      @include media($tablet-up) {
+        padding-right: $site-margins;
+      }
+      
+    }
+  }
+
+  .faq__question {
+    color: $color-magenta;
+    font-weight: 500;
+  }
+}
+
+.slab--features {
+  h3 {
+    color: $color-magenta;
+  }
+}
+
+.slab--demo {
+
+  .media-box__media {
+    display: none;
+    @include media($tablet-up) {
+      display: block;
+    }
+  }
+
+  @include media($tablet-up) {
+    h3 {
+      margin-top: 2.5em;
+    }
+  }
+
+}
+
+.slab--testimony {
+  .text--pullquote {
+    margin-top: 1.5em;
+  }
+}

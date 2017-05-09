@@ -1,0 +1,44 @@
+.tab-bar {
+  @include clearfix();
+  @include full-bleed();
+  border-bottom: 2px solid $color-tan;
+  margin-top: 1em;
+  font-size: $font-size-small;
+}
+
+.tab-bar__tab {
+  position: relative;
+  display: block;
+  float: left;
+  margin-right: .5em;
+  margin-bottom: -2px;
+  border: 2px solid $color-tan;
+  background-color: rgba($color-tan, .25);
+  padding: .5em 1.5em;
+  color: $color-dark-grey;
+  text-decoration: none;
+  min-width: 8em;
+  text-align: center;
+
+  &:hover {
+    background-color: rgba($color-teal, .1);
+    color: $color-dark-grey;
+  }
+
+  &.is-selected {
+    z-index: 2;
+    color: #000;
+    font-weight: 600;
+    background-color: $color-background;
+    &:before {
+      content: '';
+      position: absolute;
+      display: block;
+      left: 0;
+      right: 0;
+      bottom: -2px;
+      height: 2px;
+      background-color: $color-background;
+    }
+  }
+}

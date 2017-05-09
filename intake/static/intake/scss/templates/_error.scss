@@ -1,0 +1,9 @@
+.template--error {
+  margin-top: 2em;
+  margin-bottom: 2em;
+  @include media($tablet-up) {
+    margin-top: 4em;
+    margin-bottom: 4em;
+  }
+
+}

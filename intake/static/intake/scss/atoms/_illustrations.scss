@@ -1,0 +1,290 @@
+.illustration {
+  text-indent: -9999px;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  background-position: center center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1em;
+}
+
+.illustration--cfa-logo {
+  @include retina-bg(cfa_logo, 100px 41px); 
+  margin-left: 0;
+  width: 100px;
+  height: 41px;
+}
+
+.illustration--cfa-logo-color {
+  @include retina-bg(cfa_logo_color, 100% auto);
+  width: 100%;
+  height: 200px;
+  opacity: .5;
+}
+
+
+.illustration--success {
+  width: 45px;
+  height: 55px;
+  @include retina-bg(illustration_success, 100% auto);
+}
+
+.illustration--partners {
+  @include retina-bg(partners, 400px 155px);
+  width: 400px;
+  height: 155px; 
+  @include media($tablet-up) {
+    @include retina-bg(partners, 531px 204px);
+    width: 531px;
+    height: 204px; 
+    margin-top: 1em;
+  }
+}
+
+.illustration--cbos_mockup {
+  @include retina-bg(cbos_mockup, 100% auto);
+  background-position: top left;
+  width: 100%;
+  min-height: 426px;
+  max-width: 567px;
+  max-height: 426px;
+}
+
+.illustration--cbo_partners {
+  margin-left: 0;
+  @include retina-bg(cbo_partners, 100% auto);
+  width: 100%;
+  max-width: 461px;
+  height: 53px;
+}
+
+.illustration--mobile_app_preview {
+  @include retina-bg(mobile_app_preview, 300px 278px);
+  width: 300px;
+  height: 278px;
+}
+
+.illustration--analytics_preview {
+  @include retina-bg(analytics_preview, 460px 292px);
+  width: 460px;
+  height: 292px;
+}
+
+.illustration--icon_lock {
+  @include retina-bg(icon_lock, 70px 75px);
+  width: 70px;
+  height: 75px;
+}
+
+.illustration--eligibility_preview {
+  @include retina-bg(eligibility_preview, 100% auto);
+
+  width: 100%;
+  height: 383px;
+
+  @include media($tablet-up) {
+    @include retina-bg(eligibility_preview, 605px 383px);
+    width: 605px;
+    height: 383px;
+  }
+}
+
+.illustration--counties_mockup {
+  @include retina-bg(counties_mockup, 100% auto);
+  background-position: center left;
+  width: 100%;
+  min-height: 426px;
+  max-width: 553px;
+  max-height: 426px;
+}
+
+
+.illustration--participation_gap {
+  @include retina-bg(participation_gap, 239px 158px);
+  width: 239px;
+  height: 158px;
+  margin: 2em auto 0 0;
+  @include media($tablet-up) {
+    margin: 0em 0 0em auto;
+  }
+}
+
+.illustration--gcf_features {
+
+  @include retina-bg(gcf_features_mobile, 100% auto);
+  max-width: 300px;
+  min-height: 481px;
+  margin-top: 4em;
+
+  @include media($tablet-up) {
+    @include retina-bg(gcf_features, 100% auto);
+    width: 100%;
+    min-height: 278px;
+    max-width: 725px;
+    max-height: 278px;
+    margin-top: 4em;
+  }
+
+}
+
+.illustration--live_chat {
+  @include retina-bg(live_chat, 100% auto);
+  max-width: 462px;
+  min-height: 241px;
+}
+
+.illustration--alameda {
+  @include retina-bg(alameda_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+.illustration--contra-costa {
+  @include retina-bg(contra_costa_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+.illustration--marin {
+  @include retina-bg(marin_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+.illustration--placer {
+  @include retina-bg(placer_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+.illustration--san-diego {
+  @include retina-bg(san_diego_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+
+.illustration--san-francisco {
+  @include retina-bg(san_francisco_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+.illustration--santa-cruz {
+  @include retina-bg(santa_cruz_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+.illustration--solano {
+  @include retina-bg(solano_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+.illustration--yolo {
+  @include retina-bg(yolo_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+.illustration--docs {
+  @include retina-bg(illustration_docs, 100% auto);
+  display: inline-block;
+  margin-bottom: 0;
+  width: 30px;
+  height: 36px;
+  margin-bottom: -.6em;
+  margin-right: 1em;
+}
+
+.illustration--call {
+  @include retina-bg(illustration_call, 100% auto);
+  display: inline-block;
+  margin-bottom: 0;
+  width: 30px;
+  height: 36px;
+  margin-bottom: -.6em;
+  margin-right: 1em;
+}
+
+.illustration--app {
+  @include retina-bg(illustration_app, 100% auto);
+  width: 45px;
+  height: 55px;
+}
+
+.illustration--interview {
+  @include retina-bg(illustration_interview, 100% auto);
+  width: 45px;
+  height: 55px;
+}
+
+.illustration--send_docs {
+  @include retina-bg(illustration_send_docs, 100% auto);
+  width: 50px;
+  height: 55px;
+}
+
+.illustration--ca_cdss {
+  @include retina-bg(ca_cdss, 100% auto);
+  width: 214px;
+  height: 110px;
+  margin-left: 0;
+  margin-top: 1em;
+  @include media($tablet-up) {
+    margin-left: auto;
+    margin-right: 0;
+    margin-top: -1.5em;
+    margin-bottom: -1.5em;
+  }
+}
+
+.illustration--pencil {
+  @include retina-bg(emoji_pencil, 100% auto);
+  width: 50px;
+  height: 55px;
+}
+
+.illustration--credit_card {
+  @include retina-bg(emoji_credit_card, 100% auto);
+  width: 50px;
+  height: 55px;
+}
+
+
+.illustration--avocado {
+  @include retina-bg(emoji_avocado, 100% auto);
+  width: 50px;
+  height: 55px;
+}
+
+.illustration--ok {
+  @include retina-bg(emoji_ok, 100% auto);
+  width: 40px;
+  height: 55px;
+}
+
+.illustration--egg {
+  @include retina-bg(emoji_egg, 100% auto);
+  width: 50px;
+  height: 55px;
+}
+
+.illustration--blush {
+  @include retina-bg(emoji_blush, 100% auto);
+  width: 60px;
+  height: 60px;
+}
+
+.illustration--tools {
+  @include retina-bg(emoji_tools, 100% auto);
+  width: 52px;
+  height: 52px;
+}
+
+.illustration--confused_face {
+  @include retina-bg(emoji_confused_face, 100% auto);
+  width: 52px;
+  height: 52px;
+}

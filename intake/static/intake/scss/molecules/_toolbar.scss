@@ -1,0 +1,29 @@
+.toolbar {
+  @include clearfix();
+  max-width: $site-max-width;
+  margin: {
+    left: auto;
+    right: auto;
+  }
+}
+
+.toolbar__item {
+  float: left;
+  margin-right: 1em;
+}
+
+.toolbar__left {
+  float: left;
+  margin-right: .5em;
+}
+
+.toolbar__right {
+  float: right;
+  margin-left: .5em;
+  .toolbar__item {
+    margin-right: 0;
+    margin-left: 1em;
+    display: inline-block;
+    float: left;
+  }
+}

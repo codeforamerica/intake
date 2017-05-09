@@ -1,0 +1,45 @@
+.template--about {
+  .main-header {
+    background-color: #FFFFFF;
+    border-bottom: 0;
+  }
+
+  .slab--header {
+    background-color: #FFFFFF;
+    padding: {
+      top: 3em;
+      bottom: 3em;
+    }
+
+    @include media($tablet-up) {
+      padding: {
+        top: 4em;
+        bottom: 4em;
+      }
+    }
+
+    .button--primary {
+      margin: {
+        left: auto;
+        right: auto;
+      }
+    }
+  }
+
+  h2 {
+    text-align: center;
+    font-size: $font-size-h1;
+  }
+
+  .partner-logo {
+    display: block;
+    float: left;
+    width: 30%;
+    margin: 5% 10%;
+
+    @include media($tablet-up) {
+      width: 15%;
+      margin: 5%;
+    }
+  }
+}

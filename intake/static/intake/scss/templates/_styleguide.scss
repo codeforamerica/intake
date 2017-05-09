@@ -1,0 +1,97 @@
+.template--styleguide {
+
+    .slab--styleguide {
+        background-color: #FFFFFF;
+        padding-top: 6em;
+        padding-bottom: 6em;
+    }
+
+    .example-icon {
+      display: inline-block;
+      font-size: $font-size-h3;
+      margin-right: .5em;
+      margin-bottom: .5em;
+    }
+
+    .example-container {
+      position: relative;
+    }
+
+    .color {
+      display: inline-block;
+      margin-right: 1em;
+      margin-bottom: 1em;
+      font-size: $font-size-small;
+      color: $color-dark-grey;
+      text-align: center;
+      &:before {
+        display: block;
+        content: '';
+        width: 4.5em;
+        height: 4.5em;
+        border: 1px solid $color-tan;
+        background-color: $color-tan;
+      }
+
+      &--background {
+        &:before {
+          background-color: $color-background;
+        }
+      }
+
+      &--tan {
+        &:before {
+          background-color: $color-tan;
+        }
+      }
+
+      &--teal {
+        &:before {
+          background-color: $color-teal;
+        }
+      }
+
+      &--magenta {
+        &:before {
+          background-color: $color-magenta;
+        }
+      }
+
+      &--darkest-grey {
+        &:before {
+          background-color: $color-darkest-grey;
+        }
+      }
+
+      &--dark-grey {
+        &:before {
+          background-color: $color-dark-grey;
+        }
+      }
+
+      &--grey {
+        &:before {
+          background-color: $color-grey;
+        }
+      }
+
+      &--light-grey {
+        &:before {
+          background-color: $color-light-grey;
+        }
+      }
+
+      &--red {
+        &:before {
+          background-color: $color-red;
+        }
+      }
+
+      &--green {
+        &:before {
+          background-color: $color-green;
+        }
+      }
+    }
+
+}
