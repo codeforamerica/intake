@@ -1,15 +1,15 @@
 [
 {
   "model": "intake.applicationbundle",
-  "pk": 49,
+  "pk": 4,
   "fields": {
     "organization": [
       "Fresno County Public Defender"
     ],
     "bundled_pdf": "",
     "submissions": [
-      107,
-      106
+      7,
+      8
     ]
   }
 }
