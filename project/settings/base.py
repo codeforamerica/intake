@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'compressor',
     'behave_django',
+    'favicons',
 ]
 
 MIDDLEWARE_CLASSES = [
