@@ -1,4 +1,5 @@
 import os
+from django_jinja.builtins import DEFAULT_EXTENSIONS
 
 REPO_DIR = os.path.dirname(
     os.path.dirname(
@@ -13,6 +14,7 @@ ALLOWED_HOSTS = []
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 INSTALLED_APPS = [
+    'heroku_hijack_collectstatic',
     'django.contrib.sites',
     'dal',
     'dal_select2',
@@ -22,9 +24,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'health_check',
     'intake',
+    'url_robots',
     'user_accounts',
+    'phone',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -35,6 +40,7 @@ INSTALLED_APPS = [
     'taggit',
     'debug_toolbar',
     'django_extensions',
+    'compressor',
     'behave_django',
 ]
 
@@ -65,6 +71,8 @@ TEMPLATES = [
         'APP_DIRS': True,
         "OPTIONS": {
             "match_extension": ".jinja",
+            "extensions": DEFAULT_EXTENSIONS + [
+                "compressor.contrib.jinja2ext.CompressorExtension"],
             "context_processors": [
                 "django.contrib.auth.context_processors.auth",
                 "django.template.context_processors.debug",
@@ -94,7 +102,9 @@ TEMPLATES = [
     },
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(REPO_DIR, 'project', 'templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -169,12 +179,45 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(REPO_DIR, 'frontend', 'build'),
-]
 PDFPARSER_PATH = os.path.join(REPO_DIR, 'intake', 'pdfparser.jar')
 
 # AWS uploads
 AWS_S3_FILE_OVERWRITE = False
+
+# Static files & django-compressor settings (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+STATICFILES_FINDERS = [
+    'compressor.finders.CompressorFinder',
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
+
+
+def build_precompilers(path):
+    less_command = os.path.join(path, '.bin/lessc')
+    exec_less = '%s --include-path=%s {infile} {outfile}' % (
+        less_command,
+        path,
+    )
+    browserify_command = os.path.join(path, '.bin/browserify')
+    exec_browserify = '%s {infile} -d --outfile {outfile}' % browserify_command
+    return (
+        ('text/less', exec_less),
+        ('text/browserify', exec_browserify)
+    )
+
+
+# Build Compress with Node Modules
+NODE_MODULES_PATH = os.path.join(REPO_DIR, 'node_modules')
+COMPRESS_PRECOMPILERS = build_precompilers(NODE_MODULES_PATH)
+
+COMPRESS_ENABLED = True
+COMPRESS_OFFLINE = True
+
+
+def COMPRESS_JINJA2_GET_ENVIRONMENT():
+    from django.template import engines
+    return engines["jinja"].env
+
+# static files location
+STATIC_ROOT = os.path.join(REPO_DIR, 'staticfiles')

@@ -8,12 +8,13 @@ from intake.tests import factories
 class TestApplicationEvent(TestCase):
 
     @patch('intake.models.application_event.log_to_mixpanel')
-    def test_that_pii_and_sensitive_info_is_not_sent_to_mixpane(
+    def test_that_pii_and_sensitive_info_is_not_sent_to_mixpanel(
             self, mixpanel):
         sub = factories.FormSubmissionFactory.create()
         for log_call in ('log_followup_sent', 'log_confirmation_sent'):
             getattr(models.ApplicationEvent, log_call)(
                 sub.applicant_id,
+                sub,
                 contact_info=dict(
                     sms='5555555555',
                     email='someone@nowhere.horse'),

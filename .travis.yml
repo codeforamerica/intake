@@ -2,13 +2,17 @@
 language: python
 python:
   - "3.5"
-install: pip install -r requirements/ci.txt
+before_install:
+  - nvm install 6.5
+install:
+  - npm install
+  - pip install -r requirements/ci.txt
 env:
-  - DJANGO_SETTINGS_MODULE='project.settings.ci' DELUXE_TEST=1
+  - DJANGO_SETTINGS_MODULE='project.settings.ci' DELUXE_TEST=1 SECRET_KEY='not so secret key'
 addons:
   postgresql: "9.4"
-
-before_script: python ./manage.py collectstatic --noinput
+before_script:
+  - python ./manage.py collectstatic --noinput
 script:
   - pep8
   - make test.coverage.keepdb
@@ -16,4 +20,5 @@ script:
 after_success:
   - codeclimate-test-reporter
 notifications:
-    slack: cfa:CYBv6gMC0oGtY1wwI6ZTfldS
+    slack:
+      secure: "fAWM872UibAqbu5tLL7FSTETezfD8JR1qUSGYpyocJP+Hy8E+/aSgG2Vdev3EmJnfSz5lDkRe86Q7j3nYICzeEXAgoK6B+2PeE/UqUzdRr0IpdQQ5EunJ3PvVve1wlqgjWeNgKFR36d4eEXgLErw1anSNPtBE0ve49kC0URsBnlwDyq+CALNVG+5XYAEmYat/fRKHugKm9Cd/7AAwAWtbeG5gXgQJEKhRe6XuB1FsV0A67U66NRc2e5jQkBX31AHc4TgzcMuI0xgnF54XFi6ZTi9jlG+uAO3wQMzVW6xbIqqDing8VRHs6jnMSbC8nKpDGCZBaayVbaEIqhU86CgjSqsOJ2NuylnB+Xm3DLQMbD0X1hGBOBrCtwcNU1UkrqSAxgq+qjf7RUO6LMMZkHS//hHGr1eatp5Lq9XSlzAOKTjQzDRsaz50udBpaXRazuovo2SamMpKHvzqb6GWXwdgaY5hbq4xvMtLqegkiDOZlUeJaceBqoH7Hi+rO86FU9ngDGxsIm0QDJBGrcd/WcUECr1iHH6t6b8EuW2EnBcnj7h+7akKYBxpDXDfsbJpTqeB616FBYo3maauvexkIPXFScf50dFAQGcUji7znBsTz9dAS5FLXajNgWkMOU/YUZf1QtsJbF03MucmENFiNkmIpYYWMYTU8jzlttlBHK2E3s="

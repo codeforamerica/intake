@@ -31,25 +31,25 @@ DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 MEDIA_ROOT = os.path.join(REPO_DIR, 'project', 'media')
 
-# static files location
-STATIC_ROOT = os.path.join(REPO_DIR, 'project', 'static')
-
 # Email settings
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 MAIL_DEFAULT_SENDER = "admin@localhost"
-DEFAULT_NOTIFICATION_EMAIL = "user@localhost"
-
+VOICEMAIL_NOTIFICATION_EMAIL = 'youremail@example.horse'
 
 DIVERT_REMOTE_CONNECTIONS = True
 
 # specific to intake.translators.clean_slate.translator
 TEST_PDF_PATH = "./CleanSlateCombined.pdf"
 
-MIXPANEL_KEY = '7654cd3ca2f987fec69c12a8439a479c'
+MIXPANEL_KEY = '12345'
+
+TWILIO_AUTH_TOKEN = '12345'
 
 CELERY_BROKER_URL = 'amqp://localhost'
 
 
 BROWSER_STACK_ID = 'username'
 BROWSER_STACK_KEY = 'insert key here'
+
+COMPRESS_OFFLINE = False

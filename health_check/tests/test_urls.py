@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
+from user_accounts.tests.mock import fake_superuser, fake_password
 
 
 class TestURLPatterns(TestCase):
@@ -10,7 +11,8 @@ class TestURLPatterns(TestCase):
         self.assertContains(response, "Everything seems fine")
 
     def test_error(self):
-        response = self.client.get(reverse('health_check-error'))
-        self.assertEqual(response.status_code, 500)
-        self.assertIn(
-            "Errors seem to work correctly", response.content.decode('utf-8'))
+        su = fake_superuser()
+        self.client.login(username=su.username, password=fake_password)
+        with self.assertRaises(Exception) as context:
+            response = self.client.get(reverse('health_check-error'))
+            self.assertTrue('This is a Test' in context.exception)

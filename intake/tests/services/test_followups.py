@@ -56,13 +56,27 @@ class TestGetSubmissionsDueForFollowups(TestCase):
             date_received=get_old_date(),
             applicant=applicant, organizations=[self.followup_org])
         models.ApplicationEvent.log_followup_sent(
-            applicant.id,
+            applicant.id, sub_w_followup,
             contact_info=dict(email=sub_w_followup.answers['email']),
             message_content="hey how are things going?")
         # if we grab subs that need followups
         results = FollowupsService.get_submissions_due_for_follow_ups()
         results_set = set(results)
         # we should only have ones that have not received followups
+        self.assertIn(no_followup, results_set)
+        self.assertNotIn(sub_w_followup, results_set)
+
+    def test_filters_out_subs_with_previous_followup_flag(self):
+        # given old submissions, some with old followups
+        no_followup = factories.FormSubmissionWithOrgsFactory.create(
+            date_received=get_old_date(), organizations=[self.followup_org])
+        sub_w_followup = factories.FormSubmissionWithOrgsFactory.create(
+            date_received=get_old_date(), organizations=[self.followup_org],
+            has_been_sent_followup=True)
+        # if we grab subs that need followups
+        results = FollowupsService.get_submissions_due_for_follow_ups()
+        results_set = set(results)
+        # we should only have ones that have not been flagged
         self.assertIn(no_followup, results_set)
         self.assertNotIn(sub_w_followup, results_set)
 
@@ -86,6 +100,7 @@ class TestGetSubmissionsDueForFollowups(TestCase):
         followed_up_sub.save()
         models.ApplicationEvent.log_followup_sent(
             applicant.id,
+            followed_up_sub,
             contact_info=dict(email=followed_up_sub.answers['email']),
             message_content="hey how are things going?")
         # when we get submissions due for follow ups,
@@ -198,6 +213,7 @@ class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
             followup_events.values_list('applicant_id', flat=True))
         for sub in subs:
             self.assertIn(sub.applicant_id, followed_up_app_ids)
+            self.assertEqual(sub.has_been_sent_followup, True)
 
     def test_if_some_have_usable_contact_info(self):
         orgs = [
@@ -231,8 +247,10 @@ class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
             followup_events.values_list('applicant_id', flat=True))
         for sub in contacted_subs:
             self.assertIn(sub.applicant_id, followed_up_app_ids)
+            self.assertEqual(sub.has_been_sent_followup, True)
         for sub in not_contacted_subs:
             self.assertNotIn(sub.applicant_id, followed_up_app_ids)
+            self.assertEqual(sub.has_been_sent_followup, False)
 
     def test_that_followup_messages_arent_sent_for_apps_w_updates(self):
         org_a, org_b = Organization.objects.filter(

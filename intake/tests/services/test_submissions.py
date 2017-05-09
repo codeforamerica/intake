@@ -348,6 +348,15 @@ class TestGetUnopenedSubmissionsForOrg(TestCase):
             org_count=Count('organizations')).filter(org_count__gte=3).first()
         ApplicationLogEntry.log_opened([sub.id], cc_pubdef_user)
         # assert that it shows up in unopened apps
+        self.assertEqual(
+            True,
+            sub.applications.filter(
+                organization=cc_pubdef).first().has_been_opened)
+        self.assertFalse(
+            False,
+            all([
+                app.has_been_opened for app in sub.applications.exclude(
+                    organization=cc_pubdef)]))
         cc_pubdef_subs = \
             SubmissionsService.get_unopened_submissions_for_org(cc_pubdef)
         a_pubdef_subs = \
