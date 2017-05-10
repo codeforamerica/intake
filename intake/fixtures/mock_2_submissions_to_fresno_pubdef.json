@@ -1,9 +1,10 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 107,
+  "pk": 7,
   "fields": {
-    "first_visit": "2017-04-25T17:41:54.309Z",
+    "uuid": "e2b6529a-7ffb-46b8-b300-c78420dc7a04",
+    "first_visit": "2017-05-10T17:15:06.923Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +12,10 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 108,
+  "pk": 8,
   "fields": {
-    "first_visit": "2017-04-25T17:41:54.343Z",
+    "uuid": "d2863006-288d-4865-9639-32f53d02cbd6",
+    "first_visit": "2017-05-10T17:15:06.945Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,158 +23,57 @@
 },
 {
   "model": "intake.applicant",
-  "pk": 107,
+  "pk": 7,
   "fields": {
-    "visitor": 107
+    "visitor": 7
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 108,
+  "pk": 8,
   "fields": {
-    "visitor": 108
+    "visitor": 8
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 106,
+  "pk": 7,
   "fields": {
-    "applicant": 107,
+    "applicant": 7,
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
-        "prefers_sms",
-        "prefers_email"
-      ],
-      "first_name": "Nathan",
-      "middle_name": "Todd",
-      "last_name": "Hughes",
-      "aliases": "Jacob Myers",
-      "phone_number": "4152124848",
-      "alternate_phone_number": "4152124848",
-      "email": "cmrtestuser@gmail.com",
-      "address": {
-        "street": "3935 Ewing Falls",
-        "city": "Port Charlene",
-        "state": "NM",
-        "zip": "05608"
-      },
-      "dob": {
-        "month": "8",
-        "day": "6",
-        "year": "1959"
-      },
-      "driver_license_or_id": "D3738948",
-      "last_four": "7462",
-      "case_number": "C6372-584",
-      "us_citizen": "yes",
-      "being_charged": "no",
-      "serving_sentence": "no",
-      "on_probation_parole": "yes",
-      "where_probation_or_parole": "Yolo County",
-      "when_probation_or_parole": "2018",
-      "monthly_income": 6440,
-      "dependents": 2,
-      "reasons_for_applying": [
-        "background_check",
-        "lost_job",
-        "housing"
-      ],
-      "how_did_you_hear": "from work",
-      "additional_information": "I want help",
-      "understands_limits": "yes",
-      "consent_to_represent": "yes"
-    },
-    "first_name": "Nathan",
-    "last_name": "Hughes",
-    "dob": null,
-    "ssn": "",
-    "last_four": "7462",
-    "drivers_license_or_id": "",
-    "case_number": "C6372-584",
-    "phone_number": "4152124848",
-    "alternate_phone_number": "4152124848",
-    "email": "cmrtestuser@gmail.com",
-    "reasons_for_applying": "['background_check', 'lost_job', 'housing']",
-    "how_did_you_hear": "from work",
-    "additional_information": "I want help",
-    "aliases": "Jacob Myers",
-    "pfn_number": "",
-    "contact_preferences": "['prefers_sms', 'prefers_email']",
-    "preferred_pronouns": "",
-    "street": "3935 Ewing Falls",
-    "city": "Port Charlene",
-    "state": "NM",
-    "zip": "05608",
-    "us_citizen": "yes",
-    "is_veteran": "",
-    "is_student": "",
-    "being_charged": "no",
-    "serving_sentence": "no",
-    "on_probation_parole": "yes",
-    "where_probation_or_parole": "Yolo County",
-    "when_probation_or_parole": "2018",
-    "finished_half_probation": "",
-    "reduced_probation": "",
-    "rap_outside_sf": "",
-    "when_where_outside_sf": "",
-    "has_suspended_license": "",
-    "owes_court_fees": "",
-    "currently_employed": "",
-    "monthly_income": 6440,
-    "income_source": "",
-    "on_public_benefits": "",
-    "owns_home": "",
-    "monthly_expenses": null,
-    "household_size": null,
-    "dependents": 2,
-    "is_married": "",
-    "has_children": "",
-    "old_uuid": "13937a89efc3452880eb37ac799bfdee",
-    "anonymous_name": "Cheerful Elephant",
-    "date_received": "2017-04-12T15:50:50-07:00"
-  }
-},
-{
-  "model": "intake.formsubmission",
-  "pk": 107,
-  "fields": {
-    "applicant": 108,
-    "duplicate_set": null,
-    "answers": {
-      "contact_preferences": [
-        "prefers_email",
         "prefers_sms"
       ],
-      "first_name": "Michael",
-      "middle_name": "William",
-      "last_name": "Schultz",
-      "aliases": "Samuel Liu",
+      "first_name": "Cynthia",
+      "middle_name": "Melissa",
+      "last_name": "Smith",
+      "aliases": "James Woods",
       "phone_number": "4152124848",
       "alternate_phone_number": "4152124848",
       "email": "cmrtestuser@gmail.com",
       "address": {
-        "street": "651 Michelle Hill Suite 247",
-        "city": "New Logan",
-        "state": "AL",
-        "zip": "36814"
+        "street": "2566 Perez Street",
+        "city": "Blakeborough",
+        "state": "KY",
+        "zip": "57462"
       },
       "dob": {
-        "month": "1",
-        "day": "9",
-        "year": "1960"
+        "month": "12",
+        "day": "11",
+        "year": "1975"
       },
-      "driver_license_or_id": "D7315348",
-      "last_four": "7224",
-      "case_number": "C7987-248",
-      "us_citizen": "yes",
+      "driver_license_or_id": "D7137318",
+      "last_four": "8708",
+      "case_number": "C0784-886",
+      "us_citizen": "no",
       "being_charged": "no",
       "serving_sentence": "no",
       "on_probation_parole": "yes",
       "where_probation_or_parole": "Yolo County",
       "when_probation_or_parole": "2018",
-      "monthly_income": 466,
-      "dependents": 2,
+      "monthly_income": 3887,
+      "dependents": 0,
       "reasons_for_applying": [
         "background_check",
         "lost_job",
@@ -183,27 +84,128 @@
       "understands_limits": "yes",
       "consent_to_represent": "yes"
     },
-    "first_name": "Michael",
-    "last_name": "Schultz",
+    "has_been_sent_followup": false,
+    "first_name": "Cynthia",
+    "last_name": "Smith",
     "dob": null,
     "ssn": "",
-    "last_four": "7224",
+    "last_four": "8708",
     "drivers_license_or_id": "",
-    "case_number": "C7987-248",
+    "case_number": "C0784-886",
     "phone_number": "4152124848",
     "alternate_phone_number": "4152124848",
     "email": "cmrtestuser@gmail.com",
     "reasons_for_applying": "['background_check', 'lost_job', 'housing']",
     "how_did_you_hear": "from work",
     "additional_information": "I want help",
-    "aliases": "Samuel Liu",
+    "aliases": "James Woods",
     "pfn_number": "",
-    "contact_preferences": "['prefers_email', 'prefers_sms']",
+    "contact_preferences": "['prefers_sms']",
     "preferred_pronouns": "",
-    "street": "651 Michelle Hill Suite 247",
-    "city": "New Logan",
-    "state": "AL",
-    "zip": "36814",
+    "street": "2566 Perez Street",
+    "city": "Blakeborough",
+    "state": "KY",
+    "zip": "57462",
+    "us_citizen": "no",
+    "is_veteran": "",
+    "is_student": "",
+    "being_charged": "no",
+    "serving_sentence": "no",
+    "on_probation_parole": "yes",
+    "where_probation_or_parole": "Yolo County",
+    "when_probation_or_parole": "2018",
+    "finished_half_probation": "",
+    "reduced_probation": "",
+    "rap_outside_sf": "",
+    "when_where_outside_sf": "",
+    "has_suspended_license": "",
+    "owes_court_fees": "",
+    "currently_employed": "",
+    "monthly_income": 3887,
+    "income_source": "",
+    "on_public_benefits": "",
+    "owns_home": "",
+    "monthly_expenses": null,
+    "household_size": null,
+    "dependents": 0,
+    "is_married": "",
+    "has_children": "",
+    "old_uuid": "8c9a5af5c43c4919a413d3d5f76e20bb",
+    "anonymous_name": "Green Tree",
+    "date_received": "2017-05-06T12:05:50-07:00"
+  }
+},
+{
+  "model": "intake.formsubmission",
+  "pk": 8,
+  "fields": {
+    "applicant": 8,
+    "duplicate_set": null,
+    "answers": {
+      "contact_preferences": [
+        "prefers_email"
+      ],
+      "first_name": "Jack",
+      "middle_name": "Danielle",
+      "last_name": "Fisher",
+      "aliases": "Elizabeth Reyes",
+      "phone_number": "4152124848",
+      "alternate_phone_number": "4152124848",
+      "email": "cmrtestuser@gmail.com",
+      "address": {
+        "street": "30349 Marshall Radial",
+        "city": "Leemouth",
+        "state": "WV",
+        "zip": "89333"
+      },
+      "dob": {
+        "month": "10",
+        "day": "24",
+        "year": "1970"
+      },
+      "driver_license_or_id": "D1650035",
+      "last_four": "9572",
+      "case_number": "C7811-226",
+      "us_citizen": "yes",
+      "being_charged": "no",
+      "serving_sentence": "no",
+      "on_probation_parole": "yes",
+      "where_probation_or_parole": "Yolo County",
+      "when_probation_or_parole": "2018",
+      "monthly_income": 4415,
+      "dependents": 0,
+      "reasons_for_applying": [
+        "background_check",
+        "lost_job",
+        "housing"
+      ],
+      "how_did_you_hear": "from work",
+      "additional_information": "I want help",
+      "understands_limits": "yes",
+      "consent_to_represent": "yes"
+    },
+    "has_been_sent_followup": false,
+    "first_name": "Jack",
+    "last_name": "Fisher",
+    "dob": null,
+    "ssn": "",
+    "last_four": "9572",
+    "drivers_license_or_id": "",
+    "case_number": "C7811-226",
+    "phone_number": "4152124848",
+    "alternate_phone_number": "4152124848",
+    "email": "cmrtestuser@gmail.com",
+    "reasons_for_applying": "['background_check', 'lost_job', 'housing']",
+    "how_did_you_hear": "from work",
+    "additional_information": "I want help",
+    "aliases": "Elizabeth Reyes",
+    "pfn_number": "",
+    "contact_preferences": "['prefers_email']",
+    "preferred_pronouns": "",
+    "street": "30349 Marshall Radial",
+    "city": "Leemouth",
+    "state": "WV",
+    "zip": "89333",
     "us_citizen": "yes",
     "is_veteran": "",
     "is_student": "",
@@ -219,76 +221,78 @@
     "has_suspended_license": "",
     "owes_court_fees": "",
     "currently_employed": "",
-    "monthly_income": 466,
+    "monthly_income": 4415,
     "income_source": "",
     "on_public_benefits": "",
     "owns_home": "",
     "monthly_expenses": null,
     "household_size": null,
-    "dependents": 2,
+    "dependents": 0,
     "is_married": "",
     "has_children": "",
-    "old_uuid": "5707792f143d48c7ad743c0acb1cf5d7",
-    "anonymous_name": "Calm Chameleon",
-    "date_received": "2017-04-17T06:27:55-07:00"
+    "old_uuid": "c5bdb9e6711d493887ad9bde247bf558",
+    "anonymous_name": "Turqoise Ocean",
+    "date_received": "2017-05-06T10:18:15-07:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 151,
+  "pk": 7,
   "fields": {
-    "created": "2017-04-12T22:50:50Z",
-    "updated": "2017-04-25T17:41:54.330Z",
+    "created": "2017-05-06T19:05:50Z",
+    "updated": "2017-05-10T17:15:06.937Z",
     "organization": [
       "Fresno County Public Defender"
     ],
-    "form_submission": 106,
-    "was_transferred_out": false
+    "form_submission": 7,
+    "was_transferred_out": false,
+    "has_been_opened": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 152,
+  "pk": 8,
   "fields": {
-    "created": "2017-04-17T13:27:55Z",
-    "updated": "2017-04-25T17:41:54.373Z",
+    "created": "2017-05-06T17:18:15Z",
+    "updated": "2017-05-10T17:15:06.958Z",
     "organization": [
       "Fresno County Public Defender"
     ],
-    "form_submission": 107,
-    "was_transferred_out": false
+    "form_submission": 8,
+    "was_transferred_out": false,
+    "has_been_opened": false
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 152,
+  "pk": 7,
   "fields": {
-    "created": "2017-04-25T17:41:57.782Z",
-    "updated": "2017-04-25T17:41:57.806Z",
-    "status_type": 1,
-    "additional_information": "We may be able to get a fee waived for you",
-    "author": [
-      "fresno_pubdef_user"
-    ],
-    "application": 152,
-    "other_next_step": "Come to our Walk-In Clinic",
-    "next_steps": [
-      1
-    ]
-  }
-},
-{
-  "model": "intake.statusupdate",
-  "pk": 151,
-  "fields": {
-    "created": "2017-04-25T17:41:57.723Z",
-    "updated": "2017-04-25T17:41:57.753Z",
+    "created": "2017-05-10T17:15:07.656Z",
+    "updated": "2017-05-10T17:15:07.664Z",
     "status_type": 7,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "fresno_pubdef_user"
     ],
-    "application": 151,
+    "application": 7,
+    "other_next_step": "Come to our Walk-In Clinic",
+    "next_steps": [
+      1
+    ]
+  }
+},
+{
+  "model": "intake.statusupdate",
+  "pk": 8,
+  "fields": {
+    "created": "2017-05-10T17:15:07.672Z",
+    "updated": "2017-05-10T17:15:07.682Z",
+    "status_type": 1,
+    "additional_information": "We may be able to get a fee waived for you",
+    "author": [
+      "fresno_pubdef_user"
+    ],
+    "application": 8,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -297,28 +301,28 @@
 },
 {
   "model": "intake.statusnotification",
-  "pk": 151,
+  "pk": 7,
   "fields": {
-    "status_update": 151,
+    "status_update": 7,
     "contact_info": {
       "email": "cmrtestuser+notification@gmail.com"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-25T17:41:57.728Z"
+    "created": "2017-05-10T17:15:07.658Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 152,
+  "pk": 8,
   "fields": {
-    "status_update": 152,
+    "status_update": 8,
     "contact_info": {
       "email": "cmrtestuser+notification@gmail.com"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-25T17:41:57.784Z"
+    "created": "2017-05-10T17:15:07.674Z"
   }
 }
 ]

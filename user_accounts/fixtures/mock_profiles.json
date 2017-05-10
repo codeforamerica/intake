@@ -2,7 +2,7 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$30000$7ojTzaKZ29fK$xhtYOFa8hkYd6nS5wPkXp7QFE5Dm1TgitZkWzIbOlT8=",
+    "password": "pbkdf2_sha256$30000$q37U5Wl7OGrj$3luWZ7t6s9GiQ1LDj+DaT1wr4UxXCvuu907Rc+bMo/o=",
     "last_login": null,
     "is_superuser": false,
     "username": "a_pubdef_user",
@@ -11,7 +11,7 @@
     "email": "bgolder+demo+a_pubdef_user@codeforamerica.org",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2017-04-11T23:32:31.835Z",
+    "date_joined": "2017-05-10T17:15:05.763Z",
     "groups": [
       [
         "application_reviewers"
@@ -23,7 +23,7 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$30000$WHwUW65w2tsx$on5c659cHoKtuS9rw/vZOZ9ICcUqowQizj51rKaLTZg=",
+    "password": "pbkdf2_sha256$30000$fZsx4HdOBGHj$dLOQFyiy9L1FvyjJ/Qz1j/wR92xSqDiTfnjLS0fXckU=",
     "last_login": null,
     "is_superuser": false,
     "username": "cc_pubdef_user",
@@ -32,7 +32,7 @@
     "email": "bgolder+demo+cc_pubdef_user@codeforamerica.org",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2017-04-11T23:32:31.899Z",
+    "date_joined": "2017-05-10T17:15:05.824Z",
     "groups": [
       [
         "application_reviewers"
@@ -44,7 +44,7 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$30000$BXbmVSDprVe7$+I8CZ2AloTY4RAGR1APs03R3ACn+Tb1ojMKCVVdS4C4=",
+    "password": "pbkdf2_sha256$30000$NGJvAalhqBiA$a54QltBdb2yHdgQr0bzNoPuDoqIukNf4OWwJDsyzYJU=",
     "last_login": null,
     "is_superuser": false,
     "username": "ebclc_user",
@@ -53,7 +53,7 @@
     "email": "bgolder+demo+ebclc_user@codeforamerica.org",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2017-04-11T23:32:31.975Z",
+    "date_joined": "2017-05-10T17:15:05.873Z",
     "groups": [
       [
         "application_reviewers"
@@ -65,7 +65,7 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$30000$Fqt2hFR7aV16$+ATSJPhjmhvYS7X2LsWrNzlcFSGB/ZVJtpvhWpyPOG0=",
+    "password": "pbkdf2_sha256$30000$hHIFpC5BS5Ym$rJ4yoXqQVCC6J/WgnY/JWJIsq5OzxWFq50p4VdSbgpA=",
     "last_login": null,
     "is_superuser": false,
     "username": "fresno_pubdef_user",
@@ -74,7 +74,7 @@
     "email": "bgolder+demo+fresno_pubdef_user@codeforamerica.org",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2017-04-11T23:32:32.047Z",
+    "date_joined": "2017-05-10T17:15:05.920Z",
     "groups": [
       [
         "application_reviewers"
@@ -86,7 +86,7 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$30000$eXMSmQyv1JGW$GXzFpEQs2xomBankiFvAj6qGotminlIj9HwL4M0D6VM=",
+    "password": "pbkdf2_sha256$30000$RbDYzypj2N1a$O8U1O+BXVtUYkAqMGMX6AtVze3xLun3OQp/KBY0su/k=",
     "last_login": null,
     "is_superuser": false,
     "username": "monterey_pubdef_user",
@@ -95,7 +95,7 @@
     "email": "bgolder+demo+monterey_pubdef_user@codeforamerica.org",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2017-04-11T23:32:32.122Z",
+    "date_joined": "2017-05-10T17:15:05.968Z",
     "groups": [
       [
         "application_reviewers"
@@ -107,7 +107,7 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$30000$QmzjieDCPTtT$12z+EAAGxXqpm61Azp4o3wDLAQHH+Y+rkQoye3LDLFA=",
+    "password": "pbkdf2_sha256$30000$yE1lrhsGMFlX$JAt+l+cOzYTQIPQku3pRp6AJ1uF8iTL4gwrG1dNg2PI=",
     "last_login": null,
     "is_superuser": false,
     "username": "san_diego_pubdef_user",
@@ -116,7 +116,7 @@
     "email": "bgolder+demo+san_diego_pubdef_user@codeforamerica.org",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2017-04-11T23:32:32.193Z",
+    "date_joined": "2017-05-10T17:15:06.014Z",
     "groups": [
       [
         "application_reviewers"
@@ -128,7 +128,7 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$30000$EsPH77q1IbFk$vVZJHjV6xXQRW7Idpn16sxaum+/4icmCl/KnQ71lEWQ=",
+    "password": "pbkdf2_sha256$30000$kb2CmW8RoEUv$7OjDxNzgUOnAHiJPIAyd5Vnt2T+GFFbqa0ztHMM5u+E=",
     "last_login": null,
     "is_superuser": false,
     "username": "sf_pubdef_user",
@@ -137,7 +137,7 @@
     "email": "bgolder+demo+sf_pubdef_user@codeforamerica.org",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2017-04-11T23:32:32.264Z",
+    "date_joined": "2017-05-10T17:15:06.062Z",
     "groups": [
       [
         "application_reviewers"
@@ -149,7 +149,7 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$30000$JJPzS9M4Ak3X$M7gpv5+MfRTKF5bridfENGReRKncYV+rzuR2+/fQDl8=",
+    "password": "pbkdf2_sha256$30000$xDxmRVYwd7kT$XgZ1gzFmp8wpelvT+dfB8WM0ZS4IdhqOgTQ4RliZmGQ=",
     "last_login": null,
     "is_superuser": false,
     "username": "san_joaquin_pubdef_user",
@@ -158,7 +158,7 @@
     "email": "bgolder+demo+san_joaquin_pubdef_user@codeforamerica.org",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2017-04-11T23:32:32.315Z",
+    "date_joined": "2017-05-10T17:15:06.108Z",
     "groups": [
       [
         "application_reviewers"
@@ -170,7 +170,7 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$30000$Nt3AfA5GwNaV$q5Y3fKEZGjOaeEO8+DBIooytXxxEYInqdcZ9NH9TCYc=",
+    "password": "pbkdf2_sha256$30000$kfQBqWJUR0FZ$qh12fhqlE5q0uJvmsEQi/h13UZf5qMfLnyOmIzYE/yU=",
     "last_login": null,
     "is_superuser": false,
     "username": "santa_barbara_pubdef_user",
@@ -179,7 +179,7 @@
     "email": "bgolder+demo+santa_barbara_pubdef_user@codeforamerica.org",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2017-04-11T23:32:32.368Z",
+    "date_joined": "2017-05-10T17:15:06.155Z",
     "groups": [
       [
         "application_reviewers"
@@ -191,7 +191,7 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$30000$Uqr0g8cHrWB3$OCNc1plWkS3HX4Ie8BT53T+rUMqCMPBSB9joB/IVft8=",
+    "password": "pbkdf2_sha256$30000$hXwYNDYtwKtI$h7Y/3DtZ1hp8ovwzzHY/Sa8hmQWJveVH7PPYQhGoyj8=",
     "last_login": null,
     "is_superuser": false,
     "username": "santa_clara_pubdef_user",
@@ -200,7 +200,7 @@
     "email": "bgolder+demo+santa_clara_pubdef_user@codeforamerica.org",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2017-04-11T23:32:32.427Z",
+    "date_joined": "2017-05-10T17:15:06.203Z",
     "groups": [
       [
         "application_reviewers"
@@ -212,7 +212,7 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$30000$yXpDHppbQrk1$5cVCYgQhwKwx81nCWEJVxBYFgdxuVXkhjZk6YK+hx9Q=",
+    "password": "pbkdf2_sha256$30000$k1rGntlh1ESL$17q9QpryIzAEWurM8P2PQkcHkwHdqyJb11Indd2FHSk=",
     "last_login": null,
     "is_superuser": false,
     "username": "santa_cruz_pubdef_user",
@@ -221,7 +221,7 @@
     "email": "bgolder+demo+santa_cruz_pubdef_user@codeforamerica.org",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2017-04-11T23:32:32.485Z",
+    "date_joined": "2017-05-10T17:15:06.252Z",
     "groups": [
       [
         "application_reviewers"
@@ -233,7 +233,7 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$30000$qK3jmNPUf1lC$+T/zT2i/HsiQ8KGzNeUIMBv2dEElyj0GlUOnV/mer2Q=",
+    "password": "pbkdf2_sha256$30000$gqKUUqFSHPSi$8GtqfOxORI7YzvLPc0Q7QbQ94Ccp5f/Ly6hUSdfz0cQ=",
     "last_login": null,
     "is_superuser": false,
     "username": "solano_pubdef_user",
@@ -242,7 +242,7 @@
     "email": "bgolder+demo+solano_pubdef_user@codeforamerica.org",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2017-04-11T23:32:32.629Z",
+    "date_joined": "2017-05-10T17:15:06.304Z",
     "groups": [
       [
         "application_reviewers"
@@ -254,7 +254,7 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$30000$NIzwqsto9RQP$B7DmOIYQa+y2TGK1ZW466il2JsklXtCgpJFLgLoTyhM=",
+    "password": "pbkdf2_sha256$30000$vCuFAZL0kale$q6gLSEOJd/h55aLn9BsQ77+lz5W/b2YS/CsxoaNSpNU=",
     "last_login": null,
     "is_superuser": false,
     "username": "sonoma_pubdef_user",
@@ -263,7 +263,7 @@
     "email": "bgolder+demo+sonoma_pubdef_user@codeforamerica.org",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2017-04-11T23:32:32.730Z",
+    "date_joined": "2017-05-10T17:15:06.352Z",
     "groups": [
       [
         "application_reviewers"
@@ -275,7 +275,7 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$30000$nvxxxy8QhWNd$iLd/cazEYvrsdcupm7koTIiCs7Cox87xb8cpLV/IKVM=",
+    "password": "pbkdf2_sha256$30000$LyfxjUvmShwl$SQSJ2IyCj6H+LOfgJqFqFD6crBn7egMt+tpdyrY1VUM=",
     "last_login": null,
     "is_superuser": false,
     "username": "tulare_pubdef_user",
@@ -284,7 +284,7 @@
     "email": "bgolder+demo+tulare_pubdef_user@codeforamerica.org",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2017-04-11T23:32:32.795Z",
+    "date_joined": "2017-05-10T17:15:06.399Z",
     "groups": [
       [
         "application_reviewers"
@@ -296,7 +296,7 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$30000$Ljo1dMsgT2eX$/NM1PUROzPuxG8g5zT5oKBusSdW1KoW7yDMjVfEz/t4=",
+    "password": "pbkdf2_sha256$30000$uHNixjJ0OmAv$o1IAWtxxvRGyjRZATeGcc+CqLtY/fBIfSdixbDEcBwM=",
     "last_login": null,
     "is_superuser": false,
     "username": "ventura_pubdef_user",
@@ -305,7 +305,7 @@
     "email": "bgolder+demo+ventura_pubdef_user@codeforamerica.org",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2017-04-11T23:32:32.912Z",
+    "date_joined": "2017-05-10T17:15:06.445Z",
     "groups": [
       [
         "application_reviewers"
@@ -317,7 +317,7 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$30000$LlON1yT7Dtp8$BEd2x3VzITxPKrlMMJvOyv3oZIlIAIUuoOgzTXpafu8=",
+    "password": "pbkdf2_sha256$30000$xjGBGYsQTu1W$RNOeePB1VxkktdZTBx770FuJvor9ELqQQ5sCceACX2g=",
     "last_login": null,
     "is_superuser": true,
     "username": "cfa_user",
@@ -326,7 +326,7 @@
     "email": "bgolder+demo+cfa_user@codeforamerica.org",
     "is_staff": true,
     "is_active": true,
-    "date_joined": "2017-04-11T23:32:32.988Z",
+    "date_joined": "2017-05-10T17:15:06.495Z",
     "groups": [
       [
         "application_reviewers"
@@ -341,7 +341,7 @@
 {
   "model": "auth.user",
   "fields": {
-    "password": "pbkdf2_sha256$30000$UxV4zpxQsabA$3wWMG2JobOxjGn55JnvqvGZrZfJlVF+hS/l8O9lO6+0=",
+    "password": "pbkdf2_sha256$30000$JWbO63FUF3fy$iDo3xr51we6wZSsmk+s8tdMDeZiSo6J1caApLSuUWo4=",
     "last_login": null,
     "is_superuser": false,
     "username": "monitor_user",
@@ -350,7 +350,7 @@
     "email": "bgolder+demo+monitor_user@codeforamerica.org",
     "is_staff": false,
     "is_active": true,
-    "date_joined": "2017-04-11T23:32:33.036Z",
+    "date_joined": "2017-05-10T17:15:06.543Z",
     "groups": [
       [
         "performance_monitors"
