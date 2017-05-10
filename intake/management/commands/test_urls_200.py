@@ -7,6 +7,7 @@ from urllib.parse import urljoin
 URLS_SHOULD_200 = [
     '/',
     'apply/',
+    'robots.txt',
 ]
 
 
