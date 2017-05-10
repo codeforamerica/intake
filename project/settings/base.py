@@ -97,6 +97,7 @@ TEMPLATES = [
                 "format_phone_number": "project.jinja2.format_phone_number",
                 "settings": "django.conf.settings",
                 "local_time": "intake.utils.local_time",
+                "static": "project.jinja2.loudfail_static",
             }
         },
     },
