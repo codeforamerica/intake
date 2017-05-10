@@ -652,6 +652,7 @@ INTAKE_FIELDS = [
     CurrentlyEmployed,
     MonthlyIncome,
     IncomeSource,
+    HowMuchSavings,
     OnPublicBenefits,
     MonthlyExpenses,
     OwnsHome,

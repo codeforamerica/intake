@@ -544,10 +544,13 @@ class SantaBarbaraCountyFormSpec(VenturaCountyFormSpec):
         F.Aliases,
         F.ReasonsForApplying,
         F.IsMarried,
+        F.HowMuchSavings,
         F.WhenProbationParole}) - {
         F.LastFourOfSocial,
         F.IsVeteran,
     }
+    required_fields = (
+        VenturaCountyFormSpec.required_fields | {F.HowMuchSavings})
 
 
 class EBCLCIntakeFormSpec(CombinableOrganizationFormSpec):
