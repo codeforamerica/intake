@@ -227,7 +227,8 @@ if not SCOPE_TO_LIVE_COUNTIES:
             'Tulare County (near Visalia, Tulare, Porterville, Finuba, '
             'Lindsay, Farmersville, Exeter, or Woodlake)')),
         (Counties.VENTURA, _(
-            'Ventura County (near Oxnard, Thousand Oaks, Simi Valley and '
+            'Ventura County (near Oxnard, Thousand Oaks, Simi Valley, '
+            'Camarillo, Ojai, Moorpark, Fillmore, Ojai, Santa Paula, or '
             'Ventura)')),
         (Counties.SANTA_BARBARA, _(
             'Santa Barbara County (near Santa Maria, Santa Barbara, Lompoc, '
