@@ -115,6 +115,8 @@ Numbers for Clear My Record
 {% endblock jsons %}
 {% block main_script %}
 {% if stats %}
-<script src="{{ static('js/stats.js')}}"></script>
+  {% compress 'js' %}
+    <script type="text/browserify" src="{{ static('intake/js/stats_entry.js') }}"></script>
+  {% endcompress %}
 {% endif %}
 {% endblock main_script %}

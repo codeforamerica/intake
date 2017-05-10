@@ -20,7 +20,7 @@ pip-selfcheck.json
 .env
 db.sqlite3
 node_modules
-project/static
+staticfiles
 project/media
 local_settings.py
 *.pdf

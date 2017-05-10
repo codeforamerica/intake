@@ -4,7 +4,7 @@ import dj_database_url
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
-SECRET_KEY = os.environ.get('SECRET_KEY', 'something super secret')
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # looks for 'DATABASE_URL' environmental variable
 DATABASES = {
@@ -19,27 +19,21 @@ DEFAULT_HOST = os.environ.get('DEFAULT_HOST', 'http://localhost:8000')
 AWS_ACCESS_KEY_ID = os.environ.get('BUCKETEER_AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('BUCKETEER_AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('BUCKETEER_BUCKET_NAME')
-DEFAULT_FILE_STORAGE = os.environ.get(
-    'DEFAULT_FILE_STORAGE',
-    'django.core.files.storage.FileSystemStorage')
-# set to 'storages.backends.s3boto.S3BotoStorage' for prod
 
-if 'FileSystem' in DEFAULT_FILE_STORAGE:
-    MEDIA_ROOT = os.path.join(REPO_DIR, 'project', 'media')
-else:
-    MEDIA_ROOT = ''
+MEDIA_ROOT = ''
 
-# static files location
-STATIC_ROOT = os.environ.get('STATIC_ROOT',
-                             os.path.join(REPO_DIR, 'project', 'static'))
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 # Email settings
 EMAIL_BACKEND = "sgbackend.SendGridBackend"
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", "admin@localhost")
 DEFAULT_FROM_EMAIL = MAIL_DEFAULT_SENDER
-DEFAULT_NOTIFICATION_EMAIL = os.environ.get(
-    "DEFAULT_NOTIFICATION_EMAIL", "user@localhost")
+VOICEMAIL_NOTIFICATION_EMAIL = os.environ.get(
+    'VOICEMAIL_NOTIFICATION_EMAIL')
+
+# Twilio API
+TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN")
 
 # Slack Web hook
 SLACK_WEBHOOK_URL = os.environ.get("SLACK_WEBHOOK_URL")

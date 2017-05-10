@@ -167,20 +167,12 @@ Any print commands will pretty print by default. Tab completion is available.
 
 ## Static Asset Handling
 
-Here is the step-by-step process for static asset handling:
+Static assets are managed in each applications static folder for example in `intake/static/intake`
 
-1. Static assets start in the `frontend/` folder.
-2. gulp & browserify are used to bundle javascript modules from `frontend/js/` into `frontend/build/js/`.
-2. gulp & less are used to bundle `frontend/less` into `frontend/build/css`.
-3. gulp also copies image files into the build folder. For example `frontend/img` into `frontend/build/img`.
-4. When running the local dev server, gulp watches for changes to `less` and `.js` files, and overwrites `frontend/build` with any updates to the bundled assets.
-4. The `frontend/build/` folder is overwritten by gulp. Don't try to edit the files it contains.
-5. `frontend/build/` is also included in the git repo, unfortunately. Once our deployment environment can pull in frontend libraries and run gulp to bundle frontend assets, we can remove this folder from git.
-5. Django's builtin `./manage.py collectstatic` command copies files from `frontend/build` and other django app static directories (such as `django/contrib/admin/static/admin`) and copies them into `project/static`. Heroku runs this command with every deployment.
-6. In production, [WhiteNoise](http://whitenoise.evans.io/en/stable/) serves static files from the `project/static` folder.
+Less and Javascript files are compiled using compressor but we have combined that with collectstatic
 
-In sum, here are the files and folders essential to static asset handling:
-- `frontend/build` <sup>(tracked by git)</sup>, a folder that is overwritten by gulp. Do not edit it's contents directly.
-- `gulpfile.js` <sup>(tracked by git)</sup>, a file containing all the tasks used to build frontend assets
-- `frontend/js` and `frontend/less` <sup>(tracked by git)</sup>, where the javascript modules and less files live.
-- `project/static` <sup>(_not_ tracked by git)</sup>, overwritten by `./manage.py collectstatic` and used to serve static files in production.
+```sh
+./manage.py collectstatic -c --no-input
+```
+
+When doing local development `COMPRESS_OFFLINE` should be set to `False` and the assets with automatically build at load time.

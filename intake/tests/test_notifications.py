@@ -2,7 +2,6 @@ from unittest import TestCase as BaseTestCase
 from unittest.mock import Mock, patch
 from django.test import TestCase as DjangoTestCase, override_settings
 from project.jinja2 import external_reverse
-from django.core.urlresolvers import reverse
 from django.core import mail
 from django.conf import settings
 import json
@@ -32,7 +31,7 @@ class TestNotifications(DjangoTestCase):
             'Notification Test',
             'Hi',
             settings.MAIL_DEFAULT_SENDER,
-            [settings.DEFAULT_NOTIFICATION_EMAIL]
+            ['pegasus@flying.horse']
         )
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(
@@ -43,7 +42,7 @@ class TestNotifications(DjangoTestCase):
     def test_email_notification_class(self, *args):
         from intake.notifications import EmailNotification
         default = EmailNotification("Hello {{name}}", "basic_email.txt")
-        default.send(name="Ben")
+        default.send(name="Ben", to=['pegasus@flying.horse'])
         self.assertEqual(len(mail.outbox), 1)
         email = mail.outbox[0]
         self.assertEqual(email.subject, "Hello Ben")

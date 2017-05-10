@@ -94,7 +94,6 @@ class TemplateNotification:
 class EmailNotification(TemplateNotification):
 
     default_from_email = settings.MAIL_DEFAULT_SENDER
-    default_recipients = [settings.DEFAULT_NOTIFICATION_EMAIL]
 
     def __init__(self, subject_template='', body_template_path=''):
         super().__init__(
@@ -105,7 +104,6 @@ class EmailNotification(TemplateNotification):
     def send(self, to=None, from_email=None, **context_args):
         content = self.render(**context_args)
         from_email = from_email or self.default_from_email
-        to = to or self.default_recipients
         # does not need to check for remote connection permission because
         # emails are diverted by default in a test environment.
         return mail.send_mail(

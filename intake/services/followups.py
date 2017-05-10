@@ -19,14 +19,13 @@ def get_submissions_due_for_follow_ups(after_id=None):
         status_updates=None, organization__needs_applicant_followups=True)
     has_at_least_one_app_w_no_update = Q(
         id__in=apps_that_need_followups.values_list(
-                'form_submission_id', flat=True))
+            'form_submission_id', flat=True))
     if after_id:
         lower_bound = models.FormSubmission.objects.get(
             id=after_id).date_received
         start_date_criteria = Q(date_received__gte=lower_bound)
         date_criteria = date_criteria & start_date_criteria
-    exclusion_criteria = ~Q(
-        applicant__events__name=models.ApplicationEvent.FOLLOWUP_SENT)
+    exclusion_criteria = ~Q(has_been_sent_followup=True)
     qset = models.FormSubmission.objects.filter(
         has_at_least_one_app_w_no_update & date_criteria & exclusion_criteria
     )
