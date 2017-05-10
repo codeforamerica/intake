@@ -531,6 +531,12 @@ class MonthlyExpenses(WholeDollarField):
               "groceries, utilities, medical expenses, or childcare expenses?")
 
 
+class HowMuchSavings(WholeDollarField):
+    context_key = "how_much_savings"
+    help_text = _("Your best estimate is okay.")
+    label = _("How much money do you have saved?")
+
+
 class HouseholdSize(IntegerField):
     context_key = "household_size"
     label = _("How many people live with you?")
@@ -553,7 +559,7 @@ class HowManyDependents(IntegerField):
 
 class IsMarried(YesNoField):
     context_key = "is_married"
-    label = _("Are you married?")
+    label = _("Are you married or in a legal domestic partnership?")
 
 
 class HasChildren(YesNoField):

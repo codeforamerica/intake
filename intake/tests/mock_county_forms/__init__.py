@@ -321,7 +321,11 @@ class Provider(BaseProvider):
         return data
 
     def santa_barbara_pubdef_answers(self, **overrides):
-        return self.ventura_pubdef_answers(**overrides)
+        data = self.ventura_pubdef_answers()
+        data.update(
+            how_much_savings=2000,
+            )
+        return data
 
     def all_county_answers(self, **overrides):
         data = {
