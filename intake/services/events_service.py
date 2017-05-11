@@ -1,6 +1,7 @@
 import intake.services.applicants as ApplicantsService
 import project.services.logging_service as LoggingService
 from project.services.mixpanel_service import log_to_mixpanel
+from intake.services import status_notifications as SNService
 
 
 def form_started(request, counties):
@@ -160,8 +161,16 @@ def status_updated(status_update):
         status_type=status_update.status_type.display_name,
         next_steps=[
             step.display_name for step in status_update.next_steps.all()],
-        has_additional_info=bool(status_update.additional_information),
-        organization_name=status_update.author.profile.organization.name)
+        additional_info_length=len(status_update.additional_information),
+        other_next_steps_length=len(status_update.other_next_step),
+        organization_name=status_update.author.profile.organization.name,
+        message_change_ratio=SNService.get_message_change_ratio(status_update),
+        contact_info_keys=SNService.get_contact_info_keys(status_update),
+        has_unsent_additional_info=SNService.has_unsent_additional_info(
+            status_update),
+        has_unsent_other_next_step=SNService.has_unsent_other_next_step(
+            status_update),
+        )
     if hasattr(status_update, 'notification'):
         event_kwargs.update(
             notification_contact_info_types=list(

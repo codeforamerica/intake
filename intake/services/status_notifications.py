@@ -1,9 +1,9 @@
+import Levenshtein
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
-from intake import models, notifications
 from django.template import loader
 from django.core.urlresolvers import reverse
-import intake.services.events_service as EventsService
+from intake import models, notifications
 
 
 jinja = loader.engines['jinja']
@@ -95,8 +95,52 @@ def send_and_save_new_status(request, notification_data, status_update_data):
     status_update.next_steps.add(*next_steps)
     save_and_send_status_notification(
         request, notification_data, status_update)
-    EventsService.status_updated(status_update)
     success_message = get_status_update_success_message(
         status_update.application.form_submission.get_full_name(),
         status_update.status_type)
     messages.success(request, success_message)
+    return status_update
+
+
+def get_message_change_ratio(status_update):
+    """Expects a status update instance, returns a number representing
+    how much a message has been edited (1.0 completely changed, 0.0 unchanged)
+    based on Levenshtein ratio.
+    If a status update has no associated notification, returns None
+    https://github.com/ztane/python-Levenshtein
+    """
+    if hasattr(status_update, 'notification'):
+        author_profile = status_update.author.profile
+        intro_text = get_notification_intro(author_profile) + '\n\n'
+        return 1.0 - Levenshtein.ratio(
+            *[message.replace(intro_text, '')
+              for message in (
+                status_update.notification.base_message,
+                status_update.notification.sent_message)])
+    else:
+        return None
+
+
+def get_contact_info_keys(status_update):
+    """Returns the contact info method keys (email, sms)
+    used to send a notification for a status update if the notification
+    exists. Returns [] if there is no notification
+    """
+    if hasattr(status_update, 'notification'):
+        return list(status_update.notification.contact_info.keys())
+    else:
+        return []
+
+
+def has_unsent_additional_info(status_update):
+    if hasattr(status_update, 'notification'):
+        if len(status_update.additional_information) > 1:
+            return (status_update.additional_information in
+                    status_update.notification.sent_message)
+
+
+def has_unsent_other_next_step(status_update):
+    if hasattr(status_update, 'notification'):
+        if len(status_update.other_next_step) > 1:
+            return (status_update.other_next_step in
+                    status_update.notification.sent_message)
