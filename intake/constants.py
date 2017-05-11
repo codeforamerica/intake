@@ -231,8 +231,8 @@ if not SCOPE_TO_LIVE_COUNTIES:
             'Camarillo, Ojai, Moorpark, Fillmore, Ojai, Santa Paula, or '
             'Ventura)')),
         (Counties.SANTA_BARBARA, _(
-            'Santa Barbara County (near Santa Maria, Santa Barbara, Lompoc, '
-            'Goleta)'))
+            'Santa Barbara County (near Santa Maria, Santa Barbara, Goleta, '
+            'Carpinteria, Solvang, and Lompoc)'))
     )
 
 COUNTY_CHOICES = sorted(COUNTY_CHOICES, key=lambda item: item[1])

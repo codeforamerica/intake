@@ -324,8 +324,8 @@ class Provider(BaseProvider):
             reasons_for_applying=['background_check', 'lost_job', 'housing'],
             when_probation_or_parole='2018',
             is_married=self.maybe(0.4),
+            how_much_savings=2000,
             household_size=random.randint(0, 5),
-            has_children=self.maybe(0.5),
             is_veteran=self.maybe(0.4),
             dependents=random.randint(0, 4)
             )

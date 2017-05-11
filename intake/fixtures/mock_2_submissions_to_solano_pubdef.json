@@ -3,8 +3,8 @@
   "model": "intake.visitor",
   "pk": 23,
   "fields": {
-    "uuid": "867cde3c-39da-49a4-9471-e2731bed9698",
-    "first_visit": "2017-05-09T01:17:08.656Z",
+    "uuid": "5be31148-4974-4229-a082-7706e819cde7",
+    "first_visit": "2017-05-10T17:15:07.267Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -14,8 +14,8 @@
   "model": "intake.visitor",
   "pk": 24,
   "fields": {
-    "uuid": "8374defe-c777-4ab4-93b3-a535d69c35d7",
-    "first_visit": "2017-05-09T01:17:08.673Z",
+    "uuid": "ee6f6777-13a9-4ae5-a34a-37af3b0a1eb6",
+    "first_visit": "2017-05-10T17:15:07.288Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -43,43 +43,42 @@
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
-        "prefers_sms",
-        "prefers_email"
+        "prefers_sms"
       ],
-      "first_name": "Chad",
-      "middle_name": "Christine",
-      "last_name": "Parsons",
+      "first_name": "David",
+      "middle_name": "Joseph",
+      "last_name": "Williams",
       "phone_number": "4152124848",
       "alternate_phone_number": "4152124848",
       "email": "cmrtestuser@gmail.com",
       "address": {
-        "street": "9338 Amber Junction Suite 104",
-        "city": "Perryfort",
-        "state": "KS",
-        "zip": "33089"
+        "street": "386 Charles Center",
+        "city": "Jasmineville",
+        "state": "MT",
+        "zip": "38507"
       },
       "dob": {
-        "month": "4",
-        "day": "17",
-        "year": "1991"
+        "month": "11",
+        "day": "13",
+        "year": "1998"
       },
-      "us_citizen": "yes",
+      "us_citizen": "no",
       "being_charged": "no",
-      "serving_sentence": "yes",
+      "serving_sentence": "no",
       "on_probation_parole": "yes",
       "where_probation_or_parole": "Yolo County",
       "when_probation_or_parole": "2018",
-      "rap_outside_sf": "no",
+      "rap_outside_sf": "yes",
       "when_where_outside_sf": "",
-      "owes_court_fees": "yes",
+      "owes_court_fees": "no",
       "how_did_you_hear": "from work",
       "additional_information": "I want help",
       "understands_limits": "yes",
       "consent_to_represent": "yes"
     },
     "has_been_sent_followup": false,
-    "first_name": "Chad",
-    "last_name": "Parsons",
+    "first_name": "David",
+    "last_name": "Williams",
     "dob": null,
     "ssn": "",
     "last_four": "",
@@ -93,26 +92,26 @@
     "additional_information": "I want help",
     "aliases": "",
     "pfn_number": "",
-    "contact_preferences": "['prefers_sms', 'prefers_email']",
+    "contact_preferences": "['prefers_sms']",
     "preferred_pronouns": "",
-    "street": "9338 Amber Junction Suite 104",
-    "city": "Perryfort",
-    "state": "KS",
-    "zip": "33089",
-    "us_citizen": "yes",
+    "street": "386 Charles Center",
+    "city": "Jasmineville",
+    "state": "MT",
+    "zip": "38507",
+    "us_citizen": "no",
     "is_veteran": "",
     "is_student": "",
     "being_charged": "no",
-    "serving_sentence": "yes",
+    "serving_sentence": "no",
     "on_probation_parole": "yes",
     "where_probation_or_parole": "Yolo County",
     "when_probation_or_parole": "2018",
     "finished_half_probation": "",
     "reduced_probation": "",
-    "rap_outside_sf": "no",
+    "rap_outside_sf": "yes",
     "when_where_outside_sf": "",
     "has_suspended_license": "",
-    "owes_court_fees": "yes",
+    "owes_court_fees": "no",
     "currently_employed": "",
     "monthly_income": null,
     "income_source": "",
@@ -123,9 +122,9 @@
     "dependents": "",
     "is_married": "",
     "has_children": "",
-    "old_uuid": "e85e8d1b9559496784cb2be3496c7161",
-    "anonymous_name": "Glowing Tower",
-    "date_received": "2017-04-30T19:36:28-07:00"
+    "old_uuid": "baebf29dac1a4f57be79c1fde456902a",
+    "anonymous_name": "Gregarious Lotus",
+    "date_received": "2017-04-27T00:13:53-07:00"
   }
 },
 {
@@ -136,24 +135,25 @@
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
+        "prefers_sms",
         "prefers_email"
       ],
-      "first_name": "Thomas",
-      "middle_name": "Ariana",
-      "last_name": "Moore",
+      "first_name": "Tammy",
+      "middle_name": "Robert",
+      "last_name": "Everett",
       "phone_number": "4152124848",
       "alternate_phone_number": "4152124848",
       "email": "cmrtestuser@gmail.com",
       "address": {
-        "street": "7846 Parker Drives Apt. 625",
-        "city": "Jamesbury",
-        "state": "AR",
-        "zip": "17544"
+        "street": "7679 Weiss Trace",
+        "city": "East Travis",
+        "state": "FM",
+        "zip": "96072"
       },
       "dob": {
-        "month": "12",
-        "day": "27",
-        "year": "1967"
+        "month": "8",
+        "day": "20",
+        "year": "1998"
       },
       "us_citizen": "no",
       "being_charged": "no",
@@ -170,8 +170,8 @@
       "consent_to_represent": "yes"
     },
     "has_been_sent_followup": false,
-    "first_name": "Thomas",
-    "last_name": "Moore",
+    "first_name": "Tammy",
+    "last_name": "Everett",
     "dob": null,
     "ssn": "",
     "last_four": "",
@@ -185,12 +185,12 @@
     "additional_information": "I want help",
     "aliases": "",
     "pfn_number": "",
-    "contact_preferences": "['prefers_email']",
+    "contact_preferences": "['prefers_sms', 'prefers_email']",
     "preferred_pronouns": "",
-    "street": "7846 Parker Drives Apt. 625",
-    "city": "Jamesbury",
-    "state": "AR",
-    "zip": "17544",
+    "street": "7679 Weiss Trace",
+    "city": "East Travis",
+    "state": "FM",
+    "zip": "96072",
     "us_citizen": "no",
     "is_veteran": "",
     "is_student": "",
@@ -215,17 +215,17 @@
     "dependents": "",
     "is_married": "",
     "has_children": "",
-    "old_uuid": "e09dfb1b481547d284cd6659634fff7b",
-    "anonymous_name": "Orange Dolphin",
-    "date_received": "2017-04-28T17:36:17-07:00"
+    "old_uuid": "f91b457adb6143608473dfff9ccc31f5",
+    "anonymous_name": "Imaginative Wallaby",
+    "date_received": "2017-04-29T01:47:30-07:00"
   }
 },
 {
   "model": "intake.application",
   "pk": 23,
   "fields": {
-    "created": "2017-05-01T02:36:28Z",
-    "updated": "2017-05-09T01:17:08.668Z",
+    "created": "2017-04-27T07:13:53Z",
+    "updated": "2017-05-10T17:15:07.282Z",
     "organization": [
       "Solano County Public Defender"
     ],
@@ -238,8 +238,8 @@
   "model": "intake.application",
   "pk": 24,
   "fields": {
-    "created": "2017-04-29T00:36:17Z",
-    "updated": "2017-05-09T01:17:08.685Z",
+    "created": "2017-04-29T08:47:30Z",
+    "updated": "2017-05-10T17:15:07.304Z",
     "organization": [
       "Solano County Public Defender"
     ],
@@ -252,8 +252,8 @@
   "model": "intake.statusupdate",
   "pk": 23,
   "fields": {
-    "created": "2017-05-09T01:17:09.316Z",
-    "updated": "2017-05-09T01:17:09.325Z",
+    "created": "2017-05-10T17:15:08.056Z",
+    "updated": "2017-05-10T17:15:08.069Z",
     "status_type": 2,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
@@ -270,8 +270,8 @@
   "model": "intake.statusupdate",
   "pk": 24,
   "fields": {
-    "created": "2017-05-09T01:17:09.336Z",
-    "updated": "2017-05-09T01:17:09.345Z",
+    "created": "2017-05-10T17:15:08.088Z",
+    "updated": "2017-05-10T17:15:08.102Z",
     "status_type": 3,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
@@ -294,7 +294,7 @@
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-05-09T01:17:09.318Z"
+    "created": "2017-05-10T17:15:08.058Z"
   }
 },
 {
@@ -307,7 +307,7 @@
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-05-09T01:17:09.338Z"
+    "created": "2017-05-10T17:15:08.091Z"
   }
 }
 ]
