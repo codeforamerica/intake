@@ -1,5 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 from intake import models, notifications
+import intake.services.events_service as EventsService
 
 
 TRANSFER_MESSAGE_INTRO = _(
@@ -63,6 +64,7 @@ def transfer_application(author, application, to_organization, reason):
     transfer.save()
     application.was_transferred_out = True
     application.save()
+    EventsService.app_transferred(application, new_application, author)
     return transfer, transfer_status_update, new_application
 
 

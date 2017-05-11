@@ -5,7 +5,6 @@ from django.views.generic.base import TemplateView
 
 from django.db.models import Q
 
-from django.contrib import messages
 from django.http import Http404, HttpResponse
 from django.template.response import TemplateResponse
 
@@ -13,7 +12,6 @@ from dal import autocomplete
 
 
 from intake import models, notifications, forms, utils
-from user_accounts.models import Organization
 from printing.pdf_form_display import PDFFormDisplay
 from intake.aggregate_serializer_fields import get_todays_date
 
@@ -21,6 +19,7 @@ import intake.services.submissions as SubmissionsService
 import intake.services.applications_service as AppsService
 import intake.services.bundles as BundlesService
 import intake.services.tags as TagsService
+import intake.services.events_service as EventsService
 
 from intake.views.base_views import ViewAppDetailsMixin
 from intake.views.app_detail_views import ApplicationDetail, not_allowed
@@ -51,7 +50,7 @@ class FilledPDF(ApplicationDetail):
                     organization=org)
             fillable_pdf = fillables.first()
             pdf = fillable_pdf.fill_for_submission(submission)
-        self.mark_viewed(request, submission)
+        SubmissionsService.mark_opened(submission, request.user)
         response = HttpResponse(pdf.pdf,
                                 content_type='application/pdf')
         return response
@@ -126,7 +125,7 @@ class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
             show_pdf=request.user.profile.should_see_pdf(),
             app_ids=[sub.id for sub in submissions]
         )
-        models.ApplicationLogEntry.log_bundle_opened(bundle, request.user)
+        EventsService.bundle_opened(bundle, request.user)
         notifications.slack_submissions_viewed.send(
             submissions=submissions, user=request.user,
             bundle_url=bundle.get_external_url())
@@ -156,7 +155,7 @@ class ApplicationBundleDetail(ApplicationDetail):
             show_pdf=bool(bundle.bundled_pdf),
             app_ids=[sub.id for sub in submissions],
             bundled_pdf_url=bundle.get_pdf_bundle_url())
-        models.ApplicationLogEntry.log_bundle_opened(bundle, request.user)
+        EventsService.bundle_opened(bundle, request.user)
         notifications.slack_submissions_viewed.send(
             submissions=submissions, user=request.user,
             bundle_url=bundle.get_external_url())
@@ -177,6 +176,7 @@ class ApplicationBundleDetailPDFView(ViewAppDetailsMixin, View):
                 "There doesn't seem to be a PDF associated with these "
                 "applications. If you think this is an error, please contact "
                 "Code for America.")
+        EventsService.bundle_opened(bundle, request.user)
         return HttpResponse(bundle.bundled_pdf, content_type="application/pdf")
 
 

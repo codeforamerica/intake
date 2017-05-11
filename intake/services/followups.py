@@ -3,6 +3,7 @@ from django.db.models import Q
 from intake import models, utils
 from intake.notifications import slack_simple
 from intake.service_objects import FollowupNotification
+import intake.services.events_service as EventsService
 
 
 def get_submissions_due_for_follow_ups(after_id=None):
@@ -39,6 +40,11 @@ def send_followup_notifications(submissions):
     for submission in submissions:
         followup_notification = FollowupNotification(submission)
         followup_notification.send()
+        if followup_notification.successes:
+            EventsService.followup_sent(
+                submission, followup_notification.contact_methods)
+            submission.has_been_sent_followup = True
+            submission.save()
         notifications.append(followup_notification)
     return notifications
 

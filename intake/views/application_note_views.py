@@ -1,6 +1,7 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
 from intake import models, serializers
+import intake.services.events_service as EventsService
 
 
 class NoteViewMixin:
@@ -12,7 +13,9 @@ class NoteViewMixin:
 class CreateNote(NoteViewMixin, generics.CreateAPIView):
     """Returns 201 if a note is successfully created
     """
-    pass
+    def perform_create(self, serializer):
+        note = serializer.save()
+        EventsService.note_added(note.submission, self.request.user)
 
 
 class DestroyNote(NoteViewMixin, generics.DestroyAPIView):

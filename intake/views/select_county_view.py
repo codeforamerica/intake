@@ -21,7 +21,7 @@ class SelectCountyView(ApplicantFormViewBase):
         return super().post(request, *args, **kwargs)
 
     def form_valid(self, form):
-        EventsService.log_app_started(
+        EventsService.form_started(
             self.request, counties=form.parsed_data['counties'])
         return super().form_valid(form)
 

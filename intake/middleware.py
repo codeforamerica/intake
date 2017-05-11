@@ -2,6 +2,7 @@ import logging
 from urllib.parse import urlparse
 
 from intake.models import Visitor
+import intake.services.events_service as EventsService
 
 
 logger = logging.getLogger(__name__)
@@ -54,7 +55,9 @@ class CountUniqueVisitorsMiddleware:
                 ip_address=getattr(request, 'ip_address', '')
             )
             visitor.save()
+            EventsService.site_entered(visitor, request.get_full_path())
             request.session['visitor_id'] = visitor.id
         else:
             visitor = Visitor.objects.get(id=visitor_id)
+            EventsService.page_viewed(visitor, request.get_full_path())
         request.visitor = visitor
