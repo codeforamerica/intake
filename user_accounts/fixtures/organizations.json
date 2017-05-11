@@ -421,7 +421,7 @@
     "short_followup_message": "Has the Ventura Public Defender contacted you and told you your next steps?",
     "long_followup_message": "Has the Ventura Public Defender contacted you and told you your next steps?",
     "address": "Ventura County Public Defender's Office\n800 S. Victoria Avenue\nRoom # 207\nVentura, CA 93009",
-    "phone_number": "(805) 654-2201",
+    "phone_number": "",
     "email": "",
     "fax_number": "(805) 648-9220",
     "notify_on_weekends": false,
