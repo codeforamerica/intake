@@ -1,0 +1,331 @@
+[class^="icon-"], [class*=" icon-"] {
+  line-height: $line-height-normal;
+  position: relative;
+}
+
+// Microadjustments for icons
+.icon-arrow_forward {
+  top: .15em;
+}
+
+.icon-keyboard_arrow_left {
+  top: .15em;
+}
+
+.icon-keyboard_arrow_right {
+  top: .15em;
+}
+
+.icon-arrow_back {
+  top: .15em;
+}
+
+.icon-insert_comment {
+  top: .1em;
+}
+
+.icon-file_upload {
+  top: .15em;
+}
+
+.icon-person {
+  top: .1em;
+}
+
+.icon-people {
+  top: .15em;
+}
+
+.icon-replay {
+  top: .1em;
+}
+
+.icon-add {
+  top: .1em;
+}
+
+.icon-control_point {
+  top: .1em;
+}
+
+.icon-info {
+  top: .1em;
+}
+
+
+// Paste style.css file from icomoon here
+
+@font-face {
+  font-family: 'icomoon';
+  src:  font-url('icomoon.eot?ia7soh');
+  src:  font-url('icomoon.eot?ia7soh#iefix') format('embedded-opentype'),
+    font-url('icomoon.ttf?ia7soh') format('truetype'),
+    font-url('icomoon.woff?ia7soh') format('woff'),
+    font-url('icomoon.svg?ia7soh#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-add:before {
+  content: "\e145";
+}
+.icon-add_a_photo:before {
+  content: "\e439";
+}
+.icon-add_circle:before {
+  content: "\e147";
+}
+.icon-control_point:before {
+  content: "\e3ba";
+}
+.icon-arrow_back:before {
+  content: "\e5c4";
+}
+.icon-arrow_downward:before {
+  content: "\e5db";
+}
+.icon-arrow_drop_down:before {
+  content: "\e5c5";
+}
+.icon-arrow_drop_up:before {
+  content: "\e5c7";
+}
+.icon-arrow_forward:before {
+  content: "\e5c8";
+}
+.icon-arrow_upward:before {
+  content: "\e5d8";
+}
+.icon-call_made:before {
+  content: "\e0b2";
+}
+.icon-call_received:before {
+  content: "\e0b5";
+}
+.icon-cancel:before {
+  content: "\e5c9";
+}
+.icon-check:before {
+  content: "\e5ca";
+}
+.icon-check_box:before {
+  content: "\e834";
+}
+.icon-check_box_outline_blank:before {
+  content: "\e835";
+}
+.icon-check_circle:before {
+  content: "\e86c";
+}
+.icon-navigate_before:before {
+  content: "\e408";
+}
+.icon-navigate_next:before {
+  content: "\e409";
+}
+.icon-close:before {
+  content: "\e5cd";
+}
+.icon-mode_edit:before {
+  content: "\e254";
+}
+.icon-delete:before {
+  content: "\e872";
+}
+.icon-delete_forever:before {
+  content: "\e92b";
+}
+.icon-done:before {
+  content: "\e876";
+}
+.icon-done_all:before {
+  content: "\e877";
+}
+.icon-time_to_leave:before {
+  content: "\e62c";
+}
+.icon-markunread:before {
+  content: "\e159";
+}
+.icon-expand_less:before {
+  content: "\e5ce";
+}
+.icon-favorite:before {
+  content: "\e87d";
+}
+.icon-favorite_border:before {
+  content: "\e87e";
+}
+.icon-get_app:before {
+  content: "\e884";
+}
+.icon-file_upload:before {
+  content: "\e2c6";
+}
+.icon-people:before {
+  content: "\e7fb";
+}
+.icon-group_add:before {
+  content: "\e7f0";
+}
+.icon-help:before {
+  content: "\e887";
+}
+.icon-help_outline:before {
+  content: "\e8fd";
+}
+.icon-highlight_off:before {
+  content: "\e888";
+}
+.icon-photo:before {
+  content: "\e410";
+}
+.icon-info:before {
+  content: "\e88e";
+}
+.icon-info_outline:before {
+  content: "\e88f";
+}
+.icon-insert_comment:before {
+  content: "\e24c";
+}
+.icon-tag_faces:before {
+  content: "\e420";
+}
+.icon-keyboard_arrow_down:before {
+  content: "\e313";
+}
+.icon-keyboard_arrow_left:before {
+  content: "\e314";
+}
+.icon-keyboard_arrow_right:before {
+  content: "\e315";
+}
+.icon-keyboard_arrow_up:before {
+  content: "\e316";
+}
+.icon-keyboard_backspace:before {
+  content: "\e317";
+}
+.icon-language:before {
+  content: "\e894";
+}
+.icon-room:before {
+  content: "\e8b4";
+}
+.icon-lock_open:before {
+  content: "\e898";
+}
+.icon-lock_outline:before {
+  content: "\e899";
+}
+.icon-mood_bad:before {
+  content: "\e7f3";
+}
+.icon-move_to_inbox:before {
+  content: "\e168";
+}
+.icon-no_encryption:before {
+  content: "\e641";
+}
+.icon-notifications:before {
+  content: "\e7f4";
+}
+.icon-notifications_active:before {
+  content: "\e7f7";
+}
+.icon-notifications_off:before {
+  content: "\e7f6";
+}
+.icon-person:before {
+  content: "\e7fd";
+}
+.icon-person_add:before {
+  content: "\e7fe";
+}
+.icon-phone_in_talk:before {
+  content: "\e61d";
+}
+.icon-phone_iphone:before {
+  content: "\e325";
+}
+.icon-visibility:before {
+  content: "\e8f4";
+}
+.icon-replay:before {
+  content: "\e042";
+}
+.icon-report:before {
+  content: "\e160";
+}
+.icon-warning:before {
+  content: "\e002";
+}
+.icon-sentiment_dissatisfied:before {
+  content: "\e811";
+}
+.icon-sentiment_neutral:before {
+  content: "\e812";
+}
+.icon-sentiment_satisfied:before {
+  content: "\e813";
+}
+.icon-sentiment_very_dissatisfied:before {
+  content: "\e814";
+}
+.icon-sentiment_very_satisfied:before {
+  content: "\e815";
+}
+.icon-settings:before {
+  content: "\e8b8";
+}
+.icon-star_border:before {
+  content: "\e83a";
+}
+.icon-stars:before {
+  content: "\e8d0";
+}
+.icon-thumb_down:before {
+  content: "\e8db";
+}
+.icon-thumb_up:before {
+  content: "\e8dc";
+}
+.icon-timer:before {
+  content: "\e425";
+}
+.icon-translate:before {
+  content: "\e8e2";
+}
+.icon-vertical_align_bottom:before {
+  content: "\e258";
+}
+.icon-vertical_align_top:before {
+  content: "\e25a";
+}
+.icon-watch_later:before {
+  content: "\e924";
+}
+.icon-zoom_in:before {
+  content: "\e8ff";
+}
+.icon-zoom_out:before {
+  content: "\e900";
+}
+
+

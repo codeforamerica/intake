@@ -1,0 +1,19 @@
+.summary-table {
+  text-align: center;
+  .grid__item {
+    margin-bottom: 1em;
+  }
+}
+
+.summary-table--left {
+  text-align: left;
+}
+
+.summary-table__label {
+  @extend .text--help;
+  margin-bottom: 0;
+}
+
+.summary-table__value {
+  @extend .text--pullquote;
+}

@@ -1,0 +1,68 @@
+.illustration {
+  text-indent: -9999px;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  background-position: center center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1em;
+}
+
+.illustration--cfa-logo {
+  @include retina-bg(cfa_logo, 100px 41px); 
+  margin-left: 0;
+  width: 100px;
+  height: 41px;
+}
+
+.illustration--cfa-logo-color {
+  @include retina-bg(cfa_logo_color, 100% auto);
+  width: 100%;
+  height: 200px;
+  opacity: .5;
+}
+
+
+// .illustration--success {
+//   width: 45px;
+//   height: 55px;
+//   @include retina-bg(illustration_success, 100% auto);
+// }
+
+
+.illustration--alameda {
+  @include retina-bg(alameda_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+.illustration--contra-costa {
+  @include retina-bg(contra_costa_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+.illustration--san-diego {
+  @include retina-bg(san_diego_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+
+.illustration--san-francisco {
+  @include retina-bg(san_francisco_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+.illustration--santa-cruz {
+  @include retina-bg(santa_cruz_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+.illustration--solano {
+  @include retina-bg(solano_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}

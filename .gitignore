@@ -24,3 +24,4 @@ staticfiles
 project/media
 local_settings.py
 *.pdf
+.sass-cache
