@@ -4,11 +4,12 @@ from user_accounts import models
 from django.contrib.auth import models as auth_models
 from django.utils.text import slugify
 from django.core.management import call_command
-
+from django.conf import settings
 
 fake = FakerFactory.create('en_US')
 
-fake_password = 'cmr-demo'
+fake_password = getattr(settings, 'TEST_USER_PASSWORD', 'cmr-demo')
+
 Pacific = timezone('US/Pacific')
 
 
