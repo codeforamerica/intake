@@ -1,10 +1,11 @@
+import logging
 from unittest.mock import patch, Mock
 from intake.tests.base_testcases import ExternalNotificationsPatchTestCase
 from intake.tests import mock, factories
 from intake.tests.mock_org_answers import get_answers_for_orgs
 from intake.management.commands import send_followups
-from intake.models import Applicant
 from user_accounts.models import Organization
+from project.tests.assertions import assertInLogsCount
 
 
 class TestCommand(ExternalNotificationsPatchTestCase):
@@ -43,10 +44,13 @@ class TestCommand(ExternalNotificationsPatchTestCase):
                 ))
         command = send_followups.Command()
         command.stdout = Mock()
-        command.handle()
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            command.handle()
         self.assertEqual(
             len(slack.mock_calls), 1)
         self.assertEqual(
             len(self.notifications.email_followup.send.mock_calls), 4)
         self.assertEqual(
             len(self.notifications.slack_notification_sent.send.mock_calls), 4)
+        assertInLogsCount(logs, {'event_name=app_followup_sent': 4})

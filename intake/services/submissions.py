@@ -1,8 +1,8 @@
 import itertools
 from django.utils.translation import ugettext_lazy as _
 import Levenshtein
-
-from intake import models, serializers
+import intake.services.events_service as EventsService
+from intake import models, serializers, notifications
 from intake.constants import SMS, EMAIL
 from .pagination import get_page
 from intake.service_objects import ConfirmationNotification
@@ -38,7 +38,6 @@ def create_submission(form, organizations, applicant_id):
 
     submission.organizations.add_orgs_to_sub(*organizations)
     link_with_any_duplicates(submission, applicant_id)
-    models.ApplicationEvent.log_app_submitted(applicant_id)
     return submission
 
 
@@ -100,6 +99,16 @@ def get_submissions_for_followups():
     subs = get_submissions_for_staff_user()
     return serializers.FormSubmissionFollowupListSerializer(
         subs, many=True).data
+
+
+def mark_opened(submission, user):
+    submission.applications.filter(
+        organization__profiles__user=user
+    ).distinct().update(has_been_opened=True)
+    EventsService.apps_opened(submission.applications.all(), user)
+    notifications.slack_submissions_viewed.send(
+        submissions=[submission], user=user,
+        bundle_url=submission.get_external_url())
 
 
 def check_for_existing_duplicates(submission, applicant_id):
@@ -203,6 +212,9 @@ def get_confirmation_flash_messages(confirmation_notification):
 def send_confirmation_notifications(sub):
     confirmation_notification = ConfirmationNotification(sub)
     confirmation_notification.send()
+    if confirmation_notification.successes:
+        EventsService.confirmation_sent(
+            sub, confirmation_notification.contact_methods)
     return get_confirmation_flash_messages(confirmation_notification)
 
 

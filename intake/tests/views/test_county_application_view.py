@@ -1,4 +1,5 @@
 import random
+import logging
 from unittest.mock import patch
 from django.core.urlresolvers import reverse
 from formation import fields
@@ -7,7 +8,8 @@ from intake.tests.views.test_applicant_form_view_base \
     import ApplicantFormViewBaseTestCase
 from intake.views.county_application_view import WARNING_FLASH_MESSAGE
 from intake.tests import mock, factories
-from intake import models, constants
+from intake import constants
+from project.tests.assertions import assertInLogsCount
 
 
 class TestCountyApplicationNoWarningsView(ApplicantFormViewBaseTestCase):
@@ -132,21 +134,35 @@ class TestCountyApplicationNoWarningsView(ApplicantFormViewBaseTestCase):
         county_setting = self.client.session['form_in_progress']['counties']
         self.assertEqual(county_setting, second_choices)
 
-    @patch('intake.services.events_service.log_form_page_complete')
-    def test_logs_page_complete_event(self, event_log):
+    def test_logs_page_complete_event(self):
         self.set_form_session_data(counties=['contracosta'])
-        self.client.fill_form(
-            reverse(self.view_name),
-            **mock.fake.cc_pubdef_answers())
-        self.assertEqual(event_log.call_count, 1)
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            self.client.fill_form(
+                reverse(self.view_name),
+                **mock.fake.cc_pubdef_answers())
+        assertInLogsCount(
+            logs, {
+                'event_name=application_page_complete': 1,
+                'event_name=application_started': 0,
+                'event_name=application_submitted': 1,
+                'event_name=application_errors': 0,
+                })
 
-    @patch('intake.services.events_service.log_form_validation_errors')
-    def test_logs_validation_errors_event(self, event_log):
+    def test_logs_validation_errors_event(self):
         self.set_form_session_data(counties=['sanfrancisco'])
-        self.client.fill_form(
-            reverse(self.view_name),
-            **mock.fake.sf_pubdef_answers(first_name=''))
-        self.assertEqual(event_log.call_count, 1)
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            self.client.fill_form(
+                reverse(self.view_name),
+                **mock.fake.sf_pubdef_answers(first_name=''))
+        assertInLogsCount(
+            logs, {
+                'event_name=application_page_complete': 0,
+                'event_name=application_started': 0,
+                'event_name=application_submitted': 0,
+                'event_name=application_errors': 1,
+                })
 
     def test_saves_form_data_to_session(self):
         self.set_form_session_data(counties=['contracosta'])
@@ -169,9 +185,11 @@ class TestCountyApplicationView(TestCountyApplicationNoWarningsView):
         applicant = factories.ApplicantFactory.create()
         self.set_form_session_data(
             counties=['sanfrancisco'], applicant_id=applicant.id)
-        response = self.client.fill_form(
-            reverse(self.view_name),
-            **mock.fake.sf_pubdef_answers(ssn=''))
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            response = self.client.fill_form(
+                reverse(self.view_name),
+                **mock.fake.sf_pubdef_answers(ssn=''))
         self.assertRedirects(
             response, reverse('intake-confirm'), fetch_redirect_response=False)
         response = self.client.get(response.url)
@@ -182,6 +200,10 @@ class TestCountyApplicationView(TestCountyApplicationNoWarningsView):
                 fields.SocialSecurityNumberField.is_recommended_error_message))
         slack.assert_not_called()
         send_confirmation.assert_not_called()
-        submitted_event_count = applicant.events.filter(
-            name=models.ApplicationEvent.APPLICATION_SUBMITTED).count()
-        self.assertEqual(0, submitted_event_count)
+        assertInLogsCount(
+            logs, {
+                'event_name=application_page_complete': 1,
+                'event_name=application_started': 0,
+                'event_name=application_submitted': 0,
+                'event_name=application_errors': 0,
+                })

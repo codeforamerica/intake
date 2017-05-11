@@ -3,6 +3,7 @@ from taggit.models import Tag
 from intake.models import SubmissionTagLink, FormSubmission
 from intake.exceptions import UserCannotBeNoneError
 from intake.serializers import TagSerializer
+import intake.services.events_service as EventsService
 
 
 def update_tags_for_submission(user_id, submission_id, tags_input_string):
@@ -34,13 +35,14 @@ def update_tags_for_submission(user_id, submission_id, tags_input_string):
             tag__name__in=existing_tag_names)
         existing_through_tag_ids = set(
             through.tag_id for through in existing_through_models)
-        new_through_models = (
+        new_through_models = [
             SubmissionTagLink(
                 content_object_id=submission_id,
                 tag_id=tag.id,
                 user_id=user_id) for tag in tag_objs
-            if tag.id not in existing_through_tag_ids)
+            if tag.id not in existing_through_tag_ids]
         SubmissionTagLink.objects.bulk_create(new_through_models)
+        EventsService.tags_added(new_through_models)
     tags_for_submission = FormSubmission.objects.get(
         id=submission_id).tags.all()
     return TagSerializer(tags_for_submission, many=True).data
