@@ -1,4 +1,4 @@
-from unittest.mock import patch, Mock
+from unittest.mock import patch
 from user_accounts.models import Organization
 from intake.constants import Organizations
 from intake.tests import factories
@@ -7,7 +7,7 @@ from intake.tests.base_testcases import ExternalNotificationsPatchTestCase
 from intake.tests.services.test_followups import get_old_date
 from intake.service_objects import applicant_notifications
 from intake.constants import SMS, EMAIL
-from intake import utils, models
+from intake import utils
 
 
 class TestApplicantNotification(ExternalNotificationsPatchTestCase):
@@ -106,14 +106,6 @@ class TestFollowupNotification(TestApplicantNotification):
         notification.set_contact_methods()
         self.assertEqual(methods, notification.contact_methods)
 
-    def test_logs_one_followup_event_on_applicant(self):
-        orgs, sub, notification = self.org_notification_and_default_sub()
-        # after sending, should log event on applicant
-        notification.send()
-        results = sub.applicant.events.filter(
-            name=models.ApplicationEvent.FOLLOWUP_SENT)
-        self.assertEqual(results.count(), 1)
-
     def test_logs_to_slack_correctly(self):
         orgs, sub, notification = self.org_notification_and_default_sub()
         notification.send()
@@ -126,7 +118,6 @@ class TestFollowupNotification(TestApplicantNotification):
 
     def test_sends_expected_notification_calls(self):
         orgs, sub, notification = self.org_notification_and_default_sub()
-        notification.log_event_to_submission = Mock()
         notification.send()
         self.assertEqual(
             len(self.notifications.email_followup.send.mock_calls), 1)
@@ -154,14 +145,6 @@ class TestConfirmationNotification(TestApplicantNotification):
 
         self.assertEqual(messages, context['next_steps'])
 
-    def test_logs_two_confirmation_events_on_applicant(self):
-        orgs, sub, notification = self.org_notification_and_default_sub()
-        # after sending, should log event on applicant
-        notification.send()
-        results = sub.applicant.events.filter(
-            name=models.ApplicationEvent.CONFIRMATION_SENT)
-        self.assertEqual(results.count(), 2)
-
     def test_logs_to_slack_correctly(self):
         orgs, sub, notification = self.org_notification_and_default_sub()
         notification.send()
@@ -185,7 +168,6 @@ class TestConfirmationNotification(TestApplicantNotification):
 
     def test_sends_expected_notification_calls(self):
         orgs, sub, notification = self.org_notification_and_default_sub()
-        notification.log_event_to_submission = Mock()
         notification.send()
         self.assertEqual(
             len(self.notifications.email_confirmation.send.mock_calls), 1)
