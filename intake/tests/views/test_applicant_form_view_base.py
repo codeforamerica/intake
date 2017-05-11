@@ -8,6 +8,7 @@ from intake import models
 from user_accounts.models import Organization
 from intake.tests.mock import fake
 from intake.tests import factories
+from project.tests.assertions import assertInLogsCount
 
 
 class ApplicantFormViewBaseTestCase(AuthIntegrationTestCase):
@@ -99,18 +100,26 @@ class TestApplicantFormViewBase(ApplicantFormViewBaseTestCase):
         self.assertListEqual(
             orgs, mock_view_instance.receiving_organizations)
 
-    @patch('intake.services.events_service.log_form_page_complete')
     @patch('intake.services.messages_service.flash_success')
     @patch('intake.services.submissions.fill_pdfs_for_submission')
     @patch('intake.services.submissions.create_submission')
     def test_finalize_application_actions(
-            self, create_sub, fill_pdfs, flash_success, log_page_complete):
+            self, create_sub, fill_pdfs, flash_success):
         self.set_form_session_data(counties=['contracosta'])
         answers = fake.contra_costa_county_form_answers()
-        self.client.fill_form(
-            reverse('intake-county_application'), **answers)
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            self.client.fill_form(
+                reverse('intake-county_application'), **answers)
         self.assertEqual(create_sub.call_count, 1)
         self.assertEqual(fill_pdfs.call_count, 1)
         self.assertEqual(self.slack_new_submission.call_count, 1)
         self.assertEqual(self.send_confirmations.call_count, 1)
         self.assertEqual(flash_success.call_count, 1)
+        assertInLogsCount(
+            logs, {
+                'event_name=application_submitted': 1,
+                'event_name=application_page_complete': 1,
+                'event_name=application_started': 0,
+                'event_name=application_errors': 0,
+            })

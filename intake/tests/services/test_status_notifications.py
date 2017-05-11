@@ -37,7 +37,6 @@ class TestSendAndSaveNewStatus(TestCase):
             sent_message="hey there")
         services.status_notifications.send_and_save_new_status(
             mock_request, notification_data, status_update_data)
-
         expected_intro_message = \
             services.status_notifications.get_notification_intro(profile)
         latest_update = models.StatusUpdate.objects.filter(

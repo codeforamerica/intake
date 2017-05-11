@@ -33,25 +33,6 @@ class TestApplicant(TestCase):
             second_applicant.save()
         self.assertEqual(visitor.applicant, applicant)
 
-    def test_can_log_event(self):
-        applicant = factories.ApplicantFactory()
-        event_name = "im_being_tested"
-        event = applicant.log_event(event_name)
-        self.assertTrue(event.id)
-        self.assertEqual(event.applicant, applicant)
-        self.assertEqual(event.name, event_name)
-        self.assertEqual(event.data, {})
-
-        all_events = list(applicant.events.all())
-        self.assertIn(event, all_events)
-
-    def test_can_log_event_with_data(self):
-        applicant = factories.ApplicantFactory()
-        event_name = "im_being_tested"
-        event_data = {"foo": "bar"}
-        event = applicant.log_event(event_name, event_data)
-        self.assertEqual(event.data, event_data)
-
     def test_permission_to_view_aggregate_stats(self):
         # given a user and a group
         # and the group has permission to view aggregate_stats

@@ -1,3 +1,4 @@
+import logging
 from django.core.urlresolvers import reverse
 from formation import fields
 from markupsafe import escape
@@ -6,6 +7,7 @@ from intake import models, constants
 from intake.tests import mock
 from intake.tests.views.test_applicant_form_view_base \
     import ApplicantFormViewBaseTestCase
+from project.tests.assertions import assertInLogsCount
 
 
 # these actually probably work independent of the existing county application
@@ -70,13 +72,21 @@ class TestWriteDeclarationLetterView(ApplicantFormViewBaseTestCase):
         self.assertContains(
             response, "You are applying for help in Alameda County.")
 
-    @patch('intake.services.events_service.log_form_page_complete')
-    def test_logs_page_complete_event(self, event_log):
+    def test_logs_page_complete_event(self):
         self.set_form_session_data(
             counties=['alameda'], **mock.fake.a_pubdef_answers())
-        self.client.fill_form(
-            reverse(self.view_name), **mock.fake.declaration_letter_answers())
-        self.assertEqual(event_log.call_count, 1)
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            self.client.fill_form(
+                reverse(self.view_name),
+                **mock.fake.declaration_letter_answers())
+        assertInLogsCount(
+            logs, {
+                'event_name=application_page_complete': 1,
+                'event_name=application_started': 0,
+                'event_name=application_submitted': 0,
+                'event_name=application_errors': 0,
+                })
 
     def test_saves_form_data_to_session(self):
         answers = mock.fake.declaration_letter_answers()
@@ -88,14 +98,22 @@ class TestWriteDeclarationLetterView(ApplicantFormViewBaseTestCase):
         for key, value in answers.items():
             self.assertEqual(form_data[key], [value])
 
-    @patch('intake.services.events_service.log_form_validation_errors')
-    def test_logs_validation_errors_event(self, event_log):
+    def test_logs_validation_errors_event(self):
         self.set_form_session_data(
             counties=['alameda'], **mock.fake.a_pubdef_answers())
-        self.client.fill_form(
-            reverse(self.view_name), **mock.fake.declaration_letter_answers(
-                declaration_letter_intro=''))
-        self.assertEqual(event_log.call_count, 1)
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            self.client.fill_form(
+                reverse(self.view_name),
+                **mock.fake.declaration_letter_answers(
+                    declaration_letter_intro=''))
+        assertInLogsCount(
+            logs, {
+                'event_name=application_page_complete': 0,
+                'event_name=application_started': 0,
+                'event_name=application_submitted': 0,
+                'event_name=application_errors': 1,
+                })
 
     @patch(
         'intake.services.submissions.send_confirmation_notifications')
@@ -194,14 +212,21 @@ class TestReviewDeclarationLetterView(ApplicantFormViewBaseTestCase):
             reverse(self.view_name), submit_action='invalid_option')
         self.assertEqual(response.status_code, 200)
 
-    @patch('intake.services.events_service.log_form_page_complete')
-    def test_logs_page_complete_event(self, event_log):
+    def test_logs_page_complete_event(self):
         self.set_form_session_data(
             counties=['alameda'], **mock.fake.a_pubdef_answers(
                 **mock.fake.declaration_letter_answers()))
-        self.client.fill_form(
-            reverse(self.view_name), submit_action='approve_letter')
-        self.assertEqual(event_log.call_count, 1)
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            self.client.fill_form(
+                reverse(self.view_name), submit_action='approve_letter')
+        assertInLogsCount(
+            logs, {
+                'event_name=application_page_complete': 1,
+                'event_name=application_started': 0,
+                'event_name=application_submitted': 1,
+                'event_name=application_errors': 0,
+                })
 
     def test_saves_form_data_to_session(self):
         self.set_form_session_data(
@@ -212,11 +237,18 @@ class TestReviewDeclarationLetterView(ApplicantFormViewBaseTestCase):
         form_data = self.get_form_session_data()
         self.assertEqual(form_data['submit_action'], ['approve_letter'])
 
-    @patch('intake.services.events_service.log_form_validation_errors')
-    def test_logs_validation_errors_event(self, event_log):
+    def test_logs_validation_errors_event(self):
         self.set_form_session_data(
             counties=['alameda'], **mock.fake.a_pubdef_answers(
                 **mock.fake.declaration_letter_answers()))
-        self.client.fill_form(
-            reverse(self.view_name), submit_action='invalid_option')
-        self.assertEqual(event_log.call_count, 1)
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            self.client.fill_form(
+                reverse(self.view_name), submit_action='invalid_option')
+        assertInLogsCount(
+            logs, {
+                'event_name=application_page_complete': 0,
+                'event_name=application_started': 0,
+                'event_name=application_submitted': 0,
+                'event_name=application_errors': 1,
+                })

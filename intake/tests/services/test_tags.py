@@ -1,3 +1,4 @@
+import logging
 from django.test import TestCase
 from intake.tests.base_testcases import IntakeDataTestCase
 from intake.tests import mock
@@ -5,6 +6,7 @@ from user_accounts.tests.mock import create_user
 from intake.models import SubmissionTagLink
 import intake.services.tags as TagsService
 from intake.exceptions import UserCannotBeNoneError
+from project.tests.assertions import assertInLogsCount
 
 
 class TestUpdateTagsForSubmission(IntakeDataTestCase):
@@ -32,14 +34,25 @@ class TestUpdateTagsForSubmission(IntakeDataTestCase):
             self.assertEqual(name, tag_name)
 
     def test_all_new_tags(self):
-        result = TagsService.update_tags_for_submission(
-            self.cfa_user.id, self.sub.id, "new, thing")
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            result = TagsService.update_tags_for_submission(
+                self.cfa_user.id, self.sub.id, "new, thing")
         self.assertTagsHaveNames(result, ["existing", "new", "thing"])
+        assertInLogsCount(logs, {
+            'event_name=app_tag_added': 2, 'new': 1, 'thing': 1})
 
     def test_some_new_tags(self):
-        result = TagsService.update_tags_for_submission(
-            self.cfa_user.id, self.sub.id, "old, new")
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            result = TagsService.update_tags_for_submission(
+                self.cfa_user.id, self.sub.id, "old, new")
         self.assertTagsHaveNames(result, ["existing", "new", "old"])
+        assertInLogsCount(
+            logs, {
+                'event_name=app_tag_added': 2,
+                "'tag_name': 'new'": 1,
+                "'tag_name': 'old'": 1})
 
     def test_no_new_tags(self):
         result = TagsService.update_tags_for_submission(
