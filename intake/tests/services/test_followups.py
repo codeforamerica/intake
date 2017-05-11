@@ -1,5 +1,5 @@
+import logging
 from django.test import TestCase
-
 import intake.services.followups as FollowupsService
 from intake.tests import factories
 from intake.tests.mock import get_old_date, get_newer_date
@@ -9,8 +9,8 @@ from project.fixtures_index import (
     ESSENTIAL_DATA_FIXTURES,
     MOCK_USER_ACCOUNT_FIXTURES)
 from intake.constants import Organizations
-from intake import models
 from user_accounts.models import Organization
+from project.tests.assertions import assertInLogsCount
 
 """
 Each function in intake.services.followups corresponds to a TestCase in this
@@ -54,15 +54,26 @@ class TestGetSubmissionsDueForFollowups(TestCase):
         applicant = factories.ApplicantFactory()
         sub_w_followup = factories.FormSubmissionWithOrgsFactory.create(
             date_received=get_old_date(),
-            applicant=applicant, organizations=[self.followup_org])
-        models.ApplicationEvent.log_followup_sent(
-            applicant.id,
-            contact_info=dict(email=sub_w_followup.answers['email']),
-            message_content="hey how are things going?")
+            applicant=applicant, organizations=[self.followup_org],
+            has_been_sent_followup=True)
         # if we grab subs that need followups
         results = FollowupsService.get_submissions_due_for_follow_ups()
         results_set = set(results)
         # we should only have ones that have not received followups
+        self.assertIn(no_followup, results_set)
+        self.assertNotIn(sub_w_followup, results_set)
+
+    def test_filters_out_subs_with_previous_followup_flag(self):
+        # given old submissions, some with old followups
+        no_followup = factories.FormSubmissionWithOrgsFactory.create(
+            date_received=get_old_date(), organizations=[self.followup_org])
+        sub_w_followup = factories.FormSubmissionWithOrgsFactory.create(
+            date_received=get_old_date(), organizations=[self.followup_org],
+            has_been_sent_followup=True)
+        # if we grab subs that need followups
+        results = FollowupsService.get_submissions_due_for_follow_ups()
+        results_set = set(results)
+        # we should only have ones that have not been flagged
         self.assertIn(no_followup, results_set)
         self.assertNotIn(sub_w_followup, results_set)
 
@@ -83,11 +94,8 @@ class TestGetSubmissionsDueForFollowups(TestCase):
         applicant = factories.ApplicantFactory()
         followed_up_sub = old_subs[2]
         followed_up_sub.applicant = applicant
+        followed_up_sub.has_been_sent_followup = True
         followed_up_sub.save()
-        models.ApplicationEvent.log_followup_sent(
-            applicant.id,
-            contact_info=dict(email=followed_up_sub.answers['email']),
-            message_content="hey how are things going?")
         # when we get submissions due for follow ups,
         results = list(FollowupsService.get_submissions_due_for_follow_ups(
             after_id=second_oldest_id))
@@ -182,7 +190,9 @@ class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
                 organizations=orgs,
                 answers=self.full_answers(),
             ))
-        FollowupsService.send_followup_notifications(subs)
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            FollowupsService.send_followup_notifications(subs)
         self.assertEqual(
             FollowupsService.get_submissions_due_for_follow_ups().count(), 0)
         self.assertEqual(
@@ -191,13 +201,10 @@ class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
             len(self.notifications.sms_followup.send.mock_calls), 0)
         self.assertEqual(
             len(self.notifications.slack_notification_sent.send.mock_calls), 4)
-        followup_events = models.ApplicationEvent.objects.filter(
-            name=models.ApplicationEvent.FOLLOWUP_SENT)
-        self.assertEqual(followup_events.count(), 4)
-        followed_up_app_ids = set(
-            followup_events.values_list('applicant_id', flat=True))
+        assertInLogsCount(logs, {'event_name=app_followup_sent': 4})
         for sub in subs:
-            self.assertIn(sub.applicant_id, followed_up_app_ids)
+            assertInLogsCount(logs, {'distinct_id=' + sub.get_uuid(): 1})
+            self.assertEqual(sub.has_been_sent_followup, True)
 
     def test_if_some_have_usable_contact_info(self):
         orgs = [
@@ -214,8 +221,10 @@ class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
                 factories.FormSubmissionWithOrgsFactory.create(
                     organizations=orgs,
                     answers=self.cant_contact_answers()))
-        FollowupsService.send_followup_notifications(
-            contacted_subs + not_contacted_subs)
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            FollowupsService.send_followup_notifications(
+                contacted_subs + not_contacted_subs)
         self.assertEqual(
             FollowupsService.get_submissions_due_for_follow_ups().count(), 0)
         self.assertEqual(
@@ -224,15 +233,13 @@ class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
             len(self.notifications.sms_followup.send.mock_calls), 0)
         self.assertEqual(
             len(self.notifications.slack_notification_sent.send.mock_calls), 2)
-        followup_events = models.ApplicationEvent.objects.filter(
-            name=models.ApplicationEvent.FOLLOWUP_SENT)
-        self.assertEqual(followup_events.count(), 2)
-        followed_up_app_ids = set(
-            followup_events.values_list('applicant_id', flat=True))
+        assertInLogsCount(logs, {'event_name=app_followup_sent': 2})
         for sub in contacted_subs:
-            self.assertIn(sub.applicant_id, followed_up_app_ids)
+            assertInLogsCount(logs, {'distinct_id=' + sub.get_uuid(): 1})
+            self.assertEqual(sub.has_been_sent_followup, True)
         for sub in not_contacted_subs:
-            self.assertNotIn(sub.applicant_id, followed_up_app_ids)
+            assertInLogsCount(logs, {'distinct_id=' + sub.get_uuid(): 0})
+            self.assertEqual(sub.has_been_sent_followup, False)
 
     def test_that_followup_messages_arent_sent_for_apps_w_updates(self):
         org_a, org_b = Organization.objects.filter(

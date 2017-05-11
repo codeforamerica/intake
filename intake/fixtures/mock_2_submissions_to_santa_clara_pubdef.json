@@ -1,9 +1,10 @@
 [
 {
   "model": "intake.visitor",
-  "pk": 119,
+  "pk": 19,
   "fields": {
-    "first_visit": "2017-04-25T17:41:54.801Z",
+    "uuid": "494d2070-927a-4c5b-a781-79815f57e5b8",
+    "first_visit": "2017-05-10T17:15:07.186Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -11,9 +12,10 @@
 },
 {
   "model": "intake.visitor",
-  "pk": 120,
+  "pk": 20,
   "fields": {
-    "first_visit": "2017-04-25T17:41:54.848Z",
+    "uuid": "ed978e19-15ff-4d0d-af8e-af7be6103f4b",
+    "first_visit": "2017-05-10T17:15:07.207Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -21,47 +23,47 @@
 },
 {
   "model": "intake.applicant",
-  "pk": 119,
+  "pk": 19,
   "fields": {
-    "visitor": 119
+    "visitor": 19
   }
 },
 {
   "model": "intake.applicant",
-  "pk": 120,
+  "pk": 20,
   "fields": {
-    "visitor": 120
+    "visitor": 20
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 118,
+  "pk": 19,
   "fields": {
-    "applicant": 119,
+    "applicant": 19,
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
         "prefers_sms"
       ],
-      "first_name": "Anthony",
-      "middle_name": "Michael",
-      "last_name": "Avila",
-      "preferred_pronouns": "she",
+      "first_name": "Kristin",
+      "middle_name": "Mark",
+      "last_name": "Spencer",
+      "preferred_pronouns": "he",
       "phone_number": "4152124848",
       "alternate_phone_number": "4152124848",
       "email": "cmrtestuser@gmail.com",
       "address": {
-        "street": "1320 Mccarthy Shores Suite 683",
-        "city": "East Jason",
-        "state": "NM",
-        "zip": "58276"
+        "street": "82294 Nathan Springs Apt. 023",
+        "city": "Jonathanfort",
+        "state": "CO",
+        "zip": "93238"
       },
       "dob": {
-        "month": "3",
-        "day": "11",
-        "year": "1963"
+        "month": "11",
+        "day": "23",
+        "year": "1966"
       },
-      "pfn_number": "838205",
+      "pfn_number": "990206",
       "is_veteran": "no",
       "being_charged": "no",
       "serving_sentence": "no",
@@ -71,14 +73,14 @@
       "reduced_probation": "no",
       "rap_outside_sf": "no",
       "when_where_outside_sf": "",
-      "owes_court_fees": "yes",
-      "currently_employed": "no",
-      "monthly_income": 2508,
+      "owes_court_fees": "no",
+      "currently_employed": "yes",
+      "monthly_income": 3309,
       "income_source": "a job",
-      "on_public_benefits": "no",
+      "on_public_benefits": "yes",
       "monthly_expenses": 2000,
-      "household_size": 3,
-      "has_children": "yes",
+      "household_size": 2,
+      "has_children": "no",
       "is_married": "no",
       "reasons_for_applying": [
         "background_check",
@@ -89,14 +91,15 @@
       "additional_information": "I want help",
       "understands_limits": "yes",
       "consent_to_represent": "yes",
-      "declaration_letter_intro": "Quasi amet necessitatibus ullam cupiditate maxime. Aliquid sequi harum quod corrupti. Quasi rerum est delectus debitis dolores libero iste dolore.",
-      "declaration_letter_life_changes": "Illo voluptatem illo aut fugit impedit. Ipsum nulla aspernatur distinctio. Animi expedita quia quas sint possimus est. Hic natus illo porro maiores iusto at voluptas.",
-      "declaration_letter_activities": "Eligendi in dolor illum explicabo laboriosam quaerat. Eaque minima maxime repellendus necessitatibus ipsam aliquid. Cupiditate beatae dignissimos expedita porro.",
-      "declaration_letter_goals": "Temporibus doloribus eligendi optio perspiciatis adipisci doloremque dolorem. Consequuntur possimus doloribus sunt rerum quos quae vel. Quidem repudiandae sed molestiae eius enim alias veritatis reprehenderit. In commodi blanditiis maxime beatae.",
-      "declaration_letter_why": "Ut dolor occaecati animi distinctio atque sed. Explicabo corporis quo officia quibusdam veniam. Recusandae magni eveniet odio aliquid similique aspernatur cupiditate. Deleniti rem voluptate blanditiis accusamus quisquam necessitatibus rem."
+      "declaration_letter_intro": "Aliquam tenetur ex officiis laboriosam et nisi repellendus. Eligendi ducimus maiores maxime soluta molestiae.",
+      "declaration_letter_life_changes": "Repellendus perferendis optio vero ab velit hic. Sit iure voluptate odio ad nulla non maxime distinctio. Ipsam enim amet sapiente vero excepturi animi alias.",
+      "declaration_letter_activities": "Officiis maiores fugit similique officia sint. Aut odio nihil tenetur mollitia doloribus cupiditate totam. Commodi adipisci voluptatum doloremque rem fugit ratione fuga dolor.",
+      "declaration_letter_goals": "Blanditiis inventore repellat doloremque cumque cupiditate error. Dolores quas aut earum aliquam. Fuga earum molestias nulla placeat nesciunt aliquam illum fuga.",
+      "declaration_letter_why": "Totam beatae reprehenderit magni veritatis tempora dolorum reiciendis. Ipsa odio hic dolor fugiat explicabo. Perferendis architecto quo autem. Sed ex quisquam velit quis tempora similique."
     },
-    "first_name": "Anthony",
-    "last_name": "Avila",
+    "has_been_sent_followup": false,
+    "first_name": "Kristin",
+    "last_name": "Spencer",
     "dob": null,
     "ssn": "",
     "last_four": "",
@@ -109,13 +112,13 @@
     "how_did_you_hear": "from work",
     "additional_information": "I want help",
     "aliases": "",
-    "pfn_number": "838205",
+    "pfn_number": "990206",
     "contact_preferences": "['prefers_sms']",
-    "preferred_pronouns": "she",
-    "street": "1320 Mccarthy Shores Suite 683",
-    "city": "East Jason",
-    "state": "NM",
-    "zip": "58276",
+    "preferred_pronouns": "he",
+    "street": "82294 Nathan Springs Apt. 023",
+    "city": "Jonathanfort",
+    "state": "CO",
+    "zip": "93238",
     "us_citizen": "",
     "is_veteran": "no",
     "is_student": "",
@@ -129,68 +132,68 @@
     "rap_outside_sf": "no",
     "when_where_outside_sf": "",
     "has_suspended_license": "",
-    "owes_court_fees": "yes",
-    "currently_employed": "no",
-    "monthly_income": 2508,
+    "owes_court_fees": "no",
+    "currently_employed": "yes",
+    "monthly_income": 3309,
     "income_source": "a job",
-    "on_public_benefits": "no",
+    "on_public_benefits": "yes",
     "owns_home": "",
     "monthly_expenses": 2000,
-    "household_size": 3,
+    "household_size": 2,
     "dependents": "",
     "is_married": "no",
-    "has_children": "yes",
-    "old_uuid": "e0b690e5cad34959bf15c06aecd5676b",
-    "anonymous_name": "Calm Cuttlefish",
-    "date_received": "2017-04-22T05:34:16-07:00"
+    "has_children": "no",
+    "old_uuid": "41ce17da65db4c93bd9e9189991857ab",
+    "anonymous_name": "Orange Toucan",
+    "date_received": "2017-04-28T12:01:16-07:00"
   }
 },
 {
   "model": "intake.formsubmission",
-  "pk": 119,
+  "pk": 20,
   "fields": {
-    "applicant": 120,
+    "applicant": 20,
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
-        "prefers_sms"
+        "prefers_email"
       ],
-      "first_name": "Oscar",
-      "middle_name": "David",
-      "last_name": "Branch",
-      "preferred_pronouns": "none",
+      "first_name": "Christian",
+      "middle_name": "Valerie",
+      "last_name": "Roman",
+      "preferred_pronouns": "they",
       "phone_number": "4152124848",
       "alternate_phone_number": "4152124848",
       "email": "cmrtestuser@gmail.com",
       "address": {
-        "street": "97571 Friedman Via",
-        "city": "South Katieside",
-        "state": "LA",
-        "zip": "17437"
+        "street": "026 Garcia Lake Apt. 104",
+        "city": "Lake Amy",
+        "state": "AS",
+        "zip": "68534"
       },
       "dob": {
-        "month": "1",
-        "day": "25",
-        "year": "1967"
+        "month": "10",
+        "day": "19",
+        "year": "1963"
       },
-      "pfn_number": "305884",
-      "is_veteran": "yes",
+      "pfn_number": "605733",
+      "is_veteran": "no",
       "being_charged": "no",
       "serving_sentence": "no",
       "on_probation_parole": "yes",
       "where_probation_or_parole": "Yolo County",
       "when_probation_or_parole": "2018",
       "reduced_probation": "no",
-      "rap_outside_sf": "i_dont_know",
+      "rap_outside_sf": "no",
       "when_where_outside_sf": "",
-      "owes_court_fees": "yes",
+      "owes_court_fees": "no",
       "currently_employed": "no",
-      "monthly_income": 6019,
+      "monthly_income": 1797,
       "income_source": "a job",
       "on_public_benefits": "yes",
       "monthly_expenses": 2000,
-      "household_size": 4,
-      "has_children": "yes",
+      "household_size": 2,
+      "has_children": "no",
       "is_married": "yes",
       "reasons_for_applying": [
         "background_check",
@@ -201,14 +204,15 @@
       "additional_information": "I want help",
       "understands_limits": "yes",
       "consent_to_represent": "yes",
-      "declaration_letter_intro": "Eaque minus molestias eveniet temporibus. Quos eveniet libero dicta dolor saepe dolor enim. Quam provident veritatis nam harum eum veritatis. Temporibus quae itaque hic ratione.",
-      "declaration_letter_life_changes": "Unde rem quibusdam accusantium aliquid fugiat distinctio ea. Aperiam consequuntur sunt aliquam ipsa expedita officia consequatur.",
-      "declaration_letter_activities": "Esse saepe rem porro veritatis. Accusamus deserunt ea adipisci qui in animi sequi quia. Deleniti consequatur natus ad blanditiis eos aliquam odit.",
-      "declaration_letter_goals": "Cupiditate aliquid illum minus temporibus magni tenetur deleniti. Sit dignissimos corporis atque praesentium. Commodi a animi omnis ex. Vel eos officiis dolor doloremque.",
-      "declaration_letter_why": "Quae a accusamus fugit error dolore praesentium provident. Voluptatibus quos maiores iure sint perspiciatis. Iste quod alias atque sapiente."
+      "declaration_letter_intro": "In doloribus aliquid repellendus reprehenderit veniam nam reiciendis. Hic illum debitis delectus iusto aliquam et eos. Quibusdam dolores repellendus dolorum vero a. Aut velit quas placeat repellat. Porro adipisci eligendi deserunt tempora.",
+      "declaration_letter_life_changes": "Eos commodi officia quam exercitationem. Ipsum dolores repellendus alias natus et accusantium vitae. Recusandae fugiat expedita earum aspernatur iste. Magnam nesciunt nostrum cum.",
+      "declaration_letter_activities": "Sed ad quae aut neque numquam consectetur dolorem. Quaerat repellendus voluptate debitis deserunt rem numquam asperiores. Voluptatibus repudiandae adipisci incidunt quod commodi accusantium. Voluptas nulla distinctio natus quasi fugit voluptas.",
+      "declaration_letter_goals": "Harum accusamus iure enim autem architecto occaecati perferendis consectetur. Provident corrupti at deserunt fuga aliquam accusamus. Blanditiis laudantium nostrum quasi sed laborum deserunt. Neque quia labore deserunt iusto eligendi.",
+      "declaration_letter_why": "Error nihil hic harum. Praesentium at aliquam illum at optio. Quae iste architecto libero ullam adipisci. Laborum veniam laudantium quo labore quos."
     },
-    "first_name": "Oscar",
-    "last_name": "Branch",
+    "has_been_sent_followup": false,
+    "first_name": "Christian",
+    "last_name": "Roman",
     "dob": null,
     "ssn": "",
     "last_four": "",
@@ -221,15 +225,15 @@
     "how_did_you_hear": "from work",
     "additional_information": "I want help",
     "aliases": "",
-    "pfn_number": "305884",
-    "contact_preferences": "['prefers_sms']",
-    "preferred_pronouns": "none",
-    "street": "97571 Friedman Via",
-    "city": "South Katieside",
-    "state": "LA",
-    "zip": "17437",
+    "pfn_number": "605733",
+    "contact_preferences": "['prefers_email']",
+    "preferred_pronouns": "they",
+    "street": "026 Garcia Lake Apt. 104",
+    "city": "Lake Amy",
+    "state": "AS",
+    "zip": "68534",
     "us_citizen": "",
-    "is_veteran": "yes",
+    "is_veteran": "no",
     "is_student": "",
     "being_charged": "no",
     "serving_sentence": "no",
@@ -238,63 +242,65 @@
     "when_probation_or_parole": "2018",
     "finished_half_probation": "",
     "reduced_probation": "no",
-    "rap_outside_sf": "i_dont_know",
+    "rap_outside_sf": "no",
     "when_where_outside_sf": "",
     "has_suspended_license": "",
-    "owes_court_fees": "yes",
+    "owes_court_fees": "no",
     "currently_employed": "no",
-    "monthly_income": 6019,
+    "monthly_income": 1797,
     "income_source": "a job",
     "on_public_benefits": "yes",
     "owns_home": "",
     "monthly_expenses": 2000,
-    "household_size": 4,
+    "household_size": 2,
     "dependents": "",
     "is_married": "yes",
-    "has_children": "yes",
-    "old_uuid": "22ea0856dd394f2aac3edb8d6d68ffb8",
-    "anonymous_name": "Brilliant Oak",
-    "date_received": "2017-04-23T22:19:17-07:00"
+    "has_children": "no",
+    "old_uuid": "9e8d8519108240c4ab5d70e44c0267d8",
+    "anonymous_name": "Amicable Beetle",
+    "date_received": "2017-04-30T11:10:36-07:00"
   }
 },
 {
   "model": "intake.application",
-  "pk": 163,
+  "pk": 19,
   "fields": {
-    "created": "2017-04-22T12:34:16Z",
-    "updated": "2017-04-25T17:41:54.838Z",
+    "created": "2017-04-28T19:01:16Z",
+    "updated": "2017-05-10T17:15:07.199Z",
     "organization": [
       "Santa Clara County Public Defender"
     ],
-    "form_submission": 118,
-    "was_transferred_out": false
+    "form_submission": 19,
+    "was_transferred_out": false,
+    "has_been_opened": false
   }
 },
 {
   "model": "intake.application",
-  "pk": 164,
+  "pk": 20,
   "fields": {
-    "created": "2017-04-24T05:19:17Z",
-    "updated": "2017-04-25T17:41:54.887Z",
+    "created": "2017-04-30T18:10:36Z",
+    "updated": "2017-05-10T17:15:07.219Z",
     "organization": [
       "Santa Clara County Public Defender"
     ],
-    "form_submission": 119,
-    "was_transferred_out": false
+    "form_submission": 20,
+    "was_transferred_out": false,
+    "has_been_opened": false
   }
 },
 {
   "model": "intake.statusupdate",
-  "pk": 163,
+  "pk": 19,
   "fields": {
-    "created": "2017-04-25T17:41:59.184Z",
-    "updated": "2017-04-25T17:41:59.260Z",
+    "created": "2017-05-10T17:15:07.967Z",
+    "updated": "2017-05-10T17:15:07.976Z",
     "status_type": 5,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "santa_clara_pubdef_user"
     ],
-    "application": 163,
+    "application": 19,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -303,16 +309,16 @@
 },
 {
   "model": "intake.statusupdate",
-  "pk": 164,
+  "pk": 20,
   "fields": {
-    "created": "2017-04-25T17:41:59.327Z",
-    "updated": "2017-04-25T17:41:59.381Z",
+    "created": "2017-05-10T17:15:07.985Z",
+    "updated": "2017-05-10T17:15:07.994Z",
     "status_type": 6,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
       "santa_clara_pubdef_user"
     ],
-    "application": 164,
+    "application": 20,
     "other_next_step": "Come to our Walk-In Clinic",
     "next_steps": [
       1
@@ -321,28 +327,28 @@
 },
 {
   "model": "intake.statusnotification",
-  "pk": 163,
+  "pk": 19,
   "fields": {
-    "status_update": 163,
+    "status_update": 19,
     "contact_info": {
       "email": "cmrtestuser+notification@gmail.com"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-25T17:41:59.191Z"
+    "created": "2017-05-10T17:15:07.969Z"
   }
 },
 {
   "model": "intake.statusnotification",
-  "pk": 164,
+  "pk": 20,
   "fields": {
-    "status_update": 164,
+    "status_update": 20,
     "contact_info": {
       "email": "cmrtestuser+notification@gmail.com"
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-04-25T17:41:59.333Z"
+    "created": "2017-05-10T17:15:07.987Z"
   }
 }
 ]

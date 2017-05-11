@@ -113,7 +113,7 @@
   "fields": {
     "slug": "ventura",
     "name": "Ventura",
-    "description": "Ventura County (near Oxnard, Thousand Oaks, Simi Valley and Ventura)"
+    "description": "Ventura County (near Oxnard, Thousand Oaks, Simi Valley, Camarillo, Ojai, Moorpark, Fillmore, Ojai, Santa Paula and Ventura)"
   }
 },
 {
@@ -122,7 +122,7 @@
   "fields": {
     "slug": "santa_barbara",
     "name": "Santa Barbara",
-    "description": "Santa Barbara County (near Santa Maria, Santa Barbara, Lompoc, Goleta)"
+    "description": "Santa Barbara County (near Santa Maria, Santa Barbara, Goleta, Carpinteria, Solvang, and Lompoc)"
   }
 }
 ]

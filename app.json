@@ -64,13 +64,13 @@
   ],
   "buildpacks": [
     {
-      "url": "heroku/python"
-    },
-    {
       "url": "heroku/nodejs"
     },
     {
       "url": "heroku/ruby"
+    },
+    {
+      "url": "heroku/python"
     }
   ]
 }

@@ -66,6 +66,11 @@ class ApplicationLogEntry(models.Model):
 
     @classmethod
     def log_opened(cls, submission_ids, user, time=None):
+        intake.models.Application.objects.filter(
+            form_submission_id__in=submission_ids,
+            organization__profiles__user=user
+        ).distinct().update(
+            has_been_opened=True)
         return cls.log_multiple(cls.OPENED, submission_ids, user, time)
 
     @classmethod

@@ -115,6 +115,7 @@ class FormSubmission(models.Model):
         'intake.DuplicateSubmissionSet', null=True,
         related_name='submissions')
     answers = JSONField()
+    has_been_sent_followup = models.BooleanField(default=False)
 
     # extracting these values from answers for autocomplete/search/querying
     first_name = models.TextField(default="")
@@ -348,6 +349,10 @@ class FormSubmission(models.Model):
     def get_case_update_status_url(self):
         return reverse(
             'intake-create_status_update', kwargs=dict(submission_id=self.id))
+
+    def get_uuid(self):
+        """returns the _applicant/visitor_ uuid for funnel tracking"""
+        return self.applicant.get_uuid()
 
     def qualifies_for_fee_waiver(self):
         on_benefits = OnPublicBenefits(self.answers)

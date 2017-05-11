@@ -311,17 +311,25 @@ class Provider(BaseProvider):
             last_four=self.generator.numerify("####"),
             driver_license_or_id=self.generator.numerify("D#######"),
             case_number=self.generator.numerify("C####-###"),
-            is_married=self.maybe(0.4),
+            is_veteran=self.maybe(0.4),
             dependents=random.randint(0, 5),
-            has_children=self.maybe(0.6),
             reduced_probation=self.maybe(0.1),
-            reasons_for_applying=['background_check', 'lost_job', 'housing'],
         )
         data.update(overrides)
         return data
 
     def santa_barbara_pubdef_answers(self, **overrides):
-        return self.ventura_pubdef_answers(**overrides)
+        data = self.ventura_pubdef_answers(**overrides)
+        data.update(
+            reasons_for_applying=['background_check', 'lost_job', 'housing'],
+            when_probation_or_parole='2018',
+            is_married=self.maybe(0.4),
+            how_much_savings=2000,
+            household_size=random.randint(0, 5),
+            is_veteran=self.maybe(0.4),
+            dependents=random.randint(0, 4)
+            )
+        return data
 
     def all_county_answers(self, **overrides):
         data = {

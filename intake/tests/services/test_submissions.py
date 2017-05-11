@@ -1,3 +1,4 @@
+import logging
 from unittest.mock import Mock, patch
 from django.test import TestCase
 from django.db.models import Count
@@ -10,10 +11,10 @@ from formation.forms import county_form_selector
 from intake.constants import (
     COUNTY_CHOICE_DISPLAY_DICT, Organizations,
     EMAIL, SMS)
-from intake.models import (
-    ApplicationEvent, FormSubmission, ApplicationLogEntry)
+from intake.models import FormSubmission, ApplicationLogEntry
 from intake import constants, models
 from user_accounts.models import Organization, UserProfile
+from project.tests.assertions import assertInLogsCount
 
 """
 Each function in intake.services.submissions corresponds to a TestCase in this
@@ -40,12 +41,6 @@ class TestCreateSubmissions(TestCase):
         # make a submission
         submission = SubmissionsService.create_submission(
             form, organizations, applicant.id)
-        # assert that the correct event was created
-        events = ApplicationEvent.objects.filter(
-            applicant_id=applicant.id).all()
-        self.assertEqual(len(events), 1)
-        self.assertEqual(
-            events[0].name, ApplicationEvent.APPLICATION_SUBMITTED)
         self.assertEqual(submission.applicant_id, applicant.id)
         self.assertEqual(
             set(submission.organizations.all()),
@@ -256,16 +251,16 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
             applicant=applicant,
             organizations=self.get_orgs(),
             answers=answers)
-        SubmissionsService.send_confirmation_notifications(sub)
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            SubmissionsService.send_confirmation_notifications(sub)
         self.assertEqual(
             len(self.notifications.slack_notification_sent.send.mock_calls), 1)
         self.assertEqual(
             len(self.notifications.email_confirmation.send.mock_calls), 1)
         self.assertEqual(
             len(self.notifications.sms_confirmation.send.mock_calls), 1)
-        self.assertEqual(
-            applicant.events.filter(
-                name=ApplicationEvent.CONFIRMATION_SENT).count(), 2)
+        assertInLogsCount(logs, {'event_name=app_confirmation_sent': 1})
 
     def test_notifications_slacks_and_logs_for_no_contact_preferences(self):
         applicant = factories.ApplicantFactory()
@@ -279,6 +274,7 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
             applicant=applicant,
             organizations=self.get_orgs(),
             answers=answers)
+        # does not log so no logs
         SubmissionsService.send_confirmation_notifications(sub)
         self.assertEqual(
             len(self.notifications.slack_notification_sent.send.mock_calls), 0)
@@ -286,9 +282,6 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
             len(self.notifications.email_confirmation.send.mock_calls), 0)
         self.assertEqual(
             len(self.notifications.sms_confirmation.send.mock_calls), 0)
-        self.assertEqual(
-            applicant.events.filter(
-                name=ApplicationEvent.CONFIRMATION_SENT).count(), 0)
 
     def test_notifications_slacks_and_logs_for_one_contact_preference(self):
         applicant = factories.ApplicantFactory()
@@ -302,16 +295,16 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
             applicant=applicant,
             organizations=self.get_orgs(),
             answers=answers)
-        SubmissionsService.send_confirmation_notifications(sub)
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            SubmissionsService.send_confirmation_notifications(sub)
         self.assertEqual(
             len(self.notifications.slack_notification_sent.send.mock_calls), 1)
         self.assertEqual(
             len(self.notifications.email_confirmation.send.mock_calls), 1)
         self.assertEqual(
             len(self.notifications.sms_confirmation.send.mock_calls), 0)
-        self.assertEqual(
-            applicant.events.filter(
-                name=ApplicationEvent.CONFIRMATION_SENT).count(), 1)
+        assertInLogsCount(logs, {'event_name=app_confirmation_sent': 1})
 
 
 class TestGetUnopenedSubmissionsForOrg(TestCase):
@@ -336,7 +329,8 @@ class TestGetUnopenedSubmissionsForOrg(TestCase):
             else:
                 self.assertEqual(subs.count(), 3)
 
-    def test_returns_apps_opened_by_other_org(self):
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_returns_apps_opened_by_other_org(self, slack):
         # assume we have a multi-org app opened by a user from one org
         cc_pubdef = Organization.objects.get(
             slug=constants.Organizations.COCO_PUBDEF)
@@ -346,8 +340,17 @@ class TestGetUnopenedSubmissionsForOrg(TestCase):
             organization=cc_pubdef).first().user
         sub = FormSubmission.objects.annotate(
             org_count=Count('organizations')).filter(org_count__gte=3).first()
-        ApplicationLogEntry.log_opened([sub.id], cc_pubdef_user)
+        SubmissionsService.mark_opened(sub, cc_pubdef_user)
         # assert that it shows up in unopened apps
+        self.assertEqual(
+            True,
+            sub.applications.filter(
+                organization=cc_pubdef).first().has_been_opened)
+        self.assertFalse(
+            False,
+            all([
+                app.has_been_opened for app in sub.applications.exclude(
+                    organization=cc_pubdef)]))
         cc_pubdef_subs = \
             SubmissionsService.get_unopened_submissions_for_org(cc_pubdef)
         a_pubdef_subs = \

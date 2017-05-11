@@ -10,6 +10,29 @@ from jinja2 import Markup
 from django.utils.html import mark_safe
 from markupsafe import escape
 from rest_framework.renderers import JSONRenderer
+from django.contrib.staticfiles.storage import staticfiles_storage
+
+
+def environment(**options):
+    env = Environment(**options)
+    env.globals.update({
+        'static': staticfiles_storage.url,
+        'url': reverse,
+        "content": "project.content.constants",
+        "linkify": "project.jinja2.linkify",
+        "current_local_time": "project.jinja2.current_local_time",
+        "namify": "project.jinja2.namify",
+        "url_with_ids": "project.jinja2.url_with_ids",
+        "oxford_comma": "project.jinja2.oxford_comma",
+        "contact_info_to_html": "project.jinja2.contact_info_to_html",
+        "to_json": "project.jinja2.to_json",
+        "humanize": "project.jinja2.humanize",
+        "contact_method_verbs": "project.jinja2.contact_method_verbs",
+        "format_phone_number": "project.jinja2.format_phone_number",
+        "settings": "django.conf.settings",
+        "local_time": "intake.utils.local_time",
+    })
+    return env
 
 
 def externalize_url(url):

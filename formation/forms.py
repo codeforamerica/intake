@@ -497,22 +497,19 @@ class VenturaCountyFormSpec(CombinableCountyFormSpec):
         F.OnPublicBenefits,
         F.MonthlyExpenses,
         F.OwnsHome,
-        F.HouseholdSize,
-        F.HasChildren,
-        F.IsMarried,
+        F.HowManyDependents,
+        F.IsVeteran,
         F.DateOfBirthField,
         F.LastFourOfSocial,
         F.DriverLicenseOrIDNumber,
         F.OnProbationParole,
         F.WhereProbationParole,
-        F.WhenProbationParole,
         F.OwesCourtFees,
         F.ServingSentence,
         F.BeingCharged,
         F.RAPOutsideSF,
         F.WhenWhereOutsideSF,
         F.CaseNumber,
-        F.ReasonsForApplying,
         F.HowDidYouHear,
         F.AdditionalInformation,
         F.UnderstandsLimits,
@@ -523,6 +520,8 @@ class VenturaCountyFormSpec(CombinableCountyFormSpec):
         F.MonthlyIncome,
         F.IncomeSource,
         F.MonthlyExpenses,
+        F.OwnsHome,
+        F.HowManyDependents,
         F.OnPublicBenefits,
         F.HouseholdSize,
         F.DateOfBirthField,
@@ -541,9 +540,17 @@ class VenturaCountyFormSpec(CombinableCountyFormSpec):
 
 class SantaBarbaraCountyFormSpec(VenturaCountyFormSpec):
     county = Counties.SANTA_BARBARA
-    fields = VenturaCountyFormSpec.fields - {
-        F.DriverLicenseOrIDNumber,
+    fields = (VenturaCountyFormSpec.fields | {
+        F.Aliases,
+        F.ReasonsForApplying,
+        F.IsMarried,
+        F.HowMuchSavings,
+        F.WhenProbationParole}) - {
+        F.LastFourOfSocial,
+        F.IsVeteran,
     }
+    required_fields = (
+        VenturaCountyFormSpec.required_fields | {F.HowMuchSavings})
 
 
 class EBCLCIntakeFormSpec(CombinableOrganizationFormSpec):

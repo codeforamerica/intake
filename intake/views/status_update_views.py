@@ -6,7 +6,7 @@ from django.views.generic.edit import FormView
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from intake.views.app_detail_views import not_allowed
-
+import intake.services.events_service as EventsService
 import intake.services.status_notifications as StatusNotificationService
 
 
@@ -157,10 +157,11 @@ class ReviewStatusNotificationFormView(StatusUpdateBase, FormView):
         return context
 
     def form_valid(self, form):
-        StatusNotificationService.send_and_save_new_status(
+        status_update = StatusNotificationService.send_and_save_new_status(
             self.request,
             form.cleaned_data,
             self.existing_status_update_data)
+        EventsService.status_updated(status_update)
         utils.clear_form_data_from_session(
             self.request, self.get_session_storage_key())
         return super().form_valid(form)
