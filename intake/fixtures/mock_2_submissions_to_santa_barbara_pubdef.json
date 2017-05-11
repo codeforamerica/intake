@@ -3,8 +3,8 @@
   "model": "intake.visitor",
   "pk": 17,
   "fields": {
-    "uuid": "fb3a72e9-ce3f-4feb-b968-881b25f7af1f",
-    "first_visit": "2017-05-09T01:17:08.541Z",
+    "uuid": "71729df3-a314-4ffd-887b-2cdc65346786",
+    "first_visit": "2017-05-10T17:15:07.146Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -14,8 +14,8 @@
   "model": "intake.visitor",
   "pk": 18,
   "fields": {
-    "uuid": "0e09593c-57e0-4761-a47b-a6a51ae054df",
-    "first_visit": "2017-05-09T01:17:08.560Z",
+    "uuid": "6cc6184d-870c-4ec3-b868-1ce1e680bcd1",
+    "first_visit": "2017-05-10T17:15:07.169Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -43,28 +43,28 @@
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
-        "prefers_sms",
         "prefers_email"
       ],
-      "first_name": "Linda",
-      "middle_name": "Neil",
-      "last_name": "Wallace",
+      "first_name": "Gordon",
+      "middle_name": "Donald",
+      "last_name": "Ward",
+      "aliases": "",
       "phone_number": "4152124848",
       "alternate_phone_number": "4152124848",
       "email": "cmrtestuser@gmail.com",
       "address": {
-        "street": "47986 Morton Keys Apt. 924",
-        "city": "North Jenniferstad",
-        "state": "AK",
-        "zip": "48248"
+        "street": "81628 Gonzalez Well Apt. 927",
+        "city": "South Sandra",
+        "state": "WI",
+        "zip": "04822"
       },
       "dob": {
-        "month": "10",
-        "day": "24",
-        "year": "1967"
+        "month": "4",
+        "day": "11",
+        "year": "1980"
       },
-      "last_four": "8808",
-      "case_number": "C6379-857",
+      "driver_license_or_id": "D4892453",
+      "case_number": "C7964-337",
       "being_charged": "no",
       "serving_sentence": "no",
       "on_probation_parole": "yes",
@@ -76,11 +76,10 @@
       "currently_employed": "no",
       "monthly_income": 2000,
       "income_source": "a job",
-      "on_public_benefits": "yes",
+      "on_public_benefits": "no",
       "monthly_expenses": 2000,
       "owns_home": "no",
-      "household_size": 0,
-      "has_children": "no",
+      "dependents": 4,
       "is_married": "yes",
       "reasons_for_applying": [
         "background_check",
@@ -93,13 +92,13 @@
       "consent_to_represent": "yes"
     },
     "has_been_sent_followup": false,
-    "first_name": "Linda",
-    "last_name": "Wallace",
+    "first_name": "Gordon",
+    "last_name": "Ward",
     "dob": null,
     "ssn": "",
-    "last_four": "8808",
+    "last_four": "",
     "drivers_license_or_id": "",
-    "case_number": "C6379-857",
+    "case_number": "C7964-337",
     "phone_number": "4152124848",
     "alternate_phone_number": "4152124848",
     "email": "cmrtestuser@gmail.com",
@@ -108,12 +107,12 @@
     "additional_information": "I want help",
     "aliases": "",
     "pfn_number": "",
-    "contact_preferences": "['prefers_sms', 'prefers_email']",
+    "contact_preferences": "['prefers_email']",
     "preferred_pronouns": "",
-    "street": "47986 Morton Keys Apt. 924",
-    "city": "North Jenniferstad",
-    "state": "AK",
-    "zip": "48248",
+    "street": "81628 Gonzalez Well Apt. 927",
+    "city": "South Sandra",
+    "state": "WI",
+    "zip": "04822",
     "us_citizen": "",
     "is_veteran": "",
     "is_student": "",
@@ -131,16 +130,16 @@
     "currently_employed": "no",
     "monthly_income": 2000,
     "income_source": "a job",
-    "on_public_benefits": "yes",
+    "on_public_benefits": "no",
     "owns_home": "no",
     "monthly_expenses": 2000,
-    "household_size": 0,
-    "dependents": "",
+    "household_size": null,
+    "dependents": 4,
     "is_married": "yes",
-    "has_children": "no",
-    "old_uuid": "49ca5551550045f5ac34bdf5f94a7bff",
-    "anonymous_name": "Witty Bat",
-    "date_received": "2017-05-03T05:30:20-07:00"
+    "has_children": "",
+    "old_uuid": "62e51d8d13064f3f82a1e64731ac589c",
+    "anonymous_name": "Kind Sea",
+    "date_received": "2017-04-29T00:29:41-07:00"
   }
 },
 {
@@ -154,42 +153,42 @@
         "prefers_sms",
         "prefers_email"
       ],
-      "first_name": "Peter",
-      "middle_name": "Cynthia",
-      "last_name": "Lane",
+      "first_name": "Daisy",
+      "middle_name": "Deanna",
+      "last_name": "Mckinney",
+      "aliases": "",
       "phone_number": "4152124848",
       "alternate_phone_number": "4152124848",
       "email": "cmrtestuser@gmail.com",
       "address": {
-        "street": "44784 Wallace Circle",
-        "city": "Lake Katelynside",
-        "state": "MA",
-        "zip": "18643"
+        "street": "7963 Riley Hill",
+        "city": "Port Daisy",
+        "state": "NJ",
+        "zip": "67142"
       },
       "dob": {
-        "month": "1",
-        "day": "7",
-        "year": "1973"
+        "month": "6",
+        "day": "18",
+        "year": "1960"
       },
-      "last_four": "4997",
-      "case_number": "C9766-257",
+      "driver_license_or_id": "D9504662",
+      "case_number": "C3880-937",
       "being_charged": "no",
-      "serving_sentence": "no",
+      "serving_sentence": "yes",
       "on_probation_parole": "yes",
       "where_probation_or_parole": "Yolo County",
       "when_probation_or_parole": "2018",
       "rap_outside_sf": "no",
       "when_where_outside_sf": "",
-      "owes_court_fees": "no",
-      "currently_employed": "no",
+      "owes_court_fees": "yes",
+      "currently_employed": "yes",
       "monthly_income": 2000,
       "income_source": "a job",
-      "on_public_benefits": "yes",
+      "on_public_benefits": "no",
       "monthly_expenses": 2000,
       "owns_home": "no",
-      "household_size": 5,
-      "has_children": "no",
-      "is_married": "no",
+      "dependents": 1,
+      "is_married": "yes",
       "reasons_for_applying": [
         "background_check",
         "lost_job",
@@ -201,13 +200,13 @@
       "consent_to_represent": "yes"
     },
     "has_been_sent_followup": false,
-    "first_name": "Peter",
-    "last_name": "Lane",
+    "first_name": "Daisy",
+    "last_name": "Mckinney",
     "dob": null,
     "ssn": "",
-    "last_four": "4997",
+    "last_four": "",
     "drivers_license_or_id": "",
-    "case_number": "C9766-257",
+    "case_number": "C3880-937",
     "phone_number": "4152124848",
     "alternate_phone_number": "4152124848",
     "email": "cmrtestuser@gmail.com",
@@ -218,15 +217,15 @@
     "pfn_number": "",
     "contact_preferences": "['prefers_sms', 'prefers_email']",
     "preferred_pronouns": "",
-    "street": "44784 Wallace Circle",
-    "city": "Lake Katelynside",
-    "state": "MA",
-    "zip": "18643",
+    "street": "7963 Riley Hill",
+    "city": "Port Daisy",
+    "state": "NJ",
+    "zip": "67142",
     "us_citizen": "",
     "is_veteran": "",
     "is_student": "",
     "being_charged": "no",
-    "serving_sentence": "no",
+    "serving_sentence": "yes",
     "on_probation_parole": "yes",
     "where_probation_or_parole": "Yolo County",
     "when_probation_or_parole": "2018",
@@ -235,28 +234,28 @@
     "rap_outside_sf": "no",
     "when_where_outside_sf": "",
     "has_suspended_license": "",
-    "owes_court_fees": "no",
-    "currently_employed": "no",
+    "owes_court_fees": "yes",
+    "currently_employed": "yes",
     "monthly_income": 2000,
     "income_source": "a job",
-    "on_public_benefits": "yes",
+    "on_public_benefits": "no",
     "owns_home": "no",
     "monthly_expenses": 2000,
-    "household_size": 5,
-    "dependents": "",
-    "is_married": "no",
-    "has_children": "no",
-    "old_uuid": "c314dca4457e4a54a85a23276808f868",
-    "anonymous_name": "Golden Skyscraper",
-    "date_received": "2017-04-26T05:47:13-07:00"
+    "household_size": null,
+    "dependents": 1,
+    "is_married": "yes",
+    "has_children": "",
+    "old_uuid": "c6a7b3e799a8427399c3adf744828a39",
+    "anonymous_name": "Silver Octopus",
+    "date_received": "2017-05-03T08:53:08-07:00"
   }
 },
 {
   "model": "intake.application",
   "pk": 17,
   "fields": {
-    "created": "2017-05-03T12:30:20Z",
-    "updated": "2017-05-09T01:17:08.553Z",
+    "created": "2017-04-29T07:29:41Z",
+    "updated": "2017-05-10T17:15:07.162Z",
     "organization": [
       "Santa Barbara County Public Defender"
     ],
@@ -269,8 +268,8 @@
   "model": "intake.application",
   "pk": 18,
   "fields": {
-    "created": "2017-04-26T12:47:13Z",
-    "updated": "2017-05-09T01:17:08.573Z",
+    "created": "2017-05-03T15:53:08Z",
+    "updated": "2017-05-10T17:15:07.180Z",
     "organization": [
       "Santa Barbara County Public Defender"
     ],
@@ -283,8 +282,8 @@
   "model": "intake.statusupdate",
   "pk": 18,
   "fields": {
-    "created": "2017-05-09T01:17:09.204Z",
-    "updated": "2017-05-09T01:17:09.215Z",
+    "created": "2017-05-10T17:15:07.944Z",
+    "updated": "2017-05-10T17:15:07.955Z",
     "status_type": 4,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
@@ -301,8 +300,8 @@
   "model": "intake.statusupdate",
   "pk": 17,
   "fields": {
-    "created": "2017-05-09T01:17:09.186Z",
-    "updated": "2017-05-09T01:17:09.194Z",
+    "created": "2017-05-10T17:15:07.918Z",
+    "updated": "2017-05-10T17:15:07.931Z",
     "status_type": 3,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
@@ -325,7 +324,7 @@
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-05-09T01:17:09.188Z"
+    "created": "2017-05-10T17:15:07.922Z"
   }
 },
 {
@@ -338,7 +337,7 @@
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-05-09T01:17:09.206Z"
+    "created": "2017-05-10T17:15:07.947Z"
   }
 }
 ]

@@ -181,7 +181,7 @@ class DateOfBirthField(MultiValueField):
     label = _("What is your date of birth?")
     help_text = _("For example: 4/28/1986")
     is_required_error_message = _("The public defender may not be able to "
-                                  "check your RAP sheet without a full date "
+                                  "check your record without a full date "
                                   "of birth.")
     is_recommended_error_message = is_required_error_message
     subfields = [
@@ -199,10 +199,10 @@ class SocialSecurityNumberField(CharField):
     context_key = "ssn"
     label = _('What is your Social Security Number? (if you have one)')
     help_text = _("The public defender's office will use this to "
-                  "get your San Francisco RAP sheet and find any "
+                  "get your San Francisco record and find any "
                   "convictions that can be reduced or dismissed.")
     is_required_error_message = _("The public defender may not be able to "
-                                  "check your RAP sheet without a social "
+                                  "check your record without a social "
                                   "security number.")
     is_recommended_error_message = is_required_error_message
     display_label = "SSN"
@@ -501,7 +501,7 @@ class IsReasonableMonthsWages:
 class MonthlyIncome(WholeDollarField):
     context_key = "monthly_income"
     label = _("What is your monthly household income?")
-    help_text = _("Enter '0' if you have no income. "
+    help_text = _("Include your spouse or legal partner's income. "
                   "Your best estimate is okay.")
     validators = [
         IsReasonableMonthsWages(10, 10000),
@@ -521,7 +521,7 @@ class OnPublicBenefits(YesNoField):
 
 class OwnsHome(YesNoField):
     context_key = "owns_home"
-    label = _("Do you own your home?")
+    label = _("Do you own a home or rental property?")
 
 
 class MonthlyExpenses(WholeDollarField):
@@ -529,6 +529,12 @@ class MonthlyExpenses(WholeDollarField):
     help_text = _("Your best estimate is okay.")
     label = _("How much do you spend each month on things like rent, "
               "groceries, utilities, medical expenses, or childcare expenses?")
+
+
+class HowMuchSavings(WholeDollarField):
+    context_key = "how_much_savings"
+    help_text = _("Your best estimate is okay.")
+    label = _("How much money do you have saved?")
 
 
 class HouseholdSize(IntegerField):
@@ -553,7 +559,7 @@ class HowManyDependents(IntegerField):
 
 class IsMarried(YesNoField):
     context_key = "is_married"
-    label = _("Are you married?")
+    label = _("Are you married or in a legal domestic partnership?")
 
 
 class HasChildren(YesNoField):
@@ -646,6 +652,7 @@ INTAKE_FIELDS = [
     CurrentlyEmployed,
     MonthlyIncome,
     IncomeSource,
+    HowMuchSavings,
     OnPublicBenefits,
     MonthlyExpenses,
     OwnsHome,

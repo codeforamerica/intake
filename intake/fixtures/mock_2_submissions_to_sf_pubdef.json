@@ -3,8 +3,8 @@
   "model": "intake.visitor",
   "pk": 13,
   "fields": {
-    "uuid": "ca88201c-258b-47b4-9c3f-2bb79c693212",
-    "first_visit": "2017-05-09T01:17:08.471Z",
+    "uuid": "6d7e4ba1-63a0-43a4-bf31-991de7012e12",
+    "first_visit": "2017-05-10T17:15:07.049Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -14,8 +14,8 @@
   "model": "intake.visitor",
   "pk": 14,
   "fields": {
-    "uuid": "102edfaf-bb80-42ac-a800-2a31e35367b2",
-    "first_visit": "2017-05-09T01:17:08.488Z",
+    "uuid": "47a518fd-b142-4cbf-8a11-58d422e548e3",
+    "first_visit": "2017-05-10T17:15:07.077Z",
     "source": "share",
     "referrer": "http://bajoradefender.org/services/clean-slate/",
     "ip_address": "48.104.186.127"
@@ -43,26 +43,26 @@
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
-        "prefers_sms"
+        "prefers_email"
       ],
-      "first_name": "Angela",
-      "middle_name": "Luis",
-      "last_name": "Roth",
+      "first_name": "Gary",
+      "middle_name": "Rodney",
+      "last_name": "Hernandez",
       "phone_number": "4152124848",
       "email": "cmrtestuser@gmail.com",
       "address": {
-        "street": "851 Susan Hills Suite 357",
-        "city": "New Saraport",
-        "state": "CA",
-        "zip": "83574"
+        "street": "9675 Latoya Lodge Suite 067",
+        "city": "Thompsonchester",
+        "state": "NV",
+        "zip": "74427"
       },
       "dob": {
-        "month": "1",
-        "day": "23",
-        "year": "1998"
+        "month": "11",
+        "day": "13",
+        "year": "1967"
       },
-      "ssn": "296580479",
-      "us_citizen": "yes",
+      "ssn": "296829492",
+      "us_citizen": "no",
       "being_charged": "no",
       "serving_sentence": "no",
       "on_probation_parole": "no",
@@ -70,19 +70,19 @@
       "when_probation_or_parole": "",
       "rap_outside_sf": "no",
       "when_where_outside_sf": "",
-      "currently_employed": "yes",
-      "monthly_income": 4652,
-      "monthly_expenses": 903,
+      "currently_employed": "no",
+      "monthly_income": 798,
+      "monthly_expenses": 2771,
       "how_did_you_hear": "",
       "additional_information": "I want help",
       "understands_limits": "yes",
       "consent_to_represent": "yes"
     },
     "has_been_sent_followup": false,
-    "first_name": "Angela",
-    "last_name": "Roth",
+    "first_name": "Gary",
+    "last_name": "Hernandez",
     "dob": null,
-    "ssn": "296580479",
+    "ssn": "296829492",
     "last_four": "",
     "drivers_license_or_id": "",
     "case_number": "",
@@ -94,13 +94,13 @@
     "additional_information": "I want help",
     "aliases": "",
     "pfn_number": "",
-    "contact_preferences": "['prefers_sms']",
+    "contact_preferences": "['prefers_email']",
     "preferred_pronouns": "",
-    "street": "851 Susan Hills Suite 357",
-    "city": "New Saraport",
-    "state": "CA",
-    "zip": "83574",
-    "us_citizen": "yes",
+    "street": "9675 Latoya Lodge Suite 067",
+    "city": "Thompsonchester",
+    "state": "NV",
+    "zip": "74427",
+    "us_citizen": "no",
     "is_veteran": "",
     "is_student": "",
     "being_charged": "no",
@@ -114,19 +114,19 @@
     "when_where_outside_sf": "",
     "has_suspended_license": "",
     "owes_court_fees": "",
-    "currently_employed": "yes",
-    "monthly_income": 4652,
+    "currently_employed": "no",
+    "monthly_income": 798,
     "income_source": "",
     "on_public_benefits": "",
     "owns_home": "",
-    "monthly_expenses": 903,
+    "monthly_expenses": 2771,
     "household_size": null,
     "dependents": "",
     "is_married": "",
     "has_children": "",
-    "old_uuid": "00c18c0c78d647e48a34de4f53e3cf24",
-    "anonymous_name": "Vermillion Lion",
-    "date_received": "2017-05-02T20:26:40-07:00"
+    "old_uuid": "78ff53b7c9b741a9a5faf182d3132abe",
+    "anonymous_name": "Orange Manatee",
+    "date_received": "2017-05-08T09:38:22-07:00"
   }
 },
 {
@@ -137,25 +137,26 @@
     "duplicate_set": null,
     "answers": {
       "contact_preferences": [
+        "prefers_email",
         "prefers_sms"
       ],
-      "first_name": "Spencer",
-      "middle_name": "Judy",
-      "last_name": "Miller",
+      "first_name": "Juan",
+      "middle_name": "Paul",
+      "last_name": "Cox",
       "phone_number": "4152124848",
       "email": "cmrtestuser@gmail.com",
       "address": {
-        "street": "850 Smith Lights Suite 671",
-        "city": "Coreyfort",
-        "state": "AS",
-        "zip": "21522"
+        "street": "52820 Lynn Street Apt. 845",
+        "city": "Curtisport",
+        "state": "ND",
+        "zip": "00876"
       },
       "dob": {
-        "month": "3",
-        "day": "25",
-        "year": "1979"
+        "month": "8",
+        "day": "18",
+        "year": "1963"
       },
-      "ssn": "796752065",
+      "ssn": "901545790",
       "us_citizen": "no",
       "being_charged": "no",
       "serving_sentence": "no",
@@ -165,18 +166,18 @@
       "rap_outside_sf": "no",
       "when_where_outside_sf": "",
       "currently_employed": "yes",
-      "monthly_income": 6535,
-      "monthly_expenses": 1953,
+      "monthly_income": 3074,
+      "monthly_expenses": 114,
       "how_did_you_hear": "",
       "additional_information": "I want help",
       "understands_limits": "yes",
       "consent_to_represent": "yes"
     },
     "has_been_sent_followup": false,
-    "first_name": "Spencer",
-    "last_name": "Miller",
+    "first_name": "Juan",
+    "last_name": "Cox",
     "dob": null,
-    "ssn": "796752065",
+    "ssn": "901545790",
     "last_four": "",
     "drivers_license_or_id": "",
     "case_number": "",
@@ -188,12 +189,12 @@
     "additional_information": "I want help",
     "aliases": "",
     "pfn_number": "",
-    "contact_preferences": "['prefers_sms']",
+    "contact_preferences": "['prefers_email', 'prefers_sms']",
     "preferred_pronouns": "",
-    "street": "850 Smith Lights Suite 671",
-    "city": "Coreyfort",
-    "state": "AS",
-    "zip": "21522",
+    "street": "52820 Lynn Street Apt. 845",
+    "city": "Curtisport",
+    "state": "ND",
+    "zip": "00876",
     "us_citizen": "no",
     "is_veteran": "",
     "is_student": "",
@@ -209,26 +210,26 @@
     "has_suspended_license": "",
     "owes_court_fees": "",
     "currently_employed": "yes",
-    "monthly_income": 6535,
+    "monthly_income": 3074,
     "income_source": "",
     "on_public_benefits": "",
     "owns_home": "",
-    "monthly_expenses": 1953,
+    "monthly_expenses": 114,
     "household_size": null,
     "dependents": "",
     "is_married": "",
     "has_children": "",
-    "old_uuid": "6a6f52e284004294b67d931b1e37e2d3",
-    "anonymous_name": "Perceptive Hamster",
-    "date_received": "2017-05-02T02:38:35-07:00"
+    "old_uuid": "36fc4cdacf204c5e98ff8a26715130f9",
+    "anonymous_name": "Shimmering Pulsar",
+    "date_received": "2017-05-08T07:22:33-07:00"
   }
 },
 {
   "model": "intake.application",
   "pk": 13,
   "fields": {
-    "created": "2017-05-03T03:26:40Z",
-    "updated": "2017-05-09T01:17:08.482Z",
+    "created": "2017-05-08T16:38:22Z",
+    "updated": "2017-05-10T17:15:07.069Z",
     "organization": [
       "San Francisco Public Defender"
     ],
@@ -241,8 +242,8 @@
   "model": "intake.application",
   "pk": 14,
   "fields": {
-    "created": "2017-05-02T09:38:35Z",
-    "updated": "2017-05-09T01:17:08.499Z",
+    "created": "2017-05-08T14:22:33Z",
+    "updated": "2017-05-10T17:15:07.094Z",
     "organization": [
       "San Francisco Public Defender"
     ],
@@ -255,8 +256,8 @@
   "model": "intake.statusupdate",
   "pk": 13,
   "fields": {
-    "created": "2017-05-09T01:17:09.122Z",
-    "updated": "2017-05-09T01:17:09.132Z",
+    "created": "2017-05-10T17:15:07.786Z",
+    "updated": "2017-05-10T17:15:07.801Z",
     "status_type": 6,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
@@ -273,8 +274,8 @@
   "model": "intake.statusupdate",
   "pk": 14,
   "fields": {
-    "created": "2017-05-09T01:17:09.141Z",
-    "updated": "2017-05-09T01:17:09.148Z",
+    "created": "2017-05-10T17:15:07.824Z",
+    "updated": "2017-05-10T17:15:07.843Z",
     "status_type": 7,
     "additional_information": "We may be able to get a fee waived for you",
     "author": [
@@ -297,7 +298,7 @@
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-05-09T01:17:09.124Z"
+    "created": "2017-05-10T17:15:07.789Z"
   }
 },
 {
@@ -310,7 +311,7 @@
     },
     "base_message": "Resistance is futile",
     "sent_message": "Live long and prosper",
-    "created": "2017-05-09T01:17:09.143Z"
+    "created": "2017-05-10T17:15:07.826Z"
   }
 }
 ]
