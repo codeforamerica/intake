@@ -8,6 +8,13 @@ from django.conf import settings
 
 fake = FakerFactory.create('en_US')
 
+"""
+TODO: For some reason the tests fail if I use the environment variable
+Even when i run new_fixtures it still acts like the password is wrong
+the best solution will be to go through and remove the fixtures and
+either write new factories using factory_boy or split up the current
+fixture generation code.
+"""
 fake_password = getattr(settings, 'TEST_USER_PASSWORD', 'cmr-demo')
 
 Pacific = timezone('US/Pacific')
