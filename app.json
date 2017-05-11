@@ -72,5 +72,8 @@
     {
       "url": "heroku/python"
     }
-  ]
+  ],
+  "scripts": {
+	"postdeploy": "./manage.py new_fixtures"
+  }
 }

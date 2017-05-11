@@ -54,6 +54,12 @@ test.deluxe:
 	./manage.py test $(SCOPE) \
 		--verbosity 2
 
+test.everything:
+	pep8
+	make test.coverage.keepdb
+	make test.behave
+
+
 
 db.seed:
 	python ./manage.py load_essential_data
