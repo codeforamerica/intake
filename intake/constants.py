@@ -206,6 +206,16 @@ COUNTY_CHOICES = (
         'Santa Clara County (near San Jose, Santa Clara, Campbell, Los '
         'Altos, Los Gatos, Palo Alto, Mountain View, Sunnyvale, Morgan '
         'View, or Gilroy)')),
+    (Counties.VENTURA, _(
+            'Ventura County (near Oxnard, Thousand Oaks, Simi Valley, '
+            'Camarillo, Ojai, Moorpark, Fillmore, Ojai, Santa Paula, or '
+            'Ventura)')),
+    (Counties.SANTA_BARBARA, _(
+        'Santa Barbara County (near Santa Maria, Santa Barbara, Goleta, '
+        'Carpinteria, Solvang, and Lompoc)')),
+    (Counties.SONOMA, _(
+            'Sonoma County (near Santa Rosa, Petaluma, Sonoma, '
+            'Sebastopol, Bodega Bay, Healdsburg, or Cloverdale)')),
 )
 
 if SCOPE_TO_LIVE_COUNTIES and len(COUNTY_CHOICES) == 3:
@@ -220,19 +230,9 @@ if not SCOPE_TO_LIVE_COUNTIES:
         (Counties.MONTEREY, _(
             'Monterey County (near Salinas, Monterey, Marina, Seaside, '
             'Prunedale, Castroville, or King City)')),
-        (Counties.SONOMA, _(
-            'Sonoma County (near Santa Rosa, Petaluma, Sonoma, '
-            'Sebastopol, Bodega Bay, Healdsburg, or Cloverdale)')),
         (Counties.TULARE, _(
             'Tulare County (near Visalia, Tulare, Porterville, Finuba, '
             'Lindsay, Farmersville, Exeter, or Woodlake)')),
-        (Counties.VENTURA, _(
-            'Ventura County (near Oxnard, Thousand Oaks, Simi Valley, '
-            'Camarillo, Ojai, Moorpark, Fillmore, Ojai, Santa Paula, or '
-            'Ventura)')),
-        (Counties.SANTA_BARBARA, _(
-            'Santa Barbara County (near Santa Maria, Santa Barbara, Goleta, '
-            'Carpinteria, Solvang, and Lompoc)'))
     )
 
 COUNTY_CHOICES = sorted(COUNTY_CHOICES, key=lambda item: item[1])
