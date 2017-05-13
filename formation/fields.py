@@ -281,6 +281,10 @@ class AlternatePhoneNumberField(PhoneNumberField):
     label = _('What is another phone number we can reach you at?')
 
 
+class FaxNumberField(PhoneNumberField):
+    context_key = "fax_number"
+
+
 class EmailField(CharField):
     context_key = "email"
     label = _('What is your email?')

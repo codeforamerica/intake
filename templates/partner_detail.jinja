@@ -40,6 +40,12 @@
   </div>
 {%- endif %}
 
+{%- if organization.fax_number %}
+  <div class="data_display-row">
+      {{ display_form.fax_number_display }}
+  </div>
+{%- endif %}
+
 {%- if organization.address %}
   <div class="data_display-row">
   <div class="data_display address">

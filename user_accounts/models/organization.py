@@ -62,6 +62,7 @@ class Organization(models.Model):
     long_followup_message = models.TextField(blank=True)
     address = models.TextField(blank=True)
     phone_number = models.TextField(blank=True)
+    fax_number = models.TextField(blank=True)
     email = models.TextField(blank=True)
     notify_on_weekends = models.BooleanField(default=False)
     can_transfer_applications = models.BooleanField(default=False)
