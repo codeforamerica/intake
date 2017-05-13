@@ -70,5 +70,49 @@
     "text": "Reentry Resource Center\r\n151 W. Mission Street\r\nSan Jose, CA  95110",
     "walk_in_hours": "8:00 AM \u2013 5:00 PM Monday through Friday"
   }
+},
+{
+  "model": "user_accounts.address",
+  "pk": 7,
+  "fields": {
+    "organization": [
+      "Santa Barbara County Public Defender"
+    ],
+    "name": "Santa Barbara Office (HQ)",
+    "text": "Court House\r\n1100 Anacapa Street\r\nSanta Barbara, CA 93101"
+  }
+},
+{
+  "model": "user_accounts.address",
+  "pk": 8,
+  "fields": {
+    "organization": [
+      "Santa Barbara County Public Defender"
+    ],
+    "name": "Santa Maria Office",
+    "text": "312-P East Cook Street\r\nSanta Maria, CA 93454"
+  }
+},
+{
+  "model": "user_accounts.address",
+  "pk": 9,
+  "fields": {
+    "organization": [
+      "Santa Barbara County Public Defender"
+    ],
+    "name": "Santa Maria Juvenile Office",
+    "text": "Juvenile Court Facility\r\n4285 California Blvd., Suite C\r\nSanta Maria, CA 93455"
+  }
+},
+{
+  "model": "user_accounts.address",
+  "pk": 10,
+  "fields": {
+    "organization": [
+      "Santa Barbara County Public Defender"
+    ],
+    "name": "Lompoc Office",
+    "text": "115 Civic Center Plaza\r\nLompoc, CA 93436"
+  }
 }
 ]
