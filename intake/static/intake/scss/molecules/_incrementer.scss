@@ -1,0 +1,42 @@
+.incrementer {
+  display: table;
+  border-collapse: separate;
+  border-spacing: 1em;
+  margin-bottom: .5em;
+  .text-input {
+    @include appearance(none);
+    display: table-cell;
+    text-align: center;
+    margin-bottom: 0;
+    padding: {
+      left: 1em;
+      right: 1em;
+    }
+    &::-webkit-inner-spin-button {
+      display: none;
+    }
+  }
+}
+
+.incrementer__subtract, .incrementer__add {
+  @include transition($animation-fast background-color);
+  @include user-select(none);
+  cursor: pointer;
+  color: $color-teal;
+  display: table-cell;
+  width: 1%;
+  background-color: $color-light-grey;
+  font-size: $font-size-h3;
+  font-weight: 500;
+  padding: .5em 0;
+  width: 2.3em;
+  text-align: center;
+  border-radius: $border-radius;
+  text-decoration: none;
+  &:hover {
+    background-color: tint($color-light-grey, 30%);
+  }
+  &:active {
+    background-color: shade($color-light-grey, 10%);
+  }
+}

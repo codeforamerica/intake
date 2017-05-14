@@ -1,0 +1,13 @@
+{% extends "base.jinja" %}
+
+{% block css %}
+{% compress 'css' %}
+<link rel="stylesheet" type="text/css" href="{{ static('intake/css/cfa.css') }}">
+{% endcompress %}
+{% endblock css %}
+
+
+{% block body_class %}cfa-style{% endblock body_class %}
+
+{% block body %}
+{% endblock body %}

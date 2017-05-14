@@ -1,0 +1,38 @@
+@include keyframes('scroller') {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+
+}
+
+.scroller {
+    @include animation(scroller 2s 1);
+    position: absolute;
+    left: 50%;
+    bottom: 1em;
+    margin-left: -1em;
+    display: block;
+    width: 2em;
+    height: 2em;
+    color: $color-darkest-grey;
+    text-decoration: none;
+    &:before {
+        font-family: $font-icon;
+        font-size: $font-size-h2;
+        display: block;
+        content: '\e313';
+        text-align: center;
+        line-height: 1.5em;
+    }
+}
+
+.scroller--light {
+  color: #FFFFFF;
+  &:hover {
+    color: $color-magenta;
+  }
+}
