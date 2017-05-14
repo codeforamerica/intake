@@ -16,7 +16,6 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 
 def loudfail_static(*args, **kwargs):
     result = staticfiles_storage.url(*args, **kwargs)
-    print("\nChecking static result")
     if not result:
         raise ObjectDoesNotExist(
             "Cannot find static file with: {} {}".format(args, kwargs))
