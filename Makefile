@@ -106,4 +106,10 @@ db.pull.demo:
 
 
 static:
+	sass \
+	        --require bourbon \
+	        --require normalize-scss \
+	        --require neat \
+	        intake/static/intake/scss/main.scss \
+	        intake/static/intake/css/cfa.css
 	./manage.py collectstatic --noinput
