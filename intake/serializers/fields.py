@@ -1,7 +1,5 @@
 import datetime
 from rest_framework import serializers
-from intake import models
-from formation.field_types import YES, NO
 from intake.constants import PACIFIC_TIME
 
 from formation.display_form_base import DisplayForm
@@ -10,7 +8,7 @@ from formation import fields as F
 
 THIS_YEAR = datetime.datetime.now().year
 
-# 78-85, 91-92, 95, 101-106, 122-132
+
 class ContactInfoMiniForm(DisplayForm):
     fields = [
         F.PhoneNumberField,

@@ -15,13 +15,12 @@ def make_year_weeks():
     start_date = utils.get_start_date()
     year_weeks = []
     date_cursor = start_date
-    last_year_week = as_year_week(utils.get_todays_date())
+    last_date = utils.get_todays_date()
     year_week = as_year_week(date_cursor)
-    while year_week <= last_year_week:
+    while date_cursor <= last_date:
         year_week = as_year_week(date_cursor)
-        year_weeks.append((
-            year_week, date_cursor, from_year_week(year_week)))
-        # increment by one week
+        row = (year_week, date_cursor, from_year_week(year_week))
+        year_weeks.append(row)
         date_cursor += timedelta(days=7)
     return year_weeks
 
@@ -49,7 +48,9 @@ def rollup_subs(app_dates_sub_ids_org_ids):
 
 
 def counts_by_week(datetimes):
-    return Counter(as_year_week(dt) for dt in datetimes)
+    return Counter(
+        as_year_week(dt.astimezone(constants.PACIFIC_TIME))
+        for dt in datetimes)
 
 
 def make_weekly_totals(week_counter, year_weeks):
@@ -91,6 +92,7 @@ def get_org_data_dict():
         'org': {'name': 'Total (All Organizations)', 'slug': 'all'},
         'total': models.FormSubmission.objects.count(),
         'apps_this_week': weekly_totals[-1]['count'],
+        'apps_last_week': weekly_totals[-2]['count'],
         'weekly_totals': weekly_totals
     }]
     for org in orgs:
@@ -102,5 +104,6 @@ def get_org_data_dict():
             week_counter, year_weeks)
         org_datum['total'] = sum(week_counter.values())
         org_datum['apps_this_week'] = org_datum['weekly_totals'][-1]['count']
+        org_datum['apps_last_week'] = org_datum['weekly_totals'][-2]['count']
         org_data.append(org_datum)
     return org_data
