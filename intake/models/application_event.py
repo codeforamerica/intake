@@ -1,20 +1,7 @@
 from django.db import models
 from django.utils import timezone as timezone_utils
 from django.contrib.postgres.fields import JSONField
-from intake.tasks import log_to_mixpanel
-
 import intake
-
-
-def remove_pii_from_contact_info(contact_info):
-    return list(contact_info.keys())
-
-PII_FILTERS = dict(
-    contact_info=remove_pii_from_contact_info)
-
-PII_EXCLUSIONS = (
-    'message_content',
-)
 
 
 class ApplicationEvent(models.Model):
@@ -40,68 +27,6 @@ class ApplicationEvent(models.Model):
 
     class Meta:
         ordering = ['-time']
-
-    def send_filtered_data_to_mixpanel(self):
-        filtered_data = {}
-        for key, value in self.data.items():
-            if key in PII_FILTERS:
-                filtered_data[key] = PII_FILTERS[key](value)
-            else:
-                if key not in PII_EXCLUSIONS:
-                    filtered_data[key] = value
-        log_to_mixpanel.delay(
-            self.applicant_id, self.name, filtered_data)
-
-    @classmethod
-    def create(cls, name, applicant_id, **data):
-        event = cls(
-            name=name,
-            applicant_id=applicant_id,
-            data=data or {}
-        )
-        event.save()
-        event.send_filtered_data_to_mixpanel()
-        return event
-
-    @classmethod
-    def log_app_started(
-            cls, applicant_id, counties, referrer=None, user_agent=None,
-            source=None):
-        return cls.create(
-            cls.APPLICATION_STARTED, applicant_id,
-            counties=counties,
-            referrer=referrer,
-            user_agent=user_agent,
-            source=source)
-
-    @classmethod
-    def log_app_errors(cls, applicant_id, errors=None):
-        return cls.create(cls.APPLICATION_ERRORS, applicant_id, errors=errors)
-
-    @classmethod
-    def log_page_complete(cls, applicant_id, page_name=None):
-        return cls.create(
-            cls.APPLICATION_PAGE_COMPLETE, applicant_id, page_name=page_name)
-
-    @classmethod
-    def log_app_submitted(cls, applicant_id):
-        return cls.create(cls.APPLICATION_SUBMITTED, applicant_id)
-
-    @classmethod
-    def log_confirmation_sent(
-            cls, applicant_id, submission, contact_info, message_content):
-        return cls.create(
-            cls.CONFIRMATION_SENT, applicant_id, contact_info=contact_info,
-            message_content=message_content)
-
-    @classmethod
-    def log_followup_sent(
-            cls, applicant_id, submission, contact_info, message_content):
-        submission.has_been_sent_followup = True
-        submission.save()
-        return cls.create(
-            cls.FOLLOWUP_SENT, applicant_id, contact_info=contact_info,
-            message_content=message_content)
 
     @classmethod
     def from_logs(cls, logs):
@@ -139,10 +64,3 @@ class ApplicationEvent(models.Model):
                 events.append(event)
         cls.objects.bulk_create(events)
         return events
-
-    def __str__(self):
-        return 'Applicant(id={})\t{}\t{}\t{}'.format(
-            self.applicant_id,
-            self.time.strftime('%Y-%m-%d %H:%M:%S'),
-            self.name,
-            str(self.data))

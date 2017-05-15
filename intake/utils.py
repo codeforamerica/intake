@@ -1,4 +1,5 @@
 import random
+import datetime
 from django.db import models
 from django.http.request import QueryDict
 from django.utils import timezone
@@ -20,6 +21,10 @@ def local_time(dt, fmt=None, tz_name='US/Pacific'):
     if not fmt:
         return local_datetime
     return local_datetime.strftime(fmt)
+
+
+def get_start_date():
+    return PACIFIC_TIME.localize(datetime.datetime(2016, 4, 18)).date()
 
 
 def get_todays_date():
