@@ -8,14 +8,7 @@ from django.conf import settings
 
 fake = FakerFactory.create('en_US')
 
-"""
-TODO: For some reason the tests fail if I use the environment variable
-Even when i run new_fixtures it still acts like the password is wrong
-the best solution will be to go through and remove the fixtures and
-either write new factories using factory_boy or split up the current
-fixture generation code.
-"""
-fake_password = getattr(settings, 'TEST_USER_PASSWORD', 'cmr-demo')
+fake_password = settings.TEST_USER_PASSWORD
 
 Pacific = timezone('US/Pacific')
 
@@ -40,7 +33,7 @@ def fake_user_data(**kwargs):
     return data
 
 
-def create_user(**attributes):
+def create_user(user=None, **attributes):
     name = attributes.get('name', fake.name())
     first_name = attributes.get('first_name', fake.first_name())
     last_name = attributes.get('last_name', fake.last_name())
@@ -48,13 +41,21 @@ def create_user(**attributes):
     email = attributes.get('email',
                            username + '@' + fake.free_email_domain())
     password = fake_password
-    return auth_models.User.objects.create_user(
-        first_name=first_name,
-        last_name=last_name,
-        username=username,
-        email=email,
-        password=password
-    )
+    if user:
+        attributes.pop('password')
+        for attr, value in attributes.iteritems():
+            setattr(user, attr, value)
+        user.set_password(password)
+        user.save()
+    else:
+        user = auth_models.User.objects.create_user(
+            first_name=first_name,
+            last_name=last_name,
+            username=username,
+            email=email,
+            password=password
+        )
+    return user
 
 
 def create_user_with_profile(organization, **attributes):

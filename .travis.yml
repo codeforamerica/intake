@@ -16,8 +16,13 @@ env:
 addons:
   postgresql: "9.4"
 before_script:
+  - psql -c 'create database intake;' -U postgres
+  - python ./manage.py migrate
+  - python ./manage.py load_essential_data
+  - python ./manapy.py new_fixtures
   - python ./manage.py collectstatic --noinput
 script:
+  - ./manage.py new_fixtures
   - make test.everything
 after_success:
   - codeclimate-test-reporter
