@@ -173,19 +173,6 @@ class ApplicationBundleDetailPDFView(ViewAppDetailsMixin, View):
         return HttpResponse(bundle.bundled_pdf, content_type="application/pdf")
 
 
-def get_pdf_for_user(user, submission_data):
-    """
-    Creates a filled out pdf for a submission.
-
-    TODO: remove
-    """
-    organization = user.profile.organization
-    fillable = organization.pdfs.first()
-    if isinstance(submission_data, list):
-        return fillable.fill_many(submission_data)
-    return fillable.fill(submission_data)
-
-
 class FilledPDFBundle(FilledPDF, MultiSubmissionMixin):
     """A concatenated PDF of individual filled PDFs for an org user.
     Typically this is displayed in an iframe in `ApplicationBundle`
