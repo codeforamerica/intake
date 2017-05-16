@@ -102,7 +102,6 @@ def create_bundles_and_send_notifications_to_orgs():
         emails = org.get_referral_emails()
         subs = list(SubmissionsService.get_unopened_submissions_for_org(org))
         if subs:
-            ids = [sub.id for sub in subs]
             bundle = create_bundle_from_submissions(subs, organization=org)
             bundle_url = bundle.get_external_url()
             notifications.front_email_daily_app_bundle.send(
@@ -110,7 +109,6 @@ def create_bundles_and_send_notifications_to_orgs():
                 count=len(subs),
                 bundle_url=bundle_url,
                 app_index_url=external_reverse('intake-app_index'))
-            ApplicationLogEntry.log_referred(ids, user=None, organization=org)
             notifications.slack_app_bundle_sent.send(
                 submissions=subs,
                 emails=emails,

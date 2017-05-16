@@ -74,30 +74,6 @@ class ApplicationLogEntry(models.Model):
         return cls.log_multiple(cls.OPENED, submission_ids, user, time)
 
     @classmethod
-    def log_bundle_opened(cls, bundle, user, time=None):
-        sub_ids = bundle.submissions.values_list('pk', flat=True)
-        return cls.log_opened(sub_ids, user, time)
-
-    @classmethod
-    def log_referred(cls, submission_ids, user, time=None, organization=None):
-        return cls.log_multiple(
-            cls.REFERRED, submission_ids, user, time, organization)
-
-    @classmethod
-    def log_confirmation_sent(cls, submission_id, user,
-                              time, contact_info=None, message_sent=''):
-        if not time:
-            time = timezone_utils.now()
-        if not contact_info:
-            contact_info = {}
-        return ApplicantContactedLogEntry.objects.create(
-            submission_id=submission_id,
-            user=user,
-            event_type=cls.CONFIRMATION_SENT,
-            contact_info=contact_info,
-            message_sent=message_sent)
-
-    @classmethod
     def log_referred_from_one_org_to_another(cls, submission_id,
                                              to_organization_id, user):
         return cls.log_multiple(
