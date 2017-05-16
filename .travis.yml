@@ -19,7 +19,7 @@ before_script:
   - psql -c 'create database intake;' -U postgres
   - python ./manage.py migrate
   - python ./manage.py load_essential_data
-  - python ./manape.py new_fixtures
+  - python ./manage.py new_fixtures
   - python ./manage.py collectstatic --noinput
 script:
   - ./manage.py new_fixtures
