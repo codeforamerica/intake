@@ -1,73 +1,109 @@
 """
 This module handles queries to retrieve common statistics
 """
-from intake import models, constants
+from datetime import datetime, timedelta
 from collections import Counter
+from intake import models, constants, utils
+from user_accounts.models import Organization
+
 
 TOTAL = 'Total'
 ALL = (constants.Organizations.ALL, 'Total (All Organizations)')
 
 
-def sort_status_type_and_next_step_counts(item_counts):
-    """item_counts is a counter"""
-    total_count = item_counts.pop(TOTAL, 0)
-    sorted_bucket_counts = list(sorted(
-        item_counts.items(),
-        key=lambda i: i[1],
-        reverse=True
-    ))
-    sorted_bucket_counts.insert(
-        0, (TOTAL, total_count))
-    return sorted_bucket_counts
+def make_year_weeks():
+    start_date = utils.get_start_date()
+    year_weeks = []
+    date_cursor = start_date
+    last_date = utils.get_todays_date()
+    year_week = as_year_week(date_cursor)
+    while date_cursor <= last_date:
+        year_week = as_year_week(date_cursor)
+        row = (year_week, date_cursor, from_year_week(year_week))
+        year_weeks.append(row)
+        date_cursor += timedelta(days=7)
+    return year_weeks
 
 
-def get_status_update_success_metrics():
-    """calculates the total number of status updates,
-        including the totals by type of status for all orgs and each org.
+def from_year_week(year_week_string):
+    return datetime.strptime(year_week_string, '%Y-%W-%w').date()
 
-    Example output (with incorrect numbers):
 
-    [('Total (All Organizations)',
-      [('Total', 20),
-       ('Submit personal statement', 20),
-       ('Eligible', 3),
-       ('Not Eligible', 3),
-       ('Declined', 2)]),
-     ('San Francisco Public Defender',
-      [('Total', 2),
-       ('Submit personal statement', 2),
-       ('Declined', 1),
-       ("Can't Proceed", 1)]),
+def as_year_week(dt):
+    return dt.strftime('%Y-%W-1')
+
+
+def get_app_dates_sub_ids_org_ids():
+    return models.Application.objects.values_list(
+        'created', 'form_submission_id', 'organization_id'
+    ).order_by('-created')
+
+
+def rollup_subs(app_dates_sub_ids_org_ids):
+    """Reduces results down to unique sub & datetime pairs
     """
-    updates = models.StatusUpdate.objects.all().prefetch_related(
-        'application__organization',
-        'status_type',
-        'next_steps'
-    )
-    org_status_type_counts = {ALL: Counter()}
-    org_status_notification_counts = {ALL: Counter()}
-    for update in updates:
-        org = (
-            update.application.organization.slug,
-            update.application.organization.name
-        )
-        status_type = update.status_type.display_name
-        next_steps = [
-            next_step.display_name for
-            next_step in update.next_steps.all()]
-        if not org_status_type_counts.get(org):
-            org_status_type_counts[org] = Counter()
-        if not org_status_notification_counts.get(org):
-            org_status_notification_counts[org] = Counter()
-        org_status_type_counts[ALL].update([TOTAL, status_type, *next_steps])
-        org_status_type_counts[org].update([TOTAL, status_type, *next_steps])
-    data = []
-    sorted_orgs = sorted(
-        org_status_type_counts.items(),
-        key=lambda entry: constants.DEFAULT_ORGANIZATION_ORDER.index(
-            entry[0][0])
-    )
-    for org_tuple, counter in sorted_orgs:
-        entry = (org_tuple[1], sort_status_type_and_next_step_counts(counter))
-        data.append(entry)
-    return data
+    return set(
+        (row[0], row[1])
+        for row in app_dates_sub_ids_org_ids)
+
+
+def counts_by_week(datetimes):
+    return Counter(
+        as_year_week(dt.astimezone(constants.PACIFIC_TIME))
+        for dt in datetimes)
+
+
+def make_weekly_totals(week_counter, year_weeks):
+    return sorted([
+        {
+            'date': row[1].strftime('%Y-%m-%d'),
+            'count': week_counter[row[0]]
+        }
+        for row in year_weeks
+    ], key=lambda d: d['date'])
+
+
+def get_org_data_dict():
+    """
+    [
+      {
+        'org': {
+            'name': 'Total (All Organizations)'.
+            'slug': 'all'
+        },
+        'total': 1501,
+        'apps_this_week': 33,
+        'weekly_totals': [
+            {'date': '2016-04-24', 'count': 0}
+        ]
+      }
+    ]
+    """
+    year_weeks = make_year_weeks()
+    orgs = list(
+        Organization.objects.filter(
+            is_receiving_agency=True, is_live=True).values(
+                'name', 'slug', 'id').order_by('name'))
+    app_data = get_app_dates_sub_ids_org_ids()
+    week_counter = counts_by_week(
+        row[0] for row in rollup_subs(app_data))
+    weekly_totals = make_weekly_totals(week_counter, year_weeks)
+    org_data = [{
+        'org': {'name': 'Total (All Organizations)', 'slug': 'all'},
+        'total': models.FormSubmission.objects.count(),
+        'apps_this_week': weekly_totals[-1]['count'],
+        'apps_last_week': weekly_totals[-2]['count'],
+        'weekly_totals': weekly_totals
+    }]
+    for org in orgs:
+        org_datum = {'org': org}
+        week_counter = counts_by_week(
+            row[0] for row in app_data
+            if row[2] == org['id'])
+        org_datum['weekly_totals'] = make_weekly_totals(
+            week_counter, year_weeks)
+        org_datum['total'] = sum(week_counter.values())
+        org_datum['apps_this_week'] = org_datum['weekly_totals'][-1]['count']
+        org_datum['apps_last_week'] = org_datum['weekly_totals'][-2]['count']
+        org_data.append(org_datum)
+    return org_data
