@@ -101,14 +101,15 @@ def get_submissions_for_followups():
         subs, many=True).data
 
 
-def mark_opened(submission, user):
+def mark_opened(submission, user, send_slack_notification=True):
     submission.applications.filter(
         organization__profiles__user=user
     ).distinct().update(has_been_opened=True)
     EventsService.apps_opened(submission.applications.all(), user)
-    notifications.slack_submissions_viewed.send(
-        submissions=[submission], user=user,
-        bundle_url=submission.get_external_url())
+    if send_slack_notification:
+        notifications.slack_submissions_viewed.send(
+            submissions=[submission], user=user,
+            bundle_url=submission.get_external_url())
 
 
 def check_for_existing_duplicates(submission, applicant_id):
