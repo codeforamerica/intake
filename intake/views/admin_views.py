@@ -13,7 +13,6 @@ from dal import autocomplete
 
 from intake import models, notifications, forms, utils
 from printing.pdf_form_display import PDFFormDisplay
-from intake.aggregate_serializer_fields import get_todays_date
 
 import intake.services.submissions as SubmissionsService
 import intake.services.applications_service as AppsService
@@ -296,7 +295,7 @@ def get_concatenated_printout_for_bundle(user, bundle):
             canvas, pdf = pdf_display.render(
                 save=True,
                 title="{} Applications from Code for America".format(count))
-    today = get_todays_date()
+    today = utils.get_todays_date()
     filename = '{}-{}-Applications-CodeForAmerica.pdf'.format(
         today.strftime('%Y-%m-%d'),
         count
