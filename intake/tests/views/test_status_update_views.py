@@ -1,3 +1,4 @@
+import logging
 from unittest.mock import patch
 from intake.tests.base_testcases import IntakeDataTestCase
 from django.core.urlresolvers import reverse
@@ -5,6 +6,7 @@ from markupsafe import escape
 from intake import models, services, utils
 from intake.views.app_detail_views import NOT_ALLOWED_MESSAGE
 from intake.views.status_update_views import WARNING_MESSAGE
+from project.tests.assertions import assertInLogsCount
 
 
 class StatusUpdateViewBaseTestCase(IntakeDataTestCase):
@@ -240,8 +242,10 @@ class TestReviewStatusNotificationFormView(StatusUpdateViewBaseTestCase):
         self.be_apubdef_user()
         self.create_status_update(follow=True)
         edited_message = "Hi, I've been edited"
-        response = self.confirm_status_update(
-            sent_message=edited_message)
+
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            response = self.confirm_status_update(sent_message=edited_message)
         self.assertRedirects(response, reverse('intake-app_index'))
         application = self.sub.applications.filter(
             organization=self.a_pubdef).first()
@@ -250,6 +254,7 @@ class TestReviewStatusNotificationFormView(StatusUpdateViewBaseTestCase):
             status_update.notification.sent_message.split("\n\n")[1]
         self.assertEqual(
             customizable_sent_message_string, edited_message)
+        assertInLogsCount(logs, {'event_name=app_status_updated': 1})
 
     def test_displays_intro_message(self):
         self.be_apubdef_user()

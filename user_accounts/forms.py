@@ -85,6 +85,7 @@ class OrganizationDetailsDisplayForm(DisplayForm):
     fields = [
         F.EmailField,
         F.PhoneNumberField,
+        F.FaxNumberField,
         F.WebsiteField,
     ]
 

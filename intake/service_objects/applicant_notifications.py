@@ -1,5 +1,5 @@
 from project.jinja2 import oxford_comma, namify
-from intake import notifications, models, utils
+from intake import notifications, utils
 from intake.constants import SMS, EMAIL
 
 from intake.serializers.fields import ContactInfoByPreferenceField
@@ -9,7 +9,6 @@ from intake.exceptions import FrontAPIError
 class ApplicantNotification:
     message_accessors = {}
     notification_type = None
-    application_event_log_function = None
 
     def __init__(self, submission):
         self.sub = submission
@@ -65,25 +64,12 @@ class ApplicantNotification:
     def get_notification_channel(self, method):
         return None
 
-    def log_event_to_submission(self, contact_method, message_content):
-        message_info = dict(
-            contact_info={
-                contact_method: self.contact_info[contact_method]
-            },
-            message_content=message_content)
-        self.messages.append(message_info)
-        self.application_event_log_function(
-            self.sub.applicant_id, self.sub, **message_info)
-
     def send_notification_message(self, contact_method):
         context = self.get_context(contact_method)
         notification_channel = self.get_notification_channel(contact_method)
-        # notification_channel.render returns a namedtuple
-        message_content = notification_channel.render(**context)._asdict()
         notification_channel.send(
             to=self.contact_info[contact_method],
             **context)
-        self.log_event_to_submission(contact_method, message_content)
 
     def send_notifications_to_applicant(self):
         """Sends one or more notifications to the applicant
@@ -122,7 +108,6 @@ class FollowupNotification(ApplicantNotification):
         EMAIL: 'long_followup_message',
         SMS: 'short_followup_message',
     }
-    application_event_log_function = models.ApplicationEvent.log_followup_sent
 
     def get_notification_channel(self, method):
         if method == EMAIL:
@@ -161,8 +146,6 @@ class ConfirmationNotification(ApplicantNotification):
         EMAIL: 'long_confirmation_message',
         SMS: 'short_confirmation_message',
     }
-    application_event_log_function = \
-        models.ApplicationEvent.log_confirmation_sent
 
     def get_notification_channel(self, method):
         if method == EMAIL:
