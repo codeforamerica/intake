@@ -209,6 +209,9 @@ COUNTY_CHOICES = (
     (Counties.SONOMA, _(
             'Sonoma County (near Santa Rosa, Petaluma, Sonoma, '
             'Sebastopol, Bodega Bay, Healdsburg, or Cloverdale)')),
+    (Counties.SANTA_BARBARA, _(
+        'Santa Barbara County (near Santa Maria, Santa Barbara, Goleta, '
+        'Carpinteria, Solvang, and Lompoc)')),
 )
 
 if SCOPE_TO_LIVE_COUNTIES and len(COUNTY_CHOICES) == 3:
@@ -230,9 +233,6 @@ if not SCOPE_TO_LIVE_COUNTIES:
             'Ventura County (near Oxnard, Thousand Oaks, Simi Valley, '
             'Camarillo, Ojai, Moorpark, Fillmore, Ojai, Santa Paula, or '
             'Ventura)')),
-        (Counties.SANTA_BARBARA, _(
-            'Santa Barbara County (near Santa Maria, Santa Barbara, Goleta, '
-            'Carpinteria, Solvang, and Lompoc)')),
     )
 
 COUNTY_CHOICES = sorted(COUNTY_CHOICES, key=lambda item: item[1])

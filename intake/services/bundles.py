@@ -4,10 +4,13 @@ from project.jinja2 import external_reverse
 from intake import notifications
 from intake.utils import is_the_weekend
 from intake.models import (
-    ApplicationBundle, get_parser, ApplicationLogEntry
+    FormSubmission,
+    ApplicationBundle, get_parser, ApplicationLogEntry,
+    Application
 )
 from user_accounts.models import Organization
 import intake.services.submissions as SubmissionsService
+import intake.services.events_service as EventsService
 from django.db.models import Count
 
 
@@ -22,6 +25,20 @@ def create_bundle_from_submissions(submissions, skip_pdf=False, **kwargs):
     if not skip_pdf and not bundle.bundled_pdf:
         build_bundled_pdf_if_necessary(bundle)
     return bundle
+
+
+def mark_opened(bundle, user, send_slack_notification=True):
+    submission_ids = FormSubmission.objects.filter(
+        bundles=bundle).values_list('id', flat=True)
+    Application.objects.filter(
+        form_submission_id__in=submission_ids,
+        organization_id=user.profile.organization.id
+    ).distinct().update(has_been_opened=True)
+    EventsService.bundle_opened(bundle, user)
+    if send_slack_notification:
+        notifications.slack_submissions_viewed.send(
+            submissions=bundle.submissions.all(), user=user,
+            bundle_url=bundle.get_external_url())
 
 
 def get_or_create_for_submissions_and_user(submissions, user):
