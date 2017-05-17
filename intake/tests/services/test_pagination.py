@@ -11,18 +11,15 @@ class TestGetPaginatedSerializerClass(TestCase):
     def test_works_as_expected(self):
         # have a queryset of applications and a serializer
         queryset = models.FormSubmission.objects.all()
-        serializer = serializers.FormSubmissionSerializer
+        serializer = serializers.FormSubmissionFollowupListSerializer
         results = services.pagination.get_serialized_page(
             queryset, serializer, page_index=2, max_count_per_page=2)
         for thing in results:
             self.assertTrue(isinstance(thing, OrderedDict))
             self.assertEqual(
                 [key for key in thing.keys()],
-                ['id', 'date_received', 'organizations',
-                 'contact_preferences', 'monthly_income', 'us_citizen',
-                 'being_charged', 'serving_sentence', 'on_probation_parole',
-                 'currently_employed', 'city', 'age', 'url',
-                 'where_they_heard'])
+                ['id', 'local_date_received', 'full_name', 'url',
+                 'phone_number', 'email', 'applications', 'notes', 'tags'])
         self.assertEqual(results.number, 2)
         self.assertEqual(results.has_next(), True)
         self.assertEqual(results.has_previous(), True)
