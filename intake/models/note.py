@@ -1,6 +1,5 @@
 from django.db import models
 from intake.utils import local_time
-from intake.permissions import CAN_SEE_FOLLOWUP_NOTES
 
 
 class ApplicationNote(models.Model):

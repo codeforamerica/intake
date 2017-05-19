@@ -582,11 +582,3 @@ class TestCasePrintoutPDFView(IntakeDataTestCase):
         application = submission.applications.filter(
             organization=user.profile.organization).first()
         self.assertTrue(application.has_been_opened)
-
-
-class TestApplicantAutocomplete(IntakeDataTestCase):
-
-    def test_anonymous_users_get_403(self):
-        self.be_anonymous()
-        response = self.client.get(reverse('applicant-autocomplete'))
-        self.assertEqual(response.status_code, 403)

@@ -10,6 +10,7 @@ from intake.views import (
     application_done_view,
     application_transfer_view,
     admin_views,
+    search_views,
     app_detail_views,
     application_note_views,
     tag_views,
@@ -106,9 +107,7 @@ urlpatterns = [
         login_required(status_update_views.review_status_notification),
         name='intake-review_status_notification'),
 
-    url(
-        r'^applicant-autocomplete/$',
-        admin_views.applicant_autocomplete,
+    url(r'^applicant-autocomplete/$', search_views.application_search,
         name='applicant-autocomplete',),
 
     # API Views

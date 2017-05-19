@@ -1,6 +1,5 @@
 from django.db import models
 from intake import models as intake_models
-from intake import constants
 from intake.utils import coerce_to_ids
 from formation.forms import county_form_selector, display_form_selector
 import user_accounts
