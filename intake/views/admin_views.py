@@ -63,15 +63,16 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
         if is_staff:
             context['ALL_TAG_NAMES'] = TagsService.get_all_used_tag_names()
             context['results'] = \
-                SubmissionsService.get_submissions_for_followups()
+                SubmissionsService.get_submissions_for_followups(
+                    self.request.GET.get('page'))
         else:
             context['results'] = \
                 AppsService.get_applications_index_for_org_user(
                     self.request.user, self.request.GET.get('page'))
-            context['page_counter'] = \
-                utils.get_page_navigation_counter(
-                    page=context['results'],
-                    wing_size=9)
+        context['page_counter'] = \
+            utils.get_page_navigation_counter(
+                page=context['results'],
+                wing_size=9)
         return context
 
 

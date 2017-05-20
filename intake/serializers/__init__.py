@@ -12,11 +12,7 @@ from .tag_serializer import TagSerializer
 __all__ = [
     FormSubmissionFollowupListSerializer,
     OrganizationSerializer,
-<<<<<<< Updated upstream
-=======
-    ApplicantSerializer,
     ApplicationAutocompleteSerializer,
->>>>>>> Stashed changes
     ApplicationIndexSerializer,
     ApplicationIndexWithTransfersSerializer,
     ApplicationNoteSerializer,

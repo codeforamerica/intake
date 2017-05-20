@@ -1,0 +1,7 @@
+{# 
+  expects a 'results' to be data from FormSubmissionFollowupListSerializer
+  expects humanize, perms
+-#}
+{% for sub in results %}
+  {%- include "includes/followup_list_row.jinja" %}
+{%- endfor %}

@@ -15,4 +15,4 @@ class GlobalTemplateContextMixin:
 
 
 class ViewAppDetailsMixin(PermissionRequiredMixin):
-    permission_required = permissions.CAN_SEE_APP_DETAILS
+    permission_required = 'intake.' + permissions.CAN_SEE_APP_DETAILS
