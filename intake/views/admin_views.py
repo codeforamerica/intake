@@ -59,7 +59,6 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
         is_staff = self.request.user.is_staff
         context['show_pdf'] = self.request.user.profile.should_see_pdf()
         context['body_class'] = 'admin'
-        context['search_form'] = forms.ApplicationSelectForm()
         if is_staff:
             context['ALL_TAG_NAMES'] = TagsService.get_all_used_tag_names()
             context['results'] = \
