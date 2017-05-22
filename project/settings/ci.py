@@ -19,6 +19,7 @@ BROWSER_STACK_KEY = os.environ.get('BROWSER_STACK_KEY')
 NODE_MODULES_PATH = os.path.join(REPO_DIR, 'node_modules')
 COMPRESS_PRECOMPILERS = build_precompilers(NODE_MODULES_PATH)
 
+TEST_USER_PASSWORD = 'cmr-travis'
 
 LOGGING = {
     'version': 1,
