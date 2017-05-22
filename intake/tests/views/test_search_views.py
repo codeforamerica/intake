@@ -65,7 +65,7 @@ class SearchViewTestCase(TestCase):
 
 
 class TestApplicantAutocomplete(SearchViewTestCase):
-    view_name = 'applicant-autocomplete'
+    view_name = 'applications-autocomplete'
 
     def test_anonymous_users_get_403(self):
         self.client.logout()
@@ -111,7 +111,7 @@ class TestApplicantAutocomplete(SearchViewTestCase):
 
 
 class TestFollowupsAutocomplete(SearchViewTestCase):
-    view_name = 'followup-autocomplete'
+    view_name = 'followups-autocomplete'
 
     def test_anonymous_users_get_403(self):
         self.client.logout()
