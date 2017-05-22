@@ -13,13 +13,11 @@ from dal import autocomplete
 
 from intake import models, notifications, forms, utils
 from printing.pdf_form_display import PDFFormDisplay
-from intake.aggregate_serializer_fields import get_todays_date
 
 import intake.services.submissions as SubmissionsService
 import intake.services.applications_service as AppsService
 import intake.services.bundles as BundlesService
 import intake.services.tags as TagsService
-import intake.services.events_service as EventsService
 
 from intake.views.base_views import ViewAppDetailsMixin
 from intake.views.app_detail_views import ApplicationDetail, not_allowed
@@ -125,10 +123,7 @@ class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
             show_pdf=request.user.profile.should_see_pdf(),
             app_ids=[sub.id for sub in submissions]
         )
-        EventsService.bundle_opened(bundle, request.user)
-        notifications.slack_submissions_viewed.send(
-            submissions=submissions, user=request.user,
-            bundle_url=bundle.get_external_url())
+        BundlesService.mark_opened(bundle, request.user)
         return TemplateResponse(request, "app_bundle.jinja", context)
 
 
@@ -155,10 +150,7 @@ class ApplicationBundleDetail(ApplicationDetail):
             show_pdf=bool(bundle.bundled_pdf),
             app_ids=[sub.id for sub in submissions],
             bundled_pdf_url=bundle.get_pdf_bundle_url())
-        EventsService.bundle_opened(bundle, request.user)
-        notifications.slack_submissions_viewed.send(
-            submissions=submissions, user=request.user,
-            bundle_url=bundle.get_external_url())
+        BundlesService.mark_opened(bundle, request.user)
         return TemplateResponse(request, "app_bundle.jinja", context)
 
 
@@ -176,21 +168,8 @@ class ApplicationBundleDetailPDFView(ViewAppDetailsMixin, View):
                 "There doesn't seem to be a PDF associated with these "
                 "applications. If you think this is an error, please contact "
                 "Code for America.")
-        EventsService.bundle_opened(bundle, request.user)
+        BundlesService.mark_opened(bundle, request.user)
         return HttpResponse(bundle.bundled_pdf, content_type="application/pdf")
-
-
-def get_pdf_for_user(user, submission_data):
-    """
-    Creates a filled out pdf for a submission.
-
-    TODO: remove
-    """
-    organization = user.profile.organization
-    fillable = organization.pdfs.first()
-    if isinstance(submission_data, list):
-        return fillable.fill_many(submission_data)
-    return fillable.fill(submission_data)
 
 
 class FilledPDFBundle(FilledPDF, MultiSubmissionMixin):
@@ -316,7 +295,7 @@ def get_concatenated_printout_for_bundle(user, bundle):
             canvas, pdf = pdf_display.render(
                 save=True,
                 title="{} Applications from Code for America".format(count))
-    today = get_todays_date()
+    today = utils.get_todays_date()
     filename = '{}-{}-Applications-CodeForAmerica.pdf'.format(
         today.strftime('%Y-%m-%d'),
         count
@@ -338,6 +317,8 @@ class CasePrintoutPDFView(ApplicationDetail):
         if not submission.organizations.filter(
                 id=request.user.profile.organization_id).exists():
             return not_allowed(request)
+        SubmissionsService.mark_opened(
+            submission, request.user, send_slack_notification=False)
         filename, pdf_bytes = get_printout_for_submission(
             request.user,
             submission)
@@ -357,6 +338,8 @@ class CaseBundlePrintoutPDFView(ViewAppDetailsMixin, View):
             pk=int(bundle_id))
         if bundle.organization_id != request.user.profile.organization_id:
             return not_allowed(request)
+        BundlesService.mark_opened(
+            bundle, request.user, send_slack_notification=False)
         filename, pdf_bytes = get_concatenated_printout_for_bundle(
             request.user, bundle)
         response = HttpResponse(

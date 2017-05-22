@@ -11,9 +11,7 @@ class TestPersistReferrerMiddleware(TestCase):
     def test_persist_external_referrer(self):
         referrer = 'http://backtothefuture.com'
         response = self.client.get(
-            reverse('intake-home'),
-            HTTP_REFERER=referrer
-        )
+            reverse('intake-home'), HTTP_REFERER=referrer)
         self.assertEqual(referrer, self.client.session['referrer'])
 
         self.client.get(
@@ -22,8 +20,13 @@ class TestPersistReferrerMiddleware(TestCase):
         self.assertEqual(referrer, self.client.session['referrer'])
 
     def test_no_referrer_does_nothing(self):
-
         self.client.get(reverse('intake-home'))
+        self.assertIsNone(self.client.session.get('referrer'))
+
+    def test_ignores_health_checks(self):
+        self.client.get(
+            reverse('health_check-ok'),
+            **{'HTTP_REFERER': 'https://wonderful.horse'})
         self.assertIsNone(self.client.session.get('referrer'))
 
 
@@ -48,6 +51,10 @@ class TestPersistSourceMiddleware(TestCase):
         response = self.client.get(reverse('intake-home'))
         source = response.wsgi_request.session.get('source')
         self.assertIsNone(source)
+
+    def test_ignores_health_checks(self):
+        self.client.get(reverse('health_check-ok'), {'source': 'odo'})
+        self.assertIsNone(self.client.session.get('source'))
 
 
 class TestGetCleanIpAddressMiddleware(TestCase):
@@ -80,6 +87,12 @@ class TestGetCleanIpAddressMiddleware(TestCase):
         result = middleware._get_client_ip(mock_request)
         self.assertEqual(result, 'fake_ip1')
 
+    def test_ignores_health_checks(self):
+        response = self.client.get(
+            reverse('health_check-ok'),
+            **{'HTTP_X_FORWARDED_FOR': 'https://wonderful.horse'})
+        self.assertFalse(hasattr(response.wsgi_request, 'ip_address'))
+
 
 class TestCountUniqueVisitorsMiddleware(TestCase):
 
@@ -100,3 +113,10 @@ class TestCountUniqueVisitorsMiddleware(TestCase):
         self.assertEqual(visitor_id, visitor_id_2)
         Visitor.assert_called_once_with(
             ip_address='127.0.0.1', referrer='', source='')
+
+    @patch('intake.middleware.Visitor')
+    def test_ignores_health_checks(self, Visitor):
+        Visitor.return_value = Mock(id=1)
+        response = self.client.get(reverse('health_check-ok'))
+        self.assertIsNone(response.wsgi_request.session.get('visitor_id'))
+        Visitor.assert_not_called()

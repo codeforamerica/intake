@@ -1,3 +1,4 @@
+import sys
 from project.settings.environment import *
 
 DEBUG = True
@@ -26,4 +27,22 @@ DATABASES = {
         'NAME': 'intake',
         'USER': 'postgres',
     }
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'WARNING',
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+        },
+    },
+    'loggers': {
+        'project': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+        },
+    },
 }

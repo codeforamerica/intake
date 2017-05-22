@@ -109,3 +109,8 @@ db.dump_fixtures:
 db.pull.demo:
 	dropdb intake --if-exists
 	heroku pg:pull --app cmr-demo DATABASE_URL intake
+
+
+static:
+	rm -rf staticfiles
+	./manage.py collectstatic --noinput
