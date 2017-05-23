@@ -3,6 +3,8 @@ from django.test import TestCase
 from intake.constants import PACIFIC_TIME
 from intake.services import statistics
 from intake import utils
+from intake.tests.factories import FormSubmissionWithOrgsFactory
+from user_accounts.models import Organization
 from intake.tests.base_testcases import ALL_APPLICATION_FIXTURES
 
 
@@ -20,6 +22,26 @@ class TestGetOrgDataDict(TestCase):
             self.assertIn('org', org_data)
             self.assertListEqual(
                 dates, [week['date'] for week in org_data['weekly_totals']])
+
+
+class TestRollupSubs(TestCase):
+
+    def test_diff_dates_same_sub_no_change(self):
+        # make sure that if the application times differ slightly, it does
+        # not affect the count
+        one_org = Organization(name="House Stark", slug='stark')
+        one_org.save()
+        other_org = Organization(name="House Tyrell", slug='tyrell')
+        other_org.save()
+        sub = FormSubmissionWithOrgsFactory(
+            organizations=[one_org, other_org],
+            answers={})
+        app = sub.applications.first()
+        app.created = app.created + datetime.timedelta(milliseconds=1)
+        app.save()
+        results = statistics.rollup_subs(
+            statistics.get_app_dates_sub_ids_org_ids())
+        self.assertEqual(len(results), 1)
 
 
 class TestMakeYearWeeks(TestCase):

@@ -35,7 +35,8 @@ def as_year_week(dt):
 
 def get_app_dates_sub_ids_org_ids():
     return models.Application.objects.values_list(
-        'created', 'form_submission_id', 'organization_id'
+        'created', 'form_submission_id',
+        'organization_id'
     ).order_by('-created')
 
 
