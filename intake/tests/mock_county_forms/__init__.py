@@ -314,6 +314,8 @@ class Provider(BaseProvider):
             is_veteran=self.maybe(0.4),
             dependents=random.randint(0, 5),
             reduced_probation=self.maybe(0.1),
+            is_california_resident=self.maybe(0.8),
+            how_long_california_resident='6 months',
         )
         data.update(overrides)
         return data
