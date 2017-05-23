@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 import user_accounts
+from user_accounts import exceptions
 
 
 class UserProfile(models.Model):
@@ -39,7 +40,7 @@ class UserProfile(models.Model):
             )
             invitation = invitations.first()
         if not invitation:
-            raise user_accounts.exceptions.MissingInvitationError(
+            raise exceptions.MissingInvitationError(
                 "No invitation found for {}".format(user.email))
         profile = cls(
             user=user,
@@ -77,7 +78,7 @@ class UserProfile(models.Model):
             return bool(resource.organizations.filter(
                 pk=self.organization_id).count())
         msg = "`{}` doesn't have a way to define UserProfile access"
-        raise user_accounts.exceptions.UndefinedResourceAccessError(
+        raise exceptions.UndefinedResourceAccessError(
             msg.format(resource))
 
     def filter_submissions(self, submissions_qset):
