@@ -357,16 +357,16 @@ class AddressField(MultiValueField):
 class IsCaliforniaResident(YesNoField):
     context_key = "is_california_resident"
     label = _("Are you a current resident of California?")
-    display_label = "Is a California resident"
+    display_label = "California resident?"
 
 
 class HowLongCaliforniaResident(CharField):
     context_key = "how_long_california_resident"
     label = _(
-        "If you live in California, how long have you continuously resided "
+        "If you live in California, how long have you continuously lived "
         "here?")
     help_text = _("For example: 5 years")
-    display_label = "Duration of California residency"
+    display_label = "How long?"
 
 
 ###
