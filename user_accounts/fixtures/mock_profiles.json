@@ -24,7 +24,7 @@
   "model": "auth.user",
   "fields": {
     "password": "pbkdf2_sha256$30000$fZsx4HdOBGHj$dLOQFyiy9L1FvyjJ/Qz1j/wR92xSqDiTfnjLS0fXckU=",
-    "last_login": null,
+    "last_login": "2017-05-23T18:29:20.945Z",
     "is_superuser": false,
     "username": "cc_pubdef_user",
     "first_name": "Fake",
@@ -171,7 +171,7 @@
   "model": "auth.user",
   "fields": {
     "password": "pbkdf2_sha256$30000$kfQBqWJUR0FZ$qh12fhqlE5q0uJvmsEQi/h13UZf5qMfLnyOmIzYE/yU=",
-    "last_login": null,
+    "last_login": "2017-05-23T18:32:26.225Z",
     "is_superuser": false,
     "username": "santa_barbara_pubdef_user",
     "first_name": "Fake",
@@ -297,7 +297,7 @@
   "model": "auth.user",
   "fields": {
     "password": "pbkdf2_sha256$30000$uHNixjJ0OmAv$o1IAWtxxvRGyjRZATeGcc+CqLtY/fBIfSdixbDEcBwM=",
-    "last_login": null,
+    "last_login": "2017-05-23T18:29:36.478Z",
     "is_superuser": false,
     "username": "ventura_pubdef_user",
     "first_name": "Fake",
@@ -318,7 +318,7 @@
   "model": "auth.user",
   "fields": {
     "password": "pbkdf2_sha256$30000$xjGBGYsQTu1W$RNOeePB1VxkktdZTBx770FuJvor9ELqQQ5sCceACX2g=",
-    "last_login": null,
+    "last_login": "2017-05-22T22:25:17.162Z",
     "is_superuser": true,
     "username": "cfa_user",
     "first_name": "Fake",
@@ -356,6 +356,40 @@
         "performance_monitors"
       ]
     ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$30000$Ab40PH5VqTUg$1/oNgXLoh9CjzEsvGfvc3hrT6hqprzISQmLpeW6QOZc=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "jennifermarie+sample",
+    "first_name": "",
+    "last_name": "",
+    "email": "jennifermarie+sample@codeforamerica.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-05-22T22:37:59.301Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$30000$roSXJWImXh8k$DHYlhpUhEn8xA6lTI1lCSOIgGfZjnogFANNERoS8nqw=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "testuser",
+    "first_name": "",
+    "last_name": "",
+    "email": "testuser@random.org",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2017-05-22T22:50:03.525Z",
+    "groups": [],
     "user_permissions": []
   }
 },

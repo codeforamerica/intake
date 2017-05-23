@@ -489,6 +489,8 @@ class VenturaCountyFormSpec(CombinableCountyFormSpec):
         F.AlternatePhoneNumberField,
         F.EmailField,
         F.AddressField,
+        F.IsCaliforniaResident,
+        F.HowLongCaliforniaResident,
         F.OwnsHome,
         F.FinancialScreeningNote,
         F.CurrentlyEmployed,
@@ -500,8 +502,6 @@ class VenturaCountyFormSpec(CombinableCountyFormSpec):
         F.HowManyDependents,
         F.IsVeteran,
         F.DateOfBirthField,
-        F.LastFourOfSocial,
-        F.DriverLicenseOrIDNumber,
         F.OnProbationParole,
         F.WhereProbationParole,
         F.OwesCourtFees,
@@ -545,8 +545,10 @@ class SantaBarbaraCountyFormSpec(VenturaCountyFormSpec):
         F.ReasonsForApplying,
         F.IsMarried,
         F.HowMuchSavings,
+        F.DriverLicenseOrIDNumber,
         F.WhenProbationParole}) - {
-        F.LastFourOfSocial,
+        F.IsCaliforniaResident,
+        F.HowLongCaliforniaResident,
         F.IsVeteran,
     }
     required_fields = (
