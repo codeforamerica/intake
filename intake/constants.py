@@ -212,6 +212,10 @@ COUNTY_CHOICES = (
     (Counties.SANTA_BARBARA, _(
         'Santa Barbara County (near Santa Maria, Santa Barbara, Goleta, '
         'Carpinteria, Solvang, and Lompoc)')),
+    (Counties.VENTURA, _(
+            'Ventura County (near Oxnard, Thousand Oaks, Simi Valley, '
+            'Camarillo, Ojai, Moorpark, Fillmore, Santa Paula, or '
+            'Ventura)')),
 )
 
 if SCOPE_TO_LIVE_COUNTIES and len(COUNTY_CHOICES) == 3:
@@ -229,10 +233,6 @@ if not SCOPE_TO_LIVE_COUNTIES:
         (Counties.TULARE, _(
             'Tulare County (near Visalia, Tulare, Porterville, Finuba, '
             'Lindsay, Farmersville, Exeter, or Woodlake)')),
-        (Counties.VENTURA, _(
-            'Ventura County (near Oxnard, Thousand Oaks, Simi Valley, '
-            'Camarillo, Ojai, Moorpark, Fillmore, Ojai, Santa Paula, or '
-            'Ventura)')),
     )
 
 COUNTY_CHOICES = sorted(COUNTY_CHOICES, key=lambda item: item[1])
