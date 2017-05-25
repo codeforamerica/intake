@@ -317,7 +317,6 @@ def make_two_mock_transfers():
 
 
 def build_seed_submissions():
-    create_seed_users()
     subs = []
     orgs = Organization.objects.filter(is_receiving_agency=True)
     for org in orgs:

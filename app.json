@@ -62,7 +62,7 @@
     "heroku-postgresql",
     {
       "plan": "heroku-postgresql",
-	  "as": "test_db"
+	    "as": "test_db"
     }
   ],
   "buildpacks": [
@@ -77,6 +77,6 @@
     }
   ],
   "scripts": {
-	"postdeploy": "./manage.py new_fixtures"
+	  "postdeploy": "./manage.py new_fixtures"
   }
 }
