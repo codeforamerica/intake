@@ -10,6 +10,7 @@ from django.core import serializers
 from django.core.management import call_command
 from django.conf import settings
 from django.utils.datastructures import MultiValueDict
+from user_accounts.models import Organization
 
 from taggit.models import Tag
 
@@ -316,7 +317,6 @@ def make_two_mock_transfers():
 
 
 def build_seed_submissions():
-    create_seed_users()
     subs = []
     orgs = Organization.objects.filter(is_receiving_agency=True)
     for org in orgs:
