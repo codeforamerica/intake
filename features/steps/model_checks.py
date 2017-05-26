@@ -8,5 +8,3 @@ def test_has_filledpdf(context):
     filled_pdf = models.FilledPDF.objects.first()
     context.test.assertEqual(len(fillable_pdf), 1)
     context.test.assertTrue(filled_pdf, "no filled PDF here")
-    # context.test.assertTrue(filled_pdf.pdf)
-    # context.test.assertNotEqual(filled_pdf.pdf.size, 0)
