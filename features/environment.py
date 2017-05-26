@@ -1,8 +1,6 @@
 from browserstack.local import Local
 from django.conf import settings
-from urllib.parse import urljoin
 from selenium import webdriver
-from project.fixtures_index import ESSENTIAL_DATA_FIXTURES
 
 
 USERNAME = settings.BROWSER_STACK_ID
