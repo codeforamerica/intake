@@ -1,8 +1,8 @@
 from browserstack.local import Local
 from django.conf import settings
-from urllib.parse import urljoin
 from selenium import webdriver
-from project.fixtures_index import ESSENTIAL_DATA_FIXTURES
+from intake.tests import mock
+from django.core.management import call_command
 
 
 USERNAME = settings.BROWSER_STACK_ID
@@ -63,4 +63,5 @@ def after_all(context):
 
 
 def before_scenario(context, scenario):
-    context.fixtures = ['counties', 'organizations']
+    call_command('load_essential_data')
+    mock.fillable_pdf()
