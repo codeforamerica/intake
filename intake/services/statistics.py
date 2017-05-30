@@ -35,8 +35,9 @@ def as_year_week(dt):
 
 def get_app_dates_sub_ids_org_ids():
     return models.Application.objects.values_list(
-        'created', 'form_submission_id', 'organization_id'
-    ).order_by('-created')
+        'form_submission__date_received', 'form_submission_id',
+        'organization_id'
+    ).order_by('-form_submission__date_received')
 
 
 def rollup_subs(app_dates_sub_ids_org_ids):
