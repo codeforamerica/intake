@@ -2,7 +2,7 @@ from .base_factory import PrepopulatedModelFactory
 from user_accounts import models
 
 
-class OrganizationFactory(PrepopulatedModelFactory):
+class ExistingOrganizationFactory(PrepopulatedModelFactory):
     @classmethod
     def get_queryset(cls):
         return models.Organization.objects.filter(is_receiving_agency=True)
