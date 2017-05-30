@@ -1,7 +1,6 @@
 Feature: A staff user can search for and modify submissions 
-	As CfA staff
-	I want to quickly search for an applicant
-	In order to add a note and provide case support for applicants
+	As CfA staff, I want to quickly search for an applicant
+	in order to add a note and provide case support for applicants.
 
 	Background:
 	   Given an applicant support user

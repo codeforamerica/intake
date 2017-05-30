@@ -31,7 +31,7 @@ function handleNewNoteFormSubmission(e){
 }
 
 function renderApplicationSearchResults(results){
-	$('ul.applicants-autocomplete_results').html(
+	$('ul.applications-autocomplete_results').html(
 		results.map(templates.searchResult).join('')
 	);
 }

@@ -1,12 +1,12 @@
 function initializeSearchWidget(inputSelector, postURL, resultsCallback, emptySearchCallback){
   var currentXHR = null;
+
   function handleResultsAndResetRequest(callback){
     return function(results){
       callback(results);
       currentXHR = null;
     };
   }
-
 
   function sendSearchQuery(searchTerm){
       var data = {'q': searchTerm};
