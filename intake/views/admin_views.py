@@ -3,13 +3,8 @@ from django.core.urlresolvers import reverse_lazy
 from django.views.generic import View
 from django.views.generic.base import TemplateView
 
-from django.db.models import Q
-
 from django.http import Http404, HttpResponse
 from django.template.response import TemplateResponse
-
-from dal import autocomplete
-
 
 from intake import models, notifications, forms, utils
 from printing.pdf_form_display import PDFFormDisplay
@@ -64,19 +59,19 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
         is_staff = self.request.user.is_staff
         context['show_pdf'] = self.request.user.profile.should_see_pdf()
         context['body_class'] = 'admin'
-        context['search_form'] = forms.ApplicationSelectForm()
         if is_staff:
             context['ALL_TAG_NAMES'] = TagsService.get_all_used_tag_names()
             context['results'] = \
-                SubmissionsService.get_submissions_for_followups()
+                SubmissionsService.get_submissions_for_followups(
+                    self.request.GET.get('page'))
         else:
             context['results'] = \
                 AppsService.get_applications_index_for_org_user(
                     self.request.user, self.request.GET.get('page'))
-            context['page_counter'] = \
-                utils.get_page_navigation_counter(
-                    page=context['results'],
-                    wing_size=9)
+        context['page_counter'] = \
+            utils.get_page_navigation_counter(
+                page=context['results'],
+                wing_size=9)
         return context
 
 
@@ -348,41 +343,6 @@ class CaseBundlePrintoutPDFView(ViewAppDetailsMixin, View):
         return response
 
 
-class ApplicantAutocomplete(autocomplete.Select2QuerySetView):
-
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return super().dispatch(request, *args, **kwargs)
-        return HttpResponse(status=403)
-
-    def get_queryset(self):
-        if self.request.user.is_staff:
-            qs = qs = models.Application.objects.all()
-        else:
-            qs = models.Application.objects.filter(
-                organization=self.request.user.profile.organization)
-
-        if self.q:
-            qs = qs.filter(
-                Q(form_submission__first_name__icontains=self.q) |
-                Q(form_submission__last_name__icontains=self.q) |
-                Q(form_submission__ssn__icontains=self.q) |
-                Q(form_submission__last_four__icontains=self.q) |
-                Q(form_submission__drivers_license_or_id__icontains=self.q) |
-                Q(form_submission__phone_number__icontains=self.q) |
-                Q(form_submission__alternate_phone_number__icontains=self.q) |
-                Q(form_submission__email__icontains=self.q) |
-                Q(form_submission__case_number__icontains=self.q)
-            )
-        return qs
-
-    def get_result_value(self, application):
-        return dict(
-            organization=application.organization.name,
-            name=application.form_submission.get_full_name(),
-            url=application.form_submission.get_absolute_url())
-
-
 filled_pdf = FilledPDF.as_view()
 pdf_bundle = FilledPDFBundle.as_view()
 app_index = ApplicationIndex.as_view()
@@ -392,4 +352,3 @@ app_bundle_detail = ApplicationBundleDetail.as_view()
 app_bundle_detail_pdf = ApplicationBundleDetailPDFView.as_view()
 case_printout = CasePrintoutPDFView.as_view()
 case_bundle_printout = CaseBundlePrintoutPDFView.as_view()
-applicant_autocomplete = ApplicantAutocomplete.as_view()

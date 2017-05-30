@@ -1,13 +1,13 @@
 import factory
 from user_accounts import models
-from .organization_factory import ExistingOrganizationFactory
+from .organization_factory import FakeOrganizationFactory
 from .user_factory import UserFactory, user_with_name_and_email_from_org_slug
 
 
 class UserProfileFactory(factory.DjangoModelFactory):
     name = factory.Sequence(lambda n: 'Fake User {}'.format(n))
     user = factory.SubFactory(UserFactory)
-    organization = factory.SubFactory(ExistingOrganizationFactory)
+    organization = factory.SubFactory(FakeOrganizationFactory)
 
     class Meta:
         model = models.UserProfile

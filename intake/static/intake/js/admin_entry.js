@@ -5,7 +5,7 @@ var utils = require('./utils');
 var ajaxModule = require('./ajax');
 var templates = require('./templates');
 var tagWidget = require('./tag_widget');
-var searchWidget = require('./application_search_widget');
+var searchWidget = require('./search_widget');
 
 
 function handleNoteDeletionClick(e){
@@ -30,12 +30,55 @@ function handleNewNoteFormSubmission(e){
 	});
 }
 
+function renderApplicationSearchResults(results){
+	$('ul.applications-autocomplete_results').html(
+		results.map(templates.searchResult).join('')
+	);
+}
+
+function renderEmptyApplicationSearchResults(){
+	renderApplicationSearchResults([]);
+}
+
+var FOLLOWUP_SEARCH_RESULTS;
+var FOLLOWUP_PAGE_CONTENTS;
+
+function removeExistingFollowupResults(){
+	if (FOLLOWUP_SEARCH_RESULTS){
+		FOLLOWUP_SEARCH_RESULTS.remove();
+	}
+}
+function renderFollowupSearchResults(htmlString){
+	// find the followups list
+	if (!FOLLOWUP_PAGE_CONTENTS){
+		FOLLOWUP_PAGE_CONTENTS = $('tr.form_submission');
+	}
+	FOLLOWUP_PAGE_CONTENTS.hide();
+	removeExistingFollowupResults();
+	FOLLOWUP_SEARCH_RESULTS = $(htmlString);
+	$('.followups').append(FOLLOWUP_SEARCH_RESULTS);
+}
+
+function renderEmptyFollowupSearchResults(){
+	// remove previous search results
+	removeExistingFollowupResults();
+	if (FOLLOWUP_PAGE_CONTENTS){
+		FOLLOWUP_PAGE_CONTENTS.show();
+	}
+}
 
 function initializeEventListeners(){
-	$('.notes_log').on('click', '.note-remove', handleNoteDeletionClick);
-	$('form.note-create_form').on('submit', handleNewNoteFormSubmission);
+	// these need to be high level to function properly
+	$('.followups').on('click', '.note-remove', handleNoteDeletionClick);
+	$('.followups').on(
+		'submit', 'form.note-create_form', handleNewNoteFormSubmission);
 	tagWidget.init();
-	searchWidget.init();
+	searchWidget(
+		'.applications-search_module', '/applications-autocomplete/',
+		renderApplicationSearchResults, renderEmptyApplicationSearchResults);
+	searchWidget(
+		'.followups-search_module', '/followups-autocomplete/',
+		renderFollowupSearchResults, renderEmptyFollowupSearchResults);
 }
 
 function main(){

@@ -236,7 +236,7 @@ class TestApplicationIndex(IntakeDataTestCase):
         random_new_subs_count = randint(5, 20)
         for i in range(random_new_subs_count):
             FormSubmissionFactory.create()
-        with self.assertNumQueries(17):
+        with self.assertNumQueries(18):
             self.client.get(reverse('intake-app_index'))
 
     def test_that_org_user_can_only_see_apps_to_own_org(self):
@@ -582,11 +582,3 @@ class TestCasePrintoutPDFView(IntakeDataTestCase):
         application = submission.applications.filter(
             organization=user.profile.organization).first()
         self.assertTrue(application.has_been_opened)
-
-
-class TestApplicantAutocomplete(IntakeDataTestCase):
-
-    def test_anonymous_users_get_403(self):
-        self.be_anonymous()
-        response = self.client.get(reverse('applicant-autocomplete'))
-        self.assertEqual(response.status_code, 403)

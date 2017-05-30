@@ -4,7 +4,7 @@ import Levenshtein
 import intake.services.events_service as EventsService
 from intake import models, serializers, notifications
 from intake.constants import SMS, EMAIL
-from .pagination import get_page
+from . import pagination
 from intake.service_objects import ConfirmationNotification
 from intake.models.form_submission import (
     FORMSUBMISSION_TEXT_SEARCH_FIELDS, QUERYABLE_ANSWER_FIELDS, DOLLAR_FIELDS)
@@ -60,7 +60,7 @@ def get_latest_submission_from_applicant(applicant_id):
 
 
 def get_paginated_submissions_for_org_user(user, page_index):
-    return get_page(get_submissions_for_org_user(user), page_index)
+    return pagination.get_page(get_submissions_for_org_user(user), page_index)
 
 
 def get_permitted_submissions(user, ids=None):
@@ -95,10 +95,10 @@ def get_submissions_for_staff_user():
     )
 
 
-def get_submissions_for_followups():
-    subs = get_submissions_for_staff_user()
-    return serializers.FormSubmissionFollowupListSerializer(
-        subs, many=True).data
+def get_submissions_for_followups(page_index):
+    query = get_submissions_for_staff_user()
+    serializer = serializers.FormSubmissionFollowupListSerializer
+    return pagination.get_serialized_page(query, serializer, page_index)
 
 
 def mark_opened(submission, user, send_slack_notification=True):

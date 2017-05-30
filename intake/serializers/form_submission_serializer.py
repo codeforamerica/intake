@@ -1,7 +1,7 @@
 from . import fields
 from rest_framework import serializers
 from intake import models
-from .application_serializer import ApplicationFollowupListSerializer
+from .application_serializers import ApplicationFollowupListSerializer
 from .note_serializer import ApplicationNoteSerializer
 from .tag_serializer import TagSerializer
 

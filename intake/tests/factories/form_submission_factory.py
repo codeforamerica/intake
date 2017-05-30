@@ -1,9 +1,9 @@
 import factory
 import faker
+import random
 from intake import models, constants
 from intake.tests.mock_org_answers import get_answers_for_orgs
 from .applicant_factory import ApplicantFactory
-from user_accounts.models import Organization
 from user_accounts.tests.factories import ExistingOrganizationFactory
 
 fake = faker.Factory.create(
@@ -61,7 +61,8 @@ class FormSubmissionWithOrgsFactory(FormSubmissionFactory):
     @classmethod
     def create(cls, *args, **kwargs):
         if 'organizations' not in kwargs:
-            kwargs['organizations'] = ExistingOrganizationFactory.sample()
+            kwargs['organizations'] = ExistingOrganizationFactory.sample(
+                random.randint(1, 3))
         # set answers based on the designated organizations
         if 'answers' not in kwargs:
             kwargs['answers'] = get_answers_for_orgs(kwargs['organizations'])

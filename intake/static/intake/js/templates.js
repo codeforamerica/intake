@@ -1,4 +1,3 @@
-
 function renderTagAutocompleteResultTemplate(result){
   var activeClass = result.selected ? ' active' : '';
   return '<li class="autocomplete-result'+activeClass+'">'+result.prefix+'<span class="result-match">'+result.selection+'</span>'+result.suffix+'</li>';
@@ -7,7 +6,7 @@ function renderTagAutocompleteResultTemplate(result){
 function renderTagTemplate(tag){
   return '<span class="tag label" data-key="'+tag.id+'"">' +
     '<span class="tag-text">'+tag.name+'</span> ' +
-    '<span class="glyphicon glyphicon-remove-sign" title="Remove this tag"></span>' +
+    '<span class="tag-remove glyphicon glyphicon-remove-sign" title="Remove this tag"></span>' +
   '</span> ';
 }
 
