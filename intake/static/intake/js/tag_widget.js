@@ -131,8 +131,9 @@ function addSelectedResult(){
 
 function handleKeydownInTagInput(e){
   /*
-    if there is a currently selected result:
-      add that tag to the input value
+    if there is a currently selected result
+    and someone hits "TAB KEY":
+      add selected tag to the input value
   */
   var code = event.which;
   if( STATE.selectedResultIndex !== null ){
@@ -191,10 +192,11 @@ function handleInputBlur(e){
 
 function handleInputFocus(e){
   // Sets the targeted widget and associated elements
-  STATE.elems.widget = $(e.delegateTarget);
   STATE.elems.input = $(e.target);
+  STATE.elems.widget = STATE.elems.input.parents('.tags-cell');
   STATE.elems.resultsList = STATE.elems.widget.find(
     '.tags-autocomplete_results');
+  console.log(STATE);
 }
 
 
@@ -232,17 +234,17 @@ function handleTagRemovalClick(e){
 function initTagWidgets(){
   tagSearch.init();
   resetState();
-  var widgets = $('.tags-input_module');
-  widgets.on('focusin', "input[name='tags']", handleInputFocus);
-  widgets.on('keydown', "input[name='tags']", handleKeydownInTagInput);
-  widgets.on('keyup', "input[name='tags']", handleKeyupInTagInput);
-  widgets.on('mousedown', ".autocomplete-result", handleResultClick);
-  widgets.on('mouseenter', ".autocomplete-result", handleResultHover);
-  widgets.on('blur', "input[name='tags']", handleInputBlur);
-  widgets.on('submit', 'form', handleAddTagsFormSubmission);
-  widgets.on('mouseenter', '.glyphicon-remove-sign', addHoverWarning);
-  widgets.on('mouseleave', '.glyphicon-remove-sign', removeHoverWarning);
-  widgets.on('click', '.glyphicon-remove-sign', handleTagRemovalClick);
+  var followups = $('.followups');
+  followups.on('focusin', "input[name='tags']", handleInputFocus);
+  followups.on('keydown', "input[name='tags']", handleKeydownInTagInput);
+  followups.on('keyup', "input[name='tags']", handleKeyupInTagInput);
+  followups.on('mousedown', ".autocomplete-result", handleResultClick);
+  followups.on('mouseenter', ".autocomplete-result", handleResultHover);
+  followups.on('blur', "input[name='tags']", handleInputBlur);
+  followups.on('submit', 'form.tags-add_tags', handleAddTagsFormSubmission);
+  followups.on('mouseenter', '.tag-remove', addHoverWarning);
+  followups.on('mouseleave', '.tag-remove', removeHoverWarning);
+  followups.on('click', '.tag-remove', handleTagRemovalClick);
 }
 
 module.exports = {

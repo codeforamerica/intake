@@ -12,16 +12,26 @@
     {%- endif %}
     </div>
     <div class="col-xs-12 col-sm-6 col-md-6 centered-to-header">
-      <div class="applicants-search_module">
-      {# replace this form (copied from tags) with one for autocomplete #}
-        <form>
-          <input name="q" type="text" autocomplete="off"><ul class="applicants-autocomplete_results"></ul>
+      {%- if perms.intake.add_applicationnote %}
+      <div class="followups-search_module">
+        <form class="search_form">
+          <input name="q" type="text" autocomplete="off">
         </form>
       </div>
+      {%- else %}
+      <div class="applications-search_module">
+        <form class="search_form">
+          <input name="q" type="text" autocomplete="off">
+          <ul class="applications-autocomplete_results">
+            {#- autocomplete results should go here -#}
+          </ul>
+        </form>
+      </div>
+      {%- endif %}
     </div>
   </div>
   <div class="row">
-    {% if perms.intake.view_application_note %}
+    {% if perms.intake.add_applicationnote %}
       {% include "followup_list.jinja" %}
     {% else %}
       {% include "app_reviewer_list.jinja" %}
