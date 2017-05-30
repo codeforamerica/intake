@@ -59,11 +59,11 @@
     {%- endfor %}
     </table>
   </td>
-  {%- if perms.intake.view_application_note %}
+  {%- if perms.intake.add_applicationnote %}
   <td class="notes_log-cell">
   {# Notes #}
     <div class="notes_log">
-      {%- if perms.intake.add_application_note %}
+      {%- if perms.intake.add_applicationnote %}
       <form class="note-create_form" action="{{ url('intake-create_note') }}" method="post">
         <input type="hidden" name="submission" value="{{ sub.id }}">
         <input type="hidden" name="user" value="{{ request.user.id }}">
@@ -82,7 +82,7 @@
           <div class="note-body">{{ note.body }}</div>
           <div class="note-author">-{{ note.user }}</div>
           
-          {%- if perms.intake.delete_application_note %}
+          {%- if perms.intake.delete_applicationnote %}
           <div class="note-remove" title="Delete this note">
             <button class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-remove-sign"></span>
              Delete</a>

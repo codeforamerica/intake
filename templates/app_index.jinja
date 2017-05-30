@@ -12,7 +12,7 @@
     {%- endif %}
     </div>
     <div class="col-xs-12 col-sm-6 col-md-6 centered-to-header">
-      {%- if perms.intake.view_application_note %}
+      {%- if perms.intake.add_applicationnote %}
       <div class="followups-search_module">
         <form class="search_form">
           <input name="q" type="text" autocomplete="off">
@@ -31,7 +31,7 @@
     </div>
   </div>
   <div class="row">
-    {% if perms.intake.view_application_note %}
+    {% if perms.intake.add_applicationnote %}
       {% include "followup_list.jinja" %}
     {% else %}
       {% include "app_reviewer_list.jinja" %}

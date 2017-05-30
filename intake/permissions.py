@@ -12,5 +12,5 @@ def get_all_followup_permissions():
     return Permission.objects.filter(
         codename__in=[
             CAN_SEE_FOLLOWUP_NOTES,
-            'add_application_note',
-            'delete_application_note'])
+            'add_applicationnote',
+            'delete_applicationnote'])

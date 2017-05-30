@@ -36,6 +36,11 @@
     "name": "followup_staff",
     "permissions": [
       [
+        "view_application_note",
+        "intake",
+        "applicationnote"
+      ],
+      [
         "add_applicationnote",
         "intake",
         "applicationnote"

@@ -21,6 +21,14 @@ COMPRESS_PRECOMPILERS = build_precompilers(NODE_MODULES_PATH)
 
 TEST_USER_PASSWORD = 'cmr-travis'
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'intake',
+        'USER': 'postgres',
+    }
+}
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

@@ -49,6 +49,12 @@
     <div class="data_display-row mailing">
       {{ form.address }}
     </div>
+    {%- if 'being_charged' in form.fields %}
+      <div class="data_display-row california">
+        {{ form.is_california_resident }}
+        {{ form.how_long_california_resident }}
+      </div>
+    {%- endif %}
   </div>
 
   <div class="data_display-section case_status">

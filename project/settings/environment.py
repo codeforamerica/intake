@@ -53,5 +53,4 @@ LIVE_COUNTY_CHOICES = os.environ.get('LIVE_COUNTY_CHOICES', False)
 
 CELERY_BROKER_URL = os.environ.get('CLOUDAMQP_URL')
 
-
 TEST_USER_PASSWORD = os.environ.get("TEST_USER_PASSWORD")
