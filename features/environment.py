@@ -1,6 +1,5 @@
 from browserstack.local import Local
 from django.conf import settings
-from selenium import webdriver
 from intake.tests import mock
 from django.core.management import call_command
 
