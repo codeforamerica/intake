@@ -15,10 +15,12 @@ class PrebuiltMultiAppPDF(BaseModel):
         on_delete=models.PROTECT)
 
     def __str__(self):
+        status = 'Prebuilt' if self.pdf else 'Unbuilt'
         return str(
-            'PDF for {apps_count} applications to {org_name}. '
-            'Last built: {updated}').format(
+            '{status} PDF for {apps_count} applications to {org_name}. '
+            'Updated: {updated}').format(
+                status=status,
                 apps_count=self.applications.count(),
                 org_name=self.organization.name,
                 updated=self.updated.astimezone(
-                    PACIFIC_TIME).strftime('%Y-%m-%d %H:%M'))
+                    PACIFIC_TIME).strftime('%Y-%m-%d %H:%M %Z'))
