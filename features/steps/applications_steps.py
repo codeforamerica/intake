@@ -3,7 +3,7 @@ from behave import given, when, then
 from intake.tests import factories, mock
 from intake.constants import PACIFIC_TIME
 from user_accounts.models import Organization
-from features.steps.loads_and_contains_steps import test_page_loads
+from features.steps.web_loads_and_contains_steps import test_page_loads
 
 SEARCHABLE_APPLICANT_ID = None
 application_row_selector = 'tr.form_submission[data-key="{}"]'
