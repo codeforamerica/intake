@@ -4,8 +4,17 @@ from . import pagination
 
 
 def get_applications_for_org(organization):
+    # preselect_tables are joined using `select_related()` by following single
+    # foreign keys. They are captured in one query along with the main model.
+    preselect_tables = [
+        'form_submission'
+    ]
+    # prefetch_tables are brought inusing `prefetch_related()`. Each of these
+    # become a separate query to pull in related objects from other tables.
+    # Most of these are reverse foreign keys, and it may be possible to further
+    # optimize these into less queries.
+    # https://blog.roseman.org.uk/2010/01/11/django-patterns-part-2-efficient-reverse-lookups/
     prefetch_tables = [
-        'form_submission',
         'status_updates',
         'status_updates__status_type',
     ]
@@ -19,9 +28,17 @@ def get_applications_for_org(organization):
             'incoming_transfers__status_update__author',
             'incoming_transfers__status_update__author__profile',
         ]
-    return models.Application.objects.filter(
+    qset = models.Application.objects.filter(
         organization=organization
-    ).prefetch_related(*prefetch_tables).order_by('-created').distinct()
+    ).select_related(*preselect_tables).prefetch_related(*prefetch_tables)
+    return qset.order_by('-created').distinct()
+
+
+def get_unread_applications_for_org(organization):
+    """TODO: This is a placeholder query which will soon be replaced
+    """
+    return get_applications_for_org(organization).filter(
+        has_been_opened=False)
 
 
 def get_applications_index_for_org_user(user, page_index):
