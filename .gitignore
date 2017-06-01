@@ -25,3 +25,7 @@ project/media
 local_settings.py
 *.pdf
 .sass-cache
+
+# hiding fixtures
+intake/fixtures/mock*
+user_accounts/fixtures/mock_profiles.json

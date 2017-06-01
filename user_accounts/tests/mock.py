@@ -4,11 +4,13 @@ from user_accounts import models
 from django.contrib.auth import models as auth_models
 from django.utils.text import slugify
 from django.core.management import call_command
-
+from django.conf import settings
+from user_accounts.tests.factories import profile_for_org_and_group_names
 
 fake = FakerFactory.create('en_US')
 
-fake_password = 'cmr-demo'
+fake_password = settings.TEST_USER_PASSWORD
+
 Pacific = timezone('US/Pacific')
 
 
@@ -32,7 +34,7 @@ def fake_user_data(**kwargs):
     return data
 
 
-def create_user(**attributes):
+def create_user(user=None, **attributes):
     name = attributes.get('name', fake.name())
     first_name = attributes.get('first_name', fake.first_name())
     last_name = attributes.get('last_name', fake.last_name())
@@ -40,111 +42,54 @@ def create_user(**attributes):
     email = attributes.get('email',
                            username + '@' + fake.free_email_domain())
     password = fake_password
-    return auth_models.User.objects.create_user(
-        first_name=first_name,
-        last_name=last_name,
-        username=username,
-        email=email,
-        password=password
-    )
-
-
-def create_user_with_profile(organization, **attributes):
-    name = attributes.pop('name', fake.name())
-    user = create_user(name=name, **attributes)
-    return models.UserProfile.objects.create(
-        name=name,
-        user=user,
-        organization=organization,
-    )
-
-
-def add_cfa_seed_users():
-    org = models.Organization.objects.get(slug='cfa')
-    followup_staff = auth_models.Group.objects.get(name='followup_staff')
-    performance_monitors = auth_models.Group.objects.get(
-        name='performance_monitors')
-    application_reviewers = auth_models.Group.objects.get(
-        name='application_reviewers')
-    username = 'cfa_user'
-    email = 'bgolder+demo+{}@codeforamerica.org'.format(username)
-    user = auth_models.User.objects.filter(username=username).first()
-    name = 'Fake CFA'
-    if not user:
-        user = auth_models.User.objects.create_superuser(
-            username=username,
-            first_name='Fake',
-            last_name='CFA',
-            email=email,
-            password=fake_password,
-            is_staff=True,
-            is_superuser=True)
-    if not hasattr(user, 'profile'):
-        models.UserProfile.objects.create(
-            organization=org,
-            name=name,
-            user=user,
-            should_get_notifications=False)
-    followup_staff.user_set.add(user)
-    application_reviewers.user_set.add(user)
-
-    username = 'monitor_user'
-    email = 'bgolder+demo+{}@codeforamerica.org'.format(username)
-    user = auth_models.User.objects.filter(username=username).first()
-    name = 'Fake Monitor User'
-    if not user:
+    if user:
+        attributes.pop('password')
+        for attr, value in attributes.iteritems():
+            setattr(user, attr, value)
+        user.set_password(password)
+        user.save()
+    else:
         user = auth_models.User.objects.create_user(
+            first_name=first_name,
+            last_name=last_name,
             username=username,
-            first_name='Fake',
-            last_name='Monitor User',
             email=email,
-            password=fake_password,
-            is_staff=False,
-            is_superuser=False)
-    if not hasattr(user, 'profile'):
-        models.UserProfile.objects.create(
-            organization=org,
-            name=name,
-            user=user,
-            should_get_notifications=False)
-    performance_monitors.user_set.add(user)
+            password=password
+        )
+    return user
+
+
+def cfa_superuser():
+    cfa = models.Organization.objects.get(slug='cfa')
+    return profile_for_org_and_group_names(
+        cfa, group_names=[
+            'application_reviewers', 'followup_staff'],
+        should_get_notifications=False,
+        first_name='Fake', last_name='CFA',
+        is_staff=True, is_superuser=True)
+
+
+def cfa_monitor_user():
+    cfa = models.Organization.objects.get(slug='cfa')
+    return profile_for_org_and_group_names(
+        cfa, group_names=['performance_monitors'],
+        should_get_notifications=False,
+        username='monitor_user')
+
+
+def for_all_receiving_orgs():
+    return [
+        profile_for_org_and_group_names(
+            org, group_names=['application_reviewers'],
+            should_get_notifications=True)
+        for org in models.Organization.objects.filter(is_receiving_agency=True)
+    ]
 
 
 def create_seed_users():
-    users = []
-    user_args = {}
-    application_reviewers_group = auth_models.Group.objects.get(
-        name='application_reviewers')
-    for org in models.Organization.objects.filter(is_receiving_agency=True):
-        username = org.slug + "_user"
-        first_name = 'Fake'
-        last_name = ' '.join([
-            piece.title() for piece in org.slug.split('_')])
-        name = ' '.join([first_name, last_name])
-        email = 'bgolder+demo+{}@codeforamerica.org'.format(username)
-        password = fake_password
-        user_args[username] = dict(
-            organization=org,
-            username=username,
-            first_name=first_name,
-            last_name=last_name,
-            name=name,
-            email=email,
-            password=password)
-    for username, kwargs in user_args.items():
-        user = auth_models.User.objects.filter(username=username).first()
-        if not user:
-            user = create_user(**kwargs)
-        if not hasattr(user, 'profile'):
-            models.UserProfile.objects.create(
-                organization=kwargs['organization'],
-                name=kwargs['name'],
-                user=user,
-                should_get_notifications=True)
-        application_reviewers_group.user_set.add(user)
-        users.append(user)
-    add_cfa_seed_users()
-    serialize_seed_users()
+    for_all_receiving_orgs()
+    cfa_superuser()
+    cfa_monitor_user()
 
 
 def serialize_seed_users():
@@ -168,9 +113,10 @@ def create_fake_auth_models(num_users_per_org=2):
             cfa = org
     for org in [sfpubdef, ccpubdef, cfa]:
         for i in range(num_users_per_org):
-            profile = create_user_with_profile(
-                organization=org,
-                should_get_notifications=org.is_receiving_agency)
+            username = '{}_user_{}'.format(org.slug, i)
+            profile = profile_for_org_and_group_names(
+                org, should_get_notifications=org.is_receiving_agency,
+                username=username)
             profiles.append(profile)
     return {
         'sfpubdef': sfpubdef,

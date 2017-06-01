@@ -217,13 +217,8 @@ class TestCreateBundlesAndSendNotificationsToOrgs(TestCase):
         self.get_unopened_patcher = patch(
             'intake.services.bundles.SubmissionsService'
             '.get_unopened_submissions_for_org')
-        self.log_referred_patcher = patch(
-            'intake.services.bundles'
-            '.ApplicationLogEntry.log_referred')
         self.notifications_patcher = patch(
             'intake.services.bundles.notifications')
-
-        self.log_referred = self.log_referred_patcher.start()
         self.notifications = self.notifications_patcher.start()
 
     def patch_unopened(self, return_value):
@@ -234,7 +229,6 @@ class TestCreateBundlesAndSendNotificationsToOrgs(TestCase):
         self.get_unopened_patcher.stop()
 
     def tearDown(self):
-        self.log_referred_patcher.stop()
         self.notifications_patcher.stop()
 
     @patch(
@@ -258,5 +252,3 @@ class TestCreateBundlesAndSendNotificationsToOrgs(TestCase):
             self.notifications.front_email_daily_app_bundle.send.call_count, 1)
         self.assertEqual(
             self.notifications.slack_app_bundle_sent.send.call_count, 1)
-        self.assertEqual(
-            self.log_referred.call_count, 1)

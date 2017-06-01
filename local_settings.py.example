@@ -53,3 +53,22 @@ BROWSER_STACK_ID = 'username'
 BROWSER_STACK_KEY = 'insert key here'
 
 COMPRESS_OFFLINE = False
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'WARNING',
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+        },
+    },
+    'loggers': {
+        'project': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+        },
+    },
+}

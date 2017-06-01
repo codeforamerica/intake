@@ -66,6 +66,7 @@ class PDFFormDisplay:
         ['phone_number', 'alternate_phone_number'],
         ['email'],
         ['address'],
+        ['is_california_resident', 'how_long_california_resident'],
         ['currently_employed', 'income_source'],
         ['monthly_income', 'monthly_expenses'],
         ['household_size', 'dependents', 'has_children', 'is_married'],

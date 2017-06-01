@@ -181,6 +181,16 @@ class TestApplicationDetail(AppDetailFixturesBaseTestCase):
         response = self.get_page(submission)
         self.assertContains(response, 'New')
 
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_marks_apps_as_opened(self, slack):
+        user = self.be_ccpubdef_user()
+        submission = factories.FormSubmissionWithOrgsFactory.create(
+            organizations=[user.profile.organization])
+        self.get_page(submission)
+        application = submission.applications.filter(
+            organization=user.profile.organization).first()
+        self.assertTrue(application.has_been_opened)
+
 
 class TestAppDetailWithTransfers(AppDetailFixturesBaseTestCase):
 
@@ -288,6 +298,16 @@ class TestApplicationHistory(AppDetailFixturesBaseTestCase):
             organizations=[user.profile.organization])
         response = self.get_page(submission)
         self.assertContains(response, 'New')
+
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_marks_apps_as_opened(self, slack):
+        user = self.be_ccpubdef_user()
+        submission = factories.FormSubmissionWithOrgsFactory.create(
+            organizations=[user.profile.organization])
+        self.get_page(submission)
+        application = submission.applications.filter(
+            organization=user.profile.organization).first()
+        self.assertTrue(application.has_been_opened)
 
 
 class TestApplicationHistoryWithTransfers(AppDetailFixturesBaseTestCase):
