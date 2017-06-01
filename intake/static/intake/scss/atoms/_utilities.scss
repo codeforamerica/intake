@@ -1,5 +1,5 @@
 @mixin retina-bg($name, $size, $extension: png) {
-  @include retina-image($filename: $name, $extension: $extension, $background-size: $size, $retina-suffix: '@2x', $asset-pipeline: true);
+  @include retina-image($filename: $name, $extension: $extension, $background-size: $size, $retina-suffix: '@2x', $asset-pipeline: false);
 }
 
 @mixin full-bleed() {
