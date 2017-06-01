@@ -29,9 +29,6 @@ class Command(BaseCommand):
         self.stdout.write(
             self.style.SUCCESS(
                 "Load fake fillable pdf"))
-        self.stdout.write(
-            self.style.SUCCESS(
-                "Saved to mock_profiles fixture"))
         build_seed_submissions()
         self.stdout.write(
             self.style.SUCCESS(
