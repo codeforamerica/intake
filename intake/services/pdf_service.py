@@ -18,6 +18,8 @@ from user_accounts.models import Organization
 
 def prebuild_newapps_pdf_for_san_francisco():
     # get unread applications
+    # for any unreads that do not have a pdf, make one (and alert)
+    # concatenate all the pdfs together
     sf_pubdef = Organization.objects.get(slug='sf_pubdef')
     unread_apps = AppsService.get_unread_applications_for_org(sf_pubdef)
     unread_app_ids = [app.id for app in unread_apps]
@@ -29,8 +31,7 @@ def prebuild_newapps_pdf_for_san_francisco():
 
 
 
-    # for any unreads that do not have a pdf, make one (and alert)
-    # concatenate all the pdfs together
+   
 
 
 def fill_pdf_for_application(application_id):
