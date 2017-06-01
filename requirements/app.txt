@@ -15,7 +15,7 @@ django-jinja~=2.2
 django-debug-toolbar==1.4
 djangorestframework~=3.5
 reportlab~=3.3
-Pillow~=3.4
+Pillow~=4.1
 python-Levenshtein~=0.12
 django-taggit~=0.21
 mixpanel~=4.3.1
