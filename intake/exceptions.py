@@ -26,3 +26,7 @@ class NoApplicantInSessionError(Exception):
 
 class NoFormSpecFoundError(Exception):
     pass
+
+
+class MissingFillablePDFError(Exception):
+    pass
