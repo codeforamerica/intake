@@ -30,6 +30,11 @@
 // }
 
 
+.illustration--partner-interface {
+  @include retina-bg(/static/intake/img/partner-interface, 100% auto);
+  width: 553px;
+  height: 426px;
+}
 .illustration--alameda {
   @include retina-bg(/static/intake/img/alameda_seal, 100% auto);
   width: 86px;
@@ -38,6 +43,12 @@
 
 .illustration--contra-costa {
   @include retina-bg(/static/intake/img/contra_costa_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+.illustration--fresno {
+  @include retina-bg(/static/intake/img/fresno_seal, 100% auto);
   width: 86px;
   height: 86px;
 }
@@ -55,6 +66,18 @@
   height: 86px;
 }
 
+.illustration--santa-barbara {
+  @include retina-bg(/static/intake/img/santa_barbara_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+.illustration--santa-clara {
+  @include retina-bg(/static/intake/img/santa_clara_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
 .illustration--santa-cruz {
   @include retina-bg(/static/intake/img/santa_cruz_seal, 100% auto);
   width: 86px;
@@ -63,6 +86,12 @@
 
 .illustration--solano {
   @include retina-bg(/static/intake/img/solano_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+.illustration--ventura {
+  @include retina-bg(/static/intake/img/ventura_seal, 100% auto);
   width: 86px;
   height: 86px;
 }

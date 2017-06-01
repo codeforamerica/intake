@@ -238,9 +238,9 @@ h4, .h4 {
     margin-top: 0em; }
 
 a {
-  color: #019C86; }
+  color: #069ed6; }
   a:hover {
-    color: #017d6b; }
+    color: #057eab; }
 
 .link--subtle {
   color: inherit; }
@@ -288,7 +288,7 @@ ol, ul {
   margin-bottom: .5em; }
 
 .text--teal {
-  color: #019C86; }
+  color: #069ed6; }
 
 .list--padded li {
   margin-bottom: 1em; }
@@ -329,7 +329,7 @@ td {
   background-color: #A6005E; }
 
 .label--teal {
-  background-color: #019C86; }
+  background-color: #069ed6; }
 
 .label--green {
   background-color: #009933; }
@@ -382,8 +382,8 @@ td {
 
 @font-face {
   font-family: 'icomoon';
-  src: font-url("/static/intake/icomoon/icomoon.eot?ia7soh");
-  src: font-url("/static/intake/icomoon/icomoon.eot?ia7soh#iefix") format("embedded-opentype"), font-url("/static/intake/icomoon/icomoon.ttf?ia7soh") format("truetype"), font-url("/static/intake/icomoon/icomoon.woff?ia7soh") format("woff"), font-url("/static/intake/icomoon/icomoon.svg?ia7soh#icomoon") format("svg");
+  src: url("/static/intake/icomoon/icomoon.eot?ia7soh");
+  src: url("/static/intake/icomoon/icomoon.eot?ia7soh#iefix") format("embedded-opentype"), url("/static/intake/icomoon/icomoon.ttf?ia7soh") format("truetype"), url("/static/intake/icomoon/icomoon.woff?ia7soh") format("woff"), url("/static/intake/icomoon/icomoon.svg?ia7soh#icomoon") format("svg");
   font-weight: normal;
   font-style: normal; }
 [class^="icon-"], [class*=" icon-"] {
@@ -681,77 +681,122 @@ img {
   margin-bottom: 1em; }
 
 .illustration--cfa-logo {
-  background-image: image-url("/static/intake/img/cfa_logo.png");
+  background-image: url("/static/intake/img/cfa_logo.png");
   margin-left: 0;
   width: 100px;
   height: 41px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 1.3 / 1), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .illustration--cfa-logo {
-      background-image: image-url("/static/intake/img/cfa_logo@2x.png");
+      background-image: url("/static/intake/img/cfa_logo@2x.png");
       background-size: 100px 41px; } }
 
 .illustration--cfa-logo-color {
-  background-image: image-url("/static/intake/img/cfa_logo_color.png");
+  background-image: url("/static/intake/img/cfa_logo_color.png");
   width: 100%;
   height: 200px;
   opacity: .5; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 1.3 / 1), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .illustration--cfa-logo-color {
-      background-image: image-url("/static/intake/img/cfa_logo_color@2x.png");
+      background-image: url("/static/intake/img/cfa_logo_color@2x.png");
+      background-size: 100% auto; } }
+
+.illustration--partner-interface {
+  background-image: url("/static/intake/img/partner-interface.png");
+  width: 553px;
+  height: 426px; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 1.3 / 1), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
+    .illustration--partner-interface {
+      background-image: url("/static/intake/img/partner-interface@2x.png");
       background-size: 100% auto; } }
 
 .illustration--alameda {
-  background-image: image-url("/static/intake/img/alameda_seal.png");
+  background-image: url("/static/intake/img/alameda_seal.png");
   width: 86px;
   height: 86px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 1.3 / 1), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .illustration--alameda {
-      background-image: image-url("/static/intake/img/alameda_seal@2x.png");
+      background-image: url("/static/intake/img/alameda_seal@2x.png");
       background-size: 100% auto; } }
 
 .illustration--contra-costa {
-  background-image: image-url("/static/intake/img/contra_costa_seal.png");
+  background-image: url("/static/intake/img/contra_costa_seal.png");
   width: 86px;
   height: 86px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 1.3 / 1), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .illustration--contra-costa {
-      background-image: image-url("/static/intake/img/contra_costa_seal@2x.png");
+      background-image: url("/static/intake/img/contra_costa_seal@2x.png");
+      background-size: 100% auto; } }
+
+.illustration--fresno {
+  background-image: url("/static/intake/img/fresno_seal.png");
+  width: 86px;
+  height: 86px; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 1.3 / 1), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
+    .illustration--fresno {
+      background-image: url("/static/intake/img/fresno_seal@2x.png");
       background-size: 100% auto; } }
 
 .illustration--san-diego {
-  background-image: image-url("/static/intake/img/san_diego_seal.png");
+  background-image: url("/static/intake/img/san_diego_seal.png");
   width: 86px;
   height: 86px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 1.3 / 1), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .illustration--san-diego {
-      background-image: image-url("/static/intake/img/san_diego_seal@2x.png");
+      background-image: url("/static/intake/img/san_diego_seal@2x.png");
       background-size: 100% auto; } }
 
 .illustration--san-francisco {
-  background-image: image-url("/static/intake/img/san_francisco_seal.png");
+  background-image: url("/static/intake/img/san_francisco_seal.png");
   width: 86px;
   height: 86px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 1.3 / 1), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .illustration--san-francisco {
-      background-image: image-url("/static/intake/img/san_francisco_seal@2x.png");
+      background-image: url("/static/intake/img/san_francisco_seal@2x.png");
+      background-size: 100% auto; } }
+
+.illustration--santa-barbara {
+  background-image: url("/static/intake/img/santa_barbara_seal.png");
+  width: 86px;
+  height: 86px; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 1.3 / 1), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
+    .illustration--santa-barbara {
+      background-image: url("/static/intake/img/santa_barbara_seal@2x.png");
+      background-size: 100% auto; } }
+
+.illustration--santa-clara {
+  background-image: url("/static/intake/img/santa_clara_seal.png");
+  width: 86px;
+  height: 86px; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 1.3 / 1), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
+    .illustration--santa-clara {
+      background-image: url("/static/intake/img/santa_clara_seal@2x.png");
       background-size: 100% auto; } }
 
 .illustration--santa-cruz {
-  background-image: image-url("/static/intake/img/santa_cruz_seal.png");
+  background-image: url("/static/intake/img/santa_cruz_seal.png");
   width: 86px;
   height: 86px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 1.3 / 1), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .illustration--santa-cruz {
-      background-image: image-url("/static/intake/img/santa_cruz_seal@2x.png");
+      background-image: url("/static/intake/img/santa_cruz_seal@2x.png");
       background-size: 100% auto; } }
 
 .illustration--solano {
-  background-image: image-url("/static/intake/img/solano_seal.png");
+  background-image: url("/static/intake/img/solano_seal.png");
   width: 86px;
   height: 86px; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 1.3 / 1), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .illustration--solano {
-      background-image: image-url("/static/intake/img/solano_seal@2x.png");
+      background-image: url("/static/intake/img/solano_seal@2x.png");
+      background-size: 100% auto; } }
+
+.illustration--ventura {
+  background-image: url("/static/intake/img/ventura_seal.png");
+  width: 86px;
+  height: 86px; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 1.3 / 1), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
+    .illustration--ventura {
+      background-image: url("/static/intake/img/ventura_seal@2x.png");
       background-size: 100% auto; } }
 
 .slab {
@@ -776,7 +821,7 @@ img {
   background-color: #FFFFFF; }
 
 .slab--teal {
-  background-color: rgba(1, 156, 134, 0.05); }
+  background-color: rgba(6, 158, 214, 0.05); }
 
 .slab--padded {
   padding-top: 3em;
@@ -831,7 +876,7 @@ img {
   .button:active, .searchbar__button:active {
     background-color: #bdbdb2; }
   .button:focus, .searchbar__button:focus {
-    outline: 2px solid #80cec3; }
+    outline: 2px solid #83cfeb; }
 
 .button--cta {
   color: #FFFFFF;
@@ -846,14 +891,14 @@ img {
 
 .button--primary, .pagination .pagination__selected {
   color: #FFFFFF;
-  background-color: #019C86;
-  border-color: #019C86;
-  border-bottom-color: #018572; }
+  background-color: #069ed6;
+  border-color: #069ed6;
+  border-bottom-color: #0586b6; }
   .button--primary:hover, .pagination .pagination__selected:hover {
-    background-color: #34b09e;
+    background-color: #38b1de;
     color: #FFFFFF; }
   .button--primary:active, .pagination .pagination__selected:active {
-    background-color: #018572; }
+    background-color: #0586b6; }
 
 .button--danger {
   color: #D40000; }
@@ -909,7 +954,7 @@ label {
   background-color: transparent;
   outline: none; }
   .text-input:focus {
-    border-color: #019C86; }
+    border-color: #069ed6; }
   .text-input::-webkit-input-placeholder {
     color: #AAAAAA; }
   .text-input::-moz-placeholder {
@@ -945,8 +990,8 @@ label {
   .radio-button:hover {
     background-color: #EAEAE9; }
   .radio-button.is-selected {
-    background-color: #019C86;
-    border-color: #019C86;
+    background-color: #069ed6;
+    border-color: #069ed6;
     color: #fff; }
 
 .checkbox {
@@ -976,8 +1021,8 @@ label {
   .checkbox:hover {
     background-color: #EAEAE9; }
   .checkbox.is-selected {
-    background-color: #019C86;
-    border-color: #019C86;
+    background-color: #069ed6;
+    border-color: #069ed6;
     color: #fff; }
 
 .textarea {
@@ -989,7 +1034,7 @@ label {
   line-height: 1.5em;
   margin-bottom: .5em; }
   .textarea:focus {
-    border-color: #019C86; }
+    border-color: #069ed6; }
 
 .select {
   position: relative;
@@ -1010,7 +1055,7 @@ label {
     font-family: "icomoon";
     content: '\e313';
     background-color: #EAEAE9;
-    color: #019C86;
+    color: #069ed6;
     border: 2px solid #EAEAE9;
     width: 2em;
     text-align: center;
@@ -1039,7 +1084,7 @@ label {
   outline: 0;
   background-color: transparent; }
   .select__element:focus {
-    border-color: #019C86; }
+    border-color: #069ed6; }
 
 .file-upload__input {
   width: .1px;
@@ -1049,7 +1094,7 @@ label {
   position: absolute;
   z-index: -1; }
   .file-upload__input:focus + .file-upload__label {
-    outline: 2px solid #80cec3; }
+    outline: 2px solid #83cfeb; }
 
 .form-width--short {
   max-width: 6em; }
@@ -1207,7 +1252,7 @@ label {
   padding: .7em 1em;
   font-size: 1.6rem;
   background-color: #FFFFFF;
-  border: 2px solid #019C86;
+  border: 2px solid #069ed6;
   border-top: 0;
   border-radius: 2px;
   border-top-left-radius: 0;
@@ -1246,9 +1291,9 @@ label {
   color: #666666;
   text-align: center;
   text-decoration: none;
-  border-left: 0px solid #019C86; }
+  border-left: 0px solid #069ed6; }
   .flash__dismiss:hover {
-    background-color: #e6f5f3; }
+    background-color: #e6f5fb; }
 
 .toolbar {
   max-width: 960px;
@@ -1309,7 +1354,7 @@ label {
   min-width: 8em;
   text-align: center; }
   .tab-bar__tab:hover {
-    background-color: rgba(1, 156, 134, 0.1);
+    background-color: rgba(6, 158, 214, 0.1);
     color: #666666; }
   .tab-bar__tab.is-selected {
     z-index: 2;
@@ -1339,7 +1384,7 @@ label {
   margin: 0;
   outline: 0; }
   .searchbar__input:focus {
-    border-color: #019C86; }
+    border-color: #069ed6; }
 
 .searchbar__button {
   -webkit-transition: all 0.1s ease-out;
@@ -1355,17 +1400,17 @@ label {
   width: 1%;
   border: 2px solid #EAEAE9;
   background-color: #EAEAE9;
-  color: #019C86;
+  color: #069ed6;
   text-align: center;
   margin: 0; }
   .searchbar__button button {
     display: none; }
   .searchbar__button:hover {
-    color: #019C86;
+    color: #069ed6;
     background-color: #f0f0f0;
     border-color: #f0f0f0; }
   .searchbar__button:active {
-    color: #019C86;
+    color: #069ed6;
     background-color: #d3d3d2;
     border-color: #d3d3d2; }
 
@@ -1551,7 +1596,7 @@ label {
   -ms-user-select: none;
   user-select: none;
   cursor: pointer;
-  color: #019C86;
+  color: #069ed6;
   display: table-cell;
   width: 1%;
   background-color: #EAEAE9;
@@ -1630,7 +1675,7 @@ label {
   height: 6px;
   min-width: 6px;
   border-radius: 3px;
-  background-color: #019C86; }
+  background-color: #069ed6; }
 
 .progress-indicator__percentage {
   margin-top: .5em;
@@ -1673,7 +1718,7 @@ label {
       color: inherit;
       text-decoration: none; }
     .data-table th .is-selected, .data-table td .is-selected {
-      color: #019C86;
+      color: #069ed6;
       font-weight: 700; }
     @media screen and (min-width: 601px) {
       .data-table th:first-child, .data-table td:first-child {
@@ -1705,7 +1750,7 @@ label {
       opacity: .3; }
 
 .data-table--selectable tr:hover td {
-  background-color: rgba(1, 156, 134, 0.1);
+  background-color: rgba(6, 158, 214, 0.1);
   cursor: pointer; }
 
 .data-table--divided td {
