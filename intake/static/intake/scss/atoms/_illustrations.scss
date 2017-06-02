@@ -34,7 +34,9 @@
   @include retina-bg(/static/intake/img/partner-interface, 100% auto);
   width: 553px;
   height: 426px;
+  background-position: top left;
 }
+
 .illustration--alameda {
   @include retina-bg(/static/intake/img/alameda_seal, 100% auto);
   width: 86px;

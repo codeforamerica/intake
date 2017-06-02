@@ -703,7 +703,8 @@ img {
 .illustration--partner-interface {
   background-image: url("/static/intake/img/partner-interface.png");
   width: 553px;
-  height: 426px; }
+  height: 426px;
+  background-position: top left; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 1.3 / 1), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
     .illustration--partner-interface {
       background-image: url("/static/intake/img/partner-interface@2x.png");
@@ -1797,8 +1798,7 @@ label {
   padding-left: 20px;
   padding-right: 20px;
   padding-top: 1em;
-  padding-bottom: 1em;
-  border-bottom: 1px solid #DEDED1; }
+  padding-bottom: 1em; }
   @media screen and (min-width: 601px) {
     .main-header {
       margin-left: -40px;
@@ -1832,8 +1832,7 @@ label {
     position: relative;
     text-decoration: none;
     display: inline-block;
-    color: #000;
-    padding-left: 1.8em; }
+    color: #000; }
 
 body {
   margin-bottom: 450px; }

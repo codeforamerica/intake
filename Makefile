@@ -111,7 +111,15 @@ db.pull.demo:
 	heroku pg:pull --app cmr-demo DATABASE_URL intake
 
 
-static:
+static.dev:
+	sass \
+        --require bourbon \
+        --require normalize-scss \
+        --require neat \
+        --watch intake/static/intake/scss:intake/static/intake/css
+
+
+static.rebuild:
 	sass \
 	        --require bourbon \
 	        --require normalize-scss \
@@ -119,3 +127,6 @@ static:
 	        intake/static/intake/scss/main.scss \
 	        intake/static/intake/css/cfa.css
 	./manage.py collectstatic --noinput
+
+
+

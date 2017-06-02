@@ -2,121 +2,38 @@
 
 {% block body %}
 {# add HTML here. This will all be enclosed in a <body> tag. #}
-<body class="">
+<body>
 	<div class="page-wrapper">
-		<header class="main-header slab--white">
-			<div class="toolbar">
-				<div class="toolbar_left">
-					<h1 class="main-header__title"> Clear My Record</h1>
-				</div>
-			</div>
+		<header class="main-header">
+		  <div class="toolbar">
+		    <div class="toolbar__left">
+		        <h1 class="main-header__title">
+		        	<a class="main-header__logo" href="{{ url('intake-home') }}">Clear My Record</a>
+		        </h1>
+		    </div>
+		  </div>
 		</header>
-		<section class ="slab slab--header slab--white">
+
+		<section class="slab slab--header">
+			{# main slab #}
 			<div class="grid">
-				<div class="grid__item">
-					<div class="media-box media-box--bleed">
-						<div class="media-box__media">
-							<div class="illustration illustration--partner-interface"></div>
-						</div>
-						<div class="media-box__content">
-							<h1>Bring Clear My Record to your County</h1>
-							<p class="with-padding-med">We are a free, nonprofit service helping people clear their criminal records in California</p>
-							<a href="" class="button button--primary"> Get in Touch
-							<i class="icon icon-arrow_forward"></i>
-							</a>
-						</div>
-					</div>
+				<div class="grid__item width-five-twelfths">
+					<h1>Bring Clear My Record to your County</h1>
+          <p class="with-padding-med">
+          	We are a free, nonprofit service helping people clear their criminal records in California
+          </p>
+          <a href="mailto:cmrpartnerships@codeforamerica.org" class="button button--primary">
+            Get in Touch
+            <i class="icon icon-arrow_forward"></i>
+          </a>
+				</div>
+				<div class="grid__item width-one-half shift-one-twelfth">
+					<div class="illustration illustration--partner-interface"></div>
 				</div>
 			</div>
 		</section>
-		<section class="slab slab--padded">
-			<div class="grid">
-				<div class="grid__item">
-					<div class="media-box media-box--bleed">
-						<div class="media-box__media media-box--med width-five-tenths">
-							<ul class="county-seal-list">
-								<li class="county-seal-list width-one-third">
-									<div class="illustration illustration--san-diego"></div>
-									<p class="text--small">San Diego</p>
-								</li>
-								<li class="county-seal-list width-one-third">
-									<div class="illustration illustration--san-francisco"></div>
-									<p class="text--small center">San Francisco</p>
-								</li>
-								<li class="county-seal-list width-one-third">
-									<div class="illustration illustration--alameda"></div>
-									<p class="text--small">Alameda</p>
-								</li>
-								<li class="county-seal-list width-one-third">
-									<div class="illustration illustration--ventura"></div>
-									<p class="text--small">Ventura</p>
-								</li>
-								<li class="county-seal-list width-one-third">
-									<div class="illustration illustration--contra-costa"></div>
-									<p class="text--small">Contra Costa</p>
-								</li><ul class="county-seal-list">
-								<li class="county-seal-list width-one-fourth">
-									<div class="illustration illustration--fresno"></div>
-									<p class="text--small">Fresno</p>
-								</li>
-								<li class="county-seal-list width-one-fourth">
-									<div class="illustration illustration--santa-barbara"></div>
-									<p class="text--small">Santa Barbara</p>
-								</li>
-								<li class="county-seal-list width-one-fourth">
-									<div class="illustration illustration--santa-clara"></div>
-									<p class="text--small">Santa Clara</p>
-								</li>
-							</ul>
-							<a href="" class="width-one-whole"> See our full list of growing partners</a>
-						</<div>
-					</div>
-					<div class="media-box__content width-two-tenths">
-						<p> Clear My Record is a free, online nonprofit product built by Code for America, for people with a criminal record in select California counties.</p>
-						<p>There are an estimated 2 million people who are eligible to clear convictions from their records. Our goal is to help remove barriers for eligible applicants so they may qualify for new jobs, housing, and educational opportunities.</p>
-					</div>
-				</div>
-			</div>
-		</section>
-		<section class="slab slab--padded slab-white">
-			<h2 class="">How it works</h2>
-			<p>Using Clear My Record is easy for both applicants and attorneys.Here's how we work with your county</p>
-			<div class="illustration illustration--how-it-works">
-			</div>
-			<p>Information is always kept confidential and all data is encrypted.
-			Read our <a href="https://clearmyrecord.codeforamerica.org/privacy/">Privacy Policy</a> for more details.</p>
-		</section>
-		<section class="slab">
-			<h1 class="">Why use Clear My Record</h1>
-			<div class="grid">
-				<div class="grid item width-one-halfth">
-					<ul class="list--bulleted">
-						<li>It's free for applicants and partners.</li>
-						<li>Clear My Record helps you reach more applicants through an online channel.</li>
-						<li>Contribute to a multi-county effort to improve process and outcomes.</li>
-						<li>There are no required software or forms downloads to use or access Clear My Record. Clear My Record can be used from a computer or mobile phone.</li>
-						<li>Clear My Record is easy to understand, resulting in applicants providing you with better intake data.</li>
-						<li>You can see the other counties an applicant has requested help in, creating the opportunity for cross-county coordination, where needed.</li>
-					</ul>
-				</div>
-				<div class="grid item width-one-halfth">
-					<ul class="list--bulleted">
-						<li>Clear My Record makes it quick and easy to download and print new applications each day, both through email or by logging into Clear My Record directly. </li>
-						<li>Clear My Record allows you to send applicants quick text or email updates on the status of their application. </li>
-						<li>Clear My Record helps you better track outcomes data which can inform targeting and process improvements.</li>
-						<li>The Clear My Record team values and responds to user feedback from applicants, attorneys, and county partners. We are committed to using this information to improve our product and it's user experience.</li>
-					</ul>
-				</div>
-			</div>
-		</section>
-		<section class="slab">
-			<div class="width-one-whole">
-				<h3 class="">Talk with us today to learn more</h3>
-				<a href="" class="button button--primary"> Get in Touch
-					<i class="icon icon-arrow_forward"></i>
-				</a>
-			</div>
-		</section>
+		
+	</div>
 </body>
 
 {% endblock body %}
