@@ -1,0 +1,48 @@
+.searchbar {
+  display: table;
+  width: 100%;
+  border-collapse: separate;
+}
+
+.searchbar__input {
+  display: table-cell;
+  width: 100%;
+  border: 2px solid $color-light-grey;
+  padding: .5em .7em .5em .7em;
+  margin: 0;
+  outline: 0;
+  &:focus {
+    border-color: $color-teal;
+  }
+}
+
+.searchbar__button {
+  @include transition(all $animation-fast);
+  @include user-select(none);
+  button {
+    display: none;
+  }
+
+  @extend .button;
+  display: table-cell;
+  vertical-align: middle;
+  appearance: none;
+  width: 1%;
+  border: 2px solid $color-light-grey;
+  background-color: $color-light-grey;
+  color: $color-teal;
+  text-align: center;
+  margin: 0;
+
+  &:hover {
+    color: $color-teal;
+    background-color: tint($color-light-grey, 30%);
+    border-color: tint($color-light-grey, 30%);
+  }
+
+  &:active {
+    color: $color-teal;
+    background-color: shade($color-light-grey, 10%);
+    border-color: shade($color-light-grey, 10%);
+  }
+}
