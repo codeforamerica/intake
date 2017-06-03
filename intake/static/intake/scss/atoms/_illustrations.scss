@@ -8,11 +8,12 @@
   margin-bottom: 1em;
 }
 
-.illustration--cfa-logo {
-  @include retina-bg(/static/intake/img/cfa_logo, 100px 41px); 
+.illustration--cfa-logo-black {
+  @include retina-bg(/static/intake/img/cfa-logo-black, 100% auto); 
   margin-left: 0;
-  width: 100px;
-  height: 41px;
+  width: 145px;
+  height: 64px;
+  background-position: center left;
 }
 
 .illustration--cfa-logo-color {
@@ -97,3 +98,22 @@
   width: 86px;
   height: 86px;
 }
+
+.illustration--bundle-icon {
+  @include retina-bg(/static/intake/img/bundle-icon, 100% auto);
+  width: 102px;
+  height: 67px;
+}
+
+.illustration--eligibility-icon {
+  @include retina-bg(/static/intake/img/eligibility-icon, 100% auto);
+  width: 102px;
+  height: 67px;
+}
+
+.illustration--notification-icon {
+  @include retina-bg(/static/intake/img/notification-icon, 100% auto);
+  width: 64px;
+  height: 67px;
+}
+

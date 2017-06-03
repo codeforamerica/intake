@@ -140,7 +140,8 @@ html {
 body {
   font-size: 1.9rem;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-  line-height: 1.5em; }
+  line-height: 1.5em;
+  margin: 0; }
 
 .page-wrapper {
   overflow: hidden;
@@ -680,15 +681,16 @@ img {
   margin-right: auto;
   margin-bottom: 1em; }
 
-.illustration--cfa-logo {
-  background-image: url("/static/intake/img/cfa_logo.png");
+.illustration--cfa-logo-black {
+  background-image: url("/static/intake/img/cfa-logo-black.png");
   margin-left: 0;
-  width: 100px;
-  height: 41px; }
+  width: 145px;
+  height: 64px;
+  background-position: center left; }
   @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 1.3 / 1), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
-    .illustration--cfa-logo {
-      background-image: url("/static/intake/img/cfa_logo@2x.png");
-      background-size: 100px 41px; } }
+    .illustration--cfa-logo-black {
+      background-image: url("/static/intake/img/cfa-logo-black@2x.png");
+      background-size: 100% auto; } }
 
 .illustration--cfa-logo-color {
   background-image: url("/static/intake/img/cfa_logo_color.png");
@@ -800,6 +802,33 @@ img {
       background-image: url("/static/intake/img/ventura_seal@2x.png");
       background-size: 100% auto; } }
 
+.illustration--bundle-icon {
+  background-image: url("/static/intake/img/bundle-icon.png");
+  width: 102px;
+  height: 67px; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 1.3 / 1), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
+    .illustration--bundle-icon {
+      background-image: url("/static/intake/img/bundle-icon@2x.png");
+      background-size: 100% auto; } }
+
+.illustration--eligibility-icon {
+  background-image: url("/static/intake/img/eligibility-icon.png");
+  width: 102px;
+  height: 67px; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 1.3 / 1), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
+    .illustration--eligibility-icon {
+      background-image: url("/static/intake/img/eligibility-icon@2x.png");
+      background-size: 100% auto; } }
+
+.illustration--notification-icon {
+  background-image: url("/static/intake/img/notification-icon.png");
+  width: 64px;
+  height: 67px; }
+  @media only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 1.3 / 1), only screen and (min-resolution: 125dpi), only screen and (min-resolution: 1.3dppx) {
+    .illustration--notification-icon {
+      background-image: url("/static/intake/img/notification-icon@2x.png");
+      background-size: 100% auto; } }
+
 .slab {
   margin-left: -20px;
   margin-right: -20px;
@@ -815,8 +844,6 @@ img {
       margin-right: -40px;
       padding-left: 40px;
       padding-right: 40px; } }
-  .slab:last-child {
-    border-bottom: 0; }
 
 .slab--white {
   background-color: #FFFFFF; }
@@ -1798,7 +1825,8 @@ label {
   padding-left: 20px;
   padding-right: 20px;
   padding-top: 1em;
-  padding-bottom: 1em; }
+  padding-bottom: 1em;
+  background-color: #ffffff; }
   @media screen and (min-width: 601px) {
     .main-header {
       margin-left: -40px;
@@ -1846,10 +1874,7 @@ body {
   left: 0;
   right: 0;
   height: 450px;
-  color: #AAAAAA;
-  background-color: #30302F;
-  padding: 2em 20px;
-  font-weight: 600; }
+  padding: 2em 20px; }
   @media screen and (min-width: 601px) {
     .main-footer {
       padding: 2em 40px;
@@ -2012,6 +2037,16 @@ body {
       margin-right: -40px;
       padding-left: 40px;
       padding-right: 40px; } }
+
+.county-seal-list {
+  text-align: center;
+  max-width: 35em;
+  margin: 0 auto; }
+
+.county-seal {
+  margin: 0 0.4em 0.4em 0.4em;
+  display: inline-block;
+  text-align: center; }
 
 /* Shame */
 .lt-ie10 .select:before {

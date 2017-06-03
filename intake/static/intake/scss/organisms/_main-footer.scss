@@ -12,10 +12,7 @@ body {
   left: 0;
   right: 0;
   height: $footer-height*1.5;
-  color: $color-grey;
-  background-color: $color-darkest-grey;   
   padding: 2em $site-margins/2;
-  font-weight: 600;
 
   @include media($tablet-up) {
     padding: 2em $site-margins;
