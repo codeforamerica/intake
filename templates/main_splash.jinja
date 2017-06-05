@@ -1,8 +1,9 @@
 {% extends "gcf_style_base.jinja" %}
 
-{% block body %}
 
-<body>
+{% block body_class %}main-landing{% endblock body_class %}
+
+{% block body %}
   <div class="page-wrapper">
 
     {% include "gcf-style-public-header.jinja" %}
@@ -10,7 +11,7 @@
     <section class="slab slab--header slab--white">
       {# main slab #}
       <div class="grid">
-        <div class="grid__item width-five-twelfths">
+        <div class="grid__item width-one-half with-non-mobile-top-padding-large">
           <h1>Reduce or dismiss your convictions</h1>
           <p class="with-padding-med">
             Take the first step in just 10 minutes
@@ -20,7 +21,7 @@
             <i class="icon icon-arrow_forward"></i>
           </a>
         </div>
-        <div class="grid__item width-one-half shift-one-twelfth is-mobile-hidden">
+        <div class="grid__item width-five-twelfths is-mobile-hidden">
           <div class="illustration illustration--ladders"></div>
         </div>
       </div>
@@ -35,37 +36,39 @@
         </div>
         <div class="grid__item width-one-half shift-one-twelfth">
           {% include "includes/county-seals.jinja" %}
-          <a href="{{ url('intake-partner_list') }}">See our full list of available counties</a>
+          <p>
+            <a href="{{ url('intake-partner_list') }}">See our full list of available counties</a>
+          </p>
         </div>
       </div>
     </section>
 
     <section class="slab slab--padded slab--white">
       <div class="grid">
-        <div class="grid__item width-one-whole">
+        <div class="grid__item width-one-whole with-padding-large">
           <h2 class="text--centered with-padding-med">Why should you apply?</h2>
         </div>
 
       <div class="grid text--centered">
-        <div class="grid__item width-one-fourth">
+        <div class="grid__item width-one-fourth with-padding-med">
           <div class="illustration illustration--ca"></div>
           <p>
             You can apply to clear multiple California convictions at once
           </p>
         </div>
-        <div class="grid__item width-one-fourth">
+        <div class="grid__item width-one-fourth with-padding-med">
           <div class="illustration illustration--job_search"></div>
           <p>
             Clearing your record opens doors to jobs, housing, and education
           </p>
         </div>
-        <div class="grid__item width-one-fourth">
+        <div class="grid__item width-one-fourth with-padding-med">
           <div class="illustration illustration--10_minutes"></div>
           <p>
             Our short, easy-to-understand application only takes 10 minutes
           </p>
         </div>
-        <div class="grid__item width-one-fourth">
+        <div class="grid__item width-one-fourth with-padding-med">
           <div class="illustration illustration--speech_bubbles"></div>
           <p>
             The Clear My Record team is here to support you through the process
@@ -74,35 +77,35 @@
       </div>
     </section>
 
-    <section class="slab slab--padded">
+    <section class="slab slab--padded text--centered">
       <div class="grid">
-        <div class="grid__item width-one-whole">
-          <h2 class="text--centered with-padding-med">
+        <div class="grid__item width-one-whole with-padding-large">
+          <h2>
             Apply in three easy steps
           </h2>
         </div>
       </div>
       <div class="grid">
-        <div class="grid__item width-one-third">
-          <p>
+        <div class="grid__item width-one-third with-padding-med">
+          <h4>
             Application
-          </p>
+          </h4>
           <p>
             Fill out the online application so attorneys can understand your history and collect your contact information.
           </p>
         </div>
-        <div class="grid__item width-one-third">
-          <p>
+        <div class="grid__item width-one-third with-padding-med">
+          <h4>
             Eligibility and next steps
-          </p>
+          </h4>
           <p>
             In about 4 weeks, you’ll hear from each county. They’ll tell you what you qualify for and your next steps.
           </p>
         </div>
-        <div class="grid__item width-one-third">
-          <p>
+        <div class="grid__item width-one-third with-padding-med">
+          <h4>
             Receive decision
-          </p>
+          </h4>
           <p>
             Attorneys will ask the court to clear your record and update you with the final decision and official documents.
           </p>
@@ -113,9 +116,9 @@
     <section class="slab slab--padded slab--white">
       <div class="grid">
         <div class="grid__item width-one-whole text--centered">
-          <h2 class="with-padding-med">
+          <h3 class="with-padding-med">
             If you have convictions in California, you're probably eligible
-          </h2>
+          </h3>
           <a href="{{ url('intake-apply') }}" class="button button--primary">
             Get started today
             <i class="icon icon-arrow_forward"></i>
@@ -127,7 +130,5 @@
   </div> {# end of page wrapper #}
 
   {% include "gcf-style-footer.jinja" %}
-
-</body>
 
 {% endblock body %}

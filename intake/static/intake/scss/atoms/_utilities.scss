@@ -109,6 +109,30 @@
   margin-bottom: $padding-huge !important;
 }
 
+.with-non-mobile-top-padding-small {
+  @include media($tablet-up){
+    margin-top: $padding-small !important;
+  }
+}
+
+.with-non-mobile-top-padding-med {
+  @include media($tablet-up){
+    margin-top: $padding-med !important;
+  }
+}
+
+.with-non-mobile-top-padding-large {
+  @include media($tablet-up){
+    margin-top: $padding-large !important;
+  }
+}
+
+.with-non-mobile-top-padding-huge {
+  @include media($tablet-up){
+    margin-top: $padding-huge !important;
+  }
+}
+
 .with-neg-padding-large {
   @include media($tablet-up) {
     margin-bottom: -$padding-huge !important;

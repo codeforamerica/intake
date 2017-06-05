@@ -1,8 +1,6 @@
 {% extends "gcf_style_base.jinja" %}
 
 {% block body %}
-
-<body>
 	<div class="page-wrapper">
   
     {% include "gcf-style-public-header.jinja" %}
@@ -16,7 +14,7 @@
           	We are a free, nonprofit service helping people clear their criminal records in California
           </p>
           <a href="mailto:cmrpartnerships@codeforamerica.org" class="button button--primary">
-            Get in Touch
+            Get in touch
             <i class="icon icon-arrow_forward"></i>
           </a>
 				</div>
@@ -36,22 +34,24 @@
         <div class="grid__item width-one-half shift-one-twelfth">
           
           {% include "includes/county-seals.jinja" %}
-          <a href="{{ url('intake-partner_list') }}"> See our full list of growing partners</a>
+          <p>
+            <a href="{{ url('intake-partner_list') }}"> See our full list of growing partners</a>
+          </p>
         </div>
       </div>
     </section>
 
     <section class="slab slab--padded slab--white">
       <div class="grid">
-        <div class="grid__item width-one-whole">
+        <div class="grid__item width-one-whole with-padding-large">
           <h2 class="text--centered with-padding-med">How it works</h2>
-          <p class="text--centered with-padding-large">
+          <p class="text--centered">
             Using Clear My Record is easy for both applicants and attorneys. Here’s how we work with your county:
           </p>
         </div>
 
-      <div class="grid with-padding-large">
-        <div class="grid__item width-one-third text--centered">
+      <div class="grid">
+        <div class="grid__item width-one-third text--centered with-padding-large">
           <div class="illustration illustration--bundle-icon"></div>
           <h4>
             Receive new applications
@@ -61,7 +61,7 @@
             applications for your county. You can easily print them all at once.
           </p>
         </div>
-        <div class="grid__item width-one-third text--centered">
+        <div class="grid__item width-one-third text--centered with-padding-large">
           <div class="illustration illustration--eligibility-icon"></div>
           <h4>
             Partners check eligibility
@@ -71,7 +71,7 @@
             pull an applicant’s history and determine eligibility and next steps.
           </p>
         </div>
-        <div class="grid__item width-one-third text--centered">
+        <div class="grid__item width-one-third text--centered with-padding-large">
           <div class="illustration illustration--notification-icon"></div>
           <h4>
             Communicate next steps
@@ -127,11 +127,11 @@
     <section class="slab slab--padded slab--white">
       <div class="grid">
         <div class="grid__item width-one-whole text--centered">
-          <h2 class="with-padding-med">
+          <h3 class="with-padding-med">
             Talk with us today to learn more
-          </h2>
+          </h3>
           <a href="mailto:cmrpartnerships@codeforamerica.org" class="button button--primary">
-            Get in Touch
+            Get in touch
             <i class="icon icon-arrow_forward"></i>
           </a>
         </div>
@@ -141,7 +141,5 @@
 	</div> {# end of page wrapper #}
 
   {% include "gcf-style-footer.jinja" %}
-
-</body>
 
 {% endblock body %}

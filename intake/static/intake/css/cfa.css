@@ -15,7 +15,7 @@ html {
     clear: both;
     content: "";
     display: block; }
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 961px) {
     .grid .width-one-whole {
       float: left;
       display: block;
@@ -147,20 +147,20 @@ body {
   overflow: hidden;
   padding-left: 20px;
   padding-right: 20px; }
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 961px) {
     .page-wrapper {
       padding-left: 40px;
       padding-right: 40px; } }
 
 .is-mobile-hidden {
   display: none !important; }
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 961px) {
     .is-mobile-hidden {
       display: block !important; } }
 
 .is-mobile-hidden--inline {
   display: none !important; }
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 961px) {
     .is-mobile-hidden--inline {
       display: inline-block !important; } }
 
@@ -179,7 +179,23 @@ body {
 .with-padding-huge {
   margin-bottom: 15.2rem !important; }
 
-@media screen and (min-width: 601px) {
+@media screen and (min-width: 961px) {
+  .with-non-mobile-top-padding-small {
+    margin-top: 1rem !important; } }
+
+@media screen and (min-width: 961px) {
+  .with-non-mobile-top-padding-med {
+    margin-top: 3.8rem !important; } }
+
+@media screen and (min-width: 961px) {
+  .with-non-mobile-top-padding-large {
+    margin-top: 7.6rem !important; } }
+
+@media screen and (min-width: 961px) {
+  .with-non-mobile-top-padding-huge {
+    margin-top: 15.2rem !important; } }
+
+@media screen and (min-width: 961px) {
   .with-neg-padding-large {
     margin-bottom: -15.2rem !important; } }
 
@@ -888,7 +904,7 @@ img {
   padding-top: 2em;
   padding-bottom: 2em;
   border-bottom: 1px solid #DEDED1; }
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 961px) {
     .slab {
       margin-left: -40px;
       margin-right: -40px;
@@ -902,8 +918,8 @@ img {
   background-color: rgba(6, 158, 214, 0.05); }
 
 .slab--padded {
-  padding-top: 3em;
-  padding-bottom: 3em; }
+  padding-top: 4.5em;
+  padding-bottom: 4.5em; }
 
 .slab--not-padded {
   padding-top: 0;
@@ -919,7 +935,7 @@ img {
   margin-bottom: 2em; }
   .card > *:last-child, .form-card > *:last-child, .statistic-card > *:last-child {
     margin-bottom: 0; }
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 961px) {
     .card, .form-card, .statistic-card {
       padding: 1.5em 2em; } }
 
@@ -1014,7 +1030,7 @@ label {
   display: block;
   margin-bottom: 1em;
   font-weight: 500; }
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 961px) {
     .form-question {
       font-weight: 400; } }
 
@@ -1264,7 +1280,7 @@ label {
     float: none;
     width: 100%;
     margin-bottom: 2em; }
-    @media screen and (min-width: 601px) {
+    @media screen and (min-width: 961px) {
       .media-box--bleed .media-box__media {
         width: 50%;
         float: right;
@@ -1276,7 +1292,7 @@ label {
   float: none;
   width: 100%;
   margin-left: 0; }
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 961px) {
     .media-box--bleed.media-box--reversed .media-box__media {
       width: 50%;
       float: left;
@@ -1411,7 +1427,7 @@ label {
     clear: both;
     content: "";
     display: block; }
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 961px) {
     .tab-bar {
       margin-left: -40px;
       margin-right: -40px;
@@ -1562,7 +1578,7 @@ label {
   margin-right: -20px;
   padding-left: 20px;
   padding-right: 20px; }
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 961px) {
     .form-group--error {
       margin-left: -40px;
       margin-right: -40px;
@@ -1577,7 +1593,7 @@ label {
     left: 0px;
     width: 4px;
     background-color: #f4bfbf; }
-    @media screen and (min-width: 601px) {
+    @media screen and (min-width: 961px) {
       .form-group--error:before {
         width: 6px; } }
 
@@ -1600,13 +1616,13 @@ label {
   padding-top: 2em;
   padding-bottom: 2em;
   padding-left: 40px; }
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 961px) {
     .question-with-follow-up__follow-up {
       margin-left: -40px;
       margin-right: -40px;
       padding-left: 40px;
       padding-right: 40px; } }
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 961px) {
     .question-with-follow-up__follow-up {
       border-left: 2px solid #DEDED1;
       border-right: 2px solid #DEDED1;
@@ -1626,7 +1642,7 @@ label {
     position: absolute;
     top: -19px;
     left: 40px; }
-    @media screen and (min-width: 601px) {
+    @media screen and (min-width: 961px) {
       .question-with-follow-up__follow-up:before {
         left: 60px; } }
   .question-with-follow-up__follow-up:after {
@@ -1642,7 +1658,7 @@ label {
     position: absolute;
     top: -15px;
     left: 42px; }
-    @media screen and (min-width: 601px) {
+    @media screen and (min-width: 961px) {
       .question-with-follow-up__follow-up:after {
         left: 62px; } }
 
@@ -1773,7 +1789,7 @@ label {
 .data-table-container {
   margin-left: -20px;
   margin-right: -20px; }
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 961px) {
     .data-table-container {
       margin-left: -40px;
       margin-right: -40px; } }
@@ -1798,7 +1814,7 @@ label {
     .data-table th .is-selected, .data-table td .is-selected {
       color: #069ed6;
       font-weight: 700; }
-    @media screen and (min-width: 601px) {
+    @media screen and (min-width: 961px) {
       .data-table th:first-child, .data-table td:first-child {
         padding-left: 40px; }
       .data-table th:last-child, .data-table td:last-child {
@@ -1838,7 +1854,7 @@ label {
 
 .steps {
   position: relative; }
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 961px) {
     .steps:before {
       content: '';
       display: block;
@@ -1864,7 +1880,7 @@ label {
       left: -20px; }
   .steps .grid__item {
     margin-bottom: 2em; }
-    @media screen and (min-width: 601px) {
+    @media screen and (min-width: 961px) {
       .steps .grid__item {
         margin-bottom: 0; } }
 
@@ -1877,7 +1893,7 @@ label {
   padding-top: 1em;
   padding-bottom: 1em;
   background-color: #ffffff; }
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 961px) {
     .main-header {
       margin-left: -40px;
       margin-right: -40px;
@@ -1914,7 +1930,7 @@ label {
 
 body {
   margin-bottom: 450px; }
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 961px) {
     body {
       margin-bottom: 300px; } }
 
@@ -1925,7 +1941,7 @@ body {
   right: 0;
   height: 450px;
   padding: 2em 20px; }
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 961px) {
     .main-footer {
       padding: 2em 40px;
       height: 300px; } }
@@ -1941,7 +1957,7 @@ body {
 
 .main-footer__cfa-logo {
   margin-top: 2em; }
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 961px) {
     .main-footer__cfa-logo {
       margin-top: 1em;
       float: right; } }
@@ -1960,7 +1976,7 @@ body {
   margin-right: -20px;
   border: 0;
   border-bottom: 1px solid #DEDED1; }
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 961px) {
     .form-card {
       border: 2px solid #DEDED1;
       margin-left: 0;
@@ -1981,7 +1997,7 @@ body {
   margin-top: 1em;
   margin-bottom: 2em;
   padding-bottom: 2.5em; }
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 961px) {
     .form-card__header {
       margin-left: -40px;
       margin-right: -40px;
@@ -2008,7 +2024,7 @@ body {
   border-top: 2px solid #DEDED1;
   margin-top: 2em;
   padding-top: 1.5em; }
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 961px) {
     .form-card__footer {
       margin-left: -40px;
       margin-right: -40px;
@@ -2063,7 +2079,7 @@ body {
     display: inline-block;
     width: 2em;
     text-align: center; }
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 961px) {
     .pagination .pagination__info {
       float: left; }
     .pagination .pagination__buttons {
@@ -2081,7 +2097,7 @@ body {
   text-align: center;
   font-size: 1.6rem;
   color: #FFFFFF; }
-  @media screen and (min-width: 601px) {
+  @media screen and (min-width: 961px) {
     .demo-banner {
       margin-left: -40px;
       margin-right: -40px;
@@ -2093,10 +2109,17 @@ body {
   max-width: 35em;
   margin: 0 auto; }
 
+.county-seal-list + p {
+  text-align: center; }
+
 .county-seal {
   margin: 0 0.4em 0.4em 0.4em;
   display: inline-block;
   text-align: center; }
+
+/* Templates */
+body.main-landing .slab--header h1 {
+  font-size: 4.8rem; }
 
 /* Shame */
 .lt-ie10 .select:before {
