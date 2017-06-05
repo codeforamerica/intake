@@ -31,6 +31,13 @@
   }
 }
 
+header.main-header + .slab--header {
+  padding-top: 0;
+  @include media($tablet-up){
+    padding-top: 2em;
+  }
+}
+
 .slab--bleed {
   overflow: hidden;
 }

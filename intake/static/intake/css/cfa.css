@@ -925,6 +925,12 @@ img {
   padding-top: 0;
   padding-bottom: 0; }
 
+header.main-header + .slab--header {
+  padding-top: 0; }
+  @media screen and (min-width: 961px) {
+    header.main-header + .slab--header {
+      padding-top: 2em; } }
+
 .slab--bleed {
   overflow: hidden; }
 
