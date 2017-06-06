@@ -333,6 +333,19 @@ class Provider(BaseProvider):
             )
         return data
 
+    def yolo_pubdef_answers(self, **overrides):
+        data = self.monterey_pubdef_answers(**overrides)
+        data.update(
+            reasons_for_applying=['background_check', 'lost_job', 'housing'],
+            is_married=self.maybe(0.4),
+            how_much_savings=2000,
+            household_size=random.randint(0, 5),
+            has_children=self.maybe(0.4),
+            dependents=random.randint(0, 4),
+            currently_employed=self.maybe(0.4),
+            )
+        return data
+
     def all_county_answers(self, **overrides):
         data = {
             **self.sf_county_form_answers(),
@@ -345,6 +358,7 @@ class Provider(BaseProvider):
             **self.fresno_pubdef_answers(),
             **self.sonoma_pubdef_answers(),
             **self.tulare_pubdef_answers(),
+            **self.yolo_pubdef_answers(),
         }
         data.update(overrides)
         return data
