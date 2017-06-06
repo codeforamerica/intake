@@ -1,0 +1,161 @@
+@mixin retina-bg($name, $size, $extension: png) {
+  @include retina-image($filename: $name, $extension: $extension, $background-size: $size, $retina-suffix: '@2x', $asset-pipeline: false);
+}
+
+@mixin full-bleed() {
+  margin: {
+    left: -$site-margins/2;
+    right: -$site-margins/2;
+  }
+  padding: {
+    left: $site-margins/2;
+    right: $site-margins/2;
+  }
+
+  @include media($tablet-up) {
+    margin: {
+      left: -$site-margins;
+      right: -$site-margins;
+    }
+    padding: {
+      left: $site-margins;
+      right: $site-margins;
+    }
+  }
+}
+
+@function opposite-position($directions) {
+  $opposite-directions: ();
+  $direction-map: (
+    'top':    'bottom',
+    'right':  'left',
+    'bottom': 'top',
+    'left':   'right',
+    'center': 'center',
+    'ltr':    'rtl',
+    'rtl':    'ltr'
+  );
+ 
+  @each $direction in $directions {
+    $direction: to-lower-case($direction);
+    
+    @if map-has-key($direction-map, $direction) { 
+      $opposite-directions: append($opposite-directions, unquote(map-get($direction-map, $direction)));
+    } @else {
+      @warn "No opposite direction can be found for `#{$direction}`. Direction omitted.";
+    }
+  }
+ 
+  @return $opposite-directions;
+}
+
+/// Triangle helper mixin
+/// @param {Direction} $direction - Triangle direction, either `top`, `right`, `bottom` or `left`
+/// @param {Color} $color [currentcolor] - Triangle color 
+/// @param {Length} $size [1em] - Triangle size
+@mixin triangle($direction, $color: currentcolor, $size: 1em) {
+  @if not index(top right bottom left, $direction) {
+    @error "Direction must be either `top`, `right`, `bottom` or `left`.";
+  }
+
+  width: 0;
+  height: 0;
+  content: '';
+  z-index: 10;
+  border-#{opposite-position($direction)}: ($size * 1.5) solid $color;
+  
+  $perpendicular-borders: $size solid transparent;
+  
+  @if $direction == top or $direction == bottom {
+    border-left:   $perpendicular-borders;
+    border-right:  $perpendicular-borders;
+  } @else if $direction == right or $direction == left {
+    border-bottom: $perpendicular-borders;
+    border-top:    $perpendicular-borders;
+  }
+}
+
+.is-mobile-hidden {
+  display: none !important;
+  @include media($tablet-up) {
+    display: block !important;
+  }
+}
+
+.is-mobile-hidden--inline {
+  display: none !important;
+  @include media($tablet-up) {
+    display: inline-block !important;
+  }
+}
+
+.with-no-padding {
+  margin-bottom: 0 !important;
+}
+
+.with-padding-small {
+  margin-bottom: $padding-small !important;
+}
+
+.with-padding-med {
+  margin-bottom: $padding-med !important;
+}
+
+.with-padding-large {
+  margin-bottom: $padding-large !important;
+}
+
+.with-padding-huge {
+  margin-bottom: $padding-huge !important;
+}
+
+.with-non-mobile-top-padding-small {
+  @include media($tablet-up){
+    margin-top: $padding-small !important;
+  }
+}
+
+.with-non-mobile-top-padding-med {
+  @include media($tablet-up){
+    margin-top: $padding-med !important;
+  }
+}
+
+.with-non-mobile-top-padding-large {
+  @include media($tablet-up){
+    margin-top: $padding-large !important;
+  }
+}
+
+.with-non-mobile-top-padding-huge {
+  @include media($tablet-up){
+    margin-top: $padding-huge !important;
+  }
+}
+
+.with-neg-padding-large {
+  @include media($tablet-up) {
+    margin-bottom: -$padding-huge !important;
+  }
+}
+
+.nudge--tiny {
+  margin-top: .2em !important;
+}
+
+
+.nudge--small {
+  margin-top: .5em !important;
+}
+
+.nudge--med {
+  margin-top: .7em !important;
+}
+
+.nudge--large {
+  margin-top: $padding-large !important;
+}
+
+.nudge--huge {
+  margin-top: $padding-huge !important;
+}

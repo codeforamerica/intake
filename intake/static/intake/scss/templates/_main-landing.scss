@@ -1,0 +1,10 @@
+.main-landing {
+	.slab--header h1 {
+		// default h1 size is 3.6rem (or 36px)
+		@include media($tablet-up){
+			font-size: 4.8rem;
+		}
+	}
+}
+
+

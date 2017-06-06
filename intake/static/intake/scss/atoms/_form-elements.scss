@@ -1,0 +1,190 @@
+fieldset {
+	border: 0;
+	padding: 0;
+	margin: 0;
+}
+
+label {
+	line-height: $line-height-normal;
+}
+
+.form-question {
+	display: block;
+	margin-bottom: 1em;
+  font-weight: 500;
+
+  @include media($tablet-up) {
+    font-weight: 400;
+  }
+}
+
+.text-input {
+	display: block;
+	width: 100%;
+	font-size: $font-size-h3;
+	font-weight: 500;
+	margin-top: -.5em;
+	margin-bottom: 1em;
+	padding: .5em 0;
+	border: 0;
+	border-bottom: 2px solid $color-dark-grey;
+  border-radius: 0;
+	background-color: transparent;
+	outline: none;
+	&:focus {
+		border-color: $color-teal;
+	}
+	@include placeholder() {
+		color: $color-grey;
+	}
+}
+
+.radio-button {
+	@include transition($animation-fast all);
+  @include user-select(none);
+  position: relative;
+	display: block;
+	cursor: pointer;
+	font-size: $font-size-h3;
+	font-weight: 500;
+	margin-bottom: .5em;
+	padding: .3em .7em;
+  padding-left: 2em;
+	background-color: #FFFFFF;
+	border: 2px solid $color-light-grey;
+	border-radius: $border-radius;
+	input[type='radio'] {
+		position: absolute;
+		top: .75em;
+		left: .7em;
+	}
+	&:hover {
+		background-color: $color-light-grey;
+	}
+
+	&.is-selected {
+		background-color: $color-teal;
+		border-color: $color-teal;
+		color: #fff;
+	}
+}
+
+.checkbox {
+	@include transition($animation-fast all);
+  @include user-select(none);
+  position: relative;
+	cursor: pointer;
+	display: block;
+	font-size: $font-size-h3;
+	font-weight: 500;
+	background-color: #FFFFFF;
+	margin-bottom: .5em;
+	padding: .3em .7em;
+  padding-left: 2em;
+	border: 2px solid $color-light-grey;
+	border-radius: $border-radius;
+	input[type='checkbox'] {
+		position: absolute;
+		top: .75em;
+    left: .7em;
+		margin-right: .5em;
+	}
+	&:hover {
+		background-color: $color-light-grey;
+	}
+	&.is-selected {
+		background-color: $color-teal;
+		border-color: $color-teal;
+		color: #fff;
+	}
+}
+
+.textarea {
+	border: 2px solid $color-dark-grey;
+	border-radius: $border-radius;
+	width: 100%;
+	outline: 0;
+	padding: 1em;
+	line-height: $line-height-normal;
+	margin-bottom: .5em;
+
+	&:focus {
+		border-color: $color-teal;
+	}
+}
+
+.select {
+  position: relative;
+  display: inline-block;
+  margin-bottom: .5em;
+  font-size: $font-size-h3;
+  background-color: #FFFFFF;
+
+  &:before {
+    @include transition($animation-fast all);
+    position: absolute;
+    right: 0em;
+    top: 0em;
+    bottom: 0;
+    padding-top: .5em;
+    display: block;
+    font-family: $font-icon;
+    content: '\e313';
+    background-color: $color-light-grey;
+    color: $color-teal;
+    border: 2px solid $color-light-grey;
+    width: 2em;
+    text-align: center;
+    z-index: 0;
+  }
+
+  &:hover {
+    &:before {
+      background-color: tint($color-light-grey, 30%);
+      border-color: tint($color-light-grey, 30%);
+    } 
+  }
+
+  &:active {
+    &:before {
+      background-color: shade($color-light-grey, 10%);
+      border-color: shade($color-light-grey, 10%);
+    }
+  }
+}
+
+.select__element {
+  @include appearance(none);
+  position: relative;
+  z-index: 1;
+  border: 2px solid $color-light-grey;
+  border-radius: $border-radius;
+  padding: .5em 2.7em .5em .7em;
+  font-family: $font-system;
+  font-size: $font-size-h3;
+  font-weight: 500;
+  outline: 0;
+  background-color: transparent;
+
+  &:focus {
+    border-color: $color-teal;
+  }
+}
+
+.file-upload {
+	
+}
+
+.file-upload__input {
+	width: .1px;
+	height: .1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+	&:focus {
+		+ .file-upload__label {
+			outline: 2px solid tint($color-teal, 50%);
+		}
+	}
+}

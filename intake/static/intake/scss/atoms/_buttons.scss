@@ -1,0 +1,86 @@
+.button {
+    @include transition($animation-fast background-color);
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    font-weight: 500;
+    border: 1px solid $color-tan;
+    border-bottom: 2px solid shade($color-tan, 15%);
+    background-color: #FFFFFF;
+    padding: .5em 1em;
+    border-radius: $border-radius;
+    margin-bottom: .5em;
+    margin-right: .3em;
+    text-decoration: none;
+    color: #000000;
+
+    &:hover {
+        background-color: tint($color-tan, 20%);
+        color: #000000;
+    }
+    &:active {
+        background-color: shade($color-tan, 15%);
+    }
+    &:focus {
+        outline: 2px solid tint($color-teal, 50%);
+    }
+}
+
+.button--cta {
+  color: #FFFFFF;
+  background-color: $color-magenta;
+  border-color: $color-magenta;
+  border-bottom-color: shade($color-magenta, 15%);
+  &:hover {
+      background-color: tint($color-magenta, 20%);
+      color: #FFFFFF;
+  }
+  &:active {
+      background-color: shade($color-magenta, 15%);
+  }
+}
+
+.button--primary {
+    color: #FFFFFF;
+    background-color: $color-teal;
+    border-color: $color-teal;
+    border-bottom-color: shade($color-teal, 15%);
+    &:hover {
+        background-color: tint($color-teal, 20%);
+        color: #FFFFFF;
+    }
+    &:active {
+        background-color: shade($color-teal, 15%);
+    }
+}
+
+.button--danger {
+    color: $color-red;
+    &:hover {
+        color: $color-red;
+    }
+}
+
+.button--small {
+  font-size: $font-size-small;
+  padding: .2em .7em;
+  border-bottom-width: 1px;
+}
+
+.button--inline {
+  font-size: .8em;
+  padding: .2em;
+  border-bottom-width: 1px;
+}
+
+.button--large  {
+  font-size: $font-size-h3;
+}
+
+.button__icon {
+  margin-left: .5em;
+}
+
+.button__icon--left {
+  margin-right: .5em;
+}
