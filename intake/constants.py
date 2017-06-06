@@ -79,6 +79,7 @@ class Organizations:
     TULARE_PUBDEF = 'tulare_pubdef'
     VENTURA_PUBDEF = 'ventura_pubdef'
     SANTA_BARBARA_PUBDEF = 'santa_barbara_pubdef'
+    YOLO_PUBDEF = 'yolo_pubdef'
 
 DEFAULT_ORGANIZATION_ORDER = [
     Organizations.ALL,
@@ -97,6 +98,7 @@ DEFAULT_ORGANIZATION_ORDER = [
     Organizations.TULARE_PUBDEF,
     Organizations.VENTURA_PUBDEF,
     Organizations.SANTA_BARBARA_PUBDEF,
+    Organizations.YOLO_PUBDEF,
 ]
 
 
@@ -118,6 +120,7 @@ ORG_NAMES = {
     Organizations.VENTURA_PUBDEF: _("Ventura County Public Defender"),
     Organizations.SANTA_BARBARA_PUBDEF: _(
         "Santa Barbara County Public Defender"),
+    Organizations.YOLO_PUBDEF: _("Yolo County Public Defender"),
 }
 
 PAGE_COMPLETE_SEQUENCES = {
@@ -142,6 +145,7 @@ PAGE_COMPLETE_SEQUENCES = {
     Organizations.TULARE_PUBDEF: ["SelectCounty", "CountyApplication"],
     Organizations.VENTURA_PUBDEF: ["SelectCounty", "CountyApplication"],
     Organizations.SANTA_BARBARA_PUBDEF: ["SelectCounty", "CountyApplication"],
+    Organizations.YOLO_PUBDEF: ["SelectCounty", "CountyApplication"],
 }
 
 
@@ -160,6 +164,7 @@ class Counties:
     TULARE = 'tulare'
     VENTURA = 'ventura'
     SANTA_BARBARA = 'santa_barbara'
+    YOLO = 'yolo'
     OTHER = 'other'
 
 
@@ -178,6 +183,7 @@ class CountyNames:
     TULARE = 'Tulare'
     VENTURA = 'Ventura'
     SANTA_BARBARA = 'Santa Barbara'
+    YOLO = 'Yolo'
     ALL = 'counties throughout California'
 
 
@@ -233,6 +239,9 @@ if not SCOPE_TO_LIVE_COUNTIES:
         (Counties.TULARE, _(
             'Tulare County (near Visalia, Tulare, Porterville, Finuba, '
             'Lindsay, Farmersville, Exeter, or Woodlake)')),
+        (Counties.YOLO, _(
+            'Yolo County (near Davis, West Sacramento, Winters, and '
+            'Woodland)')),
     )
 
 COUNTY_CHOICES = sorted(COUNTY_CHOICES, key=lambda item: item[1])
@@ -252,6 +261,7 @@ COUNTY_CHOICE_DISPLAY_DICT = {
     Counties.TULARE: CountyNames.TULARE,
     Counties.VENTURA: CountyNames.VENTURA,
     Counties.SANTA_BARBARA: CountyNames.SANTA_BARBARA,
+    Counties.YOLO: CountyNames.YOLO,
 }
 
 
