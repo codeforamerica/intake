@@ -1,13 +1,28 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    bourbon (4.3.4)
+      sass (~> 3.4)
+      thor (~> 0.19)
+    neat (1.8.0)
+      sass (>= 3.3)
+      thor (~> 0.19)
+    normalize-scss (6.0.0)
+      sass (~> 3.3)
     sass (3.4.23)
+    thor (0.19.4)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  bourbon
+  neat (= 1.8.0)
+  normalize-scss
   sass
 
+RUBY VERSION
+   ruby 2.2.1p85
+
 BUNDLED WITH
-   1.14.6
+   1.13.7

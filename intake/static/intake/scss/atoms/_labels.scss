@@ -1,0 +1,34 @@
+.label {
+  display: inline-block;
+  font-size: $font-size-smallest;
+  background-color: $color-dark-grey;
+  color: #fff;
+  font-weight: 500;
+  border-radius: $border-radius;
+  text-transform: uppercase;
+  padding: 0 .5em;
+  line-height: 1.4em;
+  position: relative;
+  top: -.1em;
+  margin-left: .2em;
+}
+
+.label--magenta {
+  background-color: $color-magenta;
+}
+
+.label--teal {
+  background-color: $color-teal;
+}
+
+.label--green {
+  background-color: $color-green;
+}
+
+.label--orange {
+  background-color: $color-orange;
+}
+
+.label--red {
+  background-color: $color-red;
+}
