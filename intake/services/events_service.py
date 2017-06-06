@@ -1,14 +1,14 @@
 import intake.services.applicants as ApplicantsService
 import project.services.logging_service as LoggingService
-from project.services.mixpanel_service import log_to_mixpanel
 from intake.services import status_notifications as SNService
+from intake.tasks import log_to_mixpanel
 
 
 def form_started(request, counties):
     event_name = 'application_started'
     applicant = ApplicantsService.get_applicant_from_request_or_session(
         request)
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=applicant.get_uuid(),
         event_name=event_name,
         counties=counties,
@@ -23,7 +23,7 @@ def form_page_complete(request, page_name):
     event_name = 'application_page_complete'
     applicant = ApplicantsService.get_applicant_from_request_or_session(
         request)
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=applicant.get_uuid(),
         event_name=event_name,
         url=request.path,
@@ -40,7 +40,7 @@ def form_validation_failed(view, request, errors):
     applicant = ApplicantsService.get_applicant_from_request_or_session(
         request)
     for error_key, errors in errors.items():
-        log_to_mixpanel(
+        log_to_mixpanel.delay(
             distinct_id=applicant.get_uuid(),
             event_name=event_name,
             url=request.path,
@@ -53,7 +53,7 @@ def form_validation_failed(view, request, errors):
 
 def form_submitted(submission):
     event_name = 'application_submitted'
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=submission.get_uuid(),
         event_name=event_name,
         organizations=list(
@@ -63,7 +63,7 @@ def form_submitted(submission):
 
 def page_viewed(visitor, url):
     event_name = 'page_viewed'
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=visitor.get_uuid(),
         event_name=event_name,
         url=url,
@@ -73,7 +73,7 @@ def page_viewed(visitor, url):
 
 def site_entered(visitor, url):
     event_name = 'site_entered'
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=visitor.get_uuid(),
         event_name=event_name,
         url=url,
@@ -83,7 +83,7 @@ def site_entered(visitor, url):
 
 def app_transferred(old_application, new_application, user):
     event_name = 'app_transferred'
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=old_application.form_submission.get_uuid(),
         event_name=event_name,
         user_email=user.email,
@@ -96,7 +96,7 @@ def app_transferred(old_application, new_application, user):
 def tags_added(tag_links):
     event_name = 'app_tag_added'
     for tag_link in tag_links:
-        log_to_mixpanel(
+        log_to_mixpanel.delay(
             distinct_id=tag_link.content_object.get_uuid(),
             event_name=event_name,
             tag_name=tag_link.tag.name,
@@ -105,7 +105,7 @@ def tags_added(tag_links):
 
 def note_added(submission, user):
     event_name = 'app_note_added'
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=submission.get_uuid(),
         event_name=event_name,
         author_email=user.email)
