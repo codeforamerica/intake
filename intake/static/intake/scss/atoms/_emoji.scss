@@ -1,0 +1,28 @@
+.emoji {
+  display: inline-block;
+  text-indent: -9999px;
+  height: 1em;
+  width: 1em;
+  content: '';
+  background-size: 100% auto;
+  position: relative;
+}
+
+.emoji--big {
+  width: 3em;
+  height: 3em;
+}
+
+.emoji--med {
+  width: 2.4em;
+  height: 2.4em;
+}
+
+.emoji--small {
+  width: 1.8em;
+  height: 1.8em;
+}
+
+// .emoji--grinning-face {
+//   background-image: image-url('emojis/1f600.png');
+// }

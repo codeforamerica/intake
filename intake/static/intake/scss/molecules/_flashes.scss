@@ -1,0 +1,87 @@
+@include keyframes(slide-in) {
+  0% {
+    top: -3em;
+  }
+  30% {
+    top: -3em;
+  }
+  100% {
+    top: 0;
+  }
+}
+
+.flash-container {
+  @include transition(opacity $animation-med);
+  @include animation(slide-in ease-out .5s);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  text-align: center;
+  pointer-events: none;
+  &:target {
+    opacity: 0;
+  }
+}
+
+.flash {
+  pointer-events: auto;
+  display: inline-block;
+  text-align: left;
+  position: relative;
+  margin-bottom: 1em;
+  padding: .7em 1em;
+  font-size: $font-size-small;
+  background-color: #FFFFFF;
+  border: 2px solid $color-teal;
+  border-top: 0;
+  border-radius: $border-radius;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  box-shadow: 0 0 10px rgba(0,0,0,.25);
+}
+
+.flash--error {
+  color: $color-red;
+  border-color: tint($color-red, 75%);
+  .flash__message:before {
+    content: "\e002";
+  }
+  .flash__dismiss {
+    border-color: $color-red;
+    &:hover {
+      color: $color-red;
+      background-color: tint($color-red, 90%);
+    }
+  }
+}
+
+.flash__message {
+  margin-right: 3em;
+  margin-bottom: 0;
+  font-weight: 500;
+  &:before {
+    display: inline-block;
+    font-family: $font-icon;
+    margin-right: .5em;
+    margin-top: .1em;
+  }
+}
+
+.flash__dismiss {
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 2.9em;
+  line-height: 3.6em;
+  color: $color-dark-grey;
+  text-align: center;
+  text-decoration: none;
+  border-left: 0px solid $color-teal;
+  &:hover {
+    background-color: tint($color-teal, 90%);
+  }
+}

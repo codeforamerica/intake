@@ -16,6 +16,10 @@ class PrivacyPolicy(GlobalTemplateContextMixin, TemplateView):
     template_name = "privacy_policy.jinja"
 
 
+class PartnershipsView(GlobalTemplateContextMixin, TemplateView):
+    template_name = "partnerships.jinja"
+
+
 class PartnerListView(GlobalTemplateContextMixin, TemplateView):
     template_name = "partner_list.jinja"
 
@@ -48,6 +52,7 @@ class PersonalStatementView(GlobalTemplateContextMixin, TemplateView):
     template_name = "personal_statement_instructions.jinja"
 
 home = Home.as_view()
+partnerships = PartnershipsView.as_view()
 partner_list = PartnerListView.as_view()
 partner_detail = PartnerDetailView.as_view()
 privacy = PrivacyPolicy.as_view()
