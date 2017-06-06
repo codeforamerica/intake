@@ -26,12 +26,12 @@ def prebuild_newapps_pdf_for_san_francisco():
     unread_apps_without_pdfs = models.Application.objects.annotate(
         filled_pdf_count=Count('form_submission')
     ).filter(id__in=unread_app_ids, filled_pdf_count=0)
+    for app in unread_apps_without_pdfs:
+        fill_pdf_for_application(app.id)
     filled_pdfs = models.FilledPDF.objects.filter(
-        submission__applications__id__in=[app.id for app in unread_apps])
-
-
-
-   
+        submission__applications__id__in=unread_app_ids)
+    # join the filled pdfs
+    return filled_pdfs
 
 
 def fill_pdf_for_application(application_id):
