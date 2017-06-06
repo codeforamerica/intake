@@ -2,7 +2,7 @@ from intake import models
 from rest_framework import serializers
 from . import fields
 from .status_update_serializer import MinimalStatusUpdateSerializer
-from .application_serializer import LatestStatusBase
+from .application_serializers import LatestStatusBase
 from .application_transfer_serializer import IncomingTransferSerializer
 
 

@@ -21,88 +21,18 @@ Numbers for Clear My Record
 </div>
 {% for org_data in stats.org_stats %}
 <div class="stats_block {{ org_data.org.slug }}">
-  {% if 'drop_off' in org_data %}
   <h2>{{ org_data.org.name }}</h2>
   <div class="stats-single_figure">
     <span class="stats-total-number">{{ org_data.total }}</span>
     <span class="stats-total-annot">applications</span>
   </div>
   <div class="stats-single_figure">
+    <span class="stats-total-number">{{ org_data.apps_last_week }}</span>
+    <span class="stats-total-annot">last week</span>
+  </div>
+  <div class="stats-single_figure">
     <span class="stats-total-number">{{ org_data.apps_this_week }}</span>
-    <span class="stats-total-annot">this week</span>
-  </div>
-  <div class="stats-single_figure minutes">
-    <span class="stats-total-number">{% if org_data.mean_completion_time %}{{
-     (org_data.mean_completion_time / 60)|int
-     }} minutes{% else %}N/A{% endif %}</span>
-    <span class="stats-total-annot">mean completion time</span>
-  </div>
-  <div class="stats-single_figure minutes">
-    <span class="stats-total-number">{% if org_data.median_completion_time %}{{
-     (org_data.median_completion_time / 60)|int
-     }} minutes{% else %}N/A{% endif %}</span>
-    <span class="stats-total-annot">median completion time</span>
-  </div>
-  <div class="stats-single_figure">
-    <span class="stats-total-number">{{
-     (org_data.app_error_rate * 100)|round(1)
-     }}<span class="perc-sign">%</span></span>
-    <span class="stats-total-annot">error rate</span>
-  </div>
-  <div class="stats-single_figure">
-    <span class="stats-total-number">{{
-     (org_data.drop_off * 100)|round(1)
-     }}<span class="perc-sign">%</span></span>
-    <span class="stats-total-annot">dropoff rate</span>
-  </div>
-  {% if org_data.status_updates %}
-  <div class="stats-chart">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Status Updates</th>
-          <th>Count</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for bucket, count in org_data.status_updates %}
-        <tr>
-          <td>{{ bucket }}</td>
-          <td>{{ count }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-  {% endif %}
-  {% if org_data.channels %}
-  <div class="stats-chart">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Channel</th>
-          <th>Hits</th>
-          <th>Apps</th>
-          <th>Apps/Hits</th>
-          <th>Apps/All apps</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for datum in org_data.channels %}
-        <tr>
-          <td>{{ datum.channel }}</td>
-          <td>{{ datum.hits }}</td>
-          <td>{{ datum.apps }}</td>
-          <td>{{ (datum.conversion_rate * 100)|round(1) }}<span class="perc-sign">%</span></td>
-          <td>{{ (datum.percent_of_apps * 100)|round(1) }}<span class="perc-sign">%</span></td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-  {% endif %}
-  {% endif %}
-  <div class="stats-chart_container_set">
+    <span class="stats-total-annot">so far this week</span>
   </div>
 </div>
 {% endfor %}

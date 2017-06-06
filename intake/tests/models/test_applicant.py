@@ -32,14 +32,3 @@ class TestApplicant(TestCase):
         with self.assertRaises(IntegrityError):
             second_applicant.save()
         self.assertEqual(visitor.applicant, applicant)
-
-    def test_permission_to_view_aggregate_stats(self):
-        # given a user and a group
-        # and the group has permission to view aggregate_stats
-        user = User.objects.create(username='testuser')
-        group = Group.objects.create(name="performance_monitors")
-        permission = Permission.objects.get(
-            name=permissions.CAN_SEE_APP_STATS.name)
-        group.permissions.add(permission)
-        user.groups.add(group)
-        self.assertTrue(user.has_perm('intake.view_app_stats'))

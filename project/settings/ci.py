@@ -1,3 +1,4 @@
+import sys
 from project.settings.environment import *
 
 DEBUG = True
@@ -17,3 +18,31 @@ BROWSER_STACK_KEY = os.environ.get('BROWSER_STACK_KEY')
 # Build Compress with Node Modules
 NODE_MODULES_PATH = os.path.join(REPO_DIR, 'node_modules')
 COMPRESS_PRECOMPILERS = build_precompilers(NODE_MODULES_PATH)
+
+TEST_USER_PASSWORD = 'cmr-travis'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'intake',
+        'USER': 'postgres',
+    }
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'WARNING',
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+        },
+    },
+    'loggers': {
+        'project': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+        },
+    },
+}

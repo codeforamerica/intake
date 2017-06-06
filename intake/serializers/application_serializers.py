@@ -27,3 +27,18 @@ class ApplicationFollowupListSerializer(LatestStatusBase):
             'organization',
             'status_updates'
         ]
+
+
+class ApplicationAutocompleteSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField(read_only=True)
+    url = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = models.Application
+        fields = ['name', 'url']
+
+    def get_name(self, instance):
+        return instance.form_submission.get_full_name()
+
+    def get_url(self, instance):
+        return instance.form_submission.get_absolute_url()

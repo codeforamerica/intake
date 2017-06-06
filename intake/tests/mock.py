@@ -10,6 +10,7 @@ from django.core import serializers
 from django.core.management import call_command
 from django.conf import settings
 from django.utils.datastructures import MultiValueDict
+from user_accounts.models import Organization
 
 from taggit.models import Tag
 
@@ -17,6 +18,7 @@ from intake import models, constants, services
 from intake.constants import PACIFIC_TIME
 from intake.tests import mock_user_agents, mock_referrers, factories
 from intake.services import bundles as BundlesService
+from user_accounts.models import Organization
 from user_accounts.tests.mock import create_seed_users
 from unittest.mock import Mock
 Pacific = timezone('US/Pacific')
@@ -144,6 +146,7 @@ def fillable_pdf(**kwargs):
         pdf=File(open(
             'tests/sample_pdfs/sample_form.pdf', 'rb')),
         translator="tests.sample_translator.translate",
+        organization=Organization.objects.get(slug='sf_pubdef')
     )
     attributes.update(kwargs)
     return FillablePDFFactory.create(**attributes)
@@ -301,7 +304,6 @@ def make_mock_transfer_sub(from_org, to_org):
 
 
 def make_two_mock_transfers():
-    from user_accounts.models import Organization
     orgs = Organization.objects.filter(can_transfer_applications=True)
     org_a = orgs[0]
     org_b = orgs[1]
@@ -315,8 +317,6 @@ def make_two_mock_transfers():
 
 
 def build_seed_submissions():
-    create_seed_users()
-    from user_accounts.models import Organization
     subs = []
     orgs = Organization.objects.filter(is_receiving_agency=True)
     for org in orgs:

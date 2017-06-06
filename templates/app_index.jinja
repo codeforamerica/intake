@@ -4,11 +4,17 @@
 {% block content %}
 <div class="container">
   <div class="row">
+    <div class="col-xs-12 col-md-10 col_centered">
+      {% include "includes/app_index_navigation.jinja" %}
+    </div>
+  </div>
+  <div class="row">
     <div class="col-xs-12 col-sm-6 col-md-6">
+    {# TODO: replace with view-specific text #}
     {%- if request.user.is_staff %}
-    <h1>All Applications</h1>
+        <h1>All Applications</h1>
     {%- else %}
-    <h1>All Applications to {{ request.user.profile.organization.name }}</h1>
+        <h1>All Applications to {{ request.user.profile.organization.name }}</h1>
     {%- endif %}
     </div>
     <div class="col-xs-12 col-sm-6 col-md-6 centered-to-header">

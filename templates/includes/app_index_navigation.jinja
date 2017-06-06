@@ -1,0 +1,54 @@
+<div class="app-index-nav-bar">
+  <ul>
+    {%- if request.path == url('intake-app_unread_index') %}
+    <li role="presentation" class="active">
+      <a href="{{
+        url('intake-app_unread_index')
+      }}">Unread ({{ unreads }})</a>
+    </li>
+    <li role="presentation">
+      <a href="{{
+          url('intake-app_needs_update_index')
+        }}">Need Status Update ({{ needs_update }})</a>
+    </li>
+    <li role="presentation">
+      <a href="{{
+          url('intake-app_index')
+        }}">All ({{ unreads + needs_update }})</a>
+    </li>
+    {% elif request.path == url('intake-app_needs_update_index') %}
+    <li role="presentation">
+      <a href="{{
+        url('intake-app_unread_index')
+      }}">Unread ({{ unreads }})</a>
+    </li>
+    <li role="presentation" class="active">
+      <a href="{{
+          url('intake-app_needs_update_index')
+        }}">Need Status Update ({{ needs_update }})</a>
+    </li>
+    <li role="presentation">
+      <a href="{{
+          url('intake-app_index')
+        }}">All ({{ unreads + needs_update }})</a>
+    </li>
+    {% else %}
+    <li role="presentation">
+      <a href="{{
+        url('intake-app_unread_index')
+      }}">Unread ({{ unreads }})</a>
+    </li>
+    <li role="presentation">
+      <a href="{{
+          url('intake-app_needs_update_index')
+        }}">Need Status Update ({{ needs_update }})</a>
+    </li>
+    <li role="presentation" class="active">
+      <a href="{{
+          url('intake-app_index')
+        }}">All ({{ unreads + needs_update }})</a>
+    </li>
+    {% endif %}
+  </ul>
+  <hr>
+</div>

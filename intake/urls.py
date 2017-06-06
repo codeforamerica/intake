@@ -10,6 +10,7 @@ from intake.views import (
     application_done_view,
     application_transfer_view,
     admin_views,
+    search_views,
     app_detail_views,
     application_note_views,
     tag_views,
@@ -74,6 +75,14 @@ urlpatterns = [
         login_required(admin_views.app_index),
         name='intake-app_index'),
 
+    url(r'^applications/unread/$',
+        login_required(admin_views.app_unread_index),
+        name='intake-app_unread_index'),
+
+    url(r'^applications/needs_update/$',
+        login_required(admin_views.app_needs_update_index),
+        name='intake-app_needs_update_index'),
+
     url(r'^applications/bundle/$',
         login_required(admin_views.app_bundle),
         name='intake-app_bundle'),
@@ -106,10 +115,11 @@ urlpatterns = [
         login_required(status_update_views.review_status_notification),
         name='intake-review_status_notification'),
 
-    url(
-        r'^applicant-autocomplete/$',
-        admin_views.applicant_autocomplete,
-        name='applicant-autocomplete',),
+    url(r'^applications-autocomplete/$', search_views.application_search,
+        name='applications-autocomplete',),
+
+    url(r'^followups-autocomplete/$', search_views.followup_search,
+        name='followups-autocomplete',),
 
     # API Views
     url(r'^notes/create/$',

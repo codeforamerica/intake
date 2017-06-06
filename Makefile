@@ -54,6 +54,12 @@ test.deluxe:
 	./manage.py test $(SCOPE) \
 		--verbosity 2
 
+test.everything:
+	pep8
+	make test.coverage.keepdb
+	make test.behave
+
+
 
 db.seed:
 	python ./manage.py load_essential_data
@@ -103,3 +109,8 @@ db.dump_fixtures:
 db.pull.demo:
 	dropdb intake --if-exists
 	heroku pg:pull --app cmr-demo DATABASE_URL intake
+
+
+static:
+	rm -rf staticfiles
+	./manage.py collectstatic --noinput

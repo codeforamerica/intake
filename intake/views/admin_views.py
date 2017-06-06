@@ -3,23 +3,16 @@ from django.core.urlresolvers import reverse_lazy
 from django.views.generic import View
 from django.views.generic.base import TemplateView
 
-from django.db.models import Q
-
 from django.http import Http404, HttpResponse
 from django.template.response import TemplateResponse
 
-from dal import autocomplete
-
-
-from intake import models, notifications, forms, utils
+from intake import models, notifications, utils
 from printing.pdf_form_display import PDFFormDisplay
-from intake.aggregate_serializer_fields import get_todays_date
 
 import intake.services.submissions as SubmissionsService
 import intake.services.applications_service as AppsService
 import intake.services.bundles as BundlesService
 import intake.services.tags as TagsService
-import intake.services.events_service as EventsService
 
 from intake.views.base_views import ViewAppDetailsMixin
 from intake.views.app_detail_views import ApplicationDetail, not_allowed
@@ -66,19 +59,35 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
         is_staff = self.request.user.is_staff
         context['show_pdf'] = self.request.user.profile.should_see_pdf()
         context['body_class'] = 'admin'
-        context['search_form'] = forms.ApplicationSelectForm()
         if is_staff:
             context['ALL_TAG_NAMES'] = TagsService.get_all_used_tag_names()
             context['results'] = \
-                SubmissionsService.get_submissions_for_followups()
+                SubmissionsService.get_submissions_for_followups(
+                    self.request.GET.get('page'))
         else:
             context['results'] = \
                 AppsService.get_applications_index_for_org_user(
                     self.request.user, self.request.GET.get('page'))
-            context['page_counter'] = \
-                utils.get_page_navigation_counter(
-                    page=context['results'],
-                    wing_size=9)
+        context['page_counter'] = \
+            utils.get_page_navigation_counter(
+                page=context['results'],
+                wing_size=9)
+        context['unreads'] = 4
+        context['needs_update'] = 8
+        return context
+
+
+class ApplicationUnreadIndex(ApplicationIndex):
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+
+        return context
+
+
+class ApplicationNeedsUpdateIndex(ApplicationIndex):
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+
         return context
 
 
@@ -125,10 +134,7 @@ class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
             show_pdf=request.user.profile.should_see_pdf(),
             app_ids=[sub.id for sub in submissions]
         )
-        EventsService.bundle_opened(bundle, request.user)
-        notifications.slack_submissions_viewed.send(
-            submissions=submissions, user=request.user,
-            bundle_url=bundle.get_external_url())
+        BundlesService.mark_opened(bundle, request.user)
         return TemplateResponse(request, "app_bundle.jinja", context)
 
 
@@ -155,10 +161,7 @@ class ApplicationBundleDetail(ApplicationDetail):
             show_pdf=bool(bundle.bundled_pdf),
             app_ids=[sub.id for sub in submissions],
             bundled_pdf_url=bundle.get_pdf_bundle_url())
-        EventsService.bundle_opened(bundle, request.user)
-        notifications.slack_submissions_viewed.send(
-            submissions=submissions, user=request.user,
-            bundle_url=bundle.get_external_url())
+        BundlesService.mark_opened(bundle, request.user)
         return TemplateResponse(request, "app_bundle.jinja", context)
 
 
@@ -176,21 +179,8 @@ class ApplicationBundleDetailPDFView(ViewAppDetailsMixin, View):
                 "There doesn't seem to be a PDF associated with these "
                 "applications. If you think this is an error, please contact "
                 "Code for America.")
-        EventsService.bundle_opened(bundle, request.user)
+        BundlesService.mark_opened(bundle, request.user)
         return HttpResponse(bundle.bundled_pdf, content_type="application/pdf")
-
-
-def get_pdf_for_user(user, submission_data):
-    """
-    Creates a filled out pdf for a submission.
-
-    TODO: remove
-    """
-    organization = user.profile.organization
-    fillable = organization.pdfs.first()
-    if isinstance(submission_data, list):
-        return fillable.fill_many(submission_data)
-    return fillable.fill(submission_data)
 
 
 class FilledPDFBundle(FilledPDF, MultiSubmissionMixin):
@@ -316,7 +306,7 @@ def get_concatenated_printout_for_bundle(user, bundle):
             canvas, pdf = pdf_display.render(
                 save=True,
                 title="{} Applications from Code for America".format(count))
-    today = get_todays_date()
+    today = utils.get_todays_date()
     filename = '{}-{}-Applications-CodeForAmerica.pdf'.format(
         today.strftime('%Y-%m-%d'),
         count
@@ -338,6 +328,8 @@ class CasePrintoutPDFView(ApplicationDetail):
         if not submission.organizations.filter(
                 id=request.user.profile.organization_id).exists():
             return not_allowed(request)
+        SubmissionsService.mark_opened(
+            submission, request.user, send_slack_notification=False)
         filename, pdf_bytes = get_printout_for_submission(
             request.user,
             submission)
@@ -357,6 +349,8 @@ class CaseBundlePrintoutPDFView(ViewAppDetailsMixin, View):
             pk=int(bundle_id))
         if bundle.organization_id != request.user.profile.organization_id:
             return not_allowed(request)
+        BundlesService.mark_opened(
+            bundle, request.user, send_slack_notification=False)
         filename, pdf_bytes = get_concatenated_printout_for_bundle(
             request.user, bundle)
         response = HttpResponse(
@@ -365,48 +359,14 @@ class CaseBundlePrintoutPDFView(ViewAppDetailsMixin, View):
         return response
 
 
-class ApplicantAutocomplete(autocomplete.Select2QuerySetView):
-
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return super().dispatch(request, *args, **kwargs)
-        return HttpResponse(status=403)
-
-    def get_queryset(self):
-        if self.request.user.is_staff:
-            qs = qs = models.Application.objects.all()
-        else:
-            qs = models.Application.objects.filter(
-                organization=self.request.user.profile.organization)
-
-        if self.q:
-            qs = qs.filter(
-                Q(form_submission__first_name__icontains=self.q) |
-                Q(form_submission__last_name__icontains=self.q) |
-                Q(form_submission__ssn__icontains=self.q) |
-                Q(form_submission__last_four__icontains=self.q) |
-                Q(form_submission__drivers_license_or_id__icontains=self.q) |
-                Q(form_submission__phone_number__icontains=self.q) |
-                Q(form_submission__alternate_phone_number__icontains=self.q) |
-                Q(form_submission__email__icontains=self.q) |
-                Q(form_submission__case_number__icontains=self.q)
-            )
-        return qs
-
-    def get_result_value(self, application):
-        return dict(
-            organization=application.organization.name,
-            name=application.form_submission.get_full_name(),
-            url=application.form_submission.get_absolute_url())
-
-
 filled_pdf = FilledPDF.as_view()
 pdf_bundle = FilledPDFBundle.as_view()
 app_index = ApplicationIndex.as_view()
+app_unread_index = ApplicationUnreadIndex.as_view()
+app_needs_update_index = ApplicationNeedsUpdateIndex.as_view()
 app_bundle = ApplicationBundle.as_view()
 mark_processed = MarkProcessed.as_view()
 app_bundle_detail = ApplicationBundleDetail.as_view()
 app_bundle_detail_pdf = ApplicationBundleDetailPDFView.as_view()
 case_printout = CasePrintoutPDFView.as_view()
 case_bundle_printout = CaseBundlePrintoutPDFView.as_view()
-applicant_autocomplete = ApplicantAutocomplete.as_view()
