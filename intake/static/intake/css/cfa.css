@@ -926,10 +926,10 @@ img {
   padding-top: 0;
   padding-bottom: 0; }
 
-header.main-header + .slab--header {
+.main-header + .slab--header {
   padding-top: 0; }
   @media screen and (min-width: 961px) {
-    header.main-header + .slab--header {
+    .main-header + .slab--header {
       padding-top: 2em; } }
 
 .slab--bleed {
@@ -2125,8 +2125,9 @@ body {
   text-align: center; }
 
 /* Templates */
-body.main-landing .slab--header h1 {
-  font-size: 4.8rem; }
+@media screen and (min-width: 961px) {
+  .main-landing .slab--header h1 {
+    font-size: 4.8rem; } }
 
 /* Shame */
 .lt-ie10 .select:before {
