@@ -369,8 +369,12 @@ class SanDiegoCountyFormSpec(SolanoCountyFormSpec):
     county = Counties.SAN_DIEGO
     fields = (SolanoCountyFormSpec.fields | {
         F.CaseNumber,
+        F.IdentityConfirmation
     }) - {
         F.USCitizen,
+    }
+    required_fields = SolanoCountyFormSpec.required_fields | {
+        F.IdentityConfirmation
     }
     optional_fields = SolanoCountyFormSpec.optional_fields | {
         F.CaseNumber
@@ -555,6 +559,42 @@ class SantaBarbaraCountyFormSpec(VenturaCountyFormSpec):
         VenturaCountyFormSpec.required_fields | {F.HowMuchSavings})
 
 
+class YoloCountyFormSpec(SonomaCountyFormSpec):
+    county = Counties.YOLO
+    fields = (SonomaCountyFormSpec.fields | {
+        F.Aliases,
+        F.DriverLicenseOrIDNumber,
+        F.LastFourOfSocial,
+        F.CaseNumber,
+        F.CurrentlyEmployed,
+        F.MonthlyIncome,
+        F.IncomeSource,
+        F.HowMuchSavings,
+        F.OnPublicBenefits,
+        F.MonthlyExpenses,
+        F.OwnsHome,
+        F.HasChildren,
+        F.HowManyDependents,
+        F.IsMarried
+    }) - {
+        F.AlternatePhoneNumberField,
+        F.OwesCourtFees
+    }
+    required_fields = (SonomaCountyFormSpec.required_fields | {
+        F.CurrentlyEmployed,
+        F.MonthlyIncome,
+        F.IncomeSource,
+        F.HowMuchSavings,
+        F.MonthlyExpenses,
+        F.OwnsHome,
+        F.HowManyDependents,
+        F.IsMarried,
+        F.ReasonsForApplying
+        }) - {
+        F.OwesCourtFees,
+    }
+
+
 class EBCLCIntakeFormSpec(CombinableOrganizationFormSpec):
     organization = Organizations.EBCLC
     fields = {
@@ -673,6 +713,7 @@ INPUT_FORM_SPECS = [
     TulareCountyFormSpec(),
     VenturaCountyFormSpec(),
     SantaBarbaraCountyFormSpec(),
+    YoloCountyFormSpec(),
 ]
 
 DISPLAY_FORM_SPECS = INPUT_FORM_SPECS + [
