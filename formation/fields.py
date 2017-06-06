@@ -114,7 +114,7 @@ class IdentityConfirmation(ConsentCheckbox):
     is_required_error_message = (
         "We need your understanding before we can help you")
     label = _(
-        "Do you understand that this application should only submitted for "
+        "Do you understand that this application should only be submitted for "
         "yourself or someone who has given you permission to apply on their "
         "behalf, and that it is illegal to use this application to gain "
         "access to someone's private information?")
