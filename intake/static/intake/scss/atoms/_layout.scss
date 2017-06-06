@@ -18,9 +18,11 @@
 }
 
 .slab--padded {
-    padding: {
-        top: 4.5em;
-        bottom: 4.5em;
+    @include media($tablet-up){
+      padding: {
+          top: 4.5em;
+          bottom: 4.5em;
+      }
     }
 }
 

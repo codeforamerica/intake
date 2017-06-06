@@ -917,9 +917,10 @@ img {
 .slab--teal {
   background-color: rgba(6, 158, 214, 0.05); }
 
-.slab--padded {
-  padding-top: 4.5em;
-  padding-bottom: 4.5em; }
+@media screen and (min-width: 961px) {
+  .slab--padded {
+    padding-top: 4.5em;
+    padding-bottom: 4.5em; } }
 
 .slab--not-padded {
   padding-top: 0;
