@@ -250,6 +250,7 @@ class Provider(BaseProvider):
         data.update(
             case_number=self.generator.numerify("C####-###"),
             reasons_for_applying=['background_check', 'lost_job', 'housing'],
+            identity_confirmation='yes'
         )
         data.update(overrides)
         return data
