@@ -24,7 +24,7 @@ def get_applications_for_org(organization):
     ).prefetch_related(*prefetch_tables).order_by('-created').distinct()
 
 
-def get_applications_index_for_org_user(user, page_index):
+def get_all_applications_for_org_user(user, page_index):
     """Paginates and serializes applications for an org user
     """
     # this is two queries

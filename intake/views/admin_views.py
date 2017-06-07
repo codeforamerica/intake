@@ -66,7 +66,7 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
                     self.request.GET.get('page'))
         else:
             context['results'] = \
-                AppsService.get_applications_index_for_org_user(
+                AppsService.get_all_applications_for_org_user(
                     self.request.user, self.request.GET.get('page'))
         context['page_counter'] = \
             utils.get_page_navigation_counter(

@@ -17,26 +17,26 @@ class TestGetApplicationsIndexForOrgUser(TestCase):
 
     fixtures = ALL_APPLICATION_FIXTURES
 
-    def test_results_for_org_who_cant_transfer(self):
+    def test_all_results_for_org_who_cant_transfer(self):
         user = User.objects.filter(
             profile__organization__county__slug='solano').first()
         with self.assertNumQueries(7):
-            results = AppsService.get_applications_index_for_org_user(user, 1)
+            results = AppsService.get_all_applications_for_org_user(user, 1)
         self.assertTrue(results.object_list)
         for thing in results:
             self.assertTrue(isinstance(thing, OrderedDict))
 
-    def test_results_for_org_who_can_transfer(self):
+    def test_all_results_for_org_who_can_transfer(self):
         user = User.objects.filter(
             profile__organization__county__slug='alameda').first()
         with self.assertNumQueries(8):
-            results = AppsService.get_applications_index_for_org_user(user, 1)
+            results = AppsService.get_all_applications_for_org_user(user, 1)
         self.assertTrue(results.object_list)
         for thing in results:
             self.assertTrue(isinstance(thing, OrderedDict))
             self.assertIn('incoming_transfers', thing)
 
-    def test_results_for_org_who_has_outgoing_transfers(self):
+    def test_all_results_for_org_who_has_outgoing_transfers(self):
         user = User.objects.filter(
             profile__organization__slug='a_pubdef').first()
         to_org = Organization.objects.get(slug='ebclc')
@@ -45,13 +45,13 @@ class TestGetApplicationsIndexForOrgUser(TestCase):
         TransferService.transfer_application(
             user, application, to_org, 'food replicator malfunction')
         with self.assertNumQueries(8):
-            results = AppsService.get_applications_index_for_org_user(user, 1)
+            results = AppsService.get_all_applications_for_org_user(user, 1)
         self.assertTrue(
             any([
                 app['was_transferred_out'] for app in results
             ]))
 
-    def test_results_for_org_who_has_incoming_transfers(self):
+    def test_all_results_for_org_who_has_incoming_transfers(self):
         author = User.objects.filter(
             profile__organization__slug='a_pubdef').first()
         to_org = Organization.objects.get(slug='ebclc')
@@ -63,7 +63,7 @@ class TestGetApplicationsIndexForOrgUser(TestCase):
         user = User.objects.filter(
             profile__organization__slug='ebclc')[0]
         with self.assertNumQueries(17):
-            results = AppsService.get_applications_index_for_org_user(user, 1)
+            results = AppsService.get_all_applications_for_org_user(user, 1)
         transferred_apps = [
             app for app in results if app['incoming_transfers']]
         self.assertTrue(transferred_apps)
@@ -75,10 +75,10 @@ class TestGetApplicationsIndexForOrgUser(TestCase):
         self.assertEqual(
             transfer['reason'], 'temporal anomalies')
 
-    def test_results_are_in_proper_order(self):
+    def test_all_results_are_in_proper_order(self):
         user = User.objects.filter(
             profile__organization__slug='cc_pubdef').first()
-        results = AppsService.get_applications_index_for_org_user(user, 1)
+        results = AppsService.get_all_applications_for_org_user(user, 1)
         future = timezone.now() + timedelta(days=10000)
         for item in results:
             date = item['form_submission']['local_date_received']
