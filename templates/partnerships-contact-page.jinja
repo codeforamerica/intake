@@ -1,0 +1,34 @@
+{% extends "template" %}}
+
+{% extends "gcf_style_base.jinja" %}
+
+
+{% block body %}
+  <div class="page-wrapper">
+
+    {% include "gcf-style-public-header.jinja" %}
+
+    <div class="slab slab--header slab--white">
+      <div class="grid">
+        <div class="grid__item width-one-whole">
+          <h1>Get in touch</h1>
+          <p>
+            Thanks for your interest in Clear My Record! Please tell us a bit
+            about yourself and our partnerships team will get in touch.
+            </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="slab slab--padded">
+      <div class="grid">
+        <div class="grid__item width-one-whole">
+          <!-- csrf -->
+          {{ form }}
+          <!-- submit -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+{% endblock body %}
