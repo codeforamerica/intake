@@ -225,7 +225,7 @@
     "address": "Department of the Primary Public Defender\r\nAttn: Expungement Paralegal, Clear My Record\r\n450 \"B\" Street, Suite 900\r\nSan Diego, CA 92101",
     "phone_number": "",
     "fax_number": "(619) 338-4811 (Attn: Fresh Start Program)",
-    "email": "katherine.braner@sdcounty.ca.gov",
+    "email": "Fresh.Start@sdcounty.ca.gov",
     "notify_on_weekends": false,
     "needs_applicant_followups": false
   }
@@ -453,6 +453,35 @@
     "phone_number": "(805) 568-3470",
     "fax_number": "(805) 568-3536",
     "email": "webmaster@publicdefendersb.org",
+    "notify_on_weekends": false,
+    "needs_applicant_followups": false
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Yolo County Public Defender",
+    "slug": "yolo_pubdef",
+    "county": [
+      "yolo"
+    ],
+    "website": "http://www.yolocounty.org/law-justice/public-defender/",
+    "blurb": "The Yolo County Public Defender's Office helps people with arrests or convictions in Yolo County.",
+    "is_receiving_agency": true,
+    "is_accepting_applications": true,
+    "is_checking_notifications": true,
+    "is_live": false,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": false,
+    "show_pdf_only": false,
+    "short_confirmation_message": "The Yolo County Public Defender will contact you in 2-4 weeks with next steps.",
+    "long_confirmation_message": "The Yolo County Public Defender will contact you in 2-4 weeks with your next steps.",
+    "short_followup_message": "Has the Yolo County Public Defender contacted you and told you your next steps?",
+    "long_followup_message": "Has the Yolo County Public Defender contacted you and told you your next steps?",
+    "address": "814 North Street\nWoodland, CA 95695",
+    "phone_number": "(530) 666-8165",
+    "fax_number": "(530) 666-8405",
+    "email": "",
     "notify_on_weekends": false,
     "needs_applicant_followups": false
   }

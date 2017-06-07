@@ -97,6 +97,7 @@ TEMPLATES = [
                 "format_phone_number": "project.jinja2.format_phone_number",
                 "settings": "django.conf.settings",
                 "local_time": "intake.utils.local_time",
+                "static": "project.jinja2.loudfail_static",
             }
         },
     },
@@ -195,13 +196,13 @@ STATICFILES_FINDERS = [
 ]
 
 
-def build_precompilers(path):
-    less_command = os.path.join(path, '.bin/lessc')
+def build_precompilers(node_path):
+    less_command = os.path.join(node_path, '.bin/lessc')
     exec_less = '%s --include-path=%s {infile} {outfile}' % (
         less_command,
-        path,
+        node_path,
     )
-    browserify_command = os.path.join(path, '.bin/browserify')
+    browserify_command = os.path.join(node_path, '.bin/browserify')
     exec_browserify = '%s {infile} -d --outfile {outfile}' % browserify_command
     return (
         ('text/less', exec_less),

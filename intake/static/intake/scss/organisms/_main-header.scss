@@ -1,0 +1,44 @@
+.main-header {
+  @include full-bleed();
+  padding: {
+    top: 1em;
+    bottom: 1em;
+  }
+
+  background-color: #ffffff;
+
+  .toolbar__right {
+    float: left;
+    margin-left: 0;
+    .toolbar__item {
+      margin-left: 0;
+      margin-right: 1em;
+    }
+    @include media($mobile-up) {
+      float: right;
+      margin-left: 1em;
+      .toolbar__item {
+        margin-left: 1em;
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+.main-header__title {
+  font-size: $font-size-small;
+  line-height: $line-height-normal;
+  margin-bottom: 0;
+  font-weight: 500;
+  color: #000;
+  a {
+    color: #000;
+    text-decoration: none;
+  }
+  .main-header__logo {
+    position: relative;
+    text-decoration: none;
+    display: inline-block;
+    color: #000;
+  }
+}

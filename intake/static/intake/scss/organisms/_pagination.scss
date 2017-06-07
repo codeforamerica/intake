@@ -1,0 +1,34 @@
+.pagination {
+  @include clearfix;
+  padding: 2em 0;
+
+  .text--help {
+    margin-top: .3em;
+  }
+
+  .button {
+    min-width: 2.5em;
+    text-align: center;
+  }
+
+  .pagination__selected {
+    @extend .button--primary;
+  }
+
+  .pagination__ellipsis {
+    display: inline-block;
+    width: 2em;
+    text-align: center;
+  }
+
+  @include media($tablet-up) {
+
+    .pagination__info {
+      float: left;
+    }
+
+    .pagination__buttons {
+      float: right;
+    }
+  }
+}
