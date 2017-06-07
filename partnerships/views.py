@@ -4,7 +4,6 @@ from django.core.urlresolvers import reverse
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.contrib import messages
-from jinja2 import Markup
 from intake import tasks
 from intake.views.base_views import GlobalTemplateContextMixin
 from partnerships.forms import PotentialPartnerLeadForm
@@ -15,7 +14,7 @@ class Home(GlobalTemplateContextMixin, TemplateView):
 
 
 class Contact(GlobalTemplateContextMixin, FormView):
-    template_name = "partnerships-contact-page.jinja"
+    template_name = "partnerships-contact.jinja"
     form_class = PotentialPartnerLeadForm
     success_message_template = str(
         'Thanks for reaching out! Your message has been sent to our '
@@ -43,10 +42,9 @@ class Contact(GlobalTemplateContextMixin, FormView):
     def form_valid(self, form):
         form.save()
         self.send_email(form.cleaned_data)
-        success_message = Markup(
-            self.success_message_template.format(
-                partnerships_lead_inbox=settings.PARTNERSHIPS_LEAD_INBOX))
-        messages.success(self.request, success_message)
+        success_message = self.success_message_template.format(
+            partnerships_lead_inbox=settings.PARTNERSHIPS_LEAD_INBOX)
+        messages.success(self.request, success_message, extra_tags='safe')
         return redirect(reverse('partnerships-home'))
 
 

@@ -1,0 +1,59 @@
+{% extends "gcf_style_base.jinja" %}
+
+
+{% block content %}
+
+    <div class="slab">
+      <div class="grid">
+        <div class="grid__item width-two-thirds shift-one-sixth">
+          <div class="form-card">
+            <div class="form-card__header">
+              <h1>
+                Get in touch
+              </h1>
+              <p>
+                Thanks for your interest in Clear My Record!
+                Please tell us a bit
+                about yourself and our partnerships team will get in touch.
+              </p>
+            </div>
+            <div class="form-card__content">
+              <form action="" method="POST" accept-charset="utf-8">
+                {% include "includes/csrf_field.jinja" %}
+                <fieldset class="form_group">
+                  <label for="{{ form.name.id_for_label }}">
+                    <span class="form-question">{{ form.name.label }}</span>
+                  </label>
+                  {{ form.name }}
+                </fieldset>
+                <fieldset class="form_group">
+                  <label for="{{ form.organization_name.id_for_label }}">
+                    <span class="form-question">{{ form.organization_name.label }}</span>
+                  </label>
+                  {{ form.organization_name }}
+                </fieldset>
+                <fieldset class="form_group">
+                  <label for="{{ form.email.id_for_label }}">
+                    <span class="form-question">{{ form.email.label }}</span>
+                  </label>
+                  {{ form.email }}
+                </fieldset>
+                <fieldset class="form_group">
+                  <label for="{{ form.message.id_for_label }}">
+                    <span class="form-question">{{ form.message.label }}</span>
+                  </label>
+                  {{ form.message }}
+                </fieldset>
+                <div class="form-card__footer">
+                  <button type="submit" class="button button--primary">
+                    Send <i class="button__icon icon-arrow_forward"></i>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock content %}
