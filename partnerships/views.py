@@ -25,7 +25,8 @@ class Contact(GlobalTemplateContextMixin, FormView):
         'We will get back to you shortly.')
 
     def send_email(self, data):
-        subject = 'New Partnership Lead from {}'
+        subject = 'New Partnership Lead from {}'.format(
+            data['organization_name'])
         header = '\n'.join([
             key.title() + ': ' + data[key]
             for key in ('email', 'name', 'organization_name')
@@ -33,20 +34,19 @@ class Contact(GlobalTemplateContextMixin, FormView):
         tasks.send_email.delay(
             subject=subject,
             message='\n\n'.join(
-                (header, data.get('message'))
+                [header, data.get('message', '')]
             ),
             from_email=settings.MAIL_DEFAULT_SENDER,
             recipient_list=[settings.PARTNERSHIPS_LEAD_INBOX]
         )
 
     def form_valid(self, form):
-        partnership_lead = form.save()
-        partnership_lead.save()
+        form.save()
         self.send_email(form.cleaned_data)
         success_message = Markup(
             self.success_message_template.format(
-                partnership_lead_inbox=settings.PARTNERSHIPS_LEAD_INBOX))
-        messages.success(success_message)
+                partnerships_lead_inbox=settings.PARTNERSHIPS_LEAD_INBOX))
+        messages.success(self.request, success_message)
         return redirect(reverse('partnerships-home'))
 
 

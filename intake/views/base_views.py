@@ -6,12 +6,14 @@ import intake.services.counties as CountiesService
 class GlobalTemplateContextMixin:
 
     def get_context_data(self):
+        context = super().get_context_data()
         counties, orgs = CountiesService.get_live_counties_and_orgs()
-        return dict(
+        context.update(
             counties=counties,
             all_county_names='counties throughout California',
             organizations=orgs
         )
+        return context
 
 
 class ViewAppDetailsMixin(PermissionRequiredMixin):

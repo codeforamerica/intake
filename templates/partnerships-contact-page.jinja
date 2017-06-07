@@ -1,5 +1,3 @@
-{% extends "template" %}}
-
 {% extends "gcf_style_base.jinja" %}
 
 
@@ -23,9 +21,13 @@
     <div class="slab slab--padded">
       <div class="grid">
         <div class="grid__item width-one-whole">
-          <!-- csrf -->
-          {{ form }}
-          <!-- submit -->
+          <form class="form-card" action="" method="POST" accept-charset="utf-8">
+            <div class="form_group">
+            {% include "includes/csrf_field.jinja" %}
+            {{ form }}
+            <button type="submit" class="button button--primary">Continue <i class="icon icon-arrow_forward"></i></button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
