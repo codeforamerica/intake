@@ -27,9 +27,9 @@ class Contact(GlobalTemplateContextMixin, FormView):
         subject = 'New Partnership Lead from {}'.format(
             data['organization_name'])
         header = '\n'.join([
-            key.title() + ': ' + data[key]
-            for key in ('email', 'name', 'organization_name')
-            ])
+            'Email: "{email}"',
+            'Name: "{name}"',
+            'Organization: "{organization_name}"']).format(**data)
         tasks.send_email.delay(
             subject=subject,
             message='\n\n'.join(
@@ -40,7 +40,9 @@ class Contact(GlobalTemplateContextMixin, FormView):
         )
 
     def form_valid(self, form):
-        form.save()
+        partnership_lead = form.save(commit=False)
+        partnership_lead.visitor = self.request.visitor
+        partnership_lead.save()
         self.send_email(form.cleaned_data)
         success_message = self.success_message_template.format(
             partnerships_lead_inbox=settings.PARTNERSHIPS_LEAD_INBOX)

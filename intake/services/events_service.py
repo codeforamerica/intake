@@ -176,3 +176,10 @@ def status_updated(status_update):
             notification_contact_info_types=list(
                 status_update.notification.contact_info.keys()))
     log_to_mixpanel(**event_kwargs)
+
+
+def partnership_interest_submitted(partnership_lead):
+    event_name = 'partnership_interest_submitted'
+    log_to_mixpanel(
+        distinct_id=partnership_lead.visitor.get_uuid(),
+        event_name=event_name)
