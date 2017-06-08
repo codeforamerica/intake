@@ -18,6 +18,7 @@ from intake.views.base_views import ViewAppDetailsMixin
 from intake.views.app_detail_views import ApplicationDetail, not_allowed
 from django.contrib import messages
 
+
 class FilledPDF(ApplicationDetail):
     """Serves a filled PDF for an org user, based on the PDF
     needed by that user's organization.

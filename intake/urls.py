@@ -17,8 +17,15 @@ from intake.views import (
     status_update_views,
 )
 
+
 def org_vs_staff_view_switch(org_user_view, staff_user_view):
-    pass
+    def switch(request, *args, **kwargs):
+        if request.user.is_staff:
+            return staff_user_view(request, *args, **kwargs)
+        else:
+            return org_user_view(request, *args, **kwargs)
+    return switch
+
 
 urlpatterns = [
     # public views
@@ -73,8 +80,12 @@ urlpatterns = [
         login_required(application_transfer_view.transfer_application),
         name='intake-transfer_application'),
 
+    # default applications view. Org users see unreads. Staff users see all
     url(r'^applications/$',
-        login_required(admin_views.app_index),
+        login_required(
+            org_vs_staff_view_switch(
+                org_user_view=admin_views.app_unread_index,
+                staff_user_view=admin_views.app_index)),
         name='intake-app_index'),
 
     url(r'^applications/unread/$',

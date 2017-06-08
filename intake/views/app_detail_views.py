@@ -28,19 +28,6 @@ class ApplicationDetail(ViewAppDetailsMixin, TemplateView):
         "{applicant_name}'s application has been marked \"Read\" and moved to "
         "the \"Needs Status Update\" folder.")
 
-    def dispatch(self, request, *args, **kwargs):
-        self.next_url = request.GET.get(
-            'next', reverse_lazy('intake-app_index'))
-        self.submission = models.FormSubmission.objects.get(
-            id=kwargs['submission_id'])
-        self.application = self.submission.applications.filter(
-            organization=request.user.profile.organization).first()
-        if not self.application.has_been_opened:
-            message = self.marked_read_flash_message.format(
-                applicant_name=self.submission.get_full_name())
-            messages.success(self.request, message)
-        return super().dispatch(request, *args, **kwargs)
-
     def get(self, request, submission_id):
         if request.user.profile.should_see_pdf() and not request.user.is_staff:
             return redirect(
@@ -54,14 +41,19 @@ class ApplicationDetail(ViewAppDetailsMixin, TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        submission = self.submissions[0]
-        display_form, letter_display = submission.get_display_form_for_user(
-            self.request.user)
+        self.submission = self.submissions[0]
+        display_form, letter_display = \
+            self.submission.get_display_form_for_user(self.request.user)
         applications = models.Application.objects.filter(
-            form_submission=submission)
+            form_submission=self.submission)
         if not self.request.user.is_staff:
             applications = applications.filter(
                 organization=self.request.user.profile.organization)
+            application = applications.first()
+            if not application.has_been_opened:
+                message = self.marked_read_flash_message.format(
+                    applicant_name=self.submission.get_full_name())
+                messages.success(self.request, message)
         for application in applications:
             if application.status_updates.exists():
                 # latest_status is cached on the model instance
@@ -70,10 +62,10 @@ class ApplicationDetail(ViewAppDetailsMixin, TemplateView):
                     application.status_updates.latest('updated')
         context.update(
             form=display_form,
-            submission=submission,
+            submission=self.submission,
             declaration_form=letter_display,
             applications=applications)
-        SubmissionsService.mark_opened(submission, self.request.user)
+        SubmissionsService.mark_opened(self.submission, self.request.user)
         return context
 
 

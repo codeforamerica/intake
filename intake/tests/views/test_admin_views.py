@@ -76,7 +76,7 @@ class TestApplicationDetail(IntakeDataTestCase):
         self.be_ccpubdef_user()
         submission = self.sf_pubdef_submissions[0]
         response = self.get_detail(submission)
-        self.assertRedirects(response, reverse('intake-app_unread_index'))
+        self.assertRedirects(response, reverse('intake-app_index'))
         slack.assert_not_called()
 
     @patch('intake.notifications.slack_submissions_viewed.send')
@@ -237,34 +237,34 @@ class TestApplicationIndex(IntakeDataTestCase):
         for i in range(random_new_subs_count):
             FormSubmissionFactory.create()
         with self.assertNumQueries(18):
-            self.client.get(reverse('intake-app_unread_index'))
+            self.client.get(reverse('intake-app_all_index'))
 
     def test_that_org_user_can_only_see_apps_to_own_org(self):
         self.be_apubdef_user()
-        response = self.client.get(reverse('intake-app_unread_index'))
+        response = self.client.get(reverse('intake-app_all_index'))
         self.assertContainsSubmissions(response, self.a_pubdef_submissions)
         self.assertContainsSubmissions(response, self.combo_submissions)
         self.assertNotContainsSubmissions(response, self.sf_pubdef_submissions)
 
     def test_that_cfa_user_can_see_apps_to_all_orgs(self):
         self.be_cfa_user()
-        response = self.client.get(reverse('intake-app_index'))
+        response = self.client.get(reverse('intake-app_all_index'))
         self.assertContainsSubmissions(response, self.submissions)
 
     def test_org_user_sees_name_of_org_in_index(self):
         user = self.be_ccpubdef_user()
-        response = self.client.get(reverse('intake-app_index'))
+        response = self.client.get(reverse('intake-app_all_index'))
         self.assertContains(response, user.profile.organization.name)
 
     def test_followup_staff_sees_notes(self):
         self.be_cfa_user()
-        response = self.client.get(reverse('intake-app_index'))
+        response = self.client.get(reverse('intake-app_all_index'))
         self.assertContains(response, "Save note")
 
     def test_pdf_users_see_pdf_link(self):
         self.be_sfpubdef_user()
         # look for the pdf link of each app
-        response = self.client.get(reverse('intake-app_index'))
+        response = self.client.get(reverse('intake-app_all_index'))
         self.assertEqual(response.context_data['show_pdf'], True)
         for sub in self.sf_pubdef_submissions:
             pdf_url = reverse('intake-filled_pdf', kwargs=dict(
@@ -274,7 +274,7 @@ class TestApplicationIndex(IntakeDataTestCase):
     def test_non_pdf_users_dont_see_pdf_link(self):
         self.be_apubdef_user()
         # look for the pdf link of each app
-        response = self.client.get(reverse('intake-app_index'))
+        response = self.client.get(reverse('intake-app_all_index'))
         self.assertEqual(response.context_data['show_pdf'], False)
         for sub in self.combo_submissions:
             pdf_url = reverse('intake-filled_pdf', kwargs=dict(
@@ -283,7 +283,7 @@ class TestApplicationIndex(IntakeDataTestCase):
 
     def test_user_can_see_case_detail_printout_links(self):
         self.be_apubdef_user()
-        response = self.client.get(reverse('intake-app_index'))
+        response = self.client.get(reverse('intake-app_all_index'))
         for sub in self.a_pubdef_submissions:
             printout_url = html_utils.conditional_escape(
                 sub.get_case_printout_url())
@@ -291,7 +291,7 @@ class TestApplicationIndex(IntakeDataTestCase):
 
     def test_user_can_see_update_status_links(self):
         self.be_apubdef_user()
-        response = self.client.get(reverse('intake-app_unread_index'))
+        response = self.client.get(reverse('intake-app_all_index'))
         for sub in self.a_pubdef_submissions:
             update_status_url = html_utils.conditional_escape(
                 sub.get_case_update_status_url())
@@ -299,12 +299,12 @@ class TestApplicationIndex(IntakeDataTestCase):
 
     def test_that_nonstaff_cfa_user_cant_see_apps(self):
         self.be_monitor_user()
-        response = self.client.get(reverse('intake-app_index'))
+        response = self.client.get(reverse('intake-app_all_index'))
         self.assertEqual(response.status_code, 302)
 
     def test_org_user_can_see_latest_status_of_app(self):
         user = self.be_apubdef_user()
-        response = self.client.get(reverse('intake-app_index'))
+        response = self.client.get(reverse('intake-app_all_index'))
         for sub in self.a_pubdef_submissions:
             status = sub.applications.filter(
                 organization=user.profile.organization).first(
@@ -314,7 +314,7 @@ class TestApplicationIndex(IntakeDataTestCase):
 
     def test_outgoing_transfers_appear_without_update_status_button(self):
         self.be_apubdef_user()
-        response = self.client.get(reverse('intake-app_index'))
+        response = self.client.get(reverse('intake-app_all_index'))
         soup = BeautifulSoup(response.content.decode('utf-8'), 'html.parser')
         outgoing_transfer_rows = soup.find_all(class_="outgoing-transfer")
         self.assertTrue(len(outgoing_transfer_rows))
@@ -325,7 +325,7 @@ class TestApplicationIndex(IntakeDataTestCase):
 
     def test_incoming_transfers_have_status_button_and_transfer_label(self):
         self.be_apubdef_user()
-        response = self.client.get(reverse('intake-app_index'))
+        response = self.client.get(reverse('intake-app_all_index'))
         soup = BeautifulSoup(response.content.decode('utf-8'), 'html.parser')
         incoming_transfer_rows = soup.find_all(class_="incoming-transfer")
         self.assertTrue(len(incoming_transfer_rows))
@@ -333,7 +333,7 @@ class TestApplicationIndex(IntakeDataTestCase):
             html_text = str(row)
             self.assertIn('Update Status', html_text)
             self.assertIn('(Incoming Transfer)', html_text)
-            self.assertIn('New', html_text)
+            self.assertIn('Unread', html_text)
 
     def test_unread_results_show_correct_count_in_tab(self):
         pass
@@ -409,7 +409,8 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
             'intake-app_bundle_detail',
             kwargs=dict(bundle_id=self.a_pubdef_bundle.id)))
         self.assertRedirects(
-            result, reverse('intake-app_unread_index'), fetch_redirect_response=False)
+            result, reverse('intake-app_unread_index'),
+            fetch_redirect_response=False)
 
     @patch(
         'intake.views.admin_views.notifications.slack_submissions_viewed.send')
@@ -541,7 +542,7 @@ class TestCaseBundlePrintoutPDFView(IntakeDataTestCase):
             reverse(
                 'intake-case_bundle_printout',
                 kwargs=dict(bundle_id=bundle.id)))
-        self.assertRedirects(response, reverse('intake-app_unread_index'))
+        self.assertRedirects(response, reverse('intake-app_index'))
 
     @patch('intake.notifications.slack_submissions_viewed.send')
     def test_marks_apps_as_opened(self, slack):
