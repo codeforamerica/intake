@@ -3,9 +3,11 @@ from intake.models.abstract_base_models import BaseModel
 from intake.constants import PACIFIC_TIME
 
 
-class PotentialPartnerLead(BaseModel):
+class PartnershipLead(BaseModel):
     # includes created, & updated fields from BaseModel
-    visitor = models.ForeignKey('intake.Visitor', on_delete=models.PROTECT)
+    visitor = models.ForeignKey(
+        'intake.Visitor', on_delete=models.PROTECT,
+        related_name='partnership_leads')
     name = models.TextField()
     email = models.EmailField()
     organization_name = models.TextField()

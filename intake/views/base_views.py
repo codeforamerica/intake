@@ -5,8 +5,8 @@ import intake.services.counties as CountiesService
 
 class GlobalTemplateContextMixin:
 
-    def get_context_data(self):
-        context = super().get_context_data()
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
         counties, orgs = CountiesService.get_live_counties_and_orgs()
         context.update(
             counties=counties,

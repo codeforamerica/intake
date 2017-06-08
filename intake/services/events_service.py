@@ -175,7 +175,7 @@ def status_updated(status_update):
         event_kwargs.update(
             notification_contact_info_types=list(
                 status_update.notification.contact_info.keys()))
-    log_to_mixpanel.delat(**event_kwargs)
+    log_to_mixpanel.delay(**event_kwargs)
 
 
 def partnership_interest_submitted(partnership_lead):

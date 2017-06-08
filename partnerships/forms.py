@@ -1,5 +1,5 @@
 from django.forms import ModelForm, widgets
-from partnerships.models import PotentialPartnerLead
+from partnerships.models import PartnershipLead
 
 
 def with_classes(widget_class, *classes, **kwargs):
@@ -14,7 +14,7 @@ def with_classes(widget_class, *classes, **kwargs):
 class PotentialPartnerLeadForm(ModelForm):
 
     class Meta:
-        model = PotentialPartnerLead
+        model = PartnershipLead
         fields = ['name', 'email', 'organization_name', 'message']
         widgets = {
             'email': with_classes(

@@ -2486,6 +2486,9 @@ body {
   .main-landing .slab--header h1 {
     font-size: 4.8rem; } }
 
+.partnerships-contact .slab {
+  border-top: 1px solid #DEDED1; }
+
 /* Shame */
 .lt-ie10 .select:before {
   display: none; }

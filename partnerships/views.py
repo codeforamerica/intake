@@ -5,6 +5,7 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.contrib import messages
 from intake import tasks
+import intake.services.events_service as EventsService
 from intake.views.base_views import GlobalTemplateContextMixin
 from partnerships.forms import PotentialPartnerLeadForm
 
@@ -24,7 +25,7 @@ class Contact(GlobalTemplateContextMixin, FormView):
         'We will get back to you shortly.')
 
     def send_email(self, data):
-        subject = 'New Partnership Lead from {}'.format(
+        subject = 'New partnership lead from {}'.format(
             data['organization_name'])
         header = '\n'.join([
             'Email: "{email}"',
@@ -44,6 +45,7 @@ class Contact(GlobalTemplateContextMixin, FormView):
         partnership_lead.visitor = self.request.visitor
         partnership_lead.save()
         self.send_email(form.cleaned_data)
+        EventsService.partnership_interest_submitted(partnership_lead)
         success_message = self.success_message_template.format(
             partnerships_lead_inbox=settings.PARTNERSHIPS_LEAD_INBOX)
         messages.success(self.request, success_message, extra_tags='safe')
