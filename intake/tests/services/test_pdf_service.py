@@ -4,6 +4,18 @@ from intake.services import pdf_service as PDFService
 from intake.tests import factories
 
 
+class TestSetSinglePrebuiltPdfToBytes(TestCase):
+
+    def test_if_multiple_prebuilts(self):
+        pass
+
+    def test_filename_is_correct(self):
+        pass
+
+    def test_pdf_saved_properly(self):
+        pass
+
+
 class TestPrebuildNewappsPdfForSanFrancisco(TestCase):
 
     def setUp(self):
@@ -53,4 +65,8 @@ class TestRebuildNewappsPdfForNewApplication(TestCase):
 
 
 class TestRebuildNewappsPdfForRemovedApplication(TestCase):
-    pass
+    def test_when_new_app_not_in_prebuilt(self):
+        pass
+
+    def test_when_new_app_in_prebuilt(self):
+        pass

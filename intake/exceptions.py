@@ -30,3 +30,7 @@ class NoFormSpecFoundError(Exception):
 
 class MissingFillablePDFError(Exception):
     pass
+
+
+class MultiplePrebuiltPDFsError(Exception):
+    pass

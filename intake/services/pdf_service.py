@@ -1,7 +1,25 @@
 from django.db.models import Count
-from intake import models, exceptions
+from django.utils import timezone as timezone_utils
+from django.core.files.uploadedfile import SimpleUploadedFile
+from intake import models, exceptions, constants
 import intake.services.applications_service as AppsService
 from user_accounts.models import Organization
+
+
+def set_single_prebuilt_pdf_to_bytes(bytes_):
+    prebuilts = models.PrebuiltMultiAppPDF.objects.filter(
+        organization__slug='sf_pubdef')
+    if prebuilts.count() > 1:
+        raise exceptions.MultiplePrebuiltPDFsError(
+            "{} prebuilt pdfs found. There should only be 1.")
+    prebuilt = prebuilts.first()
+    now_str = timezone_utils.now().astimezone(
+        constants.PACIFIC_TIME).strftime('%Y-%m-%d_%H:%M')
+    filename = 'sf_pubdef_new_apps_{}.pdf'.format(now_str)
+    prebuilt.pdf = SimpleUploadedFile(
+        filename, bytes_, content_type='application/pdf')
+    prebuilt.save()
+    return prebuilt
 
 
 def prebuild_newapps_pdf_for_san_francisco():
@@ -18,8 +36,9 @@ def prebuild_newapps_pdf_for_san_francisco():
         fill_pdf_for_application(app.id)
     filled_pdfs = models.FilledPDF.objects.filter(
         submission__applications__id__in=unread_app_ids)
-    # join the filled pdfs
-    return filled_pdfs
+    return set_single_prebuilt_pdf_to_bytes(
+        models.get_parser().join_pdfs(
+            filled.pdf for filled in filled_pdfs))
 
 
 def fill_pdf_for_application(application_id):
