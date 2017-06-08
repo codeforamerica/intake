@@ -29,6 +29,12 @@ def find_with_id_and_assert_text(context, element_id, text):
     context.test.assertEquals(element.text, text)
 
 
+@then('it should have the element "{element_id}" which says "{text}"')
+def find_with_css_selector_and_assert_contains_text(context, selector, text):
+    element = context.browser.find_element_by_css_selector(selector)
+    context.test.assertIn(text, element.text)
+
+
 @then('"{element_id}" should link to "{url}"')
 def check_link_goes_to_page(context, element_id, url):
     start_url = context.browser.current_url
