@@ -20,6 +20,7 @@ NODE_MODULES_PATH = os.path.join(REPO_DIR, 'node_modules')
 COMPRESS_PRECOMPILERS = build_precompilers(NODE_MODULES_PATH)
 
 TEST_USER_PASSWORD = 'cmr-travis'
+PARTNERSHIPS_LEAD_INBOX = "cmrtestuser@gmail.com"
 
 DATABASES = {
     'default': {

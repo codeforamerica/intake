@@ -25,6 +25,8 @@ project/media
 local_settings.py
 *.pdf
 .sass-cache
+local.log
+notes/*.md
 
 # hiding fixtures
 intake/fixtures/mock*

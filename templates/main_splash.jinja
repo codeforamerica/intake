@@ -3,10 +3,7 @@
 
 {% block body_class %}main-landing{% endblock body_class %}
 
-{% block body %}
-  <div class="page-wrapper">
-
-    {% include "gcf-style-public-header.jinja" %}
+{% block content %}
 
     <section class="slab slab--header slab--white">
       {# main slab #}
@@ -127,8 +124,4 @@
       </div>
     </section>
 
-  </div> {# end of page wrapper #}
-
-  {% include "gcf-style-footer.jinja" %}
-
-{% endblock body %}
+{% endblock content %}

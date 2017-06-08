@@ -1,10 +1,6 @@
 {% extends "gcf_style_base.jinja" %}
 
-{% block body %}
-	<div class="page-wrapper">
-  
-    {% include "gcf-style-public-header.jinja" %}
-
+{% block content %}
 		<section class="slab slab--header slab--white">
 			{# main slab #}
 			<div class="grid">
@@ -13,7 +9,7 @@
           <p class="with-padding-med">
           	We are a free, nonprofit service helping people clear their criminal records in California
           </p>
-          <a href="mailto:cmrpartnerships@codeforamerica.org" class="button button--primary">
+          <a href="{{ url('partnerships-contact') }}" class="button button--primary">
             Get in touch
             <i class="icon icon-arrow_forward"></i>
           </a>
@@ -133,7 +129,7 @@
           <h3 class="with-padding-med">
             Talk with us today to learn more
           </h3>
-          <a href="mailto:cmrpartnerships@codeforamerica.org" class="button button--primary">
+          <a href="{{ url('partnerships-contact') }}" class="button button--primary">
             Get in touch
             <i class="icon icon-arrow_forward"></i>
           </a>
@@ -141,8 +137,4 @@
       </div>
     </section>
 
-	</div> {# end of page wrapper #}
-
-  {% include "gcf-style-footer.jinja" %}
-
-{% endblock body %}
+{% endblock content %}

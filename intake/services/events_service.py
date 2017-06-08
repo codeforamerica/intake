@@ -113,7 +113,7 @@ def note_added(submission, user):
 
 def followup_sent(submission, contact_methods):
     event_name = 'app_followup_sent'
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=submission.get_uuid(),
         event_name=event_name,
         contact_info_types=contact_methods)
@@ -121,7 +121,7 @@ def followup_sent(submission, contact_methods):
 
 def confirmation_sent(submission, contact_methods):
     event_name = 'app_confirmation_sent'
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=submission.get_uuid(),
         event_name=event_name,
         contact_info_types=contact_methods)
@@ -130,7 +130,7 @@ def confirmation_sent(submission, contact_methods):
 def apps_opened(applications, user):
     event_name = 'app_opened'
     for application in applications:
-        log_to_mixpanel(
+        log_to_mixpanel.delay(
             distinct_id=application.form_submission.get_uuid(),
             event_name=event_name,
             application_id=application.id,
@@ -142,7 +142,7 @@ def apps_opened(applications, user):
 def bundle_opened(bundle, user):
     event_name = 'app_bundle_opened'
     for submission in bundle.submissions.all():
-        log_to_mixpanel(
+        log_to_mixpanel.delay(
             distinct_id=submission.get_uuid(),
             event_name=event_name,
             bundle_id=bundle.id,
@@ -175,4 +175,11 @@ def status_updated(status_update):
         event_kwargs.update(
             notification_contact_info_types=list(
                 status_update.notification.contact_info.keys()))
-    log_to_mixpanel(**event_kwargs)
+    log_to_mixpanel.delay(**event_kwargs)
+
+
+def partnership_interest_submitted(partnership_lead):
+    event_name = 'partnership_interest_submitted'
+    log_to_mixpanel.delay(
+        distinct_id=partnership_lead.visitor.get_uuid(),
+        event_name=event_name)
