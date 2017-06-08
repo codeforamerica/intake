@@ -17,6 +17,8 @@ from intake.views import (
     status_update_views,
 )
 
+def org_vs_staff_view_switch(org_user_view, staff_user_view):
+    pass
 
 urlpatterns = [
     # public views
@@ -82,6 +84,10 @@ urlpatterns = [
     url(r'^applications/needs_update/$',
         login_required(admin_views.app_needs_update_index),
         name='intake-app_needs_update_index'),
+
+    url(r'^applications/all/$',
+        login_required(admin_views.app_index),
+        name='intake-app_all_index'),
 
     url(r'^applications/bundle/$',
         login_required(admin_views.app_bundle),

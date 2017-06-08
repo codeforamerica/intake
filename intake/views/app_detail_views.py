@@ -24,6 +24,23 @@ class ApplicationDetail(ViewAppDetailsMixin, TemplateView):
     """
     template_name = "app_detail.jinja"
 
+    marked_read_flash_message = str(
+        "{applicant_name}'s application has been marked \"Read\" and moved to "
+        "the \"Needs Status Update\" folder.")
+
+    def dispatch(self, request, *args, **kwargs):
+        self.next_url = request.GET.get(
+            'next', reverse_lazy('intake-app_index'))
+        self.submission = models.FormSubmission.objects.get(
+            id=kwargs['submission_id'])
+        self.application = self.submission.applications.filter(
+            organization=request.user.profile.organization).first()
+        if not self.application.has_been_opened:
+            message = self.marked_read_flash_message.format(
+                applicant_name=self.submission.get_full_name())
+            messages.success(self.request, message)
+        return super().dispatch(request, *args, **kwargs)
+
     def get(self, request, submission_id):
         if request.user.profile.should_see_pdf() and not request.user.is_staff:
             return redirect(

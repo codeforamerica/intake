@@ -24,12 +24,13 @@ def get_applications_for_org(organization):
     ).prefetch_related(*prefetch_tables).order_by('-created').distinct()
 
 
-def get_all_applications_for_org_user(user, page_index):
+def get_applications_for_org_user(user, page_index, **filters):
     """Paginates and serializes applications for an org user
     """
-    # this is two queries
     organization = user.profile.organization
     query = get_applications_for_org(organization)
+    if filters:
+        query = query.filter(**filters)
     serializer = serializers.ApplicationIndexSerializer
     if organization.can_transfer_applications:
         serializer = \
@@ -37,34 +38,18 @@ def get_all_applications_for_org_user(user, page_index):
     return pagination.get_serialized_page(query, serializer, page_index)
 
 
+def get_all_applications_for_org_user(user, page_index):
+    return get_applications_for_org_user(user, page_index)
+
+
 def get_unread_applications_for_org_user(user, page_index):
-    """Paginates and serializes applications for an org user
-    """
-    # this is two queries
-    organization = user.profile.organization
-    query = get_applications_for_org(organization)
-    filtered_query = query.filter(has_been_opened=False)
-    serializer = serializers.ApplicationIndexSerializer
-    if organization.can_transfer_applications:
-        serializer = \
-            serializers.ApplicationIndexWithTransfersSerializer
-    return pagination.get_serialized_page(filtered_query,
-                                          serializer, page_index)
+    return get_applications_for_org_user(
+        user, page_index, has_been_opened=False, status_updates__isnull=True)
 
 
 def get_applications_needing_updates_for_org_user(user, page_index):
-    """Paginates and serializes applications for an org user
-    """
-    # this is two queries
-    organization = user.profile.organization
-    query = get_applications_for_org(organization)
-    filtered_query = query.filter(status_updates__isnull=True)
-    serializer = serializers.ApplicationIndexSerializer
-    if organization.can_transfer_applications:
-        serializer = \
-            serializers.ApplicationIndexWithTransfersSerializer
-    return pagination.get_serialized_page(filtered_query,
-                                          serializer, page_index)
+    return get_applications_for_org_user(
+        user, page_index, status_updates__isnull=True)
 
 
 def get_status_updates_for_org_user(application):

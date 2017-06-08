@@ -228,28 +228,6 @@ They want to be contacted via text message and email
             called_kwargs['headers'], expected_headers)
 
     @override_settings(DEFAULT_HOST='something.com')
-    def test_render_front_email_daily_app_bundle(self):
-        expected_subject = \
-            "current time: Online applications to Clear My Record"
-        # TODO: just check that the templates are handed the proper context
-        expected_body = ("As of current time, you have one unopened "
-                         "application to Clear My Record.\n\n"
-                         "You can review and print them at this link:\n    "
-                         "something.com/applications/bundle/1/")
-        request = Mock()
-        current_time = Mock(return_value='current time')
-        content = notifications.front_email_daily_app_bundle.render(
-            count=1,
-            request=request,
-            current_local_time=current_time,
-            bundle_url="something.com/applications/bundle/1/"
-        )
-        app_index_url = external_reverse('intake-app_index')
-        self.assertIn(expected_body, content.body)
-        self.assertIn(app_index_url, content.body)
-        self.assertEqual(expected_subject, content.subject)
-
-    @override_settings(DEFAULT_HOST='something.com')
     def test_render_slack_app_bundle_sent(self):
         # case: submissions
         submissions = [

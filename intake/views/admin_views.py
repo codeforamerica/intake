@@ -16,7 +16,7 @@ import intake.services.tags as TagsService
 
 from intake.views.base_views import ViewAppDetailsMixin
 from intake.views.app_detail_views import ApplicationDetail, not_allowed
-
+from django.contrib import messages
 
 class FilledPDF(ApplicationDetail):
     """Serves a filled PDF for an org user, based on the PDF
@@ -90,6 +90,12 @@ class ApplicationUnreadIndex(ApplicationIndex):
         context['results'] = AppsService.get_unread_applications_for_org_user(
                 self.request.user, self.request.GET.get('page'))
         return context
+
+    def get(self, request):
+        if request.user.is_staff:
+            return redirect(reverse_lazy('intake-app_index'))
+        else:
+            return super().get(self, request)
 
 
 class ApplicationNeedsUpdateIndex(ApplicationIndex):
@@ -250,7 +256,8 @@ class MarkSubmissionStepView(ViewAppDetailsMixin, View, MultiSubmissionMixin):
 
         self.submission_ids = [sub.id for sub in self.submissions]
         self.next_param = request.GET.get('next',
-                                          reverse_lazy('intake-app_index'))
+                                          reverse_lazy(
+                                            'intake-app_index'))
         self.log()
         self.modify_submissions()
         self.add_message()

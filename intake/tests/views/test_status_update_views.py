@@ -130,7 +130,7 @@ class TestCreateStatusUpdateFormView(StatusUpdateViewBaseTestCase):
                 kwargs=dict(
                     submission_id=self.sub.id)))
 
-    def test_incorrect_org_user_redirected_to_app_index(self):
+    def test_incorrect_org_user_redirected_to_app_unread_index(self):
         self.be_ccpubdef_user()
         response = self.get_create_page()
         self.assertRedirects(
@@ -172,7 +172,7 @@ class TestReviewStatusNotificationFormView(StatusUpdateViewBaseTestCase):
         self.assertIn(
             reverse('user_accounts-login'), response.url)
 
-    def test_incorrect_org_user_redirected_to_app_index(self):
+    def test_incorrect_org_user_redirected_to_app_unread_index(self):
         self.be_ccpubdef_user()
         response = self.get_review_page()
         self.assertRedirects(

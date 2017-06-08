@@ -2,10 +2,10 @@
 {%- else %}
   <div class="app-index-nav-bar">
     <ul>
-      {%- if request.path == url('intake-app_unread_index') %}
+      {%- if request.path == url('intake-app_index') %}
       <li role="presentation" class="active">
         <a href="{{
-          url('intake-app_unread_index')
+          url('intake-app_index')
         }}">Unread ({{ unreads }})</a>
       </li>
       <li role="presentation">
@@ -21,7 +21,7 @@
       {% elif request.path == url('intake-app_needs_update_index') %}
       <li role="presentation">
         <a href="{{
-          url('intake-app_unread_index')
+          url('intake-app_index')
         }}">Unread ({{ unreads }})</a>
       </li>
       <li role="presentation" class="active">
@@ -37,7 +37,7 @@
       {% else %}
       <li role="presentation">
         <a href="{{
-          url('intake-app_unread_index')
+          url('intake-app_index')
         }}">Unread ({{ unreads }})</a>
       </li>
       <li role="presentation">

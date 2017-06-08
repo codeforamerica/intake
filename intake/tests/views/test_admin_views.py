@@ -76,7 +76,7 @@ class TestApplicationDetail(IntakeDataTestCase):
         self.be_ccpubdef_user()
         submission = self.sf_pubdef_submissions[0]
         response = self.get_detail(submission)
-        self.assertRedirects(response, reverse('intake-app_index'))
+        self.assertRedirects(response, reverse('intake-app_unread_index'))
         slack.assert_not_called()
 
     @patch('intake.notifications.slack_submissions_viewed.send')
@@ -237,11 +237,11 @@ class TestApplicationIndex(IntakeDataTestCase):
         for i in range(random_new_subs_count):
             FormSubmissionFactory.create()
         with self.assertNumQueries(18):
-            self.client.get(reverse('intake-app_index'))
+            self.client.get(reverse('intake-app_unread_index'))
 
     def test_that_org_user_can_only_see_apps_to_own_org(self):
         self.be_apubdef_user()
-        response = self.client.get(reverse('intake-app_index'))
+        response = self.client.get(reverse('intake-app_unread_index'))
         self.assertContainsSubmissions(response, self.a_pubdef_submissions)
         self.assertContainsSubmissions(response, self.combo_submissions)
         self.assertNotContainsSubmissions(response, self.sf_pubdef_submissions)
@@ -291,7 +291,7 @@ class TestApplicationIndex(IntakeDataTestCase):
 
     def test_user_can_see_update_status_links(self):
         self.be_apubdef_user()
-        response = self.client.get(reverse('intake-app_index'))
+        response = self.client.get(reverse('intake-app_unread_index'))
         for sub in self.a_pubdef_submissions:
             update_status_url = html_utils.conditional_escape(
                 sub.get_case_update_status_url())
@@ -409,7 +409,7 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
             'intake-app_bundle_detail',
             kwargs=dict(bundle_id=self.a_pubdef_bundle.id)))
         self.assertRedirects(
-            result, reverse('intake-app_index'), fetch_redirect_response=False)
+            result, reverse('intake-app_unread_index'), fetch_redirect_response=False)
 
     @patch(
         'intake.views.admin_views.notifications.slack_submissions_viewed.send')
@@ -533,7 +533,7 @@ class TestCaseBundlePrintoutPDFView(IntakeDataTestCase):
         self.assertIn(reverse('user_accounts-login'), response.url)
         self.assertEqual(response.status_code, 302)
 
-    def test_users_from_wrong_org_redirected_to_app_index(self):
+    def test_users_from_wrong_org_redirected_to_app_unread_index(self):
         self.be_ccpubdef_user()
         bundle = models.ApplicationBundle.objects.filter(
             organization__slug__contains='a_pubdef').first()
@@ -541,7 +541,7 @@ class TestCaseBundlePrintoutPDFView(IntakeDataTestCase):
             reverse(
                 'intake-case_bundle_printout',
                 kwargs=dict(bundle_id=bundle.id)))
-        self.assertRedirects(response, reverse('intake-app_index'))
+        self.assertRedirects(response, reverse('intake-app_unread_index'))
 
     @patch('intake.notifications.slack_submissions_viewed.send')
     def test_marks_apps_as_opened(self, slack):
