@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'url_robots',
     'user_accounts',
     'phone',
+    'partnerships',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',

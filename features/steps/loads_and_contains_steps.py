@@ -29,6 +29,12 @@ def find_with_id_and_assert_text(context, element_id, text):
     context.test.assertEquals(element.text, text)
 
 
+@then('it should have the element "{selector}" which says "{text}"')
+def find_with_css_selector_and_assert_contains_text(context, selector, text):
+    element = context.browser.find_element_by_css_selector(selector)
+    context.test.assertIn(text, element.text)
+
+
 @then('"{element_id}" should link to "{url}"')
 def check_link_goes_to_page(context, element_id, url):
     start_url = context.browser.current_url
@@ -67,5 +73,12 @@ def element_contains_text(context, element_class, text):
 @when('the "{input_name}" text input is set to "{value}"')
 def type_in_textarea(context, input_name, value):
     selector = "input[name='{}'][type='text']".format(input_name)
+    text = context.browser.find_element_by_css_selector(selector)
+    text.send_keys(value)
+
+
+@when('the "{input_name}" email input is set to "{value}"')
+def type_in_email_input(context, input_name, value):
+    selector = "input[name='{}'][type='email']".format(input_name)
     text = context.browser.find_element_by_css_selector(selector)
     text.send_keys(value)

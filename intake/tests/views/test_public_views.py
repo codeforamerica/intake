@@ -16,12 +16,6 @@ class TestFooterContent(TestCase):
             html_utils.conditional_escape(reverse('account_login')))
 
 
-class TestPartnershipsView(TestCase):
-    def test_returns_200(self):
-        response = self.client.get(reverse('intake-partnerships'))
-        self.assertEqual(response.status_code, 200)
-
-
 class TestPartnerListView(TestCase):
     fixtures = ['counties', 'organizations']
 
