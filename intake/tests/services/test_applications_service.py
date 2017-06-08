@@ -85,6 +85,34 @@ class TestGetApplicationsIndexForOrgUser(TestCase):
             self.assertTrue(date <= future)
             future = date
 
+    def test_unread_results_only_include_unreads(self):
+        user = User.objects.filter(
+            profile__organization__slug='a_pubdef').first()
+        results = AppsService.get_unread_applications_for_org_user(user, 1)
+        self.assertFalse(
+            any([
+                app['has_been_opened'] for app in results
+            ]))
+
+    def test_needs_updates_results_only_include_apps_needing_update(self):
+        user = User.objects.filter(
+            profile__organization__slug='a_pubdef').first()
+        results = AppsService.get_applications_needing_updates_for_org_user(
+            user, 1)
+        self.assertFalse(
+            any([
+                app['status_updates'] for app in results
+            ]))
+
+    def all_results_include_unread_apps(self):
+        user = User.objects.filter(
+            profile__organization__slug='a_pubdef').first()
+        results = AppsService.get_all_applications_for_org_user(user, 1)
+        self.assertTrue(
+            any([
+                app['has_been_opened'] for app in results
+            ]))
+
 
 class TestGetSerializedApplicationHistoryEvents(DeluxeTransactionTestCase):
 

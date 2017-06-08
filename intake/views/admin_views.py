@@ -68,26 +68,36 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
             context['results'] = \
                 AppsService.get_all_applications_for_org_user(
                     self.request.user, self.request.GET.get('page'))
+            context['all'] = AppsService.get_all_applications_for_org_user(
+                    self.request.user, self.request.GET.get('page')).__len__()
+            context['unreads'] = \
+                AppsService.get_unread_applications_for_org_user(
+                    self.request.user, self.request.GET.get('page')).__len__()
+            context['needs_update'] = \
+                AppsService.get_applications_needing_updates_for_org_user(
+                    self.request.user, self.request.GET.get('page')).__len__()
         context['page_counter'] = \
             utils.get_page_navigation_counter(
                 page=context['results'],
                 wing_size=9)
-        context['unreads'] = 4
-        context['needs_update'] = 8
+
         return context
 
 
 class ApplicationUnreadIndex(ApplicationIndex):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-
+        context['results'] = AppsService.get_unread_applications_for_org_user(
+                self.request.user, self.request.GET.get('page'))
         return context
 
 
 class ApplicationNeedsUpdateIndex(ApplicationIndex):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-
+        context['results'] = \
+            AppsService.get_applications_needing_updates_for_org_user(
+                self.request.user, self.request.GET.get('page'))
         return context
 
 

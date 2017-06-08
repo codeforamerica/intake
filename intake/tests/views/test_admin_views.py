@@ -335,6 +335,15 @@ class TestApplicationIndex(IntakeDataTestCase):
             self.assertIn('(Incoming Transfer)', html_text)
             self.assertIn('New', html_text)
 
+    def test_unread_results_show_correct_count_in_tab(self):
+        pass
+
+    def test_all_results_show_correct_count_in_tab(self):
+        pass
+
+    def test_needs_updates_results_show_correct_count_in_tab(self):
+        pass
+
 
 class TestApplicationBundleDetail(IntakeDataTestCase):
 

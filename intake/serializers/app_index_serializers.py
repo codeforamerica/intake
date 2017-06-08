@@ -37,7 +37,8 @@ class ApplicationIndexSerializer(LatestStatusBase):
             'local_created',
             'status_updates',
             'form_submission',
-            'was_transferred_out'
+            'was_transferred_out',
+            'has_been_opened'
         ]
 
 
@@ -51,5 +52,6 @@ class ApplicationIndexWithTransfersSerializer(ApplicationIndexSerializer):
             'status_updates',
             'form_submission',
             'was_transferred_out',
-            'incoming_transfers'
+            'incoming_transfers',
+            'has_been_opened'
         ]

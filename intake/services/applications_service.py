@@ -37,6 +37,36 @@ def get_all_applications_for_org_user(user, page_index):
     return pagination.get_serialized_page(query, serializer, page_index)
 
 
+def get_unread_applications_for_org_user(user, page_index):
+    """Paginates and serializes applications for an org user
+    """
+    # this is two queries
+    organization = user.profile.organization
+    query = get_applications_for_org(organization)
+    filtered_query = query.filter(has_been_opened=False)
+    serializer = serializers.ApplicationIndexSerializer
+    if organization.can_transfer_applications:
+        serializer = \
+            serializers.ApplicationIndexWithTransfersSerializer
+    return pagination.get_serialized_page(filtered_query,
+                                          serializer, page_index)
+
+
+def get_applications_needing_updates_for_org_user(user, page_index):
+    """Paginates and serializes applications for an org user
+    """
+    # this is two queries
+    organization = user.profile.organization
+    query = get_applications_for_org(organization)
+    filtered_query = query.filter(status_updates__isnull=True)
+    serializer = serializers.ApplicationIndexSerializer
+    if organization.can_transfer_applications:
+        serializer = \
+            serializers.ApplicationIndexWithTransfersSerializer
+    return pagination.get_serialized_page(filtered_query,
+                                          serializer, page_index)
+
+
 def get_status_updates_for_org_user(application):
     # note: this only returns status updates for the latest transfer
     #   if an app has multiple transfers, older ones will be overlooked
