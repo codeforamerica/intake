@@ -29,14 +29,10 @@ def find_with_id_and_assert_text(context, element_id, text):
     context.test.assertEquals(element.text, text)
 
 
-@then('"{element_id}" should deeplink to "{section}"')
-def check_link_goes_to_section_but_stays_on_page(context, element_id, section):
-    element = context.browser.find_element_by_id(element_id)
-    start_url = urldefrag(context.browser.current_url)
-    element.click()
-    end_url = urldefrag(context.browser.current_url)
-    context.test.assertEquals(start_url[0], end_url[0])
-    context.test.assertEquals(end_url[1], section)
+@then('it should have the element "{selector}" which says "{text}"')
+def find_with_css_selector_and_assert_contains_text(context, selector, text):
+    element = context.browser.find_element_by_css_selector(selector)
+    context.test.assertIn(text, element.text)
 
 
 @then('"{element_id}" should link to "{url}"')
@@ -77,5 +73,12 @@ def element_contains_text(context, element_class, text):
 @when('the "{input_name}" text input is set to "{value}"')
 def type_in_textarea(context, input_name, value):
     selector = "input[name='{}'][type='text']".format(input_name)
+    text = context.browser.find_element_by_css_selector(selector)
+    text.send_keys(value)
+
+
+@when('the "{input_name}" email input is set to "{value}"')
+def type_in_email_input(context, input_name, value):
+    selector = "input[name='{}'][type='email']".format(input_name)
     text = context.browser.find_element_by_css_selector(selector)
     text.send_keys(value)

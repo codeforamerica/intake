@@ -2,8 +2,6 @@ from project.settings.base import *
 import dj_database_url
 
 
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
-
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # looks for 'DATABASE_URL' environmental variable
@@ -20,8 +18,10 @@ AWS_ACCESS_KEY_ID = os.environ.get('BUCKETEER_AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('BUCKETEER_AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('BUCKETEER_BUCKET_NAME')
 
+# settings for static files
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+# settings for media files
 MEDIA_ROOT = ''
-
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 # Email settings
@@ -31,6 +31,7 @@ MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", "admin@localhost")
 DEFAULT_FROM_EMAIL = MAIL_DEFAULT_SENDER
 VOICEMAIL_NOTIFICATION_EMAIL = os.environ.get(
     'VOICEMAIL_NOTIFICATION_EMAIL')
+PARTNERSHIPS_LEAD_INBOX = os.environ.get("PARTNERSHIPS_LEAD_INBOX")
 
 # Twilio API
 TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN")

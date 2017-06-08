@@ -1,237 +1,127 @@
-{% extends "public_base.jinja" %}
+{% extends "gcf_style_base.jinja" %}
 
-{% block above_the_fold %}
-<section class="splash above_the_fold">
-  <div class="container">
 
-    <div class="row">
-      <div class="col-md-6 col-sm-8 col-xs-12 col_centered">
-      {% include "includes/public_topbar.jinja" %}
-      </div>
-    </div>
+{% block body_class %}main-landing{% endblock body_class %}
 
-      <div class="row">
-        <div class="col-md-6 col-sm-8 col-xs-12 col_centered">
-          <h1 class="main_headline new_section">
-            {{ content.main_headline }}
-          </h1>
-
-          <h2 class="subheadline">
-            {{ content.subheadline }}
-          </h2>
-
-          <p class="call_to_action_time">
-            {{ content.call_to_action_time }}
-          </p>
-
-          <div class="row">
-            <div class="col-md-4 col-sm-5">
-              <a id="learn-more" href="#learn_more_section" class="btn btn-default btn-lg call_to_action_button text-center">
-                <span class="main-action-text">
-                  {{ content.learn_more_button }}
-                </span>
-              </a>
-            </div>
-
-            <div class="col-md-6 col-sm-7">
-              <a id="apply-now" href="{{ url('intake-apply') }}" class="btn btn-primary btn-lg call_to_action_button text-center">
-                <span class="main-action-text">
-                  {{ content.call_to_action_button }}
-                </span>
-              </a>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <div class="row credibility_note">
-        <div class="col-md-6 col-sm-8 col-xs-12 col_centered">
-          <p class="small">{{ linkify(content.credibility_note) }}</p>
-        </div>
-      </div>
-
-  </div>
-</section>
-
-{% endblock above_the_fold %}
 {% block content %}
 
-<section class="about_the_service">
-  
-
-  <div class="container">
-
-    <div class="row">
-      <div class="col-xs-12">
-        <h2 class="benefits_headline new_section" id="learn_more_section" name="learn_more_section">{{ content.journey_headline }}</h2>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="apply_steps">
-        <div class="col-xs-12 col-md-3-33">
-          <div class="step">
-            <h4 class="step_headline">{{ content.step_1_headline }}</h4>
-            <p class="step_paragraph">{{ content.step_1_paragraph }}</p>
-          </div>
-        </div>
-
-        <div class="col-xs-12 col-md-1">
-          <h1 class="step-arrow">
-            <span class="glyphicon glyphicon-arrow-right visible-md visible-lg" aria-hidden="true"></span>
-            <span class="glyphicon glyphicon-arrow-down visible-xs visible-sm" aria-hidden="true"></span>
-          </h1>
-        </div>
-
-        <div class="col-xs-12 col-md-3-33">
-          <div class="step">
-            <h4 class="step_headline">{{ content.step_2_headline }}</h4>
-            <p class="step_paragraph">{{ content.step_2_paragraph }}</p>
-          </div>
-        </div>
-
-        <div class="col-xs-12 col-md-1">
-          <h1 class="step-arrow">
-            <span class="glyphicon glyphicon-arrow-right visible-md visible-lg" aria-hidden="true"></span>
-            <span class="glyphicon glyphicon-arrow-down visible-xs visible-sm" aria-hidden="true"></span>
-          </h1>
-        </div>
-
-        <div class="col-xs-12 col-md-3-33">
-          <div class="step">
-            <h4 class="step_headline">{{ content.step_3_headline }}</h4>
-            <p class="step_paragraph">{{ content.step_3_paragraph }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="apply_backup">
-        <div class="col-xs-12 col-centered">
-          <h2 class="backup_apply_headline new_section">{{ content.backup_apply_headline }}</h2>
-          <a href="{{ url('intake-apply') }}" class="btn btn-primary btn-lg call_to_action_button">
-            <span class="main-action-text">
-              {{ content.call_to_action_button }}
-            </span>
+    <section class="slab slab--header slab--white">
+      {# main slab #}
+      <div class="grid">
+        <div class="grid__item width-one-half with-non-mobile-top-padding-large">
+          <h1>Reduce or dismiss your convictions</h1>
+          <p class="with-padding-med">
+            Take the first step in just 10 minutes
+          </p>
+          <a id="apply-now" href="{{ url('intake-apply') }}" class="button button--primary">
+            Start now
+            <i class="icon icon-arrow_forward"></i>
           </a>
         </div>
+        <div class="grid__item width-five-twelfths is-mobile-hidden">
+          <div class="illustration illustration--ladders"></div>
+        </div>
       </div>
-    </div>
+    </section>
+    
 
-  </div>
-</section>
+    <section class="slab slab--padded">
+      <div class="grid">
+        <div class="grid__item width-five-twelfths with-padding-large">
+          <p>Clearing your record can help remove barriers to new jobs, housing, and educational opportunities.</p>
+          <p>Clear My Record is a free, nonprofit, service for people with a criminal record in select California counties.</p>
+        </div>
+        <div class="grid__item width-one-half shift-one-twelfth">
+          {% include "includes/county-seals.jinja" %}
+          <p>
+            <a href="{{ url('intake-partner_list') }}">See our full list of available counties</a>
+          </p>
+        </div>
+      </div>
+    </section>
 
-<section class="who_we_are new_section">
-  <div class="container">
+    <section class="slab slab--padded slab--white">
+      <div class="grid">
+        <div class="grid__item width-one-whole with-padding-large">
+          <h2 class="text--centered with-padding-med">Why should you apply?</h2>
+        </div>
 
-    <div class="row">
-      <div class="col-xs-12 col-md-6">
-        <div class="gov_service">
-          <h2 class="gov_service_name">
-            {{ content.gov_service_name }}
+      <div class="grid text--centered">
+        <div class="grid__item width-one-fourth with-padding-med">
+          <div class="illustration illustration--ca"></div>
+          <p>
+            You can apply to clear multiple California convictions at once
+          </p>
+        </div>
+        <div class="grid__item width-one-fourth with-padding-med">
+          <div class="illustration illustration--job_search"></div>
+          <p>
+            Clearing your record opens doors to jobs, housing, and education
+          </p>
+        </div>
+        <div class="grid__item width-one-fourth with-padding-med">
+          <div class="illustration illustration--10_minutes"></div>
+          <p>
+            Our short, easy-to-understand application only takes 10 minutes
+          </p>
+        </div>
+        <div class="grid__item width-one-fourth with-padding-med">
+          <div class="illustration illustration--speech_bubbles"></div>
+          <p>
+            The Clear My Record team is here to support you through the process
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slab slab--padded text--centered">
+      <div class="grid">
+        <div class="grid__item width-one-whole with-padding-large">
+          <h2>
+            Apply in three easy steps
           </h2>
-          <p class="gov_service_description_1)">
-            {{ content.gov_service_description_1 }}
-          </p>
-
-          <p class="gov_service_description_2)">
-            {{ content.gov_service_description_2 }}
-          </p>
-
-          <p class="partners">
-            {{ _("Here is a list of our county partners:") }}
-          </p>
-          <ul class="partner_list">
-            {%- for county in counties %}
-            <li class="partner_list-county_partners_item">
-              <span class="partner_list-county">{{ county.name }} County</span>
-              -
-              <span class="partner_list-partners">{{
-                linkify(
-                  oxford_comma(
-                    county.organizations.order_by('name').values_list(
-                      'name', flat=True
-                    )))
-              }}</span>
-            </li>
-            {%- endfor %}
-          </ul>
-        </div>
-
-        <div class="contact_info">
-          <h2>{{ content.contact_headline }}</h2>
-          <ul>
-            <li>Email: {{ linkify(content.contact_email) }}</li>
-            <li>Phone: {{ linkify(content.contact_phone) }}</li>
-          </ul>
         </div>
       </div>
-
-      <div class="col-xs-12 col-md-5 col-md-offset-1">
-        <div class="team_faces">
-
-          <h2>We will be helping you apply</h2>
-          <div class="team_face_row">
-            <div class="row">
-              <div class="col-xs-4 col-sm-3">
-                <div class="cfa-staff" id="jazmyn-circle"></div>
-              </div>
-
-              <div class="col-xs-8 col-sm-9">
-                <h4>Jazmyn Latimer</h4>
-                <p>Code for America</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="team_face_row">
-            <div class="row">
-              <div class="col-xs-4 col-sm-3">
-                <div class="cfa-staff" id="ben-circle"></div>
-              </div>
-
-              <div class="col-xs-8 col-sm-9">
-                <h4>Ben Golder</h4>
-                <p>Code for America</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="team_face_row">
-            <div class="row">
-              <div class="col-xs-4 col-sm-3">
-                <div class="cfa-staff" id="tiffany-circle"></div>
-              </div>
-
-              <div class="col-xs-8 col-sm-9">
-                <h4>Tiffany Andrews</h4>
-                <p>Code for America</p>
-              </div>
-            </div>
-          </div>
-
+      <div class="grid">
+        <div class="grid__item width-one-third with-padding-med">
+          <h4>
+            Application
+          </h4>
+          <p>
+            Fill out the online application so attorneys can understand your history and collect your contact information.
+          </p>
+        </div>
+        <div class="grid__item width-one-third with-padding-med">
+          <h4>
+            Eligibility and next steps
+          </h4>
+          <p>
+            In about 4 weeks, you’ll hear from each county. They’ll tell you what you qualify for and your next steps.
+          </p>
+        </div>
+        <div class="grid__item width-one-third with-padding-med">
+          <h4>
+            Receive decision
+          </h4>
+          <p>
+            Attorneys will ask the court to clear your record and update you with the final decision and official documents.
+          </p>
         </div>
       </div>
-    </div>
+    </section>
 
-    <div class="row">
-      <div class="apply_backup_2">
-        <div class="col-xs-12 col-centered">
-          <h2 class="time_expectation new_section">{{ content.time_expectation}}</h2>
-          <a href="{{ url('intake-apply') }}" class="btn btn-primary btn-lg call_to_action_button">
-            <span class="main-action-text">
-              {{ content.call_to_action_button }}
-            </span>
+    <section class="slab slab--padded slab--white">
+      <div class="grid">
+        <div class="grid__item width-one-whole text--centered">
+          <h3 class="with-padding-med">
+            If you have convictions in California, you're probably eligible
+          </h3>
+          <a href="{{ url('intake-apply') }}" class="button button--primary">
+            Get started today
+            <i class="icon icon-arrow_forward"></i>
           </a>
         </div>
       </div>
-    </div>
-
-  </div>
-</section>
-
+    </section>
 
 {% endblock content %}
-

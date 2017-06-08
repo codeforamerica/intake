@@ -1,0 +1,40 @@
+.steps {
+  position: relative;
+
+  @include media($tablet-up) {
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 25px;
+      height: 3px;
+      width: 80%;
+      margin-left: 10%;
+      background-color: $color-light-grey;
+      z-index: 0;
+    }
+  }
+
+  .illustration {
+    position: relative;
+    background-color: #fff;
+    &:before {
+      content: '';
+      z-index: 0;
+      display: block;
+      position: absolute;
+      border: 20px solid #fff;
+      top: -20px;
+      right: -20px;
+      bottom: -20px;
+      left: -20px;
+    }
+  }
+
+  .grid__item {
+    margin-bottom: 2em;
+    @include media($tablet-up) {
+      margin-bottom: 0;
+    }
+  }
+}

@@ -1,0 +1,36 @@
+.document-previewer {
+  display: inline-block;
+  margin-bottom: 1em;
+
+  .document-preview {
+    display: inline-block;
+    padding: 5px;
+    margin-bottom: 0.5em;
+    max-width: 100px;
+    margin-right: 1em;
+    text-align: center;
+    img {
+      display: block;
+      background-color: $color-grey;
+    }
+  }
+}
+
+.document-upload {
+  .form {
+    &__documentuploader {
+      border-width: 1px;
+      border-color: $color-tan;
+      border-style: solid;
+      margin-bottom: 0.5em;
+      padding: 1em;
+      text-align: center;
+      width: 100%;
+      line-height: normal;
+
+      &:hover {
+        background-color: $color-light-grey;
+      }
+    }
+  }
+}

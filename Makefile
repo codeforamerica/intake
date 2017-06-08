@@ -8,7 +8,7 @@ serve:
 
 
 
-SCOPE=user_accounts intake formation health_check phone
+SCOPE=user_accounts intake formation health_check phone partnerships
 
 test:
 	./manage.py test $(SCOPE) \
@@ -111,6 +111,11 @@ db.pull.demo:
 	heroku pg:pull --app cmr-demo DATABASE_URL intake
 
 
-static:
-	rm -rf staticfiles
-	./manage.py collectstatic --noinput
+# static.dev runs sass to convert .scss stylesheets to css
+# it will watch the scss directory and automatically regenerate css
+static.dev:
+	sass \
+        --require bourbon \
+        --require normalize-scss \
+        --require neat \
+        --watch intake/static/intake/scss:intake/static/intake/css

@@ -1,0 +1,156 @@
+.illustration {
+  text-indent: -9999px;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  background-position: center center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1em;
+}
+
+.illustration--cfa-logo-black {
+  @include retina-bg(/static/intake/img/cfa-logo-black, 100% auto); 
+  margin-left: 0;
+  width: 145px;
+  height: 64px;
+  background-position: center left;
+}
+
+.illustration--cfa-logo-color {
+  @include retina-bg(/static/intake/img/cfa_logo_color, 100% auto);
+  width: 100%;
+  height: 200px;
+  opacity: .5;
+}
+
+
+// .illustration--success {
+//   width: 45px;
+//   height: 55px;
+//   @include retina-bg(/static/intake/img/illustration_success, 100% auto);
+// }
+
+
+
+.illustration--alameda {
+  @include retina-bg(/static/intake/img/alameda_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+.illustration--contra-costa {
+  @include retina-bg(/static/intake/img/contra_costa_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+.illustration--fresno {
+  @include retina-bg(/static/intake/img/fresno_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+.illustration--san-diego {
+  @include retina-bg(/static/intake/img/san_diego_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+
+.illustration--san-francisco {
+  @include retina-bg(/static/intake/img/san_francisco_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+.illustration--santa-barbara {
+  @include retina-bg(/static/intake/img/santa_barbara_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+.illustration--santa-clara {
+  @include retina-bg(/static/intake/img/santa_clara_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+.illustration--santa-cruz {
+  @include retina-bg(/static/intake/img/santa_cruz_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+.illustration--solano {
+  @include retina-bg(/static/intake/img/solano_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+.illustration--ventura {
+  @include retina-bg(/static/intake/img/ventura_seal, 100% auto);
+  width: 86px;
+  height: 86px;
+}
+
+.illustration--bundle-icon {
+  @include retina-bg(/static/intake/img/bundle-icon, 100% auto);
+  width: 102px;
+  height: 67px;
+}
+
+.illustration--eligibility-icon {
+  @include retina-bg(/static/intake/img/eligibility-icon, 100% auto);
+  width: 102px;
+  height: 67px;
+}
+
+.illustration--notification-icon {
+  @include retina-bg(/static/intake/img/notification-icon, 100% auto);
+  width: 64px;
+  height: 67px;
+}
+
+
+.illustration--partner-interface {
+  @include retina-bg(/static/intake/img/partner-interface, 100% auto);
+  width: 470px;
+  height: 295px;
+  background-position: top left;
+}
+
+.illustration--ladders {
+  @include retina-bg(/static/intake/img/ladders, 100% auto);
+  width: 481px;
+  height: 410px;
+  background-position: center center;
+}
+
+
+.illustration--ca {
+  @include retina-bg(/static/intake/img/ca, 100% auto);
+  width: 68px;
+  height: 94px;
+  background-position: center center;
+}
+
+.illustration--job_search {
+  @include retina-bg(/static/intake/img/job_search, 100% auto);
+  width: 111px;
+  height: 94px;
+  background-position: center center;
+}
+
+.illustration--10_minutes {
+  @include retina-bg(/static/intake/img/10_minutes, 100% auto);
+  width: 94px;
+  height: 94px;
+  background-position: center center;
+}
+
+.illustration--speech_bubbles {
+  @include retina-bg(/static/intake/img/speech_bubbles, 100% auto);
+  width: 107px;
+  height: 94px;
+  background-position: center center;
+}

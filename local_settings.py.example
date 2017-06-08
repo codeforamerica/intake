@@ -36,6 +36,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 MAIL_DEFAULT_SENDER = "admin@localhost"
 VOICEMAIL_NOTIFICATION_EMAIL = 'youremail@example.horse'
+PARTNERSHIPS_LEAD_INBOX = 'anotheremail@example.space'
 
 DIVERT_REMOTE_CONNECTIONS = True
 
@@ -46,6 +47,9 @@ MIXPANEL_KEY = '12345'
 
 TWILIO_AUTH_TOKEN = '12345'
 
+
+COMPRESS_OFFLINE = False
+CELERY_TASK_ALWAYS_EAGER = True
 CELERY_BROKER_URL = 'amqp://localhost'
 
 

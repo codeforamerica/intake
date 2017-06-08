@@ -124,5 +124,14 @@
     "name": "Santa Barbara",
     "description": "Santa Barbara County (near Santa Maria, Santa Barbara, Goleta, Carpinteria, Solvang, and Lompoc)"
   }
+},
+{
+  "model": "intake.county",
+  "pk": 15,
+  "fields": {
+    "slug": "yolo",
+    "name": "Yolo",
+    "description": "Yolo County (near Davis, West Sacramento, Winters, and Woodland)"
+  }
 }
 ]
