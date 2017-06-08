@@ -36,6 +36,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 MAIL_DEFAULT_SENDER = "admin@localhost"
 VOICEMAIL_NOTIFICATION_EMAIL = 'youremail@example.horse'
+PARTNERSHIPS_LEAD_INBOX = 'anotheremail@example.space'
 
 DIVERT_REMOTE_CONNECTIONS = True
 
