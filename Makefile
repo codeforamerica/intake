@@ -62,8 +62,7 @@ test.everything:
 
 
 db.seed:
-	python ./manage.py load_essential_data
-	python ./manage.py load_mock_data
+	python ./manage.py new_fixtures
 
 
 db.setup:

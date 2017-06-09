@@ -3,7 +3,6 @@ from behave import given, when, then
 from intake.tests import factories, mock
 from intake.constants import PACIFIC_TIME
 from user_accounts.models import Organization
-from features.steps.loads_and_contains_steps import test_page_loads
 
 SEARCHABLE_APPLICANT_ID = None
 application_row_selector = 'tr.form_submission[data-key="{}"]'
@@ -112,5 +111,6 @@ def click_on_search_result(context):
 
 @then("it should load the applicant's detail page")
 def test_detail_page_loads(context):
-    test_page_loads(
-        context, 'application/{}/'.format(SEARCHABLE_APPLICANT_ID))
+    step_text = 'Then it should load "application/{}/"'\
+        .format(SEARCHABLE_APPLICANT_ID)
+    context.execute_steps(step_text)
