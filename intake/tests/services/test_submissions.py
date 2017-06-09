@@ -14,6 +14,8 @@ from intake.constants import (
 from intake.models import FormSubmission, ApplicationLogEntry
 from intake import constants, models
 from user_accounts.models import Organization, UserProfile
+from user_accounts.tests.factories import \
+    FakeOrganizationFactory, UserProfileFactory
 from project.tests.assertions import assertInLogsCount
 
 """
@@ -372,3 +374,46 @@ class TestGetUnopenedSubmissionsForOrg(TestCase):
         unopened_subs = \
             SubmissionsService.get_unopened_submissions_for_org(sf_pubdef)
         self.assertEqual(unopened_subs.count(), 3)
+
+
+class TestSendToNewappsBundleIfNeeded(TestCase):
+    fixtures = [
+        'counties',
+        'organizations'
+    ]
+
+    @patch('intake.tasks.add_application_pdfs')
+    def test_calls_task_if_sf_in_sub(self, add_application_pdfs):
+        sf_pubdef = Organization.objects.get(
+            slug=constants.Organizations.SF_PUBDEF)
+        sub = factories.FormSubmissionWithOrgsFactory(
+            organizations=[sf_pubdef])
+        SubmissionsService.send_to_newapps_bundle_if_needed(sub, [sf_pubdef])
+        add_application_pdfs.delay.assert_called_with(
+            sub.applications.first().id)
+
+    @patch('intake.tasks.add_application_pdfs')
+    def test_does_not_call_task_if_not_sf(self, add_application_pdfs):
+        a_pubdef = Organization.objects.get(
+            slug=constants.Organizations.ALAMEDA_PUBDEF)
+        sub = factories.FormSubmissionWithOrgsFactory(
+            organizations=[a_pubdef])
+        SubmissionsService.send_to_newapps_bundle_if_needed(sub, [a_pubdef])
+        add_application_pdfs.delay.assert_not_called()
+
+
+class TestMarkOpened(TestCase):
+    def test_mark_only_users_app_opened(self):
+        fake_org_1 = FakeOrganizationFactory()
+        fake_org_2 = FakeOrganizationFactory()
+        sub = factories.FormSubmissionWithOrgsFactory(
+            organizations=[fake_org_1, fake_org_2], answers={})
+        org_1_user = UserProfileFactory(organization=fake_org_1).user
+        SubmissionsService.mark_opened(sub, org_1_user, False)
+        org_1_apps = sub.applications.filter(organization=fake_org_1)
+        org_2_apps = sub.applications.filter(organization=fake_org_2)
+        self.assertTrue(all([app.has_been_opened for app in org_1_apps]))
+        self.assertFalse(any([app.has_been_opened for app in org_2_apps]))
+
+    def test_calls_remove_pdf_task_when_opened(self):
+        pass

@@ -42,9 +42,9 @@ def create_submission(form, organizations, applicant_id):
 
 
 def send_to_newapps_bundle_if_needed(submission, organizations):
-    sf = [org for org in organizations if org.slug == 'sf_pubdef'].pop(0, None)
-    if sf:
-        apps = submission.applications.filter(organization_id=sf.id)
+    sf_ids = [org.id for org in organizations if org.slug == 'sf_pubdef']
+    if sf_ids:
+        apps = submission.applications.filter(organization_id=sf_ids[0])
         for app in apps:
             tasks.add_application_pdfs.delay(app.id)
 
@@ -110,9 +110,12 @@ def get_submissions_for_followups(page_index):
 
 
 def mark_opened(submission, user, send_slack_notification=True):
-    submission.applications.filter(
+    queryset = submission.applications.filter(
         organization__profiles__user=user
-    ).distinct().update(has_been_opened=True)
+    ).distinct()
+    queryset.update(has_been_opened=True)
+    for app_id in queryset.values_list('id', flat=True):
+        tasks.remove_application_pdfs.delay(app_id)
     EventsService.apps_opened(submission.applications.all(), user)
     if send_slack_notification:
         notifications.slack_submissions_viewed.send(
