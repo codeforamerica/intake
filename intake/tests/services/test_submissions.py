@@ -415,5 +415,11 @@ class TestMarkOpened(TestCase):
         self.assertTrue(all([app.has_been_opened for app in org_1_apps]))
         self.assertFalse(any([app.has_been_opened for app in org_2_apps]))
 
-    def test_calls_remove_pdf_task_when_opened(self):
-        pass
+    @patch('intake.tasks.remove_application_pdfs')
+    def test_calls_remove_pdf_task_when_opened(self, remove_application_pdfs):
+        profile = UserProfileFactory()
+        sub = factories.FormSubmissionWithOrgsFactory(
+            organizations=[profile.organization], answers={})
+        SubmissionsService.mark_opened(sub, profile.user, False)
+        remove_application_pdfs.delay.assert_called_with(
+            sub.applications.first().id)
