@@ -1,57 +1,17 @@
-{%- if request.user.is_staff %}
-{%- else %}
-  <div class="app-index-nav-bar">
-    <ul>
-      {%- if request.path == url('intake-app_index') %}
-      <li role="presentation" class="active">
-        <a href="{{
-          url('intake-app_index')
-        }}">Unread ({{ unreads }})</a>
-      </li>
-      <li role="presentation">
-        <a href="{{
-            url('intake-app_needs_update_index')
-          }}">Need Status Update ({{ needs_update }})</a>
-      </li>
-      <li role="presentation">
-        <a href="{{
-            url('intake-app_index')
-          }}">All ({{ all }})</a>
-      </li>
-      {% elif request.path == url('intake-app_needs_update_index') %}
-      <li role="presentation">
-        <a href="{{
-          url('intake-app_index')
-        }}">Unread ({{ unreads }})</a>
-      </li>
-      <li role="presentation" class="active">
-        <a href="{{
-            url('intake-app_needs_update_index')
-          }}">Need Status Update ({{ needs_update }})</a>
-      </li>
-      <li role="presentation">
-        <a href="{{
-            url('intake-app_index')
-          }}">All ({{ all }})</a>
-      </li>
-      {% else %}
-      <li role="presentation">
-        <a href="{{
-          url('intake-app_index')
-        }}">Unread ({{ unreads }})</a>
-      </li>
-      <li role="presentation">
-        <a href="{{
-            url('intake-app_needs_update_index')
-          }}">Need Status Update ({{ needs_update }})</a>
-      </li>
-      <li role="presentation" class="active">
-        <a href="{{
-            url('intake-app_index')
-          }}">All ({{ all }})</a>
-      </li>
-      {% endif %}
-    </ul>
-    <hr>
-  </div>
-{% endif %}
+<div class="app-index-nav-bar">
+  <ul>
+  {% for tab in app_index_tabs %}
+    <li role="presentation"{% if tab.is_active %} class="active" {% endif %}>
+      <a href="{{ tab.url }}">{{ tab.label }} ({{ tab.count }})</a>
+    </li>
+    {% endfor %}
+  </ul>
+  <hr>
+</div>
+
+<div class="row">
+{# TODO: move to nav template #}
+<div class="col-xs-12 col-sm-6 col-md-6">
+    <h1>{{ app_index_scope_title }}</h1>
+</div>
+</div>

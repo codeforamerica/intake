@@ -236,7 +236,7 @@ class TestApplicationIndex(IntakeDataTestCase):
         random_new_subs_count = randint(5, 20)
         for i in range(random_new_subs_count):
             FormSubmissionFactory.create()
-        with self.assertNumQueries(18):
+        with self.assertNumQueries(19):
             self.client.get(reverse('intake-app_all_index'))
 
     def test_that_org_user_can_only_see_apps_to_own_org(self):
@@ -409,7 +409,7 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
             'intake-app_bundle_detail',
             kwargs=dict(bundle_id=self.a_pubdef_bundle.id)))
         self.assertRedirects(
-            result, reverse('intake-app_unread_index'),
+            result, reverse('intake-app_index'),
             fetch_redirect_response=False)
 
     @patch(

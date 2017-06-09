@@ -4,24 +4,6 @@
 {% block content %}
 <div class="container">
   <div class="row">
-    <div class="col-xs-12 col-md-10 col_centered">
-      {% include "includes/app_index_navigation.jinja" %}
-    </div>
-  </div>
-  <div class="row">
-  {# TODO: move to nav template #}
-    <div class="col-xs-12 col-sm-6 col-md-6">
-    {%- if request.user.is_staff %}
-        <h1>All Applications</h1>
-    {%- elif request.path == url('intake-app_unread_index') %}
-      <h1>{{ unreads }} Unread Applications</h1>
-    {%- elif request.path == url('intake-app_needs_update_index') %}
-      <h1>{{ needs_update }} Applications Need Status Updates</h1>
-    {%- elif request.path == url('intake-app_index') %}
-        <h1>All Applications to {{ request.user.profile.organization.name }}</h1>
-    {%- endif %}
-    </div>
-    {# TODO: move search bar above nav #}
     <div class="col-xs-12 col-sm-6 col-md-6 centered-to-header">
       <div class="applicants-search_module">
       {# replace this form (copied from tags) with one for autocomplete #}
@@ -29,6 +11,11 @@
           <input name="q" type="text" autocomplete="off"><ul class="applicants-autocomplete_results"></ul>
         </form>
       </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-md-10 col_centered">
+      {% include "includes/app_index_navigation.jinja" %}
     </div>
   </div>
   <div class="row">

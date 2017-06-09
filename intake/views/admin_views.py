@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, get_object_or_404
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, reverse
 from django.views.generic import View
 from django.views.generic.base import TemplateView
 
@@ -16,7 +16,6 @@ import intake.services.tags as TagsService
 
 from intake.views.base_views import ViewAppDetailsMixin
 from intake.views.app_detail_views import ApplicationDetail, not_allowed
-from django.contrib import messages
 
 
 class FilledPDF(ApplicationDetail):
@@ -50,6 +49,51 @@ class FilledPDF(ApplicationDetail):
         return response
 
 
+def get_tabs_for_org_user(organization, active_tab):
+    tabs = [
+        {
+            'url': reverse('intake-app_unread_index'),
+            'label': 'Unread',
+            'count': models.Application.objects.filter(
+                organization=organization, has_been_opened=False,
+                status_updates__isnull=True).count(),
+            'is_active': False},
+        {
+            'url': reverse('intake-app_needs_update_index'),
+            'label': 'Needs Status Update',
+            'count': models.Application.objects.filter(
+                organization=organization, status_updates__isnull=True
+            ).count(),
+            'is_active': False},
+        {
+            'url': reverse('intake-app_all_index'),
+            'label': 'All',
+            'count': models.Application.objects.filter(
+                organization=organization).count(),
+            'is_active': False}
+    ]
+
+    active_tab_count = activate_tab_by_label(tabs, active_tab)
+
+    return tabs, active_tab_count
+
+
+def get_tabs_for_staff_user():
+    return [
+        {
+            'url': reverse('intake-app_all_index'),
+            'label': 'All Applications',
+            'count': models.FormSubmission.objects.count(),
+            'is_active': True}]
+
+
+def activate_tab_by_label(tabs, label):
+    for tab in tabs:
+        if tab['label'] == label:
+            tab['is_active'] = True
+            return tab['count']
+
+
 class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
     """A paginated list view of all the applications to a user's organization.
     """
@@ -65,18 +109,16 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
             context['results'] = \
                 SubmissionsService.get_submissions_for_followups(
                     self.request.GET.get('page'))
+            context['app_index_tabs'] = get_tabs_for_staff_user()
+            context['app_index_scope_title'] = "All Applications"
         else:
             context['results'] = \
                 AppsService.get_all_applications_for_org_user(
                     self.request.user, self.request.GET.get('page'))
-            context['all'] = AppsService.get_all_applications_for_org_user(
-                    self.request.user, self.request.GET.get('page')).__len__()
-            context['unreads'] = \
-                AppsService.get_unread_applications_for_org_user(
-                    self.request.user, self.request.GET.get('page')).__len__()
-            context['needs_update'] = \
-                AppsService.get_applications_needing_updates_for_org_user(
-                    self.request.user, self.request.GET.get('page')).__len__()
+            context['app_index_tabs'], count = get_tabs_for_org_user(
+                self.request.user.profile.organization, 'All')
+            context['app_index_scope_title'] = "All Applications To {}".format(
+                self.request.user.profile.organization.name)
         context['page_counter'] = \
             utils.get_page_navigation_counter(
                 page=context['results'],
@@ -90,6 +132,10 @@ class ApplicationUnreadIndex(ApplicationIndex):
         context = super().get_context_data(*args, **kwargs)
         context['results'] = AppsService.get_unread_applications_for_org_user(
                 self.request.user, self.request.GET.get('page'))
+        context['app_index_tabs'], count = get_tabs_for_org_user(
+            self.request.user.profile.organization, 'Unread')
+        context['app_index_scope_title'] = "{} Unread Applications".format(
+            count)
         return context
 
     def get(self, request):
@@ -99,12 +145,17 @@ class ApplicationUnreadIndex(ApplicationIndex):
             return super().get(self, request)
 
 
-class ApplicationNeedsUpdateIndex(ApplicationIndex):
+class ApplicationNeedsUpdateIndex(ApplicationUnreadIndex):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['results'] = \
             AppsService.get_applications_needing_updates_for_org_user(
                 self.request.user, self.request.GET.get('page'))
+        context['app_index_tabs'], count = get_tabs_for_org_user(
+            self.request.user.profile.organization,
+            'Needs Status Update')
+        context['app_index_scope_title'] = \
+            "{} Applications Need Status Updates".format(count)
         return context
 
 
