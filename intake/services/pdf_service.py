@@ -6,8 +6,8 @@ import intake.services.applications_service as AppsService
 from user_accounts.models import Organization
 
 
-def set_single_prebuilt_pdf_to_bytes(bytes_):
-    prebuilts = models.PrebuiltMultiAppPDF.objects.filter(
+def set_single_newapps_pdf_to_bytes(bytes_):
+    prebuilts = models.NewAppsPDF.objects.filter(
         organization__slug='sf_pubdef')
     if prebuilts.count() > 1:
         raise exceptions.MultiplePrebuiltPDFsError(
@@ -36,7 +36,7 @@ def prebuild_newapps_pdf_for_san_francisco():
         fill_pdf_for_application(app.id)
     filled_pdfs = models.FilledPDF.objects.filter(
         submission__applications__id__in=unread_app_ids)
-    return set_single_prebuilt_pdf_to_bytes(
+    return set_single_newapps_pdf_to_bytes(
         models.get_parser().join_pdfs(
             filled.pdf for filled in filled_pdfs))
 
@@ -59,7 +59,7 @@ def fill_pdf_for_application(application_id):
 
 
 def newapps_pdf_includes_app(application_id):
-    return models.PrebuiltMultiAppPDF.objects.filter(
+    return models.NewAppsPDF.objects.filter(
             applications__id=application_id).exists()
 
 

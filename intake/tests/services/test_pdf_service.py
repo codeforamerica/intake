@@ -4,7 +4,7 @@ from intake.services import pdf_service as PDFService
 from intake.tests import factories
 
 
-class TestSetSinglePrebuiltPdfToBytes(TestCase):
+class TestSetSingleNewAppsPdfToBytes(TestCase):
 
     def test_if_multiple_prebuilts(self):
         pass
