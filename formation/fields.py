@@ -109,6 +109,20 @@ class UnderstandsLimits(ConsentCheckbox):
         "Understands might not qualify and could take a few months")
 
 
+class IdentityConfirmation(ConsentCheckbox):
+    context_key = "identity_confirmation"
+    is_required_error_message = (
+        "We need your understanding before we can help you")
+    label = _(
+        "Do you understand that this application should only be submitted for "
+        "yourself or someone who has given you permission to apply on their "
+        "behalf, and that it is illegal to use this application to gain "
+        "access to someone's private information?")
+    agreement_text = _("Yes, I understand")
+    display_label = str(
+        "Confirms application is for self or with permission")
+
+
 class ReasonsForApplying(MultipleChoiceField):
     context_key = "reasons_for_applying"
     label = _("Why are you applying to clear your record?")
@@ -686,6 +700,7 @@ INTAKE_FIELDS = [
     HowDidYouHear,
     AdditionalInformation,
     UnderstandsLimits,
+    IdentityConfirmation,
     ConsentToRepresent,
     ConsentNote,
 

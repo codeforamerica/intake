@@ -11,7 +11,7 @@
 {# Twitter card data #}
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@codeforamerica">
-<meta name="twitter:url" content="{{ request.url }}">
+<meta name="twitter:url" content="{{ request.path }}">
 <meta name="twitter:title" content="{{ content.metadata_title }}">
 <meta name="twitter:description" content="{{ content.metadata_description }}">
 <meta name="twitter:creator" content="@codeforamerica">
@@ -20,7 +20,7 @@
 {# Open Graph data #}
 <meta property="og:title" content="{{ content.metadata_title }}">
 <meta property="og:type" content="article">
-<meta property="og:url" content="{{ request.url }}">
+<meta property="og:url" content="{{ request.path }}">
 <meta property="og:image" content="{{ static('intake/img/CMR_share.png') }}">
 <meta property="og:description" content="{{ content.metadata_description }}">
 <meta property="og:site_name" content="{{ content.metadata_author }}">

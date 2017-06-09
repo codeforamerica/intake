@@ -1,0 +1,29 @@
+.flash {
+  @include full-bleed();
+  position: relative;
+  padding: {
+    top: 1em;
+    bottom: 1em;
+  }
+  background-color: #fff;
+  font-weight: 500;
+  &:last-child {
+    box-shadow: 10px 0 10px rgba(0,0,0,.25);
+  }
+  p:last-child {
+    margin-bottom: 0;
+  }
+  a {
+    color: inherit;
+  }
+}
+
+.flash.error {
+  background-color: tint($color-red, 80%);
+}
+
+.flash.success {
+  color: #fff;
+  background-color: shade($color-green, 8%);
+}
+

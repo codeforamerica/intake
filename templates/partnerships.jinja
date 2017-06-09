@@ -1,0 +1,140 @@
+{% extends "gcf_style_base.jinja" %}
+
+{% block content %}
+		<section class="slab slab--header slab--white">
+			{# main slab #}
+			<div class="grid">
+				<div class="grid__item width-five-twelfths">
+					<h1>Bring Clear My Record to your County</h1>
+          <p class="with-padding-med">
+          	We are a free, nonprofit service helping people clear their criminal records in California
+          </p>
+          <a href="{{ url('partnerships-contact') }}" class="button button--primary">
+            Get in touch
+            <i class="icon icon-arrow_forward"></i>
+          </a>
+				</div>
+				<div class="grid__item width-one-half shift-one-twelfth is-mobile-hidden">
+					<div class="illustration illustration--partner-interface"></div>
+				</div>
+			</div>
+		</section>
+		
+
+    <section class="slab slab--padded">
+      <div class="grid">
+        <div class="grid__item width-five-twelfths with-padding-large">
+          <p> Clear My Record is a free, online nonprofit product built by Code for America, for people with a criminal record in select California counties.</p>
+          <p>There are an estimated 2 million people who are eligible to clear convictions from their records. Our goal is to help remove barriers for eligible applicants so they may qualify for new jobs, housing, and educational opportunities.</p>
+        </div>
+        <div class="grid__item width-one-half shift-one-twelfth">
+          
+          {% include "includes/county-seals.jinja" %}
+          <p>
+            <a href="{{ url('intake-partner_list') }}"> See our full list of growing partners</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slab slab--padded slab--white">
+
+      <div class="grid">
+        <div class="grid__item width-one-whole with-padding-large">
+          <h2 class="text--centered with-padding-med">How it works</h2>
+          <p class="text--centered">
+            Using Clear My Record is easy for both applicants and attorneys. Here’s how we work with your county:
+          </p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="grid__item width-one-third text--centered with-padding-large">
+          <div class="illustration illustration--bundle-icon"></div>
+          <h4>
+            Receive new applications
+          </h4>
+          <p>
+            County partners (you) receive a daily email digest of new or unopened
+            applications for your county. You can easily print them all at once.
+          </p>
+        </div>
+        <div class="grid__item width-one-third text--centered with-padding-large">
+          <div class="illustration illustration--eligibility-icon"></div>
+          <h4>
+            Partners check eligibility
+          </h4>
+          <p>
+            Clear My Record applications include all the information partners need to
+            pull an applicant’s history and determine eligibility and next steps.
+          </p>
+        </div>
+        <div class="grid__item width-one-third text--centered with-padding-large">
+          <div class="illustration illustration--notification-icon"></div>
+          <h4>
+            Communicate next steps
+          </h4>
+          <p>
+            Through Clear My Record, county partners can email or text applicants
+            to communicate eligibility, case status, and next steps.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="grid__item width-one-whole">
+          <p class="text--centered">
+            Information is always kept confidential and all data is encrypted. Read our
+            <a href="{{ url('intake-privacy') }}">Privacy Policy</a>
+            for more details.
+          </p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="slab slab--padded">
+      <div class="grid">
+        <div class="grid__item width-one-whole">
+          <h2 class="text--centered with-padding-med">
+            Why use Clear My Record?
+          </h2>
+        </div>
+        <div class="grid">
+          <div class="grid__item width-one-half">
+            <ul class="list--bulleted">
+              <li>It's free for applicants and partners.</li>
+              <li>Clear My Record helps you reach more applicants through an online channel.</li>
+              <li>Contribute to a multi-county effort to improve process and outcomes.</li>
+              <li>There are no required software or form downloads to use or access Clear My Record. Clear My Record can be used from a computer or mobile phone.</li>
+              <li>Clear My Record is easy to understand, resulting in applicants providing you with better intake data.</li>
+              <li>You can see the other counties an applicant has requested help in, creating the opportunity for cross-county coordination, where needed.</li>
+            </ul>
+          </div>
+          <div class="grid__item width-one-half">
+            <ul class="list--bulleted">
+              <li>Clear My Record makes it quick and easy to download and print new applications each day, both through email or by logging into Clear My Record directly. </li>
+              <li>Clear My Record allows you to send applicants quick text or email updates on the status of their application. </li>
+              <li>Clear My Record helps you better track outcomes data which can inform targeting and process improvements.</li>
+              <li>The Clear My Record team values and responds to user feedback from applicants, attorneys, and county partners. We are committed to using this information to improve our product and it's user experience.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slab slab--padded slab--white">
+      <div class="grid">
+        <div class="grid__item width-one-whole text--centered">
+          <h3 class="with-padding-med">
+            Talk with us today to learn more
+          </h3>
+          <a href="{{ url('partnerships-contact') }}" class="button button--primary">
+            Get in touch
+            <i class="icon icon-arrow_forward"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+{% endblock content %}

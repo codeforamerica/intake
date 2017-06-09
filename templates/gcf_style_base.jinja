@@ -1,0 +1,22 @@
+{% extends "base.jinja" %}
+
+{% block css %}
+{% compress 'css' %}
+<link rel="stylesheet" type="text/css" href="{{ static('intake/css/cfa.css') }}">
+{% endcompress %}
+{% endblock css %}
+
+
+{% block body_class %}cfa-style{% endblock body_class %}
+
+{% block body %}
+  <div class="page-wrapper">
+    {% include "gcf-style-flash-messages.jinja" %}
+    {% include "gcf-style-public-header.jinja" %}
+    
+    {% block content %}
+    {% endblock content %}
+
+    {% include "gcf-style-footer.jinja" %}
+  </div>
+{% endblock body %}

@@ -1,0 +1,22 @@
+{#-
+  this include is intended to appear before the header or any other content
+-#}
+<div class="flash-message-container">
+  {%- if messages -%}
+    {%- for message in messages -%}
+    <div class="flash {{ message.tags }}">
+      <div class="grid">
+        <div class="grid__item width-one-whole">
+          <p class="flash__message">
+            {% if 'safe' in message.tags %}
+              {{- message|safe -}}
+            {% else %}
+              {{- message -}}
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    </div>
+    {%- endfor %}
+  {%- endif %}
+</div>

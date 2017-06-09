@@ -1,0 +1,11 @@
+.demo-banner {
+  @include full-bleed();
+  position: relative;
+  z-index: 2;
+  background-color: $color-red;
+  padding: .5em;
+  text-align: center;
+  font-size: $font-size-small;
+  color: #FFFFFF;
+}
+

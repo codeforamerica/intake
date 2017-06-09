@@ -1,0 +1,90 @@
+{% extends "gcf_style_base.jinja" %}
+
+{% block body_class %}partnerships-contact{% endblock body_class %}
+
+{% block content %}
+
+    <div class="slab">
+      <div class="grid">
+        <div class="grid__item width-two-thirds shift-one-sixth">
+          <div class="form-card">
+            <div class="form-card__header">
+              <h1>
+                Get in touch
+              </h1>
+              <p>
+                Thanks for your interest in Clear My Record!
+                Please tell us a bit
+                about yourself and our partnerships team will get in touch.
+              </p>
+            </div>
+            <div class="form-card__content">
+              {%- if form.non_field_errors() %}
+              {%- for error in form.non_field_errors() %}
+              <p class="text--error"><i class="icon-warning"></i> {{ error|escape }}</p>
+              {%- endfor %}
+              {%- endif %}
+              <form class="partnerships-contact-form" action="" method="POST" accept-charset="utf-8">
+                {% include "includes/csrf_field.jinja" %}
+
+                <fieldset class="form_group">
+                  <label for="{{ form.name.id_for_label }}">
+                    <span class="form-question">{{ form.name.label }}<span class="text--error">*</span></span>
+                  </label>
+                  {{ form.name }}
+                  {%- if form.name.errors %}
+                  {%- for error in form.name.errors %}
+                  <p class="text--error"><i class="icon-warning"></i> {{ error|escape }}</p>
+                  {%- endfor %}
+                  {%- endif %}
+                </fieldset>
+
+                <fieldset class="form_group">
+                  <label for="{{ form.organization_name.id_for_label }}">
+                    <span class="form-question">{{ form.organization_name.label }}<span class="text--error">*</span></span>
+                  </label>
+                  {{ form.organization_name }}
+                  {%- if form.organization_name.errors %}
+                  {%- for error in form.organization_name.errors %}
+                  <p class="text--error"><i class="icon-warning"></i> {{ error|escape }}</p>
+                  {%- endfor %}
+                  {%- endif %}
+                </fieldset>
+
+                <fieldset class="form_group">
+                  <label for="{{ form.email.id_for_label }}">
+                    <span class="form-question">{{ form.email.label }}<span class="text--error">*</span></span>
+                  </label>
+                  {{ form.email }}
+                  {%- if form.email.errors %}
+                  {%- for error in form.email.errors %}
+                  <p class="text--error"><i class="icon-warning"></i> {{ error|escape }}</p>
+                  {%- endfor %}
+                  {%- endif %}
+                </fieldset>
+
+                <fieldset class="form_group">
+                  <label for="{{ form.message.id_for_label }}">
+                    <span class="form-question">{{ form.message.label }}</span>
+                  </label>
+                  {{ form.message }}
+                  {%- if form.message.errors %}
+                  {%- for error in form.message.errors %}
+                  <p class="text--error"><i class="icon-warning"></i> {{ error|escape }}</p>
+                  {%- endfor %}
+                  {%- endif %}
+                </fieldset>
+
+                <div class="form-card__footer">
+                  <button type="submit" class="button button--primary">
+                    Send <i class="button__icon icon-arrow_forward"></i>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock content %}

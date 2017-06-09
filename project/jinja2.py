@@ -1,5 +1,6 @@
 from django.contrib.humanize.templatetags import humanize
 from django.core.urlresolvers import reverse, reverse_lazy
+from django.core.exceptions import ObjectDoesNotExist
 import phonenumbers
 from django.conf import settings
 from jinja2 import Environment
@@ -13,10 +14,19 @@ from rest_framework.renderers import JSONRenderer
 from django.contrib.staticfiles.storage import staticfiles_storage
 
 
+def loudfail_static(*args, **kwargs):
+    result = staticfiles_storage.url(*args, **kwargs)
+    if not result:
+        raise ObjectDoesNotExist(
+            "Cannot find static file with: {} {}".format(args, kwargs))
+    else:
+        return result
+
+
 def environment(**options):
     env = Environment(**options)
     env.globals.update({
-        'static': staticfiles_storage.url,
+        'static': loudfail_static,
         'url': reverse,
         "content": "project.content.constants",
         "linkify": "project.jinja2.linkify",
@@ -148,6 +158,7 @@ linkify_links = {
     "Tulare County Public Defender": "/partners/tulare_pubdef/",
     "Santa Barbara County Public Defender": "/partners/santa_barbara_pubdef/",
     "Ventura County Public Defender": "/partners/ventura_pubdef/",
+    "Yolo County Public Defender": "/partners/yolo_pubdef/",
     "clearmyrecord@codeforamerica.org":
         "mailto:clearmyrecord@codeforamerica.org",
     "(415) 301-6005": "tel:14153016005"

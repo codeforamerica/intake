@@ -1,0 +1,31 @@
+.progress-indicator {
+  width: 10em;
+  margin: 2em auto;
+  text-align: center;
+  position: relative;
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    height: 6px;
+    left: 0;
+    right: 0;
+    border-radius: 3px;
+    background-color: $color-light-grey;
+    z-index: -1;
+    border: 1px solid $color-tan;
+  }
+}
+
+.progress-indicator__bar {
+  height: 6px;
+  min-width: 6px;
+  border-radius: 3px;
+  background-color: $color-teal;
+}
+
+.progress-indicator__percentage {
+  margin-top: .5em;
+  font-size: $font-size-small;
+}

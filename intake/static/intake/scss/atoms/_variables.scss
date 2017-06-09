@@ -1,0 +1,78 @@
+// Fonts
+$font-system:         -apple-system, BlinkMacSystemFont,
+                        "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+                        "Fira Sans", "Droid Sans", "Helvetica Neue",
+                        sans-serif;
+
+$font-icon:           'icomoon';
+
+
+// Typopgrahy
+$em-base:             10px;
+$font-size-normal:    rem(19px);
+$font-size-small:     rem(16px);
+$font-size-smallest:  rem(12px);
+$font-size-h1:        rem(36px);
+$font-size-h2:        rem(28px);
+$font-size-h3:        rem(24px);
+$font-size-h4:        rem(19px);
+$line-height-normal:  1.5em;
+$line-height-display: 1.3em;
+
+
+// Colors
+$color-background:    #FAFAF9;
+$color-teal:          #069ed6;
+$color-magenta:       #A6005E;
+$color-tan:           #DEDED1;
+$color-darkest-grey:  #30302F;
+$color-dark-grey:     #666666;
+$color-grey:          #AAAAAA;
+$color-light-grey:    #EAEAE9;
+$color-green:         #43AE74;
+$color-yellow:        #FFC61E;
+$color-orange:        #D48C00;
+$color-red:           #D40000;
+
+
+// Breakpoints
+$mobile-up:           481px;
+$tablet-up:           961px;
+$site-max-up:         961px;
+
+// Magic Numbers
+$site-margins:        40px;
+$site-max-width:      960px;
+$border-radius:       2px;
+$footer-height:       300px;
+
+// Padding Sizes
+$padding-small:   1rem;
+$padding-med:     3.8rem;
+$padding-large:   7.6rem;
+$padding-huge:    15.2rem;
+
+
+// Image Sizes
+$width-image-icon:    1.5em;
+$width-image-small:   6em;
+$width-image-med:     8em;
+$width-image-large:   10em;
+
+
+// Form Widths
+$width-form-med:	    12em;
+$width-form-long:	    20em;
+$width-form-short:     6em;
+
+$width-form-casenumber: 8em;
+$width-form-phone:      8em;
+$width-form-name:       12em;
+$width-form-zip:        5em;
+$width-form-ssn:        7em;
+$width-form-searchbar:  30em;
+
+
+// Animations
+$animation-fast:      .1s ease-out;
+$animation-med:      .2s ease-out;
