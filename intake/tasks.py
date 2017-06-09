@@ -1,6 +1,7 @@
 from celery import shared_task
 from django.core import mail
 from requests import request
+import intake.services.pdf_service as PDFService
 from project.services.mixpanel_service import log_to_mixpanel
 
 
@@ -13,5 +14,15 @@ def celery_request(*args, **kwargs):
 
 
 @shared_task
+def add_application_pdfs(application_id):
+    PDFService.fill_pdf_for_application(application_id)
+    PDFService.rebuild_newapps_pdf_for_new_application(application_id)
+
+
+@shared_task
+def remove_application_pdfs(application_id):
+    PDFService.rebuild_newapps_pdf_for_removed_application(application_id)
+
+
 def send_email(*args, **kwargs):
     mail.send_mail(*args, **kwargs)

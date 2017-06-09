@@ -2,7 +2,7 @@ import itertools
 from django.utils.translation import ugettext_lazy as _
 import Levenshtein
 import intake.services.events_service as EventsService
-from intake import models, serializers, notifications
+from intake import models, serializers, notifications, tasks
 from intake.constants import SMS, EMAIL
 from . import pagination
 from intake.service_objects import ConfirmationNotification
@@ -39,6 +39,14 @@ def create_submission(form, organizations, applicant_id):
     submission.organizations.add_orgs_to_sub(*organizations)
     link_with_any_duplicates(submission, applicant_id)
     return submission
+
+
+def send_to_newapps_bundle_if_needed(submission, organizations):
+    sf = [org for org in organizations if org.slug == 'sf_pubdef'].pop(0, None)
+    if sf:
+        apps = submission.applications.filter(organization_id=sf.id)
+        for app in apps:
+            tasks.add_application_pdfs.delay(app.id)
 
 
 def fill_pdfs_for_submission(submission, organizations=None):
