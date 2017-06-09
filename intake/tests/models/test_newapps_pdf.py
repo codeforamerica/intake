@@ -1,10 +1,11 @@
 from django.test import TestCase
+from django.db.utils import IntegrityError
 from user_accounts.tests.factories import FakeOrganizationFactory
 from intake.tests.factories import FormSubmissionWithOrgsFactory
 from intake import models
 
 
-class TestPrebuiltMultiAppPDF(TestCase):
+class TestNewAppsPDF(TestCase):
 
     def test_default_attributes(self):
         fake_org = FakeOrganizationFactory()
@@ -13,7 +14,7 @@ class TestPrebuiltMultiAppPDF(TestCase):
         sub_ids = [sub.id for sub in subs]
         fake_apps = models.Application.objects.filter(
             form_submission__id__in=sub_ids)
-        prebuilt = models.PrebuiltMultiAppPDF(
+        prebuilt = models.NewAppsPDF(
             organization=fake_org)
         prebuilt.save()
         prebuilt.applications.add(*fake_apps)
@@ -21,3 +22,18 @@ class TestPrebuiltMultiAppPDF(TestCase):
         self.assertEqual(prebuilt.organization, fake_org)
         self.assertEqual(set(prebuilt.applications.all()), set(fake_apps))
         self.assertIn('Unbuilt', str(prebuilt))
+
+    def test_two_for_same_org_raises_error(self):
+        org = FakeOrganizationFactory()
+        newapps_pdf = models.NewAppsPDF(organization=org)
+        newapps_pdf.save()
+        other_newapps_pdf = models.NewAppsPDF(organization=org)
+        with self.assertRaises(IntegrityError):
+            other_newapps_pdf.save()
+
+    def test_set_pdf_to_bytes(self):
+        newapps_pdf = models.NewAppsPDF(
+            organization=FakeOrganizationFactory())
+        bytes_ = b'zomg'
+        newapps_pdf.set_bytes(bytes_)
+        self.assertEqual(bytes_, newapps_pdf.get_bytes())

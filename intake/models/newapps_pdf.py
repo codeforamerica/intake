@@ -9,10 +9,15 @@ class NewAppsPDF(BaseModel):
         'intake.Application',
         related_name='prebuilt_multiapp_pdfs')
     pdf = models.FileField(upload_to='prebuilt_multiapp_pdfs/')
-    organization = models.ForeignKey(
-        'user_accounts.Organization',
-        related_name='newapps_pdfs',
+    organization = models.OneToOneField(
+        'user_accounts.Organization', related_name='newapps_pdf',
         on_delete=models.PROTECT)
+
+    def set_bytes(self, bytes_):
+        pass
+
+    def get_bytes(self, bytes_):
+        pass
 
     def __str__(self):
         status = 'Prebuilt' if self.pdf else 'Unbuilt'
