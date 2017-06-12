@@ -1,7 +1,8 @@
 from browserstack.local import Local
 from django.conf import settings
-from selenium import webdriver
+from intake.tests import mock
 from django.core.management import call_command
+from selenium import webdriver
 
 
 USERNAME = settings.BROWSER_STACK_ID
@@ -63,3 +64,4 @@ def after_all(context):
 
 def before_scenario(context, scenario):
     call_command('load_essential_data')
+    mock.fillable_pdf()
