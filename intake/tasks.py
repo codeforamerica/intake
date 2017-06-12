@@ -24,5 +24,6 @@ def remove_application_pdfs(application_id):
     PDFService.rebuild_newapps_pdf_for_removed_application(application_id)
 
 
+@shared_task
 def send_email(*args, **kwargs):
     mail.send_mail(*args, **kwargs)

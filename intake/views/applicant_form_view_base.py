@@ -99,7 +99,7 @@ class ApplicantFormViewBase(FormView):
         submission = SubmissionsService.create_submission(
             form, organizations, self.applicant.id)
         EventsService.form_submitted(submission)
-        SubmissionsService.send_to_new_apps_bundle_if_needed(
+        SubmissionsService.send_to_newapps_bundle_if_needed(
             submission, organizations=organizations)
         number = models.FormSubmission.objects.count()
         notifications.slack_new_submission.send(

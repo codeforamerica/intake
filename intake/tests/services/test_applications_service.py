@@ -29,7 +29,7 @@ class TestGetApplicationsIndexForOrgUser(TestCase):
     def test_all_results_for_org_who_can_transfer(self):
         user = User.objects.filter(
             profile__organization__county__slug='alameda').first()
-        with self.assertNumQueries(8):
+        with self.assertNumQueries(7):
             results = AppsService.get_all_applications_for_org_user(user, 1)
         self.assertTrue(results.object_list)
         for thing in results:
@@ -44,7 +44,7 @@ class TestGetApplicationsIndexForOrgUser(TestCase):
             organization__county__slug='alameda').first()
         TransferService.transfer_application(
             user, application, to_org, 'food replicator malfunction')
-        with self.assertNumQueries(8):
+        with self.assertNumQueries(7):
             results = AppsService.get_all_applications_for_org_user(user, 1)
         self.assertTrue(
             any([
@@ -62,7 +62,7 @@ class TestGetApplicationsIndexForOrgUser(TestCase):
                 author, application, to_org, 'temporal anomalies')
         user = User.objects.filter(
             profile__organization__slug='ebclc')[0]
-        with self.assertNumQueries(17):
+        with self.assertNumQueries(16):
             results = AppsService.get_all_applications_for_org_user(user, 1)
         transferred_apps = [
             app for app in results if app['incoming_transfers']]
