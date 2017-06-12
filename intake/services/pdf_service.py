@@ -1,44 +1,40 @@
 from django.db.models import Count
-from django.utils import timezone as timezone_utils
-from django.core.files.uploadedfile import SimpleUploadedFile
-from intake import models, exceptions, constants
+from intake import models, exceptions
 import intake.services.applications_service as AppsService
 from user_accounts.models import Organization
 
 
-def set_single_newapps_pdf_to_bytes(bytes_):
-    prebuilts = models.NewAppsPDF.objects.filter(
-        organization__slug='sf_pubdef')
-    if prebuilts.count() > 1:
-        raise exceptions.MultiplePrebuiltPDFsError(
-            "{} prebuilt pdfs found. There should only be 1.")
-    prebuilt = prebuilts.first()
-    now_str = timezone_utils.now().astimezone(
-        constants.PACIFIC_TIME).strftime('%Y-%m-%d_%H:%M')
-    filename = 'sf_pubdef_new_apps_{}.pdf'.format(now_str)
-    prebuilt.pdf = SimpleUploadedFile(
-        filename, bytes_, content_type='application/pdf')
-    prebuilt.save()
-    return prebuilt
-
-
 def prebuild_newapps_pdf_for_san_francisco():
-    # get unread applications
-    # for any unreads that do not have a pdf, make one (and alert)
-    # concatenate all the pdfs together
+    """Gets or creates a NewAppsPDF for San Francisco
+        links it to all the unread applications
+        and rebuilds the PDF
+    """
     sf_pubdef = Organization.objects.get(slug='sf_pubdef')
+    # get or create the NewAppsPDF
+    newapps_pdf = models.NewAppsPDF.objects.filter(
+        organization_id=sf_pubdef.id).first()
+    if not newapps_pdf:
+        newapps_pdf = models.NewAppsPDF(
+            organization_id=sf_pubdef.id)
+        # get the unread apps
     unread_apps = AppsService.get_unread_applications_for_org(sf_pubdef)
     unread_app_ids = [app.id for app in unread_apps]
     unread_apps_without_pdfs = models.Application.objects.annotate(
         filled_pdf_count=Count('form_submission')
     ).filter(id__in=unread_app_ids, filled_pdf_count=0)
+    # build individual filled pdfs if necessary
     for app in unread_apps_without_pdfs:
         fill_pdf_for_application(app.id)
+    # get all the filled PDFs and join them to create the group pdf
     filled_pdfs = models.FilledPDF.objects.filter(
         submission__applications__id__in=unread_app_ids)
-    return set_single_newapps_pdf_to_bytes(
+    newapps_pdf.set_bytes(
         models.get_parser().join_pdfs(
             filled.pdf for filled in filled_pdfs))
+    newapps_pdf.save()
+    # link unread apps
+    newapps_pdf.applications.add(*unread_apps)
+    return newapps_pdf
 
 
 def fill_pdf_for_application(application_id):
