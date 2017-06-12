@@ -64,4 +64,3 @@ def after_all(context):
 
 def before_scenario(context, scenario):
     call_command('load_essential_data')
-    mock.fillable_pdf()
