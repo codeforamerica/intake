@@ -16,12 +16,15 @@ class NewAppsPDF(BaseModel):
         on_delete=models.PROTECT)
 
     def set_bytes(self, bytes_):
-        now_str = timezone.now().astimezone(
-            PACIFIC_TIME).strftime('%Y-%m-%d_%H:%M')
-        filename = '{}_newapps_{}.pdf'.format(
-            self.organization.slug, now_str)
-        self.pdf = SimpleUploadedFile(
-            filename, bytes_, content_type='application/pdf')
+        if not bytes:
+            self.pdf = None
+        else:
+            now_str = timezone.now().astimezone(
+                PACIFIC_TIME).strftime('%Y-%m-%d_%H:%M')
+            filename = '{}_newapps_{}.pdf'.format(
+                self.organization.slug, now_str)
+            self.pdf = SimpleUploadedFile(
+                filename, bytes_, content_type='application/pdf')
 
     def __str__(self):
         status = 'Prebuilt' if self.pdf else 'Unbuilt'

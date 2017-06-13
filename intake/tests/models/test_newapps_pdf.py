@@ -1,4 +1,3 @@
-from unittest.mock import patch
 from django.test import TestCase
 from django.db.utils import IntegrityError
 from user_accounts.tests.factories import FakeOrganizationFactory
@@ -43,3 +42,14 @@ class TestNewAppsPDF(TestCase):
         fetched = models.NewAppsPDF.objects.first()
         self.assertIn(expected_filename, fetched.pdf.name)
         self.assertEqual(bytes_, fetched.pdf.read())
+
+    def test_set_pdf_to_empty_bytes(self):
+        newapps_pdf = models.NewAppsPDF(
+            organization=FakeOrganizationFactory())
+        bytes_ = b''
+        newapps_pdf.set_bytes(bytes_)
+        newapps_pdf.save()
+        # pull from db to ensure cahnges persist
+        fetched = models.NewAppsPDF.objects.first()
+        self.assertFalse(fetched.pdf)
+        self.assertEqual(None, fetched.pdf)

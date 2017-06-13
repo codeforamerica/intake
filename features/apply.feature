@@ -9,8 +9,8 @@ Feature: User can Apply to CMR
       And it should load css
       And "application_county_list" should say "You are applying for help in Contra Costa County."
      When applicant fills out a county application form with basic answers
-     And applicant fills out additional fields for Contra Costa
-     And submit button in form "county_form" is clicked
+      And applicant fills out additional fields for Contra Costa
+      And submit button in form "county_form" is clicked
      Then it should load "thanks/"
       And it should load css
       And "next_step" should say "Contra Costa County"

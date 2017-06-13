@@ -9,7 +9,9 @@ from .status_update_factory import (
 )
 from .status_notification_factory import StatusNotificationFactory
 
-from .fillable_pdf_factories import FillablePDFFactory
+from .fillable_pdf_factory import FillablePDFFactory
+from .filled_pdf_factory import FilledPDFFactory
+from .newapps_pdf_factory import NewAppsPDFFactory
 
 
 __all__ = [
@@ -21,5 +23,7 @@ __all__ = [
     StatusUpdateFactory,
     StatusUpdateWithNotificationFactory,
     StatusNotificationFactory,
-    FillablePDFFactory
+    FillablePDFFactory,
+    FilledPDFFactory,
+    NewAppsPDFFactory
 ]

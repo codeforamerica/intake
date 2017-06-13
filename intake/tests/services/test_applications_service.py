@@ -20,7 +20,7 @@ class TestGetApplicationsIndexForOrgUser(TestCase):
     def test_all_results_for_org_who_cant_transfer(self):
         user = User.objects.filter(
             profile__organization__county__slug='solano').first()
-        with self.assertNumQueries(7):
+        with self.assertNumQueries(6):
             results = AppsService.get_all_applications_for_org_user(user, 1)
         self.assertTrue(results.object_list)
         for thing in results:
