@@ -3,8 +3,8 @@
 
 {% block content %}
 <div class="container">
-  <div class="row">
-    <div class="col-xs-12 col-sm-6 col-md-6 centered-to-header">
+  <div class="row vertical-padded">
+    <div class="col-xs-12">
       {% if user.groups.filter(name='followup_staff').exists() %}
         <div class="followups-search_module">
           <form>
@@ -21,7 +21,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-xs-12 col-md-10 col_centered">
+    <div class="col-xs-12 col_centered">
       {% include "includes/app_index_navigation.jinja" %}
     </div>
   </div>
