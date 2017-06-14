@@ -33,12 +33,13 @@ def get_applications_for_org(organization):
     ).select_related(*preselect_tables).prefetch_related(*prefetch_tables)
     return qset.order_by('-created').distinct()
 
+UNREAD_APPLICATIONS_FILTER_KWARGS = dict(
+    has_been_opened=False, status_updates__isnull=True)
+
 
 def get_unread_applications_for_org(organization):
-    """TODO: This is a placeholder query which will soon be replaced
-    """
     return get_applications_for_org(organization).filter(
-        has_been_opened=False)
+        **UNREAD_APPLICATIONS_FILTER_KWARGS)
 
 
 def get_applications_for_org_user(user, page_index, **filters):
@@ -61,7 +62,7 @@ def get_all_applications_for_org_user(user, page_index):
 
 def get_unread_applications_for_org_user(user, page_index):
     return get_applications_for_org_user(
-        user, page_index, has_been_opened=False, status_updates__isnull=True)
+        user, page_index, **UNREAD_APPLICATIONS_FILTER_KWARGS)
 
 
 def get_applications_needing_updates_for_org_user(user, page_index):
