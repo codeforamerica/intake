@@ -8,13 +8,13 @@
       {% if user.groups.filter(name='followup_staff').exists() %}
         <div class="followups-search_module">
           <form>
-            <input name="q" type="text" autocomplete="off">
+            <input name="q" placeholder="Search all applications" type="text" autocomplete="off">
           </form>
         </div>
       {% else %}
         <div class="applications-search_module">
           <form>
-            <input name="q" type="text" autocomplete="off"><ul class="applications-autocomplete_results"></ul>
+            <input name="q" placeholder="Search all applications" type="text" autocomplete="off"><ul class="applications-autocomplete_results"></ul>
           </form>
         </div>
       {% endif %}
