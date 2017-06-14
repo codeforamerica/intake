@@ -54,9 +54,8 @@ def get_tabs_for_org_user(organization, active_tab):
         {
             'url': reverse('intake-app_unread_index'),
             'label': 'Unread',
-            'count': models.Application.objects.filter(
-                organization=organization, has_been_opened=False,
-                status_updates__isnull=True).count(),
+            'count': AppsService.get_unread_applications_for_org(
+                        organization).count(),
             'is_active': False},
         {
             'url': reverse('intake-app_needs_update_index'),
