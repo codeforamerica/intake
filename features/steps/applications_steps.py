@@ -60,13 +60,8 @@ def create_searchable_applicant(context, org_slug=None):
 
 @when("I search for the applicant's name")
 def search_by_name(context):
-    try:
-        search_input_selector = 'input[name="q"]'
-        search_input = context.browser.find_element_by_css_selector(
-            search_input_selector)
-    except:
-        body = context.browser.find_element_by_css_selector("body")
-        raise Exception(body.get_attribute("innerHTML"))
+    search_input = context.browser.find_element_by_css_selector(
+        'input[name="q"]')
     search_input.send_keys('Waldini')
     time.sleep(0.4)
 

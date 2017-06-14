@@ -1,4 +1,4 @@
-from unittest.mock import patch, Mock
+from unittest.mock import patch
 from django.test import TestCase
 from django.core.exceptions import ObjectDoesNotExist
 from user_accounts.models import Organization

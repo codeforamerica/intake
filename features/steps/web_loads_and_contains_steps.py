@@ -11,6 +11,7 @@ def load_page(context, url):
 def test_page_loads(context, url):
     browser_url = urlparse(context.browser.current_url)
     context.test.assertEquals(url, browser_url.path[1:])
+    context.test.assertNotIn('Server Error', context.browser.page_source)
 
 
 @given('it loads css')

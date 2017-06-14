@@ -26,7 +26,7 @@
     </div>
   </div>
   <div class="row">
-    {% if perms.intake.view_application_note %}
+    {% if user.groups.filter(name='followup_staff').exists() %}
       {% include "followup_list.jinja" %}
     {% else %}
       {% include "app_reviewer_list.jinja" %}
