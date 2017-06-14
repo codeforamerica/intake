@@ -5,12 +5,19 @@
 <div class="container">
   <div class="row">
     <div class="col-xs-12 col-sm-6 col-md-6 centered-to-header">
-      <div class="applicants-search_module">
-      {# replace this form (copied from tags) with one for autocomplete #}
-        <form>
-          <input name="q" type="text" autocomplete="off"><ul class="applicants-autocomplete_results"></ul>
-        </form>
-      </div>
+      {% if user.groups.filter(name='followup_staff').exists() %}
+        <div class="followups-search_module">
+          <form>
+            <input name="q" type="text" autocomplete="off">
+          </form>
+        </div>
+      {% else %}
+        <div class="applications-search_module">
+          <form>
+            <input name="q" type="text" autocomplete="off"><ul class="applications-autocomplete_results"></ul>
+          </form>
+        </div>
+      {% endif %}
     </div>
   </div>
   <div class="row">

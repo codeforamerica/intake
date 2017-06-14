@@ -31,6 +31,7 @@ def login_as(context, email):
     form_input_steps.fill_text_input(
         context, 'password', settings.TEST_USER_PASSWORD)
     form_input_steps.click_submit_button(context)
+    context.execute_steps('''Then it should load "accounts/profile/"''')
 
 
 @given('I log in as an applicant support user')

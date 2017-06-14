@@ -20,12 +20,9 @@ def submit_app_to_counties(
     first_name, last_name = applicant_name.split(' ')
     counties = list(get_counties_from_county_names_string(county_names))
     substeps = ['Given that "apply/" loads']
-    substeps.append(
-        'When the "counties" checkbox option "{slug}" is clicked'.format(
-            slug=counties.pop(0).slug))
     for county in counties:
         substeps.append(
-            'And the "counties" checkbox option "{slug}" is clicked'.format(
+            'When the "counties" checkbox option "{slug}" is clicked'.format(
                 slug=county.slug))
     substeps.append('''And the "confirm_county_selection" checkbox option "yes" is clicked
         And submit button in form "county_form" is clicked
@@ -34,7 +31,7 @@ def submit_app_to_counties(
         '''.format(name=applicant_name))
     for county in counties:
         substeps.append(
-            'And applicant fills out additional fields for {county}'.format(
+            'When applicant fills out additional fields for {county}'.format(
                 county=county.name))
     substeps.append('''And submit button in form "county_form" is clicked
         Then it should load "thanks/"
