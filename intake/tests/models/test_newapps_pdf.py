@@ -14,8 +14,7 @@ class TestNewAppsPDF(TestCase):
         sub_ids = [sub.id for sub in subs]
         fake_apps = models.Application.objects.filter(
             form_submission__id__in=sub_ids)
-        prebuilt = models.NewAppsPDF(
-            organization=fake_org)
+        prebuilt = models.NewAppsPDF(organization=fake_org)
         prebuilt.save()
         prebuilt.applications.add(*fake_apps)
         self.assertFalse(prebuilt.pdf)
@@ -38,7 +37,7 @@ class TestNewAppsPDF(TestCase):
         newapps_pdf.set_bytes(bytes_)
         newapps_pdf.save()
         expected_filename = 'org-1_newapps'
-        # pull from db to ensure cahnges persist
+        # pull from db to ensure changes persist
         fetched = models.NewAppsPDF.objects.first()
         self.assertIn(expected_filename, fetched.pdf.name)
         self.assertEqual(bytes_, fetched.pdf.read())
@@ -52,4 +51,3 @@ class TestNewAppsPDF(TestCase):
         # pull from db to ensure cahnges persist
         fetched = models.NewAppsPDF.objects.first()
         self.assertFalse(fetched.pdf)
-        self.assertEqual(None, fetched.pdf)

@@ -16,7 +16,7 @@ class NewAppsPDF(BaseModel):
         on_delete=models.PROTECT)
 
     def set_bytes(self, bytes_):
-        if not bytes:
+        if not bytes_:
             self.pdf = None
         else:
             now_str = timezone.now().astimezone(
