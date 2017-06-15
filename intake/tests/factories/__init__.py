@@ -11,7 +11,7 @@ from .status_notification_factory import StatusNotificationFactory
 
 from .fillable_pdf_factory import FillablePDFFactory
 from .filled_pdf_factory import FilledPDFFactory
-from .newapps_pdf_factory import NewAppsPDFFactory
+from .prebuilt_pdf_bundle_factory import PrebuiltPDFBundleFactory
 
 
 __all__ = [
@@ -25,5 +25,5 @@ __all__ = [
     StatusNotificationFactory,
     FillablePDFFactory,
     FilledPDFFactory,
-    NewAppsPDFFactory
+    PrebuiltPDFBundleFactory
 ]

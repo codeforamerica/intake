@@ -61,29 +61,29 @@ def get_prebuilt_pdf_bundle_for_app_id_set(app_ids):
 
 def create_new_pdf_bundle_for_apps(org, apps):
     app_ids = [app.id for app in apps]
-    pdf_bundle = models.NewAppsPDF(organization_id=org.id)
+    pdf_bundle = models.PrebuiltPDFBundle(organization_id=org.id)
     pdf_bundle.save()
     pdf_bundle.applications.add(*apps)
     fill_any_unfilled_pdfs_for_app_ids(app_ids)
     filled_pdfs = models.FilledPDF.objects.filter(
         submission__applications__id__in=app_ids)
     set_bytes_to_filled_pdfs(pdf_bundle, filled_pdfs)
+    return pdf_bundle
 
 
 def update_pdf_bundle_for_san_francisco():
-    """Gets or creates a NewAppsPDF for San Francisco
+    """Gets or creates a PrebuiltPDFBundle for San Francisco
         links it to all the unread applications
         and rebuilds the PDF
     """
     sf_pubdef = Organization.objects.get(slug='sf_pubdef')
-    # get or create the NewAppsPDF
     unread_apps = AppsService.get_unread_applications_for_org(sf_pubdef)
-    app_ids = [app.id for app in unread_apps]
-    if len(app_ids) > 0:
+    if unread_apps.count() > 0:
+        app_ids = [app.id for app in unread_apps]
         pdf_bundle = get_prebuilt_pdf_bundle_for_app_id_set(app_ids)
         if not pdf_bundle:
             pdf_bundle = create_new_pdf_bundle_for_apps(sf_pubdef, unread_apps)
-    return pdf_bundle
+        return pdf_bundle
 
 
 def rebuild_pdf_bundle_for_removed_application(application_id):

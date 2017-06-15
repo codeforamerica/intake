@@ -1,5 +1,4 @@
 from django.test import TestCase
-from django.db.utils import IntegrityError
 from user_accounts.tests.factories import FakeOrganizationFactory
 from intake.tests.factories import FormSubmissionWithOrgsFactory
 from intake import models
@@ -21,14 +20,6 @@ class TestPrebuiltPDFBundle(TestCase):
         self.assertEqual(prebuilt.organization, fake_org)
         self.assertEqual(set(prebuilt.applications.all()), set(fake_apps))
         self.assertIn('Unbuilt', str(prebuilt))
-
-    def test_two_for_same_org_raises_error(self):
-        org = FakeOrganizationFactory()
-        prebuilt = models.PrebuiltPDFBundle(organization=org)
-        prebuilt.save()
-        other_prebuilt = models.PrebuiltPDFBundle(organization=org)
-        with self.assertRaises(IntegrityError):
-            other_prebuilt.save()
 
     def test_set_pdf_to_bytes(self):
         prebuilt = models.PrebuiltPDFBundle(
