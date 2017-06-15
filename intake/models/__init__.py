@@ -2,7 +2,7 @@ from . import fields
 from .county import County, CountyManager
 from .pdfs import (
     get_parser, FillablePDF, FilledPDF)
-from .newapps_pdf import NewAppsPDF
+from .prebuilt_pdf_bundle import PrebuiltPDFBundle
 from .visitor import Visitor
 from .applicant import Applicant
 from .application import Application
@@ -48,7 +48,7 @@ __all__ = [
     MissingPDFsError,
     FillablePDF,
     FilledPDF,
-    NewAppsPDF,
+    PrebuiltPDFBundle,
     NextStep,
     StatusType,
     StatusUpdate,

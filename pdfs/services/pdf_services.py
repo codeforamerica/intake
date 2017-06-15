@@ -5,17 +5,6 @@ import intake.services.applications_service as AppsService
 from user_accounts.models import Organization
 
 
-def get_prebuilt_pdf_bundle_for_app_id_set(app_ids):
-    # match the number of IDs
-    matching_bundles = models.PrebuiltPDFBundle.objects.annotate(
-        app_count=Count('applications')
-    ).filter(app_count=len(app_ids))
-    # ensure it includes each ID
-    for app_id in app_ids:
-        matching_bundles.filter(applications__id=app_id)
-    return matching_bundles.first()
-
-
 def set_bytes_to_filled_pdfs(instance, filled_pdfs):
     if len(filled_pdfs) == 0:
         instance.pdf = None
