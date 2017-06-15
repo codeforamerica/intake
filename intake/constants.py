@@ -217,11 +217,7 @@ COUNTY_CHOICES = (
             'Sebastopol, Bodega Bay, Healdsburg, or Cloverdale)')),
     (Counties.SANTA_BARBARA, _(
         'Santa Barbara County (near Santa Maria, Santa Barbara, Goleta, '
-        'Carpinteria, Solvang, and Lompoc)')),
-    (Counties.VENTURA, _(
-            'Ventura County (near Oxnard, Thousand Oaks, Simi Valley, '
-            'Camarillo, Ojai, Moorpark, Fillmore, Santa Paula, or '
-            'Ventura)')),
+        'Carpinteria, Solvang, and Lompoc)'))
 )
 
 if SCOPE_TO_LIVE_COUNTIES and len(COUNTY_CHOICES) == 3:
@@ -242,6 +238,10 @@ if not SCOPE_TO_LIVE_COUNTIES:
         (Counties.YOLO, _(
             'Yolo County (near Davis, West Sacramento, Winters, and '
             'Woodland)')),
+        (Counties.VENTURA, _(
+            'Ventura County (near Oxnard, Thousand Oaks, Simi Valley, '
+            'Camarillo, Ojai, Moorpark, Fillmore, Santa Paula, or '
+            'Ventura)')),
     )
 
 COUNTY_CHOICES = sorted(COUNTY_CHOICES, key=lambda item: item[1])
