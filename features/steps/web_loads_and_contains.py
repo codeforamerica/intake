@@ -102,3 +102,10 @@ def type_in_email_input(context, input_name, value):
     selector = "input[name='{}'][type='email']".format(input_name)
     text = context.browser.find_element_by_css_selector(selector)
     text.send_keys(value)
+
+
+@when('the "{input_name}" email input is set to "{value}"')
+def type_in_email_input(context, input_name, value):
+    selector = "input[name='{}'][type='email']".format(input_name)
+    text = context.browser.find_element_by_css_selector(selector)
+    text.send_keys(value)
