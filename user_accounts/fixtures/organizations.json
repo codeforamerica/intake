@@ -485,5 +485,34 @@
     "notify_on_weekends": false,
     "needs_applicant_followups": false
   }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Stanislaus County Public Defender",
+    "slug": "stanislaus_pubdef",
+    "county": [
+      "stanislaus"
+    ],
+    "website": "http://www.stancounty.com/publicdefender/",
+    "blurb": "The Stanislaus County Public Defender's Office helps people with arrests or convictions in Stanislaus County.",
+    "is_receiving_agency": true,
+    "is_accepting_applications": true,
+    "is_checking_notifications": true,
+    "is_live": false,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": false,
+    "show_pdf_only": false,
+    "short_confirmation_message": "The Stanislaus County Public Defender will contact you in 2-4 weeks with next steps.",
+    "long_confirmation_message": "The Stanislaus County Public Defender will contact you in 2-4 weeks with your next steps.",
+    "short_followup_message": "Has the Stanislaus County Public Defender contacted you and told you your next steps?",
+    "long_followup_message": "Has the Stanislaus County Public Defender contacted you and told you your next steps?",
+    "address": "1021 I Street, Suite 201\nP.O. Box 3428\nModesto, CA 95353-3428",
+    "phone_number": "(209) 525-4200",
+    "fax_number": "(209) 525-4244",
+    "email": "",
+    "notify_on_weekends": false,
+    "needs_applicant_followups": false
+  }
 }
 ]
