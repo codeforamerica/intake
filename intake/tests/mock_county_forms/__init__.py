@@ -347,6 +347,10 @@ class Provider(BaseProvider):
             )
         return data
 
+    def stanislaus_pubdef_answers(self, **overrides):
+        data = self.fresno_pubdef_answers(**overrides)
+        return data
+
     def all_county_answers(self, **overrides):
         data = {
             **self.sf_county_form_answers(),
@@ -360,6 +364,7 @@ class Provider(BaseProvider):
             **self.sonoma_pubdef_answers(),
             **self.tulare_pubdef_answers(),
             **self.yolo_pubdef_answers(),
+            **self.stanislaus_pubdef_answers(),
         }
         data.update(overrides)
         return data
