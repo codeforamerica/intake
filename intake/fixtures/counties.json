@@ -133,5 +133,14 @@
     "name": "Yolo",
     "description": "Yolo County (near Davis, West Sacramento, Winters, and Woodland)"
   }
+},
+{
+  "model": "intake.county",
+  "pk": 15,
+  "fields": {
+    "slug": "stanislaus",
+    "name": "Stanislaus",
+    "description": "Stanislaus County (near Modesto, Turlock, and Ceres)"
+  }
 }
 ]
