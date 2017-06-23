@@ -1,12 +1,15 @@
+import os
 from django.core.files.uploadedfile import SimpleUploadedFile
 import factory
+from django.conf import settings
 from intake import models
 from user_accounts.models import Organization
 from .fillable_pdf_factory import FillablePDFFactory
 from .form_submission_factory import FormSubmissionWithOrgsFactory
 
 
-FILLED_SAMPLE_FORM_PATH = 'tests/sample_pdfs/sample_form_filled.pdf'
+FILLED_SAMPLE_FORM_PATH = os.path.join(
+    settings.REPO_DIR, 'tests/sample_pdfs/sample_form_filled.pdf')
 
 
 def make_sub_to_sf(*args, **kwargs):
