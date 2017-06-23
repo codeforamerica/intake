@@ -1,8 +1,10 @@
 from django.db.models import Count
 from project import alerts
-from intake import models, exceptions
+from intake import models, exceptions, utils
 import intake.services.applications_service as AppsService
 from user_accounts.models import Organization
+import intake.services.display_form_service as DisplayFormService
+from printing.pdf_form_display import PDFFormDisplay
 
 
 def fill_pdf_for_application(application_id):
@@ -59,6 +61,18 @@ def get_prebuilt_pdf_bundle_for_app_id_set(app_ids):
     return matching_bundles.first()
 
 
+def get_or_create_prebuilt_pdf_for_app_ids(app_ids):
+    prebuilt = get_prebuilt_pdf_bundle_for_app_id_set(app_ids)
+    if not prebuilt:
+        subject = 'Missing Prebuilt PDF Bundle'
+        message = \
+            'Querying with ids \n{}\ndid not return a prebuilt pdf'.format(
+                app_ids)
+        alerts.send_email_to_admins(subject=subject, message=message)
+        prebuilt = update_pdf_bundle_for_san_francisco()
+    return prebuilt
+
+
 def create_new_pdf_bundle_for_apps(org, apps):
     app_ids = [app.id for app in apps]
     pdf_bundle = models.PrebuiltPDFBundle(organization_id=org.id)
@@ -91,3 +105,91 @@ def rebuild_pdf_bundle_for_removed_application(application_id):
         organization__applications__id=application_id).exists()
     if app_is_for_org_with_fillable:
         update_pdf_bundle_for_san_francisco()
+
+
+def get_applicant_name(form):
+    return '{}, {}'.format(
+        form.last_name.get_display_value(),
+        ' '.join([
+            n for n in [
+                form.first_name.get_display_value(),
+                form.middle_name.get_display_value()
+            ] if n
+        ])
+    )
+
+
+def get_printout_for_submission(user, submission):
+    # get the correct form
+    form, letter = DisplayFormService.get_display_form_for_user_and_submission(
+        user, submission)
+    # use the form to serialize the submission
+    pdf_display = PDFFormDisplay(form, letter)
+    canvas, pdf = pdf_display.render(
+        title=get_applicant_name(form) + " - Case Details")
+    filename = '{}-{}-{}-CaseDetails.pdf'.format(
+        form.last_name.get_display_value(),
+        form.first_name.get_display_value(),
+        submission.id)
+    pdf.seek(0)
+    return filename, pdf.read()
+
+
+def get_printout_for_application(application):
+    form, letter = DisplayFormService.get_display_form_for_application(
+        application)
+    pdf_display = PDFFormDisplay(form, letter)
+    canvas, pdf = pdf_display.render(
+        title=get_applicant_name(form) + "- Case Details")
+    filename = '{}-{}-{}-CaseDetails.pdf'.format(
+        form.last_name.get_display_value(),
+        form.first_name.get_display_value(),
+        application.form_submission_id)
+    pdf.seek(0)
+    return filename, pdf.read()
+
+
+def concatenated_printout(form_letter_tuples):
+    canvas = None
+    pdf_file = None
+    count = len(form_letter_tuples)
+    for i, form_letter_tuple in enumerate(form_letter_tuples):
+        if i == 0:
+            pdf_display = PDFFormDisplay(*form_letter_tuple)
+            canvas, pdf_file = pdf_display.render(save=False)
+        else:
+            pdf_display = PDFFormDisplay(*form_letter_tuple, canvas=canvas)
+            if i == (count - 1):
+                canvas, pdf = pdf_display.render(
+                    save=True,
+                    title="{} Applications from Code for America".format(
+                        count))
+            else:
+                canvas, pdf = pdf_display.render(save=False)
+    today = utils.get_todays_date()
+    filename = '{}-{}-Applications-CodeForAmerica.pdf'.format(
+        today.strftime('%Y-%m-%d'), count)
+    pdf_file.seek(0)
+    return filename, pdf_file.read()
+
+
+def get_concatenated_printout_for_bundle(user, bundle):
+    submissions = list(bundle.submissions.all())
+    count = len(submissions)
+    if count == 1:
+        return get_printout_for_submission(user, submissions[0])
+    else:
+        return concatenated_printout([
+            DisplayFormService.get_display_form_for_user_and_submission(
+                user, submission)
+            for submission in submissions])
+
+
+def get_concatenated_printout_for_applications(applications):
+    count = len(applications)
+    if count == 1:
+        return get_printout_for_application(applications[0])
+    else:
+        return concatenated_printout([
+            DisplayFormService.get_display_form_for_application(app)
+            for app in applications])

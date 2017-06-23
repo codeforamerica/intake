@@ -5,7 +5,7 @@ from django.views.generic.edit import FormView
 from django.core.urlresolvers import reverse_lazy
 import intake.services.transfers_service as TransferService
 from django.shortcuts import redirect
-from intake.views.app_detail_views import not_allowed
+from intake.views.base_views import not_allowed
 
 
 class ApplicationTransferView(FormView):

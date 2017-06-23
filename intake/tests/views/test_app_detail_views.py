@@ -64,7 +64,7 @@ class TestApplicationDetail(AppDetailFixturesBaseTestCase):
         self.be_ccpubdef_user()
         submission = self.sf_pubdef_submissions[0]
         response = self.get_page(submission)
-        self.assertRedirects(response, reverse('intake-app_index'))
+        self.assertRedirects(response, reverse('user_accounts-profile'))
         slack.assert_not_called()
 
     @patch('intake.notifications.slack_submissions_viewed.send')
@@ -262,7 +262,7 @@ class TestApplicationHistory(AppDetailFixturesBaseTestCase):
         self.be_ccpubdef_user()
         submission = self.sf_pubdef_submissions[0]
         response = self.get_page(submission)
-        self.assertRedirects(response, reverse('intake-app_index'))
+        self.assertRedirects(response, reverse('user_accounts-profile'))
         slack.assert_not_called()
 
     @patch('intake.notifications.slack_submissions_viewed.send')

@@ -4,19 +4,9 @@ from django.views.generic.base import TemplateView
 from django.contrib import messages
 import intake.services.submissions as SubmissionsService
 import intake.services.applications_service as AppsService
+import intake.services.display_form_service as DisplayFormService
 from intake import models
-from intake.views.base_views import ViewAppDetailsMixin
-
-
-NOT_ALLOWED_MESSAGE = str(
-    "Sorry, you are not allowed to access that client information. "
-    "If you have any questions, please contact us at "
-    "clearmyrecord@codeforamerica.org")
-
-
-def not_allowed(request):
-    messages.error(request, NOT_ALLOWED_MESSAGE)
-    return redirect('intake-app_index')
+from intake.views.base_views import ViewAppDetailsMixin, not_allowed
 
 
 class ApplicationDetail(ViewAppDetailsMixin, TemplateView):
@@ -43,7 +33,8 @@ class ApplicationDetail(ViewAppDetailsMixin, TemplateView):
         context = super().get_context_data(*args, **kwargs)
         self.submission = self.submissions[0]
         display_form, letter_display = \
-            self.submission.get_display_form_for_user(self.request.user)
+            DisplayFormService.get_display_form_for_user_and_submission(
+                self.request.user, self.submission)
         applications = models.Application.objects.filter(
             form_submission=self.submission)
         if not self.request.user.is_staff:

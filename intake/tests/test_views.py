@@ -130,59 +130,6 @@ class TestViews(IntakeDataTestCase):
                              )
                              )
 
-    @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
-    @patch('intake.notifications.slack_simple.send')
-    def test_authenticated_user_can_see_pdf_bundle(self, slack):
-        self.be_sfpubdef_user()
-        ids = models.FormSubmission.objects.filter(
-            organizations=self.sf_pubdef).values_list('pk', flat=True)
-        url = url_with_ids('intake-pdf_bundle', ids)
-        bundle = self.client.get(url, follow=True)
-        self.assertEqual(bundle.status_code, 200)
-
-    @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
-    @patch('intake.notifications.slack_simple.send')
-    def test_staff_user_can_see_pdf_bundle(self, slack):
-        self.be_cfa_user()
-        submissions = self.sf_pubdef_submissions
-        bundle = BundlesService.create_bundle_from_submissions(
-            submissions=submissions,
-            organization=self.sf_pubdef)
-        ids = [s.id for s in submissions]
-        url = url_with_ids('intake-pdf_bundle', ids)
-        response = self.client.get(url)
-        self.assertRedirects(response, bundle.get_pdf_bundle_url())
-        pdf_response = self.client.get(response.url)
-        self.assertEqual(pdf_response.status_code, 200)
-
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_authenticated_user_can_see_app_bundle(self, slack):
-        self.be_cfa_user()
-        submissions = self.submissions
-        ids = [s.id for s in submissions]
-        url = url_with_ids('intake-app_bundle', ids)
-        bundle = self.client.get(url)
-        self.assertEqual(bundle.status_code, 200)
-
-    @patch(
-        'intake.views.applicant_form_view_base.notifications'
-        '.slack_submissions_processed.send')
-    def test_agency_user_can_mark_apps_as_processed(self, slack):
-        self.be_sfpubdef_user()
-        submissions = self.sf_pubdef_submissions
-        ids = [s.id for s in submissions]
-        mark_link = url_with_ids('intake-mark_processed', ids)
-        marked = self.client.get(mark_link)
-        self.assert_called_once_with_types(
-            slack,
-            submissions='list',
-            user='User')
-        self.assertRedirects(marked, reverse('intake-app_index'))
-        args, kwargs = slack.call_args
-        for sub in kwargs['submissions']:
-            self.assertTrue(sub.last_processed_by_agency())
-            self.assertIn(sub.id, ids)
-
     def test_old_urls_return_permanent_redirect(self):
         # redirecting the auth views does not seem necessary
         redirects = {

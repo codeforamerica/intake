@@ -1,8 +1,9 @@
 from django.db import models
 from django.utils import timezone
+from django.core.files.uploadedfile import SimpleUploadedFile
+from project.services import query_params
 from intake.constants import PACIFIC_TIME
 from intake.models.abstract_base_models import BaseModel
-from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 class PrebuiltPDFBundle(BaseModel):
@@ -25,6 +26,11 @@ class PrebuiltPDFBundle(BaseModel):
                 self.organization.slug, now_str)
             self.pdf = SimpleUploadedFile(
                 filename, bytes_, content_type='application/pdf')
+
+    def get_absolute_url(self):
+        return query_params.get_url_for_ids(
+            'intake-pdf_bundle_file_view',
+            self.applications.values_list('id', flat=True))
 
     def __str__(self):
         status = 'Prebuilt' if self.pdf else 'Unbuilt'

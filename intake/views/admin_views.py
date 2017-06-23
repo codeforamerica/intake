@@ -2,20 +2,20 @@ from django.shortcuts import redirect, get_object_or_404
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.views.generic import View
 from django.views.generic.base import TemplateView
-
 from django.http import Http404, HttpResponse
 from django.template.response import TemplateResponse
 
 from intake import models, notifications, utils
-from printing.pdf_form_display import PDFFormDisplay
 
 import intake.services.submissions as SubmissionsService
 import intake.services.applications_service as AppsService
 import intake.services.bundles as BundlesService
 import intake.services.tags as TagsService
+import intake.services.pdf_service as PDFService
+import intake.services.display_form_service as DisplayFormService
 
-from intake.views.base_views import ViewAppDetailsMixin
-from intake.views.app_detail_views import ApplicationDetail, not_allowed
+from intake.views.base_views import ViewAppDetailsMixin, not_allowed
+from intake.views.app_detail_views import ApplicationDetail
 
 
 class FilledPDF(ApplicationDetail):
@@ -135,6 +135,7 @@ class ApplicationUnreadIndex(ApplicationIndex):
             self.request.user.profile.organization, 'Unread')
         context['app_index_scope_title'] = "{} Unread Applications".format(
             count)
+        context['print_all_link'] = reverse('intake-pdf_bundle_wrapper_view')
         return context
 
     def get(self, request):
@@ -192,7 +193,8 @@ class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
         bundle = BundlesService\
             .get_or_create_for_submissions_and_user(submissions, request.user)
         forms = [
-            submission.get_display_form_for_user(request.user)
+            DisplayFormService.get_display_form_for_user_and_submission(
+                request.user, submission)
             for submission in submissions]
         context = dict(
             bundle=bundle,
@@ -219,7 +221,8 @@ class ApplicationBundleDetail(ApplicationDetail):
         submissions = list(
             request.user.profile.filter_submissions(bundle.submissions.all()))
         forms = [
-            submission.get_display_form_for_user(request.user)
+            DisplayFormService.get_display_form_for_user_and_submission(
+                request.user, submission)
             for submission in submissions]
         context = dict(
             bundle=bundle,
@@ -324,88 +327,6 @@ class MarkProcessed(MarkSubmissionStepView):
             **self.get_notification_context())
 
 
-def get_applicant_name(form):
-    return '{}, {}'.format(
-        form.last_name.get_display_value(),
-        ' '.join([
-            n for n in [
-                form.first_name.get_display_value(),
-                form.middle_name.get_display_value()
-            ] if n
-        ])
-    )
-
-
-def get_printout_for_submission(user, submission):
-    # get the correct form
-    form, letter = submission.get_display_form_for_user(user)
-    # use the form to serialize the submission
-    pdf_display = PDFFormDisplay(form, letter)
-    canvas, pdf = pdf_display.render(
-        title=get_applicant_name(form) + " - Case Details"
-    )
-    filename = '{}-{}-{}-CaseDetails.pdf'.format(
-        form.last_name.get_display_value(),
-        form.first_name.get_display_value(),
-        submission.id
-    )
-    pdf.seek(0)
-    return filename, pdf.read()
-
-
-def get_concatenated_printout_for_bundle(user, bundle):
-    # for each of the submissions,
-    canvas = None
-    pdf_file = None
-    submissions = list(bundle.submissions.all())
-    count = len(submissions)
-    if count == 1:
-        return get_printout_for_submission(user, submissions[0])
-    for i, submission in enumerate(submissions):
-        form, letter = submission.get_display_form_for_user(user)
-        if i == 0:
-            pdf_display = PDFFormDisplay(form, letter)
-            canvas, pdf_file = pdf_display.render(save=False)
-        elif i > 0 and i < (count - 1):
-            pdf_display = PDFFormDisplay(form, letter, canvas=canvas)
-            canvas, pdf = pdf_display.render(save=False)
-        else:
-            pdf_display = PDFFormDisplay(form, letter, canvas=canvas)
-            canvas, pdf = pdf_display.render(
-                save=True,
-                title="{} Applications from Code for America".format(count))
-    today = utils.get_todays_date()
-    filename = '{}-{}-Applications-CodeForAmerica.pdf'.format(
-        today.strftime('%Y-%m-%d'),
-        count
-    )
-    pdf_file.seek(0)
-    return filename, pdf_file.read()
-
-
-class CasePrintoutPDFView(ApplicationDetail):
-    """Serves a PDF with full case details, based on the details
-    needed by the user's organization
-
-    The PDF is created on the fly
-    """
-
-    def get(self, request, submission_id):
-        submission = get_object_or_404(
-            models.FormSubmission, pk=int(submission_id))
-        if not submission.organizations.filter(
-                id=request.user.profile.organization_id).exists():
-            return not_allowed(request)
-        SubmissionsService.mark_opened(
-            submission, request.user, send_slack_notification=False)
-        filename, pdf_bytes = get_printout_for_submission(
-            request.user,
-            submission)
-        response = HttpResponse(pdf_bytes, content_type='application/pdf')
-        response['Content-Disposition'] = 'filename="{}"'.format(filename)
-        return response
-
-
 class CaseBundlePrintoutPDFView(ViewAppDetailsMixin, View):
     """Returns a concatenated PDF of case detail PDFs
     for an org user
@@ -419,7 +340,7 @@ class CaseBundlePrintoutPDFView(ViewAppDetailsMixin, View):
             return not_allowed(request)
         BundlesService.mark_opened(
             bundle, request.user, send_slack_notification=False)
-        filename, pdf_bytes = get_concatenated_printout_for_bundle(
+        filename, pdf_bytes = PDFService.get_concatenated_printout_for_bundle(
             request.user, bundle)
         response = HttpResponse(
             pdf_bytes, content_type='application/pdf')
@@ -436,5 +357,4 @@ app_bundle = ApplicationBundle.as_view()
 mark_processed = MarkProcessed.as_view()
 app_bundle_detail = ApplicationBundleDetail.as_view()
 app_bundle_detail_pdf = ApplicationBundleDetailPDFView.as_view()
-case_printout = CasePrintoutPDFView.as_view()
 case_bundle_printout = CaseBundlePrintoutPDFView.as_view()
