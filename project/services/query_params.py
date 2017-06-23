@@ -16,5 +16,5 @@ def get_ids_from_query_params(request, key='ids', sep=','):
 
 def get_url_for_ids(view_name, ids, key='ids'):
     url = reverse(view_name)
-    params = '?' + key + '=' + ','.join([str(i) for i in sorted(ids)])
+    params = '?' + key + '=' + ','.join(sorted([str(i) for i in ids]))
     return url + params
