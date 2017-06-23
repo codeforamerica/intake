@@ -5,6 +5,7 @@ from django.views.generic.base import TemplateView
 from django.http import Http404, HttpResponse
 from django.template.response import TemplateResponse
 
+from project.services.query_params import get_url_for_ids
 from intake import models, notifications, utils
 
 import intake.services.submissions as SubmissionsService
@@ -135,7 +136,12 @@ class ApplicationUnreadIndex(ApplicationIndex):
             self.request.user.profile.organization, 'Unread')
         context['app_index_scope_title'] = "{} Unread Applications".format(
             count)
-        context['print_all_link'] = reverse('intake-pdf_bundle_wrapper_view')
+        context['print_all_link'] = get_url_for_ids(
+            'intake-pdf_bundle_wrapper_view',
+            AppsService.get_applications_for_org(
+                self.request.user.profile.organization
+                    ).values_list('id', flat=True)
+            )
         return context
 
     def get(self, request):

@@ -16,7 +16,7 @@ def test_flash_message_contains_text(context, text):
 
 @when('I click the "{link_text}" link to "{url}"')
 def follow_link_with_text(context, link_text, url):
-    selector = 'a[href="{url}"]'.format(url=url)
+    selector = 'a[href*="{url}"]'.format(url=url)
     element = context.browser.find_element_by_css_selector(selector)
     # it's a slight break in decorum to assert here, but seems like a useful
     # way to follow a link and be sure it says the right thing to the user
@@ -27,13 +27,15 @@ def follow_link_with_text(context, link_text, url):
 @then('it should load "{url}"')
 def test_page_loads(context, url):
     browser_url = urlparse(context.browser.current_url)
-    context.test.assertEquals(url, browser_url.path[1:])
+    expected_url = urlparse(urljoin(context.test.live_server_url, url))
+    context.test.assertEquals(
+        expected_url.path, browser_url.path)
     context.test.assertNotIn('Server Error', context.browser.page_source)
 
 
 @then('it should have an iframe with "{iframe_src_url}"')
 def test_iframe_exists_for_url(context, iframe_src_url):
-    selector = 'iframe[src="{}"]'.format(iframe_src_url)
+    selector = 'iframe[src*="{}"]'.format(iframe_src_url)
     element = context.browser.find_element_by_css_selector(selector)
     context.test.assertTrue(element)
 
