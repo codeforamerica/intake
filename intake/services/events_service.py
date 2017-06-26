@@ -2,6 +2,7 @@ import intake.services.applicants as ApplicantsService
 import project.services.logging_service as LoggingService
 from intake.services import status_notifications as SNService
 from intake.tasks import log_to_mixpanel
+from django.core.urlresolvers import resolve
 
 
 def form_started(request, counties):
@@ -69,6 +70,23 @@ def page_viewed(visitor, url):
         url=url,
         referrer=visitor.referrer,
         source=visitor.source)
+
+
+def user_page_viewed(request):
+    event_name = 'user_page_viewed'
+    log_to_mixpanel.delay(
+        distinct_id=request.user.profile.get_uuid(),
+        event_name=event_name,
+        view=request.get_full_path(),
+        referrer=request.session.get('referrer', ''),
+        source=request.session.get('source', ''))
+    print("USER PAGE VIEWED STUFF HERE")
+    print("distinct id = {}, event name = {}, view = {}, referrer = {}, \
+        source = {}".format(request.user.profile.get_uuid(),
+                            event_name,
+                            resolve(request.get_full_path())._func_path,
+                            request.session.get('referrer', ''),
+                            request.session.get('source', '')))
 
 
 def site_entered(visitor, url):
