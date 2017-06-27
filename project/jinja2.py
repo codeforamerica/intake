@@ -1,17 +1,19 @@
-from django.contrib.humanize.templatetags import humanize
+from datetime import datetime
+from urllib.parse import urljoin
+from pytz import timezone
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
-import phonenumbers
-from django.conf import settings
-from jinja2 import Environment
-from urllib.parse import urljoin
-from datetime import datetime
-from pytz import timezone
-from jinja2 import Markup
 from django.utils.html import mark_safe
-from markupsafe import escape
-from rest_framework.renderers import JSONRenderer
+from django.conf import settings
+from django.contrib.humanize.templatetags import humanize
 from django.contrib.staticfiles.storage import staticfiles_storage
+from rest_framework.renderers import JSONRenderer
+from jinja2 import Environment, Markup
+from markupsafe import escape
+import phonenumbers
+from project.services.query_params import get_url_for_ids
+
+url_with_ids = get_url_for_ids
 
 
 def loudfail_static(*args, **kwargs):
@@ -66,12 +68,6 @@ def namify(s=''):
     if first == first.lower() or first == first.upper():
         first = first.capitalize()
     return ' '.join([first] + words[1:])
-
-
-def url_with_ids(view_name, ids):
-    url = reverse(view_name)
-    params = '?ids=' + ','.join([str(i) for i in ids])
-    return url + params
 
 
 def oxford_comma(things, use_or=False):

@@ -1,18 +1,17 @@
-from behave import when
+from behave import when, given
 from intake import models
+from features.steps.language_hacks import oxford_comma_text_to_list
 
 
 def get_counties_from_county_names_string(county_names_string):
     """converts an oxford comma string of county names in to
         county model instances
     """
-    county_names = []
-    for chunk in county_names_string.split(', '):
-        county_names.extend(
-            [name.strip() for name in chunk.split(' and ')])
-    return models.County.objects.filter(name__in=county_names)
+    return models.County.objects.filter(
+        name__in=oxford_comma_text_to_list(county_names_string))
 
 
+@given('"{applicant_name}" applies to "{county_names}"')
 @when('"{applicant_name}" applies to "{county_names}"')
 def submit_app_to_counties(
         context, applicant_name="Waldo Waldini",

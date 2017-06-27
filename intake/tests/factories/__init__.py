@@ -11,10 +11,22 @@ from .status_notification_factory import StatusNotificationFactory
 
 from .fillable_pdf_factory import FillablePDFFactory
 from .filled_pdf_factory import FilledPDFFactory
-from .newapps_pdf_factory import NewAppsPDFFactory
+from .prebuilt_pdf_bundle_factory import PrebuiltPDFBundleFactory
+from .factory_shortcuts import (
+    make_apps_for,
+    make_app_ids_for,
+    make_apps_for_sf,
+    make_app_ids_for_sf,
+    apps_queryset,
+)
 
 
 __all__ = [
+    make_apps_for,
+    make_app_ids_for,
+    make_apps_for_sf,
+    make_app_ids_for_sf,
+    apps_queryset,
     VisitorFactory,
     ApplicantFactory,
     FormSubmissionFactory,
@@ -25,5 +37,5 @@ __all__ = [
     StatusNotificationFactory,
     FillablePDFFactory,
     FilledPDFFactory,
-    NewAppsPDFFactory
+    PrebuiltPDFBundleFactory
 ]
