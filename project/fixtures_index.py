@@ -33,6 +33,7 @@ MOCK_APPLICATION_FIXTURES = (
     'mock_2_submissions_to_ventura_pubdef',
     'mock_2_submissions_to_santa_barbara_pubdef',
     'mock_2_submissions_to_yolo_pubdef',
+    'mock_2_submissions_to_stanislaus_pubdef',
     'mock_1_submission_to_multiple_orgs',
 )
 
@@ -64,6 +65,8 @@ MOCK_BUNDLE_FIXTURES = (
     'mock_1_bundle_to_tulare_pubdef',
     'mock_1_bundle_to_ventura_pubdef',
     'mock_1_bundle_to_santa_barbara_pubdef',
+    'mock_1_bundle_to_yolo_pubdef',
+    'mock_1_bundle_to_stanislaus_pubdef',
 )
 
 # These all the fake mocked data

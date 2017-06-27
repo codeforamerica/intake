@@ -46,6 +46,7 @@ REASON_FOR_APPLYING_CHOICES = (
     ('lost_job', _('Was asked to leave job because of my record')),
     ('early_probation', _('End probation early')),
     ('homeless', _('Homeless or on social services')),
+    ('new_case', _('I have a new case pending')),
     ('other', _('My reason is not listed')),
 )
 
@@ -80,6 +81,7 @@ class Organizations:
     VENTURA_PUBDEF = 'ventura_pubdef'
     SANTA_BARBARA_PUBDEF = 'santa_barbara_pubdef'
     YOLO_PUBDEF = 'yolo_pubdef'
+    STANISLAUS_PUBDEF = 'stanislaus_pubdef'
 
 DEFAULT_ORGANIZATION_ORDER = [
     Organizations.ALL,
@@ -99,6 +101,7 @@ DEFAULT_ORGANIZATION_ORDER = [
     Organizations.VENTURA_PUBDEF,
     Organizations.SANTA_BARBARA_PUBDEF,
     Organizations.YOLO_PUBDEF,
+    Organizations.STANISLAUS_PUBDEF,
 ]
 
 
@@ -121,6 +124,7 @@ ORG_NAMES = {
     Organizations.SANTA_BARBARA_PUBDEF: _(
         "Santa Barbara County Public Defender"),
     Organizations.YOLO_PUBDEF: _("Yolo County Public Defender"),
+    Organizations.STANISLAUS_PUBDEF: _("Stanislaus County Public Defender"),
 }
 
 PAGE_COMPLETE_SEQUENCES = {
@@ -146,6 +150,7 @@ PAGE_COMPLETE_SEQUENCES = {
     Organizations.VENTURA_PUBDEF: ["SelectCounty", "CountyApplication"],
     Organizations.SANTA_BARBARA_PUBDEF: ["SelectCounty", "CountyApplication"],
     Organizations.YOLO_PUBDEF: ["SelectCounty", "CountyApplication"],
+    Organizations.STANISLAUS_PUBDEF: ["SelectCounty", "CountyApplication"],
 }
 
 
@@ -165,6 +170,7 @@ class Counties:
     VENTURA = 'ventura'
     SANTA_BARBARA = 'santa_barbara'
     YOLO = 'yolo'
+    STANISLAUS = 'stanislaus'
     OTHER = 'other'
 
 
@@ -184,6 +190,7 @@ class CountyNames:
     VENTURA = 'Ventura'
     SANTA_BARBARA = 'Santa Barbara'
     YOLO = 'Yolo'
+    STANISLAUS = 'Stanislaus'
     ALL = 'counties throughout California'
 
 
@@ -217,11 +224,7 @@ COUNTY_CHOICES = (
             'Sebastopol, Bodega Bay, Healdsburg, or Cloverdale)')),
     (Counties.SANTA_BARBARA, _(
         'Santa Barbara County (near Santa Maria, Santa Barbara, Goleta, '
-        'Carpinteria, Solvang, and Lompoc)')),
-    (Counties.VENTURA, _(
-            'Ventura County (near Oxnard, Thousand Oaks, Simi Valley, '
-            'Camarillo, Ojai, Moorpark, Fillmore, Santa Paula, or '
-            'Ventura)')),
+        'Carpinteria, Solvang, and Lompoc)'))
 )
 
 if SCOPE_TO_LIVE_COUNTIES and len(COUNTY_CHOICES) == 3:
@@ -242,6 +245,12 @@ if not SCOPE_TO_LIVE_COUNTIES:
         (Counties.YOLO, _(
             'Yolo County (near Davis, West Sacramento, Winters, and '
             'Woodland)')),
+        (Counties.VENTURA, _(
+            'Ventura County (near Oxnard, Thousand Oaks, Simi Valley, '
+            'Camarillo, Ojai, Moorpark, Fillmore, Santa Paula, or '
+            'Ventura)')),
+        (Counties.STANISLAUS, _(
+            'Stanislaus County (near Modesto, Turlock, and Ceres)')),
     )
 
 COUNTY_CHOICES = sorted(COUNTY_CHOICES, key=lambda item: item[1])
@@ -262,6 +271,7 @@ COUNTY_CHOICE_DISPLAY_DICT = {
     Counties.VENTURA: CountyNames.VENTURA,
     Counties.SANTA_BARBARA: CountyNames.SANTA_BARBARA,
     Counties.YOLO: CountyNames.YOLO,
+    Counties.STANISLAUS: CountyNames.STANISLAUS,
 }
 
 

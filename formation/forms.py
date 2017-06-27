@@ -595,6 +595,21 @@ class YoloCountyFormSpec(SonomaCountyFormSpec):
     }
 
 
+class StanislausCountyFormSpec(FresnoCountyFormSpec):
+    county = Counties.STANISLAUS
+    fields = FresnoCountyFormSpec.fields - {
+        F.DriverLicenseOrIDNumber,
+        F.LastFourOfSocial,
+        F.CaseNumber,
+        F.USCitizen,
+        F.MonthlyIncome,
+        F.IncomeSource,
+        F.HowMuchSavings,
+        F.HowManyDependents
+    }
+    required_fields = (FresnoCountyFormSpec.required_fields)
+
+
 class EBCLCIntakeFormSpec(CombinableOrganizationFormSpec):
     organization = Organizations.EBCLC
     fields = {
@@ -714,6 +729,7 @@ INPUT_FORM_SPECS = [
     VenturaCountyFormSpec(),
     SantaBarbaraCountyFormSpec(),
     YoloCountyFormSpec(),
+    StanislausCountyFormSpec()
 ]
 
 DISPLAY_FORM_SPECS = INPUT_FORM_SPECS + [
