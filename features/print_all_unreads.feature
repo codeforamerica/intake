@@ -17,7 +17,7 @@ Feature: Org users can print unread apps
      And there should be a pre-filled PDF for "Bartholomew Simpson"
      And there should be a pre-filled PDF for "Inigo Montoya"
      And there should be a prebuilt PDF bundle for "Bartholomew Simpson and Inigo Montoya"
-    When I click the "Print all" link to "/applications/unread/pdf/"
+    When I click the "Print All" link to "/applications/unread/pdf/"
     Then it should load "/applications/unread/pdf/"
      And I should see a flash message that says "2 applications have been marked as “Read” and moved to the “Needs Status Update” folder"
      And the main heading should say "2 applications to the San Francisco Public Defender"
@@ -28,8 +28,13 @@ Feature: Org users can print unread apps
      And I open "/applications/unread/"
     Then it should load "/applications/unread/"
      And I should see "2" in the active tab
-    When I click the "Print all" link to "/applications/unread/pdf/"
+    When I click the "Print All" link to "/applications/unread/pdf/"
     Then it should load "/applications/unread/pdf/"
      And I should see a flash message that says "2 applications have been marked as “Read” and moved to the “Needs Status Update” folder"
      And the main heading should say "2 applications to the Contra Costa Public Defender"
      And it should have an iframe with "/applications/unread/pdf/printout"
+    When I open "/applications/unread/"
+    Then it should load "/applications/unread/"
+     And I should see "0" in the active tab
+     And I should see "0" applications in the table when that tab is active
+     And I should not see the Print All button

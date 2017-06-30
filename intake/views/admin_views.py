@@ -136,12 +136,15 @@ class ApplicationUnreadIndex(ApplicationIndex):
             self.request.user.profile.organization, 'Unread')
         context['app_index_scope_title'] = "{} Unread Applications".format(
             count)
-        context['print_all_link'] = get_url_for_ids(
-            'intake-pdf_bundle_wrapper_view',
-            AppsService.get_applications_for_org(
-                self.request.user.profile.organization
-                    ).values_list('id', flat=True)
-            )
+        if count == 0:
+            context['print_all_link'] = None
+        else:
+            context['print_all_link'] = get_url_for_ids(
+                'intake-pdf_bundle_wrapper_view',
+                AppsService.get_unread_applications_for_org(
+                    self.request.user.profile.organization
+                        ).values_list('id', flat=True)
+                )
         return context
 
     def get(self, request):
@@ -160,6 +163,7 @@ class ApplicationNeedsUpdateIndex(ApplicationUnreadIndex):
         context['app_index_tabs'], count = get_tabs_for_org_user(
             self.request.user.profile.organization,
             'Needs Status Update')
+        context['print_all_link'] = None
         context['app_index_scope_title'] = \
             "{} Applications Need Status Updates".format(count)
         return context
