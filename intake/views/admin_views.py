@@ -119,6 +119,8 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
                 self.request.user.profile.organization, 'All')
             context['app_index_scope_title'] = "All Applications To {}".format(
                 self.request.user.profile.organization.name)
+            if count == 0:
+                context['no_results'] = "You have no applications."
         context['page_counter'] = \
             utils.get_page_navigation_counter(
                 page=context['results'],
@@ -138,6 +140,7 @@ class ApplicationUnreadIndex(ApplicationIndex):
             count)
         if count == 0:
             context['print_all_link'] = None
+            context['no_results'] = "You have read all new applications!"
         else:
             context['print_all_link'] = get_url_for_ids(
                 'intake-pdf_bundle_wrapper_view',
@@ -163,6 +166,10 @@ class ApplicationNeedsUpdateIndex(ApplicationUnreadIndex):
         context['app_index_tabs'], count = get_tabs_for_org_user(
             self.request.user.profile.organization,
             'Needs Status Update')
+        if count == 0:
+            context['no_results'] = "You have updated all applications!"
+        else:
+            context['no_results'] = None
         context['print_all_link'] = None
         context['app_index_scope_title'] = \
             "{} Applications Need Status Updates".format(count)
