@@ -343,6 +343,8 @@ def build_seed_submissions():
         factories.StatusUpdateWithNotificationFactory.create(
             application=application,
             author=application.organization.profiles.first().user)
+        application.has_been_opened = True
+        application.save()
 
     for org in orgs:
         org_subs = []
