@@ -357,9 +357,8 @@ def build_seed_submissions():
     for org in orgs:
         org_subs = []
         for sub in subs:
-            has_unread_app = sub.applications.filter(
-                organization=org, has_been_opened=False).exists()
-            if has_unread_app and sub != multi_org_sub:
+            has_app = sub.applications.filter(organization=org).exists()
+            if has_app and sub != multi_org_sub:
                 org_subs.append(sub)
         # make a bundle for each org
         bundle = BundlesService.create_bundle_from_submissions(
