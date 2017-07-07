@@ -306,9 +306,14 @@ class TestApplicationIndex(IntakeDataTestCase):
         user = self.be_apubdef_user()
         response = self.client.get(reverse('intake-app_all_index'))
         for sub in self.a_pubdef_submissions:
-            status = sub.applications.filter(
+
+            status_update = sub.applications.filter(
                 organization=user.profile.organization).first(
-            ).status_updates.latest('updated').status_type.display_name
+            ).status_updates.order_by('-updated').first()
+            if status_update:
+                status = status_update.status_type.display_name
+            else:
+                status = 'Unread'
             self.assertContains(
                 response, html_utils.conditional_escape(status))
 

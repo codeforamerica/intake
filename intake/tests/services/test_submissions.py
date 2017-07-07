@@ -320,16 +320,20 @@ class TestGetUnopenedSubmissionsForOrg(TestCase):
         with self.assertNumQueries(1):
             list(subs)
 
-    def test_returns_all_apps_if_no_open_events(self):
-        ebclc = Organization.objects.get(
-            slug=constants.Organizations.EBCLC)
-        for org in Organization.objects.filter(
-                is_receiving_agency=True):
-            subs = SubmissionsService.get_unopened_submissions_for_org(org)
-            if org == ebclc:
-                self.assertEqual(subs.count(), 2)
-            else:
-                self.assertEqual(subs.count(), 3)
+    def test_returns_none_if_all_read(self):
+        ebclc = Organization.objects.get(slug='ebclc')
+        models.Application.objects.filter(organization=ebclc).update(
+            has_been_opened=True)
+        subs = SubmissionsService.get_unopened_submissions_for_org(ebclc)
+        self.assertEqual(0, subs.count())
+
+    def test_returns_all_new_unread(self):
+        ebclc = Organization.objects.get(slug='ebclc')
+        models.Application.objects.filter(organization=ebclc).update(
+            has_been_opened=True)
+        factories.make_apps_for('ebclc', count=3)
+        subs = SubmissionsService.get_unopened_submissions_for_org(ebclc)
+        self.assertEqual(3, subs.count())
 
     @patch('intake.notifications.slack_submissions_viewed.send')
     def test_returns_apps_opened_by_other_org(self, slack):
@@ -359,21 +363,6 @@ class TestGetUnopenedSubmissionsForOrg(TestCase):
             SubmissionsService.get_unopened_submissions_for_org(a_pubdef)
         self.assertIn(sub, a_pubdef_subs)
         self.assertNotIn(sub, cc_pubdef_subs)
-
-    @patch('intake.models.ApplicationEvent.from_logs')
-    def test_deleted_opened_app_doesnt_inhibit_return_of_other_apps(
-            self, from_logs):
-        # https://code.djangoproject.com/ticket/25467?cversion=0&cnum_hist=2
-        sf_pubdef = Organization.objects.get(
-            slug=constants.Organizations.SF_PUBDEF)
-        sf_pubdef_user = UserProfile.objects.filter(
-            organization=sf_pubdef).first().user
-        logs = ApplicationLogEntry.log_opened([None], user=sf_pubdef_user)
-        self.assertTrue(logs[0].id)
-        self.assertIsNone(logs[0].submission_id)
-        unopened_subs = \
-            SubmissionsService.get_unopened_submissions_for_org(sf_pubdef)
-        self.assertEqual(unopened_subs.count(), 3)
 
 
 class TestSendToNewappsBundleIfNeeded(TestCase):
