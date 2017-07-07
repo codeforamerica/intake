@@ -8,7 +8,6 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('intake', '0060_auto_20170707_1930'),
         ('user_accounts', '0024_userprofile_uuid'),
     ]
 

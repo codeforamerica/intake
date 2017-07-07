@@ -8,6 +8,7 @@ from invitations.views import SendInvite
 from . import forms
 from user_accounts.base_views import StaffOnlyMixin
 import intake.services.events_service as EventsService
+from intake.models import Visitor
 
 
 class CustomLoginView(allauth_views.LoginView):
@@ -75,6 +76,9 @@ class UserProfileView(FormView):
         context.update(
             user=self.user, profile=self.profile)
         EventsService.user_login(self.request)
+        visitor_id = self.request.session.get('visitor_id', None)
+        visitor = Visitor.objects.get(id=visitor_id)
+        self.user.profile.visitors.add(visitor)
         return context
 
     def form_valid(self, form, *args, **kwargs):
