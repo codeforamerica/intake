@@ -332,25 +332,34 @@ def build_seed_submissions():
         organizations=target_orgs)
     subs.append(multi_org_sub)
     sub_ids = [sub.id for sub in subs]
-    applications = models.Application.objects.filter(
-        form_submission_id__in=sub_ids)
+    # applications = models.Application.objects.filter(
+    #     form_submission_id__in=sub_ids)
 
     applicants = []
     for sub in subs:
         applicants.append(sub.applicant)
 
-    for application in applications:
+    """
+    Creating status updates for all applications forces a mock situation
+    in which there are 0 unread applications, which limits our test range.
+    Working around that by only doing so for the first 2 applications to
+    an org.
+    """
+    for org in orgs:
+        updated_application = models.Application.objects.filter(
+            organization=org, form_submission_id__in=sub_ids).first()
         factories.StatusUpdateWithNotificationFactory.create(
-            application=application,
-            author=application.organization.profiles.first().user)
-        application.has_been_opened = True
-        application.save()
+            application=updated_application,
+            author=org.profiles.first().user)
+        updated_application.has_been_opened = True
+        updated_application.save()
 
     for org in orgs:
         org_subs = []
         for sub in subs:
-            has_app = sub.applications.filter(organization=org).exists()
-            if has_app and sub != multi_org_sub:
+            has_unread_app = sub.applications.filter(
+                organization=org, has_been_opened=False).exists()
+            if has_unread_app and sub != multi_org_sub:
                 org_subs.append(sub)
         # make a bundle for each org
         bundle = BundlesService.create_bundle_from_submissions(
