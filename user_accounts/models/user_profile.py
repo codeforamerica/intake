@@ -4,7 +4,6 @@ import user_accounts
 from user_accounts import exceptions
 import uuid
 import intake.services.events_service as EventsService
-from intake.models import Visitor
 
 
 class UserProfile(models.Model):
@@ -18,7 +17,6 @@ class UserProfile(models.Model):
     )
     should_get_notifications = models.BooleanField(default=False)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
-    visitors = models.ManyToManyField(Visitor, related_name="users")
 
     def get_display_name(self):
         name_display = self.name or self.user.email

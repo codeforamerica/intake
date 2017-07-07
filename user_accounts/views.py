@@ -76,9 +76,6 @@ class UserProfileView(FormView):
         context.update(
             user=self.user, profile=self.profile)
         EventsService.user_login(self.request)
-        visitor_id = self.request.session.get('visitor_id', None)
-        visitor = Visitor.objects.get(id=visitor_id)
-        self.user.profile.visitors.add(visitor)
         return context
 
     def form_valid(self, form, *args, **kwargs):
