@@ -44,7 +44,7 @@ class TestGetApplicationsIndexForOrgUser(TestCase):
             organization__county__slug='alameda').first()
         TransferService.transfer_application(
             user, application, to_org, 'food replicator malfunction')
-        with self.assertNumQueries(7):
+        with self.assertNumQueries(6):
             results = AppsService.get_all_applications_for_org_user(user, 1)
         self.assertTrue(
             any([

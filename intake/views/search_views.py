@@ -17,7 +17,6 @@ class SearchAPIBaseView(View):
     def dispatch(self, request, *args, **kwargs):
         if self.user_is_okay(request.user):
             return super().dispatch(request, *args, **kwargs)
-        EventsService.user_apps_searched(request)
         return HttpResponse(status=403)
 
     def post(self, request):
@@ -27,6 +26,7 @@ class SearchAPIBaseView(View):
             return HttpResponse(status=404)
         qset = self.get_queryset()
         data = self.serializer(qset, many=True).data
+        EventsService.user_apps_searched(request)
         return self.get_response(data)
 
 
