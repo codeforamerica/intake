@@ -86,7 +86,7 @@ def user_page_viewed(request):
     log_to_mixpanel.delay(
         distinct_id=request.user.profile.get_uuid(),
         event_name=event_name,
-        view=request.get_full_path(),
+        view=resolve(request.path).url_name,
         organization_name=request.user.profile.organization.name,
         url=request.get_full_path(),
         referrer=request.session.get('referrer', ''),
