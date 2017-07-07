@@ -68,7 +68,7 @@ class CountUniqueVisitorsMiddleware:
                 visitor.save()
                 EventsService.site_entered(visitor, request.get_full_path())
                 request.session['visitor_id'] = visitor.id
-            elif request.user.is_staff:
+            elif request.user.is_authenticated:
                 visitor = Visitor.objects.get(id=visitor_id)
                 EventsService.user_page_viewed(request)
             else:

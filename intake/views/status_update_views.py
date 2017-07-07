@@ -162,6 +162,7 @@ class ReviewStatusNotificationFormView(StatusUpdateBase, FormView):
             form.cleaned_data,
             self.existing_status_update_data)
         EventsService.status_updated(status_update)
+        EventsService.user_status_updated(status_update)
         utils.clear_form_data_from_session(
             self.request, self.get_session_storage_key())
         return super().form_valid(form)

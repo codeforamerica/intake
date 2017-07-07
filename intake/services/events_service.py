@@ -72,21 +72,136 @@ def page_viewed(visitor, url):
         source=visitor.source)
 
 
+"""
+USER EVENTS
+referrer and source will need some updates per conversation with Lou
+(these are not populated the same way as with visitors, and we will
+also include additional useragent info; these appear blank at the
+moment because they are placeholders)
+"""
+
+
 def user_page_viewed(request):
     event_name = 'user_page_viewed'
     log_to_mixpanel.delay(
         distinct_id=request.user.profile.get_uuid(),
         event_name=event_name,
         view=request.get_full_path(),
+        organization_name=request.user.profile.organization.name,
+        url=request.get_full_path(),
         referrer=request.session.get('referrer', ''),
         source=request.session.get('source', ''))
-    print("USER PAGE VIEWED STUFF HERE")
-    print("distinct id = {}, event name = {}, view = {}, referrer = {}, \
-        source = {}".format(request.user.profile.get_uuid(),
-                            event_name,
-                            resolve(request.get_full_path())._func_path,
-                            request.session.get('referrer', ''),
-                            request.session.get('source', '')))
+
+
+def user_login(request):
+    event_name = 'user_login'
+    log_to_mixpanel.delay(
+        distinct_id=request.user.profile.get_uuid(),
+        event_name=event_name,
+        organization_name=request.user.profile.organization.name,
+        referrer=request.session.get('referrer', ''),
+        source=request.session.get('source', ''))
+
+
+def user_account_created(profile):
+    event_name = 'user_account_created'
+    log_to_mixpanel.delay(
+        distinct_id=profile.get_uuid(),
+        event_name=event_name,
+        organization_name=profile.organization.name,
+        )
+    # NEEDS source & referrer
+
+
+def user_failed_login(request):
+    event_name = 'user_failed_login'
+    log_to_mixpanel.delay(
+        distinct_id=request.visitor.get_uuid(),
+        event_name=event_name,
+        attempted_login=request.POST.get('login', ''),
+        referrer=request.session.get('referrer', ''),
+        source=request.session.get('source', ''))
+
+
+def user_reset_password(request, email):
+    event_name = 'user_reset_password'
+    log_to_mixpanel.delay(
+        distinct_id=request.visitor.get_uuid(),
+        event_name=event_name,
+        email=email,
+        referrer=request.session.get('referrer', ''),
+        source=request.session.get('source', ''))
+
+
+def user_newapps_email_clicked(request):
+    event_name = 'user_newapps_email_clicked'
+    log_to_mixpanel.delay(
+        distinct_id=request.user.profile.get_uuid(),
+        event_name=event_name,
+        organization_name=request.user.profile.organization.name,
+        referrer=request.session.get('referrer', ''),
+        source=request.session.get('source', ''))
+
+
+def user_status_updated(status_update):
+    event_name = 'user_status_updated'
+    event_kwargs = dict(
+        distinct_id=status_update.author.profile.get_uuid(),
+        event_name=event_name,
+        organization_name=status_update.author.profile.organization.name,
+        user_email=status_update.author.email,
+        application_id=status_update.application.id,
+        status_type=status_update.status_type.display_name,
+        next_steps=[
+            step.display_name for step in status_update.next_steps.all()],
+        additional_info_length=len(status_update.additional_information),
+        other_next_steps_length=len(status_update.other_next_step),
+        message_change_ratio=SNService.get_message_change_ratio(status_update),
+        contact_info_keys=SNService.get_contact_info_keys(status_update),
+        has_unsent_additional_info=SNService.has_unsent_additional_info(
+            status_update),
+        has_unsent_other_next_step=SNService.has_unsent_other_next_step(
+            status_update),
+        )
+    # NEEDS referrer and source
+    if hasattr(status_update, 'notification'):
+        event_kwargs.update(
+            notification_contact_info_types=list(
+                status_update.notification.contact_info.keys()))
+    log_to_mixpanel.delay(**event_kwargs)
+
+
+def user_apps_opened(applications, user):
+    event_name = 'user_app_opened'
+    for application in applications:
+        log_to_mixpanel.delay(
+            distinct_id=user.profile.get_uuid(),
+            event_name=event_name,
+            application_id=application.id,
+            application_organization_name=application.organization.name,
+            user_email=user.email,
+            user_organization_name=user.profile.organization.name)
+
+
+def user_app_transferred(old_application, new_application, user):
+    event_name = 'user_app_transferred'
+    log_to_mixpanel.delay(
+        distinct_id=user.profile.get_uuid(),
+        event_name=event_name,
+        user_email=user.email,
+        from_org=old_application.organization.name,
+        to_org=new_application.organization.name)
+
+
+def user_apps_searched(request):
+    event_name = 'user_apps_searched'
+    log_to_mixpanel.delay(
+        distinct_id=request.user.profile.get_uuid(),
+        event_name=event_name,
+        organization_name=request.user.profile.organization.name,
+        referrer=request.session.get('referrer', ''),
+        source=request.session.get('source', ''))
+    # TODO: determine if search string belongs in here or not
 
 
 def site_entered(visitor, url):

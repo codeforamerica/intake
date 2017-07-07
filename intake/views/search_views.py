@@ -4,6 +4,7 @@ from intake import serializers
 from rest_framework.renderers import JSONRenderer
 import intake.services.search_service as SearchService
 import intake.services.submissions as SubmissionsService
+import intake.services.events_service as EventsService
 
 
 class SearchAPIBaseView(View):
@@ -16,6 +17,7 @@ class SearchAPIBaseView(View):
     def dispatch(self, request, *args, **kwargs):
         if self.user_is_okay(request.user):
             return super().dispatch(request, *args, **kwargs)
+        EventsService.user_apps_searched(request)
         return HttpResponse(status=403)
 
     def post(self, request):

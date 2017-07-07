@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 import user_accounts
 from user_accounts import exceptions
 import uuid
+import intake.services.events_service as EventsService
 
 
 class UserProfile(models.Model):
@@ -54,6 +55,7 @@ class UserProfile(models.Model):
             **kwargs
         )
         profile.save()
+        EventsService.user_account_created(profile)
         user.groups.add(*invitation.groups.all())
         return profile
 
