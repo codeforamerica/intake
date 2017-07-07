@@ -9,7 +9,7 @@ import logging
 from intake import models
 from intake.tests.base_testcases import IntakeDataTestCase, DELUXE_TEST
 from intake.tests.factories import FormSubmissionFactory
-from project.jinja2 import url_with_ids
+from project.services.query_params import get_url_for_ids
 
 import intake.services.bundles as BundlesService
 from project.tests.assertions import assertInLogsCount
@@ -76,7 +76,7 @@ class TestApplicationDetail(IntakeDataTestCase):
         self.be_ccpubdef_user()
         submission = self.sf_pubdef_submissions[0]
         response = self.get_detail(submission)
-        self.assertRedirects(response, reverse('intake-app_index'))
+        self.assertRedirects(response, reverse('user_accounts-profile'))
         slack.assert_not_called()
 
     @patch('intake.notifications.slack_submissions_viewed.send')
@@ -140,7 +140,7 @@ class TestApplicationBundle(IntakeDataTestCase):
 
     def get_submissions(self, group):
         ids = [s.id for s in group]
-        url = url_with_ids('intake-app_bundle', ids)
+        url = get_url_for_ids('intake-app_bundle', ids)
         return self.client.get(url)
 
     def assertHasDisplayData(self, response, submissions):
@@ -236,7 +236,7 @@ class TestApplicationIndex(IntakeDataTestCase):
         random_new_subs_count = randint(5, 20)
         for i in range(random_new_subs_count):
             FormSubmissionFactory.create()
-        with self.assertNumQueries(20):
+        with self.assertNumQueries(21):
             self.client.get(reverse('intake-app_all_index'))
 
     def test_that_org_user_can_only_see_apps_to_own_org(self):
@@ -397,7 +397,7 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
             kwargs=dict(bundle_id=20909872435)))
         self.assertEqual(result.status_code, 404)
 
-    def test_user_from_wrong_org_is_redirected_to_app_index(self):
+    def test_user_from_wrong_org_is_redirected_to_profile(self):
         """ApplicationBundleDetailView redirects unpermitted users
 
         with existing `ApplicationBundle`
@@ -409,7 +409,7 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
             'intake-app_bundle_detail',
             kwargs=dict(bundle_id=self.a_pubdef_bundle.id)))
         self.assertRedirects(
-            result, reverse('intake-app_index'),
+            result, reverse('user_accounts-profile'),
             fetch_redirect_response=False)
 
     @patch(
@@ -534,7 +534,7 @@ class TestCaseBundlePrintoutPDFView(IntakeDataTestCase):
         self.assertIn(reverse('user_accounts-login'), response.url)
         self.assertEqual(response.status_code, 302)
 
-    def test_users_from_wrong_org_redirected_to_app_unread_index(self):
+    def test_users_from_wrong_org_redirected_to_profile(self):
         self.be_ccpubdef_user()
         bundle = models.ApplicationBundle.objects.filter(
             organization__slug__contains='a_pubdef').first()
@@ -542,7 +542,7 @@ class TestCaseBundlePrintoutPDFView(IntakeDataTestCase):
             reverse(
                 'intake-case_bundle_printout',
                 kwargs=dict(bundle_id=bundle.id)))
-        self.assertRedirects(response, reverse('intake-app_index'))
+        self.assertRedirects(response, reverse('user_accounts-profile'))
 
     @patch('intake.notifications.slack_submissions_viewed.send')
     def test_marks_apps_as_opened(self, slack):
@@ -573,13 +573,13 @@ class TestCasePrintoutPDFView(IntakeDataTestCase):
         self.assertIn(reverse('user_accounts-login'), response.url)
         self.assertEqual(response.status_code, 302)
 
-    def test_users_from_wrong_org_redirected_to_app_index(self):
+    def test_users_from_wrong_org_redirected_to_profile(self):
         self.be_ccpubdef_user()
         sub = self.a_pubdef_submissions[0]
         response = self.client.get(
             reverse(
                 'intake-case_printout', kwargs=dict(submission_id=sub.id)))
-        self.assertRedirects(response, reverse('intake-app_index'))
+        self.assertRedirects(response, reverse('user_accounts-profile'))
 
     @patch('intake.notifications.slack_submissions_viewed.send')
     def test_marks_apps_as_opened(self, slack):

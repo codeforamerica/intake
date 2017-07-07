@@ -10,7 +10,7 @@ from user_accounts.models import Organization
 from intake.tests.base_testcases import IntakeDataTestCase
 from django.core.urlresolvers import reverse
 from markupsafe import escape
-from intake.views.app_detail_views import NOT_ALLOWED_MESSAGE
+from intake.views.base_views import NOT_ALLOWED_MESSAGE
 
 
 class TestApplicationTransferView(IntakeDataTestCase):
@@ -141,11 +141,11 @@ class TestApplicationTransferView(IntakeDataTestCase):
         response = self.post()
         self.assertRedirects(response, reverse('intake-app_index'))
 
-    def test_org_users_without_transfers_are_redirected_to_app_index(self):
+    def test_org_users_without_transfers_are_redirected_to_profile(self):
         self.be_ccpubdef_user()
         response = self.client.get(self.url)
         self.assertRedirects(
-            response, reverse('intake-app_index'),
+            response, reverse('user_accounts-profile'),
             fetch_redirect_response=False)
         index = self.client.get(response.url)
         self.assertContains(index, escape(NOT_ALLOWED_MESSAGE))
@@ -156,21 +156,18 @@ class TestApplicationTransferView(IntakeDataTestCase):
         self.assertEqual(response.status_code, 302)
         self.assertIn(reverse('user_accounts-login'), response.url)
 
-    def test_cfa_user_redirected_to_appindex(self):
+    def test_cfa_user_redirected_to_profile(self):
         self.be_cfa_user()
         response = self.client.get(self.url)
         self.assertRedirects(
-            response, reverse('intake-app_index'),
+            response, reverse('user_accounts-profile'),
             fetch_redirect_response=False)
         index = self.client.get(response.url)
         self.assertContains(index, escape(NOT_ALLOWED_MESSAGE))
 
-    def test_monitor_user_gets_error(self):
+    def test_monitor_user_redirected_to_profile(self):
         self.be_monitor_user()
         response = self.client.get(self.url)
-        # since monitoring users don't have access to app index
-        # this will create an infinite redirect error (as will most attempts
-        # by monitor users to access restricted URLs)
         self.assertRedirects(
-            response, reverse('intake-app_index'),
+            response, reverse('user_accounts-profile'),
             fetch_redirect_response=False)

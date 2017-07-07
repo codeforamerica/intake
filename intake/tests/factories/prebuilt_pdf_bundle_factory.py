@@ -7,8 +7,8 @@ def get_sf_pubdef(*args, **kwargs):
     return Organization.objects.get(slug="sf_pubdef")
 
 
-class NewAppsPDFFactory(factory.DjangoModelFactory):
+class PrebuiltPDFBundleFactory(factory.DjangoModelFactory):
     organization = factory.LazyFunction(get_sf_pubdef)
 
     class Meta:
-        model = models.NewAppsPDF
+        model = models.PrebuiltPDFBundle

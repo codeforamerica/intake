@@ -1,19 +1,15 @@
 import uuid
 from urllib.parse import urljoin
-
 from django.conf import settings
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.utils import timezone as timezone_utils
-from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
 from taggit.managers import TaggableManager
 import intake
 from intake import anonymous_names
 from intake.constants import SMS, EMAIL
 from project.jinja2 import namify
-from formation.forms import (
-    display_form_selector, DeclarationLetterDisplay)
 from formation.fields import MonthlyIncome, HouseholdSize, OnPublicBenefits
 
 FORMSUBMISSION_TEXT_SEARCH_FIELDS = [
@@ -225,50 +221,6 @@ class FormSubmission(models.Model):
 
     def get_nice_counties(self):
         return self.get_counties().values_list('name', flat=True)
-
-    def get_display_form_for_user(self, user):
-        """
-        based on user information, get the correct Form class and return it
-        instantiated with the data for self
-
-        """
-        # TODO: get rid of this method, and put it elsewhere and make it right
-        if not user.is_staff:
-            DisplayFormClass = user.profile.get_submission_display_form()
-        else:
-            DisplayFormClass = display_form_selector.get_combined_form_class(
-                counties=[
-                    intake.constants.Counties.SAN_FRANCISCO,
-                    intake.constants.Counties.CONTRA_COSTA,
-                    intake.constants.Counties.ALAMEDA,
-                    intake.constants.Counties.MONTEREY,
-                    intake.constants.Counties.SOLANO,
-                    intake.constants.Counties.SAN_DIEGO,
-                    intake.constants.Counties.SAN_JOAQUIN,
-                    intake.constants.Counties.SANTA_CLARA,
-                    intake.constants.Counties.FRESNO,
-                ])
-        init_data = dict(
-            date_received=self.get_local_date_received(),
-            counties=list(self.get_counties().values_list('slug', flat=True)),
-            organizations=list(
-                self.organizations.values_list('name', flat=True))
-        )
-        init_data.update(self.answers)
-        for key, value in init_data.items():
-            if isinstance(value, str):
-                init_data[key] = mark_safe(value)
-        display_form = DisplayFormClass(init_data, validate=True)
-        display_form.display_only = True
-        display_form.display_template_name = "formation/intake_display.jinja"
-        display_form.submission = self
-        show_declaration = any(self.organizations.all().values_list(
-            'requires_declaration_letter', flat=True))
-        if show_declaration:
-            declaration_letter_form = DeclarationLetterDisplay(
-                init_data, validate=True)
-            return display_form, declaration_letter_form
-        return display_form, None
 
     def get_full_name(self):
         return '{first_name} {last_name}'.format(

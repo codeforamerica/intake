@@ -122,3 +122,14 @@ def get_serialized_application_history_events(application, user):
     else:
         status_updates = get_status_updates_for_org_user(application)
     return serializers.StatusUpdateSerializer(status_updates, many=True).data
+
+
+def mark_opened(application_ids):
+    # This does not fire events
+    apps = models.Application.objects.filter(id__in=application_ids)
+    apps.update(has_been_opened=True)
+
+
+def get_valid_application_ids_from_set(application_ids):
+    return models.Application.objects.filter(
+        id__in=application_ids).values_list('id', flat=True)

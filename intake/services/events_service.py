@@ -318,3 +318,26 @@ def partnership_interest_submitted(partnership_lead):
     log_to_mixpanel.delay(
         distinct_id=partnership_lead.visitor.get_uuid(),
         event_name=event_name)
+
+
+def empty_print_all_opened(request, view):
+    event_name = 'user_empty_print_all_opened'
+    log_to_mixpanel.delay(
+        distinct_id=request.user.get_uuid(),
+        event_name=event_name)
+
+
+def unread_pdf_opened(request, view):
+    applicant_event_name = 'app_unread_pdf_opened'
+    user_event_name = 'user_unread_pdf_opened'
+    log_to_mixpanel.delay(
+        distinct_id=request.user.get_uuid(),
+        event_name=user_event_name,
+        organization_name=view.organization.name)
+    for app in view.applications:
+        log_to_mixpanel.delay(
+            distinct_id=app.get_uuid(),
+            event_name=applicant_event_name,
+            bundle_organization_name=app.organization.name,
+            user_email=request.user.email,
+            user_organization_name=request.user.profile.organization.name)
