@@ -149,6 +149,7 @@ def user_status_updated(status_update):
         distinct_id=status_update.author.profile.get_uuid(),
         event_name=event_name,
         organization_name=status_update.author.profile.organization.name,
+        applicant_uuid=status_update.application.form_submission.get_uuid(),
         user_email=status_update.author.email,
         application_id=status_update.application.id,
         status_type=status_update.status_type.display_name,
@@ -178,9 +179,9 @@ def user_apps_opened(applications, user):
             distinct_id=user.profile.get_uuid(),
             event_name=event_name,
             application_id=application.id,
-            application_organization_name=application.organization.name,
+            applicant_uuid=application.form_submission.get_uuid(),
             user_email=user.email,
-            user_organization_name=user.profile.organization.name)
+            organization_name=user.profile.organization.name)
 
 
 def user_app_transferred(old_application, new_application, user):
@@ -189,6 +190,7 @@ def user_app_transferred(old_application, new_application, user):
         distinct_id=user.profile.get_uuid(),
         event_name=event_name,
         user_email=user.email,
+        applicant_uuid=old_application.form_submission.get_uuid(),
         from_org=old_application.organization.name,
         to_org=new_application.organization.name)
 
