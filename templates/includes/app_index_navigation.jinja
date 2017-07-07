@@ -9,8 +9,10 @@
 </div>
 
 <div class="row">
-{# TODO: move to nav template #}
-<div class="col-xs-12 col-sm-6 col-md-6">
-    <h1>{{ app_index_scope_title }}</h1>
-</div>
+  <div class="col-xs-12 app-index-title">
+      <h1>{{ app_index_scope_title }}</h1>
+      {%- if print_all_link %}
+      <a href="{{ print_all_link }}" class="btn btn-large btn-default print-all"><span class="glyphicon glyphicon-print"></span> Print All</a>
+      {%- endif %}
+  </div>
 </div>

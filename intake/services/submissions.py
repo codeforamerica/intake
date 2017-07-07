@@ -44,9 +44,8 @@ def create_submission(form, organizations, applicant_id):
 def send_to_newapps_bundle_if_needed(submission, organizations):
     sf_ids = [org.id for org in organizations if org.slug == 'sf_pubdef']
     if sf_ids:
-        apps = submission.applications.filter(organization_id=sf_ids[0])
-        for app in apps:
-            tasks.add_application_pdfs.delay(app.id)
+        app = submission.applications.filter(organization_id=sf_ids[0]).first()
+        tasks.add_application_pdfs.delay(app.id)
 
 
 def fill_pdfs_for_submission(submission, organizations=None):

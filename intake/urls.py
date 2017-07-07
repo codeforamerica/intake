@@ -15,6 +15,8 @@ from intake.views import (
     application_note_views,
     tag_views,
     status_update_views,
+    prebuilt_pdf_bundle_views,
+    printout_views
 )
 
 
@@ -28,7 +30,8 @@ def org_vs_staff_view_switch(org_user_view, staff_user_view):
 
 
 urlpatterns = [
-    # public views
+
+    # PUBLIC VIEWS
     url(r'^$', public_views.home, name='intake-home', robots_allow=True),
     url(r'^privacy/$', public_views.privacy,
         name='intake-privacy', robots_allow=True),
@@ -41,8 +44,10 @@ urlpatterns = [
         name='intake-recommendation_letters', robots_allow=True),
     url(r'^personal-statement/$', public_views.personal_statement,
         name='intake-personal_statement', robots_allow=True),
+    url(r'^stats/$', stats_views.stats,
+        name='intake-stats', robots_allow=True),
 
-    # public form processing views
+    # PUBLIC FORM PROCESSING VIEWS
     url(r'^apply/$', select_county_view.select_county,
         name='intake-apply', robots_allow=True),
     url(r'^application/$', county_application_view.county_application,
@@ -56,10 +61,8 @@ urlpatterns = [
     url(r'^getting_your_rap/$', application_done_view.rap_sheet_info,
         name='intake-rap_sheet', robots_allow=True),
 
-    # stats views
-    url(r'^stats/$', stats_views.stats,
-        name='intake-stats', robots_allow=True),
-    # protected views
+
+    # PROTECTED VIEWS
     url(r'^application/(?P<submission_id>[0-9]+)/$',
         login_required(app_detail_views.app_detail),
         name='intake-app_detail'),
@@ -73,7 +76,7 @@ urlpatterns = [
         name='intake-filled_pdf'),
 
     url(r'^application/(?P<submission_id>[0-9]+)/printout/$',
-        login_required(admin_views.case_printout),
+        login_required(printout_views.printout_for_submission),
         name='intake-case_printout'),
 
     url(r'^application/(?P<submission_id>[0-9]+)/transfer/$',
@@ -99,6 +102,19 @@ urlpatterns = [
     url(r'^applications/all/$',
         login_required(admin_views.app_index),
         name='intake-app_all_index'),
+
+    # APPLICATION BUNDLE VIEWS
+    url(r'^applications/unread/pdf/$',
+        login_required(prebuilt_pdf_bundle_views.wrapper_view),
+        name='intake-pdf_bundle_wrapper_view'),
+
+    url(r'^applications/unread/pdf/prebuilt$',
+        login_required(prebuilt_pdf_bundle_views.file_view),
+        name='intake-pdf_bundle_file_view'),
+
+    url(r'^applications/unread/pdf/printout$',
+        login_required(printout_views.printout_for_apps),
+        name='intake-pdf_printout_for_apps'),
 
     url(r'^applications/bundle/$',
         login_required(admin_views.app_bundle),

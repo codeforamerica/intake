@@ -5,6 +5,7 @@ from intake.constants import PACIFIC_TIME
 from user_accounts.models import Organization
 from intake.models import FormSubmission
 from user_accounts.tests.factories import UserProfileFactory
+from selenium.common.exceptions import NoSuchElementException
 
 SEARCHABLE_APPLICANT_ID = None
 application_row_selector = 'tr.form_submission[data-key="{}"]'
@@ -143,3 +144,17 @@ def correct_number_of_rows_returned(context, count):
     listed_class = "application-listing"
     elements = context.browser.find_elements_by_class_name(listed_class)
     context.test.assertEqual(int(count), len(elements))
+
+
+@then('I should see the Print All button')
+def print_all_button_visible(context):
+    selector = "a.print-all"
+    element = context.browser.find_element_by_css_selector(selector)
+    context.test.assertIn("Print All", element.text)
+
+
+@then('I should not see the Print All button')
+def print_all_button_not_visible(context):
+    selector = "a.print-all"
+    with context.test.assertRaises(NoSuchElementException):
+        element = context.browser.find_element_by_css_selector(selector)

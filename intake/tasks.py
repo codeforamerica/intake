@@ -16,12 +16,12 @@ def celery_request(*args, **kwargs):
 @shared_task
 def add_application_pdfs(application_id):
     PDFService.fill_pdf_for_application(application_id)
-    PDFService.rebuild_newapps_pdf_for_new_application(application_id)
+    PDFService.update_pdf_bundle_for_san_francisco()
 
 
 @shared_task
 def remove_application_pdfs(application_id):
-    PDFService.rebuild_newapps_pdf_for_removed_application(application_id)
+    PDFService.rebuild_pdf_bundle_for_removed_application(application_id)
 
 
 @shared_task

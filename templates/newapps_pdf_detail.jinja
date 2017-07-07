@@ -7,20 +7,17 @@
 
     <div class="row">
       <div class="bundle-metadata col-xs-12 col-md-10 col_centered">
-        <h1 class="bundle-count">{{ app_count }} applications</h1>
+        <h1 class="bundle-count">
+          {{ app_count }} applications to the {{ organization.name }}
+        </h1>
       </div> 
     </div>
 
     <div id="bundle-pdf" class="row">
       <div class="iframe_container col-xs-12 col-md-10 col_centered">
-        {%- if newapps_pdf_is_empty %}
-         There are no unread applications
-        {%- else %}
-        <iframe class="pdf_inset" src="{{ 
-          newapps_pdf.get_absolute_url() 
-        }}" frameborder="0" width="800" height="600">
+        <iframe id="embedded-pdf" class="pdf_inset" src="{{ 
+          pdf_url }}" frameborder="0" width="800" height="600">
         </iframe>
-        {%- endif %}
       </div>
     </div>
   </div>

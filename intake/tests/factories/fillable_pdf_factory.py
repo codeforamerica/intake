@@ -1,10 +1,13 @@
+import os
+from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 import factory
 from intake import models
 from user_accounts.models import Organization
 
 
-SAMPLE_FORM_PATH = 'tests/sample_pdfs/sample_form.pdf'
+SAMPLE_FORM_PATH = os.path.join(
+    settings.REPO_DIR, 'tests/sample_pdfs/sample_form.pdf')
 
 
 def get_sf_pubdef(*args, **kwargs):
