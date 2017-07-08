@@ -16,7 +16,29 @@ def is_a_monitoring_request(request):
     return request.get_full_path()[:7] == '/health'
 
 
-class PersistReferrerMiddleware:
+def is_a_valid_response_code(response):
+    """Returns True if 200"""
+    return response.status_code == 200
+
+
+class MiddlewareBase:
+    def __init__(self, get_response=None):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        self.process_request(request)
+        response = self.get_response(request)
+        self.process_response(response)
+        return response
+
+    def process_request(self, request):
+        return None
+
+    def process_response(self, response):
+        return None
+
+
+class PersistReferrerMiddleware(MiddlewareBase):
 
     def process_request(self, request):
         if not is_a_monitoring_request(request):
@@ -29,7 +51,7 @@ class PersistReferrerMiddleware:
             return None
 
 
-class PersistSourceMiddleware:
+class PersistSourceMiddleware(MiddlewareBase):
 
     def process_request(self, request):
         if not is_a_monitoring_request(request):
@@ -38,7 +60,7 @@ class PersistSourceMiddleware:
                 request.session['source'] = source
 
 
-class GetCleanIpAddressMiddleware:
+class GetCleanIpAddressMiddleware(MiddlewareBase):
 
     def _get_client_ip(self, request):
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -54,9 +76,9 @@ class GetCleanIpAddressMiddleware:
             return None
 
 
-class CountUniqueVisitorsMiddleware:
+class CountUniqueVisitorsMiddleware(MiddlewareBase):
 
-    def process_request(self, request):
+    def __call__(self, request):
         if not is_a_monitoring_request(request):
             visitor_id = request.session.get('visitor_id', None)
             if not visitor_id:
@@ -68,10 +90,20 @@ class CountUniqueVisitorsMiddleware:
                 visitor.save()
                 EventsService.site_entered(visitor, request.get_full_path())
                 request.session['visitor_id'] = visitor.id
-            elif request.user.is_authenticated:
-                visitor = Visitor.objects.get(id=visitor_id)
-                EventsService.user_page_viewed(request)
             else:
                 visitor = Visitor.objects.get(id=visitor_id)
-                EventsService.page_viewed(visitor, request.get_full_path())
             request.visitor = visitor
+            response = self.get_response(request)
+
+            if is_a_valid_response_code(response):
+                response.view = getattr(response, "context_data", {}).get(
+                    "view", None)
+                if response.view:
+                    response.view = response.view.__class__.__name__
+                if request.user.is_authenticated:
+                    EventsService.user_page_viewed(request, response)
+                else:
+                    EventsService.page_viewed(request, response)
+        else:
+            response = self.get_response(request)
+        return response

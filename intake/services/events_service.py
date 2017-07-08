@@ -62,14 +62,16 @@ def form_submitted(submission):
         )
 
 
-def page_viewed(visitor, url):
+def page_viewed(request, response):
     event_name = 'page_viewed'
     log_to_mixpanel.delay(
-        distinct_id=visitor.get_uuid(),
+        distinct_id=request.visitor.get_uuid(),
         event_name=event_name,
-        url=url,
-        referrer=visitor.referrer,
-        source=visitor.source)
+        view=response.view,
+        url=request.get_full_path(),
+        referrer=request.visitor.referrer,
+        source=request.visitor.source
+        )
 
 
 """
@@ -81,16 +83,17 @@ moment because they are placeholders)
 """
 
 
-def user_page_viewed(request):
+def user_page_viewed(request, response):
     event_name = 'user_page_viewed'
     log_to_mixpanel.delay(
         distinct_id=request.user.profile.get_uuid(),
         event_name=event_name,
-        view=resolve(request.path).url_name,
+        view=response.view,
         organization_name=request.user.profile.organization.name,
         url=request.get_full_path(),
-        referrer=request.session.get('referrer', ''),
-        source=request.session.get('source', ''))
+        referrer=request.visitor.referrer,
+        source=request.visitor.source
+        )
 
 
 def user_login(request):
@@ -99,8 +102,9 @@ def user_login(request):
         distinct_id=request.user.profile.get_uuid(),
         event_name=event_name,
         organization_name=request.user.profile.organization.name,
-        referrer=request.session.get('referrer', ''),
-        source=request.session.get('source', ''))
+        referrer=request.visitor.referrer,
+        source=request.visitor.source
+        )
 
 
 def user_account_created(profile):
@@ -119,8 +123,8 @@ def user_failed_login(request):
         distinct_id=request.visitor.get_uuid(),
         event_name=event_name,
         attempted_login=request.POST.get('login', ''),
-        referrer=request.session.get('referrer', ''),
-        source=request.session.get('source', ''))
+        referrer=request.visitor.referrer,
+        source=request.visitor.source)
 
 
 def user_reset_password(request, email):
@@ -129,8 +133,8 @@ def user_reset_password(request, email):
         distinct_id=request.visitor.get_uuid(),
         event_name=event_name,
         email=email,
-        referrer=request.session.get('referrer', ''),
-        source=request.session.get('source', ''))
+        referrer=request.visitor.referrer,
+        source=request.visitor.source)
 
 
 def user_newapps_email_clicked(request):
@@ -139,11 +143,11 @@ def user_newapps_email_clicked(request):
         distinct_id=request.user.profile.get_uuid(),
         event_name=event_name,
         organization_name=request.user.profile.organization.name,
-        referrer=request.session.get('referrer', ''),
-        source=request.session.get('source', ''))
+        referrer=request.visitor.referrer,
+        source=request.visitor.source)
 
 
-def user_status_updated(status_update):
+def user_status_updated(request, status_update):
     event_name = 'user_status_updated'
     event_kwargs = dict(
         distinct_id=status_update.author.profile.get_uuid(),
@@ -163,8 +167,9 @@ def user_status_updated(status_update):
             status_update),
         has_unsent_other_next_step=SNService.has_unsent_other_next_step(
             status_update),
+        referrer=request.visitor.referrer,
+        source=request.visitor.source
         )
-    # NEEDS referrer and source
     if hasattr(status_update, 'notification'):
         event_kwargs.update(
             notification_contact_info_types=list(
@@ -201,8 +206,8 @@ def user_apps_searched(request):
         distinct_id=request.user.profile.get_uuid(),
         event_name=event_name,
         organization_name=request.user.profile.organization.name,
-        referrer=request.session.get('referrer', ''),
-        source=request.session.get('source', ''))
+        referrer=request.visitor.referrer,
+        source=request.visitor.source)
     # TODO: determine if search string belongs in here or not
 
 
@@ -286,7 +291,7 @@ def bundle_opened(bundle, user):
             user_organization_name=user.profile.organization.name)
 
 
-def status_updated(status_update):
+def status_updated(request, status_update):
     event_name = 'app_status_updated'
     event_kwargs = dict(
         distinct_id=status_update.application.form_submission.get_uuid(),
@@ -305,6 +310,8 @@ def status_updated(status_update):
             status_update),
         has_unsent_other_next_step=SNService.has_unsent_other_next_step(
             status_update),
+        referrer=request.visitor.referrer,
+        source=request.visitor.source
         )
     if hasattr(status_update, 'notification'):
         event_kwargs.update(
