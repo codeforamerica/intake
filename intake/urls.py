@@ -10,6 +10,7 @@ from intake.views import (
     application_done_view,
     application_transfer_view,
     admin_views,
+    redirect_link_views,
     search_views,
     app_detail_views,
     application_note_views,
@@ -102,6 +103,18 @@ urlpatterns = [
     url(r'^applications/all/$',
         login_required(admin_views.app_index),
         name='intake-app_all_index'),
+
+    url(r'^applications-link/unread$',
+        login_required(admin_views.unread_email_redirect),
+        name='intake-redirect_link_views'),
+
+    url(r'^applications-link/needs_update$',
+        login_required(admin_views.unread_email_redirect),
+        name='intake-redirect_link_views'),
+
+    url(r'^applications-link/all$',
+        login_required(admin_views.unread_email_redirect),
+        name='intake-redirect_link_views'),
 
     # APPLICATION BUNDLE VIEWS
     url(r'^applications/unread/pdf/$',
