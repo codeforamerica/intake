@@ -169,7 +169,6 @@ class ApplicationNeedsUpdateIndex(ApplicationUnreadIndex):
         return context
 
 
-
 class MultiSubmissionMixin:
     """A mixin for pulling multiple submission ids
     out of request query params.
@@ -363,7 +362,7 @@ filled_pdf = FilledPDF.as_view()
 pdf_bundle = FilledPDFBundle.as_view()
 app_index = ApplicationIndex.as_view()
 app_unread_index = ApplicationUnreadIndex.as_view()
-all_email_redirect = ApplicationNeedsUpdateIndex.as_view()
+app_needs_update_index = ApplicationNeedsUpdateIndex.as_view()
 app_bundle = ApplicationBundle.as_view()
 mark_processed = MarkProcessed.as_view()
 app_bundle_detail = ApplicationBundleDetail.as_view()

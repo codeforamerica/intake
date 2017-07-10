@@ -137,14 +137,16 @@ def user_reset_password(request, email):
         source=request.visitor.source)
 
 
-def user_newapps_email_clicked(request):
-    event_name = 'user_newapps_email_clicked'
+def user_email_link_clicked(request, view):
+    event_name = 'user_email_link_clicked'
     log_to_mixpanel.delay(
         distinct_id=request.user.profile.get_uuid(),
         event_name=event_name,
         organization_name=request.user.profile.organization.name,
         referrer=request.visitor.referrer,
-        source=request.visitor.source)
+        source=request.visitor.source,
+        target_url=view.get_redirect_url(),
+        view=view.__class__.__name__)
 
 
 def user_status_updated(request, status_update):

@@ -105,16 +105,16 @@ urlpatterns = [
         name='intake-app_all_index'),
 
     url(r'^applications-link/unread$',
-        login_required(admin_views.unread_email_redirect),
-        name='intake-redirect_link_views'),
+        login_required(redirect_link_views.unread_email_redirect),
+        name='intake-unread_email_redirect'),
 
     url(r'^applications-link/needs_update$',
-        login_required(admin_views.unread_email_redirect),
-        name='intake-redirect_link_views'),
+        login_required(redirect_link_views.needs_update_email_redirect),
+        name='intake-needs_update_email_redirect'),
 
     url(r'^applications-link/all$',
-        login_required(admin_views.unread_email_redirect),
-        name='intake-redirect_link_views'),
+        login_required(redirect_link_views.all_email_redirect),
+        name='intake-all_email_redirect'),
 
     # APPLICATION BUNDLE VIEWS
     url(r'^applications/unread/pdf/$',
