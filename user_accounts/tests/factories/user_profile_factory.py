@@ -13,6 +13,11 @@ class UserProfileFactory(factory.DjangoModelFactory):
         model = models.UserProfile
 
 
+def fake_app_reviewer(**kwargs):
+    user = UserFactory(group_names=['application_reviewers'], **kwargs)
+    return UserProfileFactory(user=user)
+
+
 def profile_for_org_and_group_names(
         org, group_names=None, should_get_notifications=True, **user_kwargs):
     """Creates a user and user profile based on the org slug
