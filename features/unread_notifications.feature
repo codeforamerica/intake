@@ -11,8 +11,7 @@ Feature: An org user can follow a notification to see unreads
 	Scenario: Org user can follow an unreads link from an email
 		Given I log in as an org user at "cc_pubdef"
 		  And it is a weekday
-		  And Front is patched
-		 Then I should receive the unreads email
+		 Then org user at "cc_pubdef" should receive the unreads email
 		  And I should see "15 unread applications" in the email
 		  And I should see "18 applications awaiting a status update" in the email
 		  And I should see "all 24 applications" in the email
