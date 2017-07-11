@@ -1,8 +1,7 @@
-{{ org_name }} has
+{{ org_name }} has:
 {%- if unread_count > 0 %}
-	{{ unread_count }} unread applications. Emailed {{ oxford_comma(emails) }} 
+	{{ unread_count }} unread applications. (Emailed {{ oxford_comma(emails) }}) 
 {%- else %}
-	no unread applications. Did not email {{ oxford_comma(emails) }}
+	no unread applications. (Did not email {{ oxford_comma(emails) }})
 {%- endif %}
-	{{ update_count }} applications needing status updates out of 
-	{{ all_count }} total applications
+	{{ update_count }} applications needing status updates out of {{ all_count }} total applications
