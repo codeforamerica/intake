@@ -55,21 +55,18 @@ def get_tabs_for_org_user(organization, active_tab):
         {
             'url': reverse('intake-app_unread_index'),
             'label': 'Unread',
-            'count': AppsService.get_unread_applications_for_org(
-                        organization).count(),
+            'count': AppsService.get_unread_apps_per_org_count(organization),
             'is_active': False},
         {
             'url': reverse('intake-app_needs_update_index'),
             'label': 'Needs Status Update',
-            'count': models.Application.objects.filter(
-                organization=organization, status_updates__isnull=True
-            ).count(),
+            'count': AppsService.get_needs_update_apps_per_org_count(
+                organization),
             'is_active': False},
         {
             'url': reverse('intake-app_all_index'),
             'label': 'All',
-            'count': models.Application.objects.filter(
-                organization=organization).count(),
+            'count': AppsService.get_all_apps_per_org_count(organization),
             'is_active': False}
     ]
 
