@@ -118,7 +118,6 @@ def count_unreads_and_send_notifications_to_orgs():
     orgs = get_orgs_that_might_need_a_bundle_email_today()
     for org in orgs:
         emails = org.get_referral_emails()
-        # subs = list(SubmissionsService.get_unopened_submissions_for_org(org))
         unread_count = AppsService.get_unread_apps_per_org_count(org)
         update_count = AppsService.get_needs_update_apps_per_org_count(org)
         all_count = AppsService.get_all_apps_per_org_count(org)

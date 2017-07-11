@@ -19,6 +19,8 @@ class TransferOrganizationFactory(PrepopulatedModelFactory):
 class FakeOrganizationFactory(factory.DjangoModelFactory):
     slug = factory.Sequence(lambda n: 'org-{}'.format(n))
     name = factory.Sequence(lambda n: 'Fake Org {}'.format(n))
+    is_checking_notifications = True
+    is_receiving_agency = True
 
     class Meta:
         model = models.Organization

@@ -8,6 +8,7 @@ class UserProfileFactory(factory.DjangoModelFactory):
     name = factory.Sequence(lambda n: 'Fake User {}'.format(n))
     user = factory.SubFactory(UserFactory)
     organization = factory.SubFactory(FakeOrganizationFactory)
+    should_get_notifications = True
 
     class Meta:
         model = models.UserProfile
