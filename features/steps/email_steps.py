@@ -40,4 +40,3 @@ def follow_unreads_link_in_email(context):
         expected_unreads_link, context.test.unreads_email['body'])
     path = reverse('intake-unread_email_redirect')
     context.browser.get(urljoin(context.test.live_server_url, path))
-    
