@@ -240,15 +240,17 @@ class TestCreateBundlesAndSendNotificationsToOrgs(TestCase):
             slug=constants.Organizations.ALAMEDA_PUBDEF)
         # assume we only receive one org back
         get_orgs.return_value = [a_pubdef]
-        with self.assertNumQueries(6):
+        with self.assertNumQueries(5):
             # queries that are run:
             #   get org emails
-            #   get unopened submissions
-            #   make new bundle
-            #   add submissions to bundle (2 queries)
-            #   check if it needs pdfs
-            BundlesService.create_bundles_and_send_notifications_to_orgs()
+            #   get submissions
+            #   get app counts (unread, needs update, all)
+            BundlesService.count_unreads_and_send_notifications_to_orgs()
         self.assertEqual(
             self.notifications.front_email_daily_app_bundle.send.call_count, 1)
         self.assertEqual(
             self.notifications.slack_app_bundle_sent.send.call_count, 1)
+
+    @patch(
+        'intake.services.bundles.count_unreads_and_send_notifications_to_orgs')
+    def test_count_unreads_and_send_notifications_to_orgs(self, )

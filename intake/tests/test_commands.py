@@ -11,7 +11,7 @@ class TestCommands(TestCase):
     def test_send_unopened_apps_notification(self, BundlesService):
         command = Mock()
         commands.send_unopened_apps_notification.Command.handle(command)
-        BundlesService.create_bundles_and_send_notifications_to_orgs\
+        BundlesService.count_unreads_and_send_notifications_to_orgs\
             .assert_called_once_with()
         command.style.SUCCESS.assert_called_once_with(
             "Successfully referred any unopened apps")

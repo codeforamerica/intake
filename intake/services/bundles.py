@@ -114,15 +114,15 @@ def get_orgs_that_might_need_a_bundle_email_today():
     return orgs
 
 
-def create_bundles_and_send_notifications_to_orgs():
+def count_unreads_and_send_notifications_to_orgs():
     orgs = get_orgs_that_might_need_a_bundle_email_today()
     for org in orgs:
         emails = org.get_referral_emails()
-        subs = list(SubmissionsService.get_unopened_submissions_for_org(org))
+        # subs = list(SubmissionsService.get_unopened_submissions_for_org(org))
         unread_count = AppsService.get_unread_apps_per_org_count(org)
         update_count = AppsService.get_needs_update_apps_per_org_count(org)
         all_count = AppsService.get_all_apps_per_org_count(org)
-        if subs:
+        if unread_count > 0:
             notifications.front_email_daily_app_bundle.send(
                 to=emails,
                 org_name=org.name,
@@ -135,10 +135,10 @@ def create_bundles_and_send_notifications_to_orgs():
                     'intake-needs_update_email_redirect'),
                 all_redirect_link=external_reverse(
                     'intake-all_email_redirect'))
-            notifications.slack_app_bundle_sent.send(
-                org_name=org.name,
-                emails=emails,
-                unread_count=unread_count,
-                update_count=update_count,
-                all_count=all_count,
-            )
+        notifications.slack_app_bundle_sent.send(
+            org_name=org.name,
+            emails=emails,
+            unread_count=unread_count,
+            update_count=update_count,
+            all_count=all_count,
+        )

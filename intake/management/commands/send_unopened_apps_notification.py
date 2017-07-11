@@ -7,7 +7,7 @@ class Command(BaseCommand):
     help = 'Sends an email about unopened applications'
 
     def handle(self, *args, **options):
-        BundlesService.create_bundles_and_send_notifications_to_orgs()
+        BundlesService.count_unreads_and_send_notifications_to_orgs()
         self.stdout.write(
             self.style.SUCCESS("Successfully referred any unopened apps")
         )
