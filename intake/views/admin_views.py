@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, get_object_or_404
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.views.generic import View
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView, RedirectView
 from django.http import Http404, HttpResponse
 from django.template.response import TemplateResponse
 
@@ -55,21 +55,18 @@ def get_tabs_for_org_user(organization, active_tab):
         {
             'url': reverse('intake-app_unread_index'),
             'label': 'Unread',
-            'count': AppsService.get_unread_applications_for_org(
-                        organization).count(),
+            'count': AppsService.get_unread_apps_per_org_count(organization),
             'is_active': False},
         {
             'url': reverse('intake-app_needs_update_index'),
             'label': 'Needs Status Update',
-            'count': models.Application.objects.filter(
-                organization=organization, status_updates__isnull=True
-            ).count(),
+            'count': AppsService.get_needs_update_apps_per_org_count(
+                organization),
             'is_active': False},
         {
             'url': reverse('intake-app_all_index'),
             'label': 'All',
-            'count': models.Application.objects.filter(
-                organization=organization).count(),
+            'count': AppsService.get_all_apps_per_org_count(organization),
             'is_active': False}
     ]
 
@@ -119,6 +116,8 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
                 self.request.user.profile.organization, 'All')
             context['app_index_scope_title'] = "All Applications To {}".format(
                 self.request.user.profile.organization.name)
+            if count == 0:
+                context['no_results'] = "You have no applications."
         context['page_counter'] = \
             utils.get_page_navigation_counter(
                 page=context['results'],
@@ -138,6 +137,7 @@ class ApplicationUnreadIndex(ApplicationIndex):
             count)
         if count == 0:
             context['print_all_link'] = None
+            context['no_results'] = "You have read all new applications!"
         else:
             context['print_all_link'] = get_url_for_ids(
                 'intake-pdf_bundle_wrapper_view',
@@ -163,6 +163,10 @@ class ApplicationNeedsUpdateIndex(ApplicationUnreadIndex):
         context['app_index_tabs'], count = get_tabs_for_org_user(
             self.request.user.profile.organization,
             'Needs Status Update')
+        if count == 0:
+            context['no_results'] = "You have updated all applications!"
+        else:
+            context['no_results'] = None
         context['print_all_link'] = None
         context['app_index_scope_title'] = \
             "{} Applications Need Status Updates".format(count)

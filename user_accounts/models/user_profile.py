@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 import user_accounts
 from user_accounts import exceptions
+import uuid
+import intake.services.events_service as EventsService
 
 
 class UserProfile(models.Model):
@@ -14,11 +16,15 @@ class UserProfile(models.Model):
         related_name='profiles'
     )
     should_get_notifications = models.BooleanField(default=False)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
 
     def get_display_name(self):
         name_display = self.name or self.user.email
         return "{} at {}".format(
             name_display, self.organization.name)
+
+    def get_uuid(self):
+        return self.uuid.hex
 
     def __str__(self):
         display = self.get_display_name()
@@ -49,6 +55,7 @@ class UserProfile(models.Model):
             **kwargs
         )
         profile.save()
+        EventsService.user_account_created(profile)
         user.groups.add(*invitation.groups.all())
         return profile
 

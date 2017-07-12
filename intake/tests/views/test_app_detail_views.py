@@ -148,7 +148,20 @@ class TestApplicationDetail(AppDetailFixturesBaseTestCase):
     @patch('intake.notifications.slack_submissions_viewed.send')
     def test_agency_user_can_only_see_latest_status_for_their_org(self, slack):
         user = self.be_apubdef_user()
-        submission = self.combo_submissions[0]
+        orgs = [
+            Organization.objects.get(slug='a_pubdef'),
+            Organization.objects.get(slug='cc_pubdef')
+            ]
+        submission = factories.FormSubmissionWithOrgsFactory(
+            organizations=orgs)
+        for org in orgs:
+            updated_application = models.Application.objects.filter(
+                organization=org, form_submission=submission).first()
+            factories.StatusUpdateWithNotificationFactory.create(
+                application=updated_application,
+                author=org.profiles.first().user)
+            updated_application.has_been_opened = True
+            updated_application.save()
         statuses = models.StatusUpdate.objects.filter(
             application__form_submission=submission)
         latest_status = statuses.filter(

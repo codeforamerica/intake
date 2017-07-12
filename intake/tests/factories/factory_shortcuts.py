@@ -3,11 +3,12 @@ from user_accounts.models import Organization
 from .form_submission_factory import FormSubmissionWithOrgsFactory
 
 
-def make_apps_for(org_slug, count=3):
+def make_apps_for(org_slug, count=3, **sub_kwargs):
     apps = []
     for i in range(count):
         sub = FormSubmissionWithOrgsFactory(
-            organizations=[Organization.objects.get(slug=org_slug)])
+            organizations=[Organization.objects.get(slug=org_slug)],
+            **sub_kwargs)
         apps.append(sub.applications.first())
     return apps
 

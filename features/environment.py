@@ -63,3 +63,9 @@ def after_all(context):
 
 def before_scenario(context, scenario):
     call_command('load_essential_data')
+    context.test.patches = {}
+
+
+def after_scenario(context, scenario):
+    for patch_name, patch in context.test.patches.items():
+        patch.stop()

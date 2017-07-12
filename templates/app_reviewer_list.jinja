@@ -1,22 +1,25 @@
-<table class="table applications_list">
-<tr>
-  <th>Date</th>
-  <th>Last Name</th>
-  <th>First Name</th>
-  {%- if show_pdf %}
-  <th>Intake PDF</th>
-  {%- endif %}
-  <th>Status</th>
-  <th>Latest Status Update</th>
-  <th>Actions</th>
-  <th></th>
-</tr>
-{%- for app in results %}
-  {%- if app.was_transferred_out %}
-    {%- include "includes/org_user_transferred_app_listing.jinja" %}
-  {%- else %}
-    {%- include "includes/org_user_app_index_listing.jinja" %}
-  {%- endif %}
-{%- endfor %}
-  
-</table>
+{%- if no_results %}
+  <p class="no-results">{{ no_results }}</p>
+{%- else %}
+  <table class="table applications_list">
+  <tr>
+    <th>Date</th>
+    <th>Last Name</th>
+    <th>First Name</th>
+    {%- if show_pdf %}
+    <th>Intake PDF</th>
+    {%- endif %}
+    <th>Status</th>
+    <th>Latest Status Update</th>
+    <th>Actions</th>
+    <th></th>
+  </tr>
+  {%- for app in results %}
+    {%- if app.was_transferred_out %}
+      {%- include "includes/org_user_transferred_app_listing.jinja" %}
+    {%- else %}
+      {%- include "includes/org_user_app_index_listing.jinja" %}
+    {%- endif %}
+  {%- endfor %}
+  </table>
+{%- endif %}
