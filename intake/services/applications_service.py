@@ -133,3 +133,18 @@ def mark_opened(application_ids):
 def get_valid_application_ids_from_set(application_ids):
     return models.Application.objects.filter(
         id__in=application_ids).values_list('id', flat=True)
+
+
+def get_unread_apps_per_org_count(organization):
+    return models.Application.objects.filter(
+        organization=organization, has_been_opened=False).count()
+
+
+def get_needs_update_apps_per_org_count(organization):
+    return models.Application.objects.filter(
+        organization=organization, status_updates__isnull=True).count()
+
+
+def get_all_apps_per_org_count(organization):
+    return models.Application.objects.filter(
+        organization=organization).count()

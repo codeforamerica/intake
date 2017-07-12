@@ -11,6 +11,7 @@ from intake.models import (
 from user_accounts.models import Organization
 import intake.services.submissions as SubmissionsService
 import intake.services.events_service as EventsService
+import intake.services.applications_service as AppsService
 from django.db.models import Count
 
 
@@ -113,21 +114,30 @@ def get_orgs_that_might_need_a_bundle_email_today():
     return orgs
 
 
-def create_bundles_and_send_notifications_to_orgs():
+def count_unreads_and_send_notifications_to_orgs():
     orgs = get_orgs_that_might_need_a_bundle_email_today()
     for org in orgs:
         emails = org.get_referral_emails()
-        subs = list(SubmissionsService.get_unopened_submissions_for_org(org))
-        if subs:
-            bundle = create_bundle_from_submissions(subs, organization=org)
-            bundle_url = bundle.get_external_url()
+        unread_count = AppsService.get_unread_apps_per_org_count(org)
+        update_count = AppsService.get_needs_update_apps_per_org_count(org)
+        all_count = AppsService.get_all_apps_per_org_count(org)
+        if unread_count > 0:
             notifications.front_email_daily_app_bundle.send(
                 to=emails,
-                count=len(subs),
-                bundle_url=bundle_url,
-                app_index_url=external_reverse('intake-app_index'))
-            notifications.slack_app_bundle_sent.send(
-                submissions=subs,
-                emails=emails,
-                bundle_url=bundle_url,
-            )
+                org_name=org.name,
+                unread_count=unread_count,
+                update_count=update_count,
+                all_count=all_count,
+                unread_redirect_link=external_reverse(
+                    'intake-unread_email_redirect'),
+                needs_update_redirect_link=external_reverse(
+                    'intake-needs_update_email_redirect'),
+                all_redirect_link=external_reverse(
+                    'intake-all_email_redirect'))
+        notifications.slack_app_bundle_sent.send(
+            org_name=org.name,
+            emails=emails,
+            unread_count=unread_count,
+            update_count=update_count,
+            all_count=all_count,
+        )

@@ -116,6 +116,7 @@ def mark_opened(submission, user, send_slack_notification=True):
     for app_id in queryset.values_list('id', flat=True):
         tasks.remove_application_pdfs.delay(app_id)
     EventsService.apps_opened(submission.applications.all(), user)
+    EventsService.user_apps_opened(submission.applications.all(), user)
     if send_slack_notification:
         notifications.slack_submissions_viewed.send(
             submissions=[submission], user=user,

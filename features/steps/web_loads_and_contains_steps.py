@@ -29,7 +29,7 @@ def test_page_loads(context, url):
     browser_url = urlparse(context.browser.current_url)
     expected_url = urlparse(urljoin(context.test.live_server_url, url))
     context.test.assertEquals(
-        expected_url.path, browser_url.path)
+        expected_url.path.rstrip('/'), browser_url.path.rstrip('/'))
     context.test.assertNotIn('Server Error', context.browser.page_source)
 
 
