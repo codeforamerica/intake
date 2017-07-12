@@ -37,6 +37,9 @@ UNREAD_APPLICATIONS_FILTER_KWARGS = dict(
     has_been_opened=False, status_updates__isnull=True)
 
 
+NEEDS_STATUS_UPDATE_FILTER_KWARGS = dict(status_updates__isnull=True)
+
+
 def get_unread_applications_for_org(organization):
     return get_applications_for_org(organization).filter(
         **UNREAD_APPLICATIONS_FILTER_KWARGS)
@@ -67,7 +70,7 @@ def get_unread_applications_for_org_user(user, page_index):
 
 def get_applications_needing_updates_for_org_user(user, page_index):
     return get_applications_for_org_user(
-        user, page_index, status_updates__isnull=True)
+        user, page_index, **NEEDS_STATUS_UPDATE_FILTER_KWARGS)
 
 
 def get_status_updates_for_org_user(application):
@@ -137,12 +140,12 @@ def get_valid_application_ids_from_set(application_ids):
 
 def get_unread_apps_per_org_count(organization):
     return models.Application.objects.filter(
-        organization=organization, has_been_opened=False).count()
+        organization=organization, **UNREAD_APPLICATIONS_FILTER_KWARGS).count()
 
 
 def get_needs_update_apps_per_org_count(organization):
     return models.Application.objects.filter(
-        organization=organization, status_updates__isnull=True).count()
+        organization=organization, **NEEDS_STATUS_UPDATE_FILTER_KWARGS).count()
 
 
 def get_all_apps_per_org_count(organization):

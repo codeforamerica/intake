@@ -209,10 +209,8 @@ class TestGetOrgsThatMightNeedABundleEmailToday(TestCase):
 class TestCreateBundlesAndSendNotificationsToOrgs(TestCase):
 
     fixtures = [
-        'counties', 'groups',
-        'organizations', 'mock_profiles',
-        'mock_2_submissions_to_cc_pubdef',
-        'mock_2_submissions_to_a_pubdef', 'template_options'
+        'counties', 'groups', 'organizations', 'mock_profiles',
+        'template_options'
     ]
 
     def setUp(self):
@@ -240,6 +238,7 @@ class TestCreateBundlesAndSendNotificationsToOrgs(TestCase):
     def test_queries_and_notifications_for_each_org(self, get_orgs):
         a_pubdef = auth_models.Organization.objects.get(
             slug=constants.Organizations.ALAMEDA_PUBDEF)
+        make_apps_for(a_pubdef.slug, count=3)
         # assume we only receive one org back
         get_orgs.return_value = [a_pubdef]
         with self.assertNumQueries(4):
