@@ -41,4 +41,10 @@
     </div>
   </div>
 </section>
+<script>
+  window.onbeforeunload = function() {
+    location.reload();
+    return undefined;
+  }
+</script>
 {% endblock content %}
