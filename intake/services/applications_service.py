@@ -1,5 +1,6 @@
 from django.db.models import Q
 from intake import models, serializers, notifications
+import intake.services.events_service as EventsService
 from . import pagination
 
 

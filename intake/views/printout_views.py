@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.views.generic.base import View
 from intake import models
 import intake.services.pdf_service as PDFService
-import intake.services.applications_services as AppsService
+import intake.services.applications_service as AppsService
 from intake.views.base_views import (
     ViewAppDetailsMixin, AppIDQueryParamMixin, not_allowed)
 from intake.views.app_detail_views import ApplicationDetail
@@ -22,7 +22,7 @@ class CasePrintoutPDFView(ApplicationDetail):
                 id=request.user.profile.organization_id).exists():
             return not_allowed(request)
         apps = AppsService.filter_to_org_if_not_staff(
-            submissions.applications.all())
+            submission.applications.all(), request.user)
         AppsService.handle_apps_opened(
             apps, request.user, send_slack_notification=False)
         filename, pdf_bytes = PDFService.get_printout_for_submission(
