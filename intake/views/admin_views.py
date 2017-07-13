@@ -1,21 +1,22 @@
 from django.shortcuts import redirect, get_object_or_404
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, reverse
 from django.views.generic import View
 from django.views.generic.base import TemplateView
-
 from django.http import Http404, HttpResponse
 from django.template.response import TemplateResponse
 
-from intake import models, notifications, forms, utils
-from printing.pdf_form_display import PDFFormDisplay
+from project.services.query_params import get_url_for_ids
+from intake import models, notifications, utils
 
 import intake.services.submissions as SubmissionsService
 import intake.services.applications_service as AppsService
 import intake.services.bundles as BundlesService
 import intake.services.tags as TagsService
+import intake.services.pdf_service as PDFService
+import intake.services.display_form_service as DisplayFormService
 
-from intake.views.base_views import ViewAppDetailsMixin
-from intake.views.app_detail_views import ApplicationDetail, not_allowed
+from intake.views.base_views import ViewAppDetailsMixin, not_allowed
+from intake.views.app_detail_views import ApplicationDetail
 
 
 class FilledPDF(ApplicationDetail):
@@ -43,10 +44,52 @@ class FilledPDF(ApplicationDetail):
                     organization=org)
             fillable_pdf = fillables.first()
             pdf = fillable_pdf.fill_for_submission(submission)
-        SubmissionsService.mark_opened(submission, request.user)
-        response = HttpResponse(pdf.pdf,
-                                content_type='application/pdf')
+        apps = AppsService.filter_to_org_if_not_staff(
+            submission.applications.all(), request.user)
+        AppsService.handle_apps_opened(apps, request.user)
+        response = HttpResponse(pdf.pdf, content_type='application/pdf')
         return response
+
+
+def get_tabs_for_org_user(organization, active_tab):
+    tabs = [
+        {
+            'url': reverse('intake-app_unread_index'),
+            'label': 'Unread',
+            'count': AppsService.get_unread_apps_per_org_count(organization),
+            'is_active': False},
+        {
+            'url': reverse('intake-app_needs_update_index'),
+            'label': 'Needs Status Update',
+            'count': AppsService.get_needs_update_apps_per_org_count(
+                organization),
+            'is_active': False},
+        {
+            'url': reverse('intake-app_all_index'),
+            'label': 'All',
+            'count': AppsService.get_all_apps_per_org_count(organization),
+            'is_active': False}
+    ]
+
+    active_tab_count = activate_tab_by_label(tabs, active_tab)
+
+    return tabs, active_tab_count
+
+
+def get_tabs_for_staff_user():
+    return [
+        {
+            'url': reverse('intake-app_all_index'),
+            'label': 'All Applications',
+            'count': models.FormSubmission.objects.count(),
+            'is_active': True}]
+
+
+def activate_tab_by_label(tabs, label):
+    for tab in tabs:
+        if tab['label'] == label:
+            tab['is_active'] = True
+            return tab['count']
 
 
 class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
@@ -64,14 +107,70 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
             context['results'] = \
                 SubmissionsService.get_submissions_for_followups(
                     self.request.GET.get('page'))
+            context['app_index_tabs'] = get_tabs_for_staff_user()
+            context['app_index_scope_title'] = "All Applications"
         else:
             context['results'] = \
-                AppsService.get_applications_index_for_org_user(
+                AppsService.get_all_applications_for_org_user(
                     self.request.user, self.request.GET.get('page'))
+            context['app_index_tabs'], count = get_tabs_for_org_user(
+                self.request.user.profile.organization, 'All')
+            context['app_index_scope_title'] = "All Applications To {}".format(
+                self.request.user.profile.organization.name)
+            if count == 0:
+                context['no_results'] = "You have no applications."
         context['page_counter'] = \
             utils.get_page_navigation_counter(
                 page=context['results'],
                 wing_size=9)
+
+        return context
+
+
+class ApplicationUnreadIndex(ApplicationIndex):
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['results'] = AppsService.get_unread_applications_for_org_user(
+                self.request.user, self.request.GET.get('page'))
+        context['app_index_tabs'], count = get_tabs_for_org_user(
+            self.request.user.profile.organization, 'Unread')
+        context['app_index_scope_title'] = "{} Unread Applications".format(
+            count)
+        if count == 0:
+            context['print_all_link'] = None
+            context['no_results'] = "You have read all new applications!"
+        else:
+            context['print_all_link'] = get_url_for_ids(
+                'intake-pdf_bundle_wrapper_view',
+                AppsService.get_unread_applications_for_org(
+                    self.request.user.profile.organization
+                        ).values_list('id', flat=True)
+                )
+        return context
+
+    def get(self, request):
+        if request.user.is_staff:
+            return redirect(reverse_lazy('intake-app_index'))
+        else:
+            return super().get(self, request)
+
+
+class ApplicationNeedsUpdateIndex(ApplicationUnreadIndex):
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['results'] = \
+            AppsService.get_applications_needing_updates_for_org_user(
+                self.request.user, self.request.GET.get('page'))
+        context['app_index_tabs'], count = get_tabs_for_org_user(
+            self.request.user.profile.organization,
+            'Needs Status Update')
+        if count == 0:
+            context['no_results'] = "You have updated all applications!"
+        else:
+            context['no_results'] = None
+        context['print_all_link'] = None
+        context['app_index_scope_title'] = \
+            "{} Applications Need Status Updates".format(count)
         return context
 
 
@@ -109,7 +208,8 @@ class ApplicationBundle(ApplicationDetail, MultiSubmissionMixin):
         bundle = BundlesService\
             .get_or_create_for_submissions_and_user(submissions, request.user)
         forms = [
-            submission.get_display_form_for_user(request.user)
+            DisplayFormService.get_display_form_for_user_and_submission(
+                request.user, submission)
             for submission in submissions]
         context = dict(
             bundle=bundle,
@@ -136,7 +236,8 @@ class ApplicationBundleDetail(ApplicationDetail):
         submissions = list(
             request.user.profile.filter_submissions(bundle.submissions.all()))
         forms = [
-            submission.get_display_form_for_user(request.user)
+            DisplayFormService.get_display_form_for_user_and_submission(
+                request.user, submission)
             for submission in submissions]
         context = dict(
             bundle=bundle,
@@ -224,7 +325,8 @@ class MarkSubmissionStepView(ViewAppDetailsMixin, View, MultiSubmissionMixin):
 
         self.submission_ids = [sub.id for sub in self.submissions]
         self.next_param = request.GET.get('next',
-                                          reverse_lazy('intake-app_index'))
+                                          reverse_lazy(
+                                            'intake-app_index'))
         self.log()
         self.modify_submissions()
         self.add_message()
@@ -240,88 +342,6 @@ class MarkProcessed(MarkSubmissionStepView):
             **self.get_notification_context())
 
 
-def get_applicant_name(form):
-    return '{}, {}'.format(
-        form.last_name.get_display_value(),
-        ' '.join([
-            n for n in [
-                form.first_name.get_display_value(),
-                form.middle_name.get_display_value()
-            ] if n
-        ])
-    )
-
-
-def get_printout_for_submission(user, submission):
-    # get the correct form
-    form, letter = submission.get_display_form_for_user(user)
-    # use the form to serialize the submission
-    pdf_display = PDFFormDisplay(form, letter)
-    canvas, pdf = pdf_display.render(
-        title=get_applicant_name(form) + " - Case Details"
-    )
-    filename = '{}-{}-{}-CaseDetails.pdf'.format(
-        form.last_name.get_display_value(),
-        form.first_name.get_display_value(),
-        submission.id
-    )
-    pdf.seek(0)
-    return filename, pdf.read()
-
-
-def get_concatenated_printout_for_bundle(user, bundle):
-    # for each of the submissions,
-    canvas = None
-    pdf_file = None
-    submissions = list(bundle.submissions.all())
-    count = len(submissions)
-    if count == 1:
-        return get_printout_for_submission(user, submissions[0])
-    for i, submission in enumerate(submissions):
-        form, letter = submission.get_display_form_for_user(user)
-        if i == 0:
-            pdf_display = PDFFormDisplay(form, letter)
-            canvas, pdf_file = pdf_display.render(save=False)
-        elif i > 0 and i < (count - 1):
-            pdf_display = PDFFormDisplay(form, letter, canvas=canvas)
-            canvas, pdf = pdf_display.render(save=False)
-        else:
-            pdf_display = PDFFormDisplay(form, letter, canvas=canvas)
-            canvas, pdf = pdf_display.render(
-                save=True,
-                title="{} Applications from Code for America".format(count))
-    today = utils.get_todays_date()
-    filename = '{}-{}-Applications-CodeForAmerica.pdf'.format(
-        today.strftime('%Y-%m-%d'),
-        count
-    )
-    pdf_file.seek(0)
-    return filename, pdf_file.read()
-
-
-class CasePrintoutPDFView(ApplicationDetail):
-    """Serves a PDF with full case details, based on the details
-    needed by the user's organization
-
-    The PDF is created on the fly
-    """
-
-    def get(self, request, submission_id):
-        submission = get_object_or_404(
-            models.FormSubmission, pk=int(submission_id))
-        if not submission.organizations.filter(
-                id=request.user.profile.organization_id).exists():
-            return not_allowed(request)
-        SubmissionsService.mark_opened(
-            submission, request.user, send_slack_notification=False)
-        filename, pdf_bytes = get_printout_for_submission(
-            request.user,
-            submission)
-        response = HttpResponse(pdf_bytes, content_type='application/pdf')
-        response['Content-Disposition'] = 'filename="{}"'.format(filename)
-        return response
-
-
 class CaseBundlePrintoutPDFView(ViewAppDetailsMixin, View):
     """Returns a concatenated PDF of case detail PDFs
     for an org user
@@ -335,7 +355,7 @@ class CaseBundlePrintoutPDFView(ViewAppDetailsMixin, View):
             return not_allowed(request)
         BundlesService.mark_opened(
             bundle, request.user, send_slack_notification=False)
-        filename, pdf_bytes = get_concatenated_printout_for_bundle(
+        filename, pdf_bytes = PDFService.get_concatenated_printout_for_bundle(
             request.user, bundle)
         response = HttpResponse(
             pdf_bytes, content_type='application/pdf')
@@ -346,9 +366,10 @@ class CaseBundlePrintoutPDFView(ViewAppDetailsMixin, View):
 filled_pdf = FilledPDF.as_view()
 pdf_bundle = FilledPDFBundle.as_view()
 app_index = ApplicationIndex.as_view()
+app_unread_index = ApplicationUnreadIndex.as_view()
+app_needs_update_index = ApplicationNeedsUpdateIndex.as_view()
 app_bundle = ApplicationBundle.as_view()
 mark_processed = MarkProcessed.as_view()
 app_bundle_detail = ApplicationBundleDetail.as_view()
 app_bundle_detail_pdf = ApplicationBundleDetailPDFView.as_view()
-case_printout = CasePrintoutPDFView.as_view()
 case_bundle_printout = CaseBundlePrintoutPDFView.as_view()

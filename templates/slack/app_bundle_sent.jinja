@@ -1,8 +1,7 @@
-{% if submissions|length > 0 -%}
-Emailed {{ oxford_comma(emails) }} with a link to
-  {%- if submissions|length > 1 %} apps from <{{ bundle_url}}|{{oxford_comma(submissions) }}>
-  {%- else %} <{{ bundle_url }}|{{ submissions[0] }}'s application>
-  {%- endif %}
-{%- else -%}
-No unopened applications. Did not email {{ oxford_comma(emails) }}
-{%- endif -%}
+{{ org_name }} has:
+{%- if unread_count > 0 %}
+	{{ unread_count }} unread applications. (Emailed {{ oxford_comma(emails) }}) 
+{%- else %}
+	no unread applications. (Did not email {{ oxford_comma(emails) }})
+{%- endif %}
+	{{ update_count }} applications needing status updates out of {{ all_count }} total applications

@@ -1,0 +1,26 @@
+{% extends "cmr_base.jinja" %}
+
+{% block content %}
+
+<section class="content">
+  <div class="container">
+
+    <div class="row">
+      <div class="bundle-metadata col-xs-12 col-md-10 col_centered">
+        <h1 class="bundle-count">
+          {{ app_count }} applications to the {{ organization.name }}
+        </h1>
+      </div> 
+    </div>
+
+    <div id="bundle-pdf" class="row">
+      <div class="iframe_container col-xs-12 col-md-10 col_centered">
+        <iframe id="embedded-pdf" class="pdf_inset" src="{{ 
+          pdf_url }}" frameborder="0" width="800" height="600">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+{%- include "includes/back_reload.jinja" %}
+{% endblock content %}

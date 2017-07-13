@@ -8,7 +8,7 @@ Feature: An org user can search for an application and navigate to its detail pa
 	     And a "ebclc" application to search for
 
 	Scenario: Org user can search for application and find details
-	   Given I log in as an org user at "ebclc"
+	 Given I log in as an org user at "ebclc"
 		 And that "/applications/" loads
 		When I search for the applicant's name
 		Then I should see the applicant's name in search results

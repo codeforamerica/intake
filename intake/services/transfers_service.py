@@ -65,6 +65,7 @@ def transfer_application(author, application, to_organization, reason):
     application.was_transferred_out = True
     application.save()
     EventsService.app_transferred(application, new_application, author)
+    EventsService.user_app_transferred(application, new_application, author)
     return transfer, transfer_status_update, new_application
 
 

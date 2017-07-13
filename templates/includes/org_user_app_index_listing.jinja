@@ -25,7 +25,11 @@
     {%- if app.latest_status %}
           {{ app.latest_status.status_type }}
     {%- else -%}
-      New
+      {% if app.has_been_opened %}
+        Read
+      {% else %}
+        Unread
+      {% endif %}
       {%- if app.incoming_transfers %}
       <span class="incoming-transfer-note">
         (Incoming Transfer)

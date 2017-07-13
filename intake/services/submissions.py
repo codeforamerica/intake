@@ -2,7 +2,7 @@ import itertools
 from django.utils.translation import ugettext_lazy as _
 import Levenshtein
 import intake.services.events_service as EventsService
-from intake import models, serializers, notifications
+from intake import models, serializers, notifications, tasks
 from intake.constants import SMS, EMAIL
 from . import pagination
 from intake.service_objects import ConfirmationNotification
@@ -39,6 +39,13 @@ def create_submission(form, organizations, applicant_id):
     submission.organizations.add_orgs_to_sub(*organizations)
     link_with_any_duplicates(submission, applicant_id)
     return submission
+
+
+def send_to_newapps_bundle_if_needed(submission, organizations):
+    sf_ids = [org.id for org in organizations if org.slug == 'sf_pubdef']
+    if sf_ids:
+        app = submission.applications.filter(organization_id=sf_ids[0]).first()
+        tasks.add_application_pdfs.delay(app.id)
 
 
 def fill_pdfs_for_submission(submission, organizations=None):
@@ -99,17 +106,6 @@ def get_submissions_for_followups(page_index):
     query = get_submissions_for_staff_user()
     serializer = serializers.FormSubmissionFollowupListSerializer
     return pagination.get_serialized_page(query, serializer, page_index)
-
-
-def mark_opened(submission, user, send_slack_notification=True):
-    submission.applications.filter(
-        organization__profiles__user=user
-    ).distinct().update(has_been_opened=True)
-    EventsService.apps_opened(submission.applications.all(), user)
-    if send_slack_notification:
-        notifications.slack_submissions_viewed.send(
-            submissions=[submission], user=user,
-            bundle_url=submission.get_external_url())
 
 
 def check_for_existing_duplicates(submission, applicant_id):

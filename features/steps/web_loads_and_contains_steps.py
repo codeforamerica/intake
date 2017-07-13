@@ -1,16 +1,43 @@
-from behave import given, when, then
-from urllib.parse import urljoin, urlparse, urldefrag
+from behave import given, then, when
+from urllib.parse import urljoin, urlparse
 
 
+@when('I open "{url}"')
 @given('that "{url}" loads')
 def load_page(context, url):
     context.browser.get(urljoin(context.test.live_server_url, url))
 
 
+@then('I should see a flash message that says "{text}"')
+def test_flash_message_contains_text(context, text):
+    element = context.browser.find_element_by_css_selector('.flash_messages')
+    context.test.assertIn(text, element.text)
+
+
+@when('I click the "{link_text}" link to "{url}"')
+def follow_link_with_text(context, link_text, url):
+    selector = 'a[href*="{url}"]'.format(url=url)
+    element = context.browser.find_element_by_css_selector(selector)
+    # it's a slight break in decorum to assert here, but seems like a useful
+    # way to follow a link and be sure it says the right thing to the user
+    context.test.assertIn(link_text, element.text)
+    element.click()
+
+
 @then('it should load "{url}"')
 def test_page_loads(context, url):
     browser_url = urlparse(context.browser.current_url)
-    context.test.assertEquals(url, browser_url.path[1:])
+    expected_url = urlparse(urljoin(context.test.live_server_url, url))
+    context.test.assertEquals(
+        expected_url.path.rstrip('/'), browser_url.path.rstrip('/'))
+    context.test.assertNotIn('Server Error', context.browser.page_source)
+
+
+@then('it should have an iframe with "{iframe_src_url}"')
+def test_iframe_exists_for_url(context, iframe_src_url):
+    selector = 'iframe[src*="{}"]'.format(iframe_src_url)
+    element = context.browser.find_element_by_css_selector(selector)
+    context.test.assertTrue(element)
 
 
 @given('it loads css')
@@ -62,43 +89,13 @@ def check_link_goes_to_page(context, element_id, url):
     )
 
 
-@when('"{checkbox_value}" is clicked on the "{checkbox_name}" radio button')
-@when('the "{checkbox_name}" checkbox option "{checkbox_value}" is clicked')
-def click_checkbox(context, checkbox_name, checkbox_value):
-    selector = "input[name='%s'][value='%s']" % (
-        checkbox_name,
-        checkbox_value,
-    )
-    checkbox = context.browser.find_element_by_css_selector(selector)
-    checkbox.click()
-
-
-@when('submit button in form "{form_class}" is clicked')
-def click_submit(context, form_class):
-    selector = "form.%s button[type='submit']" % (
-        form_class,
-    )
-    checkbox = context.browser.find_element_by_css_selector(selector)
-    checkbox.click()
-
-
 @then('"{element_class}" should say "{text}"')
 def element_contains_text(context, element_class, text):
     element = context.browser.find_element_by_class_name(element_class)
     context.test.assertTrue(text in element.text)
 
 
-@when('the "{input_name}" text input is set to "{value}"')
-def type_in_textarea(context, input_name, value):
-    selector = "input[name='%s'][type='text']" % (
-        input_name,
-    )
-    text = context.browser.find_element_by_css_selector(selector)
-    text.send_keys(value)
-
-
-@when('the "{input_name}" email input is set to "{value}"')
-def type_in_email_input(context, input_name, value):
-    selector = "input[name='{}'][type='email']".format(input_name)
-    text = context.browser.find_element_by_css_selector(selector)
-    text.send_keys(value)
+@then('the main heading should say "{text}"')
+def test_main_heading_contains_text(context, text):
+    main_heading = context.browser.find_element_by_css_selector('h1')
+    context.test.assertIn(text, main_heading.text)

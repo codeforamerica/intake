@@ -8,7 +8,7 @@ Feature: A staff user can search for and modify submissions
 	     And an applicant to search for
 
 	Scenario: CfA user can find applicant and add a note
-	   Given I log in as an applicant support user
+	 Given I log in as an applicant support user
 		 And that "/applications/" loads
 		When I search for the applicant's name
 		Then I should see the applicant's followup row

@@ -5,7 +5,7 @@ from django.views.generic import View
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse_lazy
 
-from project.jinja2 import url_with_ids
+from project.services.query_params import get_url_for_ids
 from intake import models
 
 
@@ -52,6 +52,6 @@ class MultiIdPermanentRedirect(PermanentRedirectView):
         uuids = [key for key in key_set.split('|')]
         submissions = models.FormSubmission.objects.filter(
             old_uuid__in=uuids)
-        return url_with_ids(
+        return get_url_for_ids(
             self.redirect_view_name,
             [s.id for s in submissions])

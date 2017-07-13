@@ -4,7 +4,7 @@ from intake.tests.base_testcases import IntakeDataTestCase
 from django.core.urlresolvers import reverse
 from markupsafe import escape
 from intake import models, services, utils
-from intake.views.app_detail_views import NOT_ALLOWED_MESSAGE
+from intake.views.base_views import NOT_ALLOWED_MESSAGE
 from intake.views.status_update_views import WARNING_MESSAGE
 from project.tests.assertions import assertInLogsCount
 
@@ -130,20 +130,20 @@ class TestCreateStatusUpdateFormView(StatusUpdateViewBaseTestCase):
                 kwargs=dict(
                     submission_id=self.sub.id)))
 
-    def test_incorrect_org_user_redirected_to_app_index(self):
+    def test_incorrect_org_user_redirected_to_profile(self):
         self.be_ccpubdef_user()
         response = self.get_create_page()
         self.assertRedirects(
-            response, reverse('intake-app_index'),
+            response, reverse('user_accounts-profile'),
             fetch_redirect_response=False)
         index = self.client.get(response.url)
         self.assertContains(index, escape(NOT_ALLOWED_MESSAGE))
 
-    def test_cfa_user_redirected_to_app_index(self):
+    def test_cfa_user_redirected_to_profile(self):
         self.be_cfa_user()
         response = self.get_create_page()
         self.assertRedirects(
-            response, reverse('intake-app_index'),
+            response, reverse('user_accounts-profile'),
             fetch_redirect_response=False)
         index = self.client.get(response.url)
         self.assertContains(index, escape(NOT_ALLOWED_MESSAGE))
@@ -172,20 +172,20 @@ class TestReviewStatusNotificationFormView(StatusUpdateViewBaseTestCase):
         self.assertIn(
             reverse('user_accounts-login'), response.url)
 
-    def test_incorrect_org_user_redirected_to_app_index(self):
+    def test_incorrect_org_user_redirected_to_profile(self):
         self.be_ccpubdef_user()
         response = self.get_review_page()
         self.assertRedirects(
-            response, reverse('intake-app_index'),
+            response, reverse('user_accounts-profile'),
             fetch_redirect_response=False)
         index = self.client.get(response.url)
         self.assertContains(index, escape(NOT_ALLOWED_MESSAGE))
 
-    def test_cfa_user_redirected_to_app_index(self):
+    def test_cfa_user_redirected_to_profile(self):
         self.be_cfa_user()
         response = self.get_review_page()
         self.assertRedirects(
-            response, reverse('intake-app_index'),
+            response, reverse('user_accounts-profile'),
             fetch_redirect_response=False)
         index = self.client.get(response.url)
         self.assertContains(index, escape(NOT_ALLOWED_MESSAGE))

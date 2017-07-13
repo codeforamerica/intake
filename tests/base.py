@@ -182,6 +182,12 @@ class ScreenSequenceTestCase(FunctionalTestCase):
             self.screenshot(self.build_filepath(prefix, i, step_name))
 
 
+def respond_with(response):
+    def wrapped(*args, **kwargs):
+        return response('Test exception')
+    return wrapped
+
+
 class TimeProfileTestMixin:
     """A mixin that allows code to be profiled using cProfile
     """

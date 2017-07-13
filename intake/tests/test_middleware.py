@@ -4,6 +4,8 @@ from django.core.urlresolvers import reverse
 
 from intake.middleware import GetCleanIpAddressMiddleware
 from intake import models
+from django.http import HttpResponseServerError
+from tests.base import respond_with
 
 
 class TestPersistReferrerMiddleware(TestCase):
@@ -120,3 +122,26 @@ class TestCountUniqueVisitorsMiddleware(TestCase):
         response = self.client.get(reverse('health_check-ok'))
         self.assertIsNone(response.wsgi_request.session.get('visitor_id'))
         Visitor.assert_not_called()
+
+    def test_response_view_identified(self):
+        response = self.client.get(reverse('intake-apply'))
+        self.assertEqual(response.view, 'SelectCountyView')
+
+    @patch('intake.middleware.EventsService.page_viewed')
+    def test_404_does_not_fire_page_viewed(self, page_viewed):
+        self.client.get('/doesnotexist')
+        page_viewed.assert_not_called()
+
+    @patch('intake.middleware.EventsService.page_viewed')
+    def test_redirecting_response_does_not_fire_page_viewed(self, page_viewed):
+        response = self.client.get(reverse('intake-app_index'))
+        page_viewed.assert_not_called()
+        self.client.get(response.url)
+        self.assertEqual(1, page_viewed.call_count)
+
+    @patch('intake.middleware.EventsService.page_viewed')
+    @patch('intake.views.public_views.Home.get', respond_with(
+        HttpResponseServerError))
+    def test_500_does_not_fire_page_viewed(self, page_viewed):
+        self.client.get(reverse('intake-home'))
+        page_viewed.assert_not_called()

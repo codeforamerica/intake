@@ -1,6 +1,5 @@
 from browserstack.local import Local
 from django.conf import settings
-from intake.tests import mock
 from django.core.management import call_command
 from selenium import webdriver
 
@@ -64,4 +63,9 @@ def after_all(context):
 
 def before_scenario(context, scenario):
     call_command('load_essential_data')
-    mock.fillable_pdf()
+    context.test.patches = {}
+
+
+def after_scenario(context, scenario):
+    for patch_name, patch in context.test.patches.items():
+        patch.stop()

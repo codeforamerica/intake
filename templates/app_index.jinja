@@ -3,35 +3,30 @@
 
 {% block content %}
 <div class="container">
-  <div class="row">
-    <div class="col-xs-12 col-sm-6 col-md-6">
-    {%- if request.user.is_staff %}
-    <h1>All Applications</h1>
-    {%- else %}
-    <h1>All Applications to {{ request.user.profile.organization.name }}</h1>
-    {%- endif %}
-    </div>
-    <div class="col-xs-12 col-sm-6 col-md-6 centered-to-header">
-      {%- if perms.intake.add_applicationnote %}
-      <div class="followups-search_module">
-        <form class="search_form">
-          <input name="q" type="text" autocomplete="off">
-        </form>
-      </div>
-      {%- else %}
-      <div class="applications-search_module">
-        <form class="search_form">
-          <input name="q" type="text" autocomplete="off">
-          <ul class="applications-autocomplete_results">
-            {#- autocomplete results should go here -#}
-          </ul>
-        </form>
-      </div>
-      {%- endif %}
+  <div class="row vertical-padded">
+    <div class="col-xs-12">
+      {% if user.groups.filter(name='followup_staff').exists() %}
+        <div class="followups-search_module">
+          <form>
+            <input name="q" placeholder="Search all applications" type="text" autocomplete="off">
+          </form>
+        </div>
+      {% else %}
+        <div class="applications-search_module">
+          <form>
+            <input name="q" placeholder="Search all applications" type="text" autocomplete="off"><ul class="applications-autocomplete_results"></ul>
+          </form>
+        </div>
+      {% endif %}
     </div>
   </div>
   <div class="row">
-    {% if perms.intake.add_applicationnote %}
+    <div class="col-xs-12 col_centered">
+      {% include "includes/app_index_navigation.jinja" %}
+    </div>
+  </div>
+  <div class="row">
+    {% if user.groups.filter(name='followup_staff').exists() %}
       {% include "followup_list.jinja" %}
     {% else %}
       {% include "app_reviewer_list.jinja" %}
@@ -41,8 +36,8 @@
   {% include "includes/results_paginator.jinja" %}
   {%- endif %}
 </div>
+<div class="no-footer"></div>
 {% endblock content %}
-
 
 {% block scripts %}
 {%- if ALL_TAG_NAMES %}

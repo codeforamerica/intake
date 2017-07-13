@@ -8,9 +8,15 @@ class UserProfileFactory(factory.DjangoModelFactory):
     name = factory.Sequence(lambda n: 'Fake User {}'.format(n))
     user = factory.SubFactory(UserFactory)
     organization = factory.SubFactory(FakeOrganizationFactory)
+    should_get_notifications = True
 
     class Meta:
         model = models.UserProfile
+
+
+def fake_app_reviewer(**kwargs):
+    user = UserFactory(group_names=['application_reviewers'], **kwargs)
+    return UserProfileFactory(user=user)
 
 
 def profile_for_org_and_group_names(
@@ -35,3 +41,28 @@ def profile_for_org_and_group_names(
         user=user, organization=org,
         name=' '.join([user.first_name, user.last_name]),
         should_get_notifications=should_get_notifications)
+
+
+def profile_for_slug_in_groups(org_slug, group_names=None, **kwargs):
+    return profile_for_org_and_group_names(
+        models.Organization.objects.get(slug=org_slug),
+        group_names=group_names, **kwargs)
+
+
+def app_reviewer(org_slug=None, **kwargs):
+    if org_slug:
+        org = models.Organization.objects.get(slug=org_slug)
+    else:
+        org = FakeOrganizationFactory()
+    return profile_for_org_and_group_names(
+        org, ['application_reviewers'], **kwargs)
+
+
+def followup_user(**kwargs):
+    return profile_for_slug_in_groups(
+        'cfa', group_names=['followup_staff'], is_staff=True, **kwargs)
+
+
+def monitor_user(**kwargs):
+    return profile_for_slug_in_groups(
+        'cfa', group_names=['performance_monitors'], **kwargs)

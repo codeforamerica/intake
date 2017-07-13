@@ -10,16 +10,29 @@ from intake.views import (
     application_done_view,
     application_transfer_view,
     admin_views,
+    redirect_link_views,
     search_views,
     app_detail_views,
     application_note_views,
     tag_views,
     status_update_views,
+    prebuilt_pdf_bundle_views,
+    printout_views
 )
 
 
+def org_vs_staff_view_switch(org_user_view, staff_user_view):
+    def switch(request, *args, **kwargs):
+        if request.user.is_staff:
+            return staff_user_view(request, *args, **kwargs)
+        else:
+            return org_user_view(request, *args, **kwargs)
+    return switch
+
+
 urlpatterns = [
-    # public views
+
+    # PUBLIC VIEWS
     url(r'^$', public_views.home, name='intake-home', robots_allow=True),
     url(r'^privacy/$', public_views.privacy,
         name='intake-privacy', robots_allow=True),
@@ -32,8 +45,10 @@ urlpatterns = [
         name='intake-recommendation_letters', robots_allow=True),
     url(r'^personal-statement/$', public_views.personal_statement,
         name='intake-personal_statement', robots_allow=True),
+    url(r'^stats/$', stats_views.stats,
+        name='intake-stats', robots_allow=True),
 
-    # public form processing views
+    # PUBLIC FORM PROCESSING VIEWS
     url(r'^apply/$', select_county_view.select_county,
         name='intake-apply', robots_allow=True),
     url(r'^application/$', county_application_view.county_application,
@@ -47,10 +62,8 @@ urlpatterns = [
     url(r'^getting_your_rap/$', application_done_view.rap_sheet_info,
         name='intake-rap_sheet', robots_allow=True),
 
-    # stats views
-    url(r'^stats/$', stats_views.stats,
-        name='intake-stats', robots_allow=True),
-    # protected views
+
+    # PROTECTED VIEWS
     url(r'^application/(?P<submission_id>[0-9]+)/$',
         login_required(app_detail_views.app_detail),
         name='intake-app_detail'),
@@ -64,16 +77,57 @@ urlpatterns = [
         name='intake-filled_pdf'),
 
     url(r'^application/(?P<submission_id>[0-9]+)/printout/$',
-        login_required(admin_views.case_printout),
+        login_required(printout_views.printout_for_submission),
         name='intake-case_printout'),
 
     url(r'^application/(?P<submission_id>[0-9]+)/transfer/$',
         login_required(application_transfer_view.transfer_application),
         name='intake-transfer_application'),
 
+    # default applications view. Org users see unreads. Staff users see all
     url(r'^applications/$',
-        login_required(admin_views.app_index),
+        login_required(
+            org_vs_staff_view_switch(
+                org_user_view=admin_views.app_unread_index,
+                staff_user_view=admin_views.app_index)),
         name='intake-app_index'),
+
+    url(r'^applications/unread/$',
+        login_required(admin_views.app_unread_index),
+        name='intake-app_unread_index'),
+
+    url(r'^applications/needs_update/$',
+        login_required(admin_views.app_needs_update_index),
+        name='intake-app_needs_update_index'),
+
+    url(r'^applications/all/$',
+        login_required(admin_views.app_index),
+        name='intake-app_all_index'),
+
+    url(r'^applications-link/unread$',
+        login_required(redirect_link_views.unread_email_redirect),
+        name='intake-unread_email_redirect'),
+
+    url(r'^applications-link/needs_update$',
+        login_required(redirect_link_views.needs_update_email_redirect),
+        name='intake-needs_update_email_redirect'),
+
+    url(r'^applications-link/all$',
+        login_required(redirect_link_views.all_email_redirect),
+        name='intake-all_email_redirect'),
+
+    # APPLICATION BUNDLE VIEWS
+    url(r'^applications/unread/pdf/$',
+        login_required(prebuilt_pdf_bundle_views.wrapper_view),
+        name='intake-pdf_bundle_wrapper_view'),
+
+    url(r'^applications/unread/pdf/prebuilt$',
+        login_required(prebuilt_pdf_bundle_views.file_view),
+        name='intake-pdf_bundle_file_view'),
+
+    url(r'^applications/unread/pdf/printout$',
+        login_required(printout_views.printout_for_apps),
+        name='intake-pdf_printout_for_apps'),
 
     url(r'^applications/bundle/$',
         login_required(admin_views.app_bundle),
