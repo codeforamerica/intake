@@ -56,7 +56,7 @@ class ApplicationDetail(ViewAppDetailsMixin, TemplateView):
             submission=self.submission,
             declaration_form=letter_display,
             applications=applications)
-        SubmissionsService.mark_opened(self.submission, self.request.user)
+        AppsService.handle_apps_opened(applications, self.request.user)
         return context
 
 

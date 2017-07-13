@@ -1,5 +1,5 @@
 from django.db.models import Q
-from intake import models, serializers
+from intake import models, serializers, notifications
 from . import pagination
 
 
@@ -127,10 +127,35 @@ def get_serialized_application_history_events(application, user):
     return serializers.StatusUpdateSerializer(status_updates, many=True).data
 
 
-def mark_opened(application_ids):
-    # This does not fire events
-    apps = models.Application.objects.filter(id__in=application_ids)
-    apps.update(has_been_opened=True)
+def filter_to_org_if_not_staff(apps, user):
+    if not user.is_staff:
+        return apps.filter(
+            organization_id=request.user.profile.organization_id)
+    return apps
+
+
+def coerce_possible_ids_to_apps(maybe_ids):
+    if maybe_ids:
+        if isinstance(maybe_ids[0], int):
+            return models.Application.objects.filter(id__in=maybe_ids)
+    return maybe_ids
+
+
+def handle_apps_opened(apps, user, send_slack_notification=True):
+    apps = coerce_possible_ids_to_apps(apps)
+    EventsService.apps_opened(apps, user)
+    EventsService.user_apps_opened(apps, user)
+    for app in apps:
+        should_be_marked = user.profile.organization_id == app.organization_id
+        if should_be_marked:
+            app.has_been_opened = True
+            app.save()
+            tasks.remove_application_pdfs.delay(app.id)
+            # here would be the place to mark the apps_updated table
+        if send_slack_notification:
+            notifications.slack_submissions_viewed.send(
+                submissions=[app.form_submission], user=user,
+                bundle_url=app.form_submission.get_external_url())
 
 
 def get_valid_application_ids_from_set(application_ids):

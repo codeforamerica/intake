@@ -34,7 +34,7 @@ class PrebuiltPDFBundleWrapperView(
         else:
             context['pdf_url'] = query_params.get_url_for_ids(
                 'intake-pdf_printout_for_apps', self.app_ids)
-        AppsService.mark_opened(self.app_ids)
+        AppsService.handle_apps_opened(self.app_ids, self.request.user)
         MessagesService.flash_success(
             self.request, get_multiple_apps_read_flash(context['app_count']))
         return context
