@@ -152,7 +152,9 @@ class ApplicationUnreadIndex(ApplicationIndex):
         if request.user.is_staff:
             return redirect(reverse_lazy('intake-app_index'))
         else:
-            return super().get(self, request)
+            response = super().get(self, request)
+            # response['Cache-Control'] = 'no-cache, max-age=0, must-revalidate, no-store'
+            return response
 
 
 class ApplicationNeedsUpdateIndex(ApplicationUnreadIndex):

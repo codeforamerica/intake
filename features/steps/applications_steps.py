@@ -8,7 +8,8 @@ from user_accounts.tests.factories import UserProfileFactory
 from selenium.common.exceptions import NoSuchElementException
 
 SEARCHABLE_APPLICANT_ID = None
-application_row_selector = 'tr.form_submission[data-key="{}"]'
+application_row_selector = 'tr.application-listing[data-key="{}"]'
+followup_row_selector = 'tr.form_submission[data-key="{}"]'
 
 
 @given('"{count}" applications')
@@ -67,9 +68,24 @@ def search_by_name(context):
     time.sleep(0.4)
 
 
-@then("I should see the applicant's followup row")
-def shows_row(context):
+@when("I click on the applicant's row")
+def click_row(context):
     selector = application_row_selector.format(SEARCHABLE_APPLICANT_ID)
+    selector += ' > td:first-child > a'
+    element = context.browser.find_element_by_css_selector(selector)
+    element.click()
+
+
+@then("I should not see the applicant listed")
+def does_not_show_application_row(context):
+    selector = application_row_selector.format(SEARCHABLE_APPLICANT_ID)
+    with context.test.assertRaises(NoSuchElementException):
+        context.browser.find_element_by_css_selector(selector)
+
+
+@then("I should see the applicant's followup row")
+def shows_followup_row(context):
+    selector = followup_row_selector.format(SEARCHABLE_APPLICANT_ID)
     element = context.browser.find_element_by_css_selector(selector)
     context.test.assertIn('Waldo', element.text)
     context.test.assertIn('Waldini', element.text)
@@ -84,7 +100,7 @@ def shows_search_result_row(context):
 
 @then('the create note form should be visible')
 def has_note_input(context):
-    row_selector = application_row_selector.format(SEARCHABLE_APPLICANT_ID)
+    row_selector = followup_row_selector.format(SEARCHABLE_APPLICANT_ID)
     note_form_selector = 'form.note-create_form'
     button_selector = ' '.join([
         row_selector, note_form_selector, 'button[type="submit"]'])
@@ -94,7 +110,7 @@ def has_note_input(context):
 
 @when("I add a note about the applicant's case")
 def create_note(context):
-    row_selector = application_row_selector.format(SEARCHABLE_APPLICANT_ID)
+    row_selector = followup_row_selector.format(SEARCHABLE_APPLICANT_ID)
     note_form_selector = 'form.note-create_form'
     input_selector = ' '.join([
         row_selector, note_form_selector, 'input[name="body"'])
@@ -109,7 +125,7 @@ def create_note(context):
 
 @then('the note should be visible')
 def note_is_visible(context):
-    row_selector = application_row_selector.format(SEARCHABLE_APPLICANT_ID)
+    row_selector = followup_row_selector.format(SEARCHABLE_APPLICANT_ID)
     element = context.browser.find_element_by_css_selector(
         ' '.join([row_selector, '.notes > .note:first-child']))
     context.test.assertIn('We found Waldo', element.text)

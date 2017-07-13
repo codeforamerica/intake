@@ -99,3 +99,7 @@ def element_contains_text(context, element_class, text):
 def test_main_heading_contains_text(context, text):
     main_heading = context.browser.find_element_by_css_selector('h1')
     context.test.assertIn(text, main_heading.text)
+
+@when('I hit the browser back button')
+def hit_browser_back(context):
+    context.browser.back()

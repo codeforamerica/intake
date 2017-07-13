@@ -1,4 +1,4 @@
-<tr class="application-listing{%- if app.incoming_transfers %} incoming-transfer{% endif %}">
+<tr class="application-listing{%- if app.incoming_transfers %} incoming-transfer{% endif %}" data-key="{{ app.form_submission.id }}">
   <td>
     {# Date #}
     <a href="{{ app.form_submission.url }}">
