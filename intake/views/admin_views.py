@@ -153,7 +153,7 @@ class ApplicationUnreadIndex(ApplicationIndex):
             return redirect(reverse_lazy('intake-app_index'))
         else:
             response = super().get(self, request)
-            # response['Cache-Control'] = 'no-cache, max-age=0, must-revalidate, no-store'
+            response['Cache-Control'] = 'no-cache, max-age=0, must-revalidate, no-store'
             return response
 
 
