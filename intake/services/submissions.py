@@ -108,21 +108,6 @@ def get_submissions_for_followups(page_index):
     return pagination.get_serialized_page(query, serializer, page_index)
 
 
-def mark_opened(submission, user, send_slack_notification=True):
-    queryset = submission.applications.filter(
-        organization__profiles__user=user
-    ).distinct()
-    queryset.update(has_been_opened=True)
-    for app_id in queryset.values_list('id', flat=True):
-        tasks.remove_application_pdfs.delay(app_id)
-    EventsService.apps_opened(submission.applications.all(), user)
-    EventsService.user_apps_opened(submission.applications.all(), user)
-    if send_slack_notification:
-        notifications.slack_submissions_viewed.send(
-            submissions=[submission], user=user,
-            bundle_url=submission.get_external_url())
-
-
 def check_for_existing_duplicates(submission, applicant_id):
     dups = []
     other_subs = models.FormSubmission.objects.filter(

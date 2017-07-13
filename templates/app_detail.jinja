@@ -41,10 +41,5 @@
     </div>
   </div>
 </section>
-<script>
-  window.onbeforeunload = function() {
-    location.reload();
-    return undefined;
-  }
-</script>
+{%- include "includes/back_reload.jinja" %}
 {% endblock content %}

@@ -1,6 +1,6 @@
 from django.db.models import Q
-from intake import models, serializers, notifications
-import intake.services.events_service as EventsService
+from intake import models, serializers, notifications, tasks
+from intake.services import events_service as EventsService
 from . import pagination
 
 
@@ -131,7 +131,7 @@ def get_serialized_application_history_events(application, user):
 def filter_to_org_if_not_staff(apps, user):
     if not user.is_staff:
         return apps.filter(
-            organization_id=request.user.profile.organization_id)
+            organization_id=user.profile.organization_id)
     return apps
 
 

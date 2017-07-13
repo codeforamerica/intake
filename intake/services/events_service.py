@@ -2,7 +2,6 @@ import intake.services.applicants as ApplicantsService
 import project.services.logging_service as LoggingService
 from intake.services import status_notifications as SNService
 from intake.tasks import log_to_mixpanel
-from django.core.urlresolvers import resolve
 
 
 def form_started(request, counties):

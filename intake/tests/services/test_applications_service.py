@@ -1,4 +1,5 @@
 import random
+from unittest.mock import patch
 from datetime import timedelta
 from django.utils import timezone
 from django.test import TestCase
@@ -11,6 +12,8 @@ from intake.tests.base_testcases import (
 from intake.tests import factories
 import intake.services.applications_service as AppsService
 import intake.services.transfers_service as TransferService
+from user_accounts.tests.factories import \
+    FakeOrganizationFactory, UserProfileFactory
 
 
 class TestGetApplicationsIndexForOrgUser(TestCase):
@@ -150,3 +153,28 @@ class TestGetSerializedApplicationHistoryEvents(DeluxeTransactionTestCase):
         with self.assertNumQueriesLessThanEqual(14):
             AppsService.get_serialized_application_history_events(
                 application, receiving_user)
+
+
+class TestHandleAppsOpened(TestCase):
+    def test_mark_only_users_app_opened(self):
+        fake_org_1 = FakeOrganizationFactory()
+        fake_org_2 = FakeOrganizationFactory()
+        sub = factories.FormSubmissionWithOrgsFactory(
+            organizations=[fake_org_1, fake_org_2], answers={})
+        org_1_user = UserProfileFactory(organization=fake_org_1).user
+        AppsService.handle_apps_opened(
+            sub.applications.all(), org_1_user, False)
+        org_1_apps = sub.applications.filter(organization=fake_org_1)
+        org_2_apps = sub.applications.filter(organization=fake_org_2)
+        self.assertTrue(all([app.has_been_opened for app in org_1_apps]))
+        self.assertFalse(any([app.has_been_opened for app in org_2_apps]))
+
+    @patch('intake.tasks.remove_application_pdfs')
+    def test_calls_remove_pdf_task_when_opened(self, remove_application_pdfs):
+        profile = UserProfileFactory()
+        sub = factories.FormSubmissionWithOrgsFactory(
+            organizations=[profile.organization], answers={})
+        AppsService.handle_apps_opened(
+            sub.applications.all(), profile.user, False)
+        remove_application_pdfs.delay.assert_called_with(
+            sub.applications.first().id)
