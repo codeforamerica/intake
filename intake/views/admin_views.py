@@ -45,7 +45,7 @@ class FilledPDF(ApplicationDetail):
             fillable_pdf = fillables.first()
             pdf = fillable_pdf.fill_for_submission(submission)
         apps = AppsService.filter_to_org_if_not_staff(
-            submission.applications.all())
+            submission.applications.all(), request.user)
         AppsService.handle_apps_opened(apps, request.user)
         response = HttpResponse(pdf.pdf, content_type='application/pdf')
         return response
