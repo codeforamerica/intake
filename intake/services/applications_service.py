@@ -1,11 +1,21 @@
 from django.db.models import Q
-from intake import models, serializers
+from intake import models, serializers, notifications, tasks
+from intake.services import events_service as EventsService
 from . import pagination
 
 
 def get_applications_for_org(organization):
+    # preselect_tables are joined using `select_related()` by following single
+    # foreign keys. They are captured in one query along with the main model.
+    preselect_tables = [
+        'form_submission'
+    ]
+    # prefetch_tables are brought inusing `prefetch_related()`. Each of these
+    # become a separate query to pull in related objects from other tables.
+    # Most of these are reverse foreign keys, and it may be possible to further
+    # optimize these into less queries.
+    # https://blog.roseman.org.uk/2010/01/11/django-patterns-part-2-efficient-reverse-lookups/
     prefetch_tables = [
-        'form_submission',
         'status_updates',
         'status_updates__status_type',
     ]
@@ -19,22 +29,49 @@ def get_applications_for_org(organization):
             'incoming_transfers__status_update__author',
             'incoming_transfers__status_update__author__profile',
         ]
-    return models.Application.objects.filter(
+    qset = models.Application.objects.filter(
         organization=organization
-    ).prefetch_related(*prefetch_tables).order_by('-created').distinct()
+    ).select_related(*preselect_tables).prefetch_related(*prefetch_tables)
+    return qset.order_by('-created').distinct()
+
+UNREAD_APPLICATIONS_FILTER_KWARGS = dict(
+    has_been_opened=False, status_updates__isnull=True)
 
 
-def get_applications_index_for_org_user(user, page_index):
+NEEDS_STATUS_UPDATE_FILTER_KWARGS = dict(status_updates__isnull=True)
+
+
+def get_unread_applications_for_org(organization):
+    return get_applications_for_org(organization).filter(
+        **UNREAD_APPLICATIONS_FILTER_KWARGS)
+
+
+def get_applications_for_org_user(user, page_index, **filters):
     """Paginates and serializes applications for an org user
     """
-    # this is two queries
     organization = user.profile.organization
     query = get_applications_for_org(organization)
+    if filters:
+        query = query.filter(**filters)
     serializer = serializers.ApplicationIndexSerializer
     if organization.can_transfer_applications:
         serializer = \
             serializers.ApplicationIndexWithTransfersSerializer
     return pagination.get_serialized_page(query, serializer, page_index)
+
+
+def get_all_applications_for_org_user(user, page_index):
+    return get_applications_for_org_user(user, page_index)
+
+
+def get_unread_applications_for_org_user(user, page_index):
+    return get_applications_for_org_user(
+        user, page_index, **UNREAD_APPLICATIONS_FILTER_KWARGS)
+
+
+def get_applications_needing_updates_for_org_user(user, page_index):
+    return get_applications_for_org_user(
+        user, page_index, **NEEDS_STATUS_UPDATE_FILTER_KWARGS)
 
 
 def get_status_updates_for_org_user(application):
@@ -89,3 +126,54 @@ def get_serialized_application_history_events(application, user):
     else:
         status_updates = get_status_updates_for_org_user(application)
     return serializers.StatusUpdateSerializer(status_updates, many=True).data
+
+
+def filter_to_org_if_not_staff(apps, user):
+    if not user.is_staff:
+        return apps.filter(
+            organization_id=user.profile.organization_id)
+    return apps
+
+
+def coerce_possible_ids_to_apps(maybe_ids):
+    if maybe_ids:
+        if isinstance(maybe_ids[0], int):
+            return models.Application.objects.filter(id__in=maybe_ids)
+    return maybe_ids
+
+
+def handle_apps_opened(apps, user, send_slack_notification=True):
+    apps = coerce_possible_ids_to_apps(apps)
+    EventsService.apps_opened(apps, user)
+    EventsService.user_apps_opened(apps, user)
+    for app in apps:
+        should_be_marked = user.profile.organization_id == app.organization_id
+        if should_be_marked:
+            app.has_been_opened = True
+            app.save()
+            tasks.remove_application_pdfs.delay(app.id)
+            # here would be the place to mark the apps_updated table
+        if send_slack_notification:
+            notifications.slack_submissions_viewed.send(
+                submissions=[app.form_submission], user=user,
+                bundle_url=app.form_submission.get_external_url())
+
+
+def get_valid_application_ids_from_set(application_ids):
+    return models.Application.objects.filter(
+        id__in=application_ids).values_list('id', flat=True)
+
+
+def get_unread_apps_per_org_count(organization):
+    return models.Application.objects.filter(
+        organization=organization, **UNREAD_APPLICATIONS_FILTER_KWARGS).count()
+
+
+def get_needs_update_apps_per_org_count(organization):
+    return models.Application.objects.filter(
+        organization=organization, **NEEDS_STATUS_UPDATE_FILTER_KWARGS).count()
+
+
+def get_all_apps_per_org_count(organization):
+    return models.Application.objects.filter(
+        organization=organization).count()

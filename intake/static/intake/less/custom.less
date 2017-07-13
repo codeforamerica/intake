@@ -327,6 +327,10 @@ section.footer.container.new_section{
   text-align: center;
 }
 
+.no-footer {
+  padding-bottom: 100px;
+}
+
 
 ul.opportunities {
   padding-top: 12px;
@@ -479,110 +483,6 @@ li.how_to_detail{
   padding-left:20px;
   margin-bottom:25px;
   margin-top:25px;
-}
-
-/***Status Updates (App Detail)***/
-.app_detail-data_display .application-detail-latest-status{
-  background-color: @brand-primary-background-light;
-  overflow: auto;
-  padding: 1em;
-
-  ul.event-next-steps{
-    padding-left: 0;
-    font-size: 16px;
-  }
-}
-
-/***Status Notifications (App History)***/
-li.application-event-block{
-  border: 1px solid @gray-lighter;
-  border-radius: 4px;
-  margin-bottom: 3em;
-
-  .application-event-header{
-    background-color: @splash-background-medium;
-    color: white;
-    border-radius: 4px;
-    padding:12px;
-    font-size: 12px;
-
-    .application-event-title{
-      font-size: 18px;
-    }
-  }
-
-  .application-event-body{
-    padding: 1em;
-    font-size: 16px;
-
-    .section-label{
-      color: @gray-light;
-      .contact-info {
-        color: @brand-note;
-      }
-    }
-
-    ul.event-next-steps{
-      padding-left: 0;
-      font-size: 16px;
-    }
-    .status-update-details{
-      clear:both;
-      margin-bottom: 1em;
-      min-height: 60px;
-    }
-    .status-notification-message{
-      background-color: @gray-lighter;
-      border-radius: 4px;
-      padding: 8px;
-      margin-top: 0.5em;
-    }
-  }
-
-}
-
-/***Autocomplete (App Index)***/
-.centered-to-header{
-  margin-top: 36px;
-  margin-bottom: 12px;
-}
-
-ul.applicants-autocomplete_results{
-  margin: 0;
-    padding: 0;
-    position: absolute;
-    background-color: #fff;
-    font-size: inherit;
-    margin-top: 1px;
-    max-height: 20em;
-    overflow-y: auto;
-    -webkit-box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.2);
-    -moz-box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.2);
-    box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.2);
-    z-index: 10;
-  }
-  li.autocomplete-result.active {
-    color: #fff;
-    background-color: @brand-note;
-  }
-  li.autocomplete-result {
-    padding: .2em .6em;
-    border-left: 1px solid #dfdfdf;
-    border-right: 1px solid #dfdfdf;
-    border-bottom: 1px solid #dfdfdf;
-    cursor: pointer;
-    .result-match {
-      font-weight: 700;
-    }
-    &:hover{
-      background-color: @brand-note;
-      a {
-        color: #fff;
-      }
-    }
-    a{
-      display: block;
-    }
 }
 
 /***Media Queries***/

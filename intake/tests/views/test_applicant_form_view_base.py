@@ -101,10 +101,10 @@ class TestApplicantFormViewBase(ApplicantFormViewBaseTestCase):
             orgs, mock_view_instance.receiving_organizations)
 
     @patch('intake.services.messages_service.flash_success')
-    @patch('intake.services.submissions.fill_pdfs_for_submission')
+    @patch('intake.services.submissions.send_to_newapps_bundle_if_needed')
     @patch('intake.services.submissions.create_submission')
     def test_finalize_application_actions(
-            self, create_sub, fill_pdfs, flash_success):
+            self, create_sub, send_to_newapps, flash_success):
         self.set_form_session_data(counties=['contracosta'])
         answers = fake.contra_costa_county_form_answers()
         with self.assertLogs(
@@ -112,7 +112,7 @@ class TestApplicantFormViewBase(ApplicantFormViewBaseTestCase):
             self.client.fill_form(
                 reverse('intake-county_application'), **answers)
         self.assertEqual(create_sub.call_count, 1)
-        self.assertEqual(fill_pdfs.call_count, 1)
+        self.assertEqual(send_to_newapps.call_count, 1)
         self.assertEqual(self.slack_new_submission.call_count, 1)
         self.assertEqual(self.send_confirmations.call_count, 1)
         self.assertEqual(flash_success.call_count, 1)

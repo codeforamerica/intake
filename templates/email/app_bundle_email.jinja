@@ -1,25 +1,22 @@
-As of {{ current_local_time('%-I:%M %p %Z on %A %b %-d') }}, you have 
-{%- if count == 1 %} one unopened application{% else %} {{ count }} unopened applications
+As of {{ current_local_time('%-I:%M %p %Z on %A %b %-d') }}, {{ org_name }} has
+{%- if unread_count == 1 %} one unread application{% else %} {{ unread_count }} unread applications
 {%- endif %} to Clear My Record.
 
 You can review and print them at this link:
-    {{ bundle_url }}
+    {{ unread_redirect_link }}
 
+There are also {{ update_count }} applications awaiting a status update. You can review them at this link: 
+	{{ needs_update_redirect_link }}
 
-If you'd like to search through all Clear My Record applications, you can access all applications at this link:
-    {{ app_index_url }}
+You may also review all {{ all_count }} applications at this link:
+	{{ all_redirect_link }}
 
-If you have any questions or concerns, email us at clearmyrecord@codeforamerica.org and Jazmyn or Ben will get back to you right away.
+If you have any questions or concerns, email us at clearmyrecord@codeforamerica.org and we will get back to you right away.
 
 Best,
 
-Ben Golder
-831-420-7603
-bgolder@codeforamerica.org
-
-Jazmyn Latimer
-805-201-8509
-jazmyn@codeforamerica.org
+Sarah White
+sarah@codeforamerica.org
 
 Tiffany Andrews
 tandrews@codeforamerica.org

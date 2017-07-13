@@ -5,7 +5,7 @@ from intake import models, utils
 from django.views.generic.edit import FormView
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
-from intake.views.app_detail_views import not_allowed
+from intake.views.base_views import not_allowed
 import intake.services.events_service as EventsService
 import intake.services.status_notifications as StatusNotificationService
 
@@ -161,7 +161,8 @@ class ReviewStatusNotificationFormView(StatusUpdateBase, FormView):
             self.request,
             form.cleaned_data,
             self.existing_status_update_data)
-        EventsService.status_updated(status_update)
+        EventsService.status_updated(self.request, status_update)
+        EventsService.user_status_updated(self.request, status_update)
         utils.clear_form_data_from_session(
             self.request, self.get_session_storage_key())
         return super().form_valid(form)

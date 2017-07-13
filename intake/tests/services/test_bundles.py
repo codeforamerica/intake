@@ -1,12 +1,14 @@
 from unittest.mock import Mock, patch, call
 from django.test import TestCase
 
+from project.jinja2 import external_reverse
 import user_accounts.models as auth_models
-
 from intake import constants, models
 import intake.services.bundles as BundlesService
 import intake.services.submissions as SubmissionsService
 from intake.tests import mock
+from user_accounts.tests.factories import UserProfileFactory
+from intake.tests.factories import make_apps_for
 
 
 def not_the_weekend():
@@ -207,10 +209,8 @@ class TestGetOrgsThatMightNeedABundleEmailToday(TestCase):
 class TestCreateBundlesAndSendNotificationsToOrgs(TestCase):
 
     fixtures = [
-        'counties', 'groups',
-        'organizations', 'mock_profiles',
-        'mock_2_submissions_to_cc_pubdef',
-        'mock_2_submissions_to_a_pubdef', 'template_options'
+        'counties', 'groups', 'organizations', 'mock_profiles',
+        'template_options'
     ]
 
     def setUp(self):
@@ -238,17 +238,64 @@ class TestCreateBundlesAndSendNotificationsToOrgs(TestCase):
     def test_queries_and_notifications_for_each_org(self, get_orgs):
         a_pubdef = auth_models.Organization.objects.get(
             slug=constants.Organizations.ALAMEDA_PUBDEF)
+        make_apps_for(a_pubdef.slug, count=3)
         # assume we only receive one org back
         get_orgs.return_value = [a_pubdef]
-        with self.assertNumQueries(6):
-            # queries that are run:
-            #   get org emails
-            #   get unopened submissions
-            #   make new bundle
-            #   add submissions to bundle (2 queries)
-            #   check if it needs pdfs
-            BundlesService.create_bundles_and_send_notifications_to_orgs()
+        with self.assertNumQueries(4):
+            BundlesService.count_unreads_and_send_notifications_to_orgs()
         self.assertEqual(
             self.notifications.front_email_daily_app_bundle.send.call_count, 1)
         self.assertEqual(
             self.notifications.slack_app_bundle_sent.send.call_count, 1)
+
+
+class TestCountUnreadsAndSendNotificationsToOrgs(TestCase):
+
+    def email_and_org(self):
+        profile = UserProfileFactory()
+        return profile.user.email, profile.organization
+
+    @patch('intake.notifications.front_email_daily_app_bundle.send')
+    @patch('intake.notifications.slack_app_bundle_sent.send')
+    @patch('intake.services.bundles.is_the_weekend', not_the_weekend)
+    def test_counts_and_notification_args_for_unreads(self, slack, send_email):
+        email, org = self.email_and_org()
+        make_apps_for(org.slug, count=3, answers={})
+        BundlesService.count_unreads_and_send_notifications_to_orgs()
+        send_email.assert_called_once_with(
+                to=[email],
+                org_name=org.name,
+                unread_count=3,
+                update_count=3,
+                all_count=3,
+                unread_redirect_link=external_reverse(
+                    'intake-unread_email_redirect'),
+                needs_update_redirect_link=external_reverse(
+                    'intake-needs_update_email_redirect'),
+                all_redirect_link=external_reverse(
+                    'intake-all_email_redirect'))
+        slack.assert_called_once_with(
+            org_name=org.name,
+            emails=[email],
+            unread_count=3,
+            update_count=3,
+            all_count=3)
+
+    @patch('intake.notifications.front_email_daily_app_bundle.send')
+    @patch('intake.notifications.slack_app_bundle_sent.send')
+    @patch('intake.services.bundles.is_the_weekend', not_the_weekend)
+    def test_counts_and_notification_args_for_no_unreads(
+            self, slack, send_email):
+        email, org = self.email_and_org()
+        apps = make_apps_for(org.slug, count=3, answers={})
+        for app in apps:
+            app.has_been_opened = True
+            app.save()
+        BundlesService.count_unreads_and_send_notifications_to_orgs()
+        send_email.assert_not_called()
+        slack.assert_called_once_with(
+            org_name=org.name,
+            emails=[email],
+            unread_count=0,
+            update_count=3,
+            all_count=3)

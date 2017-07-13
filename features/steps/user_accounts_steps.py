@@ -31,6 +31,7 @@ def login_as(context, email):
     form_input_steps.fill_text_input(
         context, 'password', settings.TEST_USER_PASSWORD)
     form_input_steps.click_submit_button(context)
+    context.execute_steps('''Then it should load "accounts/profile/"''')
 
 
 @given('I log in as an applicant support user')
@@ -40,6 +41,7 @@ def login_as_applicant_support_user(context):
 
 @given('I log in as an org user')
 @given('I log in as an org user at "{org_slug}"')
+@when('I log in as an org user at "{org_slug}"')
 def login_as_org_user(context, org_slug='ebclc'):
     login_as(
         context, "bgolder+demo+{}_user@codeforamerica.org".format(org_slug))

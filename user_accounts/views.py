@@ -7,6 +7,8 @@ from invitations.views import SendInvite
 
 from . import forms
 from user_accounts.base_views import StaffOnlyMixin
+import intake.services.events_service as EventsService
+from intake.models import Visitor
 
 
 class CustomLoginView(allauth_views.LoginView):
@@ -21,6 +23,7 @@ class CustomLoginView(allauth_views.LoginView):
         # save it in the session, in case the go to password reset
         if login_email:
             self.request.session['failed_login_email'] = login_email
+        EventsService.user_failed_login(self.request)
         return super().form_invalid(*args)
 
 
@@ -72,6 +75,7 @@ class UserProfileView(FormView):
         self.get_user_and_profile()
         context.update(
             user=self.user, profile=self.profile)
+        EventsService.user_login(self.request)
         return context
 
     def form_valid(self, form, *args, **kwargs):
@@ -91,6 +95,7 @@ class PasswordResetView(allauth_views.PasswordResetView):
         initial_email = context['form'].initial.get('email', '')
         if not initial_email:
             context['form'].initial['email'] = login_email
+        EventsService.user_reset_password(self.request, initial_email)
         return context
 
 
