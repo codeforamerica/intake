@@ -45,7 +45,6 @@ class NoBrowserCacheOnGetMixin:
         return response
 
 
-
 class AppIDQueryParamMixin:
     """
     A base view for ApplicationsListViews that retrieve resources using a list

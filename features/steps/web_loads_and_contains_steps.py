@@ -50,20 +50,6 @@ def test_css_loads(context):
     context.test.assertEquals(css_url.hostname, domain_url.hostname)
 
 
-"""
-This is broken (don't konw how t select compress output)
-@given('it loads js with name {name}')
-@then('it should load js with name {name}')
-def test_js_loads(context, name):
-    selector = 'script[type="text/javascript"][name="{}"]'.format(name)
-    element = context.browser.find_element_by_css_selector(selector)
-    context.test.assertEquals(element.tag_name, 'script')
-    js_url = urlparse(element.get_attribute('src'))
-    domain_url = urlparse(context.test.live_server_url)
-    context.test.assertEquals(js_url.hostname, domain_url.hostname)
-"""
-
-
 @then('it should have the "{element_id}" link and say "{text}"')
 def find_with_id_and_assert_text(context, element_id, text):
     element = context.browser.find_element_by_id(element_id)
@@ -85,8 +71,7 @@ def check_link_goes_to_page(context, element_id, url):
     context.test.assertNotEquals(start_url, end_url)
     context.test.assertEquals(
         urljoin(context.test.live_server_url, url),
-        end_url,
-    )
+        end_url)
 
 
 @then('"{element_class}" should say "{text}"')
@@ -99,6 +84,7 @@ def element_contains_text(context, element_class, text):
 def test_main_heading_contains_text(context, text):
     main_heading = context.browser.find_element_by_css_selector('h1')
     context.test.assertIn(text, main_heading.text)
+
 
 @when('I hit the browser back button')
 def hit_browser_back(context):
