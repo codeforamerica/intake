@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, get_object_or_404
 from django.core.urlresolvers import reverse_lazy, reverse
 from django.views.generic import View
-from django.views.generic.base import TemplateView, RedirectView
+from django.views.generic.base import TemplateView
 from django.http import Http404, HttpResponse
 from django.template.response import TemplateResponse
 
@@ -45,7 +45,7 @@ class FilledPDF(ApplicationDetail):
             fillable_pdf = fillables.first()
             pdf = fillable_pdf.fill_for_submission(submission)
         apps = AppsService.filter_to_org_if_not_staff(
-            submissions.applications.all())
+            submission.applications.all())
         AppsService.handle_apps_opened(apps, request.user)
         response = HttpResponse(pdf.pdf, content_type='application/pdf')
         return response
