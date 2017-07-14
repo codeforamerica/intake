@@ -564,4 +564,3 @@ class TestCaseBundlePrintoutPDFView(IntakeDataTestCase):
             form_submission__id__in=[
                 sub.id for sub in bundle.submissions.all()])
         self.assertTrue(all([app.has_been_opened for app in apps]))
-
