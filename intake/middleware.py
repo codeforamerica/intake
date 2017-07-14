@@ -85,7 +85,7 @@ class CountUniqueVisitorsMiddleware(MiddlewareBase):
                 visitor = Visitor(
                     referrer=request.session.get('referrer', ''),
                     source=request.session.get('source', ''),
-                    ip_address=getattr(request, 'ip_address', '')
+                    ip_address=getattr(request, 'ip_address', ''),
                 )
                 visitor.save()
                 EventsService.site_entered(visitor, request.get_full_path())
