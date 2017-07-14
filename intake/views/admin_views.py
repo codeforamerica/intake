@@ -15,7 +15,8 @@ import intake.services.tags as TagsService
 import intake.services.pdf_service as PDFService
 import intake.services.display_form_service as DisplayFormService
 
-from intake.views.base_views import ViewAppDetailsMixin, not_allowed
+from intake.views.base_views import (
+    ViewAppDetailsMixin, not_allowed, NoBrowserCacheOnGetMixin)
 from intake.views.app_detail_views import ApplicationDetail
 
 
@@ -127,7 +128,7 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
         return context
 
 
-class ApplicationUnreadIndex(ApplicationIndex):
+class ApplicationUnreadIndex(NoBrowserCacheOnGetMixin, ApplicationIndex):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['results'] = AppsService.get_unread_applications_for_org_user(

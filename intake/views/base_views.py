@@ -30,6 +30,21 @@ class ViewAppDetailsMixin(PermissionRequiredMixin):
         return not_allowed(self.request)
 
 
+class NoBrowserCacheOnGetMixin:
+    """Sets the 'Cache-Control' response header to
+        'no-cache, max-age=0, must-revalidate, no-store'
+    on GET requests.
+
+    This is useful if you would like the browser to refetch
+    the page when a user navigates to it using the Back button.
+    """
+    def get(self, *args, **kwargs):
+        response = super().get(*args, **kwargs)
+        response['Cache-Control'] = \
+            'no-cache, max-age=0, must-revalidate, no-store'
+        return response
+
+
 class AppIDQueryParamMixin:
     """
     A base view for ApplicationsListViews that retrieve resources using a list
