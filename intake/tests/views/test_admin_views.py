@@ -1,3 +1,4 @@
+import logging
 from unittest import skipUnless
 from unittest.mock import patch
 from random import randint
@@ -5,15 +6,15 @@ from random import randint
 from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
 from django.core.files.uploadedfile import SimpleUploadedFile
-import logging
+
+from bs4 import BeautifulSoup
+
 from intake import models
 from intake.tests.base_testcases import IntakeDataTestCase, DELUXE_TEST
 from intake.tests.factories import FormSubmissionFactory
 from project.services.query_params import get_url_for_ids
-
 import intake.services.bundles as BundlesService
 from project.tests.assertions import assertInLogsCount
-from bs4 import BeautifulSoup
 
 
 class TestApplicationDetail(IntakeDataTestCase):
@@ -564,36 +565,3 @@ class TestCaseBundlePrintoutPDFView(IntakeDataTestCase):
                 sub.id for sub in bundle.submissions.all()])
         self.assertTrue(all([app.has_been_opened for app in apps]))
 
-
-class TestCasePrintoutPDFView(IntakeDataTestCase):
-
-    fixtures = TestApplicationDetail.fixtures
-
-    def test_anonymous_users_redirected_to_login(self):
-        self.be_anonymous()
-        sub = self.a_pubdef_submissions[0]
-        response = self.client.get(
-            reverse(
-                'intake-case_printout', kwargs=dict(submission_id=sub.id)))
-        self.assertIn(reverse('user_accounts-login'), response.url)
-        self.assertEqual(response.status_code, 302)
-
-    def test_users_from_wrong_org_redirected_to_profile(self):
-        self.be_ccpubdef_user()
-        sub = self.a_pubdef_submissions[0]
-        response = self.client.get(
-            reverse(
-                'intake-case_printout', kwargs=dict(submission_id=sub.id)))
-        self.assertRedirects(response, reverse('user_accounts-profile'))
-
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_marks_apps_as_opened(self, slack):
-        user = self.be_apubdef_user()
-        submission = self.a_pubdef_submissions[0]
-        self.client.get(
-            reverse(
-                'intake-case_printout', kwargs=dict(
-                    submission_id=submission.id)))
-        application = submission.applications.filter(
-            organization=user.profile.organization).first()
-        self.assertTrue(application.has_been_opened)
