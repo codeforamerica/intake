@@ -10,6 +10,7 @@ from user_accounts.tests import factories as user_accounts_factories
 
 
 class TestCasePrintoutPDFView(TestCase):
+    fixtures = ['groups']
 
     def test_anonymous_users_redirected_to_login(self):
         sub = intake_factories.make_apps_for(
@@ -36,7 +37,7 @@ class TestCasePrintoutPDFView(TestCase):
         login(self.client, profile)
         submission = intake_factories.make_apps_for(
                     'a_pubdef', count=1)[0].form_submission
-        self.client.get(
+        response = self.client.get(
             reverse(
                 'intake-case_printout', kwargs=dict(
                     submission_id=submission.id)))
