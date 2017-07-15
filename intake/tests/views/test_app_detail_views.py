@@ -1,10 +1,12 @@
+import logging
 from datetime import timedelta
 from unittest.mock import patch
 from django.core.urlresolvers import reverse
 from markupsafe import escape
-from intake import models
-from user_accounts.models import Organization
 from django.contrib.auth.models import User
+from project.tests.assertions import assertInLogsCount
+from user_accounts.models import Organization
+from intake import models
 from intake.tests.base_testcases import IntakeDataTestCase
 from intake.tests import factories
 
@@ -204,6 +206,17 @@ class TestApplicationDetail(AppDetailFixturesBaseTestCase):
             organization=user.profile.organization).first()
         self.assertTrue(application.has_been_opened)
 
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_fires_expected_mixpanel_events(self, slack):
+        user = self.be_ccpubdef_user()
+        submission = factories.FormSubmissionWithOrgsFactory.create(
+            organizations=[user.profile.organization])
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            self.get_page(submission)
+        assertInLogsCount(logs, {'event_name=app_opened': 1})
+        assertInLogsCount(logs, {'event_name=user_app_opened': 1})
+
 
 class TestAppDetailWithTransfers(AppDetailFixturesBaseTestCase):
 
@@ -240,6 +253,17 @@ class TestAppDetailWithTransfers(AppDetailFixturesBaseTestCase):
             incoming_transfer.status_update.author.profile.name)
         self.assertContains(response, escape(expected_message))
         self.assertContains(response, escape(incoming_transfer.reason))
+
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_fires_expected_mixpanel_events(self, slack):
+        user = self.be_ccpubdef_user()
+        submission = factories.FormSubmissionWithOrgsFactory.create(
+            organizations=[user.profile.organization])
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            self.get_page(submission)
+        assertInLogsCount(logs, {'event_name=app_opened': 1})
+        assertInLogsCount(logs, {'event_name=user_app_opened': 1})
 
 
 class TestApplicationHistory(AppDetailFixturesBaseTestCase):
@@ -322,6 +346,17 @@ class TestApplicationHistory(AppDetailFixturesBaseTestCase):
             organization=user.profile.organization).first()
         self.assertTrue(application.has_been_opened)
 
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_fires_expected_mixpanel_events(self, slack):
+        user = self.be_ccpubdef_user()
+        submission = factories.FormSubmissionWithOrgsFactory.create(
+            organizations=[user.profile.organization])
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            self.get_page(submission)
+        assertInLogsCount(logs, {'event_name=app_opened': 1})
+        assertInLogsCount(logs, {'event_name=user_app_opened': 1})
+
 
 class TestApplicationHistoryWithTransfers(AppDetailFixturesBaseTestCase):
 
@@ -396,3 +431,14 @@ class TestApplicationHistoryWithTransfers(AppDetailFixturesBaseTestCase):
             ]
             for expected_data in expected_display_data:
                 self.assertContains(response, escape(expected_data))
+
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_fires_expected_mixpanel_events(self, slack):
+        user = self.be_ccpubdef_user()
+        submission = factories.FormSubmissionWithOrgsFactory.create(
+            organizations=[user.profile.organization])
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            self.get_page(submission)
+        assertInLogsCount(logs, {'event_name=app_opened': 1})
+        assertInLogsCount(logs, {'event_name=user_app_opened': 1})
