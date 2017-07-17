@@ -1,11 +1,15 @@
+import logging
 from unittest.mock import patch
+
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+
 from project.services import query_params
 from project.tests.utils import login
 from intake import models
 from intake.tests import factories as intake_factories
 from user_accounts.tests import factories as user_accounts_factories
+from project.tests.assertions import assertInLogsCount
 
 
 def prebuilt_pdf_for_ids(app_ids):
@@ -111,6 +115,18 @@ class TestPrebuiltPDFBundleWrapperView(TestCase):
         self.assertContains(response, str(
             '3 applications have been marked as “Read” and moved to the '
             '“Needs Status Update” folder'))
+
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_fires_expected_mixpanel_events(self, slack):
+        app_ids = intake_factories.make_app_ids_for('sf_pubdef')
+        profile = user_accounts_factories.app_reviewer('sf_pubdef')
+        login(self.client, profile)
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            response = self.client.get(
+                query_params.get_url_for_ids(self.view_name, app_ids))
+        assertInLogsCount(logs, {'event_name=app_opened': len(app_ids)})
+        assertInLogsCount(logs, {'event_name=user_app_opened': len(app_ids)})
 
 
 class TestPrebuiltPDFBundleFileView(TestCase):

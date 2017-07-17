@@ -152,7 +152,6 @@ def handle_apps_opened(apps, user, send_slack_notification=True):
             app.has_been_opened = True
             app.save()
             tasks.remove_application_pdfs.delay(app.id)
-            # here would be the place to mark the apps_updated table
         if send_slack_notification:
             notifications.slack_submissions_viewed.send(
                 submissions=[app.form_submission], user=user,
