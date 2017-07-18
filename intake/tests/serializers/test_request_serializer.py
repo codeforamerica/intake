@@ -82,3 +82,12 @@ class TestRequestSerializer(TestCase):
         json = JSONRenderer().render(data, renderer_context={'indent': 2})
         for chunk in self.json_chunks:
             self.assertIn(chunk, json)
+
+    def test_detects_language_and_locale(self):
+        locale_string = 'es-ni'
+        request = self.client.get(
+            reverse('intake-home'), HTTP_ACCEPT_LANGUAGE=locale_string
+        ).wsgi_request
+        data = RequestSerializer(request).data
+        self.assertEqual('es-ni', data['locale'])
+        self.assertEqual('Nicaraguan Spanish', data['language'])

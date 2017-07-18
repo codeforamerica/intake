@@ -2,6 +2,7 @@ import intake.services.applicants as ApplicantsService
 import project.services.logging_service as LoggingService
 from intake.services import status_notifications as SNService
 from intake.tasks import log_to_mixpanel
+from intake.serializers import serialized_request
 
 
 def form_started(request, counties):
@@ -14,7 +15,7 @@ def form_started(request, counties):
         counties=counties,
         referrer=applicant.visitor.referrer,
         source=applicant.visitor.source,
-        user_agent=request.META.get('HTTP_USER_AGENT'))
+        **serialized_request(request))
 
 
 def form_page_complete(request, page_name):
