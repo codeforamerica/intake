@@ -27,7 +27,6 @@ amqp==2.1.4
 PyYAML==3.12
 user-agents==1.1.0
 ua-parser==0.7.3
-django-user-agents==0.3.0
 
 # factory-boy breaks on later version fo fake-factory
 # we need to pin fake-factory

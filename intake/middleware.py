@@ -3,6 +3,7 @@ from urllib.parse import urlparse
 
 from intake.models import Visitor
 import intake.services.events_service as EventsService
+import user_agents
 
 
 logger = logging.getLogger(__name__)
@@ -36,6 +37,13 @@ class MiddlewareBase:
 
     def process_response(self, response):
         return None
+
+
+class UserAgentMiddleware(MiddlewareBase):
+
+    def process_request(self, request):
+        user_agent_string = request.META.get('HTTP_USER_AGENT', '')
+        request.user_agent = user_agents.parse(user_agent_string)
 
 
 class PersistReferrerMiddleware(MiddlewareBase):
@@ -86,6 +94,7 @@ class CountUniqueVisitorsMiddleware(MiddlewareBase):
                     referrer=request.session.get('referrer', ''),
                     source=request.session.get('source', ''),
                     ip_address=getattr(request, 'ip_address', ''),
+                    user_agent=request.META.get('HTTP_USER_AGENT', ''),
                 )
                 visitor.save()
                 EventsService.site_entered(visitor, request.get_full_path())

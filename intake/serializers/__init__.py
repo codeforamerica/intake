@@ -1,3 +1,4 @@
+from .request_serializer import RequestSerializer
 from .form_submission_serializer import FormSubmissionFollowupListSerializer
 from .organization_serializer import OrganizationSerializer
 from .app_index_serializers import (
@@ -10,6 +11,7 @@ from .tag_serializer import TagSerializer
 
 
 __all__ = [
+    RequestSerializer,
     FormSubmissionFollowupListSerializer,
     OrganizationSerializer,
     ApplicationAutocompleteSerializer,

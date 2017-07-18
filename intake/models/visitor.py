@@ -1,6 +1,6 @@
 import uuid
 from django.db import models
-from ua_parser import user_agent_parser
+import user_agents
 
 
 class Visitor(models.Model):
@@ -15,4 +15,4 @@ class Visitor(models.Model):
         return self.uuid.hex
 
     def get_parsed_user_agent(self):
-        return user_agent_parser.Parse(self.user_agent)
+        return user_agents.parse(self.user_agent)
