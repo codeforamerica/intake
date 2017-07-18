@@ -38,11 +38,11 @@ class UserProfile(models.Model):
     def create_from_invited_user(cls, user, invitation=None, **kwargs):
         """
         This assumes we have a saved user and an
-        accepted invite for that user's email
+        invite for that user's email
         """
         if not invitation:
             invitations = user_accounts.models.Invitation.objects.filter(
-                email=user.email, accepted=True
+                email=user.email
             )
             invitation = invitations.first()
         if not invitation:
