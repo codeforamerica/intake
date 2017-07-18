@@ -23,15 +23,20 @@ function initializeSearchWidget(inputSelector, postURL, resultsCallback, emptySe
   }
 
 
-  function handleKeyupInSearchInput(e){
+  function handleKeypressInSearchInput(e){
     var searchTerm = $(this).val();
+
+    if (event.which == 13 || event.keyCode == 13) {
+        //detects an enter keypress, false return prevents form submit
+        return false;
+    }
     if (searchTerm.length > 0){
       sendSearchQuery(searchTerm);
     } else {
       emptySearchCallback();
     }
   }
-  $(inputSelector).on('keyup', "input[name='q']", handleKeyupInSearchInput);
+  $(inputSelector).on('keypress', "input[name='q']", handleKeypressInSearchInput);
 }
 
 module.exports = initializeSearchWidget;
