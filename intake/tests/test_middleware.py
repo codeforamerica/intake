@@ -141,7 +141,8 @@ class TestCountUniqueVisitorsMiddleware(TestCase):
         visitor_id_2 = response_2.wsgi_request.session.get('visitor_id')
         self.assertEqual(visitor_id, visitor_id_2)
         Visitor.assert_called_once_with(
-            ip_address='127.0.0.1', referrer='', source='', user_agent='')
+            ip_address='127.0.0.1', referrer='', source='', user_agent='',
+            locale='en')
 
     @patch('intake.middleware.Visitor')
     def test_ignores_health_checks(self, Visitor):

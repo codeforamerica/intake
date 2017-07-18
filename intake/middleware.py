@@ -95,7 +95,7 @@ class CountUniqueVisitorsMiddleware(MiddlewareBase):
                     source=request.session.get('source', ''),
                     ip_address=getattr(request, 'ip_address', ''),
                     user_agent=request.META.get('HTTP_USER_AGENT', ''),
-                )
+                    locale=getattr(request, 'LANGUAGE_CODE', ''))
                 visitor.save()
                 EventsService.site_entered(visitor, request.get_full_path())
                 request.session['visitor_id'] = visitor.id

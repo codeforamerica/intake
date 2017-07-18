@@ -1,8 +1,9 @@
 from django.conf import settings
 from rest_framework import serializers
 from .fields import ChainableAttributeField
+from intake.constants import LANGUAGES_LOOKUP
 
-LANGUAGES_LOOKUP = dict(settings.LANGUAGES)
+
 
 
 class RequestSerializer(serializers.Serializer):
@@ -31,5 +32,5 @@ class RequestSerializer(serializers.Serializer):
             request.LANGUAGE_CODE, request.LANGUAGE_CODE)
 
 
-def serialized_request(request):
+def mixpanel_request_data(request):
     return RequestSerializer(request).data

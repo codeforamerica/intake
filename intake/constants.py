@@ -3,6 +3,7 @@ from django.conf import settings
 from pytz import timezone
 
 PACIFIC_TIME = timezone('US/Pacific')
+LANGUAGES_LOOKUP = dict(settings.LANGUAGES)
 
 SCOPE_TO_LIVE_COUNTIES = getattr(settings, 'LIVE_COUNTY_CHOICES', False)
 
