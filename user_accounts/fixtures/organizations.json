@@ -479,9 +479,9 @@
     "short_followup_message": "Has the Yolo County Public Defender contacted you and told you your next steps?",
     "long_followup_message": "Has the Yolo County Public Defender contacted you and told you your next steps?",
     "address": "814 North Street\nWoodland, CA 95695",
-    "phone_number": "(530) 666-8165",
+    "phone_number": "(530) 406-4565",
     "fax_number": "(530) 666-8405",
-    "email": "",
+    "email": "ClearMyRecord@yolocounty.org",
     "notify_on_weekends": false,
     "needs_applicant_followups": false
   }
