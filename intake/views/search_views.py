@@ -26,7 +26,7 @@ class SearchAPIBaseView(View):
             return HttpResponse(status=404)
         qset = self.get_queryset()
         data = self.serializer(qset, many=True).data
-        EventsService.user_apps_searched(request)
+        EventsService.user_apps_searched(self)
         return self.get_response(data)
 
 

@@ -56,7 +56,7 @@ class ApplicationDetail(ViewAppDetailsMixin, TemplateView):
             submission=self.submission,
             declaration_form=letter_display,
             applications=applications)
-        AppsService.handle_apps_opened(applications, self.request.user)
+        AppsService.handle_apps_opened(self, applications)
         return context
 
 

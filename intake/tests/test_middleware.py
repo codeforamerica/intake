@@ -153,7 +153,7 @@ class TestCountUniqueVisitorsMiddleware(TestCase):
 
     def test_response_view_identified(self):
         response = self.client.get(reverse('intake-apply'))
-        self.assertEqual(response.view, 'SelectCountyView')
+        self.assertEqual(response.view.__class__.__name__, 'SelectCountyView')
 
     @patch('intake.middleware.EventsService.page_viewed')
     def test_404_does_not_fire_page_viewed(self, page_viewed):

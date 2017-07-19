@@ -4,9 +4,11 @@ from .fields import ChainableAttributeField
 from intake.constants import LANGUAGES_LOOKUP
 
 
-
-
 class RequestSerializer(serializers.Serializer):
+    visitor_source = ChainableAttributeField('visitor.source')
+    visitor_referrer = ChainableAttributeField('visitor.referrer')
+    path = ChainableAttributeField('path')
+    full_path = serializers.SerializerMethodField(read_only=True)
     compact_user_agent = serializers.SerializerMethodField(read_only=True)
     browser_family = ChainableAttributeField('user_agent.browser.family')
     browser_version = ChainableAttributeField(
@@ -30,6 +32,9 @@ class RequestSerializer(serializers.Serializer):
     def get_language(self, request):
         return LANGUAGES_LOOKUP.get(
             request.LANGUAGE_CODE, request.LANGUAGE_CODE)
+
+    def get_full_path(self, request):
+        return request.get_full_path()
 
 
 def mixpanel_request_data(request):

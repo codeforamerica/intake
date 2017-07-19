@@ -97,18 +97,17 @@ class CountUniqueVisitorsMiddleware(MiddlewareBase):
                     user_agent=request.META.get('HTTP_USER_AGENT', ''),
                     locale=getattr(request, 'LANGUAGE_CODE', ''))
                 visitor.save()
-                EventsService.site_entered(visitor, request.get_full_path())
+                request.visitor = visitor
+                EventsService.site_entered(visitor, request)
                 request.session['visitor_id'] = visitor.id
             else:
                 visitor = Visitor.objects.get(id=visitor_id)
-            request.visitor = visitor
+                request.visitor = visitor
             response = self.get_response(request)
 
             if is_a_valid_response_code(response):
                 response.view = getattr(response, "context_data", {}).get(
                     "view", None)
-                if response.view:
-                    response.view = response.view.__class__.__name__
                 if request.user.is_authenticated:
                     EventsService.user_page_viewed(request, response)
                 else:
