@@ -123,6 +123,19 @@ class IdentityConfirmation(ConsentCheckbox):
         "Confirms application is for self or with permission")
 
 
+class UnderstandsMaybeFee(ConsentCheckbox):
+    context_key = "understands_maybe_fee"
+    is_required_error_message = (
+        "We need your understanding before we can help you")
+    label = _(
+        "Do you understand that if you are eligible, you might have to pay a "
+        "fee in Yolo County? If you are low income, you may be eligible for "
+        "a fee waiver.")
+    agreement_text = _("Yes, I understand")
+    display_label = str(
+        "Understands that there may be a fee in Yolo County")
+
+
 class ReasonsForApplying(MultipleChoiceField):
     context_key = "reasons_for_applying"
     label = _("Why are you applying to clear your record?")
@@ -701,6 +714,7 @@ INTAKE_FIELDS = [
     AdditionalInformation,
     UnderstandsLimits,
     IdentityConfirmation,
+    UnderstandsMaybeFee,
     ConsentToRepresent,
     ConsentNote,
 

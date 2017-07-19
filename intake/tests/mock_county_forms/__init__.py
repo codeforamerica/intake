@@ -344,6 +344,7 @@ class Provider(BaseProvider):
             has_children=self.maybe(0.4),
             dependents=random.randint(0, 4),
             currently_employed=self.maybe(0.4),
+            understands_maybe_fee='yes'
             )
         return data
 
