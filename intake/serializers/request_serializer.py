@@ -35,7 +35,3 @@ class RequestSerializer(serializers.Serializer):
 
     def get_full_path(self, request):
         return request.get_full_path()
-
-
-def mixpanel_request_data(request):
-    return RequestSerializer(request).data

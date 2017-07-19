@@ -7,7 +7,3 @@ class ApplicantMixpanelSerializer(serializers.Serializer):
     """
     applicant_source = ChainableAttributeField('visitor.source')
     applicant_referrer = ChainableAttributeField('visitor.referrer')
-
-
-def mixpanel_applicant_data(applicant):
-    return ApplicantMixpanelSerializer(applicant).data

@@ -5,7 +5,3 @@ from intake.constants import LANGUAGES_LOOKUP
 
 class ViewMixpanelSerializer(serializers.Serializer):
     view_name = ChainableAttributeField('__class__.__name__')
-
-
-def mixpanel_view_data(view):
-    return ViewMixpanelSerializer(view).data
