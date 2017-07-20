@@ -563,8 +563,6 @@ class YoloCountyFormSpec(SonomaCountyFormSpec):
     county = Counties.YOLO
     fields = (SonomaCountyFormSpec.fields | {
         F.Aliases,
-        F.DriverLicenseOrIDNumber,
-        F.LastFourOfSocial,
         F.CaseNumber,
         F.CurrentlyEmployed,
         F.MonthlyIncome,
@@ -575,10 +573,13 @@ class YoloCountyFormSpec(SonomaCountyFormSpec):
         F.OwnsHome,
         F.HasChildren,
         F.HowManyDependents,
-        F.IsMarried
+        F.IsMarried,
+        F.UnderstandsMaybeFee
     }) - {
         F.AlternatePhoneNumberField,
-        F.OwesCourtFees
+        F.OwesCourtFees,
+        F.ServingSentence,
+        F.USCitizen
     }
     required_fields = (SonomaCountyFormSpec.required_fields | {
         F.CurrentlyEmployed,
@@ -589,7 +590,8 @@ class YoloCountyFormSpec(SonomaCountyFormSpec):
         F.OwnsHome,
         F.HowManyDependents,
         F.IsMarried,
-        F.ReasonsForApplying
+        F.ReasonsForApplying,
+        F.UnderstandsMaybeFee
         }) - {
         F.OwesCourtFees,
     }

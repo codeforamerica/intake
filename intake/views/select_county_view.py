@@ -22,7 +22,7 @@ class SelectCountyView(ApplicantFormViewBase):
 
     def form_valid(self, form):
         EventsService.form_started(
-            self.request, counties=form.parsed_data['counties'])
+            self, counties=form.parsed_data['counties'])
         return super().form_valid(form)
 
 
