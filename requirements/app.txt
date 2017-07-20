@@ -33,4 +33,3 @@ ua-parser==0.7.3
 fake-factory==0.7.2
 factory-boy~=2.7
 django-url-robots==2.0
-pycparser==2.18
