@@ -15,7 +15,7 @@ class CreateNote(NoteViewMixin, generics.CreateAPIView):
     """
     def perform_create(self, serializer):
         note = serializer.save()
-        EventsService.note_added(note.submission, self.request.user)
+        EventsService.note_added(self, note.submission)
 
 
 class DestroyNote(NoteViewMixin, generics.DestroyAPIView):

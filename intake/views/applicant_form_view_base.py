@@ -70,8 +70,7 @@ class ApplicantFormViewBase(FormView):
         return context
 
     def log_page_completion_and_save_data(self, form):
-        EventsService.form_page_complete(
-            self.request, page_name=self.__class__.__name__)
+        EventsService.form_page_complete(self)
         utils.save_form_data_to_session(
             self.request, self.session_key, form.data)
 
@@ -83,7 +82,7 @@ class ApplicantFormViewBase(FormView):
         MessagesService.flash_errors(
             self.request, ERROR_MESSAGE, *form.non_field_errors())
         EventsService.form_validation_failed(
-            self, self.request, errors=form.get_serialized_errors())
+            self, errors=form.get_serialized_errors())
 
         return super().form_invalid(form)
 
@@ -98,7 +97,7 @@ class ApplicantFormViewBase(FormView):
         organizations = self.get_receiving_organizations(form)
         submission = SubmissionsService.create_submission(
             form, organizations, self.applicant.id)
-        EventsService.form_submitted(submission)
+        EventsService.form_submitted(self, submission)
         SubmissionsService.send_to_newapps_bundle_if_needed(
             submission, organizations=organizations)
         number = models.FormSubmission.objects.count()
