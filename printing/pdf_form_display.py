@@ -72,9 +72,14 @@ class PDFFormDisplay:
         ['household_size', 'dependents', 'has_children', 'is_married'],
         ['owns_home', 'on_public_benefits'],
         ['how_did_you_hear'],
-        ['understands_limits'],
-        ['consent_to_represent'],
-        ['identity_confirmation'],
+        [
+            'understands_limits',
+            'consent_to_represent'
+        ],
+        [
+            'identity_confirmation',
+            'understands_maybe_fee'
+        ],
         ['additional_information'],
     ]
 
