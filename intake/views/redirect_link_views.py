@@ -9,11 +9,12 @@ class LinkRedirectEventViewBase(RedirectView):
     a user arrived at unread through an email notification link.
     """
 
-    def fire_event(self, request):
-        EventsService.user_email_link_clicked(request, self)
+    def fire_event(self):
+        EventsService.user_email_link_clicked(self)
 
     def get(self, request):
-        self.fire_event(request)
+        self.request = request
+        self.fire_event()
         return super().get(request)
 
 

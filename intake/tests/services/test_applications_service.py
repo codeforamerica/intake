@@ -1,5 +1,5 @@
 import random
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 from datetime import timedelta
 from django.utils import timezone
 from django.test import TestCase
@@ -47,7 +47,7 @@ class TestGetApplicationsIndexForOrgUser(TestCase):
             organization__county__slug='alameda').first()
         TransferService.transfer_application(
             user, application, to_org, 'food replicator malfunction')
-        with self.assertNumQueries(6):
+        with self.assertNumQueries(5):
             results = AppsService.get_all_applications_for_org_user(user, 1)
         self.assertTrue(
             any([
@@ -163,7 +163,8 @@ class TestHandleAppsOpened(TestCase):
             organizations=[fake_org_1, fake_org_2], answers={})
         org_1_user = UserProfileFactory(organization=fake_org_1).user
         AppsService.handle_apps_opened(
-            sub.applications.all(), org_1_user, False)
+            Mock(**{'request.user': org_1_user}),
+            sub.applications.all(), False)
         org_1_apps = sub.applications.filter(organization=fake_org_1)
         org_2_apps = sub.applications.filter(organization=fake_org_2)
         self.assertTrue(all([app.has_been_opened for app in org_1_apps]))
@@ -175,6 +176,7 @@ class TestHandleAppsOpened(TestCase):
         sub = factories.FormSubmissionWithOrgsFactory(
             organizations=[profile.organization], answers={})
         AppsService.handle_apps_opened(
-            sub.applications.all(), profile.user, False)
+            Mock(**{'request.user': profile.user}),
+            sub.applications.all(), False)
         remove_application_pdfs.delay.assert_called_with(
             sub.applications.first().id)

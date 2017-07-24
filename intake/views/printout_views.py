@@ -24,7 +24,7 @@ class CasePrintoutPDFView(ApplicationDetail):
         apps = AppsService.filter_to_org_if_not_staff(
             submission.applications.all(), request.user)
         AppsService.handle_apps_opened(
-            apps, request.user, send_slack_notification=False)
+            self, apps, send_slack_notification=False)
         filename, pdf_bytes = PDFService.get_printout_for_submission(
             request.user, submission)
         response = HttpResponse(pdf_bytes, content_type='application/pdf')
