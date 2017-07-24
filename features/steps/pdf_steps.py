@@ -26,8 +26,10 @@ def test_prefilled_pdf_for_applicant(context, applicant_name):
     context.test.assertTrue(sub.filled_pdfs.count() >= 1)
 
 
-@then('there should be a prebuilt PDF bundle for "{applicant_names}"')
-def test_applicant_in_prebuilt_pdf_for_org(context, applicant_names):
+@then(
+    'there should be a prebuilt PDF bundle for "{applicant_names}" to '
+    '"{org_slug}"')
+def test_applicant_in_prebuilt_pdf_for_org(context, applicant_names, org_slug):
     applicant_names = oxford_comma_text_to_list(applicant_names)
     app_ids = []
     for applicant_name in applicant_names:
@@ -35,7 +37,8 @@ def test_applicant_in_prebuilt_pdf_for_org(context, applicant_names):
         app_ids.append(
             models.Application.objects.filter(
                 form_submission__first_name=first_name,
-                form_submission__last_name=last_name).first().id)
+                form_submission__last_name=last_name,
+                organization__slug=org_slug).first().id)
     prebuilt = pdf_service.get_prebuilt_pdf_bundle_for_app_id_set(app_ids)
     context.test.assertTrue(prebuilt)
 

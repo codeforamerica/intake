@@ -148,6 +148,20 @@ class TestGetPrebuiltPdfBundleForAppIdSet(TestCase):
         result = PDFService.get_prebuilt_pdf_bundle_for_app_id_set([])
         self.assertEqual(None, result)
 
+    def test_bundles_with_same_count_but_different_apps_are_excluded(self):
+        other_prebuilt = factories.PrebuiltPDFBundleFactory()
+        not_matching_apps = factories.make_app_ids_for_sf(count=2)
+        other_prebuilt.applications.add(*not_matching_apps)
+
+        expected_prebuilt = factories.PrebuiltPDFBundleFactory()
+        matching_apps = factories.make_app_ids_for_sf(count=2)
+        expected_prebuilt.applications.add(*matching_apps)
+
+        result = PDFService.get_prebuilt_pdf_bundle_for_app_id_set(
+            matching_apps)
+        self.assertNotEqual(other_prebuilt, result)
+        self.assertEqual(expected_prebuilt, result)
+
 
 class TestGetOrCreatePrebuiltPdfForAppIds(TestCase):
 
