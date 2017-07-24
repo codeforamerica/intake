@@ -149,8 +149,8 @@ class TestGetPrebuiltPdfBundleForAppIdSet(TestCase):
         self.assertEqual(None, result)
 
     def test_bundles_with_same_count_but_different_apps_are_excluded(self):
-        not_matching_apps = factories.make_app_ids_for_sf(count=2)
         other_prebuilt = factories.PrebuiltPDFBundleFactory()
+        not_matching_apps = factories.make_app_ids_for_sf(count=2)
         other_prebuilt.applications.add(*not_matching_apps)
 
         expected_prebuilt = factories.PrebuiltPDFBundleFactory()
