@@ -16,7 +16,7 @@ Feature: Org users can print unread apps
      And I should see "2" in the active tab
      And there should be a pre-filled PDF for "Bartholomew Simpson"
      And there should be a pre-filled PDF for "Inigo Montoya"
-     And there should be a prebuilt PDF bundle for "Bartholomew Simpson and Inigo Montoya"
+     And there should be a prebuilt PDF bundle for "Bartholomew Simpson and Inigo Montoya" to "sf_pubdef"
     When I click the "Print All" link to "/applications/unread/pdf/"
     Then it should load "/applications/unread/pdf/"
      And I should see a flash message that says "2 applications have been marked as “Read” and moved to the “Needs Status Update” folder"

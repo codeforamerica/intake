@@ -65,7 +65,7 @@ def search_by_name(context):
     search_input = context.browser.find_element_by_css_selector(
         'input[name="q"]')
     search_input.send_keys('Waldini')
-    time.sleep(0.4)
+    time.sleep(1)
 
 
 @when("I click on the applicant's row")
