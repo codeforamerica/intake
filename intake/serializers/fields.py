@@ -66,3 +66,21 @@ class FormattedLocalDateField(LocalDateField):
 
     def to_representation(self, dt):
         return super().to_representation(dt).strftime(self.format)
+
+
+class ChainableAttributeField(serializers.Field):
+
+    def __init__(self, attribute_accessor_sequence, *args, **kwargs):
+        kwargs['source'] = kwargs.pop('source', '*')
+        super().__init__(*args, **kwargs)
+        self.attribute_accessor_sequence = attribute_accessor_sequence
+
+    def to_representation(self, obj):
+        value = obj
+        attribute_sequence = getattr(
+            self, 'attribute_accessor_sequence', '').split('.')
+        while attribute_sequence:
+            accessor = attribute_sequence.pop(0)
+            if accessor:
+                value = getattr(value, accessor)
+        return value

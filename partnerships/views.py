@@ -45,7 +45,7 @@ class Contact(GlobalTemplateContextMixin, FormView):
         partnership_lead.visitor = self.request.visitor
         partnership_lead.save()
         self.send_email(form.cleaned_data)
-        EventsService.partnership_interest_submitted(partnership_lead)
+        EventsService.partnership_interest_submitted(self, partnership_lead)
         success_message = self.success_message_template.format(
             partnerships_lead_inbox=settings.PARTNERSHIPS_LEAD_INBOX)
         messages.success(self.request, success_message, extra_tags='safe')
