@@ -26,9 +26,11 @@ def fill_pdf_for_application(application_id):
 
 def get_prebuilt_pdf_bundle_for_app_id_set(app_ids):
     # match the number of IDs
+    # order_by('created') is used to create deterministic results
+    # for testing purposes
     matching_bundles = models.PrebuiltPDFBundle.objects.annotate(
         app_count=Count('applications')
-    ).filter(app_count=len(app_ids))
+    ).filter(app_count=len(app_ids)).order_by('created')
     # ensure it includes each ID
     for app_id in app_ids:
         matching_bundles.filter(applications__id=app_id)
