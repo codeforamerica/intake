@@ -1,5 +1,6 @@
 Closes # (List any issues that this PR closes)
 
+- This PR does (not) introduce new dependencie
 - This PR does (not) include migrations
 - This PR does (not) include data migrations
 
