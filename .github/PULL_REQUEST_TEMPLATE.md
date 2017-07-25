@@ -7,9 +7,10 @@ Closes # (List any issues that this PR closes)
 
 Describe the problem this PR solves in a couple sentences that could be understood by non-developers.
 
-### Testing
+### Testing & Checks
 
-Give a summary of the integration and unit tests used to verify that this works
+Please include a list of human checks needed to check the changes included in this PR, such as user acceptance tests.
+Give a summary of any integration and unit tests used to verify that this works
 
 ### Implementation Details
 
