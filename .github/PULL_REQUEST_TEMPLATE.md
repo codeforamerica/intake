@@ -28,3 +28,6 @@ Give details on the different aspects of this PR, so that code reviewers and oth
 - Does it introduce significant changes to the architecture of the software?
 - Does it include significant refactoring?
 - Does it change an important API?
+
+
+DESIGN STUFF
