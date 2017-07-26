@@ -9,7 +9,7 @@ This PR includes the following items (if checked):
 - [ ] migrations
 - [ ] data migrations
 - [ ] celery tasks
-- [ ] changes to environment variables
+- [ ] changes to environment variables or local settings
 - [ ] configuration changes for 3rd party services (Travis, Heroku, AWS, Github, etc) 
 
 ### Testing & Checks
