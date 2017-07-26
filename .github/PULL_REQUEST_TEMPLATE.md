@@ -24,6 +24,7 @@ Give details on the different aspects of this PR, so that code reviewers and oth
 
 - Does it affect performance metrics?
 - Does it affect deployments or development workflows?
+- Do other developers need to update their environments?
 - Does it introduce significant changes to the architecture of the software?
 - Does it include significant refactoring?
 - Does it change an important API?
