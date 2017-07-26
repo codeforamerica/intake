@@ -1,8 +1,10 @@
 Closes # (List any issues that this PR closes)
 
-### What problem does this solve?
+### What does this do and why?
 
-Describe the problem this PR solves in a couple sentences that could be understood by non-developers.
+Describe the changes and the problem this PR solves in a couple sentences that could be understood by non-developers.
+
+### Testing & Checks
 
 This PR includes the following items (if checked):
 - [ ] new dependencies
@@ -11,8 +13,6 @@ This PR includes the following items (if checked):
 - [ ] celery tasks
 - [ ] changes to environment variables or local settings
 - [ ] configuration changes for 3rd party services (Travis, Heroku, AWS, Github, etc) 
-
-### Testing & Checks
 
 Please include a list of human checks suggested for this PR, such as user acceptance tests (UAT) or checks needed as part of the deployment process.
 
