@@ -13,6 +13,7 @@ This PR includes the following items (if checked):
 - [ ] celery tasks
 - [ ] changes to environment variables or local settings
 - [ ] configuration changes for 3rd party services (Travis, Heroku, AWS, Github, etc) 
+- [ ] visual or style changes
 
 Please include a list of human checks suggested for this PR, such as user acceptance tests (UAT) or checks needed as part of the deployment process.
 
@@ -28,6 +29,6 @@ Give details on the different aspects of this PR, so that code reviewers and oth
 - Does it introduce significant changes to the architecture of the software?
 - Does it include significant refactoring?
 - Does it change an important API?
+- Does it include visual changes? (maybe include some screenshots)
 
 
-DESIGN STUFF
