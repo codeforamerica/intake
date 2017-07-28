@@ -62,6 +62,7 @@ def followup_user(**kwargs):
     return profile_for_slug_in_groups(
         'cfa', group_names=['followup_staff'], is_staff=True, **kwargs)
 
+staff_user = followup_user
 
 def monitor_user(**kwargs):
     return profile_for_slug_in_groups(
