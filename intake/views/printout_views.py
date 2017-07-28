@@ -18,9 +18,10 @@ class CasePrintoutPDFView(ApplicationDetail):
     def get(self, request, submission_id):
         submission = get_object_or_404(
             models.FormSubmission, pk=int(submission_id))
-        if not submission.organizations.filter(
-                id=request.user.profile.organization_id).exists():
-            return not_allowed(request)
+        if not request.user.is_staff:
+            if not submission.organizations.filter(
+                    id=request.user.profile.organization_id).exists():
+                return not_allowed(request)
         apps = AppsService.filter_to_org_if_not_staff(
             submission.applications.all(), request.user)
         AppsService.handle_apps_opened(
