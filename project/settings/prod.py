@@ -10,6 +10,11 @@ DATABASES = {
     }
 }
 
+# settings for file uploads
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('BUCKET_NAME')
+
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
