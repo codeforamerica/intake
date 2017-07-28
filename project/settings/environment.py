@@ -1,9 +1,22 @@
 from project.settings.base import *
+import dj_database_url
+
+
+SECRET_KEY = os.environ.get('SECRET_KEY')
+
+# looks for 'DATABASE_URL' environmental variable
+DATABASES = {
+    'default': dj_database_url.config(
+        default='postgresql://postgres@localhost:5432/intake')
+}
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
 DEFAULT_HOST = os.environ.get('DEFAULT_HOST', 'http://localhost:8000')
 
-SECRET_KEY = os.environ.get('SECRET_KEY')
+# settings for file uploads
+AWS_ACCESS_KEY_ID = os.environ.get('BUCKETEER_AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('BUCKETEER_AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('BUCKETEER_BUCKET_NAME')
 
 # settings for static files
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'

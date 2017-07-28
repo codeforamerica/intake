@@ -1,6 +1,9 @@
 {
   "name": "intake",
   "env": {
+    "DEFAULT_FILE_STORAGE": {
+      "required": true
+    },
     "DEFAULT_HOST": {
       "required": true
     },
@@ -19,13 +22,13 @@
     "FRONT_PHONE_CHANNEL_ID": {
       "required": true
     },
+    "IMPORT_DATABASE_URL": {
+      "required": true
+    },
     "MAIL_DEFAULT_SENDER": {
       "required": true
     },
     "VOICEMAIL_NOTIFICATION_EMAIL": {
-      "required": true
-    },
-    "PARTNERSHIPS_LEAD_INBOX": {
       "required": true
     },
     "MIXPANEL_KEY": {
