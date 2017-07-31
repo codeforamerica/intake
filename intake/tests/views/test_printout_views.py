@@ -59,6 +59,16 @@ class TestCasePrintoutPDFView(TestCase):
         assertInLogsCount(logs, {'event_name=app_opened': 1})
         assertInLogsCount(logs, {'event_name=user_app_opened': 1})
 
+    def test_cfa_staff_can_view(self):
+        profile = user_accounts_factories.followup_user()
+        login(self.client, profile)
+        submission = intake_factories.make_apps_for(
+                    'a_pubdef', count=1)[0].form_submission
+        response = self.client.get(
+                reverse('intake-case_printout', kwargs=dict(
+                        submission_id=submission.id)))
+        self.assertEqual(response.status_code, 200)
+
 
 class TestPrintoutForApplicationsView(TestCase):
     view_name = 'intake-pdf_printout_for_apps'
