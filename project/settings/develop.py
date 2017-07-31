@@ -1,5 +1,5 @@
 import dj_database_url
-from project.settings.prod import *
+from project.settings.environment import *
 
 USE_DEBUG_TOOLBAR = False
 DEBUG = False
@@ -7,8 +7,7 @@ ALLOWED_HOSTS = ['*']
 
 # looks for 'DATABASE_URL' environmental variable
 DATABASES = {
-    'default': dj_database_url.config(
-        default='postgresql://postgres@localhost:5432/intake')
+    'default': dj_database_url.config()
 }
 
 # settings for file uploads
