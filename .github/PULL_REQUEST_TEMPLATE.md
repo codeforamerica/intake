@@ -2,11 +2,11 @@ Closes # (List any issues that this PR closes)
 
 ### What does this do and why?
 
-Describe the changes and the problem this PR solves in a couple sentences that could be understood by non-developers.
+In a couple sentences that non-engineer teammates would understand, what changes does this PR introduce and what problem does it solve?
 
 ### Testing & Checks
 
-This PR includes the following items (if checked):
+What does this PR include?
 - [ ] new dependencies
 - [ ] migrations
 - [ ] data migrations
@@ -15,20 +15,18 @@ This PR includes the following items (if checked):
 - [ ] configuration changes for 3rd party services (Travis, Heroku, AWS, Github, etc) 
 - [ ] visual or style changes
 
-Please include a list of human checks suggested for this PR, such as user acceptance tests (UAT) or checks needed as part of the deployment process.
+Are there any human checks that should be used to verify these changes, such as user acceptance tests (UAT) or manual deployment checks?
 
-Please summarize any integration or unit tests used to verify that this works
+Any integration or unit tests?
 
 ### Details
 
-Give details on the different aspects of this PR, so that code reviewers and others can understand the changes made. Consider:
+Any other information that would help reviewers and teammates better understand the changes made? For example:
 
-- Does it affect performance metrics?
-- Does it affect deployments or development workflows?
-- Do other developers need to update their environments?
-- Does it introduce significant changes to the architecture of the software?
-- Does it include significant refactoring?
-- Does it change an important API?
-- Does it include visual changes? (maybe include some screenshots)
-
-
+- Are there changes to performance metrics?
+- Are there changes to deployments or development workflows?
+- Should other developers need to update their environments?
+- Any significant changes to the architecture of the software?
+- Any significant refactoring?
+- Any changes to an important API?
+- Any visual changes? (maybe include some screenshots)
