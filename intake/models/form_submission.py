@@ -94,6 +94,17 @@ def gen_uuid():
     return uuid.uuid4().hex
 
 
+class PurgedFormSubmission(models.Model):
+    """
+    Placeholder for custom VIEW see intake migration 0062
+    TODO: Make an abstract Model from FormSubmission and
+    subclass here and in FormSubmission:w
+
+    """
+    class Meta:
+        managed = False
+
+
 class FormSubmission(models.Model):
 
     text_search_fields = FORMSUBMISSION_TEXT_SEARCH_FIELDS
