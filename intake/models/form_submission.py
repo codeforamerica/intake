@@ -95,7 +95,7 @@ def gen_uuid():
 
 
 class PurgedFormSubmission(models.Model):
-    """Placeholder for custom VIEW see intake migration 0062
+    """Placeholder for custom VIEW see intake migration 0061
     TODO: Make an abstract Model from FormSubmission and
     subclass here and in FormSubmission
 
