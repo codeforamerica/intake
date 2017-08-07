@@ -101,6 +101,7 @@ class PurgedFormSubmission(models.Model):
 
     """
     class Meta:
+        db_table = 'purged\".\"intake_formsubmission'
         managed = False
 
 
