@@ -92,6 +92,7 @@ def page_viewed(request, response):
     data = dict(
         distinct_id=request.visitor.get_uuid(),
         event_name=event_name,
+        http_status_code=response.status_code,
         **mixpanel_request_data(request))
     if response.view:
         data.update(mixpanel_view_data(response.view))
