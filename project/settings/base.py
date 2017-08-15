@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'compressor',
     'behave_django',
     'favicons',
+    'clips',
 ]
 
 MIDDLEWARE = [
