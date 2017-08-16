@@ -226,6 +226,10 @@ COUNTY_CHOICES = (
     (Counties.SANTA_BARBARA, _(
         'Santa Barbara County (near Santa Maria, Santa Barbara, Goleta, '
         'Carpinteria, Solvang, and Lompoc)')),
+    (Counties.VENTURA, _(
+        'Ventura County (near Oxnard, Thousand Oaks, Simi Valley, '
+        'Camarillo, Ojai, Moorpark, Fillmore, Santa Paula, or '
+        'Ventura)')),
     (Counties.YOLO, _(
             'Yolo County (near Davis, West Sacramento, Winters, and '
             'Woodland)'))
@@ -246,10 +250,6 @@ if not SCOPE_TO_LIVE_COUNTIES:
         (Counties.TULARE, _(
             'Tulare County (near Visalia, Tulare, Porterville, Finuba, '
             'Lindsay, Farmersville, Exeter, or Woodlake)')),
-        (Counties.VENTURA, _(
-            'Ventura County (near Oxnard, Thousand Oaks, Simi Valley, '
-            'Camarillo, Ojai, Moorpark, Fillmore, Santa Paula, or '
-            'Ventura)')),
         (Counties.STANISLAUS, _(
             'Stanislaus County (near Modesto, Turlock, and Ceres)')),
     )
