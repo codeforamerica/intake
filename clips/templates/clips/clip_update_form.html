@@ -1,0 +1,11 @@
+<form action="" method="post">{% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="Update" />
+</form>
+<table>
+{% for row in object.run %}<tr>
+  {% for column in row %}
+  <td>{{ column }}</td>
+  {% endfor %}
+</tr>{% endfor %}
+</table>

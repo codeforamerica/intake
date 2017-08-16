@@ -7,7 +7,8 @@ ALLOWED_HOSTS = ['*']
 
 # looks for 'DATABASE_URL' environmental variable
 DATABASES = {
-    'default': dj_database_url.config()
+    'default': dj_database_url.config(),
+    'purged': dj_database_url.config(),
 }
 
 # settings for file uploads
