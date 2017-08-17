@@ -28,6 +28,11 @@ DATABASES = {
         'NAME': 'intake',
         'USER': 'postgres',
     }
+    'purged': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'intake',
+        'USER': 'postgres',
+    }
 }
 
 LOGGING = {
