@@ -8,6 +8,13 @@ DATABASES = {
         'USER': 'intake',
         'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
     }
+    'purged': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'HOST': os.environ.get('PURGED_DATABASE_HOST'),
+        'NAME': 'intake',
+        'USER': os.environ.get('PURGED_DATABASE_USER'),
+        'PASSWORD': os.environ.get('PURGED_DATABASE_PASSWORD'),
+    }
 }
 
 # settings for file uploads

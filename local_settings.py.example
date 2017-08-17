@@ -11,12 +11,18 @@ INTERNAL_IPS = ['127.0.0.1', '::1']
 USE_DEBUG_TOOLBAR = False #Broken
 
 if USE_DEBUG_TOOLBAR:
-    MIDDLEWARE_CLASSES.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware',)
+    MIDDLEWARE_CLASSES.insert(0,
+        'debug_toolbar.middleware.DebugToolbarMiddleware',)
 
 SECRET_KEY = 'something super secret'
 
 DATABASES = {
     'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'intake',
+        'USER': 'your db user',
+    }
+    'purged': { # This is database used by the clips app
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'intake',
         'USER': 'your db user',

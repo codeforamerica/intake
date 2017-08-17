@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^invitations/', include(
         'invitations.urls', namespace='invitations')),
     url(r'^admin/', admin.site.urls),
+    url(r'^clips/', include('clips.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 # django debug toolbar
