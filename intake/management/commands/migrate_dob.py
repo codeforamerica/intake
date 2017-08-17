@@ -14,11 +14,12 @@ class Command(BaseCommand):
         for sub in subs:
             if not sub.dob:
                 dob_obj = sub.answers['dob']
-                parsed_dob = parse(dob_obj['year']+'-'+dob_obj['month']+'-'+dob_obj['day'])
+                parsed_dob = parse(
+                    dob_obj['year']+'-'+dob_obj['month']+'-'+dob_obj['day'])
 
                 sub.dob = parsed_dob
                 sub.save(update_fields=['dob'])
-                
+
                 migrated += 1
         self.stdout.write(
             self.style.SUCCESS(

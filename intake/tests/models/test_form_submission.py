@@ -1,6 +1,7 @@
 from unittest.mock import Mock
 from django.test import TestCase
 
+from datetime import datetime
 from intake.tests import mock, factories
 from formation import field_types
 import intake.services.submissions as SubmissionsService
@@ -31,6 +32,12 @@ class TestFormSubmission(TestCase):
         counties = models.County.objects.order_by('slug').all()
         counties_from_sub = submission.get_counties().order_by('slug').all()
         self.assertListEqual(list(counties), list(counties_from_sub))
+
+    def test_get_dob(self):
+        submission = self.get_a_sample_sub()
+        dob = datetime(1969, 1, 30, 0, 0)
+        dob_from_sub = submission.get_dob()
+        self.assertEqual(dob, dob_from_sub)
 
     def test_get_permitted_submissions_when_permitted(self):
         cc_pubdef = auth_models.Organization.objects.get(

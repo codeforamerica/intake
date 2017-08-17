@@ -6,6 +6,7 @@ from django.contrib.postgres.fields import JSONField
 from django.utils import timezone as timezone_utils
 from django.core.urlresolvers import reverse
 from taggit.managers import TaggableManager
+from dateutil.parser import parse
 import intake
 from intake import anonymous_names
 from intake.constants import SMS, EMAIL
@@ -209,6 +210,11 @@ class FormSubmission(models.Model):
     def get_local_date_received(self, fmt=None, timezone_name='US/Pacific'):
         return intake.utils.local_time(
             self.date_received, fmt, timezone_name)
+
+    def get_dob(self):
+        dob_obj = self.answers['dob']
+        return parse(
+            dob_obj['year']+'-'+dob_obj['month']+'-'+dob_obj['day'])
 
     def get_contact_preferences(self):
         if 'contact_preferences' in self.answers:
