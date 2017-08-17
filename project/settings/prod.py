@@ -7,7 +7,7 @@ DATABASES = {
         'NAME': 'intake',
         'USER': 'intake',
         'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-    }
+    },
     'purged': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'HOST': os.environ.get('PURGED_DATABASE_HOST'),
