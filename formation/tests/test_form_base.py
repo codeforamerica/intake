@@ -60,9 +60,9 @@ class TestForm(PatchTranslationTestCase):
             'contact_preferences': [],
             'currently_employed': '',
             'dob': {
-                'day': '',
-                'month': '',
-                'year': ''
+                'day': None,
+                'month': None,
+                'year': None
             },
             'email': '',
             'first_name': '',
@@ -101,8 +101,8 @@ class TestForm(PatchTranslationTestCase):
                 'prefers_sms',
                 'prefers_email'],
             'currently_employed': 'yes',
-            'dob': {'day': '2', 'month': '12', 'year': '1998'},
             'email': 'shaun68@example.com',
+            'dob': {'day': 2, 'month': 12, 'year': 1998},
             'first_name': 'Erwin',
             'how_did_you_hear': '',
             'last_name': 'Johnson',

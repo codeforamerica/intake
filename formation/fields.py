@@ -1,7 +1,9 @@
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from django.core.validators import EmailValidator, URLValidator
+from django.core.validators import (
+    EmailValidator, URLValidator, RegexValidator, MinValueValidator,
+    MaxValueValidator)
 from formation.field_types import (
     CharField, MultilineCharField, IntegerField, WholeDollarField, ChoiceField,
     YesNoField, YesNoIDontKnowField, MultipleChoiceField, MultiValueField,
@@ -188,19 +190,22 @@ class Aliases(NameField):
     label = _('Any other names that might be used on your record?')
 
 
-class Month(CharField):
+class Month(IntegerField):
     context_key = "month"
     label = _("Month")
+    validators = [MinValueValidator(1), MaxValueValidator(12)]
 
 
-class Day(CharField):
+class Day(IntegerField):
     context_key = "day"
     label = _("Day")
+    validators = [MinValueValidator(1), MaxValueValidator(31)]
 
 
-class Year(CharField):
+class Year(IntegerField):
     context_key = "year"
     label = _("Year")
+    validators = [MinValueValidator(1900), MaxValueValidator(timezone.now().year)]
 
 
 class DateOfBirthField(MultiValueField):
