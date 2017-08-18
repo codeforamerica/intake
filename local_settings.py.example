@@ -16,13 +16,10 @@ if USE_DEBUG_TOOLBAR:
 
 SECRET_KEY = 'something super secret'
 
+CLIPS_DATABASE_ALIAS = 'default'
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'intake',
-        'USER': 'your db user',
-    }
-    'purged': { # This is database used by the clips app
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'intake',
         'USER': 'your db user',
