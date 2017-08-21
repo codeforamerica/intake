@@ -17,6 +17,13 @@ class TestSubmissionTagLink(TestCase):
         self.tag = mock.make_tag()
         self.tag_id = self.tag.id
 
+    def tearDown(self):
+        try:
+            super().tearDown()
+        except Exception as err:
+            import ipdb; ipdb.set_trace()
+            raise err
+
     def make_link(self):
         link = models.SubmissionTagLink(
             content_object_id=self.sub_id, user_id=self.user_id,
