@@ -2,6 +2,17 @@ from django.db import models
 from intake.utils import local_time
 
 
+class PurgedApplicationNote(models.Model):
+    """Placeholder for custom VIEW see intake migration 0061
+    TODO: Make an abstract Model from FormSubmission and
+    subclass here and in FormSubmission
+
+    """
+    class Meta:
+        db_table = 'purged\".\"intake_applicationnote'
+        managed = False
+
+
 class ApplicationNote(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)
