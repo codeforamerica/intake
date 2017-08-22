@@ -8,7 +8,7 @@ serve:
 
 
 
-SCOPE=user_accounts intake formation health_check phone partnerships
+SCOPE=clips user_accounts intake formation health_check phone partnerships
 
 test:
 	./manage.py test $(SCOPE) \

@@ -250,8 +250,8 @@ class FormSubmission(models.Model):
             **self.answers.get('address', {}))
 
     def get_contact_info(self):
-        """Returns a dictionary of contact information structured to be valid for
-        intake.fields.ContactInfoJSONField
+        """Returns a dictionary of contact information structured to
+        be valid for intake.fields.ContactInfoJSONField
         """
         info = {}
         for key in intake.constants.CONTACT_PREFERENCE_CHECKS:
