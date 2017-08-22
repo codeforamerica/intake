@@ -22,17 +22,14 @@ COMPRESS_PRECOMPILERS = build_precompilers(NODE_MODULES_PATH)
 TEST_USER_PASSWORD = 'cmr-travis'
 PARTNERSHIPS_LEAD_INBOX = "cmrtestuser@gmail.com"
 
+CLIPS_DATABASE_ALIAS = 'default'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'intake',
         'USER': 'postgres',
     },
-    'purged': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'intake',
-        'USER': 'postgres',
-    }
 }
 
 LOGGING = {

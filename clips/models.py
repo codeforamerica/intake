@@ -1,5 +1,6 @@
 from django.urls import reverse
 from django.db import models, connections
+from django.conf import settings
 
 
 def run_query(query):
@@ -8,7 +9,7 @@ def run_query(query):
     This function used a special `purged` database to protect users
     which connects to a read-only replicate with a special user.
     """
-    with connections['purged'].cursor() as cursor:
+    with connections[settings.CLIPS_DATABASE_ALIAS].cursor() as cursor:
         try:
             cursor.execute(query)
         except Exception:
