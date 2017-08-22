@@ -63,6 +63,7 @@ MIDDLEWARE = [
     'intake.middleware.PersistSourceMiddleware',
     'intake.middleware.GetCleanIpAddressMiddleware',
     'intake.middleware.CountUniqueVisitorsMiddleware',
+    'access_audit.middleware.ClearRequestMiddleware',
     'easyaudit.middleware.easyaudit.EasyAuditMiddleware',
 ]
 
