@@ -10,7 +10,10 @@ def run_query(query):
     which connects to a read-only replicate with a special user.
     """
     with connections[settings.CLIPS_DATABASE_ALIAS].cursor() as cursor:
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception:
+            return [['there was an error']]
         desc = cursor.description
         headers = [h.name for h in desc]
         result = cursor.fetchall()
