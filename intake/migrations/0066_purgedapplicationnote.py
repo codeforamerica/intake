@@ -27,10 +27,17 @@ class Migration(migrations.Migration):
                 'managed': False,
             },
         ),
+
         migrations.RunSQL(
             """CREATE OR REPLACE VIEW purged.intake_applicationnote AS
-            SELECT created, user_id, submission_id From intake_applicationnote;
-            """,
-            """DROP VIEW purged.user_accounts_organization;
+            SELECT %s From intake_applicationnote;
+            """ %
+            ', '.join([
+                'id',
+                'created',
+                'user_id',
+                'submission_id',
+            ]),
+            """DROP VIEW purged.intake_applicationnote;
             """),
     ]

@@ -3,7 +3,7 @@ from intake.utils import local_time
 
 
 class PurgedApplicationNote(models.Model):
-    """Placeholder for custom VIEW see intake migration 0066
+    """Placeholder for custom VIEW see intake migration 0067
     """
     class Meta:
         db_table = 'purged\".\"intake_applicationnote'
