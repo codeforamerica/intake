@@ -1,6 +1,8 @@
 from django.test import TestCase
 from intake.tests.factories import SubmissionTagLinkFactory
 from intake import models
+from taggit.models import Tag
+from django.contrib.auth.models import User
 
 
 class TestSubmissionTagLink(TestCase):
@@ -24,7 +26,8 @@ class TestSubmissionTagLink(TestCase):
         # make sure related objects still exist after deletion
         link.delete()
         self.assertEqual(
-            models.FormSubmission.objects.filter(id=link.content_object_id).count(), 1)
+            models.FormSubmission.objects.filter(
+                id=link.content_object_id).count(), 1)
         self.assertEqual(
             Tag.objects.filter(id=link.tag_id).count(), 1)
         self.assertEqual(

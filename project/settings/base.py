@@ -253,3 +253,19 @@ LOGGING = {
         },
     },
 }
+
+
+DJANGO_EASY_AUDIT_CRUD_DIFFERENCE_CALLBACKS = [
+    'access_audit.helpers.dont_audit_fixture_loading']
+
+DJANGO_EASY_AUDIT_REGISTERED_CLASSES = [
+    'auth.User',
+    'auth.Group',
+    'user_accounts.UserProfile',
+    'invitations.Invitation',
+    'intake.FormSubmission',
+    'intake.Application',
+    'intake.StatusUpdate',
+    'intake.ApplicationTransfer',
+    'intake.ApplicationNote'
+]

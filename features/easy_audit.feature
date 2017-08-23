@@ -1,10 +1,16 @@
 Feature: CRUD events are audited
   Background:
-    Given an org user at "sf_pubdef"
-      And a fillable PDF for "sf_pubdef"
+    Given a superuser
+      And an org user at "ebclc"
   
-  Scenario: Automated CRUD events don't use cached users
-    Given I log in as an org user at "sf_pubdef"
-     When "Bartholomew Simpson" applies to "San Francisco and Contra Costa"
-     Then there should be a pre-filled PDF for "Bartholomew Simpson"
-     Then the latest CRUD event should not have a user
+  Scenario: Admin actions create CRUD events
+    Given I log in as a superuser
+     When I go to the admin edit page for "ebclc" user
+      And I check "is_staff"
+      And I select the "followup_staff" option in "groups_old"
+      And I click "a#id_groups_add_link"
+      And I click "input[name='_save']"
+     Then the latest "auth.User" "update" event should have "superuser" as the user
+      And the latest "auth.User" "update" event should have "True" for "is_staff"
+      And the latest "auth.User" "m2m_change" event should have "2" in "groups"
+      And the latest "auth.User" "m2m_change" event should have "3" in "groups"
