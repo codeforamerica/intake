@@ -24,8 +24,14 @@ class Migration(migrations.Migration):
         ),
         migrations.RunSQL(
             """CREATE OR REPLACE VIEW purged.intake_county AS
-            SELECT created, user_id, submission_id FROM intake_county;
-            """,
+            SELECT %s FROM intake_county;
+            """ %
+            ', '.join([
+                'id',
+                'slug',
+                'name',
+                'description',
+            ]),
             """DROP VIEW purged.intake_county;
             """),
         migrations.CreateModel(
@@ -40,8 +46,18 @@ class Migration(migrations.Migration):
         ),
         migrations.RunSQL(
             """CREATE OR REPLACE VIEW purged.intake_nextstep AS
-            SELECT created, user_id, submission_id FROM intake_nextstep;
-            """,
+            SELECT %s FROM intake_nextstep;
+            """ %
+            ', '.join([
+                'id',
+                'label',
+                'display_name',
+                'template',
+                'help_text',
+                'slug',
+                'is_active',
+                'is_a_status_update_choice',
+            ]),
             """DROP VIEW purged.intake_nextstep;
             """),
         migrations.CreateModel(
@@ -56,8 +72,13 @@ class Migration(migrations.Migration):
         ),
         migrations.RunSQL(
             """CREATE OR REPLACE VIEW purged.intake_statusnotification AS
-            SELECT created, user_id, submission_id FROM intake_statusnotification;
-            """,
+            SELECT %s FROM intake_statusnotification;
+            """ %
+            ', '.join([
+                'id',
+                'status_update_id',
+                'created',
+            ]),
             """DROP VIEW purged.intake_statusnotification;
             """),
         migrations.CreateModel(
@@ -72,8 +93,18 @@ class Migration(migrations.Migration):
         ),
         migrations.RunSQL(
             """CREATE OR REPLACE VIEW purged.intake_statustype AS
-            SELECT created, user_id, submission_id FROM intake_statustype;
-            """,
+            SELECT %s FROM intake_statustype;
+            """ %
+            ', '.join([
+                'id',
+                'label',
+                'display_name',
+                'template',
+                'help_text',
+                'slug',
+                'is_active',
+                'is_a_status_update_choice',
+            ]),
             """DROP VIEW purged.intake_statustype;
             """),
         migrations.CreateModel(
@@ -88,7 +119,7 @@ class Migration(migrations.Migration):
         ),
         migrations.RunSQL(
             """CREATE OR REPLACE VIEW purged.intake_submissiontaglink AS
-            SELECT created, user_id, submission_id FROM intake_submissiontaglink;
+            SELECT * FROM intake_submissiontaglink;
             """,
             """DROP VIEW purged.intake_submissiontaglink;
             """),
@@ -104,7 +135,7 @@ class Migration(migrations.Migration):
         ),
         migrations.RunSQL(
             """CREATE OR REPLACE VIEW purged.taggit_tag AS
-            SELECT created, user_id, submission_id FROM taggit_tag;
+            SELECT * FROM taggit_tag;
             """,
             """DROP VIEW purged.taggit_tag;
             """),

@@ -21,5 +21,3 @@ class StatusNotification(models.Model):
 
     def __str__(self):
         return self.status_update.status_type.display_name
-
-
