@@ -4,6 +4,14 @@ import user_agents
 from intake.constants import LANGUAGES_LOOKUP
 
 
+class PurgedVisitor(models.Model):
+    """Placeholder for custom VIEW see intake migration 0064
+    """
+    class Meta:
+        db_table = 'purged\".\"intake_visitor'
+        managed = False
+
+
 class Visitor(models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     first_visit = models.DateTimeField(auto_now_add=True)

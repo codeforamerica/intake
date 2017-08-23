@@ -8,9 +8,15 @@ def run_query(query):
 
     This function used a special `purged` database to protect users
     which connects to a read-only replicate with a special user.
+
+    Returns a list of lists or a string on error.
     """
     with connections[settings.CLIPS_DATABASE_ALIAS].cursor() as cursor:
-        cursor.execute(query)
+        try:
+            cursor.execute(query)
+        except Exception as e:
+            message = [[str(e)]]
+            return message
         desc = cursor.description
         headers = [h.name for h in desc]
         result = cursor.fetchall()
