@@ -12,5 +12,4 @@ Feature: CRUD events are audited
       And I click "input[name='_save']"
      Then the latest "auth.User" "update" event should have "superuser" as the user
       And the latest "auth.User" "update" event should have "True" for "is_staff"
-      And the latest "auth.User" "m2m_change" event should have "2" in "groups"
-      And the latest "auth.User" "m2m_change" event should have "3" in "groups"
+      And the latest "auth.User" "m2m_change" event should have "2" ids in "groups"

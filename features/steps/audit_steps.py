@@ -56,12 +56,12 @@ def test_crudevent_has_matching_property(
 
 
 @then(str(
-    'the latest "{content_type}" "{event_type}" event should have "{value}"'
-    ' in "{key}"'))
+    'the latest "{content_type}" "{event_type}" event should have '
+    '"{id_count}" ids in "{field_name}"'))
 def test_crudevent_property_contains(
-        context, content_type, event_type, value, key):
+        context, content_type, event_type, id_count, field_name):
     expected_event = get_latest_crudevent_for_appmodel_and_event_type(
         content_type, event_type)
     event_data = json.loads(expected_event.object_json_repr)[0]
-    data_property_items = [str(item) for item in event_data["fields"][key]]
-    context.test.assertIn(value, data_property_items)
+    context.test.assertEqual(
+        int(id_count), len(event_data["fields"][field_name]))
