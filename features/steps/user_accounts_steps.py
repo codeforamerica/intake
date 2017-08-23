@@ -8,6 +8,7 @@ from features.steps import form_input_steps
 
 
 @given('an applicant support user')
+@given('a staff user')
 def load_applicant_support_user(context):
     org = Organization.objects.get(slug='cfa')
     factories.profile_for_org_and_group_names(
@@ -35,6 +36,7 @@ def login_as(context, email):
 
 
 @given('I log in as an applicant support user')
+@given('I log in as a staff user')
 def login_as_applicant_support_user(context):
     login_as(context, "bgolder+demo+cfa_user@codeforamerica.org")
 
@@ -45,3 +47,15 @@ def login_as_applicant_support_user(context):
 def login_as_org_user(context, org_slug='ebclc'):
     login_as(
         context, "bgolder+demo+{}_user@codeforamerica.org".format(org_slug))
+
+
+@given('a "{org_slug}" organization')
+def load_receiving_org(context):
+    factories.FakeOrganizationFactory(slug=org_slug)
+
+
+@when('I submit an invite to "{email}" at "{org_slug}")
+def invite_new_org_user(context, org_slug):
+    selector = 'input[name="email"]'
+    element = context.browser.find_element_by_css_selector(selector)
+    element.send_keys(value)

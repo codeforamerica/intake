@@ -6,6 +6,7 @@ from .user_profile_factory import (
     profile_for_slug_in_groups,
     app_reviewer,
     followup_user,
+    staff_user,
     monitor_user
     )
 from .organization_factory import (
@@ -21,6 +22,7 @@ __all__ = [
     app_reviewer,
     followup_user,
     monitor_user,
+    staff_user,
     ExistingOrganizationFactory,
     FakeOrganizationFactory,
 ]
