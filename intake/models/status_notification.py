@@ -2,6 +2,14 @@ from django.db import models
 from django.contrib.postgres.fields import JSONField
 
 
+class PurgedStatusNotification(models.Model):
+    """Placeholder for custom VIEW see intake migration 0067
+    """
+    class Meta:
+        db_table = 'purged\".\"intake_statusnotification'
+        managed = False
+
+
 class StatusNotification(models.Model):
     status_update = models.OneToOneField(
         'intake.StatusUpdate', on_delete=models.PROTECT,
@@ -13,3 +21,5 @@ class StatusNotification(models.Model):
 
     def __str__(self):
         return self.status_update.status_type.display_name
+
+
