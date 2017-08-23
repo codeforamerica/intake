@@ -43,6 +43,6 @@ class TestTransferApplication(TestCase):
         to_org = Organization.objects.get(slug='ebclc')
         application = models.Application.objects.filter(
             organization__slug='a_pubdef').first()
-        with self.assertNumQueries(19):
+        with self.assertNumQueries(23):
             TransferService.transfer_application(
                 user, application, to_org, 'there was a temporal anomaly')
