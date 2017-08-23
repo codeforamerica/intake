@@ -3,10 +3,7 @@ from .abstract_base_models import BaseModel
 
 
 class PurgedApplication(models.Model):
-    """Placeholder for custom VIEW see intake migration 0061
-    TODO: Make an abstract Model from FormSubmission and
-    subclass here and in FormSubmission
-
+    """Placeholder for custom VIEW see intake migration 0063
     """
     class Meta:
         db_table = 'purged\".\"intake_application'

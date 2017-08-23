@@ -5,10 +5,7 @@ from intake.constants import LANGUAGES_LOOKUP
 
 
 class PurgedVisitor(models.Model):
-    """Placeholder for custom VIEW see intake migration 0061
-    TODO: Make an abstract Model from FormSubmission and
-    subclass here and in FormSubmission
-
+    """Placeholder for custom VIEW see intake migration 0064
     """
     class Meta:
         db_table = 'purged\".\"intake_visitor'

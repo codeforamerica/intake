@@ -3,10 +3,7 @@ from intake.utils import local_time
 
 
 class PurgedApplicationNote(models.Model):
-    """Placeholder for custom VIEW see intake migration 0061
-    TODO: Make an abstract Model from FormSubmission and
-    subclass here and in FormSubmission
-
+    """Placeholder for custom VIEW see intake migration 0066
     """
     class Meta:
         db_table = 'purged\".\"intake_applicationnote'

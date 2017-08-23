@@ -39,10 +39,7 @@ class OrganizationManager(models.Manager):
 
 
 class PurgedOrganization(models.Model):
-    """Placeholder for custom VIEW see intake migration 0061
-    TODO: Make an abstract Model from FormSubmission and
-    subclass here and in FormSubmission
-
+    """Placeholder for custom VIEW see intake migration 0025
     """
     class Meta:
         db_table = 'purged\".\"user_accounts_organization'
