@@ -2,6 +2,14 @@ from django.db import models
 from intake.utils import local_time
 
 
+class PurgedApplicationNote(models.Model):
+    """Placeholder for custom VIEW see intake migration 0066
+    """
+    class Meta:
+        db_table = 'purged\".\"intake_applicationnote'
+        managed = False
+
+
 class ApplicationNote(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)

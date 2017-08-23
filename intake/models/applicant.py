@@ -2,6 +2,14 @@ from django.db import models
 import intake
 
 
+class PurgedApplicant(models.Model):
+    """Placeholder for custom VIEW see intake migration 0065
+    """
+    class Meta:
+        db_table = 'purged\".\"intake_applicant'
+        managed = False
+
+
 class Applicant(models.Model):
     visitor = models.OneToOneField('intake.Visitor')
 

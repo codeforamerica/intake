@@ -2,6 +2,14 @@ from django.db import models
 from .abstract_base_models import BaseModel
 
 
+class PurgedApplication(models.Model):
+    """Placeholder for custom VIEW see intake migration 0063
+    """
+    class Meta:
+        db_table = 'purged\".\"intake_application'
+        managed = False
+
+
 class Application(BaseModel):
     organization = models.ForeignKey(
         'user_accounts.Organization',

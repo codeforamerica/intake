@@ -38,6 +38,14 @@ class OrganizationManager(models.Manager):
             sub.applications.filter(organization__in=orgs).delete()
 
 
+class PurgedOrganization(models.Model):
+    """Placeholder for custom VIEW see intake migration 0025
+    """
+    class Meta:
+        db_table = 'purged\".\"user_accounts_organization'
+        managed = False
+
+
 class Organization(models.Model):
     objects = OrganizationManager()
     name = models.CharField(max_length=50, unique=True)
