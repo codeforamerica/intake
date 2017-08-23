@@ -4,6 +4,14 @@ from intake import constants
 from formation import field_types
 
 
+class PurgedCounty(models.Model):
+    """Placeholder for custom VIEW see intake migration 0067
+    """
+    class Meta:
+        db_table = 'purged\".\"intake_county'
+        managed = False
+
+
 class CountyManager(models.Manager):
 
     def get_by_natural_key(self, slug):
