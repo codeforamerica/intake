@@ -8,7 +8,8 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('intake', '0066_purgedapplicationnote'),
+        ('intake',
+         '0067_purgedcounty_purgednextstep_purgedstatusnotification_purgedstatustype_purgedsubmissiontaglink_purged'),
     ]
 
     operations = [
