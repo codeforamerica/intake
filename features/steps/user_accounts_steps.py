@@ -45,3 +45,16 @@ def login_as_applicant_support_user(context):
 def login_as_org_user(context, org_slug='ebclc'):
     login_as(
         context, "bgolder+demo+{}_user@codeforamerica.org".format(org_slug))
+
+
+@given('a superuser')
+def load_superuser(context):
+    org = Organization.objects.get(slug='cfa')
+    factories.profile_for_org_and_group_names(
+        org, group_names=[groups.FOLLOWUP_STAFF, groups.APPLICATION_REVIEWERS],
+        is_staff=True, is_superuser=True, username='superuser')
+
+
+@given('I log in as a superuser')
+def login_as_superuser(context):
+    login_as(context, "bgolder+demo+superuser@codeforamerica.org")
