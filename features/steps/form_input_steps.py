@@ -17,7 +17,7 @@ def click_submit_button(context, form_selector=''):
 
 @when('"{checkbox_value}" is clicked on the "{checkbox_name}" radio button')
 @when('the "{checkbox_name}" checkbox option "{checkbox_value}" is clicked')
-def click_checkbox(context, checkbox_name, checkbox_value):
+def click_checkbox_choice(context, checkbox_name, checkbox_value):
     selector = "input[name='%s'][value='%s']" % (
         checkbox_name,
         checkbox_value,
@@ -49,3 +49,33 @@ def type_in_email_input(context, input_name, value):
     selector = "input[name='{}'][type='email']".format(input_name)
     text = context.browser.find_element_by_css_selector(selector)
     text.send_keys(value)
+
+
+@when('I check "{checkbox_name}"')
+def click_checkbox(context, checkbox_name):
+    selector = "input[name='{}']".format(checkbox_name)
+    checkbox = context.browser.find_element_by_css_selector(selector)
+    checkbox.click()
+
+
+@when('I click "{css_selector}"')
+def click_element(context, css_selector):
+    element = context.browser.find_element_by_css_selector(css_selector)
+    element.click()
+
+
+@when('I select the "{option_text}" option in "{select_name}"')
+def double_click(context, option_text, select_name):
+    selector = "select[name={}] option".format(select_name)
+    option_elements = context.browser.find_elements_by_css_selector(selector)
+    selected_options = [
+        element for element in option_elements
+        if option_text in element.text]
+    if len(selected_options) != 1:
+        raise Exception(
+            str(
+                'Could not find one single option with {} in text.\n'
+                'found: {}').format(
+                    option_text, [element.text for element in option_elements])
+        )
+    selected_options[0].click()

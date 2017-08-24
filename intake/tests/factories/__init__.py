@@ -19,6 +19,8 @@ from .factory_shortcuts import (
     make_app_ids_for_sf,
     apps_queryset,
 )
+from .tag_factory import TagFactory
+from .submission_tag_link_factory import SubmissionTagLinkFactory
 
 
 __all__ = [
@@ -37,5 +39,7 @@ __all__ = [
     StatusNotificationFactory,
     FillablePDFFactory,
     FilledPDFFactory,
-    PrebuiltPDFBundleFactory
+    PrebuiltPDFBundleFactory,
+    TagFactory,
+    SubmissionTagLinkFactory
 ]
