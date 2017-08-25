@@ -24,26 +24,6 @@ class TestGetOrgDataDict(TestCase):
                 dates, [week['date'] for week in org_data['weekly_totals']])
 
 
-class TestRollupSubs(TestCase):
-
-    def test_diff_dates_same_sub_no_change(self):
-        # make sure that if the application times differ slightly, it does
-        # not affect the count
-        one_org = Organization(name="House Stark", slug='stark')
-        one_org.save()
-        other_org = Organization(name="House Tyrell", slug='tyrell')
-        other_org.save()
-        sub = FormSubmissionWithOrgsFactory(
-            organizations=[one_org, other_org],
-            answers={})
-        app = sub.applications.first()
-        app.created = app.created + datetime.timedelta(milliseconds=1)
-        app.save()
-        results = statistics.rollup_subs(
-            statistics.get_app_dates_sub_ids_org_ids())
-        self.assertEqual(len(results), 1)
-
-
 class TestMakeYearWeeks(TestCase):
 
     def test_expected_week(self):
@@ -72,20 +52,12 @@ class TestMakeYearWeeks(TestCase):
             result = statistics.as_year_week(date)
             self.assertEqual(result, '2017-20-1')
 
-    def test_year_week_conversion(self):
-        result = statistics.from_year_week('2017-19-1')
-        expected_dt = '2017-05-08'
-        self.assertEqual(expected_dt, result.strftime('%Y-%m-%d'))
-        result = statistics.from_year_week('2017-20-1')
-        expected_dt = '2017-05-15'
-        self.assertEqual(expected_dt, result.strftime('%Y-%m-%d'))
-
     def test_make_year_weeks_output(self):
         todays_date = utils.get_todays_date()
         next_week = todays_date + datetime.timedelta(days=7)
         last_year_week = statistics.as_year_week(todays_date)
         too_far_year_week = statistics.as_year_week(next_week)
         year_weeks = statistics.make_year_weeks()
-        expected_last_yw, last_date, last_date_from_yw = year_weeks[-1]
+        expected_last_yw = year_weeks[-1]
         self.assertNotEqual(too_far_year_week, expected_last_yw)
         self.assertEqual(last_year_week, expected_last_yw)

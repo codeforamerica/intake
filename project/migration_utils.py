@@ -2,6 +2,14 @@ import os
 from django.core import serializers
 from django.forms.models import model_to_dict
 
+"""
+STOP PLEASE READ THIS
+This file is deprecated and used by two migrations do not change or use it.
+
+Changin it could break migrations and reusing custom migrations is frowned on.
+"""
+
+
 upsert_sql = """
 INSERT INTO {table_name} ({columns})
 VALUES ({values})

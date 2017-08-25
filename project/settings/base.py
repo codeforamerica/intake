@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     'compressor',
     'behave_django',
     'favicons',
+    'clips',
+    'easyaudit',
+    'access_audit',
 ]
 
 MIDDLEWARE = [
@@ -59,7 +62,9 @@ MIDDLEWARE = [
     'intake.middleware.PersistReferrerMiddleware',
     'intake.middleware.PersistSourceMiddleware',
     'intake.middleware.GetCleanIpAddressMiddleware',
-    'intake.middleware.CountUniqueVisitorsMiddleware'
+    'intake.middleware.CountUniqueVisitorsMiddleware',
+    'access_audit.middleware.ClearRequestMiddleware',
+    'easyaudit.middleware.easyaudit.EasyAuditMiddleware',
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -128,6 +133,10 @@ TEMPLATES = [
 WSGI_APPLICATION = 'project.wsgi.application'
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
+
+# django-easy-audit settings
+DJANGO_EASY_AUDIT_WATCH_LOGIN_EVENTS = True
+
 # django-allauth and django-invitations
 ACCOUNT_FORMS = {
     'login': 'user_accounts.forms.LoginForm'
@@ -244,3 +253,19 @@ LOGGING = {
         },
     },
 }
+
+
+DJANGO_EASY_AUDIT_CRUD_DIFFERENCE_CALLBACKS = [
+    'access_audit.helpers.dont_audit_fixture_loading']
+
+DJANGO_EASY_AUDIT_REGISTERED_CLASSES = [
+    'auth.User',
+    'auth.Group',
+    'user_accounts.UserProfile',
+    'invitations.Invitation',
+    'intake.FormSubmission',
+    'intake.Application',
+    'intake.StatusUpdate',
+    'intake.ApplicationTransfer',
+    'intake.ApplicationNote'
+]

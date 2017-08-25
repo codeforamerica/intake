@@ -96,9 +96,9 @@ def gen_uuid():
 
 class PurgedFormSubmission(models.Model):
     """Placeholder for custom VIEW see intake migration 0061
-    TODO: Make an abstract Model from FormSubmission and
-    subclass here and in FormSubmission
-
+    Its possible to make an abstract Model from FormSubmission and
+    subclass here and in FormSubmission if we want to be able to
+    use the ORM
     """
     class Meta:
         db_table = 'purged\".\"intake_formsubmission'
@@ -250,8 +250,8 @@ class FormSubmission(models.Model):
             **self.answers.get('address', {}))
 
     def get_contact_info(self):
-        """Returns a dictionary of contact information structured to be valid for
-        intake.fields.ContactInfoJSONField
+        """Returns a dictionary of contact information structured to
+        be valid for intake.fields.ContactInfoJSONField
         """
         info = {}
         for key in intake.constants.CONTACT_PREFERENCE_CHECKS:
