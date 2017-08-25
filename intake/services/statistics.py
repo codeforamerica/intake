@@ -143,7 +143,9 @@ def orgs_display_data(org_app_data_by_week, orgs, year_weeks):
 
     for org in orgs:
         org_id = org['id']
-        current_org_app_data_by_week = org_app_data_by_week[org_id]
+        current_org_app_data_by_week = org_app_data_by_week.get(org_id, None)
+        if current_org_app_data_by_week is None:
+            continue
 
         # Iterate over each week of the year for the current organization
         for year_week in year_weeks:
