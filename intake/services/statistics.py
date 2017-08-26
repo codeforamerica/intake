@@ -105,8 +105,8 @@ def get_org_data_dict():
     for row in org_app_data:
         current_org_app_data_by_week = org_app_data_by_week.setdefault(
             row['organization_id'], {})
-        current_org_app_data_by_week['%d-%02d-1' % (row['yr'], row['wk'])] = row[
-            'fs_count']
+        current_org_app_data_by_week['%d-%02d-1' % (row['yr'], row['wk'])] = \
+            row['fs_count']
 
     # Transform the org-specific data into something formatted for charting
     # purposes with the grand total and weekly time-series data and add it to
