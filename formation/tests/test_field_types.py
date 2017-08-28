@@ -300,7 +300,7 @@ class TestPhoneNumberField(PatchTranslationTestCase):
         field = fields.PhoneNumberField({'phone_number': 'Not sure'})
         self.assertFalse(field.is_valid())
         expected_error = ("You entered 'Not sure', which doesn't "
-                          "look like a phone number")
+                          "look like a valid phone number")
         self.assertIn(
             expected_error, [str(e) for e in field.get_errors_list()])
 
