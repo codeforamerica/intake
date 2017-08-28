@@ -219,8 +219,15 @@ class PhoneField(CharField):
         parsed_value = self.get_current_value_parsed()
         if parsed_value:
             return phonenumbers.format_number(
-                parsed_value,
-                phonenumbers.PhoneNumberFormat.NATIONAL)
+                parsed_value, phonenumbers.PhoneNumberFormat.NATIONAL)
+        # this is a hack to handle legacy data
+        # it would be better handled by refactoring to parse
+        # incrementally and be able to display intermediate parsing values
+        # or by only displaying fully parsed values
+        if (parsed_value == self.empty_value) and self.raw_input_value:
+            digits_only = extract_digit_chars(self.raw_input_value)
+            if digits_only:
+                return digits_only
         return self.empty_value
 
     def get_tel_href_number(self):
