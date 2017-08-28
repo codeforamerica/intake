@@ -20,3 +20,9 @@ class MultiValueFieldSubfieldError(NotImplementedError):
     MultiValueField without a defined `subfields` attribute
     """
     pass
+
+
+class InvalidPhoneNumberException(Exception):
+    """Raise this when an invalid phone number is found
+    """
+    pass
