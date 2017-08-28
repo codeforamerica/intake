@@ -12,19 +12,19 @@ class TestContactInfoByPreferenceField(TestCase):
                 'prefers_snailmail',
                 'prefers_email'
             ],
-            phone_number='4442223333',
+            phone_number='4153016005',
             address=dict(
                 street='654 11th St Apt 999',
                 city='Oakland',
                 state='CA',
                 zip='94449'),
-            alternate_phone_number='5551114444',
+            alternate_phone_number='4153016005',
             email='test@gmail.com',
         )
         expected_output = [
-            ('sms', '(444) 222-3333'),
+            ('sms', '(415) 301-6005'),
             ('email', 'test@gmail.com'),
-            ('voicemail', '(444) 222-3333'),
+            ('voicemail', '(415) 301-6005'),
             ('snailmail', '654 11th St Apt 999, Oakland, CA 94449'),
         ]
         results = ContactInfoByPreferenceField(
@@ -38,13 +38,13 @@ class TestContactInfoByPreferenceField(TestCase):
             contact_preferences=[
                 'prefers_email'
             ],
-            phone_number='4442223333',
+            phone_number='4153016005',
             address=dict(
                 street='654 11th St Apt 999',
                 city='Oakland',
                 state='CA',
                 zip='94449'),
-            alternate_phone_number='5551114444',
+            alternate_phone_number='4153016005',
             email='test@gmail.com',
         )
         expected_output = [
