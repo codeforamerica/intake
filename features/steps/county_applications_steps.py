@@ -70,18 +70,19 @@ def input_basic_answers(context, applicant_name="Jane Doe"):
     '''.format(first_name=first_name, last_name=last_name))
 
 
-@when('applicant fills out "county not listed" form fields')
+@when('"{applicant_name}" fills out county not listed form fields')
+@when('applicant fills out county not listed form fields')
 def fill_county_not_listed_fields(context, applicant_name="Jane Doe"):
-  first_name, last_name = applicant_name.split(' ')
-  context.execute_steps('''
-    When the "contact_preferences" checkbox option "prefers_email" is clicked
-     And the "first_name" text input is set to "{first_name}"
-     And the "last_name" text input is set to "{last_name}"
-     And the "phone_number" text input is set to "5105555555"
-     And the "email" text input is set to "testing@codeforamerica.org"
-     And the "how_did_you_hear" text input is set to "Listening"
-     And the "additional_information" text input is set to "So cool"
-  '''.format(first_name=first_name, last_name=last_name))
+    first_name, last_name = applicant_name.split(' ')
+    context.execute_steps('''
+      When the "contact_preferences" checkbox option "prefers_email" is clicked
+       And the "first_name" text input is set to "{first_name}"
+       And the "last_name" text input is set to "{last_name}"
+       And the "phone_number" text input is set to "5105555555"
+       And the "email" text input is set to "testing@codeforamerica.org"
+       And the "how_did_you_hear" text input is set to "Listening"
+       And the "additional_information" text input is set to "So cool"
+    '''.format(first_name=first_name, last_name=last_name))
 
 
 @when('applicant fills out additional fields for Contra Costa')
