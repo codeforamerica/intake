@@ -5,7 +5,7 @@ psycopg2~=2.6
 Jinja2~=2.8
 pytz~=2016.6
 python-dateutil~=2.5
-phonenumbers~=7.7
+phonenumbers==8.8.0
 django-storages~=1.5
 django-allauth==0.32
 https://github.com/bee-keeper/django-invitations/archive/master.tar.gz
@@ -27,6 +27,7 @@ amqp==2.1.4
 PyYAML==3.12
 user-agents==1.1.0
 ua-parser==0.7.3
+https://github.com/rossettistone/django-easy-audit/archive/patched.tar.gz
 
 # factory-boy breaks on later version fo fake-factory
 # we need to pin fake-factory

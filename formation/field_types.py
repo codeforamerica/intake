@@ -176,7 +176,7 @@ class PhoneField(CharField):
 
     empty_value = ''
     parse_error_message = _("You entered '{}', which "
-                            "doesn't look like a phone number")
+                            "doesn't look like a valid phone number")
     display_template_name = "formation/phone_display.jinja"
 
     def parse(self, raw_value):
@@ -188,14 +188,16 @@ class PhoneField(CharField):
             self.assert_parse_received_correct_type(raw_value, str)
             raw_value = self.parse_as_text(raw_value)
         if raw_value:
-            value = extract_digit_chars(raw_value)
-            if not value:
+            digits_only = extract_digit_chars(raw_value)
+            if not digits_only:
                 self.add_error(
                     self.parse_error_message.format(raw_value))
             else:
                 try:
-                    value = str(self.parse_phone_number(value).national_number)
-                except NumberParseException as error:
+                    value = str(
+                        self.parse_phone_number(digits_only).national_number)
+                except (NumberParseException,
+                        exceptions.InvalidPhoneNumberException) as error:
                     self.add_error(
                         self.parse_error_message.format(raw_value))
         return value
@@ -206,15 +208,26 @@ class PhoneField(CharField):
     def parse_phone_number(self, raw_string=None, country="US"):
         raw_string = raw_string or self.get_current_value()
         if raw_string:
-            return phonenumbers.parse(raw_string, country)
+            parsed_num = phonenumbers.parse(raw_string, country)
+            if not phonenumbers.is_valid_number(parsed_num):
+                raise exceptions.InvalidPhoneNumberException(
+                    "'{}' is not a valid phone number".format(raw_string))
+            return parsed_num
         return self.empty_value
 
     def get_display_value(self):
         parsed_value = self.get_current_value_parsed()
         if parsed_value:
             return phonenumbers.format_number(
-                parsed_value,
-                phonenumbers.PhoneNumberFormat.NATIONAL)
+                parsed_value, phonenumbers.PhoneNumberFormat.NATIONAL)
+        # this is a hack to handle legacy data
+        # it would be better handled by refactoring to parse
+        # incrementally and be able to display intermediate parsing values
+        # or by only displaying fully parsed values
+        if (parsed_value == self.empty_value) and self.raw_input_value:
+            digits_only = extract_digit_chars(self.raw_input_value)
+            if digits_only:
+                return digits_only
         return self.empty_value
 
     def get_tel_href_number(self):

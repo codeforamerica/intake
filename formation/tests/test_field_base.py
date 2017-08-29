@@ -40,6 +40,7 @@ class TestField(PatchTranslationTestCase):
         self.assertEqual(
             field.get_html_class_name(), base.DEFAULT_CONTEXT_KEY)
         self.assertFalse(field.is_bound())
+        self.assertEqual(field.raw_input_data, base.UNSET)
         with self.assertRaises(NotImplementedError):
             field.is_valid()
 
