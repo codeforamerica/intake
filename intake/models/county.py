@@ -17,6 +17,12 @@ class CountyManager(models.Manager):
     def get_by_natural_key(self, slug):
         return self.get(slug=slug)
 
+    def get_county_choices(self):
+        if True:
+            return self.filter(organizations__is_live=True).distinct()
+        else:
+            return self.all()
+
 
 class County(models.Model):
     objects = CountyManager()

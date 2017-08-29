@@ -2,6 +2,7 @@ from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import EmailValidator, URLValidator
+from intake.models import County
 from formation.field_types import (
     CharField, MultilineCharField, IntegerField, WholeDollarField, ChoiceField,
     YesNoField, YesNoIDontKnowField, MultipleChoiceField, MultiValueField,
@@ -9,9 +10,8 @@ from formation.field_types import (
     YES_NO_CHOICES, NOT_APPLICABLE, YES_NO_IDK_CHOICES
 )
 from intake.constants import (
-    COUNTY_CHOICES, CONTACT_PREFERENCE_CHOICES, REASON_FOR_APPLYING_CHOICES,
-    GENDER_PRONOUN_CHOICES, DECLARATION_LETTER_REVIEW_CHOICES,
-    COUNTY_CHOICE_DISPLAY_DICT
+    CONTACT_PREFERENCE_CHOICES, REASON_FOR_APPLYING_CHOICES,
+    GENDER_PRONOUN_CHOICES, DECLARATION_LETTER_REVIEW_CHOICES
 )
 from project.jinja2 import namify
 
@@ -43,13 +43,12 @@ class DateReceived(DateTimeField):
 
 class Counties(MultipleChoiceField):
     context_key = "counties"
-    choices = COUNTY_CHOICES
+    choices = County.objects.values_list('slug', 'description')
     label = _('Where were you arrested or convicted?')
     help_text = _(
         "We will send your Clear My Record application to agencies in these "
         "counties.")
     display_label = "Wants help with record in"
-    choice_display_dict = COUNTY_CHOICE_DISPLAY_DICT
 
 
 class AffirmCountySelection(ConsentCheckbox):
