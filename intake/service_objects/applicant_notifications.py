@@ -41,8 +41,7 @@ class ApplicantNotification:
         self.contact_methods.sort()
 
     def get_context(self, contact_method=None):
-        orgs = list(self.sub.organizations.all())
-        orgs = utils.sort_orgs_in_default_order(orgs)
+        orgs = list(self.sub.organizations.order_by('name'))
         organization_names = [
             org.name for org in orgs]
         county_names = [

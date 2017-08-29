@@ -38,18 +38,16 @@ class County(models.Model):
         determinations
         """
         # if alameda
-        if self.slug == constants.Counties.ALAMEDA:
+        if self.slug == 'alameda':
             # if under 3000 and not owns home
             income = answers.get('monthly_income', None)
             owns_home = answers.get('owns_home')
             if income < 3000 and owns_home == field_types.NO:
                 # return alameda pub def
-                return self.organizations.get(
-                    slug=constants.Organizations.ALAMEDA_PUBDEF)
+                return self.organizations.get(slug='a_pubdef')
             else:
                 # return ebclc
-                return self.organizations.get(
-                    slug=constants.Organizations.EBCLC)
+                return self.organizations.get('ebclc')
             # return first receiving agency
         return self.organizations.filter(is_receiving_agency=True).first()
 

@@ -17,7 +17,7 @@ class ExtractWeek(Extract):
 
 
 TOTAL = 'Total'
-ALL = (constants.Organizations.ALL, 'Total (All Organizations)')
+ALL = {'slug': 'all', 'name': 'Total (All Organizations)'}
 
 
 def make_year_weeks():
@@ -226,7 +226,7 @@ def total_display_data(total_app_data_by_week, year_weeks):
 
     # Return the total data formatted for display
     return {
-        'org': {'name': 'Total (All Organizations)', 'slug': 'all'},
+        'org': ALL,
         'total': total_count,
         'apps_this_week': weekly_totals[-1]['count'] if len(
             weekly_totals) > 0 else 0,

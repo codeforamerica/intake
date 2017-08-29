@@ -1,6 +1,3 @@
-from intake.constants import CountyNames
-
-
 ALL_COUNTIES_COPY = 'counties throughout California'
 
 
