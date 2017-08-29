@@ -29,7 +29,7 @@ def create_submission(form, organizations, applicant_id):
         existing = submission.answers.get(key, None)
         if existing:
             setattr(submission, key, existing)
-    address = submission.answers['address']
+    address = submission.answers.get('address', {})
     for component in address:
         existing = address.get(component, None)
         if existing:

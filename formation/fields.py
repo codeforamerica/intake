@@ -51,8 +51,22 @@ class Counties(MultipleChoiceField):
     display_label = "Wants help with record in"
 
 
+class UnlistedCountyNote(FormNote):
+    context_key = "unlisted_county_note"
+    content = mark_safe("""
+    <p>
+        For counties where we don't yet have official partners,
+        we'll send you details on how get started there.
+    </p>
+    """)
+
+
 class UnlistedCounties(CharField):
     context_key = "unlisted_counties"
+    label = _(
+        "Which counties were not listed that you need to clear your record in?"
+    )
+    display_label = "Needs help in unlisted counties"
 
 
 class AffirmCountySelection(ConsentCheckbox):
@@ -660,6 +674,8 @@ class DeclarationLetterWhy(DeclarationLetterIntro):
 INTAKE_FIELDS = [
     DateReceived,
     Counties,
+    UnlistedCountyNote,
+    UnlistedCounties,
     AffirmCountySelection,
 
     ContactPreferences,

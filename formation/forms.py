@@ -38,6 +38,8 @@ class NotListedFormSpec(CombinableCountyFormSpec):
     """
     county = 'not_listed'
     fields = {
+        F.UnlistedCountyNote,
+        F.UnlistedCounties,
         F.ContactPreferences,
         F.FirstName,
         F.LastName,
@@ -47,6 +49,7 @@ class NotListedFormSpec(CombinableCountyFormSpec):
         F.AdditionalInformation,
     }
     required_fields = {
+        F.UnlistedCounties,
         F.ContactPreferences,
         F.FirstName
     }
