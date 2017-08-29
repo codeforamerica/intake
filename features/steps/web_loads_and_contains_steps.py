@@ -77,7 +77,10 @@ def check_link_goes_to_page(context, element_id, url):
 @then('"{element_class}" should say "{text}"')
 def element_contains_text(context, element_class, text):
     element = context.browser.find_element_by_class_name(element_class)
-    context.test.assertTrue(text in element.text)
+    context.test.assertTrue(
+        (text in element.text),
+        "Couldn't find '{}' in '{}'".format(text, element.text))
+
 
 
 @then('the main heading should say "{text}"')

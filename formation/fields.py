@@ -51,6 +51,10 @@ class Counties(MultipleChoiceField):
     display_label = "Wants help with record in"
 
 
+class UnlistedCounties(CharField):
+    context_key = "unlisted_counties"
+
+
 class AffirmCountySelection(ConsentCheckbox):
     context_key = "confirm_county_selection"
     is_required_error_message = _(

@@ -66,7 +66,8 @@ class ApplicantFormViewBase(FormView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context.update(
-            counties=self.counties, county_list=self.formatted_county_names)
+            counties=self.counties,
+            county_list=self.counties.values_list('name', flat=True))
         return context
 
     def log_page_completion_and_save_data(self, form):

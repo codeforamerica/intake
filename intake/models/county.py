@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Case, When
 
 from intake import constants
 from formation import field_types
@@ -19,9 +20,18 @@ class CountyManager(models.Manager):
 
     def get_county_choices(self):
         if True:
-            return self.filter(organizations__is_live=True).distinct()
+            return self.filter(
+                organizations__is_live=True
+            ).distinct().order_by_name_or_not_listed()
         else:
-            return self.all()
+            return self.order_by_name_or_not_listed()
+
+    def annotate_is_not_listed(self):
+        return self.annotate(
+            is_not_listed=Case(When(slug='not_listed', then=1)))
+
+    def order_by_name_or_not_listed(self):
+        return self.annotate_not_listed().order_by('is_not_listed', 'name')
 
 
 class County(models.Model):

@@ -9,7 +9,7 @@ Feature: Applicants can apply for help in counties where we don't have partners
      When the "counties" checkbox option "not_listed" is clicked
       And submit button in form "county_form" is clicked
      Then it should load "/application/"
-      And "application_county_list" should say "You applying to for help in counties where we don't have official partners"
+      And "application_county_list" should say "You are applying for help in counties where we don't have official partners"
      When applicant fills out county not listed form fields
       And the "unlisted_counties" text input is set to "Delta Quadrant, Narnia County"
       And submit button in form "county_form" is clicked
@@ -20,8 +20,9 @@ Feature: Applicants can apply for help in counties where we don't have partners
     Given that "/apply/" loads
      When the "counties" checkbox option "not_listed" is clicked
       And the "counties" checkbox option "contracosta" is clicked
+      And submit button in form "county_form" is clicked
      Then it should load "/application/"
-      And "application_county_list" should say "You are applying for help in Contra Costa County and counties where we don't have official partners."
+      And "application_county_list" should say "You are applying for help in Contra Costa and counties where we don't have official partners."
      When applicant fills out a county application form with basic answers
       And applicant fills out additional fields for Contra Costa
       And the "unlisted_counties" text input is set to "Delta Quadrant, Narnia County"

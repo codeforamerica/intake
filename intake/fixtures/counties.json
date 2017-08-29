@@ -148,8 +148,8 @@
   "pk": 17,
   "fields": {
     "slug": "not_listed",
-    "name": "Not Listed",
-    "description": "Counties where we do not have official partners."
+    "name": "counties where we don't have official partners",
+    "description": "The county I need isn't listed"
   }
 }
 ]

@@ -32,28 +32,31 @@ class SupplementaryDisplayForm(CombinableCountyFormSpec):
     }
 
 
-class OtherCountyFormSpec(CombinableCountyFormSpec):
+class NotListedFormSpec(CombinableCountyFormSpec):
     """This could be used by Code for America to send applicants
     information on clean slate services in other counties or states.
     """
-    county = 'other'
+    county = 'not_listed'
     fields = {
         F.ContactPreferences,
         F.FirstName,
+        F.LastName,
         F.PhoneNumberField,
         F.EmailField,
-        F.AddressField,
         F.HowDidYouHear,
+        F.AdditionalInformation,
     }
     required_fields = {
         F.ContactPreferences,
         F.FirstName
     }
     optional_fields = {
-        F.HowDidYouHear
+        F.HowDidYouHear,
+        F.AdditionalInformation
     }
     validators = [
-        gave_preferred_contact_methods
+        gave_preferred_contact_methods,
+        at_least_email_or_phone
     ]
 
 
@@ -704,17 +707,12 @@ class DeclarationLetterReviewForm(Form):
 
 
 class SelectCountyForm(Form):
-    fields = [
-        F.Counties,
-        F.AffirmCountySelection
-    ]
-    required_fields = [
-        F.Counties,
-        F.AffirmCountySelection]
+    fields = [F.Counties]
+    required_fields = [F.Counties]
 
 
 INPUT_FORM_SPECS = [
-    OtherCountyFormSpec(),
+    NotListedFormSpec(),
     SanFranciscoCountyFormSpec(),
     ContraCostaFormSpec(),
     AlamedaCountyFormSpec(),

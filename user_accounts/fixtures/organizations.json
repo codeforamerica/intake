@@ -4,10 +4,12 @@
   "fields": {
     "name": "Code for America",
     "slug": "cfa",
-    "county": null,
+    "county": [
+      "not_listed"
+    ],
     "website": "",
     "blurb": "",
-    "is_receiving_agency": false,
+    "is_receiving_agency": true,
     "is_accepting_applications": false,
     "is_checking_notifications": false,
     "is_live": false,
