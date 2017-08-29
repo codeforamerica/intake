@@ -142,5 +142,14 @@
     "name": "Stanislaus",
     "description": "Stanislaus County (near Modesto, Turlock, and Ceres)"
   }
+},
+{
+  "model": "intake.county",
+  "pk": 17,
+  "fields": {
+    "slug": "not_listed",
+    "name": "Not Listed",
+    "description": "Counties where we do not have official partners."
+  }
 }
 ]

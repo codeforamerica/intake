@@ -172,6 +172,7 @@ class Counties:
     SANTA_BARBARA = 'santa_barbara'
     YOLO = 'yolo'
     STANISLAUS = 'stanislaus'
+    NOT_LISTED = 'not_listed'
     OTHER = 'other'
 
 
@@ -192,6 +193,7 @@ class CountyNames:
     SANTA_BARBARA = 'Santa Barbara'
     YOLO = 'Yolo'
     STANISLAUS = 'Stanislaus'
+    NOT_LISTED = 'Not Listed'
     ALL = 'counties throughout California'
 
 
@@ -255,6 +257,7 @@ if not SCOPE_TO_LIVE_COUNTIES:
     )
 
 COUNTY_CHOICES = sorted(COUNTY_CHOICES, key=lambda item: item[1])
+COUNTY_CHOICES += ((Counties.NOT_LISTED, _('My county is not listed')),)
 
 COUNTY_CHOICE_DISPLAY_DICT = {
     Counties.SAN_FRANCISCO: CountyNames.SAN_FRANCISCO,
@@ -273,6 +276,7 @@ COUNTY_CHOICE_DISPLAY_DICT = {
     Counties.SANTA_BARBARA: CountyNames.SANTA_BARBARA,
     Counties.YOLO: CountyNames.YOLO,
     Counties.STANISLAUS: CountyNames.STANISLAUS,
+    Counties.NOT_LISTED: CountyNames.NOT_LISTED,
 }
 
 
