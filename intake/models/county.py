@@ -61,7 +61,7 @@ class County(models.Model):
                 return self.organizations.get(slug='a_pubdef')
             else:
                 # return ebclc
-                return self.organizations.get('ebclc')
+                return self.organizations.get(slug='ebclc')
             # return first receiving agency
         return self.organizations.filter(is_receiving_agency=True).first()
 

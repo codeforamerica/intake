@@ -113,20 +113,15 @@ class TestCountyApplicationNoWarningsView(ApplicantFormViewBaseTestCase):
 
     def test_can_go_back_and_reset_counties(self):
         self.be_anonymous()
-        county_slugs = County.objects.values_list('slug', flat=True)
+        county_slugs = list(County.objects.values_list('slug', flat=True))
         first_choices = random.sample(county_slugs, 2)
         second_choices = [random.choice(county_slugs)]
         self.client.fill_form(
-            reverse('intake-apply'),
-            counties=first_choices,
-            follow=True)
+            reverse('intake-apply'), counties=first_choices, follow=True)
         county_setting = self.client.session['form_in_progress']['counties']
         self.assertEqual(county_setting, first_choices)
-
         self.client.fill_form(
-            reverse('intake-apply'),
-            counties=second_choices,
-            follow=True)
+            reverse('intake-apply'), counties=second_choices, follow=True)
         county_setting = self.client.session['form_in_progress']['counties']
         self.assertEqual(county_setting, second_choices)
 

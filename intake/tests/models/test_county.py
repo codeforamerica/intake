@@ -1,5 +1,4 @@
 from django.test import TestCase
-
 from user_accounts import models as auth_models
 from intake import models
 from formation import field_types
@@ -29,22 +28,19 @@ class TestCounty(TestCase):
         alameda = models.County.objects.get(slug='alameda')
         eligible_for_apd = dict(monthly_income=2999, owns_home=field_types.NO)
         result = alameda.get_receiving_agency(eligible_for_apd)
-        alameda_pubdef = auth_models.Organization.objects.get(
-            slug='a_pubdef')
+        alameda_pubdef = auth_models.Organization.objects.get(slug='a_pubdef')
         self.assertEqual(result, alameda_pubdef)
 
     def test_get_receiving_agency_high_income_alameda_gets_ebclc(self):
         alameda = models.County.objects.get(slug='alameda')
         ebclc_high_income = dict(monthly_income=3000, owns_home=field_types.NO)
         result = alameda.get_receiving_agency(ebclc_high_income)
-        ebclc = auth_models.Organization.objects.get(
-            slug='ebclc')
+        ebclc = auth_models.Organization.objects.get(slug='ebclc')
         self.assertEqual(result, ebclc)
 
     def test_get_receiving_agency_owns_home_alameda_gets_ebclc(self):
         alameda = models.County.objects.get(slug='alameda')
         ebclc_owns_home = dict(monthly_income=2999, owns_home=field_types.YES)
         result = alameda.get_receiving_agency(ebclc_owns_home)
-        ebclc = auth_models.Organization.objects.get(
-            slug='ebclc')
+        ebclc = auth_models.Organization.objects.get(slug='ebclc')
         self.assertEqual(result, ebclc)
