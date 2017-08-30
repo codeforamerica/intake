@@ -23,7 +23,10 @@ class ThanksView(TemplateView):
 
     def get_context_data(self):
         context = super().get_context_data()
-        context.update(organizations=self.submission.organizations.all())
+        context.update(
+            organizations=self.submission.organizations.all(),
+            unlisted_counties=self.submission.answers.get(
+                'unlisted_counties', ''))
         clear_form_session_data(self.request)
         return context
 

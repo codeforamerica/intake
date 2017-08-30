@@ -14,7 +14,7 @@ Feature: Applicants can apply for help in counties where we don't have partners
       And the "unlisted_counties" text input is set to "Delta Quadrant, Narnia County"
       And submit button in form "county_form" is clicked
      Then it should load "/thanks/"
-      And "next_steps" should say "We will contact you"
+      And "next_steps" should say "We will contact you in the next week with information on how to clear your record in Delta Quadrant, Narnia County"
 
   Scenario: Applicant can apply for an unlisted county along with a listed one
     Given that "/apply/" loads
@@ -28,6 +28,6 @@ Feature: Applicants can apply for help in counties where we don't have partners
       And the "unlisted_counties" text input is set to "Delta Quadrant, Narnia County"
       And submit button in form "county_form" is clicked
      Then it should load "/thanks/"
-      And "next_steps" should say "We will contact you"
+      And "next_steps" should say "We will contact you in the next week with information on how to clear your record in Delta Quadrant, Narnia County"
 
   # Scenario: CfA staff gets reminders and can view 'not-listed' apps
