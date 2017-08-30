@@ -8,6 +8,7 @@ from formation import fields
 from intake.tests.views.test_applicant_form_view_base \
     import ApplicantFormViewBaseTestCase
 from intake.tests import factories
+from intake.models import County
 from project.tests.assertions import assertInLogsCount, assertInLogs
 
 
@@ -15,15 +16,13 @@ class TestSelectCountyView(ApplicantFormViewBaseTestCase):
 
     def test_county_selection_saved_to_session(self):
         self.client.fill_form(
-            reverse('intake-apply'), counties=['alameda', 'contracosta'],
-            confirm_county_selection='yes')
+            reverse('intake-apply'), counties=['alameda', 'contracosta'])
         form_data = self.client.session.get(ApplicantFormViewBase.session_key)
         self.assertListEqual(['alameda', 'contracosta'], form_data['counties'])
 
     def test_county_select_persists_after_session_update(self):
         response = self.client.fill_form(
-            reverse('intake-apply'), counties=['alameda', 'contracosta'],
-            confirm_county_selection='yes')
+            reverse('intake-apply'), counties=['alameda', 'contracosta'])
         request = response.wsgi_request
         qdict = QueryDict('', mutable=True)
         qdict.setlist('hello', ['world'])
@@ -34,21 +33,12 @@ class TestSelectCountyView(ApplicantFormViewBaseTestCase):
 
     def test_select_county_redirects_to_county_application(self):
         response = self.client.fill_form(
-            reverse('intake-apply'), counties=['alameda', 'contracosta'],
-            confirm_county_selection='yes')
-        self.assertRedirects(response, reverse('intake-county_application'))
-
-    def test_no_county_confirmation_returns_and_shows_error(self):
-        response = self.client.fill_form(
             reverse('intake-apply'), counties=['alameda', 'contracosta'])
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(
-            response,
-            escape(fields.AffirmCountySelection.is_required_error_message))
+        self.assertRedirects(response, reverse('intake-county_application'))
 
     def test_no_counties_selected_returns_error(self):
         response = self.client.fill_form(
-            reverse('intake-apply'), confirm_county_selection='yes')
+            reverse('intake-apply'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(
             response, escape(fields.Counties.is_required_error_message))
@@ -57,8 +47,7 @@ class TestSelectCountyView(ApplicantFormViewBaseTestCase):
         with self.assertLogs(
                 'project.services.logging_service', logging.INFO) as logs:
             self.client.fill_form(
-                reverse('intake-apply'), counties=['alameda', 'contracosta'],
-                confirm_county_selection='yes')
+                reverse('intake-apply'), counties=['alameda', 'contracosta'])
         assertInLogsCount(
             logs, {
                 'event_name=application_page_complete': 1,
@@ -68,26 +57,22 @@ class TestSelectCountyView(ApplicantFormViewBaseTestCase):
 
     def test_saves_form_data_to_session(self):
         self.client.fill_form(
-            reverse('intake-apply'), counties=['alameda', 'contracosta'],
-            confirm_county_selection='yes')
+            reverse('intake-apply'), counties=['alameda', 'contracosta'])
         form_data = self.get_form_session_data()
         self.assertEqual(
             form_data.get('counties'), ['alameda', 'contracosta'])
-        self.assertEqual(
-            form_data.get('confirm_county_selection'), ['yes'])
 
     def test_logs_validation_errors_event(self):
         with self.assertLogs(
                 'project.services.logging_service', logging.INFO) as logs:
-            response = self.client.fill_form(
-                reverse('intake-apply'), confirm_county_selection='yes')
+            response = self.client.fill_form(reverse('intake-apply'))
         assertInLogs(logs, 'application_errors')
         assertInLogs(
             logs, 'distinct_id=' + response.wsgi_request.visitor.get_uuid())
 
     def test_shows_error_messages_in_flash(self):
         response = self.client.fill_form(
-            reverse('intake-apply'), confirm_county_selection='yes')
+            reverse('intake-apply'))
         self.assertContains(
             response, escape(fields.Counties.is_required_error_message))
 
@@ -106,7 +91,7 @@ class TestSelectCountyView(ApplicantFormViewBaseTestCase):
         self.be_anonymous()
         county_view = self.client.get(
             reverse('intake-apply'))
-        for slug, description in constants.COUNTY_CHOICES:
+        for slug, description in County.objects.get_county_choices():
             self.assertContains(county_view, slug)
             self.assertContains(county_view, escape(description))
 
@@ -120,7 +105,6 @@ class TestSelectCountyView(ApplicantFormViewBaseTestCase):
             response = self.client.fill_form(
                 reverse('intake-apply'),
                 counties=['contracosta'],
-                confirm_county_selection='yes',
                 headers={'HTTP_USER_AGENT': 'tester'})
         self.assertRedirects(response, reverse('intake-county_application'))
         applicant_id = self.client.session.get('applicant_id')
@@ -145,15 +129,13 @@ class TestSelectCountyView(ApplicantFormViewBaseTestCase):
 
     def test_creates_applicant(self):
         response = self.client.fill_form(
-            reverse('intake-apply'), counties=['alameda', 'contracosta'],
-            confirm_county_selection='yes')
+            reverse('intake-apply'), counties=['alameda', 'contracosta'])
         self.assertTrue(response.wsgi_request.applicant.id)
 
     def test_create_applicant_with_existing_visitor_and_applicant(self):
         existing_applicant = factories.ApplicantFactory()
         self.set_session(visitor_id=existing_applicant.visitor.id)
         response = self.client.fill_form(
-            reverse('intake-apply'), counties=['alameda', 'contracosta'],
-            confirm_county_selection='yes')
+            reverse('intake-apply'), counties=['alameda', 'contracosta'])
         self.assertEqual(
             response.wsgi_request.applicant, existing_applicant)

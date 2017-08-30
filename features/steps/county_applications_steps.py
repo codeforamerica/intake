@@ -23,8 +23,7 @@ def submit_app_to_counties(
         substeps.append(
             'When the "counties" checkbox option "{slug}" is clicked'.format(
                 slug=county.slug))
-    substeps.append('''And the "confirm_county_selection" checkbox option "yes" is clicked
-        And submit button in form "county_form" is clicked
+    substeps.append('''And submit button in form "county_form" is clicked
         Then it should load "application/"
         When "{name}" fills out a county application form with basic answers
         '''.format(name=applicant_name))

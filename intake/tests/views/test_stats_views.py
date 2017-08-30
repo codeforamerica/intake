@@ -2,7 +2,7 @@ from django.core.urlresolvers import reverse
 from intake.tests.base_testcases import (
     IntakeDataTestCase, ALL_APPLICATION_FIXTURES)
 
-from intake import constants, models
+from intake import models
 from intake.tests.factories import FormSubmissionWithOrgsFactory
 from user_accounts.models import Organization
 
@@ -36,7 +36,7 @@ class TestStats(IntakeDataTestCase):
             is_receiving_agency=True,
             is_live=True
         ).values_list('slug', flat=True))
-        org_slugs.append(constants.Organizations.ALL)
+        org_slugs.append('all')
         stats_slugs = [data['org']['slug'] for data in org_stats]
         self.assertEqual(set(org_slugs), set(stats_slugs))
 

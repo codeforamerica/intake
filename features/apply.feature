@@ -3,7 +3,6 @@ Feature: User can Apply to CMR
     Given that "/apply/" loads
       And it loads css
      When the "counties" checkbox option "contracosta" is clicked
-      And the "confirm_county_selection" checkbox option "yes" is clicked
       And submit button in form "county_form" is clicked
      Then it should load "/application/"
       And it should load css
@@ -19,7 +18,6 @@ Feature: User can Apply to CMR
       And that "/apply/" loads
       And it loads css
      When the "counties" checkbox option "sanfrancisco" is clicked
-      And the "confirm_county_selection" checkbox option "yes" is clicked
       And submit button in form "county_form" is clicked
      Then it should load "/application/"
       And it should load css

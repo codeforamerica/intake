@@ -5,7 +5,6 @@ from formation.forms import county_form_selector
 from formation import fields as F
 from formation.field_base import Field
 from formation.form_base import Form
-from intake.constants import Counties
 from formation import validators
 
 
@@ -18,7 +17,7 @@ class TestForm(PatchTranslationTestCase):
 
     def get_sf_form(self, *args):
         form_class = county_form_selector.get_combined_form_class(
-            counties=[Counties.SAN_FRANCISCO])
+            counties=['sanfrancisco'])
         return form_class(*args)
 
     def test_does_not_alter_class_attributes_after_instantiation(self):

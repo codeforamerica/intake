@@ -5,9 +5,7 @@ from intake.tests import mock, factories
 from formation import field_types
 import intake.services.submissions as SubmissionsService
 from user_accounts import models as auth_models
-from intake import (
-    models,
-    constants)
+from intake import models, constants
 
 
 class TestFormSubmission(TestCase):
@@ -34,7 +32,7 @@ class TestFormSubmission(TestCase):
 
     def test_get_permitted_submissions_when_permitted(self):
         cc_pubdef = auth_models.Organization.objects.get(
-            slug=constants.Organizations.COCO_PUBDEF)
+            slug='cc_pubdef')
         subs = cc_pubdef.submissions.all()
         mock_user = Mock(is_staff=False, **{'profile.organization': cc_pubdef})
         result = SubmissionsService.get_permitted_submissions(mock_user)
@@ -42,9 +40,9 @@ class TestFormSubmission(TestCase):
 
     def test_get_permitted_submissions_when_not_permitted(self):
         cc_pubdef = auth_models.Organization.objects.get(
-            slug=constants.Organizations.COCO_PUBDEF)
+            slug='cc_pubdef')
         sf_pubdef = auth_models.Organization.objects.get(
-            slug=constants.Organizations.SF_PUBDEF)
+            slug='sf_pubdef')
         submission = SubmissionsService.create_for_organizations(
             [cc_pubdef], answers={})
         mock_user = Mock(is_staff=False, **{'profile.organization': sf_pubdef})

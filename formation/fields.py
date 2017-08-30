@@ -69,19 +69,6 @@ class UnlistedCounties(CharField):
     display_label = "Needs help in unlisted counties"
 
 
-class AffirmCountySelection(ConsentCheckbox):
-    context_key = "confirm_county_selection"
-    is_required_error_message = _(
-        "We need your understanding before we can "
-        "help you")
-    label = _(
-        "Do you understand that you should only select the counties that you "
-        "think you have an arrest or conviction in?")
-    agreement_text = _(
-        "Yes, to the best of my memory, I was arrested or convicted in "
-        "these counties")
-
-
 class ConsentNote(FormNote):
     context_key = "consent_note"
     content = mark_safe("""
@@ -676,7 +663,6 @@ INTAKE_FIELDS = [
     Counties,
     UnlistedCountyNote,
     UnlistedCounties,
-    AffirmCountySelection,
 
     ContactPreferences,
 

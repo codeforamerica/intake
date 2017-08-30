@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Case, When
+from django.db.models import Case, When, BooleanField
 
 from intake import constants
 from formation import field_types
@@ -19,19 +19,23 @@ class CountyManager(models.Manager):
         return self.get(slug=slug)
 
     def get_county_choices(self):
-        if True:
+        if constants.SCOPE_TO_LIVE_COUNTIES:
             return self.filter(
                 organizations__is_live=True
-            ).distinct().order_by_name_or_not_listed()
+            ).distinct().order_by_name_or_not_listed(
+            ).values_list('slug', 'description')
         else:
-            return self.order_by_name_or_not_listed()
+            return self.order_by_name_or_not_listed(
+                ).values_list('slug', 'description')
 
     def annotate_is_not_listed(self):
         return self.annotate(
-            is_not_listed=Case(When(slug='not_listed', then=1)))
+            is_not_listed=Case(When(slug='not_listed'),
+                               then=True,
+                               output_field=BooleanField()))
 
     def order_by_name_or_not_listed(self):
-        return self.annotate_not_listed().order_by('is_not_listed', 'name')
+        return self.annotate_is_not_listed().order_by('is_not_listed', 'name')
 
 
 class County(models.Model):

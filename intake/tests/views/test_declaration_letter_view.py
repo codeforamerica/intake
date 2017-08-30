@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from formation import fields
 from markupsafe import escape
 from unittest.mock import patch
-from intake import models, constants
+from intake import models
 from intake.tests import mock
 from intake.tests.views.test_applicant_form_view_base \
     import ApplicantFormViewBaseTestCase
@@ -70,7 +70,7 @@ class TestWriteDeclarationLetterView(ApplicantFormViewBaseTestCase):
             counties=['alameda'], **mock.fake.a_pubdef_answers())
         response = self.client.get(reverse(self.view_name))
         self.assertContains(
-            response, "You are applying for help in Alameda County.")
+            response, "You are applying for help in Alameda.")
 
     def test_logs_page_complete_event(self):
         self.set_form_session_data(
@@ -132,8 +132,7 @@ class TestWriteDeclarationLetterView(ApplicantFormViewBaseTestCase):
             mock_letter[field] = html_string
         self.be_anonymous()
         self.client.fill_form(
-            reverse('intake-apply'), counties=[constants.Counties.ALAMEDA],
-            confirm_county_selection='yes', follow=True)
+            reverse('intake-apply'), counties=['alameda'], follow=True)
         self.client.fill_form(
             reverse('intake-county_application'), follow=True, **mock_answers)
         response = self.client.fill_form(
@@ -165,7 +164,7 @@ class TestReviewDeclarationLetterView(ApplicantFormViewBaseTestCase):
                 **mock.fake.declaration_letter_answers()))
         response = self.client.get(reverse(self.view_name))
         self.assertContains(
-            response, "You are applying for help in Alameda County.")
+            response, "You are applying for help in Alameda.")
 
     def test_with_no_applicant(self):
         self.set_form_session_data(

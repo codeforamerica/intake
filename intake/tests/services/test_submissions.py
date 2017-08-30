@@ -6,11 +6,9 @@ from intake.tests import mock, factories
 from intake.tests.mock_org_answers import get_answers_for_orgs
 from intake.tests.base_testcases import ExternalNotificationsPatchTestCase
 from formation.forms import county_form_selector
-from intake.constants import (
-    COUNTY_CHOICE_DISPLAY_DICT, Organizations,
-    EMAIL, SMS)
-from intake.models import FormSubmission
-from intake import constants, models
+from intake.constants import EMAIL, SMS
+from intake.models import County, FormSubmission
+from intake import models
 from user_accounts.models import Organization
 from project.tests.assertions import assertInLogsCount
 
@@ -20,7 +18,7 @@ file.
 """
 
 
-ALL_COUNTY_SLUGS = list(COUNTY_CHOICE_DISPLAY_DICT.keys())
+ALL_COUNTY_SLUGS = County.objects.values_list('slug', flat=True)
 
 
 class TestCreateSubmissions(TestCase):
@@ -76,7 +74,7 @@ class TestGetPermittedSubmissions(TestCase):
         # assert that they only receive submissions for their org
 
         # given a user from one org
-        org = Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)
+        org = Organization.objects.get(slug='a_pubdef')
         user = org.profiles.first().user
         # who requests all submissions
         submissions = list(SubmissionsService.get_permitted_submissions(user))
@@ -100,23 +98,23 @@ class TestHaveSameOrgs(TestCase):
 
     def test_returns_false_when_orgs_are_different(self):
         a = FormSubmission.objects.filter(
-            organizations__slug=Organizations.ALAMEDA_PUBDEF).first()
+            organizations__slug='a_pubdef').first()
         b = FormSubmission.objects.filter(
-            organizations__slug=Organizations.COCO_PUBDEF).first()
+            organizations__slug='cc_pubdef').first()
         self.assertEqual(SubmissionsService.have_same_orgs(a, b), False)
 
     def test_returns_true_when_orgs_are_the_same(self):
         subs = FormSubmission.objects.filter(
-            organizations__slug=Organizations.ALAMEDA_PUBDEF)
+            organizations__slug='a_pubdef')
         a, b = list(subs)[:2]
         self.assertEqual(SubmissionsService.have_same_orgs(a, b), True)
 
     def test_returns_false_when_orgs_dont_overlap(self):
         a = FormSubmission.objects.filter(
-            organizations__slug=Organizations.ALAMEDA_PUBDEF).first()
+            organizations__slug='a_pubdef').first()
         b = FormSubmission.objects.filter(
-            organizations__slug=Organizations.COCO_PUBDEF).first()
-        cc_pubdef = Organization.objects.get(slug=Organizations.COCO_PUBDEF)
+            organizations__slug='cc_pubdef').first()
+        cc_pubdef = Organization.objects.get(slug='cc_pubdef')
         a.organizations.add_orgs_to_sub(cc_pubdef)
         self.assertEqual(SubmissionsService.have_same_orgs(a, b), False)
 
@@ -128,7 +126,7 @@ class TestFindDuplicates(TestCase):
     ]
 
     def test_finds_subs_with_similar_names(self):
-        org = Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)
+        org = Organization.objects.get(slug='a_pubdef')
         a_name = dict(
             first_name="Joe",
             middle_name="H",
@@ -162,7 +160,7 @@ class TestFindDuplicates(TestCase):
             self.assertIn(sub, pair)
 
     def test_doesnt_pair_subs_with_differing_names(self):
-        org = Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)
+        org = Organization.objects.get(slug='a_pubdef')
         a_name = dict(
             first_name="Joe",
             middle_name="H",
@@ -230,7 +228,7 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
     ]
 
     def get_orgs(self):
-        return [Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)]
+        return [Organization.objects.get(slug='a_pubdef')]
 
     def test_notifications_slacks_and_logs_for_full_contact_preferences(self):
         applicant = factories.ApplicantFactory()
@@ -314,7 +312,7 @@ class TestSendToNewappsBundleIfNeeded(TestCase):
     @patch('intake.tasks.add_application_pdfs')
     def test_calls_task_if_sf_in_sub(self, add_application_pdfs):
         sf_pubdef = Organization.objects.get(
-            slug=constants.Organizations.SF_PUBDEF)
+            slug='sf_pubdef')
         sub = factories.FormSubmissionWithOrgsFactory(
             organizations=[sf_pubdef])
         SubmissionsService.send_to_newapps_bundle_if_needed(sub, [sf_pubdef])
@@ -324,7 +322,7 @@ class TestSendToNewappsBundleIfNeeded(TestCase):
     @patch('intake.tasks.add_application_pdfs')
     def test_does_not_call_task_if_not_sf(self, add_application_pdfs):
         a_pubdef = Organization.objects.get(
-            slug=constants.Organizations.ALAMEDA_PUBDEF)
+            slug='a_pubdef')
         sub = factories.FormSubmissionWithOrgsFactory(
             organizations=[a_pubdef])
         SubmissionsService.send_to_newapps_bundle_if_needed(sub, [a_pubdef])

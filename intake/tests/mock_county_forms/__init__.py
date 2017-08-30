@@ -352,6 +352,10 @@ class Provider(BaseProvider):
         data = self.fresno_pubdef_answers(**overrides)
         return data
 
+    def cfa_answers(self, **overrides):
+        data = self.all_county_answers(**overrides)
+        return data
+
     def all_county_answers(self, **overrides):
         data = {
             **self.sf_county_form_answers(),

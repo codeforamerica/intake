@@ -12,7 +12,7 @@
     <div class="next_steps">
     {%- for organization in organizations %}
       <p class="next_step {{ organization.slug }}">
-        {%- if org.county.slug != 'not_listed' %}
+        {%- if organization.county.slug != 'not_listed' %}
         To help you with {{ organization.county.name }} County, we sent your application to the
         <a href="{{ organization.get_absolute_url }}">{{ organization.name }}</a>.
         {%- endif %}

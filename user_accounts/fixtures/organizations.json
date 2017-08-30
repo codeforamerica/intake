@@ -21,8 +21,8 @@
     "short_followup_message": "",
     "long_followup_message": "",
     "address": "",
-    "phone_number": "",
-    "email": "",
+    "phone_number": "(415) 301-6005",
+    "email": "clearmyrecord@codeforamerica.org",
     "notify_on_weekends": false,
     "needs_applicant_followups": false
   }

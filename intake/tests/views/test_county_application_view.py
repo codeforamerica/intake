@@ -8,7 +8,7 @@ from intake.tests.views.test_applicant_form_view_base \
     import ApplicantFormViewBaseTestCase
 from intake.views.county_application_view import WARNING_FLASH_MESSAGE
 from intake.tests import mock, factories
-from intake import constants
+from intake.models import County
 from project.tests.assertions import assertInLogsCount
 
 
@@ -89,12 +89,10 @@ class TestCountyApplicationNoWarningsView(ApplicantFormViewBaseTestCase):
 
     def test_bad_contact_data_shows_expected_errors(self):
         self.be_anonymous()
-        contracosta = constants.Counties.CONTRA_COSTA
         answers = mock.fake.contra_costa_county_form_answers()
         result = self.client.fill_form(
             reverse('intake-apply'),
-            counties=[contracosta],
-            confirm_county_selection='yes')
+            counties=['contracosta'])
 
         # check for the preferred contact methods validator
         bad_data = answers.copy()
@@ -111,17 +109,16 @@ class TestCountyApplicationNoWarningsView(ApplicantFormViewBaseTestCase):
         self.set_form_session_data(counties=['sanfrancisco'])
         response = self.client.get(reverse(self.view_name))
         self.assertContains(
-            response, "You are applying for help in San Francisco County.")
+            response, "You are applying for help in San Francisco.")
 
     def test_can_go_back_and_reset_counties(self):
         self.be_anonymous()
-        county_slugs = [slug for slug, text in constants.COUNTY_CHOICES]
+        county_slugs = County.objects.values_list('slug', flat=True)
         first_choices = random.sample(county_slugs, 2)
         second_choices = [random.choice(county_slugs)]
         self.client.fill_form(
             reverse('intake-apply'),
             counties=first_choices,
-            confirm_county_selection='yes',
             follow=True)
         county_setting = self.client.session['form_in_progress']['counties']
         self.assertEqual(county_setting, first_choices)
@@ -129,7 +126,6 @@ class TestCountyApplicationNoWarningsView(ApplicantFormViewBaseTestCase):
         self.client.fill_form(
             reverse('intake-apply'),
             counties=second_choices,
-            confirm_county_selection='yes',
             follow=True)
         county_setting = self.client.session['form_in_progress']['counties']
         self.assertEqual(county_setting, second_choices)

@@ -7,5 +7,4 @@ def test_debugging(context):
     print("HTML in the browser")
     print(context.browser.page_source)
     print("\n---------------------------------")
-    import ipdb; ipdb.set_trace()
     assert False

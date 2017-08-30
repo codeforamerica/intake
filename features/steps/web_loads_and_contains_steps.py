@@ -82,7 +82,6 @@ def element_contains_text(context, element_class, text):
         "Couldn't find '{}' in '{}'".format(text, element.text))
 
 
-
 @then('the main heading should say "{text}"')
 def test_main_heading_contains_text(context, text):
     main_heading = context.browser.find_element_by_css_selector('h1')
