@@ -1,2 +1,2 @@
-Hi {{ name|safe }}, we got your application and sent it to {{ oxford_comma(organizations)|safe }}. {% for step in next_steps %}{{ step|safe }} {% endfor -%}
+Hi {{ name|safe }}, we got your application and sent it to {{ oxford_comma(organizations)|safe }}. {% for step in next_steps %}{{ step|safe }} {% endfor -%}{%- if unlisted_counties %} For {{ unlisted_counties|safe }} we'll contact you in the next week.{% endif %}
 - {{ staff_name }} at Clear My Record

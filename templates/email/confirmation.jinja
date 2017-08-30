@@ -4,6 +4,11 @@ Thanks for applying online to Clear My Record. Since you applied for help in {{ 
 
 {% for step in next_steps %}{{ step|safe }}
 
+{%- if unlisted_counties %}
+Next steps for {{ unlisted_counties|safe }}:
+We will contact you in the next week with information on how to clear your record in {{ unlisted_counties|safe }}
+{% endif %}
+
 {% endfor -%}
 We’ll follow up with you in about 4 weeks to make sure things are going okay.
 

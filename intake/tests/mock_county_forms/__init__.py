@@ -353,7 +353,17 @@ class Provider(BaseProvider):
         return data
 
     def cfa_answers(self, **overrides):
-        data = self.all_county_answers(**overrides)
+        data = dict(
+            unlisted_counties="O‘Duinn County",
+            contact_preferences=['prefers_email', 'prefers_sms'],
+            first_name=self.generator.first_name(),
+            last_name=self.generator.last_name(),
+            phone_number=self.make_phone_number(),
+            email='cmrtestuser@gmail.com',
+            how_did_you_hear='Craigslist',
+            additional_information='hi'
+        )
+        data.update(**overrides)
         return data
 
     def all_county_answers(self, **overrides):

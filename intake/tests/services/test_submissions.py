@@ -236,9 +236,7 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
             self.get_orgs(),
             contact_preferences=[
                 'prefers_email',
-                'prefers_sms',
-                'prefers_voicemail',
-                'prefers_snailmail'
+                'prefers_sms'
             ],
             email='test@gmail.com',
             phone_number='5554442222',
@@ -301,6 +299,45 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
         self.assertEqual(
             len(self.notifications.sms_confirmation.send.mock_calls), 0)
         assertInLogsCount(logs, {'event_name=app_confirmation_sent': 1})
+
+
+class TestSendConfirmationNotificationsRenderedOutput(TestCase):
+    fixtures = ['counties', 'organizations']
+
+    @patch('intake.notifications.SimpleFrontNotification.send')
+    def test_notifications_with_only_unlisted_counties(self, send):
+        orgs = [Organization.objects.get(slug='cfa')]
+        sub = factories.FormSubmissionWithOrgsFactory(
+            organizations=orgs,
+            answers=get_answers_for_orgs(
+                orgs, unlisted_counties="O‘Duinn County"))
+        SubmissionsService.send_confirmation_notifications(sub)
+        self.assertEqual(len(send.mock_calls), 2)
+        email, sms = send.mock_calls
+        stuff, sms_args, sms_kwargs = sms
+        stuff, email_args, email_kwargs = email
+        sms_body = sms_kwargs['body']
+        email_body = email_kwargs['body']
+        self.assertIn("O‘Duinn County", sms_body)
+        self.assertIn("O‘Duinn County", email_body)
+
+    @patch('intake.notifications.SimpleFrontNotification.send')
+    def test_notifications_with_only_partner_counties(self, send):
+        orgs = [
+                Organization.objects.get(slug='cfa'),
+                Organization.objects.get(slug='cc_pubdef')
+        ]
+        sub = factories.FormSubmissionWithOrgsFactory(
+            organizations=orgs,
+            answers=get_answers_for_orgs(
+                orgs, unlisted_counties="O‘Duinn County"))
+        SubmissionsService.send_confirmation_notifications(sub)
+
+    @patch('intake.notifications.SimpleFrontNotification.send')
+    def test_notifications_with_both_partner_and_unlisted_counties(self, send):
+        orgs = [Organization.objects.get(slug='cc_pubdef')]
+        sub = factories.FormSubmissionWithOrgsFactory(organizations=orgs)
+        SubmissionsService.send_confirmation_notifications(sub)
 
 
 class TestSendToNewappsBundleIfNeeded(TestCase):
