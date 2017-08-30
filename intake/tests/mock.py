@@ -260,30 +260,6 @@ def fake_app_submitted(applicant, time=None):
     return event
 
 
-def make_mock_submission_event_sequence(applicant):
-    sub = models.FormSubmission.objects.get(applicant_id=applicant.id)
-    events = []
-    time_to_complete = completion_time()
-    sub_finish = sub.date_received
-    start_time = sub_finish - time_to_complete
-    page_sequences = [
-        constants.PAGE_COMPLETE_SEQUENCES[org.slug]
-        for org in sub.organizations.all()]
-    counties = [org.county.slug for org in sub.organizations.all()]
-    longest_sequence = max(page_sequences, key=lambda seq: len(seq))
-    intermediate_pages = longest_sequence[1:-1]
-    intermediate_times = [
-        start_time + timeshift
-        for timeshift in random_interpolate_minutes_between(
-            time_to_complete, len(intermediate_pages))]
-    times = [start_time, *intermediate_times, sub_finish]
-    events.append(fake_app_started(applicant, counties, time=start_time))
-    for time, page_name in zip(times, longest_sequence):
-        events.append(fake_page_complete(applicant, page_name, time=time))
-    events.append(fake_app_submitted(applicant, sub_finish))
-    return events
-
-
 def make_mock_transfer_sub(from_org, to_org):
     sub = factories.FormSubmissionWithOrgsFactory.create(
         organizations=[from_org])
@@ -374,11 +350,6 @@ def build_seed_submissions():
     serialize_subs(
         [multi_org_sub],
         fixture_path('mock_1_submission_to_multiple_orgs.json'))
-    events = []
-    for applicant in applicants:
-        events.extend(
-            make_mock_submission_event_sequence(applicant))
-    dump_as_json(events, fixture_path('mock_application_events.json'))
     make_two_mock_transfers()
 
 
