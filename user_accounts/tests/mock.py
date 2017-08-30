@@ -77,17 +77,18 @@ def cfa_monitor_user():
         username='monitor_user')
 
 
-def for_all_receiving_orgs():
+def for_all_receiving_orgs_except_cfa():
     return [
         profile_for_org_and_group_names(
             org, group_names=['application_reviewers'],
             should_get_notifications=True)
-        for org in models.Organization.objects.filter(is_receiving_agency=True)
+        for org in models.Organization.objects.filter(
+            is_receiving_agency=True).exclude(slug='cfa')
     ]
 
 
 def create_seed_users():
-    for_all_receiving_orgs()
+    for_all_receiving_orgs_except_cfa()
     cfa_superuser()
     cfa_monitor_user()
 
