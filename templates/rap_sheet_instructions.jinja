@@ -8,19 +8,8 @@
 {%- block section_class %}thanks{% endblock section_class -%}
 
 {% block column_content %}
-  {%- if organizations %}
-    <div class="next_steps">
-    {%- for organization in organizations %}
-      <p class="next_step {{ organization.slug }}">
-        {%- if organization.county.slug != 'not_listed' %}
-        To help you with {{ organization.county.name }} County, we sent your application to the
-        <a href="{{ organization.get_absolute_url() }}">{{ organization.name }}</a>.
-        {%- endif %}
-        {{ linkify(organization.long_confirmation_message) }}
-      </p>
-    {%- endfor %}
-    </div>
-  {%- endif %}
+  
+  {% include "includes/application_next_steps.jinja" %}
 
   {#
     qualifies_for_fee_waiver can have three different values:
