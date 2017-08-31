@@ -30,9 +30,10 @@ class CountyManager(models.Manager):
 
     def annotate_is_not_listed(self):
         return self.annotate(
-            is_not_listed=Case(When(slug='not_listed'),
-                               then=True,
-                               output_field=BooleanField()))
+            is_not_listed=Case(
+                            When(slug='not_listed', then=True),
+                            default=False,
+                            output_field=BooleanField()))
 
     def order_by_name_or_not_listed(self):
         return self.annotate_is_not_listed().order_by('is_not_listed', 'name')

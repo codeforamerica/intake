@@ -44,3 +44,30 @@ class TestCounty(TestCase):
         result = alameda.get_receiving_agency(ebclc_owns_home)
         ebclc = auth_models.Organization.objects.get(slug='ebclc')
         self.assertEqual(result, ebclc)
+
+
+class TestCountyManager(TestCase):
+
+    fixtures = ['counties']
+
+    def test_annotate_is_not_listed(self):
+        qset = models.County.objects.annotate_is_not_listed()
+        not_listed = qset.filter(slug='not_listed').first()
+        self.assertTrue(not_listed)
+        for row in qset:
+            with self.subTest(row=row):
+                self.assertTrue(hasattr(row, 'is_not_listed'))
+                if row.slug == 'not_listed':
+                    self.assertTrue(row.is_not_listed)
+                else:
+                    self.assertFalse(row.is_not_listed)
+
+    def test_order_by_name_or_not_listed(self):
+        counties = list(models.County.objects.order_by_name_or_not_listed())
+        count = len(counties)
+        last_county = counties[count - 1]
+        self.assertEqual(last_county.slug, 'not_listed')
+        for county in counties:
+            if county != last_county:
+                with self.subTest(county=county):
+                    self.assertFalse(county.slug == 'not_listed')
