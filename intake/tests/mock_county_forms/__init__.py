@@ -350,6 +350,12 @@ class Provider(BaseProvider):
 
     def stanislaus_pubdef_answers(self, **overrides):
         data = self.fresno_pubdef_answers(**overrides)
+        data.update(
+            has_been_to_prison=self.maybe_with_idk(0.5),
+            owes_court_fees=self.maybe(0.5),
+            rap_outside_sf=self.maybe_with_idk(0.5),
+            when_where_outside_sf='',
+            )
         return data
 
     def cfa_answers(self, **overrides):
