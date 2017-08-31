@@ -37,6 +37,9 @@ class OrganizationManager(models.Manager):
         if sub and orgs:
             sub.applications.filter(organization__in=orgs).delete()
 
+    def not_cfa(self):
+        return self.exclude(slug='cfa')
+
 
 class PurgedOrganization(models.Model):
     """Placeholder for custom VIEW see intake migration 0025

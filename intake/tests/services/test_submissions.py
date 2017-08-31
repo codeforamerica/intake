@@ -301,6 +301,13 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
         assertInLogsCount(logs, {'event_name=app_confirmation_sent': 1})
 
 
+def get_notification_bodies(patched_send):
+    email, sms = patched_send.mock_calls
+    stuff, sms_args, sms_kwargs = sms
+    stuff, email_args, email_kwargs = email
+    return sms_kwargs['body'], email_kwargs['body']
+
+
 class TestSendConfirmationNotificationsRenderedOutput(TestCase):
     fixtures = ['counties', 'organizations']
 
@@ -310,16 +317,15 @@ class TestSendConfirmationNotificationsRenderedOutput(TestCase):
         sub = factories.FormSubmissionWithOrgsFactory(
             organizations=orgs,
             answers=get_answers_for_orgs(
-                orgs, unlisted_counties="O‘Duinn County"))
+                orgs, unlisted_counties="O‘Duinn County",
+                contact_preferences=['prefers_email', 'prefers_sms']))
         SubmissionsService.send_confirmation_notifications(sub)
         self.assertEqual(len(send.mock_calls), 2)
-        email, sms = send.mock_calls
-        stuff, sms_args, sms_kwargs = sms
-        stuff, email_args, email_kwargs = email
-        sms_body = sms_kwargs['body']
-        email_body = email_kwargs['body']
+        sms_body, email_body = get_notification_bodies(send)
         self.assertIn("O‘Duinn County", sms_body)
         self.assertIn("O‘Duinn County", email_body)
+        print(sms_body)
+        print(email_body)
 
     @patch('intake.notifications.SimpleFrontNotification.send')
     def test_notifications_with_only_partner_counties(self, send):
@@ -330,14 +336,26 @@ class TestSendConfirmationNotificationsRenderedOutput(TestCase):
         sub = factories.FormSubmissionWithOrgsFactory(
             organizations=orgs,
             answers=get_answers_for_orgs(
-                orgs, unlisted_counties="O‘Duinn County"))
+                orgs, unlisted_counties="O‘Duinn County",
+                contact_preferences=['prefers_email', 'prefers_sms']))
         SubmissionsService.send_confirmation_notifications(sub)
+        self.assertEqual(len(send.mock_calls), 2)
+        sms_body, email_body = get_notification_bodies(send)
+        print(sms_body)
+        print(email_body)
 
     @patch('intake.notifications.SimpleFrontNotification.send')
     def test_notifications_with_both_partner_and_unlisted_counties(self, send):
         orgs = [Organization.objects.get(slug='cc_pubdef')]
-        sub = factories.FormSubmissionWithOrgsFactory(organizations=orgs)
+        sub = factories.FormSubmissionWithOrgsFactory(
+            organizations=orgs,
+            answers=get_answers_for_orgs(
+                orgs, contact_preferences=['prefers_email', 'prefers_sms']))
         SubmissionsService.send_confirmation_notifications(sub)
+        self.assertEqual(len(send.mock_calls), 2)
+        sms_body, email_body = get_notification_bodies(send)
+        print(sms_body)
+        print(email_body)
 
 
 class TestSendToNewappsBundleIfNeeded(TestCase):

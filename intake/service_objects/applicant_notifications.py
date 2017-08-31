@@ -41,7 +41,7 @@ class ApplicantNotification:
         self.contact_methods.sort()
 
     def get_context(self, contact_method=None):
-        orgs = list(self.sub.organizations.order_by('name'))
+        orgs = list(self.sub.organizations.not_cfa().order_by('name'))
         organization_names = [
             org.name for org in orgs]
         county_names = [
@@ -58,6 +58,7 @@ class ApplicantNotification:
             counties_applied_to=counties_applied_to,
             organizations=orgs,
             organization_names=organization_names,
+            unlisted_counties=self.sub.answers.get('unlisted_counties', '')
         )
 
     def get_notification_channel(self, method):
