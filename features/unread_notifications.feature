@@ -4,6 +4,8 @@ Feature: An org user can follow a notification to see unreads
 
     Background:
        Given an org user at "cc_pubdef"
+         And an applicant support user
+         And "4" applications to "cfa"
          And "6" "read and updated" applications to "cc_pubdef"
          And "3" "needs update" applications to "cc_pubdef"
          And a "cc_pubdef" application to search for
@@ -23,3 +25,9 @@ Feature: An org user can follow a notification to see unreads
          When I hit the browser back button
          Then I should see "0" in the active tab
           And I should not see the applicant listed
+
+    Scenario: CfA user can follow an unreads link from an email
+        Given I log in as an applicant support user
+          And it is a weekday
+         Then org user at "cfa" should receive a slack message about new not listed apps
+          And I should see "one unread application" in the email
