@@ -324,15 +324,14 @@ class TestSendConfirmationNotificationsRenderedOutput(TestCase):
         sms_body, email_body = get_notification_bodies(send)
         self.assertIn("O‘Duinn County", sms_body)
         self.assertIn("O‘Duinn County", email_body)
-        print(sms_body)
-        print(email_body)
+        self.assertIn("we'll contact you in the next week", sms_body)
+        self.assertIn("We will contact you in the next week", email_body)
 
     @patch('intake.notifications.SimpleFrontNotification.send')
-    def test_notifications_with_only_partner_counties(self, send):
+    def test_notifications_with_both_partner_and_unlisted_counties(self, send):
         orgs = [
                 Organization.objects.get(slug='cfa'),
-                Organization.objects.get(slug='cc_pubdef')
-        ]
+                Organization.objects.get(slug='cc_pubdef')]
         sub = factories.FormSubmissionWithOrgsFactory(
             organizations=orgs,
             answers=get_answers_for_orgs(
@@ -341,11 +340,15 @@ class TestSendConfirmationNotificationsRenderedOutput(TestCase):
         SubmissionsService.send_confirmation_notifications(sub)
         self.assertEqual(len(send.mock_calls), 2)
         sms_body, email_body = get_notification_bodies(send)
-        print(sms_body)
-        print(email_body)
+        self.assertIn("O‘Duinn County", sms_body)
+        self.assertIn("O‘Duinn County", email_body)
+        self.assertIn(orgs[1].short_confirmation_message, sms_body)
+        self.assertIn(orgs[1].long_confirmation_message, email_body)
+        self.assertIn("we'll contact you in the next week", sms_body)
+        self.assertIn("We will contact you in the next week", email_body)
 
     @patch('intake.notifications.SimpleFrontNotification.send')
-    def test_notifications_with_both_partner_and_unlisted_counties(self, send):
+    def test_notifications_with_only_partner_counties(self, send):
         orgs = [Organization.objects.get(slug='cc_pubdef')]
         sub = factories.FormSubmissionWithOrgsFactory(
             organizations=orgs,
@@ -354,15 +357,14 @@ class TestSendConfirmationNotificationsRenderedOutput(TestCase):
         SubmissionsService.send_confirmation_notifications(sub)
         self.assertEqual(len(send.mock_calls), 2)
         sms_body, email_body = get_notification_bodies(send)
-        print(sms_body)
-        print(email_body)
+        self.assertIn(orgs[0].short_confirmation_message, sms_body)
+        self.assertIn(orgs[0].long_confirmation_message, email_body)
+        self.assertNotIn("we'll contact you in the next week", sms_body)
+        self.assertNotIn("We will contact you in the next week", email_body)
 
 
 class TestSendToNewappsBundleIfNeeded(TestCase):
-    fixtures = [
-        'counties',
-        'organizations'
-    ]
+    fixtures = ['counties', 'organizations']
 
     @patch('intake.tasks.add_application_pdfs')
     def test_calls_task_if_sf_in_sub(self, add_application_pdfs):
