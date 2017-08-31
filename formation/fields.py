@@ -505,6 +505,12 @@ class OwesCourtFees(YesNoIDontKnowField):
     flip_display_choice_order = True
 
 
+class BeenToPrison(YesNoIDontKnowField):
+    context_key = "has_been_to_prison"
+    label = _("Have you been to prison?")
+    flip_display_choice_order = True
+
+
 ###
 # Financial Questions
 ###
@@ -686,6 +692,7 @@ INTAKE_FIELDS = [
     IsStudent,
     BeingCharged,
     ServingSentence,
+    BeenToPrison,
     OnProbationParole,
     WhereProbationParole,
     WhenProbationParole,
