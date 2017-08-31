@@ -17,7 +17,6 @@ from taggit.models import Tag
 from intake import models, constants, services
 from intake.constants import PACIFIC_TIME
 from intake.tests import mock_user_agents, mock_referrers, factories
-from intake.services import bundles as BundlesService
 from user_accounts.models import Organization
 from user_accounts.tests.mock import create_seed_users
 from unittest.mock import Mock
@@ -293,6 +292,7 @@ def make_two_mock_transfers():
 
 
 def build_seed_submissions():
+    from intake.services import bundles as BundlesService
     subs = []
     orgs = Organization.objects.filter(is_receiving_agency=True)
     for org in orgs:

@@ -43,7 +43,7 @@ class DateReceived(DateTimeField):
 
 class Counties(MultipleChoiceField):
     context_key = "counties"
-    choices = County.objects.values_list('slug', 'description')
+    choices = County.objects.get_county_choices()
     label = _('Where were you arrested or convicted?')
     help_text = _(
         "We will send your Clear My Record application to agencies in these "

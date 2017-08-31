@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 import user_accounts
 from user_accounts import exceptions
 import uuid
-import intake.services.events_service as EventsService
 
 
 class UserProfile(models.Model):
@@ -57,13 +56,6 @@ class UserProfile(models.Model):
         profile.save()
         user.groups.add(*invitation.groups.all())
         return profile
-
-    def get_submission_display_form(self):
-        """Returns a form class appropriate for displaying
-        submission data to this user.
-        For now, this is based on the default form for the organization
-        """
-        return self.organization.get_display_form()
 
     def should_see_pdf(self):
         """This should be based on whether or not this user's org has a pdf

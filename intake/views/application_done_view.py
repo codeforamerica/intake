@@ -45,7 +45,7 @@ class RAPSheetInstructionsView(TemplateView):
             if submission:
                 context['organizations'] = submission.organizations.not_cfa()
                 context['qualifies_for_fee_waiver'] = \
-                    submission.qualifies_for_fee_waiver()
+                    SubmissionsService.qualifies_for_fee_waiver(submission)
             clear_form_session_data(self.request)
         return context
 

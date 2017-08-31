@@ -6,7 +6,8 @@ from intake.tests import mock, factories
 from intake.tests.mock_org_answers import get_answers_for_orgs
 from intake.tests.base_testcases import ExternalNotificationsPatchTestCase
 from formation.forms import county_form_selector
-from intake.constants import EMAIL, SMS
+from formation.field_types import YES, NO
+from intake.constants import EMAIL, SMS, FEE_WAIVER_LEVELS
 from intake.models import County, FormSubmission
 from intake import models
 from user_accounts.models import Organization
@@ -384,3 +385,33 @@ class TestSendToNewappsBundleIfNeeded(TestCase):
             organizations=[a_pubdef])
         SubmissionsService.send_to_newapps_bundle_if_needed(sub, [a_pubdef])
         add_application_pdfs.delay.assert_not_called()
+
+
+class TestQualifiesForFeeWaiver(TestCase):
+    fixtures = ['counties', 'organizations']
+
+    def test_qualifies_for_fee_waiver_with_public_benefits(self):
+        sub = models.FormSubmission(
+            answers=mock.fake.ebclc_answers(on_public_benefits=YES))
+        self.assertEqual(
+            SubmissionsService.qualifies_for_fee_waiver(sub), True)
+
+    def test_qualifies_for_fee_waiver_with_no_income(self):
+        sub = models.FormSubmission(
+            answers=mock.fake.ebclc_answers(
+                household_size=0,
+                monthly_income=0))
+        self.assertTrue(SubmissionsService.qualifies_for_fee_waiver(sub))
+
+    def test_doesnt_qualify_for_fee_waiver_with_income_and_no_benefits(self):
+        sub = models.FormSubmission(
+            answers=mock.fake.ebclc_answers(
+                on_public_benefits=NO, household_size=11))
+        sub.answers['monthly_income'] = (FEE_WAIVER_LEVELS[12] / 12) + 1
+        self.assertEqual(
+            SubmissionsService.qualifies_for_fee_waiver(sub), False)
+
+    def test_doesnt_qualify_for_fee_waiver_without_valid_inputs(self):
+        sub = models.FormSubmission(answers={})
+        self.assertEqual(
+            SubmissionsService.qualifies_for_fee_waiver(sub), None)

@@ -1,3 +1,4 @@
+from django.test import TestCase
 from formation.tests.utils import PatchTranslationTestCase
 
 from formation import fields
@@ -40,3 +41,20 @@ class TestMonthlyIncomeField(PatchTranslationTestCase):
         field = fields.MonthlyIncome(data)
         field.is_valid()
         self.assertFalse(field.warnings)
+
+
+class TestCounties(TestCase):
+
+    fixtures = ['counties']
+
+    def test_ordering_of_county_choices(self):
+        field = fields.Counties()
+        choice_count = len(field.choices)
+        for i, choice in enumerate(field.choices):
+            slug, description = choice
+            if i == (choice_count - 1):
+                with self.subTest(choice=choice):
+                    self.assertEqual(slug, 'not_listed')
+            else:
+                with self.subTest(choice=choice):
+                    self.assertTrue(slug != 'not_listed')
