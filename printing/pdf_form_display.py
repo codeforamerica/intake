@@ -95,8 +95,8 @@ class PDFFormDisplay:
             'reduced_probation',
         ],
         ['being_charged'],
-        ['has_been_to_prison'],
         ['serving_sentence'],
+        ['has_been_to_prison'],
         [
             'rap_outside_sf',
             'when_where_outside_sf'
