@@ -71,13 +71,14 @@
         {{ form.reduced_probation_display }}
       {%- endif %}
     </div>
-    {%- if 'being_charged' in form.fields %}
     <div class="data_display-stack">
-        {{ form.being_charged_display }}
+      {{ form.being_charged_display }}
     </div>
-    {%- endif %}
     <div class="data_display-stack">
       {{ form.serving_sentence_display }}
+    </div>
+    <div class="data_display-stack">
+      {{ form.has_been_to_prison }}
     </div>
     {%- if 'rap_outside_sf' in form.fields %}
     <div class="data_display-stack external_rap">
