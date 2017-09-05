@@ -1,7 +1,8 @@
 from formation.exceptions import NoChoicesGivenError
 from django.core.exceptions import ValidationError
-from django.core.validators import (RegexValidator, MinValueValidator,
-    MaxValueValidator)
+from django.core.validators import (RegexValidator,
+                                    MinValueValidator,
+                                    MaxValueValidator)
 
 from django.utils.translation import ugettext_lazy as _
 from project.jinja2 import oxford_comma

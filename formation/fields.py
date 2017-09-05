@@ -205,7 +205,8 @@ class Day(IntegerField):
 class Year(IntegerField):
     context_key = "year"
     label = _("Year")
-    validators = [MinValueValidator(1900), MaxValueValidator(timezone.now().year)]
+    validators = [MinValueValidator(1900),
+                  MaxValueValidator(timezone.now().year)]
 
 
 class DateOfBirthField(MultiValueField):
