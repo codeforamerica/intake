@@ -256,3 +256,9 @@ def get_unopened_submissions_for_org(organization):
         'id', flat=True)
     return organization.submissions.filter(
         applications__id__in=unopened_app_ids)
+
+
+def get_all_cnl_submissions(page_index):
+    query = get_submissions_for_staff_user().filter(organizations__slug='cfa')
+    serializer = serializers.FormSubmissionFollowupListSerializer
+    return pagination.get_serialized_page(query, serializer, page_index)
