@@ -77,7 +77,7 @@ def get_tabs_for_org_user(organization, active_tab):
     return tabs, active_tab_count
 
 
-def get_tabs_for_staff_user():
+def get_tabs_for_staff_user(active_tab):
     tabs = [
         {
             'url': reverse('intake-app_all_index'),
@@ -86,7 +86,7 @@ def get_tabs_for_staff_user():
             'is_active': False},
         {
             'url': reverse('intake-app_cnl_index'),
-            'label': 'County-Not-Listed Applications',
+            'label': 'County-Not-Listed',
             'count': models.FormSubmission.objects.filter(
                 organizations__slug='cfa').count(),
             'is_active': False}
@@ -119,7 +119,8 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
             context['results'] = \
                 SubmissionsService.get_submissions_for_followups(
                     self.request.GET.get('page'))
-            context['app_index_tabs'] = get_tabs_for_staff_user()
+            context['app_index_tabs'], count = get_tabs_for_staff_user(
+                "All Applications")
             context['app_index_scope_title'] = "All Applications"
         else:
             context['results'] = \
@@ -187,12 +188,19 @@ class ApplicationNeedsUpdateIndex(ApplicationUnreadIndex):
 
 
 class ApplicationCountyNotListedIndex(ApplicationIndex):
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['results'] = SubmissionsService.get_all_cnl_submissions(
-            self.request.GET.get('page'))
-        context['app_index_tabs'], count = get_tabs_for_org_user(
-            self.request.user.profile.organization, 'All')
+        is_staff = self.request.user.is_staff
+        if is_staff:
+            context['results'] = SubmissionsService.get_all_cnl_submissions(
+                self.request.GET.get('page'))
+            context['app_index_tabs'], count = get_tabs_for_staff_user(
+                "County-Not-Listed")
+        else:
+            context['app_index_tabs'], count = get_tabs_for_org_user(
+                self.request.user.profile.organization,
+                'County-Not-Listed')
         if count == 0:
             context['no_results'] = "There are no CNL applications!"
         else:
