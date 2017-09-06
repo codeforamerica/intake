@@ -40,3 +40,30 @@ class TestMonthlyIncomeField(PatchTranslationTestCase):
         field = fields.MonthlyIncome(data)
         field.is_valid()
         self.assertFalse(field.warnings)
+
+
+class TestMonth(PatchTranslationTestCase):
+
+    def test_incorrect_month_number_is_invalid(self):
+        data = {'month': 40}
+        field = fields.Month(data)
+        field.is_valid()
+        self.assertTrue(field.errors)
+
+
+class TestDay(PatchTranslationTestCase):
+
+    def test_incorrect_day_number_is_invalid(self):
+        data = {'day': 102}
+        field = fields.Day(data)
+        field.is_valid()
+        self.assertTrue(field.errors)
+
+
+class TestYear(PatchTranslationTestCase):
+
+    def test_incorrect_year_number_is_invalid(self):
+        data = {'year': 87}
+        field = fields.Year(data)
+        field.is_valid()
+        self.assertTrue(field.errors)
