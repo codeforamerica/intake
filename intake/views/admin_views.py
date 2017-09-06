@@ -119,9 +119,9 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
             context['results'] = \
                 SubmissionsService.get_submissions_for_followups(
                     self.request.GET.get('page'))
-            context['app_index_tabs'], count = get_tabs_for_staff_user(
-                "All Applications")
-            context['app_index_scope_title'] = "All Applications"
+            context['app_index_tabs'] = get_tabs_for_staff_user(
+                'All Applications')
+            context['app_index_scope_title'] = 'Applications'
         else:
             context['results'] = \
                 AppsService.get_all_applications_for_org_user(
@@ -131,7 +131,7 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
             context['app_index_scope_title'] = "All Applications To {}".format(
                 self.request.user.profile.organization.name)
             if count == 0:
-                context['no_results'] = "You have no applications."
+                context['no_results'] = 'You have no applications.'
         context['page_counter'] = \
             utils.get_page_navigation_counter(
                 page=context['results'],
@@ -196,7 +196,7 @@ class ApplicationCountyNotListedIndex(ApplicationIndex):
             context['results'] = SubmissionsService.get_all_cnl_submissions(
                 self.request.GET.get('page'))
             context['app_index_tabs'], count = get_tabs_for_staff_user(
-                "County-Not-Listed")
+                'County-Not-Listed')
         else:
             context['app_index_tabs'], count = get_tabs_for_org_user(
                 self.request.user.profile.organization,

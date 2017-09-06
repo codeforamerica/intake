@@ -415,3 +415,20 @@ class TestQualifiesForFeeWaiver(TestCase):
         sub = models.FormSubmission(answers={})
         self.assertEqual(
             SubmissionsService.qualifies_for_fee_waiver(sub), None)
+
+
+class TestGetAllCnlSubmissions(TestCase):
+
+    def test_gets_all_cnl_submissions(self):
+        cfa = Organization.objects.get(
+            slug='cfa')
+        sf_pubdef = Organization.objects.get(
+            slug='sf_pubdef')
+        cnl_sub1 = factories.FormSubmissionWithOrgsFactory(
+            organizations=[cfa])
+        cnl_sub2 = factories.FormSubmissionWithOrgsFactory(
+            organizations=[cfa])
+        other_sub = factories.FormSubmissionWithOrgsFactory(
+            organizations=[sf_pubdef])
+        cnl_subs = SubmissionsService.get_all_cnl_submissions(0)
+        self.assertEqual(len(cnl_subs.object_list), 2)
