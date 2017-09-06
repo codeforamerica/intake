@@ -51,8 +51,7 @@ class TestBuildBundledPdfIfNecessary(TestCase):
 
         # set up mocks
         should_have_a_pdf = Mock(return_value=True)
-        get_individual_filled_pdfs = Mock(
-            return_value=[filled])
+        get_individual_filled_pdfs = Mock(return_value=[filled])
         bundle.should_have_a_pdf = should_have_a_pdf
         bundle.get_individual_filled_pdfs = get_individual_filled_pdfs
 
@@ -122,8 +121,7 @@ class TestBuildBundledPdfIfNecessary(TestCase):
     @patch('intake.services.bundles.get_parser')
     @patch('intake.services.bundles.logger')
     def test_build_bundled_pdfs_if_some_are_not_prefilled(
-            self, logger, get_parser, SimpleUploadedFile, slack,
-            SubService):
+            self, logger, get_parser, SimpleUploadedFile, slack, SubService):
         # two submissions
         get_parser.return_value.join_pdfs.return_value = b'pdf'
         mock_submissions = [Mock(), Mock()]

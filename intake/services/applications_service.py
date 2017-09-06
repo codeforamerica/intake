@@ -1,5 +1,5 @@
 from django.db.models import Q
-from intake import models, serializers, notifications, tasks
+from intake import models, serializers, notifications, tasks, constants
 from intake.services import events_service as EventsService
 from . import pagination
 
@@ -177,3 +177,9 @@ def get_needs_update_apps_per_org_count(organization):
 def get_all_apps_per_org_count(organization):
     return models.Application.objects.filter(
         organization=organization).count()
+
+
+def get_all_unhandled_cnl_apps():
+    return models.Application.objects.filter(
+        organization__slug='cfa').exclude(
+        form_submission__tags__name=constants.COUNTY_NOT_LISTED_HANDLED_TAG)

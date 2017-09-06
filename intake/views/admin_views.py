@@ -175,6 +175,10 @@ class ApplicationNeedsUpdateIndex(ApplicationUnreadIndex):
         return context
 
 
+class ApplicationCountyNotListedIndex(ApplicationIndex):
+    pass
+
+
 class MultiSubmissionMixin:
     """A mixin for pulling multiple submission ids
     out of request query params.
@@ -374,3 +378,4 @@ mark_processed = MarkProcessed.as_view()
 app_bundle_detail = ApplicationBundleDetail.as_view()
 app_bundle_detail_pdf = ApplicationBundleDetailPDFView.as_view()
 case_bundle_printout = CaseBundlePrintoutPDFView.as_view()
+app_cnl_index = ApplicationCountyNotListedIndex.as_view()

@@ -37,7 +37,7 @@ Feature: Applicants can apply for help in counties where we don't have partners
        And it is a weekday
       Then the app should send a slack notification about new CNL apps
       When I click on the link in the slack message about new CNL apps
-      Then it should load "/applications/not_listed"
+      Then it should load "/applications/county_not_listed"
        And I should see "5" in the active tab
       When I add a note on the first application that says
         """

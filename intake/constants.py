@@ -13,6 +13,8 @@ EMAIL = 'email'
 VOICEMAIL = 'voicemail'
 SNAILMAIL = 'snailmail'
 
+COUNTY_NOT_LISTED_HANDLED_TAG = 'cnl_done'
+
 CONTACT_METHOD_CHOICES = (
     (VOICEMAIL, _(VOICEMAIL)),
     (SMS, _('text message')),

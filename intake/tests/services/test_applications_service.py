@@ -180,3 +180,9 @@ class TestHandleAppsOpened(TestCase):
             sub.applications.all(), False)
         remove_application_pdfs.delay.assert_called_with(
             sub.applications.first().id)
+
+
+class TestGetAllUnhandledCnlApps(TestCase):
+
+    def test_get_all_unhandled_cnl_apps(self):
+        self.assertTrue(False)  # TODO: Fixme ++ungood
