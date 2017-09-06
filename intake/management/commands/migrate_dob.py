@@ -15,9 +15,10 @@ class Command(BaseCommand):
             if not sub.dob:
                 try:
                     dob_obj = sub.answers['dob']
-                    parsed_dob = parse(
-                        dob_obj['year']+'-'+dob_obj['month']+'-'+dob_obj['day']
-                    )
+                    parsed_dob = parse(("{year}-{month}-{day}").format(
+                        year=dob_obj['year'],
+                        month=dob_obj['month'],
+                        day=dob_obj['day']))
                     sub.dob = parsed_dob
                     sub.save(update_fields=['dob'])
                     migrated += 1

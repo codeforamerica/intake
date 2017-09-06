@@ -211,10 +211,13 @@ class FormSubmission(models.Model):
         return intake.utils.local_time(
             self.date_received, fmt, timezone_name)
 
-    def get_dob(self):
-        dob_obj = self.answers['dob']
-        return parse(
-            dob_obj['year']+'-'+dob_obj['month']+'-'+dob_obj['day'])
+    def set_dob_from_answers(self):
+        dob_obj = self.answers.get('dob')
+        if dob_obj:
+            self.dob = parse(
+                ("{year}-{month}-{day}").format(year=dob_obj['year'],
+                                                month=dob_obj['month'],
+                                                day=dob_obj['day']))
 
     def get_contact_preferences(self):
         if 'contact_preferences' in self.answers:

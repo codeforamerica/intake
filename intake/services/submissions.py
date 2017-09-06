@@ -30,6 +30,7 @@ def create_submission(form, organizations, applicant_id):
         if existing:
             setattr(submission, key, existing)
     address = submission.answers['address']
+    submission.set_dob_from_answers()
     for component in address:
         existing = address.get(component, None)
         if existing:

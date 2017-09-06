@@ -33,11 +33,12 @@ class TestFormSubmission(TestCase):
         counties_from_sub = submission.get_counties().order_by('slug').all()
         self.assertListEqual(list(counties), list(counties_from_sub))
 
-    def test_get_dob(self):
+    def test_set_dob_from_answers(self):
         submission = self.get_a_sample_sub()
-        dob = datetime(1969, 1, 30, 0, 0)
-        dob_from_sub = submission.get_dob()
-        self.assertEqual(dob, dob_from_sub)
+        submission.answers['dob'] = {'year': 1987, 'month': 10, 'day': 23}
+        dob = datetime(1987, 10, 23, 0, 0)
+        submission.set_dob_from_answers()
+        self.assertEqual(dob, submission.dob)
 
     def test_get_permitted_submissions_when_permitted(self):
         cc_pubdef = auth_models.Organization.objects.get(
