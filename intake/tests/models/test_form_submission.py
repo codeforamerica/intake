@@ -40,6 +40,12 @@ class TestFormSubmission(TestCase):
         submission.set_dob_from_answers()
         self.assertEqual(dob, submission.dob)
 
+    def test_set_dob_from_answers_with_none_value(self):
+        submission = self.get_a_sample_sub()
+        submission.answers['dob'] = {'year': None, 'month': 10, 'day': 23}
+        submission.set_dob_from_answers()
+        self.assertEqual(None, submission.dob)
+
     def test_get_permitted_submissions_when_permitted(self):
         cc_pubdef = auth_models.Organization.objects.get(
             slug=constants.Organizations.COCO_PUBDEF)

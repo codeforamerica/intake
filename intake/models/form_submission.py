@@ -214,10 +214,13 @@ class FormSubmission(models.Model):
     def set_dob_from_answers(self):
         dob_obj = self.answers.get('dob')
         if dob_obj:
-            self.dob = parse(
-                ("{year}-{month}-{day}").format(year=dob_obj['year'],
-                                                month=dob_obj['month'],
-                                                day=dob_obj['day']))
+            all_values_present = all([
+                dob_obj.get(key) for key in ['year', 'month', 'day']])
+            if all_values_present:
+                self.dob = parse(
+                    ("{year}-{month}-{day}").format(year=dob_obj['year'],
+                                                    month=dob_obj['month'],
+                                                    day=dob_obj['day']))
 
     def get_contact_preferences(self):
         if 'contact_preferences' in self.answers:
