@@ -34,3 +34,5 @@ https://github.com/rossettistone/django-easy-audit/archive/patched.tar.gz
 fake-factory==0.7.2
 factory-boy~=2.7
 django-url-robots==2.0
+
+awscli~=1.11
