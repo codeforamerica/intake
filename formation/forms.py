@@ -40,7 +40,6 @@ class NotListedFormSpec(CombinableCountyFormSpec):
     fields = {
         F.UnlistedCountyNote,
         F.UnlistedCounties,
-        F.ContactPreferences,
         F.FirstName,
         F.LastName,
         F.PhoneNumberField,
@@ -50,7 +49,6 @@ class NotListedFormSpec(CombinableCountyFormSpec):
     }
     required_fields = {
         F.UnlistedCounties,
-        F.ContactPreferences,
         F.FirstName
     }
     optional_fields = {
@@ -58,7 +56,6 @@ class NotListedFormSpec(CombinableCountyFormSpec):
         F.AdditionalInformation
     }
     validators = [
-        gave_preferred_contact_methods,
         at_least_email_or_phone
     ]
 

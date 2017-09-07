@@ -237,7 +237,7 @@ class TestApplicationIndex(IntakeDataTestCase):
         random_new_subs_count = randint(5, 20)
         for i in range(random_new_subs_count):
             FormSubmissionFactory.create()
-        with self.assertNumQueries(21):
+        with self.assertNumQueries(22):
             self.client.get(reverse('intake-app_all_index'))
 
     def test_that_org_user_can_only_see_apps_to_own_org(self):

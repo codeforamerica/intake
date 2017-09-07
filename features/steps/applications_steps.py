@@ -174,4 +174,3 @@ def print_all_button_not_visible(context):
     selector = "a.print-all"
     with context.test.assertRaises(NoSuchElementException):
         element = context.browser.find_element_by_css_selector(selector)
-

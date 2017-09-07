@@ -55,8 +55,8 @@ class UnlistedCountyNote(FormNote):
     context_key = "unlisted_county_note"
     content = mark_safe("""
     <p>
-        For counties where we don't yet have official partners,
-        we'll send you details on how get started there.
+        In counties where we don't have official partners, we will send you
+        information on how to get started.
     </p>
     """)
 

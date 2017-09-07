@@ -185,4 +185,12 @@ class TestHandleAppsOpened(TestCase):
 class TestGetAllUnhandledCnlApps(TestCase):
 
     def test_get_all_unhandled_cnl_apps(self):
-        self.assertTrue(False)  # TODO: Fixme ++ungood
+        apps = factories.make_apps_for('cfa', count=3)
+        unexpected_apps = factories.make_apps_for('cc_pubdef', count=2)
+        results = list(AppsService.get_all_unhandled_cnl_apps())
+        for app in apps:
+            with self.subTest(app=app):
+                self.assertIn(app, results)
+        for app in unexpected_apps:
+            with self.subTest(app=app):
+                self.assertNotIn(app, results)
