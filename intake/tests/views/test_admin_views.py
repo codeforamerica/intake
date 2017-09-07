@@ -3,15 +3,18 @@ from unittest import skipUnless
 from unittest.mock import patch
 from random import randint
 
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase
 
 from bs4 import BeautifulSoup
 
 from intake import models
 from intake.tests.base_testcases import IntakeDataTestCase, DELUXE_TEST
 from intake.tests.factories import FormSubmissionFactory
+from user_accounts.tests.factories import followup_user, app_reviewer
 from project.services.query_params import get_url_for_ids
 import intake.services.bundles as BundlesService
 from project.tests.assertions import assertInLogsCount
@@ -349,6 +352,34 @@ class TestApplicationIndex(IntakeDataTestCase):
 
     def test_needs_updates_results_show_correct_count_in_tab(self):
         pass
+
+
+class TestApplicationCountyNotListedIndex(TestCase):
+    fixtures = ['counties', 'organizations', 'groups']
+
+    def test_anon_user_is_redirected_to_login(self):
+        response = self.client.get(reverse('intake-app_cnl_index'))
+        self.assertRedirects(
+            response,
+            '{}?next={}'.format(
+                reverse('user_accounts-login'),
+                reverse('intake-app_cnl_index')))
+
+    def test_followup_user_can_access(self):
+        profile = followup_user()
+        self.client.login(
+            username=profile.user.username,
+            password=settings.TEST_USER_PASSWORD)
+        response = self.client.get(reverse('intake-app_cnl_index'))
+        self.assertEqual(200, response.status_code)
+
+    def test_org_user_is_redirected_to_profile(self):
+        profile = app_reviewer()
+        self.client.login(
+            username=profile.user.username,
+            password=settings.TEST_USER_PASSWORD)
+        response = self.client.get(reverse('intake-app_cnl_index'))
+        self.assertRedirects(response, reverse('user_accounts-profile'))
 
 
 class TestApplicationBundleDetail(IntakeDataTestCase):

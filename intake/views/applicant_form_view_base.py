@@ -60,8 +60,7 @@ class ApplicantFormViewBase(FormView):
         self.counties = models.County.objects.order_by_name_or_not_listed(
             ).filter(slug__in=self.county_slugs)
         self.formatted_county_names = [
-            county.name + " County" for county in self.counties
-            if county.slug != 'not_listed']
+            county.name for county in self.counties]
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, *args, **kwargs):

@@ -119,7 +119,7 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
             context['results'] = \
                 SubmissionsService.get_submissions_for_followups(
                     self.request.GET.get('page'))
-            context['app_index_tabs'] = get_tabs_for_staff_user(
+            context['app_index_tabs'], count = get_tabs_for_staff_user(
                 'All Applications')
             context['app_index_scope_title'] = 'Applications'
         else:
@@ -188,6 +188,12 @@ class ApplicationNeedsUpdateIndex(ApplicationUnreadIndex):
 
 
 class ApplicationCountyNotListedIndex(ApplicationIndex):
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            return not_allowed(request)
+        else:
+            return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
