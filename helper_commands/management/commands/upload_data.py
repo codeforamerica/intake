@@ -11,12 +11,23 @@ class Command(BaseCommand):
         "Dumps database and uploads to s3")
 
     def handle(self, *args, **kwargs):
+        """Dumps a single full-database fixture to an S3 bucket for later use
+        by ./manage.py download_data
+        """
+        # Relevant settings:
+        #     SYNC_BUCKET - bucket to dump fixture to
+        #     SYNC_FIXTURE_LOCATION - filename used for fixture
+
+        # open local tempfile for writing
         with open(settings.SYNC_FIXTURE_LOCATION, 'w+') as f:
+            # dump database fixture to file
             management.call_command('dumpdata', stdout=f)
+        # args for uploading fixture to S3 bucket
         upload_command = [
             settings.AWS_CLI_LOCATION,
             's3', 'mv',
-            settings.SYNC_FIXTURE_LOCATION,
-            's3://%s' % settings.SYNC_BUCKET,
+            settings.SYNC_FIXTURE_LOCATION,  # local filename
+            's3://%s' % settings.SYNC_BUCKET,  # bucket to upload to
         ]
+        # run upload to bucket command using aws env vars
         aws_open(upload_command)
