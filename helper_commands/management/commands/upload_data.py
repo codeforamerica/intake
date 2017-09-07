@@ -2,6 +2,7 @@ from subprocess import Popen
 from django.core import management
 from django.core.management.base import BaseCommand
 from django.conf import settings
+from .utils import aws_open
 
 
 class Command(BaseCommand):
@@ -18,7 +19,4 @@ class Command(BaseCommand):
             settings.SYNC_FIXTURE_LOCATION,
             's3://%s' % settings.SYNC_BUCKET,
         ]
-        Popen(upload_command, env={
-            "AWS_ACCESS_KEY_ID": settings.SYNC_AWS_ID,
-            "AWS_SECRET_ACCESS_KEY": settings.SYNC_AWS_KEY,
-        })
+        aws_open(upload_command)
