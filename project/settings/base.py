@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'clips',
     'easyaudit',
     'access_audit',
+    'helper_commands',
 ]
 
 MIDDLEWARE = [

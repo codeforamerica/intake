@@ -601,7 +601,12 @@ class YoloCountyFormSpec(SonomaCountyFormSpec):
 
 class StanislausCountyFormSpec(FresnoCountyFormSpec):
     county = 'stanislaus'
-    fields = FresnoCountyFormSpec.fields - {
+    fields = (FresnoCountyFormSpec.fields | {
+        F.BeenToPrison,
+        F.RAPOutsideSF,
+        F.WhenWhereOutsideSF,
+        F.OwesCourtFees,
+    }) - {
         F.DriverLicenseOrIDNumber,
         F.LastFourOfSocial,
         F.CaseNumber,
@@ -743,3 +748,10 @@ ORG_FORM_SPECS = [
 display_form_selector = FormSpecSelector(DISPLAY_FORM_SPECS, DisplayForm)
 county_form_selector = FormSpecSelector(INPUT_FORM_SPECS, Form)
 organization_form_selector = FormSpecSelector(ORG_FORM_SPECS, Form)
+
+
+def print_all_fields_for_county(county_slug):
+    form_class = county_form_selector.get_combined_form_class(
+        counties=[county_slug])
+    for field in form_class.fields:
+        print(field.context_key)

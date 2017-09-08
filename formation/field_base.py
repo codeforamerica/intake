@@ -29,6 +29,7 @@ class Field(base.BindParseValidate):
         """Sets the `required` attribute for this field.
         """
         super().__init__(*args, **kwargs)
+        self.raw_input_value = base.UNSET
         self.form = form
         self.required = required
         self.recommended = recommended
