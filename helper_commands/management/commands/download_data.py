@@ -33,7 +33,7 @@ class Command(BaseCommand):
         if not settings.ORIGIN_MEDIA_BUCKET_FOR_SYNC:
             raise Exception(
                 "Warning: ORIGIN_MEDIA_BUCKET_FOR_SYNC not set."
-                "Its likely this is production.  This Error has protected you.")
+                "Its likely this is production. This Error has protected you.")
         sync_s3 = [
             settings.AWS_CLI_LOCATION,
             's3', 'sync',
