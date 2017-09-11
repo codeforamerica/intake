@@ -6,11 +6,10 @@ from intake.tests import mock, factories
 from intake.tests.mock_org_answers import get_answers_for_orgs
 from intake.tests.base_testcases import ExternalNotificationsPatchTestCase
 from formation.forms import county_form_selector
-from intake.constants import (
-    COUNTY_CHOICE_DISPLAY_DICT, Organizations,
-    EMAIL, SMS)
-from intake.models import FormSubmission
-from intake import constants, models
+from formation.field_types import YES, NO
+from intake.constants import EMAIL, SMS, FEE_WAIVER_LEVELS
+from intake.models import County, FormSubmission
+from intake import models
 from user_accounts.models import Organization
 from project.tests.assertions import assertInLogsCount
 
@@ -20,7 +19,7 @@ file.
 """
 
 
-ALL_COUNTY_SLUGS = list(COUNTY_CHOICE_DISPLAY_DICT.keys())
+ALL_COUNTY_SLUGS = County.objects.values_list('slug', flat=True)
 
 
 class TestCreateSubmissions(TestCase):
@@ -76,7 +75,7 @@ class TestGetPermittedSubmissions(TestCase):
         # assert that they only receive submissions for their org
 
         # given a user from one org
-        org = Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)
+        org = Organization.objects.get(slug='a_pubdef')
         user = org.profiles.first().user
         # who requests all submissions
         submissions = list(SubmissionsService.get_permitted_submissions(user))
@@ -100,23 +99,23 @@ class TestHaveSameOrgs(TestCase):
 
     def test_returns_false_when_orgs_are_different(self):
         a = FormSubmission.objects.filter(
-            organizations__slug=Organizations.ALAMEDA_PUBDEF).first()
+            organizations__slug='a_pubdef').first()
         b = FormSubmission.objects.filter(
-            organizations__slug=Organizations.COCO_PUBDEF).first()
+            organizations__slug='cc_pubdef').first()
         self.assertEqual(SubmissionsService.have_same_orgs(a, b), False)
 
     def test_returns_true_when_orgs_are_the_same(self):
         subs = FormSubmission.objects.filter(
-            organizations__slug=Organizations.ALAMEDA_PUBDEF)
+            organizations__slug='a_pubdef')
         a, b = list(subs)[:2]
         self.assertEqual(SubmissionsService.have_same_orgs(a, b), True)
 
     def test_returns_false_when_orgs_dont_overlap(self):
         a = FormSubmission.objects.filter(
-            organizations__slug=Organizations.ALAMEDA_PUBDEF).first()
+            organizations__slug='a_pubdef').first()
         b = FormSubmission.objects.filter(
-            organizations__slug=Organizations.COCO_PUBDEF).first()
-        cc_pubdef = Organization.objects.get(slug=Organizations.COCO_PUBDEF)
+            organizations__slug='cc_pubdef').first()
+        cc_pubdef = Organization.objects.get(slug='cc_pubdef')
         a.organizations.add_orgs_to_sub(cc_pubdef)
         self.assertEqual(SubmissionsService.have_same_orgs(a, b), False)
 
@@ -128,7 +127,7 @@ class TestFindDuplicates(TestCase):
     ]
 
     def test_finds_subs_with_similar_names(self):
-        org = Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)
+        org = Organization.objects.get(slug='a_pubdef')
         a_name = dict(
             first_name="Joe",
             middle_name="H",
@@ -162,7 +161,7 @@ class TestFindDuplicates(TestCase):
             self.assertIn(sub, pair)
 
     def test_doesnt_pair_subs_with_differing_names(self):
-        org = Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)
+        org = Organization.objects.get(slug='a_pubdef')
         a_name = dict(
             first_name="Joe",
             middle_name="H",
@@ -230,7 +229,7 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
     ]
 
     def get_orgs(self):
-        return [Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)]
+        return [Organization.objects.get(slug='a_pubdef')]
 
     def test_notifications_slacks_and_logs_for_full_contact_preferences(self):
         applicant = factories.ApplicantFactory()
@@ -238,9 +237,7 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
             self.get_orgs(),
             contact_preferences=[
                 'prefers_email',
-                'prefers_sms',
-                'prefers_voicemail',
-                'prefers_snailmail'
+                'prefers_sms'
             ],
             email='test@gmail.com',
             phone_number='5554442222',
@@ -305,16 +302,75 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
         assertInLogsCount(logs, {'event_name=app_confirmation_sent': 1})
 
 
+def get_notification_bodies(patched_send):
+    email, sms = patched_send.mock_calls
+    stuff, sms_args, sms_kwargs = sms
+    stuff, email_args, email_kwargs = email
+    return sms_kwargs['body'], email_kwargs['body']
+
+
+class TestSendConfirmationNotificationsRenderedOutput(TestCase):
+    fixtures = ['counties', 'organizations']
+
+    @patch('intake.notifications.SimpleFrontNotification.send')
+    def test_notifications_with_only_unlisted_counties(self, send):
+        orgs = [Organization.objects.get(slug='cfa')]
+        sub = factories.FormSubmissionWithOrgsFactory(
+            organizations=orgs,
+            answers=get_answers_for_orgs(
+                orgs, unlisted_counties="O‘Duinn County",
+                contact_preferences=['prefers_email', 'prefers_sms']))
+        SubmissionsService.send_confirmation_notifications(sub)
+        self.assertEqual(len(send.mock_calls), 2)
+        sms_body, email_body = get_notification_bodies(send)
+        self.assertIn("O‘Duinn County", sms_body)
+        self.assertIn("O‘Duinn County", email_body)
+        self.assertIn("we'll contact you in the next week", sms_body)
+        self.assertIn("We will contact you in the next week", email_body)
+
+    @patch('intake.notifications.SimpleFrontNotification.send')
+    def test_notifications_with_both_partner_and_unlisted_counties(self, send):
+        orgs = [
+                Organization.objects.get(slug='cfa'),
+                Organization.objects.get(slug='cc_pubdef')]
+        sub = factories.FormSubmissionWithOrgsFactory(
+            organizations=orgs,
+            answers=get_answers_for_orgs(
+                orgs, unlisted_counties="O‘Duinn County",
+                contact_preferences=['prefers_email', 'prefers_sms']))
+        SubmissionsService.send_confirmation_notifications(sub)
+        self.assertEqual(len(send.mock_calls), 2)
+        sms_body, email_body = get_notification_bodies(send)
+        self.assertIn("O‘Duinn County", sms_body)
+        self.assertIn("O‘Duinn County", email_body)
+        self.assertIn(orgs[1].short_confirmation_message, sms_body)
+        self.assertIn(orgs[1].long_confirmation_message, email_body)
+        self.assertIn("we'll contact you in the next week", sms_body)
+        self.assertIn("We will contact you in the next week", email_body)
+
+    @patch('intake.notifications.SimpleFrontNotification.send')
+    def test_notifications_with_only_partner_counties(self, send):
+        orgs = [Organization.objects.get(slug='cc_pubdef')]
+        sub = factories.FormSubmissionWithOrgsFactory(
+            organizations=orgs,
+            answers=get_answers_for_orgs(
+                orgs, contact_preferences=['prefers_email', 'prefers_sms']))
+        SubmissionsService.send_confirmation_notifications(sub)
+        self.assertEqual(len(send.mock_calls), 2)
+        sms_body, email_body = get_notification_bodies(send)
+        self.assertIn(orgs[0].short_confirmation_message, sms_body)
+        self.assertIn(orgs[0].long_confirmation_message, email_body)
+        self.assertNotIn("we'll contact you in the next week", sms_body)
+        self.assertNotIn("We will contact you in the next week", email_body)
+
+
 class TestSendToNewappsBundleIfNeeded(TestCase):
-    fixtures = [
-        'counties',
-        'organizations'
-    ]
+    fixtures = ['counties', 'organizations']
 
     @patch('intake.tasks.add_application_pdfs')
     def test_calls_task_if_sf_in_sub(self, add_application_pdfs):
         sf_pubdef = Organization.objects.get(
-            slug=constants.Organizations.SF_PUBDEF)
+            slug='sf_pubdef')
         sub = factories.FormSubmissionWithOrgsFactory(
             organizations=[sf_pubdef])
         SubmissionsService.send_to_newapps_bundle_if_needed(sub, [sf_pubdef])
@@ -324,8 +380,55 @@ class TestSendToNewappsBundleIfNeeded(TestCase):
     @patch('intake.tasks.add_application_pdfs')
     def test_does_not_call_task_if_not_sf(self, add_application_pdfs):
         a_pubdef = Organization.objects.get(
-            slug=constants.Organizations.ALAMEDA_PUBDEF)
+            slug='a_pubdef')
         sub = factories.FormSubmissionWithOrgsFactory(
             organizations=[a_pubdef])
         SubmissionsService.send_to_newapps_bundle_if_needed(sub, [a_pubdef])
         add_application_pdfs.delay.assert_not_called()
+
+
+class TestQualifiesForFeeWaiver(TestCase):
+    fixtures = ['counties', 'organizations']
+
+    def test_qualifies_for_fee_waiver_with_public_benefits(self):
+        sub = models.FormSubmission(
+            answers=mock.fake.ebclc_answers(on_public_benefits=YES))
+        self.assertEqual(
+            SubmissionsService.qualifies_for_fee_waiver(sub), True)
+
+    def test_qualifies_for_fee_waiver_with_no_income(self):
+        sub = models.FormSubmission(
+            answers=mock.fake.ebclc_answers(
+                household_size=0,
+                monthly_income=0))
+        self.assertTrue(SubmissionsService.qualifies_for_fee_waiver(sub))
+
+    def test_doesnt_qualify_for_fee_waiver_with_income_and_no_benefits(self):
+        sub = models.FormSubmission(
+            answers=mock.fake.ebclc_answers(
+                on_public_benefits=NO, household_size=11))
+        sub.answers['monthly_income'] = (FEE_WAIVER_LEVELS[12] / 12) + 1
+        self.assertEqual(
+            SubmissionsService.qualifies_for_fee_waiver(sub), False)
+
+    def test_doesnt_qualify_for_fee_waiver_without_valid_inputs(self):
+        sub = models.FormSubmission(answers={})
+        self.assertEqual(
+            SubmissionsService.qualifies_for_fee_waiver(sub), None)
+
+
+class TestGetAllCnlSubmissions(TestCase):
+
+    def test_gets_all_cnl_submissions(self):
+        cfa = Organization.objects.get(
+            slug='cfa')
+        sf_pubdef = Organization.objects.get(
+            slug='sf_pubdef')
+        cnl_sub1 = factories.FormSubmissionWithOrgsFactory(
+            organizations=[cfa])
+        cnl_sub2 = factories.FormSubmissionWithOrgsFactory(
+            organizations=[cfa])
+        other_sub = factories.FormSubmissionWithOrgsFactory(
+            organizations=[sf_pubdef])
+        cnl_subs = SubmissionsService.get_all_cnl_submissions(0)
+        self.assertEqual(len(cnl_subs.object_list), 2)

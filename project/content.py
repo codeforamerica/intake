@@ -1,10 +1,10 @@
-from intake.constants import CountyNames
+ALL_COUNTIES_COPY = 'counties throughout California'
 
 
 class constants:
 
     topbar = "Clear My Record | Get help clearing your criminal record in {}"\
-        .format(CountyNames.ALL)
+        .format(ALL_COUNTIES_COPY)
     main_headline = "Clear My Record"
     subheadline = "Reduce or dismiss convictions on your criminal record"
     call_to_action_time = "Take the first step. Apply in 10 minutes."
@@ -14,7 +14,7 @@ class constants:
         "Clear My Record is a free, non-profit service from "
         "Code for America for people with a criminal record in {}. "
         "We are not a law firm and the information on this site is not "
-        "legal advice.").format(CountyNames.ALL)
+        "legal advice.").format(ALL_COUNTIES_COPY)
 
     benefits_headline = ("Clearing your criminal record could help you qualify"
                          " for jobs, housing, and educational opportunities.")
@@ -22,14 +22,14 @@ class constants:
 
     gov_service_name = ("Clear My Record sends applications to our official "
                         "partners in {}.").format(
-        CountyNames.ALL)
+        ALL_COUNTIES_COPY)
     gov_service_description_2 = (
         "Clear My Record is a free, online service made by Code for America. "
         "It is for people who have a criminal record in {}. It was made by "
         "Code for America, who works with government to make their services "
         "easier to use. Code for America is not a law firm and the information"
         " on this site is not legal advice.").format(
-        CountyNames.ALL)
+        ALL_COUNTIES_COPY)
 
     gov_service_description_1 = (
         "Applications to Clear My Record are sent to an organization in the "
