@@ -7,7 +7,7 @@ from django.test import TestCase
 
 from intake.tests import mock
 from user_accounts import models as auth_models
-from intake import models, constants
+from intake import models
 
 import intake.services.submissions as SubmissionsService
 import intake.services.bundles as BundlesService
@@ -21,8 +21,7 @@ class TestApplicationBundle(TestCase):
     fixtures = ['counties', 'organizations']
 
     def test_should_have_a_pdf_positive(self):
-        sf_pubdef = auth_models.Organization.objects.get(
-            slug=constants.Organizations.SF_PUBDEF)
+        sf_pubdef = auth_models.Organization.objects.get(slug='sf_pubdef')
         mock.fillable_pdf(organization=sf_pubdef)
         sub = SubmissionsService.create_for_organizations(
             [sf_pubdef], answers={})
@@ -32,7 +31,7 @@ class TestApplicationBundle(TestCase):
 
     def test_should_have_a_pdf_negative(self):
         cc_pubdef = auth_models.Organization.objects.get(
-            slug=constants.Organizations.COCO_PUBDEF)
+            slug='cc_pubdef')
         sub = SubmissionsService.create_for_organizations(
             [cc_pubdef], answers={})
         bundle = BundlesService.create_bundle_from_submissions(
@@ -40,8 +39,7 @@ class TestApplicationBundle(TestCase):
         self.assertFalse(bundle.should_have_a_pdf())
 
     def test_get_individual_filled_pdfs(self):
-        sf_pubdef = auth_models.Organization.objects.get(
-            slug=constants.Organizations.SF_PUBDEF)
+        sf_pubdef = auth_models.Organization.objects.get(slug='sf_pubdef')
         fillable = mock.fillable_pdf(organization=sf_pubdef)
         subs = [
             SubmissionsService.create_for_organizations(
@@ -69,8 +67,7 @@ class TestApplicationBundle(TestCase):
 
     @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
     def test_calls_pdfparser_correctly(self):
-        sf_pubdef = auth_models.Organization.objects.get(
-            slug=constants.Organizations.SF_PUBDEF)
+        sf_pubdef = auth_models.Organization.objects.get(slug='sf_pubdef')
         fillable = mock.fillable_pdf(organization=sf_pubdef)
         subs = [
             SubmissionsService.create_for_organizations(

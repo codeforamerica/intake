@@ -10,7 +10,7 @@ import intake
 from intake import anonymous_names
 from intake.constants import SMS, EMAIL
 from project.jinja2 import namify
-from formation.fields import MonthlyIncome, HouseholdSize, OnPublicBenefits
+
 
 FORMSUBMISSION_TEXT_SEARCH_FIELDS = [
     'first_name',
@@ -316,22 +316,6 @@ class FormSubmission(models.Model):
     def get_uuid(self):
         """returns the _applicant/visitor_ uuid for funnel tracking"""
         return self.applicant.get_uuid()
-
-    def qualifies_for_fee_waiver(self):
-        on_benefits = OnPublicBenefits(self.answers)
-        if on_benefits.is_valid():
-            if bool(on_benefits):
-                return True
-        is_under_threshold = None
-        hh_size_field = HouseholdSize(self.answers)
-        hh_income_field = MonthlyIncome(self.answers)
-        if (hh_income_field.is_valid() and hh_size_field.is_valid()):
-            hh_size = hh_size_field.get_display_value()
-            annual_income = hh_income_field.get_current_value() * 12
-            threshold = intake.constants.FEE_WAIVER_LEVELS.get(
-                hh_size, intake.constants.FEE_WAIVER_LEVELS[12])
-            is_under_threshold = annual_income <= threshold
-        return is_under_threshold
 
     def __str__(self):
         return self.get_anonymous_display()

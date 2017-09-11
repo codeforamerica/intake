@@ -3,14 +3,15 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
-from intake.constants import ORG_NAMES
 
 
-def get_name_map():
-    return {
-        name: slug
-        for slug, name in ORG_NAMES.items()
-        }
+NAME_MAP = {
+    "Code for America": "cfa",
+    "San Francisco Public Defender": "sf_pubdef",
+    "Contra Costa Public Defender": "cc_pubdef",
+    "East Bay Community Law Center": "ebclc",
+    "Alameda County Public Defender's Office": "a_pubdef",
+}
 
 
 def get_models(apps, schema_editor):
@@ -21,9 +22,8 @@ def get_models(apps, schema_editor):
 
 def forward(*args):
     Organization = get_models(*args)
-    name_map = get_name_map()
     for org in Organization.all():
-        org.slug = name_map[org.name]
+        org.slug = NAME_MAP[org.name]
         org.save()
 
 

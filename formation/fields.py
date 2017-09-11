@@ -2,6 +2,7 @@ from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import EmailValidator, URLValidator
+from intake.models import County
 from formation.field_types import (
     CharField, MultilineCharField, IntegerField, WholeDollarField, ChoiceField,
     YesNoField, YesNoIDontKnowField, MultipleChoiceField, MultiValueField,
@@ -9,9 +10,8 @@ from formation.field_types import (
     YES_NO_CHOICES, NOT_APPLICABLE, YES_NO_IDK_CHOICES
 )
 from intake.constants import (
-    COUNTY_CHOICES, CONTACT_PREFERENCE_CHOICES, REASON_FOR_APPLYING_CHOICES,
-    GENDER_PRONOUN_CHOICES, DECLARATION_LETTER_REVIEW_CHOICES,
-    COUNTY_CHOICE_DISPLAY_DICT
+    CONTACT_PREFERENCE_CHOICES, REASON_FOR_APPLYING_CHOICES,
+    GENDER_PRONOUN_CHOICES, DECLARATION_LETTER_REVIEW_CHOICES
 )
 from project.jinja2 import namify
 
@@ -43,26 +43,30 @@ class DateReceived(DateTimeField):
 
 class Counties(MultipleChoiceField):
     context_key = "counties"
-    choices = COUNTY_CHOICES
+    choices = County.objects.get_county_choices()
     label = _('Where were you arrested or convicted?')
     help_text = _(
         "We will send your Clear My Record application to agencies in these "
         "counties.")
     display_label = "Wants help with record in"
-    choice_display_dict = COUNTY_CHOICE_DISPLAY_DICT
 
 
-class AffirmCountySelection(ConsentCheckbox):
-    context_key = "confirm_county_selection"
-    is_required_error_message = _(
-        "We need your understanding before we can "
-        "help you")
+class UnlistedCountyNote(FormNote):
+    context_key = "unlisted_county_note"
+    content = mark_safe("""
+    <p>
+        In counties where we don't have official partners, we will send you
+        information on how to get started.
+    </p>
+    """)
+
+
+class UnlistedCounties(CharField):
+    context_key = "unlisted_counties"
     label = _(
-        "Do you understand that you should only select the counties that you "
-        "think you have an arrest or conviction in?")
-    agreement_text = _(
-        "Yes, to the best of my memory, I was arrested or convicted in "
-        "these counties")
+        "Which counties were not listed that you need to clear your record in?"
+    )
+    display_label = "Needs help in unlisted counties"
 
 
 class ConsentNote(FormNote):
@@ -663,7 +667,8 @@ class DeclarationLetterWhy(DeclarationLetterIntro):
 INTAKE_FIELDS = [
     DateReceived,
     Counties,
-    AffirmCountySelection,
+    UnlistedCountyNote,
+    UnlistedCounties,
 
     ContactPreferences,
 

@@ -8,7 +8,6 @@ from intake.tests.base_testcases import ExternalNotificationsPatchTestCase
 from project.fixtures_index import (
     ESSENTIAL_DATA_FIXTURES,
     MOCK_USER_ACCOUNT_FIXTURES)
-from intake.constants import Organizations
 from user_accounts.models import Organization
 from project.tests.assertions import assertInLogsCount
 
@@ -158,7 +157,7 @@ class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
             needs_applicant_followups=False, is_receiving_agency=True).first()
 
     def full_answers(self):
-        org = Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)
+        org = Organization.objects.get(slug='a_pubdef')
         return get_answers_for_orgs(
             [org],
             contact_preferences=[
@@ -171,7 +170,7 @@ class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
         )
 
     def cant_contact_answers(self):
-        org = Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)
+        org = Organization.objects.get(slug='a_pubdef')
         return get_answers_for_orgs(
             [org],
             contact_preferences=[
@@ -183,7 +182,7 @@ class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
 
     def test_case_when_all_have_usable_contact_info(self):
         orgs = [
-            Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)]
+            Organization.objects.get(slug='a_pubdef')]
         subs = []
         for i in range(4):
             subs.append(factories.FormSubmissionWithOrgsFactory.create(
@@ -208,7 +207,7 @@ class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
 
     def test_if_some_have_usable_contact_info(self):
         orgs = [
-            Organization.objects.get(slug=Organizations.ALAMEDA_PUBDEF)]
+            Organization.objects.get(slug='a_pubdef')]
         contacted_subs = []
         for i in range(2):
             contacted_subs.append(

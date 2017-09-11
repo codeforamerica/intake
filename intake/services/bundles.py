@@ -5,7 +5,7 @@ from intake import notifications
 from intake.utils import is_the_weekend
 from intake.models import (
     FormSubmission,
-    ApplicationBundle, get_parser, ApplicationLogEntry,
+    ApplicationBundle, get_parser,
     Application
 )
 from user_accounts.models import Organization
@@ -16,16 +16,6 @@ from django.db.models import Count
 
 
 logger = logging.getLogger(__name__)
-
-
-def create_bundle_from_submissions(submissions, skip_pdf=False, **kwargs):
-    bundle = ApplicationBundle(**kwargs)
-    bundle.save()
-    if submissions:
-        bundle.submissions.add(*submissions)
-    if not skip_pdf and not bundle.bundled_pdf:
-        build_bundled_pdf_if_necessary(bundle)
-    return bundle
 
 
 def mark_opened(bundle, user, send_slack_notification=True):
@@ -54,6 +44,53 @@ def get_or_create_for_submissions_and_user(submissions, user):
             submissions,
             organization=user.profile.organization)
     return query
+
+
+def count_unreads_and_send_notifications_to_orgs():
+    orgs = get_orgs_that_might_need_a_bundle_email_today()
+    for org in orgs:
+        if org.slug == 'cfa':
+            notifications.slack_simple.send(
+                """
+There are {all_count} unhandled county-not-listed (CNL)
+applications outstanding: {review_link}""".format(
+                    all_count=AppsService.get_all_unhandled_cnl_apps().count(),
+                    review_link=external_reverse('intake-app_cnl_index')))
+        else:
+            emails = org.get_referral_emails()
+            unread_count = AppsService.get_unread_apps_per_org_count(org)
+            update_count = AppsService.get_needs_update_apps_per_org_count(org)
+            all_count = AppsService.get_all_apps_per_org_count(org)
+            if unread_count > 0:
+                notifications.front_email_daily_app_bundle.send(
+                    to=emails,
+                    org_name=org.name,
+                    unread_count=unread_count,
+                    update_count=update_count,
+                    all_count=all_count,
+                    unread_redirect_link=external_reverse(
+                        'intake-unread_email_redirect'),
+                    needs_update_redirect_link=external_reverse(
+                        'intake-needs_update_email_redirect'),
+                    all_redirect_link=external_reverse(
+                        'intake-all_email_redirect'))
+            notifications.slack_app_bundle_sent.send(
+                org_name=org.name,
+                emails=emails,
+                unread_count=unread_count,
+                update_count=update_count,
+                all_count=all_count,
+            )
+
+
+def create_bundle_from_submissions(submissions, skip_pdf=False, **kwargs):
+    bundle = ApplicationBundle(**kwargs)
+    bundle.save()
+    if submissions:
+        bundle.submissions.add(*submissions)
+    if not skip_pdf and not bundle.bundled_pdf:
+        build_bundled_pdf_if_necessary(bundle)
+    return bundle
 
 
 def build_bundled_pdf_if_necessary(bundle):
@@ -112,32 +149,3 @@ def get_orgs_that_might_need_a_bundle_email_today():
     if is_the_weekend():
         return orgs.filter(notify_on_weekends=True)
     return orgs
-
-
-def count_unreads_and_send_notifications_to_orgs():
-    orgs = get_orgs_that_might_need_a_bundle_email_today()
-    for org in orgs:
-        emails = org.get_referral_emails()
-        unread_count = AppsService.get_unread_apps_per_org_count(org)
-        update_count = AppsService.get_needs_update_apps_per_org_count(org)
-        all_count = AppsService.get_all_apps_per_org_count(org)
-        if unread_count > 0:
-            notifications.front_email_daily_app_bundle.send(
-                to=emails,
-                org_name=org.name,
-                unread_count=unread_count,
-                update_count=update_count,
-                all_count=all_count,
-                unread_redirect_link=external_reverse(
-                    'intake-unread_email_redirect'),
-                needs_update_redirect_link=external_reverse(
-                    'intake-needs_update_email_redirect'),
-                all_redirect_link=external_reverse(
-                    'intake-all_email_redirect'))
-        notifications.slack_app_bundle_sent.send(
-            org_name=org.name,
-            emails=emails,
-            unread_count=unread_count,
-            update_count=update_count,
-            all_count=all_count,
-        )

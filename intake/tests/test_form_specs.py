@@ -6,7 +6,7 @@ from formation.forms import (
     AlamedaPublicDefenderFormSpec, EBCLCIntakeFormSpec)
 
 from intake.tests import mock
-from intake import constants, models
+from intake import models
 
 import intake.services.submissions as SubmissionsService
 import intake.services.display_form_service as DisplayFormService
@@ -18,7 +18,7 @@ class TestAlamedaCountyForm(TestCase):
 
     def test_records_all_fields(self):
         data = mock.fake.alameda_county_form_answers()
-        alameda = models.County.objects.get(slug=constants.Counties.ALAMEDA)
+        alameda = models.County.objects.get(slug='alameda')
         Form = county_form_selector.get_combined_form_class(
             counties=[alameda.slug])
         input_form = Form(data)
@@ -34,7 +34,7 @@ class TestAlamedaCountyForm(TestCase):
 
     def test_displays_all_fields(self):
         data = mock.fake.alameda_pubdef_answers()
-        alameda = models.County.objects.get(slug=constants.Counties.ALAMEDA)
+        alameda = models.County.objects.get(slug='alameda')
         Form = county_form_selector.get_combined_form_class(
             counties=[alameda.slug])
         input_form = Form(data)
@@ -105,9 +105,9 @@ class TestOrganizationFormSelector(TestCase):
     def test_can_get_separate_forms_for_EBCLC_and_APD(self):
         from formation.forms import organization_form_selector
         org_form_results = {
-            constants.Organizations.ALAMEDA_PUBDEF:
+            'a_pubdef':
             AlamedaPublicDefenderFormSpec(),
-            constants.Organizations.EBCLC:
+            'ebclc':
             EBCLCIntakeFormSpec(),
         }
         for org_slug, expected_form_spec in org_form_results.items():

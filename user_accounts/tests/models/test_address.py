@@ -1,13 +1,11 @@
 from django.test import TestCase
 from user_accounts import models
-from intake import constants
 
 
 class TestAddress(TestCase):
 
     def test_can_create_without_walk_in_hours(self):
-        a_pubdef = models.Organization.objects.get(
-            slug=constants.Organizations.ALAMEDA_PUBDEF)
+        a_pubdef = models.Organization.objects.get(slug='a_pubdef')
         address = models.Address(
             organization=a_pubdef,
             name='Oakland Office',
@@ -16,8 +14,7 @@ class TestAddress(TestCase):
         self.assertTrue(address.id)
 
     def test_can_create_with_walk_in_hours(self):
-        a_pubdef = models.Organization.objects.get(
-            slug=constants.Organizations.ALAMEDA_PUBDEF)
+        a_pubdef = models.Organization.objects.get(slug='a_pubdef')
         address = models.Address(
             organization=a_pubdef,
             name='Oakland Office',
@@ -27,8 +24,7 @@ class TestAddress(TestCase):
         self.assertTrue(address.id)
 
     def can_get_addresses_of_organization(self):
-        a_pubdef = models.Organization.objects.get(
-            slug=constants.Organizations.ALAMEDA_PUBDEF)
+        a_pubdef = models.Organization.objects.get(slug='a_pubdef')
         address = models.Address(
             organization=a_pubdef,
             name='Oakland Office',

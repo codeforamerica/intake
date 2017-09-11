@@ -2,7 +2,6 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
 
-from intake import constants
 from intake import models
 from user_accounts import models as auth_models
 
@@ -59,8 +58,7 @@ class TestPartnerDetailView(TestCase):
     fixtures = ['counties', 'organizations']
 
     def test_returns_200_with_org_details(self):
-        sf_pubdef = auth_models.Organization.objects.get(
-            slug=constants.Organizations.SF_PUBDEF)
+        sf_pubdef = auth_models.Organization.objects.get(slug='sf_pubdef')
         response = self.client.get(
             reverse(
                 'intake-partner_detail',
