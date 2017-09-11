@@ -3,6 +3,7 @@ language: python
 python:
   - "3.5"
 before_install:
+  - unset _JAVA_OPTIONS
   - rvm install 2.2.1
   - nvm install 6.5
 cache:
