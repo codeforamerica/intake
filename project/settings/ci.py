@@ -2,7 +2,7 @@ import sys
 from project.settings.environment import *
 
 DEBUG = True
-
+DIVERT_REMOTE_CONNECTIONS = True
 INTERNAL_IPS = ['127.0.0.1', '::1']
 CELERY_TASK_ALWAYS_EAGER = True
 
