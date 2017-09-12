@@ -17,3 +17,6 @@ class ExcelDownloadView(PandasView):
 
     def get_data(self, request, *args, **kwargs):
         return pandas.to_excel('applications.xls')
+
+
+excel_download = ExcelDownloadView.as_view()

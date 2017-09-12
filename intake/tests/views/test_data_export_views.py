@@ -1,6 +1,7 @@
-from django.core.urlresolvers
+from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.test import TestCase
+import pandas
 from intake.tests import factories as intake_factories
 from user_accounts.tests import factories as accounts_factories
 from user_accounts.models import Organization
@@ -22,6 +23,10 @@ class TestExcelDownloadView(TestCase):
         both_app = intake_factories.make_apps_for('cfa', 'ebclc', count=1)
         self.client.login(
             username=user.username, password=settings.TEST_USER_PASSWORD)
+        response = self.client.get(reverse(self.view_name))
+        self.assertEqual(200, response.status_code)
+        df = pandas.read_excel(response)
+        import ipdb; ipdb.set_trace()
 
     def test_org_user_gets_apps_from_own_org_only(self):
         pass
