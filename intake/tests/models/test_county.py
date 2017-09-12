@@ -1,6 +1,8 @@
 from django.test import TestCase
 from user_accounts import models as auth_models
 from intake import models
+from intake.tests import factories
+from user_accounts.tests.factories import FakeOrganizationFactory
 from formation import field_types
 
 
@@ -71,3 +73,26 @@ class TestCountyManager(TestCase):
             if county != last_county:
                 with self.subTest(county=county):
                     self.assertFalse(county.slug == 'not_listed')
+
+    def test_get_county_choices_query_default(self):
+        live_org = FakeOrganizationFactory(
+            county=factories.CountyFactory(), is_live=True)
+        not_live_org = FakeOrganizationFactory(
+            county=factories.CountyFactory(), is_live=False)
+        not_listed = models.County.objects.get(slug='not_listed')
+        results = list(models.County.objects.get_county_choices_query())
+        self.assertIn(live_org.county, results)
+        self.assertIn(live_org.county, results)
+        self.assertIn(not_listed, results)
+
+    def test_get_county_choices_query_live(self):
+        live_org = FakeOrganizationFactory(
+            county=factories.CountyFactory(), is_live=True)
+        not_live_org = FakeOrganizationFactory(
+            county=factories.CountyFactory(), is_live=False)
+        not_listed = models.County.objects.get(slug='not_listed')
+        with self.settings(LIVE_COUNTY_CHOICES=True):
+            results = list(models.County.objects.get_county_choices_query())
+            self.assertIn(live_org.county, results)
+            self.assertNotIn(not_live_org.county, results)
+            self.assertIn(not_listed, results)
