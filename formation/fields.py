@@ -3,6 +3,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import EmailValidator, URLValidator
 from project.jinja2 import oxford_comma
+from markupsafe import escape
 from intake.models import County
 from formation.field_types import (
     CharField, MultilineCharField, IntegerField, WholeDollarField, ChoiceField,
@@ -43,7 +44,8 @@ class DateReceived(DateTimeField):
 
 
 class Counties(MultipleChoiceField):
-    template_name = "formation/county_select.jinja"
+    template_name = "formation/counties_input.jinja"
+    display_template_name = "formation/counties_display.jinja"
     context_key = "counties"
     label = _('Where were you arrested or convicted?')
     help_text = _(
@@ -56,12 +58,21 @@ class Counties(MultipleChoiceField):
         self.choices = County.objects.get_county_choices()
         super().__init__(*args, **kwargs)
 
-    def get_display_value(self):
+    def get_ordered_selected_counties(self):
         selected_counties = self.get_current_value()
+        return [
+            county for county_slug, county in self.choices
+            if county_slug in selected_counties]
+
+    def get_display_for_county(self, county, unlisted_counties=None):
+        if (county.slug == 'not_listed') and unlisted_counties:
+                return '“{}”'.format(unlisted_counties)
+        return county.name
+
+    def get_display_value(self, unlisted_counties=None):
         return oxford_comma([
-            county.name
-            for slug, county in self.choices
-            if slug in selected_counties])
+            self.get_display_for_county(county, unlisted_counties)
+            for county in self.get_ordered_selected_counties()])
 
 
 class UnlistedCountyNote(FormNote):

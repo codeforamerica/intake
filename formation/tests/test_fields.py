@@ -76,3 +76,14 @@ class TestCounties(TestCase):
         html = field.render(display=True)
         self.assertIn(escape(contracosta.name), html)
         self.assertNotIn(contracosta.description, html)
+
+    def test_display_value_with_not_listed_override(self):
+        field = fields.Counties(
+            {'counties': ['not_listed', 'contracosta']})
+        self.assertTrue(field.is_valid())
+        not_listed = models.County.objects.get(slug='not_listed')
+        value = field.get_display_value(
+            unlisted_counties='Some Counties')
+        self.assertIn('Some Counties', value)
+        self.assertNotIn(not_listed.description, value)
+        self.assertNotIn(not_listed.name, value)
