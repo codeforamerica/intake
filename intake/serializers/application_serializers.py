@@ -1,7 +1,8 @@
 from intake import models
 from rest_framework import serializers
 from .status_update_serializer import MinimalStatusUpdateSerializer
-
+from intake.services.display_form_service import \
+    get_display_form_for_application
 
 class LatestStatusBase(serializers.ModelSerializer):
 
@@ -42,3 +43,22 @@ class ApplicationAutocompleteSerializer(serializers.ModelSerializer):
 
     def get_url(self, instance):
         return instance.form_submission.get_absolute_url()
+
+
+class ApplicationExcelDownloadSerializer(serializers.ModelSerializer):
+
+    # TODO: datetimes to PT
+
+    def to_representation(self, *args, **kwargs):
+        data = super().to_representation(*args, **kwargs)
+        display_form, letter = get_display_form_for_application(args[0])
+        data.update({
+            field.get_display_label(): field.get_display_value()
+            for field in display_form.get_usable_fields()})
+        if letter:
+            data.update(letter.cleaned_data)
+        return data
+
+    class Meta:
+        model = models.Application
+        fields = '__all__'

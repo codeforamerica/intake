@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_pandas',
     'health_check',
     'intake',
     'url_robots',
@@ -270,3 +271,5 @@ DJANGO_EASY_AUDIT_REGISTERED_CLASSES = [
     'intake.ApplicationTransfer',
     'intake.ApplicationNote'
 ]
+
+PANDAS_RENDERERS = ("rest_pandas.renderers.PandasExcelRenderer",)

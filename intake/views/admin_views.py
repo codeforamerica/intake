@@ -18,6 +18,10 @@ import intake.services.display_form_service as DisplayFormService
 from intake.views.base_views import (
     ViewAppDetailsMixin, not_allowed, NoBrowserCacheOnGetMixin)
 from intake.views.app_detail_views import ApplicationDetail
+from intake.serializers.application_serializers import ApplicationExcelDownloadSerializer
+from rest_pandas import PandasView
+from rest_pandas.renderers import PandasExcelRenderer
+import pandas
 
 
 class FilledPDF(ApplicationDetail):
@@ -364,6 +368,16 @@ class CaseBundlePrintoutPDFView(ViewAppDetailsMixin, View):
         return response
 
 
+class ExcelDownloadView(PandasView):
+    queryset = models.Application.objects.all()  # TODO: filter for organization
+    serializer_class = ApplicationExcelDownloadSerializer
+    template_name = 'excel-download.jinja'
+    renderer_classes = [PandasExcelRenderer]
+
+    def get_data(self, request, *args, **kwargs):
+        return pandas.to_excel('applications.xls')
+
+
 filled_pdf = FilledPDF.as_view()
 pdf_bundle = FilledPDFBundle.as_view()
 app_index = ApplicationIndex.as_view()
@@ -374,3 +388,4 @@ mark_processed = MarkProcessed.as_view()
 app_bundle_detail = ApplicationBundleDetail.as_view()
 app_bundle_detail_pdf = ApplicationBundleDetailPDFView.as_view()
 case_bundle_printout = CaseBundlePrintoutPDFView.as_view()
+excel_download = ExcelDownloadView.as_view()

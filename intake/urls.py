@@ -161,6 +161,10 @@ urlpatterns = [
         login_required(status_update_views.review_status_notification),
         name='intake-review_status_notification'),
 
+    url(r'^applications/excel-download',
+        login_required(admin_views.excel_download),
+        name='intake-excel_download'),
+
     url(r'^applications-autocomplete/$', search_views.application_search,
         name='applications-autocomplete',),
 
