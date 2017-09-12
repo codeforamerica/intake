@@ -1,7 +1,6 @@
 from django.test import TestCase
-
 from user_accounts import models as auth_models
-from intake import models, constants
+from intake import models
 from formation import field_types
 
 
@@ -16,9 +15,8 @@ class TestCounty(TestCase):
 
     def test_get_receiving_agency_with_no_criteria(self):
         expected_matches = (
-            (constants.Counties.SAN_FRANCISCO,
-                "San Francisco Public Defender"),
-            (constants.Counties.CONTRA_COSTA, "Contra Costa Public Defender"))
+            ('sanfrancisco', "San Francisco Public Defender"),
+            ('contracosta', "Contra Costa Public Defender"))
         counties = models.County.objects.all()
         answers = {}
         for county_slug, agency_name in expected_matches:
@@ -27,25 +25,49 @@ class TestCounty(TestCase):
             self.assertEqual(organization.name, agency_name)
 
     def test_get_receiving_agency_alameda_eligible_for_apd(self):
-        alameda = models.County.objects.get(slug=constants.Counties.ALAMEDA)
+        alameda = models.County.objects.get(slug='alameda')
         eligible_for_apd = dict(monthly_income=2999, owns_home=field_types.NO)
         result = alameda.get_receiving_agency(eligible_for_apd)
-        alameda_pubdef = auth_models.Organization.objects.get(
-            slug=constants.Organizations.ALAMEDA_PUBDEF)
+        alameda_pubdef = auth_models.Organization.objects.get(slug='a_pubdef')
         self.assertEqual(result, alameda_pubdef)
 
     def test_get_receiving_agency_high_income_alameda_gets_ebclc(self):
-        alameda = models.County.objects.get(slug=constants.Counties.ALAMEDA)
+        alameda = models.County.objects.get(slug='alameda')
         ebclc_high_income = dict(monthly_income=3000, owns_home=field_types.NO)
         result = alameda.get_receiving_agency(ebclc_high_income)
-        ebclc = auth_models.Organization.objects.get(
-            slug=constants.Organizations.EBCLC)
+        ebclc = auth_models.Organization.objects.get(slug='ebclc')
         self.assertEqual(result, ebclc)
 
     def test_get_receiving_agency_owns_home_alameda_gets_ebclc(self):
-        alameda = models.County.objects.get(slug=constants.Counties.ALAMEDA)
+        alameda = models.County.objects.get(slug='alameda')
         ebclc_owns_home = dict(monthly_income=2999, owns_home=field_types.YES)
         result = alameda.get_receiving_agency(ebclc_owns_home)
-        ebclc = auth_models.Organization.objects.get(
-            slug=constants.Organizations.EBCLC)
+        ebclc = auth_models.Organization.objects.get(slug='ebclc')
         self.assertEqual(result, ebclc)
+
+
+class TestCountyManager(TestCase):
+
+    fixtures = ['counties']
+
+    def test_annotate_is_not_listed(self):
+        qset = models.County.objects.annotate_is_not_listed()
+        not_listed = qset.filter(slug='not_listed').first()
+        self.assertTrue(not_listed)
+        for row in qset:
+            with self.subTest(row=row):
+                self.assertTrue(hasattr(row, 'is_not_listed'))
+                if row.slug == 'not_listed':
+                    self.assertTrue(row.is_not_listed)
+                else:
+                    self.assertFalse(row.is_not_listed)
+
+    def test_order_by_name_or_not_listed(self):
+        counties = list(models.County.objects.order_by_name_or_not_listed())
+        count = len(counties)
+        last_county = counties[count - 1]
+        self.assertEqual(last_county.slug, 'not_listed')
+        for county in counties:
+            if county != last_county:
+                with self.subTest(county=county):
+                    self.assertFalse(county.slug == 'not_listed')

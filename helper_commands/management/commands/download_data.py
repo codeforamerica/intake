@@ -29,7 +29,11 @@ class Command(BaseCommand):
         Assumes that a db fixture has already been dumped to SYNC_BUCKET
         by ./manage.py upload_data
         Relevant settings:
-       """
+        """
+        if not settings.ORIGIN_MEDIA_BUCKET_FOR_SYNC:
+            raise Exception(
+                "Warning: ORIGIN_MEDIA_BUCKET_FOR_SYNC not set."
+                "Its likely this is production. This Error has protected you.")
         sync_s3 = [
             settings.AWS_CLI_LOCATION,
             's3', 'sync',

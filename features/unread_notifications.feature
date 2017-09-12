@@ -4,6 +4,8 @@ Feature: An org user can follow a notification to see unreads
 
     Background:
        Given an org user at "cc_pubdef"
+         And an applicant support user
+         And "4" applications to "cfa"
          And "6" "read and updated" applications to "cc_pubdef"
          And "3" "needs update" applications to "cc_pubdef"
          And a "cc_pubdef" application to search for

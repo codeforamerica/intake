@@ -3,7 +3,7 @@ from django.test import TestCase
 import intake.services.submissions as SubmissionsService
 from user_accounts import models as auth_models
 from intake.tests import mock
-from intake import models, constants
+from intake import models
 
 
 class TestApplicationLogEntry(TestCase):
@@ -15,10 +15,8 @@ class TestApplicationLogEntry(TestCase):
     ]
 
     def test_can_log_referral_between_orgs(self):
-        from_org = auth_models.Organization.objects.get(
-            slug=constants.Organizations.ALAMEDA_PUBDEF)
-        to_org = auth_models.Organization.objects.get(
-            slug=constants.Organizations.EBCLC)
+        from_org = auth_models.Organization.objects.get(slug='a_pubdef')
+        to_org = auth_models.Organization.objects.get(slug='ebclc')
         from_org_user = from_org.profiles.first().user
         answers = mock.fake.alameda_pubdef_answers()
         submission = SubmissionsService.create_for_organizations(
@@ -34,7 +32,7 @@ class TestApplicationLogEntry(TestCase):
         # log submissions read
         submissions = models.FormSubmission.objects.all()
         user = auth_models.Organization.objects.get(
-            slug=constants.Organizations.COCO_PUBDEF).profiles.first().user
+            slug='cc_pubdef').profiles.first().user
         applicant_ids = [sub.applicant_id for sub in submissions]
         event_count_before = models.ApplicationEvent.objects.filter(
             applicant_id__in=applicant_ids).count()

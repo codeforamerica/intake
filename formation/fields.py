@@ -2,6 +2,8 @@ from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import EmailValidator, URLValidator
+from project.jinja2 import oxford_comma
+from intake.models import County
 from formation.field_types import (
     CharField, MultilineCharField, IntegerField, WholeDollarField, ChoiceField,
     YesNoField, YesNoIDontKnowField, MultipleChoiceField, MultiValueField,
@@ -9,9 +11,8 @@ from formation.field_types import (
     YES_NO_CHOICES, NOT_APPLICABLE, YES_NO_IDK_CHOICES
 )
 from intake.constants import (
-    COUNTY_CHOICES, CONTACT_PREFERENCE_CHOICES, REASON_FOR_APPLYING_CHOICES,
-    GENDER_PRONOUN_CHOICES, DECLARATION_LETTER_REVIEW_CHOICES,
-    COUNTY_CHOICE_DISPLAY_DICT
+    CONTACT_PREFERENCE_CHOICES, REASON_FOR_APPLYING_CHOICES,
+    GENDER_PRONOUN_CHOICES, DECLARATION_LETTER_REVIEW_CHOICES
 )
 from project.jinja2 import namify
 
@@ -42,27 +43,53 @@ class DateReceived(DateTimeField):
 
 
 class Counties(MultipleChoiceField):
+    template_name = "formation/counties_input.jinja"
+    display_template_name = "formation/counties_display.jinja"
     context_key = "counties"
-    choices = COUNTY_CHOICES
     label = _('Where were you arrested or convicted?')
     help_text = _(
         "We will send your Clear My Record application to agencies in these "
         "counties.")
     display_label = "Wants help with record in"
-    choice_display_dict = COUNTY_CHOICE_DISPLAY_DICT
+
+    def __init__(self, *args, **kwargs):
+        # prevents the choices query from being called during import
+        self.choices = County.objects.get_county_choices()
+        super().__init__(*args, **kwargs)
+
+    def get_ordered_selected_counties(self):
+        selected_counties = self.get_current_value()
+        return [
+            county for county_slug, county in self.choices
+            if county_slug in selected_counties]
+
+    def get_display_for_county(self, county, unlisted_counties=None):
+        if (county.slug == 'not_listed') and unlisted_counties:
+                return '“{}”'.format(unlisted_counties)
+        return county.name
+
+    def get_display_value(self, unlisted_counties=None):
+        return oxford_comma([
+            self.get_display_for_county(county, unlisted_counties)
+            for county in self.get_ordered_selected_counties()])
 
 
-class AffirmCountySelection(ConsentCheckbox):
-    context_key = "confirm_county_selection"
-    is_required_error_message = _(
-        "We need your understanding before we can "
-        "help you")
+class UnlistedCountyNote(FormNote):
+    context_key = "unlisted_county_note"
+    content = mark_safe("""
+    <p>
+        In counties where we don't have official partners, we will send you
+        information on how to get started.
+    </p>
+    """)
+
+
+class UnlistedCounties(CharField):
+    context_key = "unlisted_counties"
     label = _(
-        "Do you understand that you should only select the counties that you "
-        "think you have an arrest or conviction in?")
-    agreement_text = _(
-        "Yes, to the best of my memory, I was arrested or convicted in "
-        "these counties")
+        "Which counties were not listed that you need to clear your record in?"
+    )
+    display_label = "Needs help in unlisted counties"
 
 
 class ConsentNote(FormNote):
@@ -663,7 +690,8 @@ class DeclarationLetterWhy(DeclarationLetterIntro):
 INTAKE_FIELDS = [
     DateReceived,
     Counties,
-    AffirmCountySelection,
+    UnlistedCountyNote,
+    UnlistedCounties,
 
     ContactPreferences,
 
