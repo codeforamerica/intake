@@ -91,9 +91,10 @@ class TestSelectCountyView(ApplicantFormViewBaseTestCase):
         self.be_anonymous()
         county_view = self.client.get(
             reverse('intake-apply'))
-        for slug, description in County.objects.get_county_choices():
+        for slug, county in County.objects.get_county_choices():
             self.assertContains(county_view, slug)
-            self.assertContains(county_view, escape(description))
+            self.assertIn(
+                escape(county.description), county_view.rendered_content)
 
         applicant_id = self.client.session.get('applicant_id')
         self.assertIsNone(applicant_id)

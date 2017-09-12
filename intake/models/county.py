@@ -18,15 +18,17 @@ class CountyManager(models.Manager):
     def get_by_natural_key(self, slug):
         return self.get(slug=slug)
 
-    def get_county_choices(self):
+    def get_county_choices_query(self):
         if constants.SCOPE_TO_LIVE_COUNTIES:
             return self.filter(
-                organizations__is_live=True
-            ).distinct().order_by_name_or_not_listed(
-            ).values_list('slug', 'description')
+                    organizations__is_live=True
+            ).distinct().order_by_name_or_not_listed()
         else:
-            return self.order_by_name_or_not_listed(
-                ).values_list('slug', 'description')
+            return self.order_by_name_or_not_listed()
+
+    def get_county_choices(self):
+        return tuple(
+            (obj.slug, obj) for obj in self.get_county_choices_query())
 
     def annotate_is_not_listed(self):
         return self.annotate(

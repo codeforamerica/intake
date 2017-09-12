@@ -189,8 +189,14 @@ class PDFFormDisplay:
         label_width, label_height = \
             self.draw_field_label(label_text, max_width)
         self.move_cursor(0, -label_height)
+        if field.context_key == 'counties':
+            display_value = field.get_display_value(
+                unlisted_counties=self.form.cleaned_data.get(
+                    'unlisted_counties'))
+        else:
+            display_value = field.get_display_value()
         value_width, value_height = self.draw_field_value(
-            field.get_display_value(), max_width)
+            display_value, max_width)
         total_width = max([label_width, value_width])
         total_height = label_height + value_height
         return total_width, total_height
