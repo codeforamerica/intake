@@ -22,12 +22,12 @@ class TestPrebuiltPDFBundle(TestCase):
         self.assertIn('Unbuilt', str(prebuilt))
 
     def test_set_pdf_to_bytes(self):
-        prebuilt = models.PrebuiltPDFBundle(
-            organization=FakeOrganizationFactory())
+        org = FakeOrganizationFactory()
+        prebuilt = models.PrebuiltPDFBundle(organization=org)
         bytes_ = b'zomg'
         prebuilt.set_bytes(bytes_)
         prebuilt.save()
-        expected_filename = 'org-1_newapps'
+        expected_filename = org.slug + '_newapps'
         # pull from db to ensure changes persist
         fetched = models.PrebuiltPDFBundle.objects.first()
         self.assertIn(expected_filename, fetched.pdf.name)

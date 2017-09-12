@@ -1,5 +1,5 @@
 import factory
-from user_accounts import models
+from intake import models
 
 
 class CountyFactory(factory.DjangoModelFactory):

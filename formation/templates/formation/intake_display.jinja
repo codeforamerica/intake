@@ -6,7 +6,9 @@
   <div class="data_display-section time_place">
     <div class="data_display-row">
       {{ form.date_received }}
-      {{ form.counties }}
+      {#- display the unlisted county value if it exists #}
+      {{ form.counties.render(
+          unlisted_counties=form.cleaned_data.get('unlisted_counties')) }}
     </div>
   </div>
 
@@ -78,7 +80,7 @@
       {{ form.serving_sentence_display }}
     </div>
     <div class="data_display-stack">
-      {{ form.has_been_to_prison }}
+      {{ form.has_been_to_prison_display }}
     </div>
     {%- if 'rap_outside_sf' in form.fields %}
     <div class="data_display-stack external_rap">

@@ -23,8 +23,7 @@ def submit_app_to_counties(
         substeps.append(
             'When the "counties" checkbox option "{slug}" is clicked'.format(
                 slug=county.slug))
-    substeps.append('''And the "confirm_county_selection" checkbox option "yes" is clicked
-        And submit button in form "county_form" is clicked
+    substeps.append('''And submit button in form "county_form" is clicked
         Then it should load "application/"
         When "{name}" fills out a county application form with basic answers
         '''.format(name=applicant_name))
@@ -65,6 +64,20 @@ def input_basic_answers(context, applicant_name="Jane Doe"):
        And the "monthly_expenses" text input is set to "1000"
        And "yes" is clicked on the "consent_to_represent" radio button
        And "yes" is clicked on the "understands_limits" radio button
+       And the "how_did_you_hear" text input is set to "Listening"
+       And the "additional_information" text input is set to "So cool"
+    '''.format(first_name=first_name, last_name=last_name))
+
+
+@when('"{applicant_name}" fills out county not listed form fields')
+@when('applicant fills out county not listed form fields')
+def fill_county_not_listed_fields(context, applicant_name="Jane Doe"):
+    first_name, last_name = applicant_name.split(' ')
+    context.execute_steps('''
+      When the "first_name" text input is set to "{first_name}"
+       And the "last_name" text input is set to "{last_name}"
+       And the "phone_number" text input is set to "5105555555"
+       And the "email" text input is set to "testing@codeforamerica.org"
        And the "how_did_you_hear" text input is set to "Listening"
        And the "additional_information" text input is set to "So cool"
     '''.format(first_name=first_name, last_name=last_name))

@@ -101,6 +101,10 @@ urlpatterns = [
         login_required(admin_views.app_needs_update_index),
         name='intake-app_needs_update_index'),
 
+    url(r'^applications/county_not_listed/$',
+        login_required(admin_views.app_cnl_index),
+        name='intake-app_cnl_index'),
+
     url(r'^applications/all/$',
         login_required(admin_views.app_index),
         name='intake-app_all_index'),

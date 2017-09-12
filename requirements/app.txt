@@ -8,7 +8,7 @@ python-dateutil~=2.5
 phonenumbers==8.8.0
 django-storages~=1.5
 django-allauth==0.32
-https://github.com/bee-keeper/django-invitations/archive/master.tar.gz
+-e git+git://github.com/bee-keeper/django-invitations@master#egg=django-invitations
 sendgrid-django~=2.0
 django-jinja~=2.2
 django-debug-toolbar==1.4
@@ -29,8 +29,7 @@ amqp==2.1.4
 PyYAML==3.12
 user-agents==1.1.0
 ua-parser==0.7.3
-https://github.com/rossettistone/django-easy-audit/archive/patched.tar.gz
-
+-e git+git://github.com/rossettistone/django-easy-audit.git@patched#egg=django-easy-audit
 # factory-boy breaks on later version fo fake-factory
 # we need to pin fake-factory
 fake-factory==0.7.2

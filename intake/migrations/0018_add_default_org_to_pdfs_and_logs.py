@@ -3,9 +3,8 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
-from intake.constants import Organizations, ORG_NAMES
 
-SFPUB_DEF_NAME = ORG_NAMES[Organizations.SF_PUBDEF]
+SFPUB_DEF_NAME = "San Francisco Public Defender"
 ORG_BASED_EVENT_TYPES = [
     1,  # OPENED
     2,  # REFERRED
