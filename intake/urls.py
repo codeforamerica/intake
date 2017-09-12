@@ -17,7 +17,8 @@ from intake.views import (
     tag_views,
     status_update_views,
     prebuilt_pdf_bundle_views,
-    printout_views
+    printout_views,
+    data_export_views
 )
 
 
@@ -162,7 +163,7 @@ urlpatterns = [
         name='intake-review_status_notification'),
 
     url(r'^applications/excel-download',
-        login_required(admin_views.excel_download),
+        login_required(data_export_views.excel_download),
         name='intake-excel_download'),
 
     url(r'^applications-autocomplete/$', search_views.application_search,
