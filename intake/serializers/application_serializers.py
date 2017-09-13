@@ -4,6 +4,7 @@ from .status_update_serializer import MinimalStatusUpdateSerializer
 from intake.services.display_form_service import \
     get_display_form_for_application
 
+
 class LatestStatusBase(serializers.ModelSerializer):
 
     def to_representation(self, *args, **kwargs):
@@ -47,9 +48,8 @@ class ApplicationAutocompleteSerializer(serializers.ModelSerializer):
 
 class ApplicationExcelDownloadSerializer(serializers.ModelSerializer):
 
-    # TODO: datetimes to PT
-
     def to_representation(self, *args, **kwargs):
+        # TODO: datetimes to PT
         data = super().to_representation(*args, **kwargs)
         display_form, letter = get_display_form_for_application(args[0])
         data.update({
