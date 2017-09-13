@@ -57,7 +57,8 @@ QUERYABLE_ANSWER_FIELDS = [
     'household_size',
     'dependents',
     'is_married',
-    'has_children'
+    'has_children',
+    'unlisted_counties'
 ]
 
 
@@ -170,6 +171,7 @@ class FormSubmission(models.Model):
     dependents = models.TextField(default="")
     is_married = models.TextField(default="")
     has_children = models.TextField(default="")
+    unlisted_counties = models.TextField(default="")
 
     # old_uuid is only used for porting legacy applications
     old_uuid = models.CharField(max_length=34, unique=True,
