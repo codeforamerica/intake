@@ -8,7 +8,6 @@ from intake import models
 
 class ExcelDownloadView(PandasView):
     serializer_class = ApplicationExcelDownloadSerializer
-    template_name = 'excel-download.jinja'
     renderer_classes = [PandasExcelRenderer]
 
     def get_queryset(self, *args, **kwargs):
