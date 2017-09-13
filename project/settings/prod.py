@@ -34,3 +34,5 @@ SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 DEBUG = False
+# hides counties where none of the orgs are officially live
+LIVE_COUNTY_CHOICES = True

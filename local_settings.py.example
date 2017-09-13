@@ -28,6 +28,7 @@ DATABASES = {
 
 ALLOWED_HOSTS = []
 DEFAULT_HOST = 'https://localhost:8000'
+LIVE_COUNTY_CHOICES = False
 
 # settings for file uploads
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'

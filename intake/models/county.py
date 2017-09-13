@@ -1,7 +1,6 @@
 from django.db import models
-from django.db.models import Case, When, BooleanField
-
-from intake import constants
+from django.db.models import Case, When, BooleanField, Q
+from django.conf import settings
 from formation import field_types
 
 
@@ -13,22 +12,26 @@ class PurgedCounty(models.Model):
         managed = False
 
 
+has_a_live_org = Q(organizations__is_live=True)
+is_not_listed_county = Q(slug='not_listed')
+
+
 class CountyManager(models.Manager):
 
     def get_by_natural_key(self, slug):
         return self.get(slug=slug)
 
     def get_county_choices_query(self):
-        if constants.SCOPE_TO_LIVE_COUNTIES:
-            return self.filter(
-                    organizations__is_live=True
-            ).distinct().order_by_name_or_not_listed()
+        if settings.LIVE_COUNTY_CHOICES:
+            return self.order_by_name_or_not_listed().filter(
+                    has_a_live_org | is_not_listed_county
+            ).distinct()
         else:
             return self.order_by_name_or_not_listed()
 
     def get_county_choices(self):
-        return tuple(
-            (obj.slug, obj) for obj in self.get_county_choices_query())
+        qset = self.get_county_choices_query()
+        return tuple((obj.slug, obj) for obj in qset)
 
     def annotate_is_not_listed(self):
         return self.annotate(
