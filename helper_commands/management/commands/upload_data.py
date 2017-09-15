@@ -19,7 +19,11 @@ class Command(BaseCommand):
             SYNC_FIXTURE_LOCATION - filename used for fixture
         """
         with open(settings.SYNC_FIXTURE_LOCATION, 'w+') as f:
-            management.call_command('dumpdata', stdout=f)
+            management.call_command(
+                'dumpdata',
+                natural_foreign=True,
+                stdout=f,
+            )
         upload_command = [
             settings.AWS_CLI_LOCATION,
             's3', 'mv',
