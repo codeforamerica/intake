@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from intake import models
 from rest_framework import serializers
 from .status_update_serializer import MinimalStatusUpdateSerializer
@@ -48,17 +49,24 @@ class ApplicationAutocompleteSerializer(serializers.ModelSerializer):
 
 class ApplicationExcelDownloadSerializer(serializers.ModelSerializer):
 
-    def to_representation(self, *args, **kwargs):
-        # TODO: datetimes to PT
-        data = super().to_representation(*args, **kwargs)
-        display_form, letter = get_display_form_for_application(args[0])
-        data.update({
-            field.get_display_label(): field.get_display_value()
-            for field in display_form.get_usable_fields()})
+    def to_representation(self, app, *args, **kwargs):
+        app_fields = super().to_representation(app, *args, **kwargs)
+        display_form, letter = get_display_form_for_application(app)
+        data = OrderedDict(id=app.form_submission_id)
+        data['Link'] = app.form_submission.get_external_url()
+        data['Application Date'] = app.form_submission.get_local_date_received('%m/%d/%Y')
+        for field in display_form.get_usable_fields():
+            data[field.get_display_label()] = field.get_display_value()
+        for key, value in app_fields.items():
+            data[key] = value
         if letter:
-            data.update(letter.cleaned_data)
+            for field in letter.get_usable_fields():
+                data[field.get_display_label()] = field.get_display_value()
         return data
 
     class Meta:
         model = models.Application
-        fields = '__all__'
+        fields = [
+            'was_transferred_out',
+            'has_been_opened'
+        ]
