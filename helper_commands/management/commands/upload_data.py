@@ -21,7 +21,7 @@ class Command(BaseCommand):
         with open(settings.SYNC_FIXTURE_LOCATION, 'w+') as f:
             management.call_command(
                 'dumpdata',
-                natural_foreign=True,
+                exclude=['contenttypes'],
                 stdout=f,
             )
         upload_command = [
