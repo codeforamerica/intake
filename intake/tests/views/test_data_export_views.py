@@ -29,10 +29,10 @@ class TestExcelDownloadView(TestCase):
         df = pandas.read_excel(io.BytesIO(response.content))
         for app in cfa_apps:
             with self.subTest(app=app):
-                self.assertTrue(any(df.id == app.id))
+                self.assertTrue(any(df.id == app.form_submission_id))
         for app in ebclc_apps:
             with self.subTest(app=app):
-                self.assertFalse(any(df.id == app.id))
+                self.assertFalse(any(df.id == app.form_submission_id))
 
     def test_org_user_gets_apps_from_own_org_only(self):
         user = accounts_factories.app_reviewer('ebclc').user
@@ -45,10 +45,10 @@ class TestExcelDownloadView(TestCase):
         df = pandas.read_excel(io.BytesIO(response.content))
         for app in cc_apps:
             with self.subTest(app=app):
-                self.assertFalse(any(df.id == app.id))
+                self.assertFalse(any(df.id == app.form_submission_id))
         for app in ebclc_apps:
             with self.subTest(app=app):
-                self.assertTrue(any(df.id == app.id))
+                self.assertTrue(any(df.id == app.form_submission_id))
 
     def test_org_user_w_no_apps_gets_empty_excel_spreadseet(self):
         user = accounts_factories.app_reviewer('ebclc').user
