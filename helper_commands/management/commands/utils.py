@@ -9,4 +9,5 @@ def aws_open(command):
         "AWS_ACCESS_KEY_ID": settings.SYNC_AWS_ID,
         "AWS_SECRET_ACCESS_KEY": settings.SYNC_AWS_KEY,
     })
-    Popen(command, env=env)
+    task = Popen(command, env=env)
+    return task.wait()
