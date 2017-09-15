@@ -54,7 +54,8 @@ class ApplicationExcelDownloadSerializer(serializers.ModelSerializer):
         display_form, letter = get_display_form_for_application(app)
         data = OrderedDict(id=app.form_submission_id)
         data['Link'] = app.form_submission.get_external_url()
-        data['Application Date'] = app.form_submission.get_local_date_received('%m/%d/%Y')
+        data['Application Date'] = \
+            app.form_submission.get_local_date_received('%m/%d/%Y')
         for field in display_form.get_usable_fields():
             data[field.get_display_label()] = field.get_display_value()
         for key, value in app_fields.items():
