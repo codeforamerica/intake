@@ -47,7 +47,7 @@ class ApplicationAutocompleteSerializer(serializers.ModelSerializer):
         return instance.form_submission.get_absolute_url()
 
 
-class ApplicationExcelDownloadSerializer(serializers.ModelSerializer):
+class ApplicationCSVDownloadSerializer(serializers.ModelSerializer):
 
     def to_representation(self, app, *args, **kwargs):
         app_fields = super().to_representation(app, *args, **kwargs)

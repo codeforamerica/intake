@@ -10,7 +10,7 @@ from user_accounts.models import Organization
 
 
 class TestExcelDownloadView(TestCase):
-    view_name = 'intake-excel_download'
+    view_name = 'intake-csv_download'
     fixtures = ['groups', 'counties', 'organizations']
 
     def test_anon_is_redirected_to_login(self):
@@ -26,7 +26,7 @@ class TestExcelDownloadView(TestCase):
             username=user.username, password=settings.TEST_USER_PASSWORD)
         response = self.client.get(reverse(self.view_name))
         self.assertEqual(200, response.status_code)
-        df = pandas.read_excel(io.BytesIO(response.content))
+        df = pandas.read_csv(io.BytesIO(response.content))
         for app in cfa_apps:
             with self.subTest(app=app):
                 self.assertTrue(any(df.id == app.form_submission_id))
@@ -42,7 +42,7 @@ class TestExcelDownloadView(TestCase):
             username=user.username, password=settings.TEST_USER_PASSWORD)
         response = self.client.get(reverse(self.view_name))
         self.assertEqual(200, response.status_code)
-        df = pandas.read_excel(io.BytesIO(response.content))
+        df = pandas.read_csv(io.BytesIO(response.content))
         for app in cc_apps:
             with self.subTest(app=app):
                 self.assertFalse(any(df.id == app.form_submission_id))
@@ -50,12 +50,12 @@ class TestExcelDownloadView(TestCase):
             with self.subTest(app=app):
                 self.assertTrue(any(df.id == app.form_submission_id))
 
-    def test_org_user_w_no_apps_gets_empty_excel_spreadseet(self):
+    def test_org_user_w_no_apps_gets_empty_csv(self):
         user = accounts_factories.app_reviewer('ebclc').user
         cfa_apps = intake_factories.make_apps_for('cc_pubdef', count=1)
         self.client.login(
             username=user.username, password=settings.TEST_USER_PASSWORD)
         response = self.client.get(reverse(self.view_name))
         self.assertEqual(200, response.status_code)
-        df = pandas.read_excel(io.BytesIO(response.content))
+        df = pandas.read_csv(io.BytesIO(response.content))
         self.assertEqual(0, len(df))
