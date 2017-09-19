@@ -3,7 +3,7 @@ from subprocess import Popen
 from django.core import management
 from django.core.management.base import BaseCommand
 from django.conf import settings
-from .utils import aws_open
+from .utils import aws_open, run_sql, pg_load
 
 
 class Command(BaseCommand):
@@ -52,5 +52,6 @@ class Command(BaseCommand):
             settings.SYNC_FIXTURE_LOCATION,  # local temp filename
         ]  # command to pull down fixture to local file, with aws env vars
         aws_open(download_s3)
-        management.call_command('flush', interactive=False)
-        management.call_command('loaddata', settings.SYNC_FIXTURE_LOCATION)
+        run_sql('drop schema public cascade;')
+        run_sql('create schema public;')
+        pg_load(settings.SYNC_FIXTURE_LOCATION)
