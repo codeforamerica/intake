@@ -9,7 +9,7 @@ from user_accounts.tests import factories as accounts_factories
 from user_accounts.models import Organization
 
 
-class TestExcelDownloadView(TestCase):
+class TestCSVDownloadView(TestCase):
     view_name = 'intake-csv_download'
     fixtures = ['groups', 'counties', 'organizations']
 

@@ -14,5 +14,11 @@
       {%- if print_all_link %}
       <a href="{{ print_all_link }}" class="btn btn-large btn-default print-all"><span class="glyphicon glyphicon-print"></span> Print All</a>
       {%- endif %}
+      {%- if csv_download_link %}
+      <a href="{{ url('intake-csv_download') }}" class="btn btn-large btn-default">
+        <span class="glyphicon glyphicon-download"></span>
+        Export all
+      </a>
+      {%- endif %}
   </div>
 </div>
