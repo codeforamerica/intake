@@ -40,7 +40,7 @@ def pg_load(file_location):
     })
     load = [
         'psql',
-        '-h%s' % 'localhost',
+        '-h%s' % settings.DATABASES['default']['HOST'],
         '-U%s' % settings.DATABASES['default']['USER'],
         '-d%s' % settings.DATABASES['default']['NAME'],
         '-f%s' % file_location,
