@@ -52,3 +52,11 @@ def pg_load(file_location):
 def run_sql(query):
     with connections['default'].cursor() as cursor:
         cursor.execute(query)
+        results = cursor.fetchall()
+    return results
+
+
+def drop_table(table_name):
+    query = 'drop table %s cascade' % table_name
+    with connections['default'].cursor() as cursor:
+        cursor.execute(query)
