@@ -22,6 +22,7 @@ PARTNERSHIPS_LEAD_INBOX = os.environ.get("PARTNERSHIPS_LEAD_INBOX")
 
 # Twilio API
 TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN")
+TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID")
 
 # Slack Web hook
 SLACK_WEBHOOK_URL = os.environ.get("SLACK_WEBHOOK_URL")
