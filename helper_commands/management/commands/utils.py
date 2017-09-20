@@ -22,7 +22,7 @@ def pg_dump(file_location):
     })
     pg_dump = [
         'pg_dump',
-        '-h%s' % settings.DATABASES['default']['HOST'],
+        '-h%s' % settings.DATABASES[settings.CLIPS_DATABASE_ALIAS]['HOST'],
         '-U%s' % settings.DATABASES['default']['USER'],
         settings.DATABASES['default']['NAME']
     ]
