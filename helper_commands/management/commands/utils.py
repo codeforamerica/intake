@@ -22,12 +22,12 @@ def pg_dump(file_location):
     })
     pg_dump = [
         'pg_dump',
-        '-h%s' % 'localhost',
+        '-h%s' % settings.DATABASES['default']['HOST'],
         '-U%s' % settings.DATABASES['default']['USER'],
         settings.DATABASES['default']['NAME']
     ]
     with Popen(pg_dump, env=env, stdout=PIPE, stderr=STDOUT, bufsize=1
-               ) as task, open(file_location, 'ab') as f:
+               ) as task, open(file_location, 'wb') as f:
         for line in task.stdout:
             f.write(line)
         return task.wait()
