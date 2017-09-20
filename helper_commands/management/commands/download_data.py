@@ -59,4 +59,3 @@ class Command(BaseCommand):
             print(table_name)
             drop_table(table_name[0])
         pg_load(settings.SYNC_FIXTURE_LOCATION)
-        os.remove(settings.SYNC_FIXTURE_LOCATION)
