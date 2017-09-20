@@ -18,7 +18,7 @@ class Command(BaseCommand):
 
         1. sync replica from origin
         2. pull fixture from bucket to local tempfile
-        3. empty existing database
+        3. drops all tables in the public schema of the existing database
         4. load local fixture tempfile
 
         Relevant settings:
