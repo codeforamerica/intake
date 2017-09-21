@@ -28,7 +28,11 @@ local_settings.py
 .sass-cache
 local.log
 notes/*.md
+selenium/
 
 # hiding fixtures
 intake/fixtures/mock*
 user_accounts/fixtures/mock_profiles.json
+
+# IDE settings
+.idea
