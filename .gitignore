@@ -24,6 +24,7 @@ db.sqlite3
 node_modules
 staticfiles
 project/media
+media
 local_settings.py
 .sass-cache
 local.log
