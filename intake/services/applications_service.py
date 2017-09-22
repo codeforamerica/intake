@@ -34,6 +34,7 @@ def get_applications_for_org(organization):
     ).select_related(*preselect_tables).prefetch_related(*prefetch_tables)
     return qset.order_by('-created').distinct()
 
+
 UNREAD_APPLICATIONS_FILTER_KWARGS = dict(
     has_been_opened=False, status_updates__isnull=True)
 
@@ -152,7 +153,7 @@ def handle_apps_opened(view, apps, send_slack_notification=True):
         if should_be_marked:
             app.has_been_opened = True
             app.save()
-            tasks.remove_application_pdfs.delay(app.id)
+            tasks.remove_application_pdfs(app.id)
         if send_slack_notification:
             notifications.slack_submissions_viewed.send(
                 submissions=[app.form_submission], user=view.request.user,

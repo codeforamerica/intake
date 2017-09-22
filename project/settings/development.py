@@ -45,7 +45,7 @@ DATABASES = {
     }
 }
 CLIPS_DATABASE_ALIAS = 'purged'
-
+LIVE_COUNTY_CHOICES = False
 
 COMPRESS_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 # settings for media file uploads

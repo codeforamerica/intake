@@ -178,7 +178,7 @@ class TestHandleAppsOpened(TestCase):
         AppsService.handle_apps_opened(
             Mock(**{'request.user': profile.user}),
             sub.applications.all(), False)
-        remove_application_pdfs.delay.assert_called_with(
+        remove_application_pdfs.assert_called_with(
             sub.applications.first().id)
 
 

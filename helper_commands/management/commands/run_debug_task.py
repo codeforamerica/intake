@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from project.celery import debug_task
+from intake.tasks import debug_task
 
 
 class Command(BaseCommand):

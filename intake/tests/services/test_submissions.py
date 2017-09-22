@@ -331,8 +331,8 @@ class TestSendConfirmationNotificationsRenderedOutput(TestCase):
     @patch('intake.notifications.SimpleFrontNotification.send')
     def test_notifications_with_both_partner_and_unlisted_counties(self, send):
         orgs = [
-                Organization.objects.get(slug='cfa'),
-                Organization.objects.get(slug='cc_pubdef')]
+            Organization.objects.get(slug='cfa'),
+            Organization.objects.get(slug='cc_pubdef')]
         sub = factories.FormSubmissionWithOrgsFactory(
             organizations=orgs,
             answers=get_answers_for_orgs(
@@ -374,7 +374,7 @@ class TestSendToNewappsBundleIfNeeded(TestCase):
         sub = factories.FormSubmissionWithOrgsFactory(
             organizations=[sf_pubdef])
         SubmissionsService.send_to_newapps_bundle_if_needed(sub, [sf_pubdef])
-        add_application_pdfs.delay.assert_called_with(
+        add_application_pdfs.assert_called_with(
             sub.applications.first().id)
 
     @patch('intake.tasks.add_application_pdfs')
@@ -384,7 +384,7 @@ class TestSendToNewappsBundleIfNeeded(TestCase):
         sub = factories.FormSubmissionWithOrgsFactory(
             organizations=[a_pubdef])
         SubmissionsService.send_to_newapps_bundle_if_needed(sub, [a_pubdef])
-        add_application_pdfs.delay.assert_not_called()
+        add_application_pdfs.assert_not_called()
 
 
 class TestQualifiesForFeeWaiver(TestCase):
