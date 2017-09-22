@@ -1,10 +1,15 @@
 <div class="data_display {% if field.is_subfield %}sub{% endif %}datum {{ field.get_html_class_name() }}">
   <div class="data_display-label">{{ field.get_display_label() }}</div>
-  {%- if not field.is_empty() %}
+  {%- set display_value = field.get_display_value() %}
+  {%- if display_value %}
   <div class="data_display-value">
-    <a href="tel:{{ field.get_tel_href_number() }}" class="data_display-link">
-      {{- field.get_display_value() -}}
-     </a>
+    {%- if field.get_current_value_parsed() %}
+      <a href="tel:{{ field.get_tel_href_number() }}" class="data_display-link">
+        {{- display_value -}}
+       </a>
+    {%- else %}
+      <span class="data_display-link">{{- display_value -}}</span>
+    {%- endif %}
   </div>
   {%- else %}
   <div class="data_display-value empty"></div>

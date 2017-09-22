@@ -8,12 +8,8 @@
 {%- block section_class %}thanks{% endblock section_class -%}
 
 {% block column_content %}
-  {%- if organizations %}
-  {%- for organization in organizations %}
-  <p class="next_step {{ organization.slug }}">
-    {{ linkify(organization.long_confirmation_message) }} </p>
-  {%- endfor %}
-  {%- endif %}
+  
+  {% include "includes/application_next_steps.jinja" %}
 
   {#
     qualifies_for_fee_waiver can have three different values:
@@ -21,8 +17,8 @@
       False - they don't qualify, based on their answers
       None - we don't know if they qualify, because we don't have answers
 
-      if qualifies_for_fee_waiver != False (everyone expect those who don't qualify)
-      if qualifies_for_fee_waiver == True (everyone to probably qualifies)
+      if qualifies_for_fee_waiver != False (everyone except those who don't qualify)
+      if qualifies_for_fee_waiver == True (everyone who probably qualifies)
   #}
 
 <section class="rap_intro">

@@ -273,8 +273,7 @@ email_daily_app_bundle = EmailNotification(
 
 # submissions, emails
 slack_app_bundle_sent = SlackTemplateNotification(
-    message_template_path="slack/app_bundle_sent.jinja"
-)
+    message_template_path="slack/app_bundle_sent.jinja")
 
 # CONFIRMATIONS & FOLLOWUPS
 

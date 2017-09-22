@@ -29,7 +29,7 @@ class TestThanksView(ApplicantFormViewBaseTestCase):
             self.assertContains(response, escape(org.county.name))
             self.assertContains(response, escape(org.name))
             self.assertContains(
-                response, escape(org.long_confirmation_message))
+                response, linkify(org.long_confirmation_message))
 
     def test_clears_session_data(self):
         submission = factories.FormSubmissionWithOrgsFactory.create()

@@ -1,6 +1,5 @@
 from unittest.mock import patch
 from user_accounts.models import Organization
-from intake.constants import Organizations
 from intake.tests import factories
 from intake.tests.mock_org_answers import get_answers_for_orgs
 from intake.tests.base_testcases import ExternalNotificationsPatchTestCase
@@ -21,10 +20,7 @@ class TestApplicantNotification(ExternalNotificationsPatchTestCase):
 
     def many_orgs(self):
         orgs = list(Organization.objects.filter(
-                    slug__in=[
-                        Organizations.SF_PUBDEF,
-                        Organizations.EBCLC]))
-        orgs = utils.sort_orgs_in_default_order(orgs)
+                    slug__in=['sf_pubdef', 'ebclc']).order_by('slug'))
         return orgs
 
     def make_full_submission(self, orgs, **answer_overrides):
