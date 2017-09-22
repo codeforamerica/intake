@@ -56,12 +56,11 @@ AWS_STORAGE_BUCKET_NAME = 'cmr-development-r1-static-files'
 STATIC_BUCKET = 'cmr-development-r1-static-files'
 COMPRESS_URL = 'https://%s.s3.amazonaws.com/' % STATIC_BUCKET
 STATIC_URL = COMPRESS_URL
-STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+STATICFILES_LOCATION = 'static'  # location in bucket TODO: remove
+STATICFILES_STORAGE = 'project.custom_storages.CachedS3BotoStorage'
 
 
 COMPRESS_ROOT = os.path.join(REPO_DIR, 'staticfiles')
-COMPRESS_ROOT = STATIC_ROOT
-STATICFILES_STORAGE = 'project.custom_storages.CachedS3BotoStorage'
 COMPRESS_STORAGE = STATICFILES_STORAGE
 
 AWS_QUERYSTRING_AUTH = False

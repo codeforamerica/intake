@@ -9,7 +9,16 @@ class StaticStorage(S3Boto3Storage):
 
 class CachedS3BotoStorage(S3Boto3Storage):
     """
-    S3 storage backend that saves the files locally, too.
+    S3 storage backend that saves the files locally so that
+    compressor can compile them.
+    This currently breaks if s3 and the local directory are out of sync
+    and it doesn't fix the local cache if its cleared.
+
+    This is currently using the STATICFILES_LOCATION to fix
+    an issue where its included in paths in css.
+
+    TODO: Fix CSS and remove STATICFILES_LOCATION so that its
+    at the bucket root.
     """
 
     def __init__(self, *args, **kwargs):
@@ -21,10 +30,3 @@ class CachedS3BotoStorage(S3Boto3Storage):
         self.local_storage._save(name, content)
         super(CachedS3BotoStorage, self).save(
             name, self.local_storage._open(name))
-
-    # HERE is secret to dont generating multiple manifest.json
-    # and to delete manifest.json in Amazon S3
-    def get_available_name(self, name):
-        if self.exists(name):
-            self.delete(name)
-        return name
