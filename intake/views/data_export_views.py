@@ -3,7 +3,8 @@ from rest_pandas import PandasView
 from rest_pandas.renderers import PandasCSVRenderer
 from intake.serializers.application_serializers import \
     ApplicationCSVDownloadSerializer
-from intake import models
+from intake.services.applications_service import \
+    get_all_applications_for_users_org
 
 
 class CSVDownloadView(PandasView):
@@ -11,8 +12,7 @@ class CSVDownloadView(PandasView):
     renderer_classes = [PandasCSVRenderer]
 
     def get_queryset(self, *args, **kwargs):
-        return models.Application.objects.filter(
-            organization__profiles__user=self.request.user)
+        return get_all_applications_for_users_org(self.request.user)
 
     def get_data(self, request, *args, **kwargs):
         return pandas.to_csv('applications.csv')

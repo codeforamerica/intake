@@ -52,7 +52,7 @@
         {% endif %}
         <br/>
         {% if app.latest_status %}
-          {{ humanize.naturaltime(app.latest_status.updated) }}
+          {{ humanize.naturaltime(app.latest_status.created) }}
         {% endif %}
       </td>
     </tr>
