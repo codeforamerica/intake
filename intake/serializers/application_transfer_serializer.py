@@ -30,4 +30,4 @@ class IncomingTransferSerializer(serializers.ModelSerializer):
 
     def get_local_date(self, instance):
         return fields.LocalDateField().to_representation(
-            instance.status_update.updated)
+            instance.status_update.created)

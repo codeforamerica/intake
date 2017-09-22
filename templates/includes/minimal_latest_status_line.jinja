@@ -8,7 +8,7 @@
       url('intake-app_history', submission_id=application.form_submission_id)
     }}" class="status_history_link">
       {{ application.latest_status.status_type.display_name }}
-      ({{ humanize.naturaltime(application.latest_status.updated) }}
+      ({{ humanize.naturaltime(application.latest_status.created) }}
       by {{ application.latest_status.author.profile.name }})
     </a>
   {%- else %}

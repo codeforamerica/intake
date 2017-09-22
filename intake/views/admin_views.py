@@ -130,13 +130,15 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
                 self.request.user.profile.organization, 'All')
             context['app_index_scope_title'] = "All Applications To {}".format(
                 self.request.user.profile.organization.name)
-            if count == 0:
-                context['no_results'] = 'You have no applications.'
+        if count == 0:
+            context['no_results'] = 'You have no applications.'
+            context['csv_download_link'] = None
+        else:
+            context['csv_download_link'] = reverse('intake-csv_download')
         context['page_counter'] = \
             utils.get_page_navigation_counter(
                 page=context['results'],
                 wing_size=9)
-
         return context
 
 
@@ -159,6 +161,7 @@ class ApplicationUnreadIndex(NoBrowserCacheOnGetMixin, ApplicationIndex):
                     self.request.user.profile.organization
                         ).values_list('id', flat=True)
                 )
+        context['csv_download_link'] = None
         return context
 
     def get(self, request):
@@ -182,6 +185,7 @@ class ApplicationNeedsUpdateIndex(ApplicationUnreadIndex):
         else:
             context['no_results'] = None
         context['print_all_link'] = None
+        context['csv_download_link'] = None
         context['app_index_scope_title'] = \
             "{} Applications Need Status Updates".format(count)
         return context
@@ -212,8 +216,13 @@ class ApplicationCountyNotListedIndex(ApplicationIndex):
         else:
             context['no_results'] = None
         context['print_all_link'] = None
+        context['csv_download_link'] = None
         context['app_index_scope_title'] = \
             "{} County-Not-Listed Applications".format(count)
+        context['page_counter'] = \
+            utils.get_page_navigation_counter(
+                page=context['results'],
+                wing_size=9)
         return context
 
 

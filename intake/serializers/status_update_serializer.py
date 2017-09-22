@@ -5,14 +5,14 @@ from .application_transfer_serializer import IncomingTransferSerializer
 
 
 class MinimalStatusUpdateSerializer(serializers.ModelSerializer):
-    updated = LocalDateField()
+    created = LocalDateField()
     status_type = serializers.SlugRelatedField(
         read_only=True, slug_field='display_name')
 
     class Meta:
         model = models.StatusUpdate
         fields = [
-            'updated',
+            'created',
             'status_type',
         ]
 
@@ -65,3 +65,21 @@ class StatusUpdateSerializer(serializers.ModelSerializer):
             return IncomingTransferSerializer().to_representation(
                 instance.transfer)
         return None
+
+
+class StatusUpdateCSVDownloadSerializer(serializers.ModelSerializer):
+    created = LocalDateField()
+    status_type = serializers.SlugRelatedField(
+        read_only=True, slug_field='display_name')
+    author_email = serializers.SerializerMethodField()
+
+    def get_author_email(self, instance):
+        return instance.author.email
+
+    class Meta:
+        model = models.StatusUpdate
+        fields = [
+            'created',
+            'status_type',
+            'author_email',
+        ]
