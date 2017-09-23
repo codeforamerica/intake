@@ -8,9 +8,9 @@ import intake.services.bundles as BundlesService
 
 @given('it is a weekday')
 def set_weekday(context):
-    weekend_patcher = patch('intake.utils.is_the_weekend')
-    weekend_patcher.return_value = False
-    weekend_patcher.start()
+    weekend_patcher = patch('intake.services.bundles.is_the_weekend')
+    is_the_weekend = weekend_patcher.start()
+    is_the_weekend.return_value = False
     context.test.patches["weekend_patcher"] = weekend_patcher
 
 
