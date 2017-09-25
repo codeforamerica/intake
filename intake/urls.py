@@ -17,7 +17,8 @@ from intake.views import (
     tag_views,
     status_update_views,
     prebuilt_pdf_bundle_views,
-    printout_views
+    printout_views,
+    data_export_views
 )
 
 
@@ -164,6 +165,10 @@ urlpatterns = [
     url(r'^applications/(?P<submission_id>[0-9]+)/review-status/$',
         login_required(status_update_views.review_status_notification),
         name='intake-review_status_notification'),
+
+    url(r'^applications/csv-download',
+        login_required(data_export_views.csv_download),
+        name='intake-csv_download'),
 
     url(r'^applications-autocomplete/$', search_views.application_search,
         name='applications-autocomplete',),
