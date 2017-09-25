@@ -216,7 +216,6 @@ class ApplicationCountyNotListedIndex(ApplicationIndex):
         else:
             context['no_results'] = None
         context['print_all_link'] = None
-<<<<<<< HEAD
         context['csv_download_link'] = None
         context['app_index_scope_title'] = \
             "{} County-Not-Listed Applications".format(count)
@@ -224,10 +223,6 @@ class ApplicationCountyNotListedIndex(ApplicationIndex):
             utils.get_page_navigation_counter(
                 page=context['results'],
                 wing_size=9)
-=======
-        context['app_index_scope_title'] = \
-            "{} County-Not-Listed Applications".format(count)
->>>>>>> master
         return context
 
 
