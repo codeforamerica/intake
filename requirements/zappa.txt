@@ -1,0 +1,3 @@
+# Dependencies for production
+-r app.txt
+boto~=2.42
