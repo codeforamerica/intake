@@ -41,6 +41,7 @@ def type_in_textarea(context, input_name, value):
         input_name,
     )
     text = context.browser.find_element_by_css_selector(selector)
+    text.clear()
     text.send_keys(value)
 
 

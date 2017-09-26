@@ -1,0 +1,171 @@
+<div 
+{%- if form.submission %}
+ data-submission-id="formsubmission-{{ form.submission.id }}"
+{%- endif %} class="data_display-dataset">
+
+  <div class="data_display-section identification" style="border-top: 1px solid #eeeeee;">
+    <div class="data_display-row name">
+      {{ form.first_name }}
+      {{ form.middle_name_display }}
+      {{ form.last_name }}
+    </div>
+    <div class="data_display-row alias">
+      {{ form.aliases_display }}
+    </div>
+    <div class="data_display-row id_numbers">
+      {{ form.dob_display }}
+      {{ form.last_four_display }}
+      {{ form.driver_license_or_id_display }}
+      {{ form.ssn_display }}
+      {{ form.case_number_display }}
+      {{ form.pfn_number_display }}
+    </div>
+
+    <div class="data_display-row demographic">
+      {{ form.preferred_pronouns_display }}
+    </div>
+
+  </div>
+
+  <div class="data_display-section contact_info">
+    <h3 class="data_display-section_header">Contact Information</h3>
+    <div class="data_display-row">
+      {{ form.contact_preferences }}
+    </div>
+    <div class="data_display-row devices">
+      {{ form.phone_number_display }}
+      {{ form.email }}
+    </div>
+    <div class="data_display-row alt_devices">
+      {{ form.alternate_phone_number_display }}
+    </div>
+    <div class="data_display-row mailing">
+      {{ form.address }}
+    </div>
+    <div class="data_display-row california">
+      {{ form.is_california_resident_display }}
+      {{ form.how_long_california_resident_display }}
+    </div>
+  </div>
+
+  <div class="data_display-section case_status" style="top: 0;">
+    <h3 class="data_display-section_header">Case Information</h3>
+    <div class="data_display-stack">
+      {{ form.us_citizen_display }}
+      {{ form.is_veteran_display }}
+      {{ form.is_student_display }}
+    </div>
+    <div class="data_display-stack probation_parole">
+      {{ form.on_probation_parole }}
+      {%- if form.on_probation_parole %}
+        {{ form.where_probation_or_parole_display }}
+        {{ form.when_probation_or_parole_display }}
+        {{ form.finished_half_probation_display }}
+        {{ form.reduced_probation_display }}
+      {%- endif %}
+    </div>
+    {%- if 'being_charged' in form.fields %}
+    <div class="data_display-stack">
+        {{ form.being_charged_display }}
+    </div>
+    {%- endif %}
+    <div class="data_display-stack">
+      {{ form.serving_sentence_display }}
+    </div>
+    {%- if 'rap_outside_sf' in form.fields %}
+    <div class="data_display-stack external_rap">
+        {{ form.rap_outside_sf }}
+        {%- if form.rap_outside_sf %}
+        {{ form.when_where_outside_sf_display }}
+        {%- endif %}
+    </div>
+    {%- endif %}
+    <div class="data_display-stack">
+      {{ form.has_suspended_license_display }}
+      {{ form.owes_court_fees_display }}
+    </div>
+    <div class="data_display-stack">
+      {{ form.reasons_for_applying_display }}
+    </div>
+  </div>
+
+  {%- if 'monthly_income' in form.fields %}
+  <div class="data_display-section financial">
+    <h3 class="data_display-section_header">Financial Information</h3>
+    <div class="data_display-row employment">
+      {{ form.currently_employed_display }}
+    </div>
+    <div class="data_display-row income">
+      {{ form.monthly_income_display }}
+      {{ form.income_source_display }}
+      {{ form.monthly_expenses_display }}
+    </div>
+    <div class="data_display-row household">
+      {{ form.household_size_display }}
+      {{ form.dependents_display }}
+      {{ form.has_children_display }}
+      {{ form.is_married_display }}
+    </div>
+
+    <div class="data_display-row other_financial">
+      {{ form.owns_home_display }}
+      {{ form.on_public_benefits_display }}
+      {{ form.how_much_savings_display }}
+    </div>
+    
+  </div>
+  {%- endif %}
+
+  <div class="data_display-section meta">
+    <div class="data_display-row">
+      {{ form.understands_limits }}
+    </div>
+    <div class="data_display-row">
+      {{ form.consent_to_represent }}
+    </div>
+    <div class="data_display-row">
+      {{ form.identity_confirmation_display }}
+    </div>
+    <div class="data_display-row">
+      {{ form.understands_maybe_fee_display }}
+    </div>
+    <div class="data_display-row">
+      {{ form.how_did_you_hear }}
+    </div>
+    {%- if 'additional_information' in form.fields %}
+    <div class="data_display-row">
+      {{ form.additional_information }}
+    </div>
+    {%- endif %}
+  </div>
+
+  
+  {%- include "includes/submission_display_actions.jinja" %}
+
+  {%- if declaration_form %}
+  <h3>Letter to Judge</h3>
+  {{ declaration_form.display() }}
+  {%- else %}
+    {%- if 'declaration_letter_intro' in form.fields %}
+    <h3>Letter of Declaration</h3>
+    <div class="data_display-section declaration_letter">
+      <div class="data_display-row">
+        {{ form.declaration_letter_intro }}
+      </div>
+      <div class="data_display-row">
+        {{ form.declaration_letter_life_changes }}
+      </div>
+      <div class="data_display-row">
+        {{ form.declaration_letter_activities }}
+      </div>
+      <div class="data_display-row">
+        {{ form.declaration_letter_goals }}
+      </div>
+      <div class="data_display-row">
+        {{ form.declaration_letter_why }}
+      </div>
+    </div>
+    {%- endif %}
+  {%- endif %}
+  
+</div>

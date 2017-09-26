@@ -59,6 +59,7 @@ urlpatterns = [
     url(r'^application/letter/review/$',
         declaration_letter_view.review_letter, name='intake-review_letter'),
     url(r'^confirm/$', county_application_view.confirm, name='intake-confirm'),
+    url(r'^review/$', county_application_view.review, name='intake-review'),
     url(r'^thanks/$', application_done_view.thanks, name='intake-thanks'),
     url(r'^getting_your_rap/$', application_done_view.rap_sheet_info,
         name='intake-rap_sheet', robots_allow=True),

@@ -1,0 +1,56 @@
+{% extends "forms/county_form.jinja" %}
+
+
+{%- block header_title -%}
+Review Your Application
+{%- endblock header_title -%}
+
+{% block content %}
+<section class="application_form content">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-8 col-md-6 col_centered">
+        {% if needs_declaration_letter %}
+            <p><strong>Please take a moment to review your application.</strong> If it looks okay, click Next to continue to the next step.</p>
+        {% else %}
+            <p><strong>Please take a moment to review your application.</strong> If it looks okay, click Submit Application to finish.</p>
+        {% endif %}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-8 col-md-6 col_centered">
+
+<form class="county_form" action="" method="POST" accept-charset="utf-8">
+  {#
+    Non field errors are not included here because they will be
+    displayed as flash messages in the header.
+  #}
+  
+  {% include "includes/csrf_field.jinja" %}
+  
+  {{ form.display() }}
+
+  <div class="form-submit_choices">
+  <button class="action-back" type="submit" name="submit_action" value="edit_application">
+    <span class="glyphicon glyphicon-arrow-left"></span>
+    {{ _("Edit Application") }}
+  </button>
+  <button class="action-forward" type="submit" name="submit_action" value="approve_application">
+{% if needs_declaration_letter %}
+    {{ _("Next") }}
+{% else %}
+    <span class="glyphicon glyphicon-ok"></span>
+    {{ _("Submit Application") }}
+{% endif %}
+  </button>
+
+
+  </div>
+</form>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}

@@ -1,4 +1,4 @@
-from behave import when, given
+from behave import when, then, given
 from intake import models
 from features.steps.language_hacks import oxford_comma_text_to_list
 
@@ -80,6 +80,33 @@ def fill_county_not_listed_fields(context, applicant_name="Jane Doe"):
        And the "email" text input is set to "testing@codeforamerica.org"
        And the "how_did_you_hear" text input is set to "Listening"
        And the "additional_information" text input is set to "So cool"
+    '''.format(first_name=first_name, last_name=last_name))
+
+
+@then('it displays basic answers')
+@then('it displays basic answers for "{applicant_name}"')
+def test_displays_basic_answers(context, applicant_name="Jane Doe"):
+    first_name, last_name = applicant_name.split(' ')
+    context.execute_steps('''
+    Then "first_name" should say "{first_name}"
+      And "last_name" should say "{last_name}"
+       And "phone_number" should say "(510) 555-5555"
+       And "email" should say "testing@codeforamerica.org"
+       And "dob" should say "1/1/1980"
+       And "us_citizen" should say "Yes"
+       And "address" should say "111 Coaster HWY"
+       And "address" should say "San Francisco"
+       And "address" should say "CA"
+       And "address" should say "91011"
+       And "on_probation_parole" should say "Yes"
+       And "serving_sentence" should say "Yes"
+       And "currently_employed" should say "Yes"
+       And "monthly_income" should say "$1,000.00"
+       And "monthly_expenses" should say "$1,000.00"
+       And "consent_to_represent" should say "Yes, I give them permission to do that"
+       And "understands_limits" should say "Yes, I understand"
+       And "how_did_you_hear" should say "Listening"
+       And "additional_information" should say "So cool"
     '''.format(first_name=first_name, last_name=last_name))
 
 
