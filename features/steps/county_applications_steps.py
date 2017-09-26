@@ -103,7 +103,8 @@ def test_displays_basic_answers(context, applicant_name="Jane Doe"):
        And "currently_employed" should say "Yes"
        And "monthly_income" should say "$1,000.00"
        And "monthly_expenses" should say "$1,000.00"
-       And "consent_to_represent" should say "Yes, I give them permission to do that"
+       And "consent_to_represent" should say "Yes, I give them permission to'''
+                          ''' do that"
        And "understands_limits" should say "Yes, I understand"
        And "how_did_you_hear" should say "Listening"
        And "additional_information" should say "So cool"
