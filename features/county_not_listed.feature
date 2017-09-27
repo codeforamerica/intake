@@ -13,6 +13,8 @@ Feature: Applicants can apply for help in counties where we don't have partners
      When applicant fills out county not listed form fields
       And the "unlisted_counties" text input is set to "Delta Quadrant, Narnia County"
       And submit button in form "county_form" is clicked
+     Then it should load "/review/"
+     When I click "button.action-forward"
      Then it should load "/thanks/"
       And "next_steps" should say "We will contact you in the next week with information on how to clear your record in Delta Quadrant, Narnia County"
 
@@ -27,6 +29,8 @@ Feature: Applicants can apply for help in counties where we don't have partners
       And applicant fills out additional fields for Contra Costa
       And the "unlisted_counties" text input is set to "Delta Quadrant, Narnia County"
       And submit button in form "county_form" is clicked
+     Then it should load "/review/"
+     When I click "button.action-forward"
      Then it should load "/thanks/"
       And "next_steps" should say "We will contact you in the next week with information on how to clear your record in Delta Quadrant, Narnia County"
 

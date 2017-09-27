@@ -1,11 +1,15 @@
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse, reverse_lazy
+
+from project import alerts
 from .applicant_form_view_base import ApplicantFormViewBase
 from formation.forms import county_form_selector, \
     county_display_form_selector, ApplicationReviewForm
 import intake.services.messages_service as MessagesService
 from intake.constants import EDIT_APPLICATION
+from intake.serializers import RequestSerializer
+from project.services import logging_service
 
 WARNING_FLASH_MESSAGE = _(
     "Please double check the form. Some parts are empty and may cause delays.")
@@ -21,6 +25,19 @@ class CountyApplicationNoWarningsView(ApplicantFormViewBase):
         return county_form_selector.get_combined_form_class(
             counties=self.county_slugs)
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        editing_scope = self.request.GET.get('editing', '')
+        if editing_scope:
+            MessagesService.flash_warnings(
+                self.request,
+            _("You wanted to edit your application"))
+        field_to_edit = context['form'].fields.get(editing_scope, None)
+        if field_to_edit:
+            field_to_edit.add_warning(
+                _("You wanted to edit your answer to this question."),
+                key=editing_scope)
+        return context
 
 class CountyApplicationView(CountyApplicationNoWarningsView):
     """County application page that checks for validation warnings.
@@ -103,9 +120,13 @@ class CountyApplicationReviewView(ApplicantFormViewBase):
             if county_form.is_valid():
                 return self.form_valid(county_form)
             else:
-                # TODO: seem like this code can't be executed and if it was it
-                # would fail.
-                return self.form_invalid(county_form)
+                subject = 'Invalid form data at review page'
+                serialized_request = RequestSerializer(request).data
+                message = 'Check the logs:\n{}'.format(serialized_request)
+                alerts.send_email_to_admins(subject=subject, message=message)
+                logging_service.format_and_log(
+                    'application_error', level='error', **serialized_request)
+                return redirect('intake-county_application')
         else:
             return self.form_invalid(review_form)
 

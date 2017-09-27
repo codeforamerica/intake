@@ -32,6 +32,8 @@ def submit_app_to_counties(
             'When applicant fills out additional fields for {county}'.format(
                 county=county.name))
     substeps.append('''And submit button in form "county_form" is clicked
+        Then it should load "/review/"
+        When I click "button.action-forward"
         Then it should load "thanks/"
         '''.format(first_name=first_name, last_name=last_name))
     context.execute_steps('\n'.join(substeps))
@@ -59,9 +61,7 @@ def input_basic_answers(context, applicant_name="Jane Doe"):
        And the "address.zip" text input is set to "91011"
        And "yes" is clicked on the "on_probation_parole" radio button
        And "yes" is clicked on the "serving_sentence" radio button
-       And "yes" is clicked on the "currently_employed" radio button
        And the "monthly_income" text input is set to "1000"
-       And the "monthly_expenses" text input is set to "1000"
        And "yes" is clicked on the "consent_to_represent" radio button
        And "yes" is clicked on the "understands_limits" radio button
        And the "how_did_you_hear" text input is set to "Listening"
@@ -100,9 +100,7 @@ def test_displays_basic_answers(context, applicant_name="Jane Doe"):
        And "address" should say "91011"
        And "on_probation_parole" should say "Yes"
        And "serving_sentence" should say "Yes"
-       And "currently_employed" should say "Yes"
        And "monthly_income" should say "$1,000.00"
-       And "monthly_expenses" should say "$1,000.00"
        And "consent_to_represent" should say "Yes, I give them permission to'''
                           ''' do that"
        And "understands_limits" should say "Yes, I understand"
@@ -115,6 +113,23 @@ def test_displays_basic_answers(context, applicant_name="Jane Doe"):
 def coco_fields(context):
     context.execute_steps('''
       When the "income_source" text input is set to "a job"
+       And "yes" is clicked on the "currently_employed" radio button
+       And the "monthly_expenses" text input is set to "1000"
+      ''')
+
+
+@when('applicant fills out additional fields for Alameda Public Defender')
+def a_pubdef_fields(context):
+    context.execute_steps('''
+       When the "monthly_income" text input is set to "1000"
+        And "yes" is clicked on the "on_public_benefits" radio button
+        And "no" is clicked on the "owns_home" radio button
+        And the "household_size" text input is set to "3"
+        And "no" is clicked on the "on_probation_parole" radio button
+        And "no" is clicked on the "finished_half_probation" radio button
+        And "no" is clicked on the "reduced_probation" radio button
+        And "no" is clicked on the "serving_sentence" radio button
+        And "no" is clicked on the "being_charged" radio button        
       ''')
 
 
@@ -122,6 +137,8 @@ def coco_fields(context):
 def sf_fields(context):
     context.execute_steps('''
       When the "ssn" text input is set to "123-45-6789"
+       And the "monthly_expenses" text input is set to "1000
+       And "yes" is clicked on the "currently_employed" radio button
       ''')
 
 
@@ -135,3 +152,25 @@ When the "how_much_savings" text input is set to "1000"
  And "yes" is clicked on the "is_married" radio button
  And "background_check" is clicked on the "reasons_for_applying" radio button
       ''')
+
+
+@when("applicant fills out declaration letter")
+def declaration_letter_fields(context):
+    context.execute_steps('''
+When the "declaration_letter_intro" text area is set to "Hello my name is Ben"
+And the "declaration_letter_life_changes" text area is set to "I am stuck"
+And the "declaration_letter_activities" text area is set to "in this computer"
+And the "declaration_letter_goals" text area is set to "please"
+And the "declaration_letter_why" text area is set to "send help"
+      ''')
+
+
+@then("it displays the declaration letter")
+def test_shows_declaration_letter(context):
+    context.execute_steps('''
+Then "declaration_letter" should say "Hello my name is Ben"
+And "declaration_letter" should say "I am stuck"
+And "declaration_letter" should say "in this computer"
+And "declaration_letter" should say "please"
+And "declaration_letter" should say "send help"
+    ''')
