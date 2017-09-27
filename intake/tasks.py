@@ -37,17 +37,17 @@ def add_application_pdfs(application_id):
     # circular imports
     # note: this is a really bad sign for this code,
     # no reason it should be this complex
-    import intake.services.pdf_service as PDFService
-    PDFService.fill_pdf_for_application(application_id)
-    PDFService.update_pdf_bundle_for_san_francisco()
+    from intake.services import pdf_service
+    pdf_service.fill_pdf_for_application(application_id)
+    pdf_service.update_pdf_bundle_for_san_francisco()
 
 
 @task
 def remove_application_pdfs(application_id):
     # imports of intake services should be called inside of tasks to prevent
     # circular imports
-    import intake.services.pdf_service as PDFService
-    PDFService.rebuild_pdf_bundle_for_removed_application(application_id)
+    from intake.services import pdf_service
+    pdf_service.rebuild_pdf_bundle_for_removed_application(application_id)
 
 
 @task
