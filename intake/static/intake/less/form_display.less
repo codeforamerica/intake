@@ -45,7 +45,7 @@ li.action_menu-item > a {
 	}
 }
 
-.data_display-label {
+.data_display-label, .review_display-label {
 	color: lighten(@gray-light, 20%);
 	font-size: .9em;
 }
@@ -56,7 +56,7 @@ li.action_menu-item > a {
 .public .data_display .address-name {
 	font-weight: 600;
 }
-.data_display-value {
+.data_display-value, .review_display-value {
 	color: black;
 	font-size: 1.19em; 
 	// font-size: 1.2em causes rendering artifacts for 'z' chars on chrome :/
@@ -65,6 +65,10 @@ li.action_menu-item > a {
 .data_display-value.empty:after {
 	content: "EMPTY";
 	color: @gray-lighter;
+}
+.review_display-value.empty:after {
+	content: "No answer";
+	color: @gray;
 }
 .data_display-section {
 	max-width: 34em;
@@ -163,4 +167,8 @@ pre.address {
 
 .data_display.counties {
 	max-width: 20em;
+}
+
+.review_display {
+	
 }

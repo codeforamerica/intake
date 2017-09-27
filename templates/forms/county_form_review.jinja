@@ -28,10 +28,30 @@ Review Your Application
   
   {% include "includes/csrf_field.jinja" %}
   
-  {{ form.display() }}
+  {% for field in form.get_usable_fields() %}
+    <div class="review_display {{ field.get_html_class_name() }}">
+      <div class="review_display-label">{{ field.get_display_label() }}</div>
+      {%- if not field.is_empty() %}
+      <div class="review_display-value">
+        {{ field.get_display_value() }}
+      </div>
+      {%- else %}
+      <div class="review_display-value empty"></div>
+      {%- endif %}
+      <a class="btn btn-medium btn-default review_display-edit_button" href="{{ 
+          url('intake-county_application')
+        }}?editing={{
+          field.get_html_class_name()
+        }}#{{
+          field.get_html_class_name()
+        }}">
+        Edit
+      </a>
+    </div>
+  {% endfor %}
 
   <div class="form-submit_choices">
-  <button class="action-back" type="submit" name="submit_action" value="edit_application">
+  <a href="{{ url('intake-county_application') }}?editing=all" class="action-back">
     <span class="glyphicon glyphicon-arrow-left"></span>
     {{ _("Edit Application") }}
   </button>
