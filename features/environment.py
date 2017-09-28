@@ -65,8 +65,6 @@ def after_all(context):
 
 def before_scenario(context, scenario):
     call_command('load_essential_data')
-    htt_mock = HTTMock()
-    enter_context(htt_mock)
     requests_patcher = patch(
         'intake.services.contact_info_validation_service.requests')
     requests_patcher.start()
