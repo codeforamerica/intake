@@ -1,4 +1,4 @@
-from formation.tests.utils import PatchTranslationTestCase, django_only
+from project.tests.testcases import TestCase
 from formation.tests import mock
 
 from formation.forms import county_form_selector
@@ -13,7 +13,7 @@ class ExampleForm(Form):
     required_fields = [F.FirstName]
 
 
-class TestForm(PatchTranslationTestCase):
+class TestForm(TestCase):
 
     def get_sf_form(self, *args):
         form_class = county_form_selector.get_combined_form_class(
@@ -101,7 +101,7 @@ class TestForm(PatchTranslationTestCase):
                 'prefers_email'],
             'currently_employed': 'yes',
             'dob': {'day': '2', 'month': '12', 'year': '1998'},
-            'email': 'shaun68@example.com',
+            'email': 'cmrtestuser@gmail.com',
             'first_name': 'Erwin',
             'how_did_you_hear': '',
             'last_name': 'Johnson',
@@ -161,21 +161,19 @@ class TestForm(PatchTranslationTestCase):
             'address.state': 'CA',
             'address.zip': '94609',
             'phone_number': '415-333-4444',
-            'email': 'someone@gmail.com'
+            'email': 'cmrtestuser@gmail.com'
         }))
         self.assertFalse(form.is_valid())
         self.assertFalse('phone_number' in form.errors)
         self.assertFalse('email' in form.errors)
         self.assertFalse('address' in form.errors)
 
-    @django_only
     def test_form_display(self):
         fake_answers = mock.FILLED_SF_DATA
         form = self.get_sf_form(fake_answers)
         self.assertTrue(form.is_valid())
         self.assertTrue(hasattr(form.display(), '__html__'))
 
-    @django_only
     def test_dynamic_field_display_with_existing_field(self):
         fake_answers = mock.FILLED_SF_DATA
         form = self.get_sf_form(fake_answers)
@@ -183,14 +181,12 @@ class TestForm(PatchTranslationTestCase):
             form.first_name_display, form.first_name.render(display=True))
         self.assertTrue(hasattr(form.first_name_display, '__html__'))
 
-    @django_only
     def test_dynamic_field_display_with_nonexistent_field(self):
         fake_answers = mock.FILLED_SF_DATA
         form = self.get_sf_form(fake_answers)
         self.assertEqual(
             form.random_field_display, "")
 
-    @django_only
     def test_dynamic_field_display_raises_error_for_unknown_attribute(self):
         fake_answers = mock.FILLED_SF_DATA
         form = self.get_sf_form(fake_answers)

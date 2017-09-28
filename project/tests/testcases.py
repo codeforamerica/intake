@@ -26,8 +26,15 @@ def response_content(url, request):
 
 
 class TestCase(DjangoTestCase):
+    """This Base TestCase will mock out all outgoing requests to external URLs
+        that are made using the requests library.
+
+        By default, any request will return a blank 200 OK mock HTTP response.
+
+        response_content can be edited to create custom responses, but this
+        should only be done if local patching in tests is insufficient.
+    """
     def run(self, result=None):
         with HTTMock(response_content) as httmock:
             self.httmock = httmock
             super().run(result)
-
