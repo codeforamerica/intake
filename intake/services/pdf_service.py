@@ -11,8 +11,6 @@ def fill_pdf_for_application(application_id):
     """Returns a Filled PDF for the given application_id
     Raises an error if no fillable pdf exists or or if it has no file loaded.
     """
-    import time
-    time.sleep(10)
     app = models.Application.objects.get(id=application_id)
     fillable_pdf = models.FillablePDF.objects.filter(
         organization_id=app.organization_id).first()
