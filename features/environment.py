@@ -37,10 +37,6 @@ def stop_local():
         bs_local.stop()
 
 
-def mailgun_side_effect(*args, **kwargs):
-    raise Exception("Calling out to mailgun with", args, kwargs)
-
-
 def before_all(context):
     start_local()
     desired_cap = {
@@ -69,12 +65,6 @@ def after_all(context):
 
 def before_scenario(context, scenario):
     call_command('load_essential_data')
-    mailgun_patcher = patch(
-        'intake.services.contact_info_validation_service'
-        '.validate_email_with_mailgun', side_effect)
-    mailgun_patcher.start()
-    mailgun_patcher.return_value = (True, None)
-    context.test.patches = {'mailgun_patcher': mailgun_patcher}
     context.test.patches = {}
 
 
