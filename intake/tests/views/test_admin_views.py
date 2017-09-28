@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 
 from intake import models
 from intake.tests.base_testcases import IntakeDataTestCase, DELUXE_TEST
-from intake.tests.factories import FormSubmissionFactory
+from intake.tests.factories import FormSubmissionFactory, make_apps_for
 from user_accounts.tests.factories import followup_user, app_reviewer
 from project.services.query_params import get_url_for_ids
 import intake.services.bundles as BundlesService
@@ -265,6 +265,12 @@ class TestApplicationIndex(IntakeDataTestCase):
         response = self.client.get(reverse('intake-app_all_index'))
         self.assertContains(response, "Save note")
 
+    def test_contains_csv_download_link(self):
+        self.be_apubdef_user()
+        response = self.client.get(reverse('intake-app_all_index'))
+        csv_download_link = reverse('intake-csv_download')
+        self.assertContains(response, csv_download_link)
+
     def test_pdf_users_see_pdf_link(self):
         self.be_sfpubdef_user()
         # look for the pdf link of each app
@@ -344,14 +350,35 @@ class TestApplicationIndex(IntakeDataTestCase):
             self.assertIn('(Incoming Transfer)', html_text)
             self.assertIn('Unread', html_text)
 
-    def test_unread_results_show_correct_count_in_tab(self):
-        pass
 
-    def test_all_results_show_correct_count_in_tab(self):
-        pass
+class TestApplicationUnreadIndex(TestCase):
+    fixtures = ['counties', 'organizations', 'groups']
+    view_name = 'intake-app_unread_index'
 
-    def test_needs_updates_results_show_correct_count_in_tab(self):
-        pass
+    def test_does_not_show_csv_download_link(self):
+        profile = app_reviewer('cc_pubdef')
+        make_apps_for('cc_pubdef', count=1)
+        self.client.login(
+            username=profile.user.username,
+            password=settings.TEST_USER_PASSWORD)
+        response = self.client.get(reverse(self.view_name))
+        csv_download_link = reverse('intake-csv_download')
+        self.assertNotContains(response, csv_download_link)
+
+
+class TestApplicationNeedsUpdateIndex(TestCase):
+    fixtures = ['counties', 'organizations', 'groups']
+    view_name = 'intake-app_needs_update_index'
+
+    def test_does_not_show_csv_download_link(self):
+        profile = app_reviewer('cc_pubdef')
+        make_apps_for('cc_pubdef', count=1)
+        self.client.login(
+            username=profile.user.username,
+            password=settings.TEST_USER_PASSWORD)
+        response = self.client.get(reverse(self.view_name))
+        csv_download_link = reverse('intake-csv_download')
+        self.assertNotContains(response, csv_download_link)
 
 
 class TestApplicationCountyNotListedIndex(TestCase):

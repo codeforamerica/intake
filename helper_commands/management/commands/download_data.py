@@ -1,9 +1,10 @@
+import os
 import ntpath
 from subprocess import Popen
 from django.core import management
 from django.core.management.base import BaseCommand
 from django.conf import settings
-from .utils import aws_open
+from .utils import aws_open, run_sql, pg_load, drop_table
 
 
 class Command(BaseCommand):
@@ -17,7 +18,7 @@ class Command(BaseCommand):
 
         1. sync replica from origin
         2. pull fixture from bucket to local tempfile
-        3. empty existing database
+        3. drops all tables in the public schema of the existing database
         4. load local fixture tempfile
 
         Relevant settings:
@@ -52,5 +53,9 @@ class Command(BaseCommand):
             settings.SYNC_FIXTURE_LOCATION,  # local temp filename
         ]  # command to pull down fixture to local file, with aws env vars
         aws_open(download_s3)
-        management.call_command('flush', interactive=False)
-        management.call_command('loaddata', settings.SYNC_FIXTURE_LOCATION)
+        table_names = run_sql(
+            "select tablename from pg_tables where schemaname = 'public'")
+        for table_name in table_names:
+            print(table_name)
+            drop_table(table_name[0])
+        pg_load(settings.SYNC_FIXTURE_LOCATION)

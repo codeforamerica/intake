@@ -2,7 +2,7 @@ from subprocess import Popen
 from django.core import management
 from django.core.management.base import BaseCommand
 from django.conf import settings
-from .utils import aws_open
+from .utils import aws_open, pg_dump
 
 
 class Command(BaseCommand):
@@ -18,8 +18,7 @@ class Command(BaseCommand):
             SYNC_BUCKET - bucket to dump fixture to
             SYNC_FIXTURE_LOCATION - filename used for fixture
         """
-        with open(settings.SYNC_FIXTURE_LOCATION, 'w+') as f:
-            management.call_command('dumpdata', stdout=f)
+        pg_dump(settings.SYNC_FIXTURE_LOCATION)
         upload_command = [
             settings.AWS_CLI_LOCATION,
             's3', 'mv',
