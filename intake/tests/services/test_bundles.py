@@ -1,5 +1,5 @@
 from unittest.mock import Mock, patch, call
-from django.test import TestCase
+from project.tests.testcases import TestCase
 
 from project.jinja2 import external_reverse
 import user_accounts.models as auth_models

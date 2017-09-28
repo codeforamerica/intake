@@ -1,4 +1,4 @@
-from django.test import TestCase
+from project.tests.testcases import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from intake import models

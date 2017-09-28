@@ -1,6 +1,6 @@
 from unittest import TestCase as BaseTestCase
 from unittest.mock import Mock, patch
-from django.test import TestCase as DjangoTestCase, override_settings
+from project.tests.testcases import TestCase as DjangoTestCase, override_settings
 from project.jinja2 import external_reverse
 from django.core import mail
 from django.conf import settings

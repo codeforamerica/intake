@@ -3,7 +3,7 @@ from datetime import datetime
 from unittest import skipUnless
 from unittest.mock import Mock
 
-from django.test import TestCase
+from project.tests.testcases import TestCase
 from django.core.exceptions import ValidationError
 
 from intake.tests import factories

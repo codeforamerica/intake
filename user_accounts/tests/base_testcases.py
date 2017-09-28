@@ -1,5 +1,5 @@
 import re
-from django.test import TestCase
+from project.tests.testcases import TestCase
 from django.contrib import auth
 from user_accounts.tests import clients, mock
 from user_accounts.models import Organization, UserProfile
@@ -48,7 +48,9 @@ class AuthIntegrationTestCase(TestCase):
         if profiles:
             for org in cls.orgs:
                 user_att = org.slug + "_user"
-                setattr(cls, user_att, org.profiles.first().user)
+                profile = org.profiles.first()
+                if profile:
+                    setattr(cls, user_att, profile.user)
         cls.superuser = mock.fake_superuser(
             **cls.example_superuser)
         UserProfile.objects.create(user=cls.superuser,

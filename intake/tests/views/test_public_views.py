@@ -1,4 +1,4 @@
-from django.test import TestCase
+from project.tests.testcases import TestCase
 from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
 

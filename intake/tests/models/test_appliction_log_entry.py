@@ -1,4 +1,4 @@
-from django.test import TestCase
+from project.tests.testcases import TestCase
 
 import intake.services.submissions as SubmissionsService
 from user_accounts import models as auth_models

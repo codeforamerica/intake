@@ -1,4 +1,4 @@
-from django.test import TestCase
+from project.tests.testcases import TestCase
 from clips.models import Clip, run_query
 
 

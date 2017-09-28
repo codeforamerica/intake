@@ -1,5 +1,5 @@
 from unittest.mock import Mock, patch
-from django.test import TestCase
+from project.tests.testcases import TestCase
 from phone.validators import is_valid_twilio_request
 
 

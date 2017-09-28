@@ -11,7 +11,8 @@ MAILGUN_EMAIL_VALIDATION_URL = \
 def validate_email_with_mailgun(email):
     response = requests.get(
             MAILGUN_EMAIL_VALIDATION_URL,
-            auth=HTTPBasicAuth('api', settings.MAILGUN_PRIVATE_API_KEY),
+            auth=HTTPBasicAuth(
+                'api', getattr(settings, 'MAILGUN_PRIVATE_API_KEY', '')),
             params=dict(
                 address=email,
                 mailbox_verification=True))

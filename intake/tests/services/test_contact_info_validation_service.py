@@ -1,5 +1,5 @@
 from unittest.mock import patch, Mock
-from django.test import TestCase
+from project.tests.testcases import TestCase
 from intake.services.contact_info_validation_service import \
     validate_email_with_mailgun
 from intake.exceptions import MailgunAPIError

@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 from unittest.mock import Mock
-from django.test import TestCase
+from project.tests.testcases import TestCase
 from intake import models, groups
 from user_accounts.models import Organization
 from user_accounts.tests.factories import profile_for_org_and_group_names

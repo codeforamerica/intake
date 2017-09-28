@@ -1,5 +1,5 @@
 import datetime
-from django.test import TestCase
+from project.tests.testcases import TestCase
 from intake.constants import PACIFIC_TIME
 from intake.services import statistics
 from intake import utils

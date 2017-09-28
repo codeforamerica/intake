@@ -1,4 +1,4 @@
-from django.test import TestCase
+from project.tests.testcases import TestCase
 from django.core.urlresolvers import reverse
 from user_accounts.tests.mock import fake_superuser, fake_password
 

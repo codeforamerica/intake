@@ -1,6 +1,8 @@
+from unittest.mock import patch
 from browserstack.local import Local
 from django.conf import settings
 from django.core.management import call_command
+from httmock import HTTMock
 from selenium import webdriver
 
 
@@ -63,7 +65,12 @@ def after_all(context):
 
 def before_scenario(context, scenario):
     call_command('load_essential_data')
-    context.test.patches = {}
+    htt_mock = HTTMock()
+    enter_context(htt_mock)
+    requests_patcher = patch(
+        'intake.services.contact_info_validation_service.requests')
+    requests_patcher.start()
+    context.test.patches = {'requests_patcher': requests_patcher}
 
 
 def after_scenario(context, scenario):

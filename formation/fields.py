@@ -2,6 +2,8 @@ from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import EmailValidator, URLValidator
+
+from formation.validators import mailgun_email_validator
 from project.jinja2 import oxford_comma
 from intake.models import County
 from formation.field_types import (
@@ -345,6 +347,7 @@ class EmailField(CharField):
     help_text = _('For example "yourname@example.com"')
     validators = [
         EmailValidator(_("Please enter a valid email")),
+        mailgun_email_validator
     ]
     display_template_name = "formation/email_display.jinja"
 

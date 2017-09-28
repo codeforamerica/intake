@@ -1,4 +1,4 @@
-from django.test import TestCase
+from project.tests.testcases import TestCase
 from intake import models, serializers
 from intake.tests.base_testcases import ALL_APPLICATION_FIXTURES
 

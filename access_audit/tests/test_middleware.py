@@ -1,4 +1,4 @@
-from django.test import TestCase
+from project.tests.testcases import TestCase
 from user_accounts.tests.factories import UserProfileFactory
 from django.conf import settings
 from easyaudit.middleware.easyaudit import (

@@ -1,6 +1,6 @@
 from unittest.mock import Mock, patch
 from intake.tests.factories import FormSubmissionWithOrgsFactory
-from django.test import TestCase
+from project.tests.testcases import TestCase
 from intake import services, models
 from user_accounts.models import Organization
 

@@ -1,4 +1,4 @@
-from django.test import TestCase
+from project.tests.testcases import TestCase
 from intake.tests.factories import SubmissionTagLinkFactory
 from intake import models
 from taggit.models import Tag

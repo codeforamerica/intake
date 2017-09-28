@@ -1,5 +1,5 @@
 from unittest.mock import patch
-from django.test import TestCase
+from project.tests.testcases import TestCase
 from django.core.urlresolvers import reverse
 from django.core import mail
 

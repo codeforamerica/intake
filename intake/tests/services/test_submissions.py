@@ -1,6 +1,6 @@
 import logging
 from unittest.mock import Mock, patch
-from django.test import TestCase
+from project.tests.testcases import TestCase
 import intake.services.submissions as SubmissionsService
 from intake.tests import mock, factories
 from intake.tests.mock_org_answers import get_answers_for_orgs
