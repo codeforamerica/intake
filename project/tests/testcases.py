@@ -1,40 +1,23 @@
 import json
+from unittest.mock import patch
 from django.test import TestCase as DjangoTestCase
-from httmock import HTTMock, all_requests, response
 
 
-@all_requests
-def response_content(url, request):
-    if url.netloc == 'api.mailgun.net':
-        headers = {'content-type': 'application/json'}
-        content = json.dumps({
-            "address": "cmrtestuser@gmail.com",
-            "did_you_mean": None,
-            "is_disposable_address": False,
-            "is_role_address": False,
-            "is_valid": True,
-            "mailbox_verification": 'true',
-            "parts": {
-                "display_name": None,
-                "domain": "gmail.com",
-                "local_part": "cmrtestuser"
-            }
-        })
-        return response(200, content, headers, None, 5, request)
-    else:
-        return response(200)
-
-
-class TestCase(DjangoTestCase):
-    """This Base TestCase will mock out all outgoing requests to external URLs
-        that are made using the requests library.
-
-        By default, any request will return a blank 200 OK mock HTTP response.
-
-        response_content can be edited to create custom responses, but this
-        should only be done if local patching in tests is insufficient.
-    """
+class MockMailGunRequestMixin:
+    '''Patches calls to the mailgun email validation service in order to 
+        prevent external http requests.
+        The patched service is used for validation of all application forms
+    '''
     def run(self, result=None):
-        with HTTMock(response_content) as httmock:
-            self.httmock = httmock
+        with patch(
+                'intake.services.contact_info_validation_service.'
+                'validate_email_with_mailgun') as mock_mailgun_validation:
+            mock_mailgun_validation.return_value = (True, None)
             super().run(result)
+
+
+class TestCase(DjangoTestCase, MockMailGunRequestMixin):
+    '''This is a base test case with default patches for the majority of unit
+    tests
+    '''
+    pass
