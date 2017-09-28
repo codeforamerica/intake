@@ -71,7 +71,8 @@ class TestCountyApplicationNoWarningsView(ApplicantFormViewBaseTestCase):
             **mock.fake.ebclc_answers())
         self.assertRedirects(response, reverse('intake-rap_sheet'))
 
-    def test_validation_warnings(self):
+    @patch('intake.services.pdf_service.fill_pdf_for_application')
+    def test_validation_warnings(self, mock_fill_pdf_for_application):
         self.set_form_session_data(counties=['sanfrancisco'])
         response = self.client.fill_form(
             reverse(self.view_name),
@@ -138,7 +139,7 @@ class TestCountyApplicationNoWarningsView(ApplicantFormViewBaseTestCase):
                 'event_name=application_started': 0,
                 'event_name=application_submitted': 1,
                 'event_name=application_errors': 0,
-                })
+            })
 
     def test_logs_validation_errors_event(self):
         self.set_form_session_data(counties=['sanfrancisco'])
@@ -153,7 +154,7 @@ class TestCountyApplicationNoWarningsView(ApplicantFormViewBaseTestCase):
                 'event_name=application_started': 0,
                 'event_name=application_submitted': 0,
                 'event_name=application_errors': 1,
-                })
+            })
 
     def test_saves_form_data_to_session(self):
         self.set_form_session_data(counties=['contracosta'])
@@ -197,4 +198,4 @@ class TestCountyApplicationView(TestCountyApplicationNoWarningsView):
                 'event_name=application_started': 0,
                 'event_name=application_submitted': 0,
                 'event_name=application_errors': 0,
-                })
+            })
