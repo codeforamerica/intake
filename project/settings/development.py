@@ -3,9 +3,6 @@ from project.settings.base import *
 
 DIVERT_REMOTE_CONNECTIONS = True
 
-#TEST_PDF_PATH = './cleanslatecombined.pdf'
-
-#CELERY_BROKER_URL = 'amqp://localhost'
 CELERY_TASK_ALWAYS_EAGER = True
 
 
