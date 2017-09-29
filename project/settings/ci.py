@@ -1,5 +1,6 @@
 import sys
 from project.settings.environment import *
+from project.settings.test import *
 
 DEBUG = True
 DIVERT_REMOTE_CONNECTIONS = True

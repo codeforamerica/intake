@@ -1,7 +1,18 @@
-from unittest.mock import Mock, patch
-from formation.tests import mock
+import logging
+
+from django.core.exceptions import ValidationError
+from django.test import TestCase
+
+from formation.fields import EmailField, PhoneNumberField
 from formation.tests.utils import PatchTranslationTestCase
-import formation
+from formation.form_base import Form
+from unittest.mock import patch
+
+from formation.validators import at_least_email_or_phone, \
+    AtLeastEmailOrPhoneValidator, \
+    mailgun_email_validator
+from intake.exceptions import MailgunAPIError
+from project.tests.assertions import assertInLogs
 
 
 class TestValidChoiceValidator(PatchTranslationTestCase):
@@ -38,17 +49,17 @@ class TestMultipleValidChoiceValidator(PatchTranslationTestCase):
         pass
 
 
-class EmailAndPhoneForm(formation.form_base.Form):
+class EmailAndPhoneForm(Form):
     fields = [
-        formation.fields.PhoneNumberField,
-        formation.fields.EmailField
+        PhoneNumberField,
+        EmailField
     ]
     validators = [
-        formation.validators.at_least_email_or_phone
+        at_least_email_or_phone
     ]
 
 
-class TestAtLeastEmailOrTextValidator(PatchTranslationTestCase):
+class TestAtLeastEmailOrTextValidator(TestCase):
 
     def test_valid_if_both_values(self):
         form = EmailAndPhoneForm(dict(
@@ -73,8 +84,56 @@ class TestAtLeastEmailOrTextValidator(PatchTranslationTestCase):
         form = EmailAndPhoneForm({})
         self.assertFalse(form.is_valid())
         expected_errors = {
-            key: [formation.validators.AtLeastEmailOrPhoneValidator.message]
+            key: [AtLeastEmailOrPhoneValidator.message]
             for key
-            in formation.validators.AtLeastEmailOrPhoneValidator.field_keys
+            in AtLeastEmailOrPhoneValidator.field_keys
         }
         self.assertDictEqual(form.errors, expected_errors)
+
+
+@patch('formation.validators.validate_email_with_mailgun')
+class TestMailgunEmailValidator(TestCase):
+    def test_valid_if_mailgun_returns_valid(self, mock_mailgun_service):
+        mock_mailgun_service.return_value = (True, None)
+        try:
+            mailgun_email_validator('sample@example.com')
+        except ValidationError as err:
+            raise AssertionError('unexpectedly raised {}'.format(err))
+
+    def test_invalid_if_mailgun_returns_invalid(self, mock_mailgun_service):
+        mock_mailgun_service.return_value = (False, None)
+        with self.assertRaises(ValidationError) as context:
+            mailgun_email_validator('sample@example.com')
+
+        expected_message = 'The email address you entered does not ' \
+                           'appear to exist.'
+        self.assertEqual(expected_message, str(context.exception.message))
+
+    def test_updates_error_message_if_mailgun_returns_suggestion(
+            self, mock_mailgun_service):
+        mock_mailgun_service.return_value = (False, "sample@example.com")
+        with self.assertRaises(ValidationError) as context:
+            mailgun_email_validator('sample@example.co')
+
+        expected_message = 'The email address you entered does not ' \
+                           'appear to exist. Did you mean sample@example.com?'
+        self.assertEqual(expected_message, str(context.exception.message))
+
+    def test_valid_if_mailgun_api_error(self, mock_mailgun_service):
+        mock_mailgun_service.side_effect = MailgunAPIError(
+            "Mailgun responded with 404")
+        try:
+            mailgun_email_validator('sample@example.com')
+        except Exception as err:
+            raise AssertionError('unexpectedly raised {}'.format(err))
+
+    @patch('formation.validators.send_email_to_admins')
+    def test_notifies_admin_if_mailgun_api_error(
+                self, mock_email_admins, mock_mailgun_service):
+        mock_mailgun_service.side_effect = MailgunAPIError(
+            "Mailgun responded with 404")
+        with self.assertLogs(
+                'project.services.logging_service', logging.ERROR) as logs:
+            mailgun_email_validator('sample@example.com')
+        assertInLogs(logs, 'mailgun_api_error')
+        self.assertEqual(1, len(mock_email_admins.mock_calls))
