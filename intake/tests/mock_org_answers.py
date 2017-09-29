@@ -1,3 +1,4 @@
+from unittest.mock import patch
 from faker import Factory as FakerFactory
 
 fake = FakerFactory.create(
