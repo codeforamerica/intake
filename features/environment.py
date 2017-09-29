@@ -1,8 +1,6 @@
-from unittest.mock import patch
 from browserstack.local import Local
 from django.conf import settings
 from django.core.management import call_command
-from httmock import HTTMock
 from selenium import webdriver
 
 
