@@ -1,6 +1,7 @@
 from unittest import TestCase as BaseTestCase
 from unittest.mock import Mock, patch
-from django.test import TestCase as DjangoTestCase, override_settings
+from django.test import TestCase
+from django.test import override_settings
 from project.jinja2 import external_reverse
 from django.core import mail
 from django.conf import settings
@@ -21,10 +22,10 @@ notification_mock_settings = dict(
 )
 
 
-class TestNotifications(DjangoTestCase):
+class TestNotifications(TestCase):
 
     def setUp(self):
-        DjangoTestCase.setUp(self)
+        TestCase.setUp(self)
 
     def test_email(self):
         mail.send_mail(
