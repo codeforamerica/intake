@@ -1,4 +1,4 @@
-from project.tests.testcases import TestCase
+from django.test import TestCase
 from intake import models
 from user_accounts import models as user_account_models
 from django.db import IntegrityError

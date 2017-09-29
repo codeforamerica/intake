@@ -1,4 +1,4 @@
-from project.tests.testcases import TestCase
+from django.test import TestCase
 from user_accounts.tests.factories import FakeOrganizationFactory
 from intake.tests.factories import FormSubmissionWithOrgsFactory
 from intake import models

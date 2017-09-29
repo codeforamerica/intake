@@ -1,4 +1,4 @@
-from project.tests.testcases import TestCase
+from django.test import TestCase
 
 
 class TestStatusUpdate(TestCase):

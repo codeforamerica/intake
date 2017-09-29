@@ -9,6 +9,9 @@ MAILGUN_EMAIL_VALIDATION_URL = \
 
 
 def mailgun_get_request(url, query_params):
+    if not getattr(settings, 'VALIDATE_EMAILS_WITH_MAILGUN', False):
+        # Don't make external calls to mailgun locally
+        return (200, dict(is_valid=True, mailbox_verification='true'))
     response = requests.get(
         url,
         auth=HTTPBasicAuth(
@@ -18,7 +21,6 @@ def mailgun_get_request(url, query_params):
 
 
 def validate_email_with_mailgun(email):
-    raise Exception('calling validate mailgun')
     status_code, parsed_response = mailgun_get_request(
         MAILGUN_EMAIL_VALIDATION_URL,
         query_params=dict(
@@ -27,7 +29,7 @@ def validate_email_with_mailgun(email):
     if status_code != 200:
         raise MailgunAPIError(
             'Mailgun returned {} {}'.format(
-                status_code, response.reason))
+                status_code, parsed_response))
     is_valid = parsed_response['is_valid']
     mailbox_exists = parsed_response['mailbox_verification'] == 'true'
     suggestion = parsed_response.get('did_you_mean', None)

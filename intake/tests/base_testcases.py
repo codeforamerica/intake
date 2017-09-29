@@ -1,7 +1,7 @@
 import os
 from unittest.mock import patch
 from django.db.models import Count
-from project.tests.testcases import TestCase
+from django.test import TestCase
 from django.test import Client
 from django.db import DEFAULT_DB_ALIAS, connections
 from user_accounts.tests.base_testcases import AuthIntegrationTestCase

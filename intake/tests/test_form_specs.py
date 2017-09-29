@@ -1,5 +1,5 @@
 from unittest import TestCase as BaseTestCase
-from project.tests.testcases import TestCase
+from django.test import TestCase
 from django.contrib.auth.models import User
 from formation.forms import (
     county_form_selector, SelectCountyForm, DeclarationLetterFormSpec,

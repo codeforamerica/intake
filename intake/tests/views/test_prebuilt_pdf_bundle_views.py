@@ -2,7 +2,7 @@ import logging
 from unittest.mock import patch
 
 from django.core.urlresolvers import reverse
-from project.tests.testcases import TestCase
+from django.test import TestCase
 
 from project.services import query_params
 from project.tests.utils import login

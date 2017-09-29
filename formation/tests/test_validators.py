@@ -1,7 +1,7 @@
 import logging
 
 from django.core.exceptions import ValidationError
-from project.tests.testcases import TestCase
+from django.test import TestCase
 
 from formation.fields import EmailField, PhoneNumberField
 from formation.tests.utils import PatchTranslationTestCase

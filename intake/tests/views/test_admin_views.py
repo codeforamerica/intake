@@ -7,7 +7,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
 from django.core.files.uploadedfile import SimpleUploadedFile
-from project.tests.testcases import TestCase
+from django.test import TestCase
 
 from bs4 import BeautifulSoup
 

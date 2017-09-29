@@ -1,5 +1,5 @@
 from unittest.mock import Mock, patch
-from project.tests.testcases import TestCase
+from django.test import TestCase
 from intake.management import commands
 
 

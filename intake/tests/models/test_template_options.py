@@ -1,4 +1,4 @@
-from project.tests.testcases import TestCase
+from django.test import TestCase
 from intake import models
 from intake.validators import template_field_renders_correctly
 from intake.tests.factories import StatusTypeFactory

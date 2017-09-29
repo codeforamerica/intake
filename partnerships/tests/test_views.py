@@ -1,6 +1,6 @@
 import logging
 from django.core import mail
-from project.tests.testcases import TestCase
+from django.test import TestCase
 from django.core.urlresolvers import reverse
 from partnerships.models import PartnershipLead
 from project.tests.assertions import assertInLogsCount

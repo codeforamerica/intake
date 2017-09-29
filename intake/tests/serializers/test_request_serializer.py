@@ -1,4 +1,4 @@
-from project.tests.testcases import TestCase
+from django.test import TestCase
 from django.core.urlresolvers import reverse
 from intake.serializers import RequestSerializer
 from rest_framework.renderers import JSONRenderer

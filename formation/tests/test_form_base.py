@@ -1,4 +1,4 @@
-from project.tests.testcases import TestCase
+from django.test import TestCase
 from formation.tests import mock
 
 from formation.forms import county_form_selector

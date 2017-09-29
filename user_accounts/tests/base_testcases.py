@@ -1,5 +1,5 @@
 import re
-from project.tests.testcases import TestCase
+from django.test import TestCase
 from django.contrib import auth
 from user_accounts.tests import clients, mock
 from user_accounts.models import Organization, UserProfile

@@ -1,4 +1,4 @@
-from project.tests.testcases import TestCase
+from django.test import TestCase
 import intake.services.applicants as ApplicantServices
 from intake.tests import factories, mock_utils
 

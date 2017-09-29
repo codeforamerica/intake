@@ -1,5 +1,5 @@
 import logging
-from project.tests.testcases import TestCase
+from django.test import TestCase
 from intake.tests.base_testcases import IntakeDataTestCase
 from intake.tests import mock
 from user_accounts.tests.mock import create_user

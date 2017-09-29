@@ -1,6 +1,6 @@
 import logging
 from django.core.urlresolvers import reverse
-from project.tests.testcases import TestCase
+from django.test import TestCase
 from django.conf import settings
 from project.tests.assertions import assertInLogsCount
 from user_accounts.tests.factories import fake_app_reviewer

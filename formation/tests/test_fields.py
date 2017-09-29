@@ -1,4 +1,4 @@
-from project.tests.testcases import TestCase
+from django.test import TestCase
 from markupsafe import escape
 from formation.tests.utils import PatchTranslationTestCase
 from formation import fields

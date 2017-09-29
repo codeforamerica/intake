@@ -1,4 +1,4 @@
-from project.tests.testcases import TestCase
+from django.test import TestCase
 from user_accounts.models import Organization
 from intake.models import County
 import intake.services.counties as CountiesService

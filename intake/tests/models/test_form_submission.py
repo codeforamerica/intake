@@ -1,5 +1,5 @@
 from unittest.mock import Mock
-from project.tests.testcases import TestCase
+from django.test import TestCase
 
 from intake.tests import mock, factories
 from formation import field_types

@@ -1,5 +1,5 @@
 import logging
-from project.tests.testcases import TestCase
+from django.test import TestCase
 import intake.services.followups as FollowupsService
 from intake.tests import factories
 from intake.tests.mock import get_old_date, get_newer_date

@@ -1,5 +1,5 @@
 from django.db import transaction
-from project.tests.testcases import TestCase
+from django.test import TestCase
 from django.db.utils import IntegrityError
 from django.db.models.deletion import ProtectedError
 from intake.tests.factories import VisitorFactory

@@ -2,7 +2,7 @@ import os
 from unittest import skipUnless
 from unittest.mock import patch, Mock, call
 
-from project.tests.testcases import TestCase
+from django.test import TestCase
 
 
 from intake.tests import mock

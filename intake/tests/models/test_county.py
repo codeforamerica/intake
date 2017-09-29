@@ -1,4 +1,4 @@
-from project.tests.testcases import TestCase
+from django.test import TestCase
 from user_accounts import models as auth_models
 from intake import models
 from intake.tests import factories

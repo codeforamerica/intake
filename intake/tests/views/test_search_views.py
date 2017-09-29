@@ -1,4 +1,4 @@
-from project.tests.testcases import TestCase
+from django.test import TestCase
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from intake.permissions import get_all_followup_permissions

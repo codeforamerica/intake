@@ -1,4 +1,4 @@
-from project.tests.testcases import TestCase
+from django.test import TestCase
 from intake import models
 from intake.forms import StatusUpdateForm, StatusNotificationForm
 from markupsafe import escape

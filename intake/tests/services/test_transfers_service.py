@@ -1,5 +1,5 @@
 import logging
-from project.tests.testcases import TestCase
+from django.test import TestCase
 from intake.tests.base_testcases import ALL_APPLICATION_FIXTURES
 from django.contrib.auth.models import User
 from user_accounts.models import Organization

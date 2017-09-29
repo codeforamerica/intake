@@ -1,4 +1,4 @@
-from project.tests.testcases import TestCase
+from django.test import TestCase
 from project.services import logging_service
 from unittest.mock import patch
 from logging import INFO
