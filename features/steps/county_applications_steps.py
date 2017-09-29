@@ -125,11 +125,11 @@ def a_pubdef_fields(context):
         And "yes" is clicked on the "on_public_benefits" radio button
         And "no" is clicked on the "owns_home" radio button
         And the "household_size" text input is set to "3"
-        And "no" is clicked on the "on_probation_parole" radio button
-        And "no" is clicked on the "finished_half_probation" radio button
-        And "no" is clicked on the "reduced_probation" radio button
-        And "no" is clicked on the "serving_sentence" radio button
-        And "no" is clicked on the "being_charged" radio button
+        And "yes" is clicked on the "on_probation_parole" radio button
+        And "yes" is clicked on the "finished_half_probation" radio button
+        And "yes" is clicked on the "reduced_probation" radio button
+        And "yes" is clicked on the "serving_sentence" radio button
+        And "yes" is clicked on the "being_charged" radio button
       ''')
 
 
@@ -137,7 +137,7 @@ def a_pubdef_fields(context):
 def sf_fields(context):
     context.execute_steps('''
       When the "ssn" text input is set to "123-45-6789"
-       And the "monthly_expenses" text input is set to "1000
+       And the "monthly_expenses" text input is set to "1000"
        And "yes" is clicked on the "currently_employed" radio button
       ''')
 

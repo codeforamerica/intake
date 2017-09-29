@@ -13,7 +13,7 @@ Feature: User can Apply to CMR
      Then it should load "/review/"
       And it should load css
       And it displays basic answers
-      And "action-forward" should say "Submit Application"
+      And "action-forward" should say "Finish Application"
     When I click "button.action-forward"
     Then it should load "/thanks/"
       And it should load css
@@ -60,7 +60,7 @@ Feature: User can Apply to CMR
      Then it should load "/review/"
       And it should load css
       And it displays basic answers
-      And "action-forward" should say "Submit Application"
+      And "action-forward" should say "Finish Application"
     When I click "button.action-forward"
      Then it should load "/thanks/"
       And it should load css
@@ -78,17 +78,17 @@ Feature: User can Apply to CMR
       And submit button in form "county_form" is clicked
      Then it should load "/review/"
       And it displays basic answers
-      And "action-forward" should say "Submit Application"
+      And "action-forward" should say "Finish Application"
     When I click "a#edit-first_name"
     Then it should load "/application/?editing=first_name#first_name"
       And "application_county_list" should say "You are applying for help in Contra Costa"
-      And "flash_messages" should say "You wanted to edit your application"
+      And "flash_messages" should say "You can edit your answers to any questions on this page, if you need to"
       And "first_name" should say "You wanted to edit your answer to this question"
     When the "first_name" text input is set to "Joan"
       And submit button in form "county_form" is clicked
     Then it should load "/review"
       And it displays basic answers for "Joan Doe"
-      And "action-forward" should say "Submit Application"
+      And "action-forward" should say "Finish Application"
     When I click "button.action-forward"
     Then it should load "/thanks/"
       And "next_step" should say "Contra Costa"

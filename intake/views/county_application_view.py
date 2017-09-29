@@ -104,10 +104,11 @@ class CountyApplicationReviewView(ApplicantFormViewBase):
         self.county_slugs = self.session_data.getlist('counties', [])
         has_form_data = self.has_form_data_in_session()
         if not has_form_data:
+            error_message = "{} with insufficient form data in session".format(
+                    self.__class__.__name__)
             format_and_log(
                 'application_error', level='error',
-                error_message="{} with insufficient form data in session".format(
-                    self.__class__.__name__))
+                error_message=error_message)
         if not has_form_data:
             return redirect(reverse('intake-county_application'))
 
