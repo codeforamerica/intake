@@ -129,7 +129,7 @@ def a_pubdef_fields(context):
         And "no" is clicked on the "finished_half_probation" radio button
         And "no" is clicked on the "reduced_probation" radio button
         And "no" is clicked on the "serving_sentence" radio button
-        And "no" is clicked on the "being_charged" radio button        
+        And "no" is clicked on the "being_charged" radio button
       ''')
 
 

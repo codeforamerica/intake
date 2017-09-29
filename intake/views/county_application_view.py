@@ -31,13 +31,14 @@ class CountyApplicationNoWarningsView(ApplicantFormViewBase):
         if editing_scope:
             MessagesService.flash_warnings(
                 self.request,
-            _("You wanted to edit your application"))
+                _("You wanted to edit your application"))
         field_to_edit = context['form'].fields.get(editing_scope, None)
         if field_to_edit:
             field_to_edit.add_warning(
                 _("You wanted to edit your answer to this question."),
                 key=editing_scope)
         return context
+
 
 class CountyApplicationView(CountyApplicationNoWarningsView):
     """County application page that checks for validation warnings.

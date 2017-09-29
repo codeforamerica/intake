@@ -199,7 +199,6 @@ class TestCountyApplicationReviewView(ApplicantFormViewBaseTestCase):
         with self.assertLogs(
                 'project.services.logging_service', logging.ERROR) as logs:
             response = self.client.get(reverse(self.view_name))
-        import ipdb; ipdb.set_trace()
         self.assertEqual(1, len(logs.output))
         self.assertIn('application_error', logs.output[0])
         self.assertRedirects(response, reverse('intake-county_application'))

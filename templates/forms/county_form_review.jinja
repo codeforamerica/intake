@@ -27,10 +27,10 @@ Review Your Application
   #}
   
   {% include "includes/csrf_field.jinja" %}
-  
+  <div class="review_display-wrapper">
   {% for field in form.get_usable_fields() %}
     <div class="review_display {{ field.get_html_class_name() }}">
-      <div class="review_display-label">{{ field.get_display_label() }}</div>
+      <div class="review_display-label">{{ field.label }}</div>
       {%- if not field.is_empty() %}
       <div class="review_display-value">
         {{ field.get_display_value() }}
@@ -38,7 +38,7 @@ Review Your Application
       {%- else %}
       <div class="review_display-value empty"></div>
       {%- endif %}
-      <a class="btn btn-medium btn-default review_display-edit_button" href="{{ 
+      <a class="btn btn-default review_display-edit_button" href="{{ 
           url('intake-county_application')
         }}?editing={{
           field.get_html_class_name()
@@ -49,12 +49,13 @@ Review Your Application
       </a>
     </div>
   {% endfor %}
+  </div>
 
   <div class="form-submit_choices">
-  <a href="{{ url('intake-county_application') }}?editing=all" class="action-back">
+  <a href="{{ url('intake-county_application') }}?editing=all" class="action-back btn btn-large btn-default">
     <span class="glyphicon glyphicon-arrow-left"></span>
     {{ _("Edit Application") }}
-  </button>
+  </a>
   <button class="action-forward" type="submit" name="submit_action" value="approve_application">
 {% if needs_declaration_letter %}
     {{ _("Next") }}

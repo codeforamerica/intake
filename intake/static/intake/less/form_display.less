@@ -68,7 +68,8 @@ li.action_menu-item > a {
 }
 .review_display-value.empty:after {
 	content: "No answer";
-	color: @gray;
+	color: #aaa;
+	font-style: italic;
 }
 .data_display-section {
 	max-width: 34em;
@@ -170,5 +171,11 @@ pre.address {
 }
 
 .review_display {
-	
+	padding: 1em;
+	border-left: 1px solid @gray-lighter;
+	border-right: 1px solid @gray-lighter;
+	border-top: 1px solid @gray-lighter;
+}
+.review_display:last-child {
+	border-bottom: 1px solid @gray-lighter;
 }
