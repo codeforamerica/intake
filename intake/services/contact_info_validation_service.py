@@ -17,7 +17,11 @@ def mailgun_get_request(url, query_params):
         auth=HTTPBasicAuth(
             'api', getattr(settings, 'MAILGUN_PRIVATE_API_KEY', '')),
         params=query_params)
-    return (response.status_code, response.json())
+    if response.content:
+        response_json = response.json()
+    else:
+        response_json = None
+    return (response.status_code, response_json)
 
 
 def validate_email_with_mailgun(email):

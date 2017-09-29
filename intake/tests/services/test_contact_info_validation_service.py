@@ -20,7 +20,8 @@ class TestMailGunGetRequest(TestCase):
         self.assertEqual(query_params, keyword_args['params'])
         auth = keyword_args['auth']
         self.assertEqual('api', auth.username)
-        self.assertEqual(settings.MAILGUN_PRIVATE_API_KEY, auth.password)
+        self.assertEqual(
+            getattr(settings, 'MAILGUN_PRIVATE_API_KEY', ''), auth.password)
         self.assertEqual(fake_url, call_args[0])
 
     @patch('intake.services.contact_info_validation_service.requests.get')
@@ -41,6 +42,20 @@ class TestMailGunGetRequest(TestCase):
         result = mailgun_get_request('anything', query_params={})
         mock_requests_get.assert_not_called()
         self.assertEqual(expected_result, result)
+
+    @patch('intake.services.contact_info_validation_service.requests.get')
+    def test_when_response_is_empty(self, mock_requests_get):
+        fake_url = 'https://example.com'
+        query_params = dict(
+            address='sample@example.com',
+            mailbox_verification=True)
+        mock_denied_response = Mock(content=b'', status_code=410)
+        mock_requests_get.return_value = mock_denied_response
+        expected_result = (410, None)
+        with self.settings(VALIDATE_EMAILS_WITH_MAILGUN=True):
+            result = mailgun_get_request(fake_url, query_params)
+        self.assertEqual(expected_result, result)
+        mock_denied_response.json.assert_not_called()
 
 
 class TestValidateEmailWithMailgun(TestCase):
