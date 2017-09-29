@@ -9,9 +9,6 @@ CELERY_TASK_ALWAYS_EAGER = True
 SECRET_KEY = os.environ.get('SECRET_KEY')
 # settings for static files
 # settings for media files
-MEDIA_ROOT = ''
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-
 MAIL_DEFAULT_SENDER = "admin@localhost"
 DEFAULT_NOTIFICATION_EMAIL = "user@localhost"
 PARTNERSHIPS_LEAD_INBOX = 'anotheremail@example.space'
@@ -44,6 +41,11 @@ DATABASES = {
 CLIPS_DATABASE_ALIAS = 'purged'
 LIVE_COUNTY_CHOICES = False
 
+
+MEDIA_ROOT = ''
+DEFAULT_FILE_STORAGE = 'project.custom_storages.MediaStorage'
+MEDIA_BUCKET = 'cmr-development-r1-media-files'
+
 COMPRESS_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 # settings for media file uploads
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ID')
@@ -56,8 +58,8 @@ STATIC_URL = COMPRESS_URL
 STATICFILES_LOCATION = 'static'  # location in bucket TODO: remove
 STATICFILES_STORAGE = 'project.custom_storages.CachedS3BotoStorage'
 
-
 COMPRESS_ROOT = os.path.join(REPO_DIR, 'staticfiles')
 COMPRESS_STORAGE = STATICFILES_STORAGE
+
 
 AWS_QUERYSTRING_AUTH = False

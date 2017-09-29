@@ -3,8 +3,8 @@ from storages.backends.s3boto3 import S3Boto3Storage
 from django.core.files.storage import get_storage_class
 
 
-class StaticStorage(S3Boto3Storage):
-    bucket_name = settings.STATIC_BUCKET
+class MediaStorage(S3Boto3Storage):
+    bucket_name = settings.MEDIA_BUCKET
 
 
 class CachedS3BotoStorage(S3Boto3Storage):
