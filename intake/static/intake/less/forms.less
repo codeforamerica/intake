@@ -100,10 +100,13 @@ button {
 			margin-right: 0.5em;
 		}
 	}
-button[type="submit"] { .btn-primary; .btn-lg; }
+// button[type="submit"], .action-back { .btn-primary; .btn-lg; }
 button[type="submit"].action-forward { .btn-success; .btn-lg; }
-button[type="submit"].action-back { .btn-default; .btn-lg; }
-
+.action-back { 
+	.btn-default;
+	.btn-lg; 
+	margin: 0.5em 0.25em;
+}
 
 .warnings, .errors {
 	margin: 0 -1em;

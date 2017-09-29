@@ -66,11 +66,7 @@ li.action_menu-item > a {
 	content: "EMPTY";
 	color: @gray-lighter;
 }
-.review_display-value.empty:after {
-	content: "No answer";
-	color: #aaa;
-	font-style: italic;
-}
+
 .data_display-section {
 	max-width: 34em;
 	padding: 0.7em 0;
@@ -178,4 +174,18 @@ pre.address {
 }
 .review_display:last-child {
 	border-bottom: 1px solid @gray-lighter;
+}
+
+.review_display-value.empty:after {
+	content: "No answer";
+	color: #aaa;
+	font-style: italic;
+}
+
+.review_display-label {
+	color: @gray-light;
+	font-size: .9em;
+}
+.review_display-value + .review_display-edit_button {
+	margin-top: .5em;
 }

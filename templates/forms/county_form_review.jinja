@@ -10,11 +10,7 @@ Review Your Application
   <div class="container">
     <div class="row">
       <div class="col-xs-12 col-sm-8 col-md-6 col_centered">
-        {% if needs_declaration_letter %}
-            <p><strong>Please take a moment to review your application.</strong> If it looks okay, click Next to continue to the next step.</p>
-        {% else %}
-            <p><strong>Please take a moment to review your application.</strong> If it looks okay, click Submit Application to finish.</p>
-        {% endif %}
+          <p>Please review the information you entered on the previous page. Does everything look okay?</p>
       </div>
     </div>
     <div class="row">
@@ -52,18 +48,20 @@ Review Your Application
   </div>
 
   <div class="form-submit_choices">
-  <a href="{{ url('intake-county_application') }}?editing=all" class="action-back btn btn-large btn-default">
-    <span class="glyphicon glyphicon-arrow-left"></span>
-    {{ _("Edit Application") }}
-  </a>
-  <button class="action-forward" type="submit" name="submit_action" value="approve_application">
-{% if needs_declaration_letter %}
-    {{ _("Next") }}
-{% else %}
-    <span class="glyphicon glyphicon-ok"></span>
-    {{ _("Submit Application") }}
-{% endif %}
-  </button>
+
+    <a href="{{ url('intake-county_application') }}?editing=all" class="action-back btn">
+      <span class="glyphicon glyphicon-arrow-left"></span>
+      {{ _("Edit Application") }}
+    </a>
+
+    <button class="action-forward" type="submit" name="submit_action" value="approve_application">
+      {% if needs_declaration_letter %}
+      {{ _("Next") }}
+      {% else %}
+      <span class="glyphicon glyphicon-ok"></span>
+      {{ _("Finish Application") }}
+      {% endif %}
+    </button>
 
 
   </div>
