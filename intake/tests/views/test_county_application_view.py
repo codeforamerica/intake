@@ -234,15 +234,6 @@ class TestCountyApplicationReviewView(ApplicantFormViewBaseTestCase):
             submit_action='approve_application')
         self.assertRedirects(response, reverse('intake-thanks'))
 
-    def test_clicking_edit_redirects_to_county_application(self):
-        self.set_form_session_data(
-            counties=['contracosta'],
-            **mock.fake.cc_pubdef_answers())
-        response = self.client.fill_form(
-            reverse(self.view_name),
-            submit_action='edit_application')
-        self.assertRedirects(response, reverse('intake-county_application'))
-
     def test_needs_rap_sheet_redirects_to_rap_sheet_page(self):
         self.set_form_session_data(
             counties=['alameda'],

@@ -1,3 +1,4 @@
+import logging
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -9,10 +10,13 @@ from formation.forms import county_form_selector, \
 import intake.services.messages_service as MessagesService
 from intake.constants import EDIT_APPLICATION
 from intake.serializers import RequestSerializer
-from project.services import logging_service
+from project.services.logging_service import format_and_log
 
 WARNING_FLASH_MESSAGE = _(
     "Please double check the form. Some parts are empty and may cause delays.")
+
+
+logger = logging.getLogger(__name__)
 
 
 class CountyApplicationNoWarningsView(ApplicantFormViewBase):
@@ -75,9 +79,10 @@ class CountyApplicationReviewView(ApplicantFormViewBase):
         # form as specified in get_form_class
         if self.request.method in ('POST', 'PUT'):
             return ApplicationReviewForm(data=self.request.POST)
-        county_form = super().get_form(form_class)
-        county_form.display_template_name = "forms/county_form_display.jinja"
-        return county_form
+        county_display_form = super().get_form(form_class)
+        county_display_form.display_template_name = \
+            "forms/county_form_display.jinja"
+        return county_display_form
 
     def get_county_form(self):
         """
@@ -91,6 +96,21 @@ class CountyApplicationReviewView(ApplicantFormViewBase):
             form_kwargs.update(data=self.session_data, validate=True)
         return form_class(**form_kwargs)
 
+    def check_for_session_based_redirects(self):
+        session_based_redirect = super().check_for_session_based_redirects()
+        if session_based_redirect:
+            return session_based_redirect
+        # get county_slugs earlier than dispatch
+        self.county_slugs = self.session_data.getlist('counties', [])
+        has_form_data = self.has_form_data_in_session()
+        if not has_form_data:
+            format_and_log(
+                'application_error', level='error',
+                error_message="{} with insufficient form data in session".format(
+                    self.__class__.__name__))
+        if not has_form_data:
+            return redirect(reverse('intake-county_application'))
+
     def get_context_data(self, *args, **kwargs):
         # If any of the receiving organizations will need a letter of
         # declaration, we'll want to display some different copy in the form,
@@ -102,55 +122,25 @@ class CountyApplicationReviewView(ApplicantFormViewBase):
         context_data.update(needs_declaration_letter=needs_declaration_letter)
         return context_data
 
-    def post(self, request, *args, **kwargs):
-        """
-        Overriding post so we can check the special ApplicationReviewForm just
-        to determine the next step, and and then re-create the combined county
-        form for validation if we are continuing.
-        """
-        # Fist validate the ApplicationReviewForm and check if the user chose
-        # to go back and edit their application or continue.
-        review_form = self.get_form()
-        if review_form.is_valid():
-            answer = review_form.cleaned_data['submit_action']
-            if answer == EDIT_APPLICATION:
-                # The user has chosen to go back and edit, redirect them
-                return redirect(reverse('intake-county_application'))
-
-            # Re-create the original county form with all the application data
-            # from the session, and validate as usual
-            county_form = self.get_county_form()
-            if county_form.is_valid():
-                return self.form_valid(county_form)
-            else:
-                subject = 'Invalid form data at review page'
-                serialized_request = RequestSerializer(request).data
-                message = 'Check the logs:\n{}'.format(serialized_request)
-                alerts.send_email_to_admins(subject=subject, message=message)
-                logging_service.format_and_log(
-                    'application_error', level='error', **serialized_request)
-                return redirect('intake-county_application')
-        else:
-            return self.form_invalid(review_form)
-
-    def form_valid(self, form):
+    def form_valid(self, review_form):
         # Check if any of the receiving organizations require a letter of
         # declaration and redirect before saving if so.
-        orgs = self.get_receiving_organizations(form)
+        county_form = self.get_county_form()
+        orgs = self.get_receiving_organizations(county_form)
         needs_declaration_letter = any([
             org.requires_declaration_letter for org in orgs])
         if needs_declaration_letter:
-            self.log_page_completion_and_save_data(form)
+            self.log_page_completion_and_save_data(county_form)
             return redirect('intake-write_letter')
 
         # No declaration needed, save the application
-        self.finalize_application(form)
+        self.finalize_application(county_form)
 
         # Redirect after saving if a rap sheet is needed.
         needs_rap_sheet = any([org.requires_rap_sheet for org in orgs])
         if needs_rap_sheet:
             self.success_url = reverse('intake-rap_sheet')
-        return super().form_valid(form)
+        return super().form_valid(county_form)
 
 
 county_application = CountyApplicationView.as_view()

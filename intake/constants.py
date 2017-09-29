@@ -63,7 +63,6 @@ DECLARATION_LETTER_REVIEW_CHOICES = (
 )
 
 APPLICATION_REVIEW_CHOICES = (
-    (EDIT_APPLICATION, _('Edit application')),
     (APPROVE_APPLICATION, _('Approve application')),
 )
 
