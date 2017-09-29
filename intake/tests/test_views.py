@@ -26,9 +26,7 @@ class TestViews(IntakeDataTestCase):
     def set_session_counties(self, counties=None):
         if not counties:
             counties = [constants.Counties.SAN_FRANCISCO]
-        self.set_session(form_in_progress={
-            'counties': counties,
-            'confirm_county_selection': YES})
+        self.set_session(form_in_progress={'counties': counties})
 
     def test_home_view(self):
         response = self.client.get(reverse('intake-home'))
@@ -40,7 +38,6 @@ class TestViews(IntakeDataTestCase):
         applicant = factories.ApplicantFactory.create()
         base_data = dict(
             counties=['sanfrancisco'],
-            confirm_county_selection=YES,
             **mock.NEW_RAW_FORM_DATA)
         self.set_session(
             form_in_progress=base_data,

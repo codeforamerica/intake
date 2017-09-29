@@ -8,9 +8,9 @@ import intake.services.bundles as BundlesService
 
 @given('it is a weekday')
 def set_weekday(context):
-    weekend_patcher = patch('intake.utils.is_the_weekend')
-    weekend_patcher.return_value = False
-    weekend_patcher.start()
+    weekend_patcher = patch('intake.services.bundles.is_the_weekend')
+    is_the_weekend = weekend_patcher.start()
+    is_the_weekend.return_value = False
     context.test.patches["weekend_patcher"] = weekend_patcher
 
 
@@ -39,4 +39,27 @@ def follow_unreads_link_in_email(context):
     context.test.assertIn(
         expected_unreads_link, context.test.unreads_email['body'])
     path = reverse('intake-unread_email_redirect')
+    context.browser.get(urljoin(context.test.live_server_url, path))
+
+
+@then('the app should send a slack notification about new CNL apps')
+@patch('intake.notifications.slack_simple.send')
+def test_sends_new_cnl_apps_slack(context, slack):
+    BundlesService.count_unreads_and_send_notifications_to_orgs()
+    call_args, keyword_args = slack.call_args
+    slack_message = call_args[0]
+    context.test.assertTrue(slack_message)
+    context.test.new_cnl_app_slack = slack_message
+
+
+@then('I should see "{phrase}" in the slack message about new CNL apps')
+def test_phrase_in_email(context, phrase):
+    context.test.assertIn(phrase, context.test.new_cnl_app_slack)
+
+
+@when('I click on the link in the slack message about new CNL apps')
+def follow_new_cnl_app_slack_link(context):
+    expected_cnl_link = external_reverse('intake-app_cnl_index')
+    context.test.assertIn(expected_cnl_link, context.test.new_cnl_app_slack)
+    path = reverse('intake-app_cnl_index')
     context.browser.get(urljoin(context.test.live_server_url, path))

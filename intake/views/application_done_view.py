@@ -23,7 +23,10 @@ class ThanksView(TemplateView):
 
     def get_context_data(self):
         context = super().get_context_data()
-        context.update(organizations=self.submission.organizations.all())
+        context.update(
+            organizations=self.submission.organizations.not_cfa(),
+            unlisted_counties=self.submission.answers.get(
+                'unlisted_counties', ''))
         clear_form_session_data(self.request)
         return context
 
@@ -40,9 +43,9 @@ class RAPSheetInstructionsView(TemplateView):
                 SubmissionsService.get_latest_submission_from_applicant(
                     applicant.id)
             if submission:
-                context['organizations'] = submission.organizations.all()
+                context['organizations'] = submission.organizations.not_cfa()
                 context['qualifies_for_fee_waiver'] = \
-                    submission.qualifies_for_fee_waiver()
+                    SubmissionsService.qualifies_for_fee_waiver(submission)
             clear_form_session_data(self.request)
         return context
 

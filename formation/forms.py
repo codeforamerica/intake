@@ -2,7 +2,6 @@ from formation.combinable_base import CombinableFormSpec, FormSpecSelector
 from formation.form_base import Form
 from formation.display_form_base import DisplayForm
 from formation import fields as F
-from intake.constants import Counties, Organizations
 from formation.validators import (
     gave_preferred_contact_methods, at_least_email_or_phone
 )
@@ -33,33 +32,36 @@ class SupplementaryDisplayForm(CombinableCountyFormSpec):
     }
 
 
-class OtherCountyFormSpec(CombinableCountyFormSpec):
+class NotListedFormSpec(CombinableCountyFormSpec):
     """This could be used by Code for America to send applicants
     information on clean slate services in other counties or states.
     """
-    county = Counties.OTHER
+    county = 'not_listed'
     fields = {
-        F.ContactPreferences,
+        F.UnlistedCountyNote,
+        F.UnlistedCounties,
         F.FirstName,
+        F.LastName,
         F.PhoneNumberField,
         F.EmailField,
-        F.AddressField,
         F.HowDidYouHear,
+        F.AdditionalInformation,
     }
     required_fields = {
-        F.ContactPreferences,
+        F.UnlistedCounties,
         F.FirstName
     }
     optional_fields = {
-        F.HowDidYouHear
+        F.HowDidYouHear,
+        F.AdditionalInformation
     }
     validators = [
-        gave_preferred_contact_methods
+        at_least_email_or_phone
     ]
 
 
 class SanFranciscoCountyFormSpec(CombinableCountyFormSpec):
-    county = Counties.SAN_FRANCISCO
+    county = 'sanfrancisco'
     fields = {
         F.ContactPreferences,
         F.FirstName,
@@ -109,7 +111,7 @@ class SanFranciscoCountyFormSpec(CombinableCountyFormSpec):
 
 
 class ContraCostaFormSpec(CombinableCountyFormSpec):
-    county = Counties.CONTRA_COSTA
+    county = 'contracosta'
     fields = {
         F.ContactPreferences,
         F.FirstName,
@@ -157,7 +159,7 @@ class ContraCostaFormSpec(CombinableCountyFormSpec):
 
 
 class AlamedaCountyFormSpec(CombinableCountyFormSpec):
-    county = Counties.ALAMEDA
+    county = 'alameda'
     fields = {
         F.ContactPreferences,
         F.FirstName,
@@ -218,7 +220,7 @@ class AlamedaCountyFormSpec(CombinableCountyFormSpec):
 
 
 class AlamedaPublicDefenderFormSpec(CombinableOrganizationFormSpec):
-    organization = Organizations.ALAMEDA_PUBDEF
+    organization = 'a_pubdef'
     fields = {
         F.ContactPreferences,
         F.FirstName,
@@ -264,7 +266,7 @@ class AlamedaPublicDefenderFormSpec(CombinableOrganizationFormSpec):
 
 
 class MontereyCountyFormSpec(CombinableCountyFormSpec):
-    county = Counties.MONTEREY
+    county = 'monterey'
     fields = {
         F.ContactPreferences,
         F.FirstName,
@@ -317,7 +319,7 @@ class MontereyCountyFormSpec(CombinableCountyFormSpec):
 
 
 class SolanoCountyFormSpec(CombinableCountyFormSpec):
-    county = Counties.SOLANO
+    county = 'solano'
     fields = {
         F.ContactPreferences,
         F.FirstName,
@@ -366,7 +368,7 @@ class SolanoCountyFormSpec(CombinableCountyFormSpec):
 
 
 class SanDiegoCountyFormSpec(SolanoCountyFormSpec):
-    county = Counties.SAN_DIEGO
+    county = 'san_diego'
     fields = (SolanoCountyFormSpec.fields | {
         F.CaseNumber,
         F.IdentityConfirmation
@@ -386,14 +388,14 @@ class SanDiegoCountyFormSpec(SolanoCountyFormSpec):
 
 
 class SanJoaquinCountyFormSpec(SolanoCountyFormSpec):
-    county = Counties.SAN_JOAQUIN
+    county = 'san_joaquin'
     validators = [
         gave_preferred_contact_methods
     ]
 
 
 class FresnoCountyFormSpec(SolanoCountyFormSpec):
-    county = Counties.FRESNO
+    county = 'fresno'
     fields = (SolanoCountyFormSpec.fields | {
         F.Aliases,
         F.CaseNumber,
@@ -420,7 +422,7 @@ class FresnoCountyFormSpec(SolanoCountyFormSpec):
 
 
 class SantaClaraCountyFormSpec(SolanoCountyFormSpec):
-    county = Counties.SANTA_CLARA
+    county = 'santa_clara'
     fields = (SolanoCountyFormSpec.fields | {
         F.FinancialScreeningNote,
         F.CurrentlyEmployed,
@@ -453,7 +455,7 @@ class SantaClaraCountyFormSpec(SolanoCountyFormSpec):
 
 
 class SantaCruzCountyFormSpec(SolanoCountyFormSpec):
-    county = Counties.SANTA_CRUZ
+    county = 'santa_cruz'
     fields = (SolanoCountyFormSpec.fields | {
         F.FinancialScreeningNote,
         F.MonthlyIncome,
@@ -469,21 +471,21 @@ class SantaCruzCountyFormSpec(SolanoCountyFormSpec):
 
 
 class SonomaCountyFormSpec(SolanoCountyFormSpec):
-    county = Counties.SONOMA
+    county = 'sonoma'
     validators = [
         gave_preferred_contact_methods
     ]
 
 
 class TulareCountyFormSpec(SolanoCountyFormSpec):
-    county = Counties.TULARE
+    county = 'tulare'
     validators = [
         gave_preferred_contact_methods
     ]
 
 
 class VenturaCountyFormSpec(CombinableCountyFormSpec):
-    county = Counties.VENTURA
+    county = 'ventura'
     fields = {
         F.ContactPreferences,
         F.FirstName,
@@ -543,7 +545,7 @@ class VenturaCountyFormSpec(CombinableCountyFormSpec):
 
 
 class SantaBarbaraCountyFormSpec(VenturaCountyFormSpec):
-    county = Counties.SANTA_BARBARA
+    county = 'santa_barbara'
     fields = (VenturaCountyFormSpec.fields | {
         F.Aliases,
         F.ReasonsForApplying,
@@ -560,7 +562,7 @@ class SantaBarbaraCountyFormSpec(VenturaCountyFormSpec):
 
 
 class YoloCountyFormSpec(SonomaCountyFormSpec):
-    county = Counties.YOLO
+    county = 'yolo'
     fields = (SonomaCountyFormSpec.fields | {
         F.Aliases,
         F.CaseNumber,
@@ -598,7 +600,7 @@ class YoloCountyFormSpec(SonomaCountyFormSpec):
 
 
 class StanislausCountyFormSpec(FresnoCountyFormSpec):
-    county = Counties.STANISLAUS
+    county = 'stanislaus'
     fields = (FresnoCountyFormSpec.fields | {
         F.BeenToPrison,
         F.RAPOutsideSF,
@@ -618,7 +620,7 @@ class StanislausCountyFormSpec(FresnoCountyFormSpec):
 
 
 class EBCLCIntakeFormSpec(CombinableOrganizationFormSpec):
-    organization = Organizations.EBCLC
+    organization = 'ebclc'
     fields = {
         F.ContactPreferences,
         F.FirstName,
@@ -710,17 +712,12 @@ class DeclarationLetterReviewForm(Form):
 
 
 class SelectCountyForm(Form):
-    fields = [
-        F.Counties,
-        F.AffirmCountySelection
-    ]
-    required_fields = [
-        F.Counties,
-        F.AffirmCountySelection]
+    fields = [F.Counties]
+    required_fields = [F.Counties]
 
 
 INPUT_FORM_SPECS = [
-    OtherCountyFormSpec(),
+    NotListedFormSpec(),
     SanFranciscoCountyFormSpec(),
     ContraCostaFormSpec(),
     AlamedaCountyFormSpec(),

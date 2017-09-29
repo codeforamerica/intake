@@ -1,5 +1,6 @@
 from .visitor_factory import VisitorFactory
 from .applicant_factory import ApplicantFactory
+from .county_factory import CountyFactory
 from .form_submission_factory import (
     FormSubmissionFactory, FormSubmissionWithOrgsFactory
 )
@@ -31,6 +32,7 @@ __all__ = [
     apps_queryset,
     VisitorFactory,
     ApplicantFactory,
+    CountyFactory,
     FormSubmissionFactory,
     FormSubmissionWithOrgsFactory,
     StatusTypeFactory,

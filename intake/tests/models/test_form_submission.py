@@ -6,9 +6,7 @@ from intake.tests import mock, factories
 from formation import field_types
 import intake.services.submissions as SubmissionsService
 from user_accounts import models as auth_models
-from intake import (
-    models,
-    constants)
+from intake import models, constants
 
 
 class TestFormSubmission(TestCase):
@@ -48,7 +46,7 @@ class TestFormSubmission(TestCase):
 
     def test_get_permitted_submissions_when_permitted(self):
         cc_pubdef = auth_models.Organization.objects.get(
-            slug=constants.Organizations.COCO_PUBDEF)
+            slug='cc_pubdef')
         subs = cc_pubdef.submissions.all()
         mock_user = Mock(is_staff=False, **{'profile.organization': cc_pubdef})
         result = SubmissionsService.get_permitted_submissions(mock_user)
@@ -56,9 +54,9 @@ class TestFormSubmission(TestCase):
 
     def test_get_permitted_submissions_when_not_permitted(self):
         cc_pubdef = auth_models.Organization.objects.get(
-            slug=constants.Organizations.COCO_PUBDEF)
+            slug='cc_pubdef')
         sf_pubdef = auth_models.Organization.objects.get(
-            slug=constants.Organizations.SF_PUBDEF)
+            slug='sf_pubdef')
         submission = SubmissionsService.create_for_organizations(
             [cc_pubdef], answers={})
         mock_user = Mock(is_staff=False, **{'profile.organization': sf_pubdef})
@@ -95,33 +93,6 @@ class TestFormSubmission(TestCase):
         submission = self.get_a_sample_sub()
         self.assertIsNone(
             submission.get_transfer_action(request))
-
-    def test_qualifies_for_fee_waiver_with_public_benefits(self):
-        sub = models.FormSubmission(
-            answers=mock.fake.ebclc_answers(
-                on_public_benefits=field_types.YES))
-        self.assertEqual(sub.qualifies_for_fee_waiver(), True)
-
-    def test_qualifies_for_fee_waiver_with_no_income(self):
-        sub = models.FormSubmission(
-            answers=mock.fake.ebclc_answers(
-                household_size=0,
-                monthly_income=0))
-        self.assertTrue(sub.qualifies_for_fee_waiver())
-
-    def test_doesnt_qualify_for_fee_waiver_with_income_and_no_benefits(self):
-        sub = models.FormSubmission(
-            answers=mock.fake.ebclc_answers(
-                on_public_benefits=field_types.NO,
-                household_size=11)
-        )
-        sub.answers['monthly_income'] = \
-            (constants.FEE_WAIVER_LEVELS[12] / 12) + 1
-        self.assertEqual(sub.qualifies_for_fee_waiver(), False)
-
-    def test_doesnt_qualify_for_fee_waiver_without_valid_inputs(self):
-        sub = models.FormSubmission(answers={})
-        self.assertEqual(sub.qualifies_for_fee_waiver(), None)
 
 
 class TestDuplicateSubmissionSet(TestCase):

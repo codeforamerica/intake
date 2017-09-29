@@ -1,7 +1,8 @@
 import os
 from unittest.mock import patch
 from django.db.models import Count
-from django.test import TestCase, Client
+from django.test import TestCase
+from django.test import Client
 from django.db import DEFAULT_DB_ALIAS, connections
 from user_accounts.tests.base_testcases import AuthIntegrationTestCase
 from intake import models
@@ -12,7 +13,6 @@ from project.fixtures_index import (
     ESSENTIAL_DATA_FIXTURES,
     MOCK_USER_ACCOUNT_FIXTURES,
     MOCK_APPLICATION_FIXTURES,
-    MOCK_EVENT_FIXTURES,
     MOCK_BUNDLE_FIXTURES
 )
 
@@ -23,8 +23,7 @@ DELUXE_TEST = os.environ.get('DELUXE_TEST', False)
 ALL_APPLICATION_FIXTURES = (
     ESSENTIAL_DATA_FIXTURES +
     MOCK_USER_ACCOUNT_FIXTURES +
-    MOCK_APPLICATION_FIXTURES +
-    MOCK_EVENT_FIXTURES
+    MOCK_APPLICATION_FIXTURES
 )
 
 ALL_BUNDLES = MOCK_BUNDLE_FIXTURES

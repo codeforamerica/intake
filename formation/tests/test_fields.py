@@ -1,6 +1,8 @@
+from django.test import TestCase
+from markupsafe import escape
 from formation.tests.utils import PatchTranslationTestCase
-
 from formation import fields
+from intake import models
 
 
 class TestAddressField(PatchTranslationTestCase):
@@ -67,3 +69,48 @@ class TestYear(PatchTranslationTestCase):
         field = fields.Year(data)
         field.is_valid()
         self.assertTrue(field.errors)
+
+
+class TestCounties(TestCase):
+
+    fixtures = ['counties']
+
+    def test_ordering_of_county_choices(self):
+        field = fields.Counties()
+        choice_count = len(field.choices)
+        for i, choice in enumerate(field.choices):
+            slug, description = choice
+            if i == (choice_count - 1):
+                with self.subTest(choice=choice):
+                    self.assertEqual(slug, 'not_listed')
+            else:
+                with self.subTest(choice=choice):
+                    self.assertTrue(slug != 'not_listed')
+
+    def test_labels_when_rendered(self):
+        field = fields.Counties(
+            {'counties': ['not_listed', 'contracosta']})
+        self.assertTrue(field.is_valid())
+        contracosta = models.County.objects.get(slug='contracosta')
+        html = field.render()
+        self.assertIn(escape(contracosta.description), html)
+
+    def test_display_value_when_rendered(self):
+        field = fields.Counties(
+            {'counties': ['not_listed', 'contracosta']})
+        self.assertTrue(field.is_valid())
+        contracosta = models.County.objects.get(slug='contracosta')
+        html = field.render(display=True)
+        self.assertIn(escape(contracosta.name), html)
+        self.assertNotIn(contracosta.description, html)
+
+    def test_display_value_with_not_listed_override(self):
+        field = fields.Counties(
+            {'counties': ['not_listed', 'contracosta']})
+        self.assertTrue(field.is_valid())
+        not_listed = models.County.objects.get(slug='not_listed')
+        value = field.get_display_value(
+            unlisted_counties='Some Counties')
+        self.assertIn('Some Counties', value)
+        self.assertNotIn(not_listed.description, value)
+        self.assertNotIn(not_listed.name, value)

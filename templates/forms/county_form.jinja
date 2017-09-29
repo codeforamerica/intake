@@ -30,7 +30,7 @@ public apply
   
   {% block form_content %}
 
-  {{ form.render()|safe }}
+  {{ form.render() }}
   
   <button type="submit">
   {%- block submit_button_label -%}

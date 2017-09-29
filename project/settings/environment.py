@@ -22,6 +22,7 @@ PARTNERSHIPS_LEAD_INBOX = os.environ.get("PARTNERSHIPS_LEAD_INBOX")
 
 # Twilio API
 TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN")
+TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID")
 
 # Slack Web hook
 SLACK_WEBHOOK_URL = os.environ.get("SLACK_WEBHOOK_URL")
@@ -34,10 +35,11 @@ FRONT_PHONE_CHANNEL_ID = os.environ.get("FRONT_PHONE_CHANNEL_ID")
 # Mixpanel Analytics
 MIXPANEL_KEY = os.environ.get("MIXPANEL_KEY", "")
 
+# Mailgun API
+MAILGUN_PRIVATE_API_KEY = os.environ.get("MAILGUN_PRIVATE_API_KEY")
+
 # configure django-debug-toolbar
 USE_DEBUG_TOOLBAR = os.environ.get('USE_DEBUG_TOOLBAR', 0)
-
-LIVE_COUNTY_CHOICES = os.environ.get('LIVE_COUNTY_CHOICES', False)
 
 CELERY_BROKER_URL = os.environ.get('CLOUDAMQP_URL')
 

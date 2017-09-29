@@ -1,7 +1,27 @@
 from django.db.models import Q
-from intake import models, serializers, notifications, tasks
+from intake import models, serializers, notifications, tasks, constants
 from intake.services import events_service as EventsService
 from . import pagination
+
+
+def get_all_applications_for_users_org(user):
+    """Fetches all applications (unpaginated) for the organization of the given
+        user.
+        Prefetches form submissions, status updates, status types, status
+        authors for use in intake/views/data_export_views
+    """
+    preselect_tables = [
+        'form_submission'
+    ]
+    prefetch_tables = [
+        'status_updates',
+        'status_updates__status_type',
+        'status_updates__author',
+    ]
+    qset = models.Application.objects.filter(
+        organization__profiles__user=user
+    ).select_related(*preselect_tables).prefetch_related(*prefetch_tables)
+    return qset.order_by('-created').distinct()
 
 
 def get_applications_for_org(organization):
@@ -177,3 +197,9 @@ def get_needs_update_apps_per_org_count(organization):
 def get_all_apps_per_org_count(organization):
     return models.Application.objects.filter(
         organization=organization).count()
+
+
+def get_all_unhandled_cnl_apps():
+    return models.Application.objects.filter(
+        organization__slug='cfa').exclude(
+        form_submission__tags__name=constants.COUNTY_NOT_LISTED_HANDLED_TAG)

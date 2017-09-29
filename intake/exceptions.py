@@ -34,3 +34,7 @@ class MissingFillablePDFError(Exception):
 
 class MultiplePrebuiltPDFsError(Exception):
     pass
+
+
+class MailgunAPIError(Exception):
+    pass

@@ -77,13 +77,24 @@ def get_tabs_for_org_user(organization, active_tab):
     return tabs, active_tab_count
 
 
-def get_tabs_for_staff_user():
-    return [
+def get_tabs_for_staff_user(active_tab):
+    tabs = [
         {
             'url': reverse('intake-app_all_index'),
             'label': 'All Applications',
             'count': models.FormSubmission.objects.count(),
-            'is_active': True}]
+            'is_active': False},
+        {
+            'url': reverse('intake-app_cnl_index'),
+            'label': 'County-Not-Listed',
+            'count': models.FormSubmission.objects.filter(
+                organizations__slug='cfa').count(),
+            'is_active': False}
+    ]
+
+    active_tab_count = activate_tab_by_label(tabs, active_tab)
+
+    return tabs, active_tab_count
 
 
 def activate_tab_by_label(tabs, label):
@@ -108,8 +119,9 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
             context['results'] = \
                 SubmissionsService.get_submissions_for_followups(
                     self.request.GET.get('page'))
-            context['app_index_tabs'] = get_tabs_for_staff_user()
-            context['app_index_scope_title'] = "All Applications"
+            context['app_index_tabs'], count = get_tabs_for_staff_user(
+                'All Applications')
+            context['app_index_scope_title'] = 'Applications'
         else:
             context['results'] = \
                 AppsService.get_all_applications_for_org_user(
@@ -118,13 +130,15 @@ class ApplicationIndex(ViewAppDetailsMixin, TemplateView):
                 self.request.user.profile.organization, 'All')
             context['app_index_scope_title'] = "All Applications To {}".format(
                 self.request.user.profile.organization.name)
-            if count == 0:
-                context['no_results'] = "You have no applications."
+        if count == 0:
+            context['no_results'] = 'You have no applications.'
+            context['csv_download_link'] = None
+        else:
+            context['csv_download_link'] = reverse('intake-csv_download')
         context['page_counter'] = \
             utils.get_page_navigation_counter(
                 page=context['results'],
                 wing_size=9)
-
         return context
 
 
@@ -147,6 +161,7 @@ class ApplicationUnreadIndex(NoBrowserCacheOnGetMixin, ApplicationIndex):
                     self.request.user.profile.organization
                         ).values_list('id', flat=True)
                 )
+        context['csv_download_link'] = None
         return context
 
     def get(self, request):
@@ -170,8 +185,44 @@ class ApplicationNeedsUpdateIndex(ApplicationUnreadIndex):
         else:
             context['no_results'] = None
         context['print_all_link'] = None
+        context['csv_download_link'] = None
         context['app_index_scope_title'] = \
             "{} Applications Need Status Updates".format(count)
+        return context
+
+
+class ApplicationCountyNotListedIndex(ApplicationIndex):
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            return not_allowed(request)
+        else:
+            return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        is_staff = self.request.user.is_staff
+        if is_staff:
+            context['results'] = SubmissionsService.get_all_cnl_submissions(
+                self.request.GET.get('page'))
+            context['app_index_tabs'], count = get_tabs_for_staff_user(
+                'County-Not-Listed')
+        else:
+            context['app_index_tabs'], count = get_tabs_for_org_user(
+                self.request.user.profile.organization,
+                'County-Not-Listed')
+        if count == 0:
+            context['no_results'] = "There are no CNL applications!"
+        else:
+            context['no_results'] = None
+        context['print_all_link'] = None
+        context['csv_download_link'] = None
+        context['app_index_scope_title'] = \
+            "{} County-Not-Listed Applications".format(count)
+        context['page_counter'] = \
+            utils.get_page_navigation_counter(
+                page=context['results'],
+                wing_size=9)
         return context
 
 
@@ -374,3 +425,4 @@ mark_processed = MarkProcessed.as_view()
 app_bundle_detail = ApplicationBundleDetail.as_view()
 app_bundle_detail_pdf = ApplicationBundleDetailPDFView.as_view()
 case_bundle_printout = CaseBundlePrintoutPDFView.as_view()
+app_cnl_index = ApplicationCountyNotListedIndex.as_view()

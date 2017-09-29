@@ -11,7 +11,7 @@ import intake
 from intake import anonymous_names
 from intake.constants import SMS, EMAIL
 from project.jinja2 import namify
-from formation.fields import MonthlyIncome, HouseholdSize, OnPublicBenefits
+
 
 FORMSUBMISSION_TEXT_SEARCH_FIELDS = [
     'first_name',
@@ -58,7 +58,8 @@ QUERYABLE_ANSWER_FIELDS = [
     'household_size',
     'dependents',
     'is_married',
-    'has_children'
+    'has_children',
+    'unlisted_counties'
 ]
 
 
@@ -171,6 +172,7 @@ class FormSubmission(models.Model):
     dependents = models.TextField(default="")
     is_married = models.TextField(default="")
     has_children = models.TextField(default="")
+    unlisted_counties = models.TextField(default="")
 
     # old_uuid is only used for porting legacy applications
     old_uuid = models.CharField(max_length=34, unique=True,
@@ -317,6 +319,11 @@ class FormSubmission(models.Model):
     def get_external_url(self):
         return urljoin(settings.DEFAULT_HOST, self.get_absolute_url())
 
+    def get_external_history_url(self):
+        return urljoin(
+            settings.DEFAULT_HOST, reverse(
+                'intake-app_history', kwargs=dict(submission_id=self.id)))
+
     def get_case_printout_url(self):
         return reverse(
             'intake-case_printout', kwargs=dict(submission_id=self.id))
@@ -328,22 +335,6 @@ class FormSubmission(models.Model):
     def get_uuid(self):
         """returns the _applicant/visitor_ uuid for funnel tracking"""
         return self.applicant.get_uuid()
-
-    def qualifies_for_fee_waiver(self):
-        on_benefits = OnPublicBenefits(self.answers)
-        if on_benefits.is_valid():
-            if bool(on_benefits):
-                return True
-        is_under_threshold = None
-        hh_size_field = HouseholdSize(self.answers)
-        hh_income_field = MonthlyIncome(self.answers)
-        if (hh_income_field.is_valid() and hh_size_field.is_valid()):
-            hh_size = hh_size_field.get_display_value()
-            annual_income = hh_income_field.get_current_value() * 12
-            threshold = intake.constants.FEE_WAIVER_LEVELS.get(
-                hh_size, intake.constants.FEE_WAIVER_LEVELS[12])
-            is_under_threshold = annual_income <= threshold
-        return is_under_threshold
 
     def __str__(self):
         return self.get_anonymous_display()

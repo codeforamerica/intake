@@ -3,11 +3,12 @@ from django.utils.translation import ugettext_lazy as _
 import Levenshtein
 import intake.services.events_service as EventsService
 from intake import models, serializers, notifications, tasks
-from intake.constants import SMS, EMAIL
+from intake.constants import SMS, EMAIL, FEE_WAIVER_LEVELS
 from . import pagination
 from intake.service_objects import ConfirmationNotification
 from intake.models.form_submission import (
     FORMSUBMISSION_TEXT_SEARCH_FIELDS, QUERYABLE_ANSWER_FIELDS, DOLLAR_FIELDS)
+from formation.fields import MonthlyIncome, HouseholdSize, OnPublicBenefits
 
 
 class MissingAnswersError(Exception):
@@ -29,7 +30,7 @@ def create_submission(form, organizations, applicant_id):
         existing = submission.answers.get(key, None)
         if existing:
             setattr(submission, key, existing)
-    address = submission.answers['address']
+    address = submission.answers.get('address', {})
     submission.set_dob_from_answers()
     for component in address:
         existing = address.get(component, None)
@@ -216,6 +217,22 @@ def send_confirmation_notifications(sub):
     return get_confirmation_flash_messages(confirmation_notification)
 
 
+def qualifies_for_fee_waiver(submission):
+    on_benefits = OnPublicBenefits(submission.answers)
+    if on_benefits.is_valid():
+        if bool(on_benefits):
+            return True
+    is_under_threshold = None
+    hh_size_field = HouseholdSize(submission.answers)
+    hh_income_field = MonthlyIncome(submission.answers)
+    if (hh_income_field.is_valid() and hh_size_field.is_valid()):
+        hh_size = hh_size_field.get_display_value()
+        annual_income = hh_income_field.get_current_value() * 12
+        threshold = FEE_WAIVER_LEVELS.get(hh_size, FEE_WAIVER_LEVELS[12])
+        is_under_threshold = annual_income <= threshold
+    return is_under_threshold
+
+
 # These methods are used for test setup only
 def create_for_organizations(organizations, **kwargs):
     submission = models.FormSubmission(**kwargs)
@@ -240,3 +257,9 @@ def get_unopened_submissions_for_org(organization):
         'id', flat=True)
     return organization.submissions.filter(
         applications__id__in=unopened_app_ids)
+
+
+def get_all_cnl_submissions(page_index):
+    query = get_submissions_for_staff_user().filter(organizations__slug='cfa')
+    serializer = serializers.FormSubmissionFollowupListSerializer
+    return pagination.get_serialized_page(query, serializer, page_index)

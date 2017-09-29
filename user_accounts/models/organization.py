@@ -1,7 +1,6 @@
 from django.db import models
 from intake import models as intake_models
 from intake.utils import coerce_to_ids
-from formation.forms import county_form_selector, display_form_selector
 import user_accounts
 from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
@@ -36,6 +35,9 @@ class OrganizationManager(models.Manager):
         sub = self.extract_sub()
         if sub and orgs:
             sub.applications.filter(organization__in=orgs).delete()
+
+    def not_cfa(self):
+        return self.exclude(slug='cfa')
 
 
 class PurgedOrganization(models.Model):
@@ -108,18 +110,6 @@ class Organization(models.Model):
         """Checks for any linked intake.models.FillablePDF objects
         """
         return self.pdfs.count() > 0
-
-    def get_default_form(self, display=False):
-        """Get the basic input form for this organization
-        For the time being, this is purely based on the county
-        """
-        form_selector = display_form_selector \
-            if display else county_form_selector
-        return form_selector.get_combined_form_class(
-            counties=[self.county.slug])
-
-    def get_display_form(self):
-        return self.get_default_form(display=True)
 
     def get_absolute_url(self):
         return reverse(
