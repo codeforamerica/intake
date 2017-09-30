@@ -1,4 +1,4 @@
-<div class="field field-multivalue_fieldset {{ field.get_html_class_name() }}
+<div id="{{ field.get_html_class_name() }}" class="field field-multivalue_fieldset {{ field.get_html_class_name() }}
   {%- if field.warnings %} warnings{% endif %}
   {%- if field.errors %} errors{% endif %}">
   {%- include "formation/messages_list.jinja" %}

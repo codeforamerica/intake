@@ -111,6 +111,9 @@ class TestApplicantFormViewBase(ApplicantFormViewBaseTestCase):
                 'project.services.logging_service', logging.INFO) as logs:
             self.client.fill_form(
                 reverse('intake-county_application'), **answers)
+            self.client.fill_form(
+                reverse('intake-review'),
+                submit_action='approve_application')
         self.assertEqual(create_sub.call_count, 1)
         self.assertEqual(send_to_newapps.call_count, 1)
         self.assertEqual(self.slack_new_submission.call_count, 1)
@@ -119,7 +122,7 @@ class TestApplicantFormViewBase(ApplicantFormViewBaseTestCase):
         assertInLogsCount(
             logs, {
                 'event_name=application_submitted': 1,
-                'event_name=application_page_complete': 1,
+                'event_name=application_page_complete': 2,
                 'event_name=application_started': 0,
                 'event_name=application_errors': 0,
             })

@@ -706,6 +706,11 @@ class DeclarationLetterDisplay(DisplayForm):
     ]
 
 
+class ApplicationReviewForm(Form):
+    fields = [F.ApplicationReviewActions]
+    required_fields = [F.ApplicationReviewActions]
+
+
 class DeclarationLetterReviewForm(Form):
     fields = [F.DeclarationLetterReviewActions]
     required_fields = [F.DeclarationLetterReviewActions]
@@ -746,6 +751,7 @@ ORG_FORM_SPECS = [
 ]
 
 display_form_selector = FormSpecSelector(DISPLAY_FORM_SPECS, DisplayForm)
+county_display_form_selector = FormSpecSelector(INPUT_FORM_SPECS, DisplayForm)
 county_form_selector = FormSpecSelector(INPUT_FORM_SPECS, Form)
 organization_form_selector = FormSpecSelector(ORG_FORM_SPECS, Form)
 

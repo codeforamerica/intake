@@ -14,7 +14,8 @@ from formation.field_types import (
 )
 from intake.constants import (
     CONTACT_PREFERENCE_CHOICES, REASON_FOR_APPLYING_CHOICES,
-    GENDER_PRONOUN_CHOICES, DECLARATION_LETTER_REVIEW_CHOICES
+    GENDER_PRONOUN_CHOICES, DECLARATION_LETTER_REVIEW_CHOICES,
+    APPLICATION_REVIEW_CHOICES
 )
 from project.jinja2 import namify
 
@@ -187,9 +188,14 @@ class DeclarationLetterReviewActions(ChoiceField):
     choices = DECLARATION_LETTER_REVIEW_CHOICES
 
 
+class ApplicationReviewActions(ChoiceField):
+    context_key = 'submit_action'
+    choices = APPLICATION_REVIEW_CHOICES
+
 ###
 # Identification Questions
 ###
+
 
 class NameField(CharField):
 

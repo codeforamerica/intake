@@ -18,35 +18,19 @@
 }
 .flash_message-body {
   display: block;
-  margin-left: 1.5em;
 }
 
 .flash_message.error {
   background-color: @brand-danger-background;
   color: @brand-danger-text;
 }
-.flash_message.error .row > div {
-  &:before {
-    content:"\e209";
-  }
-}
 
 .flash_message.success {
   background-color: @brand-success;
   color: white;
 }
-.flash_message.success .row > div {
-  &:before {
-    content: "\e084";
-  }
-}
 
 .flash_message.warning {
   background-color: @brand-warning;
   color: white;
-}
-.flash_message.warning .row > div {
-  &:before {
-    content:"\e209";
-  }
 }

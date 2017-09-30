@@ -36,11 +36,22 @@ def click_submit(context, form_class):
 
 
 @when('the "{input_name}" text input is set to "{value}"')
-def type_in_textarea(context, input_name, value):
+def type_in_text_input(context, input_name, value):
     selector = "input[name='%s'][type='text']" % (
         input_name,
     )
     text = context.browser.find_element_by_css_selector(selector)
+    text.clear()
+    text.send_keys(value)
+
+
+@when('the "{input_name}" text area is set to "{value}"')
+def type_in_textarea(context, input_name, value):
+    selector = "textarea[name='%s']" % (
+        input_name,
+    )
+    text = context.browser.find_element_by_css_selector(selector)
+    text.clear()
     text.send_keys(value)
 
 
