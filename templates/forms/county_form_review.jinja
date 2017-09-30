@@ -1,0 +1,77 @@
+{% extends "forms/county_form.jinja" %}
+
+
+{%- block header_title -%}
+Review Your Application
+{%- endblock header_title -%}
+
+{% block content %}
+<section class="application_form content">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-8 col-md-6 col_centered">
+          <p>Please review the information you entered on the previous page. Does everything look okay?</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-8 col-md-6 col_centered">
+
+<form class="county_form" action="" method="POST" accept-charset="utf-8">
+  {#
+    Non field errors are not included here because they will be
+    displayed as flash messages in the header.
+  #}
+  
+  {% include "includes/csrf_field.jinja" %}
+  <div class="review_display-wrapper">
+  {% for field in form.get_usable_fields() %}
+    <div class="review_display {{ field.get_html_class_name() }}">
+      <div class="review_display-label">{{ field.label }}</div>
+      {%- if not field.is_empty() %}
+      <div class="review_display-value">
+        {{ field.get_display_value() }}
+      </div>
+      {%- else %}
+      <div class="review_display-value empty"></div>
+      {%- endif %}
+      <a id="edit-{{
+          field.get_html_class_name()
+        }}" class="btn btn-default review_display-edit_button" href="{{ 
+          url('intake-county_application')
+        }}?editing={{
+          field.get_html_class_name()
+        }}#{{
+          field.get_html_class_name()
+        }}">
+        Edit
+      </a>
+    </div>
+  {% endfor %}
+  </div>
+
+  <div class="form-submit_choices">
+
+    <a href="{{ url('intake-county_application') }}?editing=all" class="action-back btn">
+      <span class="glyphicon glyphicon-arrow-left"></span>
+      {{ _("Edit Application") }}
+    </a>
+
+    <button class="action-forward" type="submit" name="submit_action" value="approve_application">
+      {% if needs_declaration_letter %}
+      {{ _("Next") }}
+      {% else %}
+      <span class="glyphicon glyphicon-ok"></span>
+      {{ _("Finish Application") }}
+      {% endif %}
+    </button>
+
+
+  </div>
+</form>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}
