@@ -7,6 +7,7 @@
     "display_name": "Can't Proceed",
     "template": "I'm sorry, we can't move forward with your application.",
     "help_text": "",
+    "is_a_status_update_choice": false,
     "slug": "cant-proceed"
   }
 },
@@ -29,6 +30,7 @@
     "display_name": "Not Eligible",
     "template": "I'm sorry, we reviewed your record and you do not qualify to clear your {{county}} record.",
     "help_text": "",
+    "is_a_status_update_choice": false,
     "slug": "not-eligible"
   }
 },
@@ -86,6 +88,72 @@
     "help_text": "",
     "slug": "transferred",
     "is_a_status_update_choice": false
+  }
+},
+{
+  "model": "intake.statustype",
+  "pk": 9,
+  "fields": {
+    "label": "In Review",
+    "display_name": "In Review",
+    "template": "We are in the process of reviewing your application. We will contact you as soon as we have an update.",
+    "help_text": "",
+    "slug": "in-review"
+  }
+},
+{
+  "model": "intake.statustype",
+  "pk": 10,
+  "fields": {
+    "label": "Can't Proceed - probation",
+    "display_name": "CP - probation",
+    "template": "I'm sorry, we can't move forward with your application. Our records show that you are on probation. You have to finish probation before you can clear your record. If you think this is a mistake, please {{organization_contact_message}}.",
+    "help_text": "",
+    "slug": "cp-probation"
+  }
+},
+{
+  "model": "intake.statustype",
+  "pk": 11,
+  "fields": {
+    "label": "Can't Proceed - fines/fees",
+    "display_name": "CP - fees",
+    "template": "I'm sorry, we can't move forward with your application. Our records show that you owe court fees. You have to pay your court fees before you can clear your record. If you think this is a mistake, please {{organization_contact_message}}.",
+    "help_text": "",
+    "slug": "cp-fees"
+  }
+},
+{
+  "model": "intake.statustype",
+  "pk": 12,
+  "fields": {
+    "label": "Can't Proceed - need more info",
+    "display_name": "CP - need info",
+    "template": "I'm sorry, we can't move forward with your application because we need more information from you.",
+    "help_text": "",
+    "slug": "cp-need-info"
+  }
+},
+{
+  "model": "intake.statustype",
+  "pk": 13,
+  "fields": {
+    "label": "Can't Proceed - ineligible convictions",
+    "display_name": "CP - not eligible",
+    "template": "I'm sorry, we can't move forward with your application. According to the law, your {{county}} convictions are not eligible to be cleared.",
+    "help_text": "",
+    "slug": "cp-not-eligible"
+  }
+},
+{
+  "model": "intake.statustype",
+  "pk": 14,
+  "fields": {
+    "label": "Can't Proceed - other",
+    "display_name": "CP - other",
+    "template": "I'm sorry, we can't move forward with your application.",
+    "help_text": "",
+    "slug": "cp-other"
   }
 },
 {
