@@ -175,8 +175,8 @@ class AlamedaCountyFormSpec(CombinableCountyFormSpec):
         F.OnPublicBenefits,
         F.OwnsHome,
         F.HouseholdSize,
+        F.ReasonsForApplying,
         F.DateOfBirthField,
-        # F.LastFourOfSSN,
         F.USCitizen,
         F.OnProbationParole,
         F.FinishedHalfProbation,
@@ -217,52 +217,6 @@ class AlamedaCountyFormSpec(CombinableCountyFormSpec):
     validators = [
         gave_preferred_contact_methods
     ]
-
-
-class AlamedaPublicDefenderFormSpec(CombinableOrganizationFormSpec):
-    organization = 'a_pubdef'
-    fields = {
-        F.ContactPreferences,
-        F.FirstName,
-        F.MiddleName,
-        F.LastName,
-        F.PhoneNumberField,
-        F.AlternatePhoneNumberField,
-        F.EmailField,
-        F.AddressField,
-        F.FinancialScreeningNote,
-        F.MonthlyIncome,
-        F.OwnsHome,
-        F.HouseholdSize,
-        F.DateOfBirthField,
-        F.USCitizen,
-        F.OnProbationParole,
-        F.FinishedHalfProbation,
-        F.ReducedProbation,
-        F.ServingSentence,
-        F.BeingCharged,
-        F.HowDidYouHear,
-        F.AdditionalInformation,
-    }
-    required_fields = {
-        F.FirstName,
-        F.LastName,
-        F.AddressField,
-        F.DateOfBirthField,
-        F.MonthlyIncome,
-        F.OwnsHome,
-        F.HouseholdSize,
-        F.OnProbationParole,
-        F.FinishedHalfProbation,
-        F.ReducedProbation,
-        F.ServingSentence,
-        F.BeingCharged,
-    }
-    optional_fields = {
-        F.AlternatePhoneNumberField,
-        F.HowDidYouHear,
-        F.AdditionalInformation,
-    }
 
 
 class MontereyCountyFormSpec(CombinableCountyFormSpec):
@@ -616,61 +570,7 @@ class StanislausCountyFormSpec(FresnoCountyFormSpec):
         F.HowMuchSavings,
         F.HowManyDependents
     }
-    required_fields = (FresnoCountyFormSpec.required_fields)
-
-
-class EBCLCIntakeFormSpec(CombinableOrganizationFormSpec):
-    organization = 'ebclc'
-    fields = {
-        F.ContactPreferences,
-        F.FirstName,
-        F.MiddleName,
-        F.LastName,
-        F.PreferredPronouns,
-        F.PhoneNumberField,
-        F.AlternatePhoneNumberField,
-        F.EmailField,
-        F.AddressField,
-        F.FinancialScreeningNote,
-        F.MonthlyIncome,
-        F.OnPublicBenefits,
-        F.OwnsHome,
-        F.HouseholdSize,
-        F.DateOfBirthField,
-        # F.LastFourOfSocial,
-        F.USCitizen,
-        F.OnProbationParole,
-        F.FinishedHalfProbation,
-        F.ReducedProbation,
-        F.ServingSentence,
-        F.BeingCharged,
-        F.RAPOutsideSF,
-        F.WhenWhereOutsideSF,
-        F.HasSuspendedLicense,
-        F.OwesCourtFees,
-        F.HowDidYouHear,
-        F.AdditionalInformation,
-    }
-    required_fields = {
-        F.FirstName,
-        F.LastName,
-        F.AddressField,
-        F.DateOfBirthField,
-        F.MonthlyIncome,
-        F.OnPublicBenefits,
-        F.OwnsHome,
-        F.HouseholdSize,
-        F.OnProbationParole,
-        F.FinishedHalfProbation,
-        F.ReducedProbation,
-        F.ServingSentence,
-        F.BeingCharged,
-    }
-    optional_fields = {
-        F.AlternatePhoneNumberField,
-        F.HowDidYouHear,
-        F.AdditionalInformation,
-    }
+    required_fields = FresnoCountyFormSpec.required_fields
 
 
 class DeclarationLetterFormSpec(CombinableFormSpec):
@@ -745,15 +645,9 @@ DISPLAY_FORM_SPECS = INPUT_FORM_SPECS + [
     SupplementaryDisplayForm(),
 ]
 
-ORG_FORM_SPECS = [
-    AlamedaPublicDefenderFormSpec(),
-    EBCLCIntakeFormSpec(),
-]
-
 display_form_selector = FormSpecSelector(DISPLAY_FORM_SPECS, DisplayForm)
 county_display_form_selector = FormSpecSelector(INPUT_FORM_SPECS, DisplayForm)
 county_form_selector = FormSpecSelector(INPUT_FORM_SPECS, Form)
-organization_form_selector = FormSpecSelector(ORG_FORM_SPECS, Form)
 
 
 def print_all_fields_for_county(county_slug):

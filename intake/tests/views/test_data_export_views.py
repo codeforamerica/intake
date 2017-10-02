@@ -56,7 +56,7 @@ class TestCSVDownloadView(TestCase):
             'Is on probation or parole,Finished half probation,'
             'Reduced probation,RAP in other counties,Where/when,'
             'Has suspended license,Owes court fines/fees,Monthly income,'
-            'On public benefits,Owns home,Household size,'
+            'On public benefits,Owns home,Household size,Reasons for applying,'
             'How they found out about this,Additional information,'
             'Understands might not qualify and could take a few months,'
             '"Consents to record access, filing, and court representation",'
@@ -66,7 +66,7 @@ class TestCSVDownloadView(TestCase):
             ',Alameda,Text Message,Gabriel,Tiffany,Jenkins,She/Her/Hers,'
             '(415) 212-4848,(415) 212-4848,cmrtestuser@gmail.com,"6230 Shawn '
             'View\nNorth John, VA\n80973",4/19/1983,No,No,No,Yes,Not on '
-            'probation,Not on probation,No,,No,No,"$3,001.00",No,Yes,3,'
+            'probation,Not on probation,No,,No,No,"$3,001.00",No,Yes,3,,'
             'from work,I want help,"Yes, I understand","Yes, I give them '
             'permission to do that",False,False,Granted,'
             '01/02/2017,bgolder+demo+ebclc_user@codeforamerica.org,')
