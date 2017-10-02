@@ -8,3 +8,4 @@ beautifulsoup4==4.4.1
 browserstack-local~=1.2.1
 selenium~=3.3.3
 
+behave-django~=0.5.0
