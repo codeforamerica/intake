@@ -5,7 +5,12 @@ from django.core.urlresolvers import reverse
 from intake.middleware import GetCleanIpAddressMiddleware
 from intake import models
 from django.http import HttpResponseServerError
-from tests.base import respond_with
+
+
+def respond_with(response):
+    def wrapped(*args, **kwargs):
+        return response('Test exception')
+    return wrapped
 
 
 class TestUserAgentMiddleware(TestCase):
