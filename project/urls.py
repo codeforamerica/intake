@@ -19,10 +19,3 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^clips/', include('clips.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
-# django debug toolbar
-if settings.DEBUG and settings.USE_DEBUG_TOOLBAR:
-    import debug_toolbar
-    urlpatterns += [
-        url(r'^__debug__/', include(debug_toolbar.urls)),
-    ]
