@@ -17,7 +17,6 @@ TEST_USER_PASSWORD = os.environ.get('TEST_USER_PASSWORD')
 
 VOICEMAIL_NOTIFICATION_EMAIL = 'mikela@codeforamerica.org'
 
-USE_DEBUG_TOOLBAR = False
 DEBUG = True
 ALLOWED_HOSTS = ['*']
 
@@ -55,7 +54,6 @@ AWS_STORAGE_BUCKET_NAME = 'cmr-development-r1-static-files'
 STATIC_BUCKET = 'cmr-development-r1-static-files'
 COMPRESS_URL = 'https://%s.s3.amazonaws.com/' % STATIC_BUCKET
 STATIC_URL = COMPRESS_URL
-STATICFILES_LOCATION = 'static'  # location in bucket TODO: remove
 STATICFILES_STORAGE = 'project.custom_storages.CachedS3BotoStorage'
 
 COMPRESS_ROOT = os.path.join(REPO_DIR, 'staticfiles-cache')
