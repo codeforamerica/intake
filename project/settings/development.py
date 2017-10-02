@@ -58,7 +58,7 @@ STATIC_URL = COMPRESS_URL
 STATICFILES_LOCATION = 'static'  # location in bucket TODO: remove
 STATICFILES_STORAGE = 'project.custom_storages.CachedS3BotoStorage'
 
-COMPRESS_ROOT = os.path.join(REPO_DIR, 'staticfiles')
+COMPRESS_ROOT = os.path.join(REPO_DIR, 'staticfiles-cache')
 COMPRESS_STORAGE = STATICFILES_STORAGE
 
 

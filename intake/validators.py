@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from django.utils.deconstruct import deconstructible
 from intake.constants import CONTACT_METHOD_CHOICES
 from intake import utils
-from intake.tests import mock_template_field_contexts as example_contexts
+from intake import example_contexts
 from jinja2.exceptions import TemplateError
 
 
