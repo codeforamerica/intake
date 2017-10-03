@@ -61,7 +61,7 @@ class StatusUpdateSerializer(serializers.ModelSerializer):
 
     def get_transfer(self, instance):
         # this prevents us from querying for a transfer unless it exists
-        if instance.status_type.id == models.status_type.TRANSFERRED:
+        if instance.status_type.slug == 'transferred':
             return IncomingTransferSerializer().to_representation(
                 instance.transfer)
         return None

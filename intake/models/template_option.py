@@ -19,6 +19,7 @@ class TemplateOption(models.Model):
     slug = models.SlugField(unique=True)
     is_active = models.BooleanField(default=True)
     is_a_status_update_choice = models.BooleanField(default=True)
+    display_order = models.IntegerField(default=0)
 
     def render(self, context):
         return render_template_string(self.template, context)

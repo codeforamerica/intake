@@ -47,11 +47,11 @@ def transfer_application(author, application, to_organization, reason):
         - a new StatusUpdate instance
         - a new Application instance for the to_organization
     """
+    transferred_status_type = models.StatusType.objects.get(slug='transferred')
     transfer_status_update = models.StatusUpdate(
-        status_type_id=models.status_type.TRANSFERRED,
+        status_type=transferred_status_type,
         author_id=author.id,
-        application=application
-    )
+        application=application)
     transfer_status_update.save()
     new_application = models.Application(
         form_submission_id=application.form_submission_id,
