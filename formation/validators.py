@@ -1,5 +1,8 @@
 from formation.exceptions import NoChoicesGivenError
 from django.core.exceptions import ValidationError
+from django.core.validators import (RegexValidator,
+                                    MinValueValidator,
+                                    MaxValueValidator)
 
 from django.utils.translation import ugettext_lazy as _
 

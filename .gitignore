@@ -30,6 +30,7 @@ local_settings.py
 local.log
 notes/*.md
 selenium/
+geckodriver.log
 
 # hiding fixtures
 intake/fixtures/mock*

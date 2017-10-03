@@ -1,7 +1,9 @@
 <div id="{{ field.get_html_class_name() }}" class="{% if field.is_subfield %}sub{% endif %}field {{ field.get_html_class_name() }}
   {%- if field.warnings %} warnings{% endif %}
   {%- if field.errors %} errors{% endif %}">
-  {%- include "formation/messages_list.jinja" %}
+  {% if not field.is_subfield %}
+    {%- include "formation/messages_list.jinja" %}
+  {% endif %}
   <label class="field-wrapping_label">
     <span class="field-display_text">
       {{ field.label }}
