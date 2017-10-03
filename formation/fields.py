@@ -57,13 +57,16 @@ class Counties(MultipleChoiceField):
 
     def __init__(self, *args, **kwargs):
         # prevents the choices query from being called during import
-        self.choices = County.objects.get_county_choices()
+        self.valid_choices = County.objects.get_county_choices()
+        self.possible_choices = \
+            County.objects.get_all_counties_as_choice_list()
+        self.choices = self.valid_choices
         super().__init__(*args, **kwargs)
 
     def get_ordered_selected_counties(self):
         selected_counties = self.get_current_value()
         return [
-            county for county_slug, county in self.choices
+            county for county_slug, county in self.possible_choices
             if county_slug in selected_counties]
 
     def get_display_for_county(self, county, unlisted_counties=None):
