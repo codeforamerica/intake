@@ -222,24 +222,37 @@ class Aliases(NameField):
     context_key = "aliases"
     label = _('Any other names that might be used on your record?')
 
+number_validation_template = "Please enter a number between {min} and {max}"
+month_validation_message = number_validation_template.format(min=1, max=12)
+day_validation_message = number_validation_template.format(min=1, max=31)
+year_validation_message = number_validation_template.format(
+    min=1900, max=timezone.now().year)
 
 class Month(IntegerField):
     context_key = "month"
     label = _("Month")
-    validators = [MinValueValidator(1), MaxValueValidator(12)]
+    validators = [
+        MinValueValidator(1, message=month_validation_message),
+        MaxValueValidator(12, message=month_validation_message)
+    ]
 
 
 class Day(IntegerField):
     context_key = "day"
     label = _("Day")
-    validators = [MinValueValidator(1), MaxValueValidator(31)]
+    validators = [
+        MinValueValidator(1, message=day_validation_message),
+        MaxValueValidator(31, message=day_validation_message)
+    ]
 
 
 class Year(IntegerField):
     context_key = "year"
     label = _("Year")
-    validators = [MinValueValidator(1900),
-                  MaxValueValidator(timezone.now().year)]
+    validators = [
+        MinValueValidator(1900, message=year_validation_message),
+        MaxValueValidator(timezone.now().year, message=year_validation_message)
+    ]
 
 
 class DateOfBirthField(MultiValueField):
