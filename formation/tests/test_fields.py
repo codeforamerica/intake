@@ -76,6 +76,22 @@ class TestYear(TestCase):
                       field.get_errors_list())
 
 
+class TestDateOfBirthField(TestCase):
+
+    def test_display_value_uses_raw_value_if_non_integer(self):
+        data = {
+            'dob': {
+                'year': 'foo',
+                'month': 134,
+                'day': False
+            }
+        }
+
+        field = fields.DateOfBirthField(data)
+        field.is_valid()
+        self.assertEqual(field.get_display_value(), "134/False/foo")
+
+
 class TestCounties(TestCase):
 
     fixtures = ['counties']

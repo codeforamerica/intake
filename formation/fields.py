@@ -232,7 +232,12 @@ year_validation_message = number_validation_template.format(
     field='year', min=1900, max=timezone.now().year)
 
 
-class Month(IntegerField):
+class DisplayRawIfFalsyMixin:
+    def get_display_value(self):
+        return self.get_current_value() or self.raw_input_value
+
+
+class Month(DisplayRawIfFalsyMixin, IntegerField):
     context_key = "month"
     label = _("Month")
     validators = [
@@ -240,8 +245,11 @@ class Month(IntegerField):
         MaxValueValidator(12, message=month_validation_message)
     ]
 
+    def get_display_value(self):
+        return self.get_current_value() or " "
 
-class Day(IntegerField):
+
+class Day(DisplayRawIfFalsyMixin, IntegerField):
     context_key = "day"
     label = _("Day")
     validators = [
@@ -250,7 +258,7 @@ class Day(IntegerField):
     ]
 
 
-class Year(IntegerField):
+class Year(DisplayRawIfFalsyMixin, IntegerField):
     context_key = "year"
     label = _("Year")
     validators = [
@@ -275,7 +283,11 @@ class DateOfBirthField(MultiValueField):
     display_label = "Date of birth"
 
     def get_display_value(self):
-        return "{month}/{day}/{year}".format(**self.get_current_value())
+        return "{month}/{day}/{year}".format(
+            month=self.month.get_display_value(),
+            day=self.day.get_display_value(),
+            year=self.year.get_display_value()
+        )
 
 
 class SocialSecurityNumberField(CharField):
