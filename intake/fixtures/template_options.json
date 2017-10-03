@@ -19,7 +19,8 @@
     "display_name": "No Convictions",
     "template": "Good news, we didn't find anything on your {{county}} record that needed to be cleared. If you think this is a mistake, please {{organization_contact_message}}.",
     "help_text": "",
-    "slug": "no-convictions"
+    "slug": "no-convictions",
+    "display_order": 2
   }
 },
 {
@@ -42,7 +43,8 @@
     "display_name": "Eligible",
     "template": "Good news, you qualify to clear some convictions on your {{county}} record!",
     "help_text": "",
-    "slug": "eligible"
+    "slug": "eligible",
+    "display_order": 3
   }
 },
 {
@@ -53,7 +55,8 @@
     "display_name": "Court Date",
     "template": "Your court date has been scheduled.",
     "help_text": "",
-    "slug": "court-date"
+    "slug": "court-date",
+    "display_order": 4
   }
 },
 {
@@ -64,7 +67,8 @@
     "display_name": "Granted",
     "template": "Congrats, your request to clear some convictions on your {{county}} record was granted!",
     "help_text": "",
-    "slug": "granted"
+    "slug": "granted",
+    "display_order": 10
   }
 },
 {
@@ -75,7 +79,8 @@
     "display_name": "Denied",
     "template": "I'm sorry, the judge declined your request to clear some convictions on your {{county}} record.",
     "help_text": "",
-    "slug": "denied"
+    "slug": "denied",
+    "display_order": 11
   }
 },
 {
@@ -98,7 +103,8 @@
     "display_name": "In Review",
     "template": "We are in the process of reviewing your application. We will contact you as soon as we have an update.",
     "help_text": "",
-    "slug": "in-review"
+    "slug": "in-review",
+    "display_order": 1
   }
 },
 {
@@ -109,7 +115,8 @@
     "display_name": "Can't Proceed: probation",
     "template": "I'm sorry, we can't move forward with your application. Our records show that you are on probation. You have to finish probation before you can clear your record. If you think this is a mistake, please {{organization_contact_message}}.",
     "help_text": "",
-    "slug": "cp-probation"
+    "slug": "cp-probation",
+    "display_order": 5
   }
 },
 {
@@ -120,7 +127,8 @@
     "display_name": "Can't Proceed: fees",
     "template": "I'm sorry, we can't move forward with your application. Our records show that you owe court fees. You have to pay your court fees before you can clear your record. If you think this is a mistake, please {{organization_contact_message}}.",
     "help_text": "",
-    "slug": "cp-fees"
+    "slug": "cp-fees",
+    "display_order": 6
   }
 },
 {
@@ -131,7 +139,8 @@
     "display_name": "Can't Proceed: need info",
     "template": "I'm sorry, we can't move forward with your application because we need more information from you.",
     "help_text": "",
-    "slug": "cp-need-info"
+    "slug": "cp-need-info",
+    "display_order": 7
   }
 },
 {
@@ -142,7 +151,8 @@
     "display_name": "Can't Proceed: not eligible",
     "template": "I'm sorry, we can't move forward with your application. According to the law, your {{county}} convictions are not eligible to be cleared.",
     "help_text": "",
-    "slug": "cp-not-eligible"
+    "slug": "cp-not-eligible",
+    "display_order": 8
   }
 },
 {
@@ -153,7 +163,8 @@
     "display_name": "Can't Proceed: other",
     "template": "I'm sorry, we can't move forward with your application.",
     "help_text": "",
-    "slug": "cp-other"
+    "slug": "cp-other",
+    "display_order": 9
   }
 },
 {
