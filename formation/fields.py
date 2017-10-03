@@ -222,11 +222,15 @@ class Aliases(NameField):
     context_key = "aliases"
     label = _('Any other names that might be used on your record?')
 
-number_validation_template = "Please enter a number between {min} and {max}"
-month_validation_message = number_validation_template.format(min=1, max=12)
-day_validation_message = number_validation_template.format(min=1, max=31)
+
+number_validation_template = "Please enter a {field} between {min} and {max}"
+month_validation_message = number_validation_template.format(
+    field='month', min=1, max=12)
+day_validation_message = number_validation_template.format(
+    field='day', min=1, max=31)
 year_validation_message = number_validation_template.format(
-    min=1900, max=timezone.now().year)
+    field='year', min=1900, max=timezone.now().year)
+
 
 class Month(IntegerField):
     context_key = "month"

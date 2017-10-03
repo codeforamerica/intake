@@ -1,18 +1,37 @@
-  {%- if field.get_errors_list() -%}
+{%- if field.errors -%}
   <ul class="errorlist">
-  {%- for error in field.get_errors_list() %}
-    <li class="error">
-      {{ error }}
-    </li>
-  {%- endfor -%}
+    {%- for error in field.get_errors_list() -%}
+      <li class="error">
+        {{ error }}
+      </li>
+    {%- endfor -%}
+    {%- if field.subfields -%}
+      {%- for subfield in field.subfields -%}
+        {%- for error in subfield.get_errors_list() -%}
+          <li class="error">
+            {{ error }}
+          </li>
+        {%- endfor -%}
+      {%- endfor -%}
+    {%- endif -%}
   </ul>
-  {%- endif -%}
-  {%- if field.get_warnings_list() -%}
+{%- endif -%}
+
+{%- if field.warnings -%}
   <ul class="warninglist">
-  {%- for warning in field.get_warnings_list() %}
-    <li class="warning">
-      {{ warning }}
-    </li>
-  {%- endfor -%}
+    {%- for warning in field.get_warnings_list() -%}
+      <li class="warning">
+        {{ warning }}
+      </li>
+    {%- endfor -%}
+    {%- if field.subfields -%}
+      {%- for subfield in field.subfields -%}
+        {%- for warning in subfield.get_warnings_list() -%}
+          <li class="warning">
+            {{ warning }}
+          </li>
+        {%- endfor -%}
+      {%- endfor -%}
+    {%- endif -%}
   </ul>
-  {%- endif -%}
+{%- endif -%}

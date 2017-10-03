@@ -1,11 +1,10 @@
 from django.test import TestCase
 from markupsafe import escape
-from formation.tests.utils import PatchTranslationTestCase
 from formation import fields
 from intake import models
 
 
-class TestAddressField(PatchTranslationTestCase):
+class TestAddressField(TestCase):
 
     def test_address_get_display_value(self):
         input_data = {
@@ -27,7 +26,7 @@ class TestAddressField(PatchTranslationTestCase):
         self.assertEqual(field.get_display_value(), expected_display)
 
 
-class TestMonthlyIncomeField(PatchTranslationTestCase):
+class TestMonthlyIncomeField(TestCase):
 
     def test_unreasonable_monthly_wage_makes_warning(self):
         high, low = ("$60,000", "1.543")
@@ -44,31 +43,37 @@ class TestMonthlyIncomeField(PatchTranslationTestCase):
         self.assertFalse(field.warnings)
 
 
-class TestMonth(PatchTranslationTestCase):
+class TestMonth(TestCase):
 
     def test_incorrect_month_number_is_invalid(self):
         data = {'month': 40}
         field = fields.Month(data)
         field.is_valid()
         self.assertTrue(field.errors)
+        self.assertIn("Please enter a month between 1 and 12",
+                      field.get_errors_list())
 
 
-class TestDay(PatchTranslationTestCase):
+class TestDay(TestCase):
 
     def test_incorrect_day_number_is_invalid(self):
         data = {'day': 102}
         field = fields.Day(data)
         field.is_valid()
         self.assertTrue(field.errors)
+        self.assertIn("Please enter a day between 1 and 31",
+                      field.get_errors_list())
 
 
-class TestYear(PatchTranslationTestCase):
+class TestYear(TestCase):
 
     def test_incorrect_year_number_is_invalid(self):
         data = {'year': 87}
         field = fields.Year(data)
         field.is_valid()
         self.assertTrue(field.errors)
+        self.assertIn("Please enter a year between 1900 and 2017",
+                      field.get_errors_list())
 
 
 class TestCounties(TestCase):
