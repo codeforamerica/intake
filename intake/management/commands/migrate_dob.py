@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
-from dateutil.parser import parse
-
+from datetime import date
 from intake import models
+from formation.fields import DateOfBirthField
 
 
 class Command(BaseCommand):
@@ -14,14 +14,14 @@ class Command(BaseCommand):
         for sub in subs:
             if not sub.dob:
                 try:
-                    dob_obj = sub.answers['dob']
-                    parsed_dob = parse(("{year}-{month}-{day}").format(
-                        year=dob_obj['year'],
-                        month=dob_obj['month'],
-                        day=dob_obj['day']))
-                    sub.dob = parsed_dob
-                    sub.save(update_fields=['dob'])
-                    migrated += 1
+                    field = DateOfBirthField(sub.answers)
+                    if field.is_valid():
+                        sub.dob = date(**field.get_current_value())
+                        sub.save(update_fields=['dob'])
+                        migrated += 1
+                    else:
+                        print(vars(sub))
+                        errored += 1
                 except Exception as e:
                     print(e)
                     print(vars(sub))
