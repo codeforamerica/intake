@@ -108,8 +108,9 @@ button.action-back, a.action-back {
 	margin: 0.5em 0.25em;
 }
 
-.warnings, .errors {
-	margin: 0 -1em;
+.field.warnings, .field.errors {
+	margin-left: -1em;
+	margin-right: -1em;
 	padding: .5em 1em;
 	position: relative;
 }
@@ -130,10 +131,16 @@ button.action-back, a.action-back {
 .errorlist {
 	color: @brand-danger-text;
 }
-.errors {
+.field.errors {
 	border-top: .25em solid @brand-danger;
 	border-bottom: .25em solid @brand-danger;
 	background-color: @brand-danger-background;
+}
+
+.subfield.errors {
+	input {
+		border: .1em solid @brand-danger;
+	}
 }
 
 .counties label > * { vertical-align: text-top; display: inline-block; }

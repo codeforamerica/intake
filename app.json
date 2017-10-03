@@ -37,6 +37,9 @@
     "SENDGRID_API_KEY": {
       "required": true
     },
+    "MAILGUN_PRIVATE_API_KEY": {
+      "required": true
+    },
     "SLACK_WEBHOOK_URL": {
       "required": true
     },
