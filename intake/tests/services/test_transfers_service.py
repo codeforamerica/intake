@@ -28,8 +28,7 @@ class TestTransferApplication(TestCase):
         self.assertEqual(new_application.incoming_transfers.count(), 1)
         transfer = new_application.incoming_transfers.first()
         self.assertEqual(
-            transfer.status_update.status_type.pk,
-            models.status_type.TRANSFERRED)
+            transfer.status_update.status_type.slug, 'transferred')
         self.assertEqual(
             transfer.status_update.application.organization.county.slug,
             'alameda')
