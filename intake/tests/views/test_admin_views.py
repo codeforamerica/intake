@@ -409,6 +409,34 @@ class TestApplicationCountyNotListedIndex(TestCase):
         self.assertRedirects(response, reverse('user_accounts-profile'))
 
 
+class TestApplicationCountyNotListedIndex(TestCase):
+    fixtures = ['counties', 'organizations', 'groups']
+
+    def test_anon_user_is_redirected_to_login(self):
+        response = self.client.get(reverse('intake-app_cnl_index'))
+        self.assertRedirects(
+            response,
+            '{}?next={}'.format(
+                reverse('user_accounts-login'),
+                reverse('intake-app_cnl_index')))
+
+    def test_followup_user_can_access(self):
+        profile = followup_user()
+        self.client.login(
+            username=profile.user.username,
+            password=settings.TEST_USER_PASSWORD)
+        response = self.client.get(reverse('intake-app_cnl_index'))
+        self.assertEqual(200, response.status_code)
+
+    def test_org_user_is_redirected_to_profile(self):
+        profile = app_reviewer()
+        self.client.login(
+            username=profile.user.username,
+            password=settings.TEST_USER_PASSWORD)
+        response = self.client.get(reverse('intake-app_cnl_index'))
+        self.assertRedirects(response, reverse('user_accounts-profile'))
+
+
 class TestApplicationBundleDetail(IntakeDataTestCase):
 
     fixtures = [
