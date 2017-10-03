@@ -24,14 +24,19 @@ class CountyManager(models.Manager):
     def get_county_choices_query(self):
         if settings.LIVE_COUNTY_CHOICES:
             return self.order_by_name_or_not_listed().filter(
-                    has_a_live_org | is_not_listed_county
-            ).distinct()
+                    has_a_live_org
+            ).exclude(is_not_listed_county).distinct()
         else:
-            return self.order_by_name_or_not_listed()
+            return self.order_by_name_or_not_listed(
+                ).exclude(is_not_listed_county)
 
     def get_county_choices(self):
         qset = self.get_county_choices_query()
         return tuple((obj.slug, obj) for obj in qset)
+
+    def get_all_counties_as_choice_list(self):
+        return tuple(
+            (obj.slug, obj) for obj in self.order_by_name_or_not_listed())
 
     def annotate_is_not_listed(self):
         return self.annotate(

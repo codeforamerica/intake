@@ -92,7 +92,9 @@ class TestCountyApplicationNoWarningsView(ApplicantFormViewBaseTestCase):
 
     def test_can_go_back_and_reset_counties(self):
         self.be_anonymous()
-        county_slugs = list(County.objects.values_list('slug', flat=True))
+        county_slugs = list(
+            County.objects.get_county_choices_query().values_list(
+                'slug', flat=True))
         first_choices = random.sample(county_slugs, 2)
         second_choices = [random.choice(county_slugs)]
         self.client.fill_form(
