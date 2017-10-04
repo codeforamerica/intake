@@ -43,15 +43,13 @@ LIVE_COUNTY_CHOICES = False
 
 MEDIA_ROOT = ''
 DEFAULT_FILE_STORAGE = 'project.custom_storages.MediaStorage'
-MEDIA_BUCKET = 'cmr-development-r1-media-files'
-
+MEDIA_BUCKET = os.environ.get('MEDIA_BUCKET')
 COMPRESS_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 # settings for media file uploads
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET')
-AWS_STORAGE_BUCKET_NAME = 'cmr-development-r1-static-files'
+AWS_STORAGE_BUCKET_NAME = os.environ.get('STATIC_BUCKET')
 # settings for static files
-STATIC_BUCKET = 'cmr-development-r1-static-files'
 COMPRESS_URL = 'https://%s.s3.amazonaws.com/' % STATIC_BUCKET
 STATIC_URL = COMPRESS_URL
 STATICFILES_STORAGE = 'project.custom_storages.CachedS3BotoStorage'
