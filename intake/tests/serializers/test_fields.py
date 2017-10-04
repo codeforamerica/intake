@@ -50,8 +50,7 @@ class TestContactInfoByPreferenceField(TestCase):
         expected_output = [
             ('email', 'test@gmail.com'),
         ]
-        results = ContactInfoByPreferenceField(
-        ).to_representation(answers)
+        results = ContactInfoByPreferenceField().to_representation(answers)
         self.assertEqual(results, expected_output)
 
     def test_empty_input_returns_empty_list(self):
