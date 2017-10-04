@@ -83,7 +83,7 @@ class TestCountyManager(TestCase):
         results = list(models.County.objects.get_county_choices_query())
         self.assertIn(live_org.county, results)
         self.assertIn(live_org.county, results)
-        self.assertIn(not_listed, results)
+        self.assertNotIn(not_listed, results)
 
     def test_get_county_choices_query_live(self):
         live_org = FakeOrganizationFactory(
@@ -93,6 +93,6 @@ class TestCountyManager(TestCase):
         not_listed = models.County.objects.get(slug='not_listed')
         with self.settings(LIVE_COUNTY_CHOICES=True):
             results = list(models.County.objects.get_county_choices_query())
-            self.assertIn(live_org.county, results)
-            self.assertNotIn(not_live_org.county, results)
-            self.assertIn(not_listed, results)
+        self.assertIn(live_org.county, results)
+        self.assertNotIn(not_live_org.county, results)
+        self.assertNotIn(not_listed, results)

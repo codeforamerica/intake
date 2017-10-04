@@ -121,16 +121,17 @@ def coco_fields(context):
 @when('applicant fills out additional fields for Alameda Public Defender')
 def a_pubdef_fields(context):
     context.execute_steps('''
-       When the "monthly_income" text input is set to "1000"
-        And "yes" is clicked on the "on_public_benefits" radio button
-        And "no" is clicked on the "owns_home" radio button
-        And the "household_size" text input is set to "3"
-        And "yes" is clicked on the "on_probation_parole" radio button
-        And "yes" is clicked on the "finished_half_probation" radio button
-        And "yes" is clicked on the "reduced_probation" radio button
-        And "yes" is clicked on the "serving_sentence" radio button
-        And "yes" is clicked on the "being_charged" radio button
-      ''')
+When the "monthly_income" text input is set to "1000"
+ And "yes" is clicked on the "on_public_benefits" radio button
+ And "no" is clicked on the "owns_home" radio button
+ And the "household_size" text input is set to "3"
+ And "background_check" is clicked on the "reasons_for_applying" radio button
+ And "yes" is clicked on the "on_probation_parole" radio button
+ And "yes" is clicked on the "finished_half_probation" radio button
+ And "yes" is clicked on the "reduced_probation" radio button
+ And "yes" is clicked on the "serving_sentence" radio button
+ And "yes" is clicked on the "being_charged" radio button
+''')
 
 
 @when('applicant fills out additional fields for San Francisco')

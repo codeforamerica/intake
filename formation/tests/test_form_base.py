@@ -61,9 +61,9 @@ class TestForm(TestCase):
             'contact_preferences': [],
             'currently_employed': '',
             'dob': {
-                'day': '',
-                'month': '',
-                'year': ''
+                'day': None,
+                'month': None,
+                'year': None
             },
             'email': '',
             'first_name': '',
@@ -102,7 +102,7 @@ class TestForm(TestCase):
                 'prefers_sms',
                 'prefers_email'],
             'currently_employed': 'yes',
-            'dob': {'day': '2', 'month': '12', 'year': '1998'},
+            'dob': {'day': 2, 'month': 12, 'year': 1998},
             'email': 'cmrtestuser@gmail.com',
             'first_name': 'Erwin',
             'how_did_you_hear': '',
