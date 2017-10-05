@@ -2,11 +2,10 @@ from django.test import TestCase
 from django.urls import reverse
 from django.conf import settings
 from formation import fields as F
-
-
 from intake.tests.factories import FormSubmissionWithOrgsFactory
 from user_accounts.tests.factories import app_reviewer, followup_user
 from user_accounts.models import Organization
+
 
 class TestAppEditView(TestCase):
     fixtures = ['counties', 'organizations', 'groups']
@@ -51,7 +50,6 @@ class TestAppEditView(TestCase):
             password=settings.TEST_USER_PASSWORD)
         response = self.client.get(self.edit_url)
         self.assertEqual(200, response.status_code)
-
 
     # getting the form
     def test_org_user_gets_expected_form_for_their_org(self):
@@ -125,10 +123,48 @@ class TestAppEditView(TestCase):
                 self.assertNotContains(response, field.context_key)
 
     def test_cfa_user_gets_expected_form(self):
-        pass
+        santa_clara_expected_fields = {
+            F.ContactPreferences,
+            F.FirstName,
+            F.MiddleName,
+            F.LastName,
+            F.PhoneNumberField,
+            F.AlternatePhoneNumberField,
+            F.AddressField,
+            F.EmailField,
+            F.DateOfBirthField}
+        fresno_expected_fields = {
+            F.ContactPreferences,
+            F.FirstName,
+            F.MiddleName,
+            F.LastName,
+            F.Aliases,
+            F.PhoneNumberField,
+            F.AlternatePhoneNumberField,
+            F.AddressField,
+            F.DriverLicenseOrIDNumber,
+            F.EmailField,
+            F.DateOfBirthField,
+            F.CaseNumber}
+
+        cfa_user_profile = followup_user()
+        self.client.login(
+            username=cfa_user_profile.user.username,
+            password=settings.TEST_USER_PASSWORD)
+        response = self.client.get(self.edit_url)
+
+        for field in santa_clara_expected_fields | fresno_expected_fields:
+            with self.subTest(field=field):
+                self.assertContains(response, field.context_key)
 
     def test_edit_form_starts_prefilled_with_existing_data(self):
-        pass
+        fresno_profile = app_reviewer('fresno_pubdef')
+        self.client.login(
+            username=fresno_profile.user.username,
+            password=settings.TEST_USER_PASSWORD)
+        response = self.client.get(self.edit_url)
+        self.assertContains(response, self.sub.answers['first_name'])
+        self.assertContains(response, self.sub.answers['last_name'])
 
     def test_edit_form_does_not_show_validation_errors_for_existing_data(self):
         pass
@@ -151,6 +187,3 @@ class TestAppEditView(TestCase):
 
     def test_updating_data_creates_audit_record(self):
         pass
-
-
-

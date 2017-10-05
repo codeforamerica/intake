@@ -47,7 +47,8 @@ def create_searchable_applicant(context, org_slug=None):
         first_name='Waldo',
         last_name='Waldini',
         phone_number='5555555555',
-        email='waldo@odlaw.institute'
+        email='waldo@odlaw.institute',
+        contact_preferences=['prefers_email', 'prefers_sms']
         )
     kwargs = dict(
         answers=answers,

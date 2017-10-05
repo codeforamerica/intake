@@ -26,7 +26,6 @@ Feature: An org user can edit some application data for applications to their or
       And the "address.city" text input is set to "Oakland"
       And the "address.state" text input is set to "California"
       And the "address.zip" text input is set to "94609"
-      And the "contact_preferences" checkbox option "prefers_email" is clicked
       And the "contact_preferences" checkbox option "prefers_sms" is clicked
       And submit button in form "application_edit_form" is clicked
      Then it should load the applicant's detail page
@@ -42,5 +41,5 @@ Feature: An org user can edit some application data for applications to their or
       And "address" should say "Oakland"
       And "address" should say "California"
       And "address" should say "94609"
-      And "contact_preferences" should say "Email and Text Message"
+      And "contact_preferences" should say "Email"
 

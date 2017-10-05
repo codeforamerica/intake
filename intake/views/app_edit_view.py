@@ -1,4 +1,5 @@
 from django.views.generic.edit import UpdateView
+from django.http import HttpResponseRedirect
 
 from intake.models import FormSubmission
 from intake.services.edit_form_service import \
@@ -20,11 +21,17 @@ class AppEditView(UpdateView):
         return obj
 
     def get_form_class(self):
-        return get_edit_form_class_for_user_and_submission(self.request.user,
-                                                           self.submission)
+        return get_edit_form_class_for_user_and_submission(
+            self.request.user, self.submission)
 
     def get_form_kwargs(self):
-        return {'data': self.submission.answers}
+        if self.request.method in ('POST', 'PUT'):
+            kwargs = {'data': self.request.POST}
+        else:
+            kwargs = {
+                'data': self.submission.answers,
+                'validate': True}
+        return kwargs
 
     def get_queryset(self):
         if self.request.user.is_staff:
@@ -32,6 +39,12 @@ class AppEditView(UpdateView):
 
         return self.model.objects.filter(
             organizations__profiles__user=self.request.user)
+
+    def form_valid(self, form):
+        # previous answers  
+        self.submission.answers.update(form.cleaned_data)
+        self.submission.save()
+        return HttpResponseRedirect(self.get_success_url())
 
 
 app_edit = AppEditView.as_view()
