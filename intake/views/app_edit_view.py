@@ -41,7 +41,6 @@ class AppEditView(UpdateView):
             organizations__profiles__user=self.request.user)
 
     def form_valid(self, form):
-        # previous answers  
         self.submission.answers.update(form.cleaned_data)
         self.submission.save()
         return HttpResponseRedirect(self.get_success_url())
