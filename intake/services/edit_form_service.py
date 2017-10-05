@@ -1,4 +1,5 @@
 from formation import fields as F
+from formation.field_types import MultiValueField
 from formation.fields import get_field_index
 from formation.form_base import Form
 from formation.forms import county_form_selector
@@ -49,3 +50,24 @@ def get_edit_form_class_for_user_and_submission(user, submission):
         required_fields=required_fields,
         validators=list(all_county_form_spec.validators))
     return type('CombinedEditForm', parent_classes, class_attributes)
+
+
+def has_errors_on_existing_data_only(form, submission):
+    for field_key in form.errors:
+        if form.fields[field_key].get_current_value() != \
+                submission.answers[field_key]:
+            return False
+    return True
+
+
+def remove_errors_for_existing_data(form, submission):
+    errors = form.errors.copy()
+    for field_key in errors:
+        if form.fields[field_key].get_current_value() == \
+                submission.answers[field_key]:
+            del form.errors[field_key]
+            field = form.fields[field_key]
+            field.errors = {}
+            if isinstance(field, MultiValueField):
+                for subfield in field.subfields:
+                    subfield.errors = {}

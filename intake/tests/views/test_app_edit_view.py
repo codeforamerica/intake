@@ -1,7 +1,9 @@
+import json
 from django.test import TestCase
 from django.urls import reverse
 from django.conf import settings
 from formation import fields as F
+from easyaudit.models import CRUDEvent
 from intake.tests.factories import FormSubmissionWithOrgsFactory
 from user_accounts.tests.factories import app_reviewer, followup_user
 from user_accounts.models import Organization
@@ -28,8 +30,12 @@ class TestAppEditView(TestCase):
             slug='santa_clara_pubdef')
         self.fresno_pubdef = Organization.objects.get(
             slug='fresno_pubdef')
+        self.sf_pubdef = Organization.objects.get(
+            slug='sf_pubdef')
         self.sub = FormSubmissionWithOrgsFactory(
-            organizations=[self.santa_clara_pubdef, self.fresno_pubdef])
+            organizations=[
+                self.santa_clara_pubdef, self.fresno_pubdef,
+                self.sf_pubdef])
         self.edit_url = self.sub.get_edit_url()
 
     # access control
@@ -203,19 +209,92 @@ class TestAppEditView(TestCase):
         response = self.client.post(
             self.edit_url, dict_to_post_data(existing_data))
         self.assertRedirects(
-            response, self.sub.get_absolute_url(), fetch_redirect_response=False)
+            response, self.sub.get_absolute_url(),
+            fetch_redirect_response=False)
 
     def test_user_sees_success_flash_and_updated_info_after_submission(self):
-        pass
+        fresno_profile = app_reviewer('fresno_pubdef')
+        self.client.login(
+            username=fresno_profile.user.username,
+            password=settings.TEST_USER_PASSWORD)
+        response = self.client.get(self.edit_url)
+        existing_data = response.context_data['form'].cleaned_data
+        existing_data.update({
+            'first_name': 'Foo',
+            'last_name': 'Bar',
+            'email': 'something@example.horse'})
+        response = self.client.post(
+            self.edit_url, dict_to_post_data(existing_data), follow=True)
+        expected_flash_message = 'Saved new information for Foo Bar'
+        self.assertContains(response, expected_flash_message)
 
     def test_submitting_unchanged_existing_bad_data_is_allowed(self):
-        pass
+        self.sub.answers['email'] = 'notgood@example'
+        self.sub.save()
+        fresno_profile = app_reviewer('fresno_pubdef')
+        self.client.login(
+            username=fresno_profile.user.username,
+            password=settings.TEST_USER_PASSWORD)
+        response = self.client.get(self.edit_url)
+        existing_data = response.context_data['form'].cleaned_data
+        existing_data.update({
+            'first_name': 'Foo', 'last_name': 'Bar',
+            'email': 'notgood@example'})
+        response = self.client.post(
+            self.edit_url, dict_to_post_data(existing_data))
+        self.assertRedirects(
+            response, self.sub.get_absolute_url(),
+            fetch_redirect_response=False)
 
     def test_submitting_new_bad_data_is_not_allowed(self):
-        pass
+        self.sub.answers['email'] = 'notgood@example'
+        self.sub.save()
+        fresno_profile = app_reviewer('fresno_pubdef')
+        self.client.login(
+            username=fresno_profile.user.username,
+            password=settings.TEST_USER_PASSWORD)
+        response = self.client.get(self.edit_url)
+        existing_data = response.context_data['form'].cleaned_data
+        existing_data.update({
+            'first_name': 'Foo', 'last_name': 'Bar',
+            'email': 'notgood@butdifferent'})
+        response = self.client.post(
+            self.edit_url, dict_to_post_data(existing_data))
+        self.assertEqual(200, response.status_code)
+        self.assertTrue(response.context_data['form'].errors)
 
     def test_deleting_data_required_by_other_orgs_is_not_allowed(self):
-        pass
+        sf_pubdef = app_reviewer('sf_pubdef')
+        self.client.login(
+            username=sf_pubdef.user.username,
+            password=settings.TEST_USER_PASSWORD)
+        response = self.client.get(self.edit_url)
+        existing_data = response.context_data['form'].cleaned_data
+        existing_data.update({
+            'first_name': 'Foo', 'last_name': 'Bar',
+            'dob.day': '', 'dob.month': '', 'dob.year': ''})
+        response = self.client.post(
+            self.edit_url, dict_to_post_data(existing_data))
+        self.assertEqual(200, response.status_code)
+        self.assertTrue(response.context_data['form'].errors)
 
     def test_updating_data_creates_audit_record(self):
-        pass
+        fresno_profile = app_reviewer('fresno_pubdef')
+        self.client.login(
+            username=fresno_profile.user.username,
+            password=settings.TEST_USER_PASSWORD)
+        response = self.client.get(self.edit_url)
+        existing_data = response.context_data['form'].cleaned_data
+        existing_data.update({
+            'first_name': 'Foo', 'last_name': 'Bar'})
+        response = self.client.post(
+            self.edit_url, dict_to_post_data(existing_data), follow=True)
+        latest_crud_event = CRUDEvent.objects.filter(
+            content_type__app_label='intake',
+            content_type__model='formsubmission').latest('datetime')
+        self.assertEqual(CRUDEvent.UPDATE, latest_crud_event.event_type)
+        data = json.loads(latest_crud_event.object_json_repr)[0]['fields']
+        self.assertEqual(data['first_name'], 'Foo')
+        self.assertEqual(data['last_name'], 'Bar')
+        self.assertEqual(data['answers']['first_name'], 'Foo')
+        self.assertEqual(data['answers']['last_name'], 'Bar')

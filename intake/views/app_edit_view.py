@@ -1,9 +1,12 @@
 from django.views.generic.edit import UpdateView
 from django.http import HttpResponseRedirect
-
 from intake.models import FormSubmission
-from intake.services.edit_form_service import \
-    get_edit_form_class_for_user_and_submission
+from intake.services.edit_form_service import (
+    get_edit_form_class_for_user_and_submission,
+    has_errors_on_existing_data_only,
+    remove_errors_for_existing_data)
+from intake.services.submissions import update_submission_answers
+from intake.services.messages_service import flash_success
 
 
 class AppEditView(UpdateView):
@@ -42,9 +45,20 @@ class AppEditView(UpdateView):
         return self.model.objects.filter(
             organizations__profiles__user=self.request.user)
 
+    def form_invalid(self, form):
+        # ignore and remove errors for data that was unchanged
+        if has_errors_on_existing_data_only(form, self.submission):
+            return self.form_valid(form)
+        else:
+            remove_errors_for_existing_data(form, self.submission)
+            return super().form_invalid(form)
+
     def form_valid(self, form):
-        self.submission.answers.update(form.cleaned_data)
-        self.submission.save()
+        update_submission_answers(self.submission, form.cleaned_data)
+        flash_success(
+            self.request,
+            'Saved new information for {}'.format(
+                self.submission.get_full_name()))
         return HttpResponseRedirect(self.get_success_url())
 
 
