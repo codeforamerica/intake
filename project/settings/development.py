@@ -50,7 +50,7 @@ AWS_ACCESS_KEY_ID = os.environ.get('AWS_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('STATIC_BUCKET')
 # settings for static files
-COMPRESS_URL = 'https://%s.s3.amazonaws.com/' % STATIC_BUCKET
+COMPRESS_URL = 'https://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
 STATIC_URL = COMPRESS_URL
 STATICFILES_STORAGE = 'project.custom_storages.CachedS3BotoStorage'
 
