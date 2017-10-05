@@ -1,6 +1,8 @@
 from behave import given, then, when
 from urllib.parse import urljoin, urlparse
 
+from selenium.common.exceptions import NoSuchElementException
+
 
 @when('I open "{url}"')
 @given('that "{url}" loads')
@@ -91,3 +93,9 @@ def test_main_heading_contains_text(context, text):
 @when('I hit the browser back button')
 def hit_browser_back(context):
     context.browser.back()
+
+
+@then('it should not show the "{input_id}" field')
+def test_field_not_present(context, input_id):
+    with context.test.assertRaises(NoSuchElementException):
+        context.browser.find_element_by_id(input_id)

@@ -142,8 +142,16 @@ def click_on_search_result(context):
 
 @then("it should load the applicant's detail page")
 def test_detail_page_loads(context):
-    step_text = 'Then it should load "application/{}/"'\
-        .format(SEARCHABLE_APPLICANT_ID)
+    step_text = 'Then it should load "application/{}/"'.format(
+        SEARCHABLE_APPLICANT_ID)
+    context.execute_steps(step_text)
+
+
+@when("I open the applicant's detail page")
+@given("I open the applicant's detail page")
+def load_app_detail_url(context):
+    step_text = 'When I open "application/{}/"'.format(
+        SEARCHABLE_APPLICANT_ID)
     context.execute_steps(step_text)
 
 
@@ -173,4 +181,19 @@ def print_all_button_visible(context):
 def print_all_button_not_visible(context):
     selector = "a.print-all"
     with context.test.assertRaises(NoSuchElementException):
-        element = context.browser.find_element_by_css_selector(selector)
+        context.browser.find_element_by_css_selector(selector)
+
+
+@when('I click the "{link_text}" link to the applicant\'s edit page')
+def click_application_edit_link(context, link_text):
+    url = "application/{}/edit".format(SEARCHABLE_APPLICANT_ID)
+    step_text = 'When I click the "{link_text}" link to "{url}"'.format(
+        link_text=link_text, url=url)
+    context.execute_steps(step_text)
+
+
+@then("it should load the applicant's edit page")
+def test_edit_page_loads(context):
+    step_text = 'Then it should load "application/{}/edit"'\
+        .format(SEARCHABLE_APPLICANT_ID)
+    context.execute_steps(step_text)
