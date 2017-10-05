@@ -7,6 +7,18 @@ from user_accounts.tests.factories import app_reviewer, followup_user
 from user_accounts.models import Organization
 
 
+def dict_to_post_data(cleaned_data):
+    post_data = {}
+    for key, value in cleaned_data.items():
+        if isinstance(value, dict):
+            for subkey, subvalue in value.items():
+                post_key = '{}.{}'.format(key, subkey)
+                post_data[post_key] = subvalue
+        else:
+            post_data[key] = value
+    return post_data
+
+
 class TestAppEditView(TestCase):
     fixtures = ['counties', 'organizations', 'groups']
 
@@ -167,11 +179,31 @@ class TestAppEditView(TestCase):
         self.assertContains(response, self.sub.answers['last_name'])
 
     def test_edit_form_does_not_show_validation_errors_for_existing_data(self):
-        pass
+        self.sub.answers['email'] = 'notgood@example'
+        self.sub.save()
+        fresno_profile = app_reviewer('fresno_pubdef')
+        self.client.login(
+            username=fresno_profile.user.username,
+            password=settings.TEST_USER_PASSWORD)
+        response = self.client.get(self.edit_url)
+        self.assertNotContains(response, 'errorlist')
 
     # submitting the form
     def test_successful_edit_submission_redirects_to_app_detail(self):
-        pass
+        fresno_profile = app_reviewer('fresno_pubdef')
+        self.client.login(
+            username=fresno_profile.user.username,
+            password=settings.TEST_USER_PASSWORD)
+        response = self.client.get(self.edit_url)
+        existing_data = response.context_data['form'].cleaned_data
+        existing_data.update({
+            'first_name': 'Foo',
+            'last_name': 'Bar',
+            'email': 'something@example.horse'})
+        response = self.client.post(
+            self.edit_url, dict_to_post_data(existing_data))
+        self.assertRedirects(
+            response, self.sub.get_absolute_url(), fetch_redirect_response=False)
 
     def test_user_sees_success_flash_and_updated_info_after_submission(self):
         pass

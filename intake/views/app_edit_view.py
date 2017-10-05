@@ -26,11 +26,13 @@ class AppEditView(UpdateView):
 
     def get_form_kwargs(self):
         if self.request.method in ('POST', 'PUT'):
-            kwargs = {'data': self.request.POST}
+            kwargs = {
+                'data': self.request.POST}
         else:
             kwargs = {
                 'data': self.submission.answers,
-                'validate': True}
+                'validate': True,
+                'skip_validation_parse_only': True}
         return kwargs
 
     def get_queryset(self):
