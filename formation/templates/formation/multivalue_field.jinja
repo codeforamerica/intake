@@ -3,14 +3,23 @@
   {%- if field.errors %} errors{% endif %}">
   {%- include "formation/messages_list.jinja" %}
   <fieldset>
-    <legend>{{ field.label }}
-      {%- if field.optional %}
-      <span class="field-optional">(optional)</span>
+    <legend>
+      {%- if label_override %}
+        {{ label_override }}
+      {%- else %}
+        {{ field.label }}
+        {%- if field.optional %}
+          <span class="field-optional">(optional)</span>
+        {%- endif %}
       {%- endif %}
     </legend>
     {%- if field.help_text %}
     <div class="field-help_text">
-      {{ field.help_text }}
+      {%- if help_text_override %}
+        {{ help_text_override }}
+      {%- else %}
+        {{ field.help_text }}
+      {%- endif %}
     </div>
     {%- endif %}
     <div class="subfield-row">

@@ -13,6 +13,7 @@ class AppEditView(UpdateView):
     model = FormSubmission
     template_name = "app_edit.jinja"
     pk_url_kwarg = 'submission_id'
+    context_object_name = 'submission'
     fields = ['first_name', 'last_name']
 
     def get_success_url(self):

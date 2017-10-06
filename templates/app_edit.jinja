@@ -1,8 +1,34 @@
+{% extends "app_detail.jinja" %}
 
+
+{% block tab_navigation %}
+{% endblock tab_navigation %}
+
+{%- block page_heading -%}
+Edit Info for {{ submission.get_full_name() }}
+{%- endblock page_heading -%}
+
+{%- block app_detail_contents -%}
 <form class="application_edit_form" action="" method="POST" accept-charset="utf-8">
+  {#
+    Non field errors are not included here because they will be
+    displayed as flash messages in the header.
+  #}
   {% include "includes/csrf_field.jinja" %}
-  {{ form }}
-  <button type="submit">
-    Save changes
-  </button>
+  
+  {% block form_content %}
+    {% for field in form.iter_fields() %}
+      {{ field.render(
+        label_override=field.get_display_label(),
+        help_text_override=' ') }}
+    {% endfor %}
+    <button type="submit">
+    {%- block submit_button_label -%}
+      Save changes
+    {%- endblock submit_button_label -%}
+    </button>
+  {% endblock form_content %}
+
 </form>
+{%- endblock app_detail_contents -%}
+
