@@ -1,8 +1,10 @@
+from unittest.mock import Mock
 from django.test import TestCase
 from formation.tests import mock
 
 from formation.forms import county_form_selector
 from formation import fields as F
+from formation.field_types import IntegerField
 from formation.field_base import Field
 from formation.form_base import Form
 from formation import validators
@@ -192,3 +194,22 @@ class TestForm(TestCase):
         form = self.get_sf_form(fake_answers)
         with self.assertRaises(AttributeError):
             str(form.foobar)
+
+    def test_fields_inherit_skip_validation_parse_only(self):
+        field_validator = Mock()
+        form_validator = Mock()
+
+        class SmallNumberField(IntegerField):
+            context_key = 'number'
+            validators = [field_validator]
+
+        class ExampleForm(Form):
+            fields = [SmallNumberField]
+            validators = [form_validator]
+
+        form = ExampleForm(
+            dict(number='11'), skip_validation_parse_only=True)
+        self.assertTrue(form.is_valid())
+        self.assertEqual(11, form.cleaned_data['number'])
+        field_validator.assert_not_called()
+        form_validator.assert_not_called()

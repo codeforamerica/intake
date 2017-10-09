@@ -29,7 +29,8 @@ class BindParseValidate(Renderable):
     # context_key is used for scoping errors
     context_key = DEFAULT_CONTEXT_KEY
 
-    def __init__(self, data=UNSET, initial=None, prefix=None):
+    def __init__(self, data=UNSET, initial=None, prefix=None,
+                 skip_validation_parse_only=False):
         """`raw_input_data` is expected to be a `dict` or `MultiValueDict`
         By default it is `UNSET`.
         """
@@ -39,6 +40,7 @@ class BindParseValidate(Renderable):
         self.errors = {}
         self.warnings = {}
         self.initial_data = initial
+        self.skip_validation_parse_only = skip_validation_parse_only
         if prefix:
             self.context_key = prefix + self.context_key
 
@@ -76,7 +78,8 @@ class BindParseValidate(Renderable):
 
     def parse_and_validate(self, raw_data):
         self.parsed_data = self.parse(raw_data)
-        self.validate()
+        if not self.skip_validation_parse_only:
+            self.validate()
 
     def parse(self, raw_data):
         """The default parsing operation does
