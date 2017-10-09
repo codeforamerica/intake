@@ -138,12 +138,34 @@ class TestValidateEmailWithMailgun(TestCase):
                 'is_disposable_address': False,
                 'is_role_address': False,
                 'is_valid': False,
-                'mailbox_verification': 'unknown',
+                'mailbox_verification': 'false',
                 'parts': {
                     'display_name': None,
                     'domain': None,
                     'local_part': None}})
         expected_response = (False, None)
+        self.assertEqual(
+            expected_response,
+            validate_email_with_mailgun(email))
+
+    @patch(
+        'intake.services.contact_info_validation_service.mailgun_get_request')
+    def test_valid_email_with_unknown_confirmation(self, mock_mailgun_get):
+        email = 'ovinsbf'
+        mock_mailgun_get.return_value = (
+            200,
+            {
+                'address': 'something@yahoo.com',
+                'did_you_mean': None,
+                'is_disposable_address': False,
+                'is_role_address': False,
+                'is_valid': True,
+                'mailbox_verification': 'unknown',
+                'parts': {
+                    'display_name': None,
+                    'domain': None,
+                    'local_part': None}})
+        expected_response = (True, None)
         self.assertEqual(
             expected_response,
             validate_email_with_mailgun(email))
