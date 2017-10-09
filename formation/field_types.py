@@ -404,7 +404,8 @@ class MultiValueField(Field):
         for sub in self.subfields:
             # runs validators on subfields
             sub.validate()
-            self.errors.update(sub.errors)
+            for error in sub.errors.values():
+                self.add_error(error)
         # runs own validators
         super().validate()
 

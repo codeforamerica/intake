@@ -54,7 +54,7 @@ def get_edit_form_class_for_user_and_submission(user, submission):
 
 def has_errors_on_existing_data_only(form, submission):
     for field_key in form.errors:
-        if form.fields[field_key].get_current_value() != \
+        if form.fields[field_key].raw_input_value != \
                 submission.answers[field_key]:
             return False
     return True
@@ -62,8 +62,9 @@ def has_errors_on_existing_data_only(form, submission):
 
 def remove_errors_for_existing_data(form, submission):
     errors = form.errors.copy()
+    import ipdb; ipdb.set_trace()
     for field_key in errors:
-        if form.fields[field_key].get_current_value() == \
+        if form.fields[field_key].raw_input_value == \
                 submission.answers[field_key]:
             del form.errors[field_key]
             field = form.fields[field_key]
