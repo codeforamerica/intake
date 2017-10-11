@@ -35,6 +35,7 @@ def validate_email_with_mailgun(email):
             'Mailgun returned {} {}'.format(
                 status_code, parsed_response))
     is_valid = parsed_response['is_valid']
-    mailbox_exists = parsed_response['mailbox_verification'] == 'true'
+    # possible return values are 'false', 'unknown', and 'true'
+    mailbox_might_exist = parsed_response['mailbox_verification'] != 'false'
     suggestion = parsed_response.get('did_you_mean', None)
-    return (is_valid and mailbox_exists, suggestion)
+    return (is_valid and mailbox_might_exist, suggestion)
