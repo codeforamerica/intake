@@ -2,10 +2,10 @@ Feature: An org user can edit some application data for applications to their or
 
   Background:
     Given an org user at "fresno_pubdef"
-      And a "fresno_pubdef" application to search for
 
   Scenario: Org user can edit allowed details for application and save
     Given I log in as an org user at "fresno_pubdef"
+      And a "fresno_pubdef" application to search for
       And I open the applicant's detail page
      When I click the "Edit info" link to the applicant's edit page
      Then it should load the applicant's edit page
@@ -42,4 +42,3 @@ Feature: An org user can edit some application data for applications to their or
       And "address" should say "California"
       And "address" should say "94609"
       And "contact_preferences" should say "Email"
-

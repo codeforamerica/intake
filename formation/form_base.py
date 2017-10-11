@@ -86,7 +86,9 @@ class Form(base.BindParseValidate):
 
     def build_field(self, field_class):
         # get init args (required, optional, recommended)
-        init_kwargs = dict(form=self)
+        init_kwargs = dict(
+            form=self,
+            prefix=self.prefix)
         for attribute_name, key in self._iter_field_attribute_keys():
             init_kwargs[key] = field_class in getattr(
                 self, attribute_name, [])

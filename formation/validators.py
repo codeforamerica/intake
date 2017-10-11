@@ -88,12 +88,12 @@ class GavePreferredContactMethods(CheckEmptyFieldValidator):
         - if it finds errors, it should raise a ValidationError to return them
     """
     message_template = _(
-        "You said you preferred to be contacted through {medium}, but "
+        "'{medium}' is set as the preferred contact method, but "
         "you didn't enter {datum}.")
 
     def message(self, preference):
         attributes, medium, datum = CONTACT_PREFERENCE_CHECKS[preference]
-        return self.message_template.format(medium=medium, datum=datum)
+        return self.message_template.format(medium=medium.title(), datum=datum)
 
     def __call__(self, parsed_data):
         errors = {}
@@ -116,6 +116,9 @@ class AtLeastEmailOrPhoneValidator(CheckEmptyFieldValidator):
     field_keys = ['email', 'phone_number']
 
     def __call__(self, parsed_data):
+        if self.context.prefix:
+            self.field_keys = [
+                self.context.prefix + key for key in self.field_keys]
         errors = {}
         all_fields_empty = all([
             self.field_is_empty(key) for key in self.field_keys])

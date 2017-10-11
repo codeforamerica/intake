@@ -82,7 +82,8 @@ class IntegerField(CharField):
         elif special_zero:
             return 0
         else:
-            self.add_error(self.parse_error_message.format(raw_value))
+            if not self.skip_validation_parse_only:
+                self.add_error(self.parse_error_message.format(raw_value))
         return None
 
     def parse(self, raw_value):
@@ -198,8 +199,9 @@ class PhoneField(CharField):
                         self.parse_phone_number(digits_only).national_number)
                 except (NumberParseException,
                         exceptions.InvalidPhoneNumberException) as error:
-                    self.add_error(
-                        self.parse_error_message.format(raw_value))
+                    if not self.skip_validation_parse_only:
+                        self.add_error(
+                            self.parse_error_message.format(raw_value))
         return value
 
     def get_current_value_parsed(self):
@@ -363,8 +365,9 @@ class MultiValueField(Field):
         """
         instance = subfield_class(
             self.raw_input_data,
-            required=False,
-            is_subfield=True
+            required=self.required,
+            is_subfield=True,
+            skip_validation_parse_only=self.skip_validation_parse_only
         )
         instance.parent = self
         # this might error if a context_key is not a valid
@@ -404,8 +407,9 @@ class MultiValueField(Field):
         for sub in self.subfields:
             # runs validators on subfields
             sub.validate()
-            for error in sub.errors.values():
-                self.add_error(error)
+            for errorlist in sub.errors.values():
+                for error in errorlist:
+                    self.add_error(error)
         # runs own validators
         super().validate()
 

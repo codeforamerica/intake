@@ -12,4 +12,3 @@ class CountyFactory(factory.DjangoModelFactory):
 
     class Meta:
         model = models.County
-        django_get_or_create = ('id',)

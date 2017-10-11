@@ -1,12 +1,10 @@
 from unittest.mock import Mock
 from django.test import TestCase
-
 from datetime import datetime
-from intake.tests import mock, factories
-from formation import field_types
+from intake.tests import factories
 import intake.services.submissions as SubmissionsService
 from user_accounts import models as auth_models
-from intake import models, constants
+from intake import models
 
 
 class TestFormSubmission(TestCase):

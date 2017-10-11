@@ -312,6 +312,13 @@ class TestPhoneNumberField(PatchTranslationTestCase):
         self.assertIn(
             expected_error, [str(e) for e in field.get_errors_list()])
 
+    def test_ignores_parse_errors_if_skip_validation_parse_only(self):
+        field = fields.PhoneNumberField(
+            {'phone_number': '5555555555'},
+            skip_validation_parse_only=True)
+        self.assertTrue(field.is_valid())
+        self.assertFalse(field.errors)
+
 
 class TestChoiceField(PatchTranslationTestCase):
 
@@ -464,15 +471,7 @@ class TestMultiValueField(PatchTranslationTestCase):
         'day': 2,
         'year': 1982,
     }}
-    incorrect_subkey = {'dob': {
-        'day': 2,
-        'year': 1982,
-        'apple': 12,
-    }}
-    dotsep_incorrect_subkey = {
-        'dob.day': 2,
-        'dob.year': 1982,
-        'dob.apple': 12, }
+
     dotsep_missing_subkey = {
         'dob.day': 2,
         'dob.year': 1982}
@@ -494,7 +493,7 @@ class TestMultiValueField(PatchTranslationTestCase):
         # make sure all the subfields are instances
         for sub in field.subfields:
             self.assertFalse(inspect.isclass(sub))
-            self.assertEqual(sub.required, False)
+            self.assertEqual(sub.required, True)
             self.assertEqual(sub.is_subfield, True)
             self.assertEqual(sub.parent, field)
             expected_sub = getattr(field, sub.context_key)
@@ -552,29 +551,19 @@ class TestMultiValueField(PatchTranslationTestCase):
             field = fields.DateOfBirthField(input_data)
             self.assertParsesCorrectly(field, self.parsed_value)
 
-    def test_valid_with_missing_subkey(self):
+    def test_invalid_with_missing_subkey(self):
         for input_data in [self.missing_subkey, self.dotsep_missing_subkey]:
             field = fields.DateOfBirthField(input_data)
-            self.assertParsesCorrectly(
-                field, self.missing_month_value, [
-                    None, 2, 1982])
+            self.assertFalse(field.is_valid())
 
-    def test_valid_with_incorrect_subkey(self):
-        for input_data in [self.incorrect_subkey,
-                           self.dotsep_incorrect_subkey]:
-            field = fields.DateOfBirthField(input_data)
-            self.assertParsesCorrectly(
-                field, self.missing_month_value, [
-                    None, 2, 1982])
-
-    def test_required_only_fails_with_all_missing_data(self):
+    def test_required_fails_with_any_missing_data(self):
         only_one = {
             'dob.day': '2',
         }
         field = fields.DateOfBirthField(only_one)
-        self.assertParsesCorrectly(field,
-                                   {'year': None, 'month': None, 'day': 2},
-                                   [None, 2, None])
+        self.assertFalse(field.is_valid())
+        self.assertDictEqual(
+            field.get_current_value(), {'year': None, 'month': None, 'day': 2})
         self.assertFalse(field.is_empty())
 
         blank = {

@@ -54,6 +54,7 @@ def before_all(context):
     )
     context.browser.implicitly_wait(10)
     settings.DIVERT_REMOTE_CONNECTIONS = True
+    setup_debug_on_error(context.config.userdata)
 
 
 def after_all(context):
@@ -69,3 +70,14 @@ def before_scenario(context, scenario):
 def after_scenario(context, scenario):
     for patch_name, patch in context.test.patches.items():
         patch.stop()
+
+
+def after_step(context, step):
+    # from https://github.com/behave/behave/blob/master/docs/tutorial.rst#
+    #       debug-on-error-in-case-of-step-failures
+    # and https://stackoverflow.com/a/22344473/399726
+    if BEHAVE_DEBUG_ON_ERROR and step.status == "failed":
+        # -- ENTER DEBUGGER: Zoom in on failure location.
+        # NOTE: Use IPython debugger, same for pdb (basic python debugger).
+        import ipdb
+        ipdb.post_mortem(step.exc_traceback)

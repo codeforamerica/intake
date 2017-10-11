@@ -61,6 +61,35 @@ def create_searchable_applicant(context, org_slug=None):
     SEARCHABLE_APPLICANT_ID = sub.id
 
 
+@given('an application to search for with bad data')
+@given('a "{org_slug}" application to search for with bad data')
+def create_searchable_applicant_with_bad_data(context, org_slug=None):
+    global SEARCHABLE_APPLICANT_ID
+    if org_slug:
+        org = Organization.objects.get(slug=org_slug)
+    answers = mock.fake.contra_costa_county_form_answers(**{
+        'first_name': 'Waldo',
+        'last_name': 'Waldini',
+        'phone_number': '5555555555',
+        'alternate_phone_number': '5555555555',
+        'email': 'waldo@odlaw',
+        'contact_preferences': ['prefers_email', 'prefers_sms'],
+        'email': 'waldo@odlaw',
+        'dob.day': '28',
+        'dob.month': 'February',
+        'dob.year': '1972',
+    })
+    kwargs = dict(
+        answers=answers,
+        date_received=PACIFIC_TIME.localize(
+            mock.fake.date_time_between('-4w', '-2w'))
+        )
+    if org_slug:
+        kwargs.update(organizations=[org])
+    sub = factories.FormSubmissionWithOrgsFactory(**kwargs)
+    SEARCHABLE_APPLICANT_ID = sub.id
+
+
 @when("I search for the applicant's name")
 def search_by_name(context):
     search_input = context.browser.find_element_by_css_selector(

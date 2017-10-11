@@ -5,15 +5,6 @@
         {{ error }}
       </li>
     {%- endfor -%}
-    {%- if field.subfields -%}
-      {%- for subfield in field.subfields -%}
-        {%- for error in subfield.get_errors_list() -%}
-          <li class="error">
-            {{ error }}
-          </li>
-        {%- endfor -%}
-      {%- endfor -%}
-    {%- endif -%}
   </ul>
 {%- endif -%}
 
@@ -24,14 +15,5 @@
         {{ warning }}
       </li>
     {%- endfor -%}
-    {%- if field.subfields -%}
-      {%- for subfield in field.subfields -%}
-        {%- for warning in subfield.get_warnings_list() -%}
-          <li class="warning">
-            {{ warning }}
-          </li>
-        {%- endfor -%}
-      {%- endfor -%}
-    {%- endif -%}
   </ul>
 {%- endif -%}

@@ -2,22 +2,25 @@ import json
 from django.test import TestCase
 from django.urls import reverse
 from django.conf import settings
-from formation import fields as F
 from easyaudit.models import CRUDEvent
+from project.tests.assertions import assertInputHasValue
+from formation import fields as F
 from intake.tests.factories import FormSubmissionWithOrgsFactory
 from user_accounts.tests.factories import app_reviewer, followup_user
 from user_accounts.models import Organization
 
 
-def dict_to_post_data(cleaned_data):
+def dict_to_post_data(raw_input_data):
     post_data = {}
-    for key, value in cleaned_data.items():
+    for key, value in raw_input_data.items():
         if isinstance(value, dict):
             for subkey, subvalue in value.items():
                 post_key = '{}.{}'.format(key, subkey)
                 post_data[post_key] = subvalue
+                post_data['existing_' + post_key] = subvalue
         else:
             post_data[key] = value
+            post_data['existing_' + key] = value
     return post_data
 
 
@@ -174,25 +177,37 @@ class TestAppEditView(TestCase):
         for field in santa_clara_expected_fields | fresno_expected_fields:
             with self.subTest(field=field):
                 self.assertContains(response, field.context_key)
+                self.assertContains(response, 'existing_' + field.context_key)
 
-    def test_edit_form_starts_prefilled_with_existing_data(self):
+    def test_edit_form_contains_existing_data_and_errors(self):
         fresno_profile = app_reviewer('fresno_pubdef')
+        self.sub.answers['email'] = 'notgood@example'
+        self.sub.answers['phone_number'] = '5555555555'
+        self.sub.answers['alternate_phone_number'] = '5555555555'
+        self.sub.answers['dob'] = {
+            'month': 'February',
+            'day': 3,
+            'year': '19714'}
+        self.sub.save()
         self.client.login(
             username=fresno_profile.user.username,
             password=settings.TEST_USER_PASSWORD)
         response = self.client.get(self.edit_url)
         self.assertContains(response, self.sub.answers['first_name'])
         self.assertContains(response, self.sub.answers['last_name'])
-
-    def test_edit_form_does_not_show_validation_errors_for_existing_data(self):
-        self.sub.answers['email'] = 'notgood@example'
-        self.sub.save()
-        fresno_profile = app_reviewer('fresno_pubdef')
-        self.client.login(
-            username=fresno_profile.user.username,
-            password=settings.TEST_USER_PASSWORD)
-        response = self.client.get(self.edit_url)
-        self.assertNotContains(response, 'errorlist')
+        assertInputHasValue(response, 'phone_number', '')
+        assertInputHasValue(response, 'existing_phone_number', '5555555555')
+        assertInputHasValue(response, 'alternate_phone_number', '')
+        assertInputHasValue(
+            response, 'existing_alternate_phone_number', '5555555555')
+        assertInputHasValue(response, 'email', 'notgood@example')
+        assertInputHasValue(response, 'existing_email', 'notgood@example')
+        assertInputHasValue(response, 'dob.day', '3')
+        assertInputHasValue(response, 'existing_dob.day', '3')
+        assertInputHasValue(response, 'dob.month', '')
+        assertInputHasValue(response, 'existing_dob.month', 'February')
+        assertInputHasValue(response, 'dob.year', '19714')
+        assertInputHasValue(response, 'existing_dob.year', '19714')
 
     # submitting the form
     def test_successful_edit_submission_redirects_to_app_detail(self):
@@ -201,13 +216,13 @@ class TestAppEditView(TestCase):
             username=fresno_profile.user.username,
             password=settings.TEST_USER_PASSWORD)
         response = self.client.get(self.edit_url)
-        existing_data = response.context_data['form'].cleaned_data
-        existing_data.update({
+        post_data = dict_to_post_data(
+            response.context_data['form'].raw_input_data)
+        post_data.update({
             'first_name': 'Foo',
             'last_name': 'Bar',
             'email': 'something@example.horse'})
-        response = self.client.post(
-            self.edit_url, dict_to_post_data(existing_data))
+        response = self.client.post(self.edit_url, post_data)
         self.assertRedirects(
             response, self.sub.get_absolute_url(),
             fetch_redirect_response=False)
@@ -218,17 +233,19 @@ class TestAppEditView(TestCase):
             username=fresno_profile.user.username,
             password=settings.TEST_USER_PASSWORD)
         response = self.client.get(self.edit_url)
-        existing_data = response.context_data['form'].cleaned_data
-        existing_data.update({
+        post_data = dict_to_post_data(
+            response.context_data['form'].raw_input_data)
+        post_data.update({
             'first_name': 'Foo',
             'last_name': 'Bar',
             'email': 'something@example.horse'})
         response = self.client.post(
-            self.edit_url, dict_to_post_data(existing_data), follow=True)
+            self.edit_url, post_data, follow=True)
         expected_flash_message = 'Saved new information for Foo Bar'
         self.assertContains(response, expected_flash_message)
 
-    def test_submitting_unchanged_existing_bad_data_is_allowed(self):
+    def test_submitting_unchanged_existing_bad_data_is_not_allowed(self):
+        # add existing bad data
         self.sub.answers['email'] = 'notgood@example'
         self.sub.save()
         fresno_profile = app_reviewer('fresno_pubdef')
@@ -236,15 +253,12 @@ class TestAppEditView(TestCase):
             username=fresno_profile.user.username,
             password=settings.TEST_USER_PASSWORD)
         response = self.client.get(self.edit_url)
-        existing_data = response.context_data['form'].cleaned_data
-        existing_data.update({
-            'first_name': 'Foo', 'last_name': 'Bar',
-            'email': 'notgood@example'})
-        response = self.client.post(
-            self.edit_url, dict_to_post_data(existing_data))
-        self.assertRedirects(
-            response, self.sub.get_absolute_url(),
-            fetch_redirect_response=False)
+        post_data = dict_to_post_data(
+           response.context_data['form'].raw_input_data)
+        post_data.update({
+            'first_name': 'Foo', 'last_name': 'Bar'})
+        response = self.client.post(self.edit_url, post_data)
+        self.assertEqual(200, response.status_code)
 
     def test_submitting_new_bad_data_is_not_allowed(self):
         self.sub.answers['email'] = 'notgood@example'
@@ -254,12 +268,13 @@ class TestAppEditView(TestCase):
             username=fresno_profile.user.username,
             password=settings.TEST_USER_PASSWORD)
         response = self.client.get(self.edit_url)
-        existing_data = response.context_data['form'].cleaned_data
-        existing_data.update({
-            'first_name': 'Foo', 'last_name': 'Bar',
+        post_data = dict_to_post_data(
+            response.context_data['form'].raw_input_data)
+        post_data.update({
+            'first_name': 'Foo',
+            'last_name': 'Bar',
             'email': 'notgood@butdifferent'})
-        response = self.client.post(
-            self.edit_url, dict_to_post_data(existing_data))
+        response = self.client.post(self.edit_url, post_data)
         self.assertEqual(200, response.status_code)
         self.assertTrue(response.context_data['form'].errors)
 
@@ -269,12 +284,13 @@ class TestAppEditView(TestCase):
             username=sf_pubdef.user.username,
             password=settings.TEST_USER_PASSWORD)
         response = self.client.get(self.edit_url)
-        existing_data = response.context_data['form'].cleaned_data
-        existing_data.update({
-            'first_name': 'Foo', 'last_name': 'Bar',
-            'dob.day': '', 'dob.month': '', 'dob.year': ''})
-        response = self.client.post(
-            self.edit_url, dict_to_post_data(existing_data))
+        post_data = dict_to_post_data(
+            response.context_data['form'].raw_input_data)
+        post_data.update({
+            'first_name': 'Foo',
+            'last_name': 'Bar',
+            'dob.day': '3', 'dob.month': '', 'dob.year': ''})
+        response = self.client.post(self.edit_url, post_data)
         self.assertEqual(200, response.status_code)
         self.assertTrue(response.context_data['form'].errors)
 
@@ -284,11 +300,11 @@ class TestAppEditView(TestCase):
             username=fresno_profile.user.username,
             password=settings.TEST_USER_PASSWORD)
         response = self.client.get(self.edit_url)
-        existing_data = response.context_data['form'].cleaned_data
-        existing_data.update({
+        post_data = dict_to_post_data(
+            response.context_data['form'].raw_input_data)
+        post_data.update({
             'first_name': 'Foo', 'last_name': 'Bar'})
-        response = self.client.post(
-            self.edit_url, dict_to_post_data(existing_data), follow=True)
+        response = self.client.post(self.edit_url, post_data, follow=True)
         latest_crud_event = CRUDEvent.objects.filter(
             content_type__app_label='intake',
             content_type__model='formsubmission').latest('datetime')

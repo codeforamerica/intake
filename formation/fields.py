@@ -248,9 +248,6 @@ class Month(DisplayRawIfFalsyMixin, IntegerField):
         MaxValueValidator(12, message=month_validation_message)
     ]
 
-    def get_display_value(self):
-        return self.get_current_value() or " "
-
 
 class Day(DisplayRawIfFalsyMixin, IntegerField):
     context_key = "day"

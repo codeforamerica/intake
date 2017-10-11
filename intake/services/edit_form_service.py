@@ -52,23 +52,33 @@ def get_edit_form_class_for_user_and_submission(user, submission):
     return type('CombinedEditForm', parent_classes, class_attributes)
 
 
-def has_errors_on_existing_data_only(form, submission):
-    for field_key in form.errors:
-        if form.fields[field_key].raw_input_value != \
-                submission.answers[field_key]:
-            return False
-    return True
-
-
-def remove_errors_for_existing_data(form, submission):
-    errors = form.errors.copy()
-    import ipdb; ipdb.set_trace()
-    for field_key in errors:
-        if form.fields[field_key].raw_input_value == \
-                submission.answers[field_key]:
-            del form.errors[field_key]
-            field = form.fields[field_key]
-            field.errors = {}
-            if isinstance(field, MultiValueField):
-                for subfield in field.subfields:
-                    subfield.errors = {}
+def get_changed_data_from_form(form):
+    """Returns a dictionary with keys of all changed fields
+    and values that are a dict with 'before' and 'after' keys
+    values of 'before' and 'after' are display values
+    for example:
+        {
+            'first_name': {
+                'before': 'George',
+                'after': 'Jorge'
+            },
+            'dob': {
+                'before': 'February/6/1791',
+                'after': '2/6/1791'}
+            }
+        }
+    Expects fields prefixed with 'existing_' in order to make that comparison
+    """
+    changes = {}
+    existing_data_form = form.__class__(
+        form.raw_input_data, prefix='existing_', validate=True,
+        skip_validation_parse_only=True)
+    for field in form.iter_fields():
+        after = field.get_display_value()
+        existing_data_field = existing_data_form.fields[field.context_key]
+        before = existing_data_field.get_display_value()
+        if before != after:
+            changes[field.context_key] = {
+                'before': before,
+                'after': after}
+    return changes
