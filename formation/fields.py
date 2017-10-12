@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.validators import (
     EmailValidator, URLValidator, RegexValidator, MinValueValidator,
     MaxValueValidator)
-from formation.validators import mailgun_email_validator
+from formation.validators import mailgun_email_validator, is_a_valid_date
 from intake.models import County
 from formation.field_types import (
     CharField, MultilineCharField, IntegerField, WholeDollarField, ChoiceField,
@@ -281,6 +281,7 @@ class DateOfBirthField(MultiValueField):
         Year
     ]
     display_label = "Date of birth"
+    validators = [is_a_valid_date]
 
     def get_display_value(self):
         return "{month}/{day}/{year}".format(
