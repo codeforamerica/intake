@@ -1,3 +1,4 @@
+from datetime import date
 from formation.exceptions import NoChoicesGivenError
 from django.core.exceptions import ValidationError
 from django.core.validators import (RegexValidator,
@@ -149,3 +150,17 @@ def mailgun_email_validator(value):
             message="{}".format(err))
         format_and_log(
             'mailgun_api_error', level='error', exception=str(err))
+
+
+def is_a_valid_date(dob_dict):
+    try:
+        date(**dob_dict)
+    except (ValueError, TypeError) as err:
+        error_message = str(err)
+        if 'day is out of range for month' in error_message:
+            message = str(
+                '{} is not a day in that month. '
+                'Please enter a valid date'.format(dob_dict['day']))
+        else:
+            message = 'Please enter a valid date'
+        raise ValidationError(message)
