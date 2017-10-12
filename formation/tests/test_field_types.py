@@ -553,9 +553,9 @@ class TestMultiValueField(PatchTranslationTestCase):
             self.assertParsesCorrectly(field, self.parsed_value)
 
     def test_invalid_with_missing_subkey(self):
-       for input_data in [self.missing_subkey, self.dotsep_missing_subkey]:
-           field = fields.DateOfBirthField(input_data)
-           self.assertFalse(field.is_valid())
+        for input_data in [self.missing_subkey, self.dotsep_missing_subkey]:
+            field = fields.DateOfBirthField(input_data)
+            self.assertFalse(field.is_valid())
 
     def test_required_fails_with_any_missing_data(self):
         only_one = {
