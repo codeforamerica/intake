@@ -91,6 +91,20 @@ class TestDateOfBirthField(TestCase):
         field.is_valid()
         self.assertEqual(field.get_display_value(), "134/False/foo")
 
+    def test_invalid_if_wrong_day_for_month(self):
+        data = {
+            'dob': {
+                'year': 1901,
+                'month': 2,
+                'day': 30
+            }
+        }
+        field = fields.DateOfBirthField(data)
+        self.assertFalse(field.is_valid())
+        self.assertIn(
+            "30 is not a day in that month. Please enter a valid date",
+            field.get_errors_list())
+
 
 class TestCounties(TestCase):
 
