@@ -13,18 +13,6 @@
 },
 {
   "model": "user_accounts.address",
-  "pk": 2,
-  "fields": {
-    "organization": [
-      "Alameda County Public Defender's Office"
-    ],
-    "name": "Hayward Clean Slate Walk-in Clinic",
-    "text": "24085 Amador St. 2nd Floor\r\nHayward, CA\r\n94544",
-    "walk_in_hours": "Every Tuesday, from 2pm to 4pm"
-  }
-},
-{
-  "model": "user_accounts.address",
   "pk": 3,
   "fields": {
     "organization": [
@@ -33,18 +21,6 @@
     "name": "Oakland Clean Slate Walk-in Clinic",
     "text": "545 4th St\r\nOakland, CA\r\n94607",
     "walk_in_hours": "Every Thursday, from 9am to 11am"
-  }
-},
-{
-  "model": "user_accounts.address",
-  "pk": 4,
-  "fields": {
-    "organization": [
-      "East Bay Community Law Center"
-    ],
-    "name": "Hayward Clean Slate Walk-in Clinic",
-    "text": "24085 Amador St. 2nd Floor\r\nHayward, CA\r\n94544",
-    "walk_in_hours": "Every Tuesday, from 2pm to 4pm"
   }
 },
 {
