@@ -337,7 +337,8 @@ class TestAppEditView(TestCase):
             'email': 'something@example.horse'})
         mock_safe_diff = Mock()
         mock_unsafe_keys = Mock()
-        remove_sensitive_patch.return_value = (mock_safe_diff, mock_unsafe_keys)
+        remove_sensitive_patch.return_value = (
+            mock_safe_diff, mock_unsafe_keys)
         self.client.post(self.edit_url, post_data)
         self.assertEqual(1, len(remove_sensitive_patch.mock_calls))
         notification_patch.send.assert_any_call(

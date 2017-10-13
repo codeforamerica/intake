@@ -13,7 +13,7 @@ from intake.services.messages_service import flash_success
 
 
 def remove_sensitive_data_from_data_diff(unsafe_data_diff):
-    """Removes 'before' and 'after' data for fields that are sensitive, such 
+    """Removes 'before' and 'after' data for fields that are sensitive, such
     as social security number and driver's license number
     """
     safe_data_diff = {}
