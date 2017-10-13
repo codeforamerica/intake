@@ -10,7 +10,8 @@ from intake.tests.factories import FormSubmissionWithOrgsFactory
 from user_accounts.tests.factories import app_reviewer, followup_user
 from user_accounts.models import Organization
 from intake.views.app_edit_view import (
-    remove_sensitive_data_from_data_diff, get_emails_to_notify_of_edits)
+    remove_sensitive_data_from_data_diff, get_emails_to_notify_of_edits,
+    AppEditView)
 
 
 def dict_to_post_data(raw_input_data):
@@ -344,16 +345,34 @@ class TestAppEditView(TestCase):
         notification_patch.send.assert_any_call(
             to=[santa_clara_profile.user.email],
             editor_email=fresno_profile.user.email,
-            app_detail_url=self.sub.get_absolute_url(),
+            editor_org_name=fresno_profile.organization.name,
+            app_detail_url=self.sub.get_external_url(),
+            submission_id=self.sub.id,
+            applicant_name='Foo Bar',
             safe_data_diff=mock_safe_diff,
             unsafe_changed_keys=mock_unsafe_keys)
         notification_patch.send.assert_any_call(
             to=[fresno_profile.user.email],
             editor_email=fresno_profile.user.email,
-            app_detail_url=self.sub.get_absolute_url(),
+            editor_org_name=fresno_profile.organization.name,
+            app_detail_url=self.sub.get_external_url(),
+            submission_id=self.sub.id,
+            applicant_name='Foo Bar',
             safe_data_diff=mock_safe_diff,
             unsafe_changed_keys=mock_unsafe_keys)
         self.assertEqual(2, len(notification_patch.send.mock_calls))
+
+    @patch('intake.views.app_edit_view.app_edited_email_notification')
+    def test_does_not_notify_if_unchanged(self, notification_patch):
+        fresno_profile = app_reviewer('fresno_pubdef')
+        self.client.login(
+            username=fresno_profile.user.username,
+            password=settings.TEST_USER_PASSWORD)
+        response = self.client.get(self.edit_url)
+        post_data = dict_to_post_data(
+            response.context_data['form'].raw_input_data)
+        self.client.post(self.edit_url, post_data)
+        notification_patch.assert_not_called()
 
 
 class TestRemoveSensitiveDataFromDataDiff(TestCase):

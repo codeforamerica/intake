@@ -76,22 +76,28 @@ class AppEditView(UpdateView):
             organizations__profiles__user=self.request.user)
 
     def form_valid(self, form):
-        update_submission_answers(self.submission, form.cleaned_data)
-        flash_success(
-            self.request,
-            'Saved new information for {}'.format(
-                self.submission.get_full_name()))
         unsafe_data_diff = get_changed_data_from_form(form)
-        safe_data_diff, unsafe_diff_keys = \
-            remove_sensitive_data_from_data_diff(unsafe_data_diff)
-        notifiable_emails = get_emails_to_notify_of_edits(self.submission.id)
-        for to_email in notifiable_emails:
-            app_edited_email_notification.send(
-                to=[to_email],
-                editor_email=self.request.user.email,
-                app_detail_url=self.submission.get_absolute_url(),
-                safe_data_diff=safe_data_diff,
-                unsafe_changed_keys=unsafe_diff_keys)
+        if unsafe_data_diff:
+            update_submission_answers(self.submission, form.cleaned_data)
+            flash_success(
+                self.request,
+                'Saved new information for {}'.format(
+                    self.submission.get_full_name()))
+            safe_data_diff, unsafe_diff_keys = \
+                remove_sensitive_data_from_data_diff(unsafe_data_diff)
+            notifiable_emails = get_emails_to_notify_of_edits(
+                self.submission.id)
+            org_name = self.request.user.profile.organization.name
+            for to_email in notifiable_emails:
+                app_edited_email_notification.send(
+                    to=[to_email],
+                    editor_email=self.request.user.email,
+                    editor_org_name=org_name,
+                    app_detail_url=self.submission.get_external_url(),
+                    submission_id=self.submission.id,
+                    applicant_name=self.submission.get_full_name(),
+                    safe_data_diff=safe_data_diff,
+                    unsafe_changed_keys=unsafe_diff_keys)
         return HttpResponseRedirect(self.get_success_url())
 
 

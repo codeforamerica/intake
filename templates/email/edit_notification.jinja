@@ -1,8 +1,28 @@
-An applicant's information has been updated in Clear My Record. You may want to update your 
+The information for applicant {{ applicant_name }} has been edited by {{ editor_email }} from {{ editor_org_name }}. You may want to update your organization's records.
 
-Updated by {{ editor_email }}
-Link to application {{ app_detail_url }}
 
-{{ safe_data_diff }}
+{%- for field, values in safe_data_diff.items() %}
 
-{{ unsafe_changed_keys }}
+------------
+Updated {{ field }}
+
+Before:
+{{ (values['before'] or "(Blank)") }}
+
+After:
+{{ (values['after'] or "(Blank)") }}
+
+{%- endfor %}
+{%- for field in unsafe_changed_keys %}
+
+------------
+Updated {{ field }}
+
+{% endfor %}
+
+You can view {{ applicant_name }}'s full application here:
+{{ app_detail_url }}
+
+
+If you have any questions, please feel free to emails us at:
+clearmyrecord@codeforamerica.org

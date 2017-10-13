@@ -281,6 +281,7 @@ class MultipleChoiceField(ChoiceField):
     empty_value = []
     validators = [validators.are_valid_choices]
     template_name = "formation/checkbox_select.jinja"
+    has_multiple_values = True
 
     def extract_raw_value(self, raw_data):
         """Attempts to pull a list from raw data

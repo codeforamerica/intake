@@ -17,15 +17,19 @@ Update Application for {{ submission.get_full_name() }}
   {% include "includes/csrf_field.jinja" %}
   
   {% block form_content %}
-    {% for field in existing_data_form.iter_fields() %}
-      {% if field.subfields %}
-        {% for subfield in field.subfields %}
+    {%- for field in existing_data_form.iter_fields() %}
+      {%- if field.subfields %}
+        {%- for subfield in field.subfields %}
           <input type="hidden" name="existing_{{ subfield.get_input_name() }}" value="{{ subfield.raw_input_value }}">
-        {% endfor %}
-      {% else %}
+        {%- endfor %}
+      {%- elif field.has_multiple_values %}
+          {%- for value in field.get_current_value() %}
+            <input type="hidden" name="existing_{{ field.get_input_name() }}" value="{{ value }}">
+          {%- endfor %}
+      {%- else %}
         <input type="hidden" name="existing_{{ field.get_input_name() }}" value="{{ field.raw_input_value }}">
-      {% endif %}
-    {% endfor %}
+      {%- endif %}
+    {%- endfor %}
     {% for field in form.iter_fields() %}
       {{ field.render(
         label_override=field.get_display_label(),

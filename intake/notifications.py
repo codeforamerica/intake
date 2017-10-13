@@ -302,5 +302,6 @@ slack_notification_failed = SlackTemplateNotification(
     message_template_path="slack/notification_failed.jinja")
 
 app_edited_email_notification = FrontEmailNotification(
-    subject_template="Clear My Record: Applicant's Information Updated",
+    subject_template=(
+        "Clear My Record: Updated info for applicant ({{submission_id}})"),
     body_template_path="email/edit_notification.jinja")
