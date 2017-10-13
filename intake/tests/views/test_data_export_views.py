@@ -49,7 +49,7 @@ class TestCSVDownloadView(TestCase):
         result = response.content.decode('utf-8')
         expected_result_line_1 = str(
             'id,Link,Application Date,Applied on,Wants help with record in,'
-            'Opted into Clear My Record updates via:,First name,Middle name,'
+            'Preferred contact methods,First name,Middle name,'
             'Last name,Preferred pronouns,Phone number,Alternate phone number,'
             'Email,Address,Date of birth,Is a citizen,'
             'Is currently being charged,Is serving a sentence,'

@@ -176,12 +176,12 @@ class TestGetChangedDataFromForm(TestCase):
         })
         form = self.Form(post_data, validate=True)
         expected_diff = {
-            'first_name': {'before': 'George', 'after': 'Jorge'},
-            'email': {
+            'First name': {'before': 'George', 'after': 'Jorge'},
+            'Email': {
                 'before': 'nothing@nowhere', 'after': 'nothing@nowhere.com'},
-            'phone_number': {
+            'Phone number': {
                 'after': '(415) 212-4848', 'before': '1928730983475123'},
-            'contact_preferences': {
+            'Preferred contact methods': {
                 'after': 'Email or Text Message', 'before': 'Email'}}
         self.assertEqual(
             expected_diff, edit_form_service.get_changed_data_from_form(form))
@@ -207,6 +207,7 @@ class TestGetChangedDataFromForm(TestCase):
         })
         form = self.Form(post_data, validate=True)
         expected_diff = {
-            'dob': {'before': 'February/6/1791', 'after': '2/6/1791'}}
+            'Date of birth': {
+                'before': 'February/6/1791', 'after': '2/6/1791'}}
         self.assertEqual(
             expected_diff, edit_form_service.get_changed_data_from_form(form))
