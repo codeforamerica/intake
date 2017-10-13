@@ -1,10 +1,36 @@
 from django.views.generic.edit import UpdateView
 from django.http import HttpResponseRedirect
+from django.contrib.auth.models import User
 from intake.models import FormSubmission
-from intake.services.edit_form_service import \
-    get_edit_form_class_for_user_and_submission
+from intake.services.edit_form_service import (
+    get_edit_form_class_for_user_and_submission,
+    SENSITIVE_FIELD_LABELS,
+    get_changed_data_from_form
+)
+from intake.notifications import app_edited_email_notification
 from intake.services.submissions import update_submission_answers
 from intake.services.messages_service import flash_success
+
+
+def remove_sensitive_data_from_data_diff(unsafe_data_diff):
+    """Removes 'before' and 'after' data for fields that are sensitive, such 
+    as social security number and driver's license number
+    """
+    safe_data_diff = {}
+    unsafe_changed_keys = []
+    for label, values in unsafe_data_diff.items():
+        if label not in SENSITIVE_FIELD_LABELS:
+            safe_data_diff[label] = values
+        else:
+            unsafe_changed_keys.append(label)
+    return safe_data_diff, unsafe_changed_keys
+
+
+def get_emails_to_notify_of_edits(form_submission_id):
+    return User.objects.filter(
+            profile__should_get_notifications=True,
+            profile__organization__submissions__id=form_submission_id
+        ).values_list('email', flat=True)
 
 
 class AppEditView(UpdateView):
@@ -55,6 +81,17 @@ class AppEditView(UpdateView):
             self.request,
             'Saved new information for {}'.format(
                 self.submission.get_full_name()))
+        unsafe_data_diff = get_changed_data_from_form(form)
+        safe_data_diff, unsafe_diff_keys = \
+            remove_sensitive_data_from_data_diff(unsafe_data_diff)
+        notifiable_emails = get_emails_to_notify_of_edits(self.submission.id)
+        for to_email in notifiable_emails:
+            app_edited_email_notification.send(
+                to=[to_email],
+                editor_email=self.request.user.email,
+                app_detail_url=self.submission.get_absolute_url(),
+                safe_data_diff=safe_data_diff,
+                unsafe_changed_keys=unsafe_diff_keys)
         return HttpResponseRedirect(self.get_success_url())
 
 

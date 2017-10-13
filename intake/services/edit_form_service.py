@@ -18,8 +18,14 @@ EDITABLE_FIELDS = {
     F.EmailField,
     F.DateOfBirthField,
     F.SocialSecurityNumberField,
-    F.CaseNumber
+    F.CaseNumber,
 }
+
+
+SENSITIVE_FIELD_LABELS = (
+    F.SocialSecurityNumberField().get_display_label(),
+    F.DriverLicenseOrIDNumber().get_display_label(),
+)
 
 
 def get_edit_form_class_for_user_and_submission(user, submission):
@@ -58,11 +64,11 @@ def get_changed_data_from_form(form):
     values of 'before' and 'after' are display values
     for example:
         {
-            'first_name': {
+            'First name': {
                 'before': 'George',
                 'after': 'Jorge'
             },
-            'dob': {
+            'Date of birth': {
                 'before': 'February/6/1791',
                 'after': '2/6/1791'}
             }
@@ -78,7 +84,7 @@ def get_changed_data_from_form(form):
         existing_data_field = existing_data_form.fields[field.context_key]
         before = existing_data_field.get_display_value()
         if before != after:
-            changes[field.context_key] = {
+            changes[field.get_display_label()] = {
                 'before': before,
                 'after': after}
     return changes

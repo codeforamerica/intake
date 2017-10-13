@@ -32,6 +32,10 @@ Update Application for {{ submission.get_full_name() }}
         help_text_override=' ') }}
     {% endfor %}
 
+  <p class="edit-notification__alert how_to_bg_warning bg-warning">
+    We will notify other partners who are working with this applicant about any changes that have been made.
+  </p>
+
   <div class="form-submit_choices">
     <a href="{{ submission.get_absolute_url() }}" class="action-back btn">
       <span class="glyphicon glyphicon-arrow-left"></span>

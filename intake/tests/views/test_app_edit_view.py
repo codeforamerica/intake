@@ -1,4 +1,5 @@
 import json
+from unittest.mock import patch, Mock
 from django.test import TestCase
 from django.urls import reverse
 from django.conf import settings
@@ -8,6 +9,8 @@ from formation import fields as F
 from intake.tests.factories import FormSubmissionWithOrgsFactory
 from user_accounts.tests.factories import app_reviewer, followup_user
 from user_accounts.models import Organization
+from intake.views.app_edit_view import (
+    remove_sensitive_data_from_data_diff, get_emails_to_notify_of_edits)
 
 
 def dict_to_post_data(raw_input_data):
@@ -314,3 +317,94 @@ class TestAppEditView(TestCase):
         self.assertEqual(data['last_name'], 'Bar')
         self.assertEqual(data['answers']['first_name'], 'Foo')
         self.assertEqual(data['answers']['last_name'], 'Bar')
+
+    @patch('intake.views.app_edit_view.app_edited_email_notification')
+    @patch('intake.views.app_edit_view.remove_sensitive_data_from_data_diff')
+    def test_calls_data_filter_and_gives_context_to_edit_notification(
+            self, remove_sensitive_patch, notification_patch):
+        fresno_profile = app_reviewer('fresno_pubdef')
+        santa_clara_profile = app_reviewer('santa_clara_pubdef')
+        self.client.login(
+            username=fresno_profile.user.username,
+            password=settings.TEST_USER_PASSWORD)
+        response = self.client.get(self.edit_url)
+        post_data = dict_to_post_data(
+            response.context_data['form'].raw_input_data)
+        post_data.update({
+            'first_name': 'Foo',
+            'last_name': 'Bar',
+            'ssn': '9123462907890387',
+            'email': 'something@example.horse'})
+        mock_safe_diff = Mock()
+        mock_unsafe_keys = Mock()
+        remove_sensitive_patch.return_value = (mock_safe_diff, mock_unsafe_keys)
+        self.client.post(self.edit_url, post_data)
+        self.assertEqual(1, len(remove_sensitive_patch.mock_calls))
+        notification_patch.send.assert_any_call(
+            to=[santa_clara_profile.user.email],
+            editor_email=fresno_profile.user.email,
+            app_detail_url=self.sub.get_absolute_url(),
+            safe_data_diff=mock_safe_diff,
+            unsafe_changed_keys=mock_unsafe_keys)
+        notification_patch.send.assert_any_call(
+            to=[fresno_profile.user.email],
+            editor_email=fresno_profile.user.email,
+            app_detail_url=self.sub.get_absolute_url(),
+            safe_data_diff=mock_safe_diff,
+            unsafe_changed_keys=mock_unsafe_keys)
+        self.assertEqual(2, len(notification_patch.send.mock_calls))
+
+
+class TestRemoveSensitiveDataFromDataDiff(TestCase):
+
+    def test_removes_unsafe_field_data(self):
+        secrets = {
+            'SSN': {
+                'before': 'super secret',
+                'after': 'still very secret',
+            },
+            'Driver License/ID': {
+                'before': 'super secret',
+                'after': 'still very secret',
+            },
+        }
+        not_so_secrets = {
+            'Email': {
+                'before': 'not really an email',
+                'after': 'just benign pii',
+            },
+            'Phone number': {
+                'before': 'not really an email',
+                'after': 'just benign pii',
+            },
+        }
+        secrets_keys = ['SSN', 'Driver License/ID']
+        data_in = dict(**secrets, **not_so_secrets)
+        safe_diff_results, secret_keys_results = \
+            remove_sensitive_data_from_data_diff(data_in)
+        self.assertEqual(not_so_secrets, safe_diff_results)
+        self.assertEqual(set(secrets_keys), set(secret_keys_results))
+
+
+class TestGetUsersToNotifyOfEdits(TestCase):
+
+    fixtures = ['counties', 'organizations', 'groups']
+
+    def test_only_gets_correct_emails(self):
+        # users who shouldn't get notifications at an org that would
+        fresno_user_w_notifications = app_reviewer('fresno_pubdef')
+        fresno_user_without_notifications = app_reviewer(
+            'fresno_pubdef', username='fresno_dont_notify')
+        fresno_user_without_notifications.should_get_notifications = False
+        fresno_user_without_notifications.save()
+        santa_clara_user = app_reviewer('santa_clara_pubdef')
+        app_reviewer('sf_pubdef')
+        submission = FormSubmissionWithOrgsFactory(
+            organizations=[
+                santa_clara_user.organization,
+                fresno_user_w_notifications.organization])
+        resulting_emails = set(get_emails_to_notify_of_edits(submission.id))
+        expected_emails = {
+            fresno_user_w_notifications.user.email,
+            santa_clara_user.user.email}
+        self.assertEqual(expected_emails, resulting_emails)
