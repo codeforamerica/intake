@@ -47,8 +47,38 @@ def create_searchable_applicant(context, org_slug=None):
         first_name='Waldo',
         last_name='Waldini',
         phone_number='5555555555',
-        email='waldo@odlaw.institute'
+        email='waldo@odlaw.institute',
+        contact_preferences=['prefers_email', 'prefers_sms']
         )
+    kwargs = dict(
+        answers=answers,
+        date_received=PACIFIC_TIME.localize(
+            mock.fake.date_time_between('-4w', '-2w'))
+        )
+    if org_slug:
+        kwargs.update(organizations=[org])
+    sub = factories.FormSubmissionWithOrgsFactory(**kwargs)
+    SEARCHABLE_APPLICANT_ID = sub.id
+
+
+@given('an application to search for with bad data')
+@given('a "{org_slug}" application to search for with bad data')
+def create_searchable_applicant_with_bad_data(context, org_slug=None):
+    global SEARCHABLE_APPLICANT_ID
+    if org_slug:
+        org = Organization.objects.get(slug=org_slug)
+    answers = mock.fake.contra_costa_county_form_answers(**{
+        'first_name': 'Waldo',
+        'last_name': 'Waldini',
+        'phone_number': '5555555555',
+        'alternate_phone_number': '5555555555',
+        'email': 'waldo@odlaw',
+        'contact_preferences': ['prefers_email', 'prefers_sms'],
+        'email': 'waldo@odlaw',
+        'dob.day': '28',
+        'dob.month': 'February',
+        'dob.year': '1972',
+    })
     kwargs = dict(
         answers=answers,
         date_received=PACIFIC_TIME.localize(
@@ -142,8 +172,16 @@ def click_on_search_result(context):
 
 @then("it should load the applicant's detail page")
 def test_detail_page_loads(context):
-    step_text = 'Then it should load "application/{}/"'\
-        .format(SEARCHABLE_APPLICANT_ID)
+    step_text = 'Then it should load "application/{}/"'.format(
+        SEARCHABLE_APPLICANT_ID)
+    context.execute_steps(step_text)
+
+
+@when("I open the applicant's detail page")
+@given("I open the applicant's detail page")
+def load_app_detail_url(context):
+    step_text = 'When I open "application/{}/"'.format(
+        SEARCHABLE_APPLICANT_ID)
     context.execute_steps(step_text)
 
 
@@ -173,4 +211,19 @@ def print_all_button_visible(context):
 def print_all_button_not_visible(context):
     selector = "a.print-all"
     with context.test.assertRaises(NoSuchElementException):
-        element = context.browser.find_element_by_css_selector(selector)
+        context.browser.find_element_by_css_selector(selector)
+
+
+@when('I click the "{link_text}" link to the applicant\'s edit page')
+def click_application_edit_link(context, link_text):
+    url = "application/{}/edit".format(SEARCHABLE_APPLICANT_ID)
+    step_text = 'When I click the "{link_text}" link to "{url}"'.format(
+        link_text=link_text, url=url)
+    context.execute_steps(step_text)
+
+
+@then("it should load the applicant's edit page")
+def test_edit_page_loads(context):
+    step_text = 'Then it should load "application/{}/edit"'\
+        .format(SEARCHABLE_APPLICANT_ID)
+    context.execute_steps(step_text)

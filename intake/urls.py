@@ -13,6 +13,7 @@ from intake.views import (
     redirect_link_views,
     search_views,
     app_detail_views,
+    app_edit_view,
     application_note_views,
     tag_views,
     status_update_views,
@@ -73,6 +74,10 @@ urlpatterns = [
     url(r'^application/(?P<submission_id>[0-9]+)/history/$',
         login_required(app_detail_views.app_history),
         name='intake-app_history'),
+
+    url(r'^application/(?P<submission_id>[0-9]+)/edit$',
+        login_required(app_edit_view.app_edit),
+        name='intake-app_edit'),
 
     url(r'^application/(?P<submission_id>[0-9]+)/pdf/$',
         login_required(admin_views.filled_pdf),

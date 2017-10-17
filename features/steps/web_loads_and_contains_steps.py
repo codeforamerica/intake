@@ -1,6 +1,8 @@
 from behave import given, then, when
 from urllib.parse import urljoin, urlparse
 
+from selenium.common.exceptions import NoSuchElementException
+
 
 @when('I open "{url}"')
 @given('that "{url}" loads')
@@ -75,11 +77,46 @@ def check_link_goes_to_page(context, element_id, url):
 
 
 @then('"{element_class}" should say "{text}"')
-def element_contains_text(context, element_class, text):
+def test_class_element_contains_text(context, element_class, text):
     element = context.browser.find_element_by_class_name(element_class)
     context.test.assertTrue(
         (text in element.text),
         "Couldn't find '{}' in '{}'".format(text, element.text))
+
+
+@then('the "{input_name}" input value should be "{text}"')
+def test_input_has_value(context, input_name, text):
+    css_selector = '[name="{}"]'.format(input_name)
+    element = context.browser.find_element_by_css_selector(css_selector)
+    value = element.get_attribute('value')
+    context.test.assertTrue(
+        (text == value),
+        "looked for '{}' but value was '{}'".format(text, value))
+
+
+@then('the "{input_name}" input value should be empty')
+def test_input_is_empty(context, input_name):
+    css_selector = '[name="{}"]'.format(input_name)
+    element = context.browser.find_element_by_css_selector(css_selector)
+    value = element.get_attribute('value')
+    context.test.assertTrue(
+        ("" == value),
+        "expected value to be empty but it was '{}'".format(value))
+
+
+@then('the "{css_selector}" element should say "{text}"')
+def test_css_selected_element_contains(context, css_selector, text):
+    element = context.browser.find_element_by_css_selector(css_selector)
+    context.test.assertTrue(
+        (text in element.text),
+        "Couldn't find '{}' in '{}'".format(text, element.text))
+
+
+@then('"{css_selector}" should be empty')
+def test_css_selected_element_is_empty(context, css_selector):
+    element = context.browser.find_element_by_css_selector(css_selector)
+    element_text = element.text.strip()
+    context.test.assertEqual("", element_text)
 
 
 @then('the main heading should say "{text}"')
@@ -91,3 +128,9 @@ def test_main_heading_contains_text(context, text):
 @when('I hit the browser back button')
 def hit_browser_back(context):
     context.browser.back()
+
+
+@then('it should not show the "{input_id}" field')
+def test_field_not_present(context, input_id):
+    with context.test.assertRaises(NoSuchElementException):
+        context.browser.find_element_by_id(input_id)

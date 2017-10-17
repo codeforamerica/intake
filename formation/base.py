@@ -41,6 +41,7 @@ class BindParseValidate(Renderable):
         self.warnings = {}
         self.initial_data = initial
         self.skip_validation_parse_only = skip_validation_parse_only
+        self.prefix = prefix
         if prefix:
             self.context_key = prefix + self.context_key
 

@@ -654,4 +654,14 @@ def print_all_fields_for_county(county_slug):
     form_class = county_form_selector.get_combined_form_class(
         counties=[county_slug])
     for field in form_class.fields:
-        print(field.context_key)
+        output = '\t{}'.format(field.context_key)
+        if field in form_class.required_fields:
+            output += ' (R)'
+        print(output)
+
+
+def print_all_forms():
+    from user_accounts.models import Organization
+    for org in Organization.objects.all():
+        print('\n{}'.format(org.name))
+        print_all_fields_for_county(org.county.slug)

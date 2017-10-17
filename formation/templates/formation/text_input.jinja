@@ -6,14 +6,22 @@
   {% endif %}
   <label class="field-wrapping_label">
     <span class="field-display_text">
-      {{ field.label }}
-      {%- if field.optional %}
-      <span class="field-optional">(optional)</span>
+      {%- if label_override %}
+        {{ label_override }}
+      {%- else %}
+        {{ field.label }}
+        {%- if field.optional %}
+          <span class="field-optional">(optional)</span>
+        {%- endif %}
       {%- endif %}
     </span>
     {%- if field.help_text %}
     <span class="field-help_text">
-      {{ field.help_text }}
+      {%- if help_text_override %}
+        {{ help_text_override }}
+      {%- else %}
+        {{ field.help_text }}
+      {%- endif %}
     </span>
     {%- endif %}
     <span class="field-input_wrapper">

@@ -1,0 +1,15 @@
+Hello,
+
+Your application has been updated by {{org_name}}.
+Here is the information that was changed:
+
+{%- for field in changed_fields %}
+- {{ field }}
+{%- endfor %}
+
+You are receiving this email because Clear My Record has an application on file with this email address.
+{%- if is_old_contact_info %}
+This is the last email you will get from us at this email address.
+{%- endif %}
+
+We value your privacy. If you did not approve this change or would like more information, please {{ org_contact_info }} to contact {{ org_name }}.
