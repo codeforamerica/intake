@@ -319,10 +319,8 @@ class TestAppEditView(TestCase):
         self.assertEqual(data['answers']['first_name'], 'Foo')
         self.assertEqual(data['answers']['last_name'], 'Bar')
 
-    @patch('intake.views.app_edit_view.app_edited_email_notification')
-    @patch('intake.views.app_edit_view.remove_sensitive_data_from_data_diff')
-    def test_calls_data_filter_and_gives_context_to_edit_notification(
-            self, remove_sensitive_patch, notification_patch):
+    @patch('intake.views.app_edit_view.app_edited_org_email_notification')
+    def test_notifies_org_user_with_safe_data_diff(self, notification_patch):
         fresno_profile = app_reviewer('fresno_pubdef')
         santa_clara_profile = app_reviewer('santa_clara_pubdef')
         self.client.login(
@@ -334,14 +332,15 @@ class TestAppEditView(TestCase):
         post_data.update({
             'first_name': 'Foo',
             'last_name': 'Bar',
-            'ssn': '9123462907890387',
+            'driver_license_or_id': '9123462907890387',
             'email': 'something@example.horse'})
-        mock_safe_diff = Mock()
-        mock_unsafe_keys = Mock()
-        remove_sensitive_patch.return_value = (
-            mock_safe_diff, mock_unsafe_keys)
+        expected_safe_diff = {
+            'First name': {'before': self.sub.first_name, 'after': 'Foo'},
+            'Last name': {'before': self.sub.last_name, 'after': 'Bar'},
+            'Email': {'before': self.sub.email,
+                      'after': 'something@example.horse'}
+        }
         self.client.post(self.edit_url, post_data)
-        self.assertEqual(1, len(remove_sensitive_patch.mock_calls))
         notification_patch.send.assert_any_call(
             to=[santa_clara_profile.user.email],
             editor_email=fresno_profile.user.email,
@@ -349,8 +348,8 @@ class TestAppEditView(TestCase):
             app_detail_url=self.sub.get_external_url(),
             submission_id=self.sub.id,
             applicant_name='Foo Bar',
-            safe_data_diff=mock_safe_diff,
-            unsafe_changed_keys=mock_unsafe_keys)
+            safe_data_diff=expected_safe_diff,
+            unsafe_changed_keys=['Driver License/ID'])
         notification_patch.send.assert_any_call(
             to=[fresno_profile.user.email],
             editor_email=fresno_profile.user.email,
@@ -358,12 +357,105 @@ class TestAppEditView(TestCase):
             app_detail_url=self.sub.get_external_url(),
             submission_id=self.sub.id,
             applicant_name='Foo Bar',
-            safe_data_diff=mock_safe_diff,
-            unsafe_changed_keys=mock_unsafe_keys)
+            safe_data_diff=expected_safe_diff,
+            unsafe_changed_keys=['Driver License/ID'])
         self.assertEqual(2, len(notification_patch.send.mock_calls))
 
-    @patch('intake.views.app_edit_view.app_edited_email_notification')
-    def test_does_not_notify_if_unchanged(self, notification_patch):
+    @patch(
+        'intake.views.app_edit_view.app_edited_applicant_email_notification')
+    @patch(
+        'intake.views.app_edit_view.app_edited_applicant_sms_notification')
+    def test_notifies_applicant_of_changed_data_at_old_and_new_contact_info(
+            self, sms_notification_patch, email_notification_patch):
+        fresno_profile = app_reviewer('fresno_pubdef')
+        self.client.login(
+            username=fresno_profile.user.username,
+            password=settings.TEST_USER_PASSWORD)
+        response = self.client.get(self.edit_url)
+        post_data = dict_to_post_data(
+            response.context_data['form'].raw_input_data)
+        post_data.update({
+            'first_name': 'Foo',
+            'last_name': 'Bar',
+            'driver_license_or_id': '9123462907890387',
+            'email': 'something@example.horse',
+            'phone_number': '4153016005'})
+        self.client.post(self.edit_url, post_data)
+        organization = fresno_profile.organization
+        expected_changed_fields = ['Driver License/ID', 'Email',
+                                   'First name', 'Last name', 'Phone number']
+        email_notification_patch.send.assert_any_call(
+            to=['something@example.horse'],
+            org_contact_info=organization.get_contact_info_message(),
+            org_name=organization.name,
+            changed_fields=expected_changed_fields,
+            is_old_contact_info=False)
+
+        email_notification_patch.send.assert_any_call(
+            to=[self.sub.email],
+            org_contact_info=organization.get_contact_info_message(),
+            org_name=organization.name,
+            changed_fields=expected_changed_fields,
+            is_old_contact_info=True)
+        self.assertEqual(2, len(email_notification_patch.send.mock_calls))
+
+        sms_notification_patch.send.assert_any_call(
+            to=['(415) 212-4848'],
+            org_contact_info=organization.get_contact_info_message(),
+            org_name=organization.name,
+            changed_fields=expected_changed_fields,
+            is_old_contact_info=True)
+
+        sms_notification_patch.send.assert_any_call(
+            to=['4153016005'],
+            org_contact_info=organization.get_contact_info_message(),
+            org_name=organization.name,
+            changed_fields=expected_changed_fields,
+            is_old_contact_info=False)
+        self.assertEqual(2, len(sms_notification_patch.send.mock_calls))
+
+    @patch(
+        'intake.views.app_edit_view.app_edited_applicant_email_notification')
+    @patch(
+        'intake.views.app_edit_view.app_edited_applicant_sms_notification')
+    def test_does_not_send_notifications_if_contact_info_does_not_exist(
+            self, sms_notification_patch, email_notification_patch):
+        self.sub.email = ''
+        self.sub.phone_number = ''
+        self.sub.answers['email'] = ''
+        self.sub.answers['phone_number'] = ''
+        self.sub.answers['contact_preferences'] = []
+        self.sub.save()
+        fresno_profile = app_reviewer('fresno_pubdef')
+        self.client.login(
+            username=fresno_profile.user.username,
+            password=settings.TEST_USER_PASSWORD)
+        response = self.client.get(self.edit_url)
+        post_data = dict_to_post_data(
+            response.context_data['form'].raw_input_data)
+        post_data.update({
+            'first_name': 'Foo',
+            'last_name': 'Bar',
+            'phone_number': '4153016005'
+        })
+
+        self.client.post(self.edit_url, post_data)
+        organization = fresno_profile.organization
+        expected_changed_fields = ['First name', 'Last name', 'Phone number']
+        email_notification_patch.send.assert_not_called()
+        sms_notification_patch.send.assert_called_once_with(
+            to=['4153016005'],
+            org_contact_info=organization.get_contact_info_message(),
+            org_name=organization.name,
+            changed_fields=expected_changed_fields,
+            is_old_contact_info=False
+        )
+
+    @patch('intake.views.app_edit_view.app_edited_org_email_notification')
+    @patch(
+        'intake.views.app_edit_view.app_edited_applicant_email_notification')
+    def test_does_not_notify_if_unchanged(
+            self, applicant_notification_patch, org_notification_patch):
         fresno_profile = app_reviewer('fresno_pubdef')
         self.client.login(
             username=fresno_profile.user.username,
@@ -372,7 +464,8 @@ class TestAppEditView(TestCase):
         post_data = dict_to_post_data(
             response.context_data['form'].raw_input_data)
         self.client.post(self.edit_url, post_data)
-        notification_patch.assert_not_called()
+        org_notification_patch.assert_not_called()
+        applicant_notification_patch.assert_not_called()
 
 
 class TestRemoveSensitiveDataFromDataDiff(TestCase):
