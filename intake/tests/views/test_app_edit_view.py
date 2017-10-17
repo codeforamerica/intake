@@ -387,14 +387,14 @@ class TestAppEditView(TestCase):
         email_notification_patch.send.assert_any_call(
             to=['something@example.horse'],
             org_contact_info=organization.get_contact_info_message(),
-            org_name=organization.name,
+            org_name='the Fresno County Public Defender',
             changed_fields=expected_changed_fields,
             is_old_contact_info=False)
 
         email_notification_patch.send.assert_any_call(
             to=[self.sub.email],
             org_contact_info=organization.get_contact_info_message(),
-            org_name=organization.name,
+            org_name='the Fresno County Public Defender',
             changed_fields=expected_changed_fields,
             is_old_contact_info=True)
         self.assertEqual(2, len(email_notification_patch.send.mock_calls))
@@ -402,14 +402,14 @@ class TestAppEditView(TestCase):
         sms_notification_patch.send.assert_any_call(
             to=['(415) 212-4848'],
             org_contact_info=organization.get_contact_info_message(),
-            org_name=organization.name,
+            org_name='the Fresno County Public Defender',
             changed_fields=expected_changed_fields,
             is_old_contact_info=True)
 
         sms_notification_patch.send.assert_any_call(
             to=['4153016005'],
             org_contact_info=organization.get_contact_info_message(),
-            org_name=organization.name,
+            org_name='the Fresno County Public Defender',
             changed_fields=expected_changed_fields,
             is_old_contact_info=False)
         self.assertEqual(2, len(sms_notification_patch.send.mock_calls))
@@ -446,7 +446,7 @@ class TestAppEditView(TestCase):
         sms_notification_patch.send.assert_called_once_with(
             to=['4153016005'],
             org_contact_info=organization.get_contact_info_message(),
-            org_name=organization.name,
+            org_name='the Fresno County Public Defender',
             changed_fields=expected_changed_fields,
             is_old_contact_info=False
         )
