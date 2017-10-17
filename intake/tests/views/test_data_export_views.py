@@ -69,7 +69,7 @@ class TestCSVDownloadView(TestCase):
             'probation,Not on probation,No,,No,No,"$3,001.00",No,Yes,3,,'
             'from work,I want help,"Yes, I understand","Yes, I give them '
             'permission to do that",False,False,Granted,'
-            '01/02/2017,bgolder+demo+ebclc_user@codeforamerica.org,')
+            '01/02/2017,cmrtestuser+ebclc@gmail.com,')
         self.assertIn(expected_result_line_1, result)
         self.assertTrue(result.startswith(expected_result_line_1))
         self.assertIn(expected_result_line_2, result)

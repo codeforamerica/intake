@@ -36,7 +36,7 @@ def login_as(context, email):
 
 @given('I log in as an applicant support user')
 def login_as_applicant_support_user(context):
-    login_as(context, "bgolder+demo+cfa_user@codeforamerica.org")
+    login_as(context, "cmrtestuser+cfa@gmail.com")
 
 
 @given('I log in as an org user')
@@ -44,7 +44,7 @@ def login_as_applicant_support_user(context):
 @when('I log in as an org user at "{org_slug}"')
 def login_as_org_user(context, org_slug='ebclc'):
     login_as(
-        context, "bgolder+demo+{}_user@codeforamerica.org".format(org_slug))
+        context, "cmrtestuser+{}@gmail.com".format(org_slug))
 
 
 @given('a superuser')
@@ -57,4 +57,4 @@ def load_superuser(context):
 
 @given('I log in as a superuser')
 def login_as_superuser(context):
-    login_as(context, "bgolder+demo+superuser@codeforamerica.org")
+    login_as(context, "cmrtestuser+superuser@gmail.com")
