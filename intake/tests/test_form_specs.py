@@ -40,7 +40,7 @@ class TestAlamedaCountyForm(TestCase):
         input_form.is_valid()
         submission = SubmissionsService.create_for_counties(
             counties=[alameda], answers=input_form.cleaned_data)
-        user = User.objects.get(username="a_pubdef_user")
+        user = User.objects.get(username="a_pubdef")
         display_form, letter_display = \
             DisplayFormService.get_display_form_for_user_and_submission(
                 user, submission)

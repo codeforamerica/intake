@@ -248,9 +248,6 @@ class Month(DisplayRawIfFalsyMixin, IntegerField):
         MaxValueValidator(12, message=month_validation_message)
     ]
 
-    def get_display_value(self):
-        return self.get_current_value() or " "
-
 
 class Day(DisplayRawIfFalsyMixin, IntegerField):
     context_key = "day"
@@ -355,7 +352,7 @@ class ContactPreferences(MultipleChoiceField):
     help_text = _(
         'An attorney may need to send you official documents in the mail '
         'or call you to help with your case.')
-    display_label = "Opted into Clear My Record updates via:"
+    display_label = "Preferred contact methods"
 
     def get_display_value(self):
         return super().get_display_value(use_or=True)

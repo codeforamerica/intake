@@ -312,6 +312,13 @@ class TestPhoneNumberField(PatchTranslationTestCase):
         self.assertIn(
             expected_error, [str(e) for e in field.get_errors_list()])
 
+    def test_ignores_parse_errors_if_skip_validation_parse_only(self):
+        field = fields.PhoneNumberField(
+            {'phone_number': '5555555555'},
+            skip_validation_parse_only=True)
+        self.assertTrue(field.is_valid())
+        self.assertFalse(field.errors)
+
 
 class TestChoiceField(PatchTranslationTestCase):
 
@@ -464,15 +471,7 @@ class TestMultiValueField(PatchTranslationTestCase):
         'day': 2,
         'year': 1982,
     }}
-    incorrect_subkey = {'dob': {
-        'day': 2,
-        'year': 1982,
-        'apple': 12,
-    }}
-    dotsep_incorrect_subkey = {
-        'dob.day': 2,
-        'dob.year': 1982,
-        'dob.apple': 12, }
+
     dotsep_missing_subkey = {
         'dob.day': 2,
         'dob.year': 1982}
@@ -494,7 +493,7 @@ class TestMultiValueField(PatchTranslationTestCase):
         # make sure all the subfields are instances
         for sub in field.subfields:
             self.assertFalse(inspect.isclass(sub))
-            self.assertEqual(sub.required, False)
+            self.assertEqual(sub.required, True)
             self.assertEqual(sub.is_subfield, True)
             self.assertEqual(sub.parent, field)
             expected_sub = getattr(field, sub.context_key)

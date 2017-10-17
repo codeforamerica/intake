@@ -240,7 +240,7 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
                 'prefers_sms'
             ],
             email='test@gmail.com',
-            phone_number='5554442222',
+            phone_number='4152124848',
         )
         sub = factories.FormSubmissionWithOrgsFactory.create(
             applicant=applicant,
@@ -263,7 +263,7 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
             self.get_orgs(),
             contact_preferences=[],
             email='test@gmail.com',
-            phone_number='5554442222',
+            phone_number='4152124848',
         )
         sub = factories.FormSubmissionWithOrgsFactory.create(
             applicant=applicant,
@@ -284,7 +284,7 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
             self.get_orgs(),
             contact_preferences=['prefers_email'],
             email='test@gmail.com',
-            phone_number='5554442222',
+            phone_number='4152124848',
         )
         sub = factories.FormSubmissionWithOrgsFactory.create(
             applicant=applicant,

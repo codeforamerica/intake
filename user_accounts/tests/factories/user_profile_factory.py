@@ -24,11 +24,11 @@ def profile_for_org_and_group_names(
     """Creates a user and user profile based on the org slug
 
     For example, if org.slug is 'yolo_pubdef':
-        user.username == 'yolo_pubdef_user'
+        user.username == 'yolo_pubdef'
         user.first_name == 'Fake'
         user.last_name == 'Yolo Pubdef User'
         profile.name == 'Fake Yolo Pubdef User'
-        email = bgolder+demo+yolo_pubdef_user@codeforamerica.org
+        email = cmrtestuser+yolo_pubdef@gmail.com
 
     if a list of strings are passed through group_names, each corresponding
     group will be added.

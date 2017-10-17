@@ -34,10 +34,10 @@ class UserFactory(factory.DjangoModelFactory):
 
 
 def user_with_name_and_email_from_org_slug(org_slug, **kwargs):
-    username = kwargs.get('username', org_slug + '_user')
+    username = kwargs.get('username', org_slug)
     default_kwargs = dict(
         username=username,
-        email='bgolder+demo+{}@codeforamerica.org'.format(username),
+        email='cmrtestuser+{}@gmail.com'.format(username),
         first_name='Fake',
         last_name=username.replace('_', ' ').title())
     default_kwargs.update(kwargs)

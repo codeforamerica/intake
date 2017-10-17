@@ -105,10 +105,10 @@ class TestNotifications(TestCase):
         front_email.channel_id = 'email_id'
 
         front_email.send(
-            to=["bgolder@codeforamerica.org"],
+            to=["cmrtestuser@gmail.com"],
             message="Hi")
         expected_data.update({
-            'to': ["bgolder@codeforamerica.org"],
+            'to': ["cmrtestuser@gmail.com"],
             'subject': 'Front test',
             'body': 'Hi this is an email message body.',
             'text': 'Hi this is an email message body.',

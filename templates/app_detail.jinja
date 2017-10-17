@@ -5,7 +5,9 @@
   <div class="container">
     <div class="row">
       <div class="col-xs-12 col-md-10 col_centered">
+        {% block tab_navigation %}
         {% include "includes/app_detail_navigation.jinja" %}
+        {% endblock tab_navigation %}
       </div>
     </div>
     <div class="row">

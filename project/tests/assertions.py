@@ -1,3 +1,4 @@
+from bs4 import BeautifulSoup
 
 
 def assertInLogs(logging_context_manager, *log_strings):
@@ -37,3 +38,18 @@ def assertInLogsCount(logging_context_manager, log_string_counts):
         raise AssertionError(
             "Unexpected string counts in logs: {}".format(
                 '.'.join(differences)))
+
+
+def assertInputHasValue(response, input_name, expected_value, msg=None):
+    no_element_message = 'input[name="{}"] was not found in {}'.format(
+        input_name, response.rendered_content)
+    soup = BeautifulSoup(response.rendered_content, "html.parser")
+    element = soup.find('input', {'name': input_name})
+    if not element:
+        raise ValueError(no_element_message)
+    value = element['value']
+    if not msg:
+        msg = 'value of "{}" input was "{}", not "{}"'.format(
+            input_name, value, expected_value)
+    if expected_value != value:
+        raise AssertionError(msg)

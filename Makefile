@@ -16,11 +16,6 @@ test:
 	pep8
 
 
-test.behave:
-	./manage.py behave \
-		--keepdb
-
-
 test.keepdb:
 	./manage.py test $(SCOPE) \
 		--verbosity 2 --keepdb
@@ -53,6 +48,20 @@ test.deluxe:
 	DELUXE_TEST=1 \
 	./manage.py test $(SCOPE) \
 		--verbosity 2
+
+
+FEATURES=features
+
+test.behave:
+	./manage.py behave $(FEATURES) \
+		--keepdb
+
+
+test.behave.debug:
+	./manage.py behave $(FEATURES) \
+		--keepdb --verbosity 2 \
+		-D BEHAVE_DEBUG_ON_ERROR=yes
+
 
 test.everything:
 	pep8
