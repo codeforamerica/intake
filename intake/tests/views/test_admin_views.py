@@ -61,20 +61,6 @@ class TestApplicationDetail(IntakeDataTestCase):
         self.assertEqual(result.context_data['form'].submission, submission)
         self.assertHasDisplayData(result, submission)
 
-    @patch('intake.models.FillablePDF')
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_user_with_pdf_redirected_to_pdf(self, slack, FillablePDF):
-        self.be_sfpubdef_user()
-        submission = self.sf_pubdef_submissions[0]
-        result = self.get_detail(submission)
-        self.assertRedirects(
-            result,
-            reverse(
-                'intake-filled_pdf', kwargs=dict(submission_id=submission.id)),
-            fetch_redirect_response=False)
-        slack.assert_not_called()  # notification should be handled by pdf view
-        FillablePDF.assert_not_called()
-
     @patch('intake.notifications.slack_submissions_viewed.send')
     def test_user_cant_see_app_detail_for_other_county(self, slack):
         self.be_ccpubdef_user()

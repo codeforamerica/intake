@@ -328,6 +328,10 @@ class FormSubmission(models.Model):
         return reverse(
             'intake-case_printout', kwargs=dict(submission_id=self.id))
 
+    def get_filled_pdf_url(self):
+        return reverse(
+            'intake-filled_pdf', kwargs=dict(submission_id=self.id))
+
     def get_edit_url(self):
         return reverse(
             'intake-app_edit', kwargs=dict(submission_id=self.id))

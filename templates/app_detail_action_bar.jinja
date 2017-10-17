@@ -23,3 +23,13 @@
     <span class="glyphicon glyphicon-pencil"></span>
     Edit info
 </a>
+
+{%- if should_see_pdf %}
+<a
+  href="{{ form.submission.get_filled_pdf_url() }}"
+  target="_blank"
+  class="btn btn-primary btn-sm">
+    <span class="glyphicon glyphicon-file"></span>
+    Pre-filled PDF
+</a>
+{%- endif %}
