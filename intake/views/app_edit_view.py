@@ -150,5 +150,4 @@ class AppEditView(UpdateView):
             )
 
 
-
 app_edit = AppEditView.as_view()
