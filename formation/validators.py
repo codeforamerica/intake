@@ -1,14 +1,10 @@
 from datetime import date
 from formation.exceptions import NoChoicesGivenError
 from django.core.exceptions import ValidationError
-from django.core.validators import (RegexValidator,
-                                    MinValueValidator,
-                                    MaxValueValidator)
-
 from django.utils.translation import ugettext_lazy as _
 
 from intake.exceptions import MailgunAPIError
-from intake.services.contact_info_validation_service import \
+from intake.services.mailgun_api_service import \
     validate_email_with_mailgun
 from project.alerts import send_email_to_admins
 from project.jinja2 import oxford_comma

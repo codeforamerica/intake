@@ -84,6 +84,17 @@ class UserProfile(models.Model):
             return submissions_qset
         return submissions_qset.filter(organizations__profiles=self)
 
+    def get_default_email_username(self):
+        """
+        :return: a username of the form {username}.{org_slug}
+        """
+        return '{username}.{org_slug}'.format(
+            username=self.user.username, org_slug=self.organization.slug)
+
+    def get_clearmyrecord_email(self):
+        return "{username}@clearmyrecord.org".format(
+            username=self.get_default_email_username())
+
 
 def get_user_display(user):
     return user.profile.get_display_name()
