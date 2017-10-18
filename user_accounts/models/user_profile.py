@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 import user_accounts
 from user_accounts import exceptions
+from user_accounts import tasks
 import uuid
 
 
@@ -44,9 +45,9 @@ class UserProfile(models.Model):
                 email=user.email, accepted=True
             )
             invitation = invitations.first()
-        if not invitation:
-            raise exceptions.MissingInvitationError(
-                "No invitation found for {}".format(user.email))
+            if not invitation:
+                raise exceptions.MissingInvitationError(
+                    "No invitation found for {}".format(user.email))
         profile = cls(
             user=user,
             organization=invitation.organization,
@@ -55,6 +56,7 @@ class UserProfile(models.Model):
         )
         profile.save()
         user.groups.add(*invitation.groups.all())
+        tasks.create_mailgun_route.delay(profile.id)
         return profile
 
     def should_see_pdf(self):

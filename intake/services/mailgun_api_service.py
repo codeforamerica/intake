@@ -26,20 +26,20 @@ def get_response_status_code_and_content(response):
         response_json = response.json()
     else:
         response_json = None
-    return (response.status_code, response_json)
+    return response.status_code, response_json
 
 
-def mailgun_email_validation_get_request(url, query_params):
-    if not getattr(settings, 'VALIDATE_EMAILS_WITH_MAILGUN', False):
+def mailgun_get_request(url, query_params):
+    if not getattr(settings, 'ALLOW_REQUESTS_TO_MAILGUN', False):
         # Don't make external calls to mailgun locally
-        return (200, dict(is_valid=True, mailbox_verification='true'))
+        return 200, dict(is_valid=True, mailbox_verification='true')
     response = requests.get(
         url, auth=mailgun_auth(), params=query_params)
     return get_response_status_code_and_content(response)
 
 
 def validate_email_with_mailgun(email):
-    status_code, parsed_response = mailgun_email_validation_get_request(
+    status_code, parsed_response = mailgun_get_request(
         MAILGUN_EMAIL_VALIDATION_URL,
         query_params=dict(
             address=email,
@@ -49,11 +49,14 @@ def validate_email_with_mailgun(email):
     # possible return values are 'false', 'unknown', and 'true'
     mailbox_might_exist = parsed_response['mailbox_verification'] != 'false'
     suggestion = parsed_response.get('did_you_mean', None)
-    return (is_valid and mailbox_might_exist, suggestion)
+    return (is_valid and mailbox_might_exist), suggestion
 
 
 def set_route_for_user_profile(user_profile):
     """Adds a mailgun route to forward incoming emails to given user's email"""
+    if not getattr(settings, 'ALLOW_REQUESTS_TO_MAILGUN', False):
+        # Don't make external calls to mailgun locally
+        return {}
     post_data = {
         'priority': 0,
         'expression': 'match_recipient("{}")'.format(

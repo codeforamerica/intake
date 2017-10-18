@@ -18,4 +18,4 @@ AWS_STORAGE_BUCKET_NAME = os.environ.get('BUCKETEER_BUCKET_NAME')
 LIVE_COUNTY_CHOICES = False
 
 # use mailgun's REST API to validate email addresses
-VALIDATE_EMAILS_WITH_MAILGUN = True
+ALLOW_REQUESTS_TO_MAILGUN = True
