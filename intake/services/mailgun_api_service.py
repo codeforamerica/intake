@@ -1,7 +1,7 @@
 import requests
 from django.conf import settings
 from requests.auth import HTTPBasicAuth
-
+from pprint import pformat
 from intake import tasks
 from intake.exceptions import MailgunAPIError
 from project.decorators import run_if_setting_true
@@ -20,9 +20,11 @@ def mailgun_auth():
 
 def raise_error_if_not_200(status_code, parsed_response):
     if status_code != 200:
-        raise MailgunAPIError(
-            'Mailgun returned {} {}'.format(
-                status_code, parsed_response))
+        msg = 'Domain: {}\n'.format(settings.DEFAULT_HOST)
+        msg += 'Mailgun returned status {}\n'.format(status_code)
+        msg += 'Response Body: {}\n'.format(
+                status_code, pformat(parsed_response, indent=2))
+        raise MailgunAPIError(msg)
 
 
 def get_response_status_code_and_content(response):
