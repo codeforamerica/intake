@@ -8,9 +8,9 @@ from django.template import loader
 from intake.constants import SMS, EMAIL
 from intake.exceptions import (
     JinjaNotInitializedError,
-    DuplicateTemplateError,
-    FrontAPIError
+    DuplicateTemplateError
 )
+from intake.services.mailgun_api_service import send_mailgun_email
 from intake.tasks import celery_request
 
 jinja = loader.engines['jinja']
@@ -188,14 +188,17 @@ front_email = SimpleFrontNotification(
     channel_id=getattr(settings, 'FRONT_EMAIL_CHANNEL_ID', None))
 
 
-def send_simple_front_notification(contact_info, message, subject=None):
+def send_applicant_notification(contact_info, message, subject=None,
+                                sender_profile=None):
     results = []
     if SMS in contact_info:
         results.append(
             front_sms.send(contact_info[SMS], message))
     if EMAIL in contact_info:
         results.append(
-            front_email.send(contact_info[EMAIL], message, subject=subject))
+            send_mailgun_email(
+                contact_info[EMAIL], message, subject=subject,
+                sender_profile=sender_profile))
     return results
 
 

@@ -1,12 +1,16 @@
-from django.conf import settings
 import requests
+from django.conf import settings
 from requests.auth import HTTPBasicAuth
-from intake.exceptions import MailgunAPIError
 
+from intake import tasks
+from intake.exceptions import MailgunAPIError
+from project.decorators import run_if_setting_true
 
 MAILGUN_EMAIL_VALIDATION_URL = \
     'https://api.mailgun.net/v3/address/private/validate'
 MAILGUN_ROUTES_API_URL = 'https://api.mailgun.net/v3/routes'
+MAILGUN_MESSAGES_API_URL = \
+    'https://api.mailgun.net/v3/clearmyrecord.org/messages'
 
 
 def mailgun_auth():
@@ -29,10 +33,10 @@ def get_response_status_code_and_content(response):
     return response.status_code, response_json
 
 
+@run_if_setting_true(
+    'ALLOW_REQUESTS_TO_MAILGUN',
+    (200, dict(is_valid=True, mailbox_verification='true')))
 def mailgun_get_request(url, query_params):
-    if not getattr(settings, 'ALLOW_REQUESTS_TO_MAILGUN', False):
-        # Don't make external calls to mailgun locally
-        return 200, dict(is_valid=True, mailbox_verification='true')
     response = requests.get(
         url, auth=mailgun_auth(), params=query_params)
     return get_response_status_code_and_content(response)
@@ -52,11 +56,9 @@ def validate_email_with_mailgun(email):
     return (is_valid and mailbox_might_exist), suggestion
 
 
+@run_if_setting_true('ALLOW_REQUESTS_TO_MAILGUN', {})
 def set_route_for_user_profile(user_profile):
     """Adds a mailgun route to forward incoming emails to given user's email"""
-    if not getattr(settings, 'ALLOW_REQUESTS_TO_MAILGUN', False):
-        # Don't make external calls to mailgun locally
-        return {}
     post_data = {
         'priority': 0,
         'expression': 'match_recipient("{}")'.format(
@@ -69,3 +71,17 @@ def set_route_for_user_profile(user_profile):
         get_response_status_code_and_content(response)
     raise_error_if_not_200(status_code, parsed_response)
     return parsed_response
+
+
+@run_if_setting_true('ALLOW_REQUESTS_TO_MAILGUN', {})
+def send_mailgun_email(to, message, sender_profile, subject):
+    post_data = {
+        "from": "{name} <{email}>".format(
+            name=sender_profile.name,
+            email=sender_profile.get_clearmyrecord_email()),
+        "to": [to],
+        "subject": subject,
+        "text": message
+    }
+    tasks.celery_request.delay(
+        'POST', MAILGUN_MESSAGES_API_URL, auth=mailgun_auth(), data=post_data)

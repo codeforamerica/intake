@@ -54,7 +54,7 @@ class TestApplicationTransferView(IntakeDataTestCase):
         self.detail_url = reverse(
             'intake-app_detail', kwargs=dict(submission_id=self.sub.id))
 
-    @patch('intake.notifications.send_simple_front_notification')
+    @patch('intake.notifications.send_applicant_notification')
     def test_can_transfer_successfully(self, front):
         user = self.be_apubdef_user()
         self.assertEqual(
@@ -102,7 +102,7 @@ class TestApplicationTransferView(IntakeDataTestCase):
         self.assertEqual(len(front.mock_calls), 1)
         front.assert_called_once_with(
             notification.contact_info, expected_sent_message,
-            subject="Update from Clear My Record")
+            subject="Update from Clear My Record", sender_profile=user.profile)
 
     def test_sees_expected_message(self):
         user = self.be_apubdef_user()
@@ -121,7 +121,7 @@ class TestApplicationTransferView(IntakeDataTestCase):
         self.assertContains(response, 'following message will be')
         self.assertContains(response, 'to the applicant')
 
-    @patch('intake.notifications.send_simple_front_notification')
+    @patch('intake.notifications.send_applicant_notification')
     @patch('intake.notifications.slack_submissions_viewed')
     def test_from_bundle_is_redirected_back_to_bundle(self, slack, front):
         self.be_apubdef_user()
@@ -135,7 +135,7 @@ class TestApplicationTransferView(IntakeDataTestCase):
             response,
             'data-submission-id="formsubmission-{}"'.format(self.sub.id))
 
-    @patch('intake.notifications.send_simple_front_notification')
+    @patch('intake.notifications.send_applicant_notification')
     def test_from_detail_transfered_back_to_index(self, front):
         self.be_apubdef_user()
         response = self.post()
