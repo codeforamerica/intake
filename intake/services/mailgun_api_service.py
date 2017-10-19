@@ -1,6 +1,5 @@
 import requests
 from django.conf import settings
-from requests.auth import HTTPBasicAuth
 from pprint import pformat
 from intake import tasks
 from intake.exceptions import MailgunAPIError
@@ -14,8 +13,7 @@ MAILGUN_MESSAGES_API_URL = \
 
 
 def mailgun_auth():
-    return HTTPBasicAuth(
-            'api', getattr(settings, 'MAILGUN_PRIVATE_API_KEY', ''))
+    return 'api', getattr(settings, 'MAILGUN_PRIVATE_API_KEY', '')
 
 
 def raise_error_if_not_200(status_code, parsed_response):

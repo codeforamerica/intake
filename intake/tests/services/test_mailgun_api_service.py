@@ -23,9 +23,9 @@ class TestMailGunGetRequest(TestCase):
         call_args, keyword_args = mock_requests_get.call_args
         self.assertEqual(query_params, keyword_args['params'])
         auth = keyword_args['auth']
-        self.assertEqual('api', auth.username)
+        self.assertEqual('api', auth[0])
         self.assertEqual(
-            getattr(settings, 'MAILGUN_PRIVATE_API_KEY', ''), auth.password)
+            getattr(settings, 'MAILGUN_PRIVATE_API_KEY', ''), auth[1])
         self.assertEqual(fake_url, call_args[0])
 
     @patch('intake.services.mailgun_api_service.requests.get')
