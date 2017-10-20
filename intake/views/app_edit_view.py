@@ -99,6 +99,7 @@ class AppEditView(UpdateView):
         for to_email in notifiable_emails:
             app_edited_org_email_notification.send(
                 to=[to_email],
+                sender_profile=self.request.user.profile,
                 editor_email=self.request.user.email,
                 editor_org_name=org_name,
                 app_detail_url=self.submission.get_external_url(),
@@ -108,13 +109,15 @@ class AppEditView(UpdateView):
                 unsafe_changed_keys=unsafe_diff_keys)
 
     def notify_applicant(self, unsafe_data_diff):
-        org = self.request.user.profile.organization
+        profile = self.request.user.profile
+        org = profile.organization
         name = 'the ' + org.name if org.slug != 'cfa' else org.name
         changed_fields = sorted(list(unsafe_data_diff.keys()))
 
         if self.submission.email:
             app_edited_applicant_email_notification.send(
                 to=[self.submission.email],
+                sender_profile=profile,
                 org_contact_info=org.get_contact_info_message(),
                 org_name=name,
                 changed_fields=changed_fields,
@@ -133,6 +136,7 @@ class AppEditView(UpdateView):
         if 'Email' in unsafe_data_diff and unsafe_data_diff['Email']['before']:
             app_edited_applicant_email_notification.send(
                 to=[unsafe_data_diff['Email']['before']],
+                sender_profile=profile,
                 org_contact_info=org.get_contact_info_message(),
                 org_name=name,
                 changed_fields=changed_fields,

@@ -31,8 +31,9 @@ def send_application_transfer_notification(transfer_data):
         base_message = "\n\n".join([intro, body])
         sent_message = "\n\n".join(
             [intro, transfer_data.get('sent_message', body)])
-        notifications.send_simple_front_notification(
-            contact_info, sent_message, subject="Update from Clear My Record")
+        notifications.send_applicant_notification(
+            contact_info, sent_message, subject="Update from Clear My Record",
+            sender_profile=transfer_data['author'].profile)
         return models.StatusNotification(
             contact_info=contact_info,
             base_message=base_message,

@@ -9,6 +9,8 @@ log_to_mixpanel = shared_task(log_to_mixpanel)
 
 @shared_task
 def celery_request(*args, **kwargs):
+    if 'auth' in kwargs:
+        kwargs['auth'] = tuple(kwargs['auth'])
     request(*args, **kwargs)
 
 

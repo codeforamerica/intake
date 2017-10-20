@@ -8,9 +8,9 @@ from django.template import loader
 from intake.constants import SMS, EMAIL
 from intake.exceptions import (
     JinjaNotInitializedError,
-    DuplicateTemplateError,
-    FrontAPIError
+    DuplicateTemplateError
 )
+from intake.services.mailgun_api_service import send_mailgun_email
 from intake.tasks import celery_request
 
 jinja = loader.engines['jinja']
@@ -173,6 +173,29 @@ class FrontNotification(TemplateNotification, SimpleFrontNotification):
         return super().send(to, **kwargs)
 
 
+class MailgunEmailNotification(TemplateNotification):
+
+    def __init__(self, default_context=None, subject_template='',
+                 body_template_path=''):
+        super().__init__(
+            default_context=default_context,
+            subject_template=subject_template,
+            body_template_path=body_template_path
+        )
+
+    def send(self, to, sender_profile, **context_args):
+        content = self.render(**context_args)
+        email_kwargs = dict(
+            to=to,
+            sender_profile=sender_profile,
+            subject=content.subject,
+            message=content.body
+        )
+        if check_that_remote_connections_are_okay(
+                'MAILGUN POST:', email_kwargs):
+            send_mailgun_email(**email_kwargs)
+
+
 class FrontEmailNotification(FrontNotification):
     channel_id = getattr(settings, 'FRONT_EMAIL_CHANNEL_ID', None)
 
@@ -188,14 +211,17 @@ front_email = SimpleFrontNotification(
     channel_id=getattr(settings, 'FRONT_EMAIL_CHANNEL_ID', None))
 
 
-def send_simple_front_notification(contact_info, message, subject=None):
+def send_applicant_notification(contact_info, message, subject=None,
+                                sender_profile=None):
     results = []
     if SMS in contact_info:
         results.append(
             front_sms.send(contact_info[SMS], message))
     if EMAIL in contact_info:
         results.append(
-            front_email.send(contact_info[EMAIL], message, subject=subject))
+            send_mailgun_email(
+                contact_info[EMAIL], message, subject=subject,
+                sender_profile=sender_profile))
     return results
 
 
@@ -301,12 +327,12 @@ slack_notification_sent = SlackTemplateNotification(
 slack_notification_failed = SlackTemplateNotification(
     message_template_path="slack/notification_failed.jinja")
 
-app_edited_org_email_notification = FrontEmailNotification(
+app_edited_org_email_notification = MailgunEmailNotification(
     subject_template=(
         "Clear My Record: Updated info for applicant ({{submission_id}})"),
     body_template_path="email/org_edit_notification.jinja")
 
-app_edited_applicant_email_notification = FrontEmailNotification(
+app_edited_applicant_email_notification = MailgunEmailNotification(
     subject_template="Clear My Record: application updated",
     body_template_path="email/applicant_edit_notification.jinja")
 

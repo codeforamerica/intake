@@ -343,6 +343,7 @@ class TestAppEditView(TestCase):
         self.client.post(self.edit_url, post_data)
         notification_patch.send.assert_any_call(
             to=[santa_clara_profile.user.email],
+            sender_profile=fresno_profile,
             editor_email=fresno_profile.user.email,
             editor_org_name=fresno_profile.organization.name,
             app_detail_url=self.sub.get_external_url(),
@@ -352,6 +353,7 @@ class TestAppEditView(TestCase):
             unsafe_changed_keys=['Driver License/ID'])
         notification_patch.send.assert_any_call(
             to=[fresno_profile.user.email],
+            sender_profile=fresno_profile,
             editor_email=fresno_profile.user.email,
             editor_org_name=fresno_profile.organization.name,
             app_detail_url=self.sub.get_external_url(),
@@ -386,6 +388,7 @@ class TestAppEditView(TestCase):
                                    'First name', 'Last name', 'Phone number']
         email_notification_patch.send.assert_any_call(
             to=['something@example.horse'],
+            sender_profile=fresno_profile,
             org_contact_info=organization.get_contact_info_message(),
             org_name='the Fresno County Public Defender',
             changed_fields=expected_changed_fields,
@@ -393,6 +396,7 @@ class TestAppEditView(TestCase):
 
         email_notification_patch.send.assert_any_call(
             to=[self.sub.email],
+            sender_profile=fresno_profile,
             org_contact_info=organization.get_contact_info_message(),
             org_name='the Fresno County Public Defender',
             changed_fields=expected_changed_fields,
