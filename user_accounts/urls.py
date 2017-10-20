@@ -1,5 +1,7 @@
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+
 from . import views
 
 urlpatterns = [
@@ -35,4 +37,7 @@ urlpatterns = [
         login_required(views.CustomSendInvite.as_view()),
         name='user_accounts-send_invite'),
 
+    url(r'^mailgun-bounce$',
+        csrf_exempt(views.MailgunBouncedEmailView.as_view()),
+        name='user_accounts-mailgun_bounce'),
 ]

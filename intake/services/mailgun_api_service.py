@@ -1,3 +1,5 @@
+import hashlib
+import hmac
 import requests
 from django.conf import settings
 from pprint import pformat
@@ -10,6 +12,24 @@ MAILGUN_EMAIL_VALIDATION_URL = \
 MAILGUN_ROUTES_API_URL = 'https://api.mailgun.net/v3/routes'
 MAILGUN_MESSAGES_API_URL = \
     'https://api.mailgun.net/v3/clearmyrecord.org/messages'
+
+
+def is_a_valid_mailgun_post(request):
+    """
+    Taken from
+        http://mailgun-documentation.readthedocs.io/en/latest/
+            user_manual.html#webhooks
+    :param request: Request object
+    :return: True or False if the request was signed by mailgun
+    """
+    token = request.POST['token']
+    timestamp = request.POST['timestamp']
+    signature = request.POST['signature']
+    key = getattr(settings, 'MAILGUN_PRIVATE_API_KEY', '').encode('utf-8')
+    msg = ('{}{}'.format(timestamp, token)).encode('utf-8')
+    hmac_digest = hmac.new(key=key, msg=msg, digestmod=hashlib.sha256
+                           ).hexdigest()
+    return hmac.compare_digest(signature, hmac_digest)
 
 
 def mailgun_auth():
