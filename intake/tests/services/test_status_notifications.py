@@ -44,7 +44,7 @@ class TestSendAndSaveNewStatus(TestCase):
         notification = latest_update.notification
         self.assertIn(expected_intro_message, notification.base_message)
         self.assertIn(expected_intro_message, notification.sent_message)
-        args = notifications.send_simple_front_notification.call_args[0]
+        args = notifications.send_applicant_notification.call_args[0]
         self.assertIn(expected_intro_message, args[1])
 
 

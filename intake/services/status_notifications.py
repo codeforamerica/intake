@@ -61,8 +61,8 @@ def save_and_send_status_notification(
     """
     sub = status_update.application.form_submission
     contact_info = sub.get_usable_contact_info()
-    notification_intro = get_notification_intro(
-        status_update.author.profile)
+    author_profile = status_update.author.profile
+    notification_intro = get_notification_intro(author_profile)
     status_update_data = vars(status_update)
     status_update_data.update(
         author=status_update.author,
@@ -83,9 +83,10 @@ def save_and_send_status_notification(
         contact_info=contact_info)
     status_notification = models.StatusNotification(**notification_data)
     status_notification.save()
-    notifications.send_simple_front_notification(
+    notifications.send_applicant_notification(
         contact_info, edited_message,
-        subject="Update from Clear My Record")
+        subject="Update from Clear My Record",
+        sender_profile=author_profile)
 
 
 def send_and_save_new_status(request, notification_data, status_update_data):

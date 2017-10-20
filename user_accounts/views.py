@@ -1,14 +1,20 @@
+import json
+
+from django.conf import settings
+from django.http import HttpResponse, Http404
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.core.mail import send_mail
 from django.core.urlresolvers import reverse_lazy
+from django.views import View
 from django.views.generic.edit import FormView
 from allauth.account import views as allauth_views
 from invitations.views import SendInvite
 
+from intake.services.mailgun_api_service import is_a_valid_mailgun_post
 from . import forms
 from user_accounts.base_views import StaffOnlyMixin
 import intake.services.events_service as EventsService
-from intake.models import Visitor
 
 
 class CustomLoginView(allauth_views.LoginView):
@@ -127,3 +133,37 @@ class PasswordChangeView(allauth_views.PasswordChangeView):
 
     def get_form_class(self):
         return forms.SetPasswordForm
+
+
+class MailgunBouncedEmailView(View):
+
+    def post(self, request):
+        if not is_a_valid_mailgun_post(request):
+            raise Http404
+        to = request.POST['recipient']
+        error = request.POST['error']
+        headers = dict(json.loads(request.POST['message-headers']))
+        sender = headers['Sender']
+        subject = headers['Subject']
+        date = headers['Date']
+        bounce_message = """
+A notification you sent through Clear My Record could not be delivered.
+
+Date: {date}
+Applicant email: {to}
+Email subject: {subject}
+
+Error:
+{error}
+
+
+Let us know if you have any questions,
+
+Clear My Record Team
+clearmyrecord@codeforamerica.org
+""".format(date=date, to=to, subject=subject, error=error)
+        send_mail(
+            'Clear My Record: An applicant notification bounced',
+            bounce_message, settings.MAIL_DEFAULT_SENDER, [sender],
+            fail_silently=False)
+        return HttpResponse()
