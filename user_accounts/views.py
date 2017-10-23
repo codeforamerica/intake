@@ -163,7 +163,10 @@ Clear My Record Team
 clearmyrecord@codeforamerica.org
 """.format(date=date, to=to, subject=subject, error=error)
         send_mail(
-            'Clear My Record: An applicant notification bounced',
-            bounce_message, settings.MAIL_DEFAULT_SENDER, [sender],
+            subject='Clear My Record: An applicant notification bounced',
+            message=bounce_message,
+            html_message=bounce_message.replace('\n', '<br>'),
+            from_email=settings.MAIL_DEFAULT_SENDER,
+            recipient_list=[sender],
             fail_silently=False)
         return HttpResponse()
