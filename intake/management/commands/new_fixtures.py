@@ -1,7 +1,9 @@
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
 
-
+from intake.models import Application
+from intake.services.pdf_service import fill_pdf_for_application, \
+    update_pdf_bundle_for_san_francisco
 from intake.tests.mock import build_seed_submissions, fillable_pdf
 from user_accounts.tests.mock import create_seed_users, serialize_seed_users
 
@@ -34,3 +36,12 @@ class Command(BaseCommand):
             self.style.SUCCESS(
                 "Created fake submissions, bundles, and transfers "
                 "and saved them to fixture files"))
+        for app_id in Application.objects.filter(
+                    organization__slug='sf_pubdef'
+                ).values_list('id', flat=True):
+            fill_pdf_for_application(app_id)
+        update_pdf_bundle_for_san_francisco()
+        self.stdout.write(
+            self.style.SUCCESS(
+                "Pre-filled PDFs for San Francisco, including pdf bundle of "
+                "unread apps"))

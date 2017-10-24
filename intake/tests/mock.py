@@ -308,9 +308,6 @@ def build_seed_submissions():
         organizations=target_orgs)
     subs.append(multi_org_sub)
     sub_ids = [sub.id for sub in subs]
-    # applications = models.Application.objects.filter(
-    #     form_submission_id__in=sub_ids)
-
     applicants = []
     for sub in subs:
         applicants.append(sub.applicant)

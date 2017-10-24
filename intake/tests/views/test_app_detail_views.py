@@ -76,26 +76,26 @@ class TestApplicationDetail(AppDetailFixturesBaseTestCase):
         response = self.get_page(submission)
         self.assertEqual(response.context_data['submission'], submission)
 
-    @patch('intake.models.FillablePDF')
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_user_with_pdf_redirected_to_pdf(self, slack, FillablePDF):
-        self.be_sfpubdef_user()
-        submission = self.sf_pubdef_submissions[0]
-        result = self.get_page(submission)
-        self.assertRedirects(
-            result,
-            reverse(
-                'intake-filled_pdf', kwargs=dict(submission_id=submission.id)),
-            fetch_redirect_response=False)
-        slack.assert_not_called()  # notification should be handled by pdf view
-        FillablePDF.assert_not_called()
-
     @patch('intake.notifications.slack_submissions_viewed.send')
     def test_agency_user_can_see_display_form_content(self, slack):
         self.be_apubdef_user()
         submission = self.a_pubdef_submissions[0]
         response = self.get_page(submission)
         self.assertHasDisplayData(response, submission)
+
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_user_with_pdf_can_see_pdf_link(self, slack):
+        self.be_sfpubdef_user()
+        submission = self.sf_pubdef_submissions[0]
+        response = self.get_page(submission)
+        self.assertContains(response, submission.get_filled_pdf_url())
+
+    @patch('intake.notifications.slack_submissions_viewed.send')
+    def test_user_without_pdf_cant_see_pdf_link(self, slack):
+        self.be_apubdef_user()
+        submission = self.a_pubdef_submissions[0]
+        response = self.get_page(submission)
+        self.assertNotContains(response, submission.get_filled_pdf_url())
 
     @patch('intake.notifications.slack_submissions_viewed.send')
     def test_agency_user_can_see_transfer_action_link(self, slack):
