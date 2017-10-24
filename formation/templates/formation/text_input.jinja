@@ -1,4 +1,6 @@
-<div id="{{ field.get_html_class_name() }}" class="{% if field.is_subfield %}sub{% endif %}field {{ field.get_html_class_name() }}
+<div id="{{ field.get_html_class_name() }}" class="{% if field.is_subfield %}sub{% endif %}field {{
+    field.get_html_class_name() }} {{
+    " ".join(field.additional_classes) }}
   {%- if field.warnings %} warnings{% endif %}
   {%- if field.errors %} errors{% endif %}">
   {% if not field.is_subfield %}

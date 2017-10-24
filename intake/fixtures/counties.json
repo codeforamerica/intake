@@ -151,5 +151,14 @@
     "name": "counties where we don't have official partners",
     "description": "The county I need isn't listed"
   }
+},
+{
+  "model": "intake.county",
+  "pk": 18,
+  "fields": {
+    "slug": "marin",
+    "name": "Marin",
+    "description": "Marin County (near San Rafael, Novato, Mill Valley, San Anselmo, and Larkspur)"
+  }
 }
 ]
