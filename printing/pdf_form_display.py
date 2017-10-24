@@ -68,7 +68,7 @@ class PDFFormDisplay:
         ['address'],
         ['is_california_resident', 'how_long_california_resident'],
         ['currently_employed', 'income_source'],
-        ['monthly_income', 'monthly_expenses'],
+        ['monthly_income', 'monthly_expenses', 'other_income'],
         ['household_size', 'dependents', 'has_children', 'is_married'],
         ['owns_home', 'on_public_benefits'],
         ['how_did_you_hear'],

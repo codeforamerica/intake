@@ -78,8 +78,8 @@ class SanFranciscoCountyFormSpec(CombinableCountyFormSpec):
         F.WhereProbationParole,
         F.WhenProbationParole,
         F.BeingCharged,
-        F.RAPOutsideSF,
-        F.WhenWhereOutsideSF,
+        F.OtherCountyArrestsOrConvictions,
+        F.WhenWhereOtherCounties,
         F.FinancialScreeningNote,
         F.CurrentlyEmployed,
         F.MonthlyIncome,
@@ -185,8 +185,8 @@ class AlamedaCountyFormSpec(CombinableCountyFormSpec):
         F.BeingCharged,
         F.HasSuspendedLicense,
         F.OwesCourtFees,
-        F.RAPOutsideSF,
-        F.WhenWhereOutsideSF,
+        F.OtherCountyArrestsOrConvictions,
+        F.WhenWhereOtherCounties,
         F.HowDidYouHear,
         F.AdditionalInformation,
         F.UnderstandsLimits,
@@ -242,8 +242,8 @@ class MontereyCountyFormSpec(CombinableCountyFormSpec):
         F.WhenProbationParole,
         F.ServingSentence,
         F.BeingCharged,
-        F.RAPOutsideSF,
-        F.WhenWhereOutsideSF,
+        F.OtherCountyArrestsOrConvictions,
+        F.WhenWhereOtherCounties,
         F.HowDidYouHear,
         F.AdditionalInformation,
         F.UnderstandsLimits,
@@ -291,8 +291,8 @@ class SolanoCountyFormSpec(CombinableCountyFormSpec):
         F.OwesCourtFees,
         F.ServingSentence,
         F.BeingCharged,
-        F.RAPOutsideSF,
-        F.WhenWhereOutsideSF,
+        F.OtherCountyArrestsOrConvictions,
+        F.WhenWhereOtherCounties,
         F.HowDidYouHear,
         F.AdditionalInformation,
         F.UnderstandsLimits,
@@ -361,8 +361,8 @@ class FresnoCountyFormSpec(SolanoCountyFormSpec):
         F.DriverLicenseOrIDNumber,
     }) - {
         F.OwesCourtFees,
-        F.RAPOutsideSF,
-        F.WhenWhereOutsideSF,
+        F.OtherCountyArrestsOrConvictions,
+        F.WhenWhereOtherCounties,
     }
     optional_fields = SolanoCountyFormSpec.optional_fields | {
         F.Aliases,
@@ -416,8 +416,8 @@ class SantaCruzCountyFormSpec(SolanoCountyFormSpec):
         F.ReasonsForApplying
     }) - {
         F.OwesCourtFees,
-        F.RAPOutsideSF,
-        F.WhenWhereOutsideSF
+        F.OtherCountyArrestsOrConvictions,
+        F.WhenWhereOtherCounties
     }
     required_fields = SolanoCountyFormSpec.required_fields - {
         F.OwesCourtFees,
@@ -467,8 +467,8 @@ class VenturaCountyFormSpec(CombinableCountyFormSpec):
         F.OwesCourtFees,
         F.ServingSentence,
         F.BeingCharged,
-        F.RAPOutsideSF,
-        F.WhenWhereOutsideSF,
+        F.OtherCountyArrestsOrConvictions,
+        F.WhenWhereOtherCounties,
         F.CaseNumber,
         F.HowDidYouHear,
         F.AdditionalInformation,
@@ -557,8 +557,8 @@ class StanislausCountyFormSpec(FresnoCountyFormSpec):
     county = 'stanislaus'
     fields = (FresnoCountyFormSpec.fields | {
         F.BeenToPrison,
-        F.RAPOutsideSF,
-        F.WhenWhereOutsideSF,
+        F.OtherCountyArrestsOrConvictions,
+        F.WhenWhereOtherCounties,
         F.OwesCourtFees,
     }) - {
         F.DriverLicenseOrIDNumber,
@@ -571,6 +571,76 @@ class StanislausCountyFormSpec(FresnoCountyFormSpec):
         F.HowManyDependents
     }
     required_fields = FresnoCountyFormSpec.required_fields
+
+
+class MarinCountyFormSpec(CombinableCountyFormSpec):
+    county = 'marin'
+    fields = {
+        F.ContactPreferences,
+        F.FirstName,
+        F.MiddleName,
+        F.LastName,
+        F.Aliases,
+        F.PhoneNumberField,
+        F.AlternatePhoneNumberField,
+        F.EmailField,
+        F.AddressField,
+        F.DateOfBirthField,
+        F.DriverLicenseOrIDNumber,
+        F.SocialSecurityNumberField,
+        F.CaseNumber,
+        F.BeingCharged,
+        F.ServingSentence,
+        F.OnProbationParole,
+        F.WhereProbationParole,
+        F.WhenProbationParole,
+        F.OtherCountyArrestsOrConvictions,
+        F.WhenWhereOtherCounties,
+        F.OwesCourtFees,
+        F.CurrentlyEmployed,
+        F.MonthlyIncome,
+        F.IncomeSource,
+        F.HowMuchSavings,
+        F.OtherIncome,
+        F.OnPublicBenefits,
+        F.MonthlyExpenses,
+        F.OwnsHome,
+        F.HasChildren,
+        F.HowManyDependents,
+        F.IsMarried,
+        F.ReasonsForApplying,
+        F.HowDidYouHear,
+        F.AdditionalInformation,
+        F.UnderstandsLimits,
+        F.ConsentToRepresent
+    }
+    required_fields = {
+        F.ContactPreferences,
+        F.FirstName,
+        F.LastName,
+        F.PhoneNumberField,
+        F.AddressField,
+        F.DateOfBirthField,
+        F.BeingCharged,
+        F.ServingSentence,
+        F.OnProbationParole,
+        F.OwesCourtFees,
+        F.CurrentlyEmployed,
+        F.MonthlyIncome,
+        F.IncomeSource,
+        F.HowMuchSavings,
+        F.OnPublicBenefits,
+        F.MonthlyExpenses,
+        F.OwnsHome,
+        F.HasChildren,
+        F.HowManyDependents,
+        F.IsMarried,
+        F.UnderstandsLimits,
+        F.ConsentToRepresent
+    }
+    validators = [
+        gave_preferred_contact_methods
+    ]
 
 
 class DeclarationLetterFormSpec(CombinableFormSpec):
@@ -638,7 +708,8 @@ INPUT_FORM_SPECS = [
     VenturaCountyFormSpec(),
     SantaBarbaraCountyFormSpec(),
     YoloCountyFormSpec(),
-    StanislausCountyFormSpec()
+    StanislausCountyFormSpec(),
+    MarinCountyFormSpec()
 ]
 
 DISPLAY_FORM_SPECS = INPUT_FORM_SPECS + [

@@ -23,6 +23,7 @@ class Field(base.BindParseValidate):
     empty_value = base.UNSET
     template_name = "formation/text_input.jinja"
     display_template_name = "formation/default_input_display.jinja"
+    additional_classes = []
 
     def __init__(self, *args, form=None, required=True, recommended=False,
                  optional=False, is_subfield=False, label=None, **kwargs):

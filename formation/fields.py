@@ -295,7 +295,7 @@ class SocialSecurityNumberField(CharField):
     context_key = "ssn"
     label = _('What is your Social Security Number? (if you have one)')
     help_text = _("The public defender's office will use this to "
-                  "get your San Francisco record and find any "
+                  "get your record and find any "
                   "convictions that can be reduced or dismissed.")
     is_required_error_message = _("The public defender may not be able to "
                                   "check your record without a social "
@@ -427,8 +427,8 @@ class Zip(CharField):
 
 class AddressField(MultiValueField):
     context_key = "address"
-    label = _("What is your mailing address?")
-    help_text = _("")
+    label = _("Where is a safe place you can receive mail?")
+    help_text = _("Enter your mailing address")
     template_name = "formation/multivalue_address.jinja"
     is_required_error_message = _("The public defender needs a mailing "
                                   "address to send you a letter with the next "
@@ -541,7 +541,7 @@ class ReducedProbation(FinishedHalfProbation):
     display_label = "Reduced probation"
 
 
-class RAPOutsideSF(YesNoIDontKnowField):
+class OtherCountyArrestsOrConvictions(YesNoIDontKnowField):
     context_key = "rap_outside_sf"
     label = _(
         "Have you ever been arrested or convicted in any other counties?")
@@ -549,7 +549,7 @@ class RAPOutsideSF(YesNoIDontKnowField):
     flip_display_choice_order = True
 
 
-class WhenWhereOutsideSF(CharField):
+class WhenWhereOtherCounties(CharField):
     context_key = "when_where_outside_sf"
     label = _(
         "If you were arrested or convicted in other counties, which ones and "
@@ -622,12 +622,21 @@ class IsReasonableMonthsWages:
 
 class MonthlyIncome(WholeDollarField):
     context_key = "monthly_income"
+    additional_classes = WholeDollarField.additional_classes + ['monthly']
     label = _("What is your monthly household income?")
     help_text = _("Include your spouse or legal partner's income. "
                   "Your best estimate is okay.")
     validators = [
         IsReasonableMonthsWages(10, 10000),
     ]
+
+
+class OtherIncome(WholeDollarField):
+    context_key = "other_income"
+    label = _("In the last 12 months, how much money have you received from "
+              "other sources such as lawsuits, a tax refund, and/or pension "
+              "fund?")
+    help_text = _("Enter a dollar amount. Your best estimate is okay.")
 
 
 class IncomeSource(CharField):
@@ -648,6 +657,7 @@ class OwnsHome(YesNoField):
 
 class MonthlyExpenses(WholeDollarField):
     context_key = "monthly_expenses"
+    additional_classes = WholeDollarField.additional_classes + ['monthly']
     help_text = _("Your best estimate is okay.")
     label = _("How much do you spend each month on things like rent, "
               "groceries, utilities, medical expenses, or childcare expenses?")
@@ -769,8 +779,8 @@ INTAKE_FIELDS = [
     WhenProbationParole,
     FinishedHalfProbation,
     ReducedProbation,
-    RAPOutsideSF,
-    WhenWhereOutsideSF,
+    OtherCountyArrestsOrConvictions,
+    WhenWhereOtherCounties,
     HasSuspendedLicense,
     OwesCourtFees,
 
@@ -780,6 +790,7 @@ INTAKE_FIELDS = [
     IncomeSource,
     HowMuchSavings,
     OnPublicBenefits,
+    OtherIncome,
     MonthlyExpenses,
     OwnsHome,
     HouseholdSize,

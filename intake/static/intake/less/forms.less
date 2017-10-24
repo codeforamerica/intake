@@ -157,47 +157,11 @@ button.action-back, a.action-back {
 .ssn input[name="ssn"] { width: 8em; }
 .phone_number input[name="phone_number"] { width: 9em; }
 .alternate_phone_number input[name="alternate_phone_number"] { width: 9em; }
-.monthly_income input[type="text"], .monthly_expenses input[type="text"], .how_much_savings input[type="text"] {
+.dollar_field input[type="text"] {
 	width: 7em;
 }
-.household_size input[type="text"], .dependents input[type="text"] {
-	width: 3em;
-}
 
-.people-count {
-	&::after {
-		content: "people";
-		width: 1em;
-		font-size: 1.25em;
-		padding: .25em .5em .25em .5em;
-		font-weight: 400;
-	}
-
-}
-.household_size .field-input_wrapper { .people-count; }
-.dependents .field-input_wrapper { .people-count; }
-
-.monthly_income .field-input_wrapper, .monthly_expenses .field-input_wrapper {
-	&::before {
-		content: "$";
-		width: 1em;
-		font-size: 1.25em;
-		padding: .25em 0;
-		font-weight: 400;
-	}
-	&::after {
-		content: ".00 / month";
-		width: 1em;
-		font-size: 1.25em;
-		padding: .25em .5em .25em 0;
-		font-weight: 400;
-	}
-	input {
-		text-align: right;
-	}
-}
-
-.how_much_savings .field-input_wrapper {
+.dollar_field .field-input_wrapper {
 	&::before {
 		content: "$";
 		width: 1em;
@@ -217,6 +181,28 @@ button.action-back, a.action-back {
 	}
 }
 
+.dollar_field.monthly .field-input_wrapper {
+	&::after {
+		content: ".00 / month";
+	}
+}
+
+.household_size input[type="text"], .dependents input[type="text"] {
+	width: 3em;
+}
+
+.people-count {
+	&::after {
+		content: "people";
+		width: 1em;
+		font-size: 1.25em;
+		padding: .25em .5em .25em .5em;
+		font-weight: 400;
+	}
+
+}
+.household_size .field-input_wrapper { .people-count; }
+.dependents .field-input_wrapper { .people-count; }
 
 .sent_message > .warninglist + .field-wrapping_label {
 	margin-top: 0.75em;
