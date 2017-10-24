@@ -113,7 +113,7 @@ class TestFillAnyUnfilledPdfsForAppIds(TestCase):
         fill_pdf.assert_called_once_with(app_ids[2])
         printed_app = str(subs[2].applications.first())
         admin_alert.assert_called_once_with(
-            subject='No FilledPDFs for Applications',
+            subject='No FilledPDFs for Applications on https://localhost:8000',
             message='1 apps did not have PDFs:\n{}'.format(printed_app))
 
 
