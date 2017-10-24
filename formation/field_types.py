@@ -103,6 +103,7 @@ class IntegerField(CharField):
 
 class WholeDollarField(IntegerField):
     empty_value = None
+    additional_classes = ['dollar_field']
     # https://regex101.com/r/dP5wX1/2
     dollars_pattern = re.compile(r"(?P<dollars>[\d,]+)(?P<cents>[\.]\d\d?)?")
     parse_error_message = _("You entered '{}', which "

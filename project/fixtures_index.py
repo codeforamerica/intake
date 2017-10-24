@@ -34,6 +34,7 @@ MOCK_APPLICATION_FIXTURES = (
     'mock_2_submissions_to_santa_barbara_pubdef',
     'mock_2_submissions_to_yolo_pubdef',
     'mock_2_submissions_to_stanislaus_pubdef',
+    'mock_2_submissions_to_marin_pubdef',
     'mock_1_submission_to_multiple_orgs',
 )
 
