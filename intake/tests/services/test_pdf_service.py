@@ -109,11 +109,12 @@ class TestFillAnyUnfilledPdfsForAppIds(TestCase):
             if i < 2:
                 factories.FilledPDFFactory(submission=sub)
             app_ids.append(sub.applications.first().id)
-        PDFService.fill_any_unfilled_pdfs_for_app_ids(app_ids)
+        with self.settings(DEFAULT_HOST='www.crazymanes.horse'):
+            PDFService.fill_any_unfilled_pdfs_for_app_ids(app_ids)
         fill_pdf.assert_called_once_with(app_ids[2])
         printed_app = str(subs[2].applications.first())
         admin_alert.assert_called_once_with(
-            subject='No FilledPDFs for Applications on https://localhost:8000',
+            subject='No FilledPDFs for Applications on www.crazymanes.horse',
             message='1 apps did not have PDFs:\n{}'.format(printed_app))
 
 
