@@ -43,5 +43,6 @@ class PrintoutForApplicationsView(
         response['Content-Disposition'] = 'filename="{}"'.format(filename)
         return response
 
+
 printout_for_apps = PrintoutForApplicationsView.as_view()
 printout_for_submission = CasePrintoutPDFView.as_view()
