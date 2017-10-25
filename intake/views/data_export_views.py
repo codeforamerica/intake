@@ -19,7 +19,7 @@ def csv_download(request):
     for datum in data:
         these_fields = list(datum.keys())
         # Finds the largest set of fields and uses it
-        # There should not be a case where a smaller set of fields would have 
+        # There should not be a case where a smaller set of fields would have
         # a field not in a larger one.
         if len(these_fields) > len(fields):
             fields = these_fields
