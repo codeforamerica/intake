@@ -173,7 +173,7 @@ urlpatterns = [
         name='intake-review_status_notification'),
 
     url(r'^applications/csv-download',
-        login_required(data_export_views.csv_download),
+        data_export_views.csv_download,
         name='intake-csv_download'),
 
     url(r'^applications-autocomplete/$', search_views.application_search,
