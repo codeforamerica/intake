@@ -136,7 +136,7 @@
     "short_followup_message": "With the Alameda Public Defender, no news is good news. They'll contact you if they need anything. If you want to check your case, call (510) 272-6600 or email cleanslate@acgov.org",
     "long_followup_message": "With the Alameda County Public Defender's Office, no news is good news. They will definitely contact you if they need anything. If you'd like to check on your case status, you may call (510) 272-6600 or email cleanslate@acgov.org.",
     "address": "Alameda Public Defender's Office\r\nAttn: Clear My Record Unit\r\n1401 Lakeside Drive, Suite 400\r\nOakland, CA 94612",
-    "phone_number": "5102726600",
+    "phone_number": "",
     "fax_number": "(510) 272 - 6610",
     "email": "cleanslate@acgov.org",
     "notify_on_weekends": false,
