@@ -51,25 +51,29 @@ class TestCSVDownloadView(TestCase):
             'id,Link,Application Date,Applied on,Wants help with record in,'
             'Preferred contact methods,First name,Middle name,'
             'Last name,Preferred pronouns,Phone number,Alternate phone number,'
-            'Email,Address,Date of birth,Is a citizen,'
+            'Email,Address,Date of birth,Citizenship status,'
             'Is currently being charged,Is serving a sentence,'
             'Is on probation or parole,Finished half probation,'
             'Reduced probation,RAP in other counties,Where/when,'
-            'Has suspended license,Owes court fines/fees,Monthly income,'
-            'On public benefits,Owns home,Household size,Reasons for applying,'
-            'How they found out about this,Additional information,'
+            'Has suspended license,Owes court fines/fees,'
+            'Has been denied housing or employment,'
+            'Denied housing/employment by,Seeking job that requires LiveScan,'
+            'Registered under PC 290,'
+            'Monthly income,On public benefits,Owns home,Household size,'
+            'Reasons for applying,How they found out about this,'
+            'Additional information,'
             'Understands might not qualify and could take a few months,'
             '"Consents to record access, filing, and court representation",'
             'Was transferred out,Has been opened,Latest status,'
             'Latest status date,Latest status author,Status history link')
         expected_result_line_2 = str(
-            ',Alameda,Text Message,Gabriel,Tiffany,Jenkins,She/Her/Hers,'
-            '(415) 212-4848,(415) 212-4848,cmrtestuser@gmail.com,"6230 Shawn '
-            'View\nNorth John, VA\n80973",4/19/1983,No,No,No,Yes,Not on '
-            'probation,Not on probation,No,,No,No,"$3,001.00",No,Yes,3,,'
-            'from work,I want help,"Yes, I understand","Yes, I give them '
-            'permission to do that",False,False,Granted,'
-            '01/02/2017,cmrtestuser+ebclc@gmail.com,')
+            'Alameda,Text Message,Gabriel,Tiffany,Jenkins,She/Her/Hers,'
+            '(415) 212-4848,(415) 212-4848,cmrtestuser@gmail.com,'
+            '"6230 Shawn View\nNorth John, VA\n80973",4/19/1983,'
+            'Other/I don\'t know,No,No,Yes,Not on probation,Not on probation,'
+            'No,,No,No,,,,,"$3,001.00",No,Yes,3,,from work,I want help,'
+            '"Yes, I understand","Yes, I give them permission to do that",'
+            'False,False,Granted,01/02/2017,cmrtestuser+ebclc@gmail.com,')
         self.assertIn(expected_result_line_1, result)
         self.assertTrue(result.startswith(expected_result_line_1))
         self.assertIn(expected_result_line_2, result)

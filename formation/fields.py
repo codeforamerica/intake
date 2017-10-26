@@ -15,8 +15,8 @@ from formation.field_types import (
 from intake.constants import (
     CONTACT_PREFERENCE_CHOICES, REASON_FOR_APPLYING_CHOICES,
     GENDER_PRONOUN_CHOICES, DECLARATION_LETTER_REVIEW_CHOICES,
-    APPLICATION_REVIEW_CHOICES
-)
+    APPLICATION_REVIEW_CHOICES,
+    CITIZENSHIP_STATUS_CHOICES)
 from project.jinja2 import namify, oxford_comma
 
 ###
@@ -470,14 +470,15 @@ class HowLongCaliforniaResident(CharField):
 # Case status and screening
 ###
 
-class USCitizen(YesNoField):
+class CitizenshipStatus(ChoiceField):
     context_key = "us_citizen"
-    label = _("Are you a U.S. citizen?")
+    choices = CITIZENSHIP_STATUS_CHOICES
+    label = _("What is your citizenship status?")
     help_text = _(
         "It is important for your attorney to know if you are a U.S citizen "
         "so they can find the best ways to help you. Your citizenship status "
         "will not be shared with any law enforcement agencies.")
-    display_label = "Is a citizen"
+    display_label = "Citizenship status"
 
 
 class IsVeteran(YesNoField):
@@ -579,6 +580,33 @@ class BeenToPrison(YesNoIDontKnowField):
     context_key = "has_been_to_prison"
     label = _("Have you been to prison?")
     flip_display_choice_order = True
+
+
+class HasBeenDeniedHousingOrEmployment(YesNoIDontKnowField):
+    context_key = "has_been_denied_housing_or_employment"
+    label = _("Have you been denied housing or employment because of your "
+              "criminal record?")
+
+
+class WhoWhenDeniedHousingOrEmployment(CharField):
+    context_key = "who_denied_housing_or_employment"
+    label = _("If you have been denied housing or employment when and by "
+              "which organization/agency?")
+    display_label = "Denied housing/employment by"
+
+
+class SeekingEmploymentThatRequiresLiveScan(YesNoIDontKnowField):
+    context_key = "seeking_employment_that_requires_livescan"
+    label = _("Are you seeking employment that will require Live Scan "
+              "fingerprinting?")
+    display_label = "Seeking job that requires LiveScan"
+
+
+class IsRegisteredUnderPc290(YesNoIDontKnowField):
+    context_key = "is_registered_under_pc_290"
+    label = _("Are you registered under PC section 290 "
+              "(California sex offender registration)?")
+    display_label = "Registered under PC 290"
 
 
 ###
@@ -768,7 +796,7 @@ INTAKE_FIELDS = [
     CaseNumber,
     PFNNumber,
 
-    USCitizen,
+    CitizenshipStatus,
     IsVeteran,
     IsStudent,
     BeingCharged,
@@ -783,6 +811,10 @@ INTAKE_FIELDS = [
     WhenWhereOtherCounties,
     HasSuspendedLicense,
     OwesCourtFees,
+    HasBeenDeniedHousingOrEmployment,
+    WhoWhenDeniedHousingOrEmployment,
+    SeekingEmploymentThatRequiresLiveScan,
+    IsRegisteredUnderPc290,
 
     FinancialScreeningNote,
     CurrentlyEmployed,
