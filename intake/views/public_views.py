@@ -47,6 +47,7 @@ class RecommendationLettersView(GlobalTemplateContextMixin, TemplateView):
 class PersonalStatementView(GlobalTemplateContextMixin, TemplateView):
     template_name = "personal_statement_instructions.jinja"
 
+
 home = Home.as_view()
 partner_list = PartnerListView.as_view()
 partner_detail = PartnerDetailView.as_view()

@@ -24,7 +24,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'rest_pandas',
     'health_check',
     'intake',
     'url_robots',
@@ -233,6 +232,7 @@ COMPRESS_OFFLINE = True
 def COMPRESS_JINJA2_GET_ENVIRONMENT():
     from django.template import engines
     return engines["jinja"].env
+
 
 # static files location
 STATIC_ROOT = os.path.join(REPO_DIR, 'staticfiles')

@@ -13,7 +13,6 @@ sendgrid-django~=2.0
 django-jinja~=2.2
 django-debug-toolbar==1.4
 djangorestframework~=3.5
-rest_pandas==0.5.0
 openpyxl==2.4.8
 reportlab~=3.3
 Pillow~=4.1

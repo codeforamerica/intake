@@ -10,6 +10,7 @@ class Unset:
     def __bool__(self):
         return False
 
+
 UNSET = Unset()
 
 DEFAULT_CONTEXT_KEY = "no_context"
