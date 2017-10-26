@@ -604,7 +604,7 @@ class SeekingEmploymentThatRequiresLiveScan(YesNoIDontKnowField):
 
 class IsRegisteredUnderPc290(YesNoIDontKnowField):
     context_key = "is_registered_under_pc_290"
-    label = _("Do you know if you are you registered under PC section 290 "
+    label = _("Are you registered under PC section 290 "
               "(California sex offender registration)?")
     display_label = "Registered under PC 290"
 
