@@ -193,6 +193,7 @@ class AlamedaCountyFormSpec(CombinableCountyFormSpec):
         F.ConsentToRepresent,
         F.HasBeenDeniedHousingOrEmployment,
         F.WhoWhenDeniedHousingOrEmployment,
+        F.SeekingEmploymentThatRequiresLiveScan,
         F.IsRegisteredUnderPc290,
     }
     required_fields = {

@@ -813,6 +813,7 @@ INTAKE_FIELDS = [
     OwesCourtFees,
     HasBeenDeniedHousingOrEmployment,
     WhoWhenDeniedHousingOrEmployment,
+    SeekingEmploymentThatRequiresLiveScan,
     IsRegisteredUnderPc290,
 
     FinancialScreeningNote,

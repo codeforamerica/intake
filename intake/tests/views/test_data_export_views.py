@@ -57,7 +57,8 @@ class TestCSVDownloadView(TestCase):
             'Reduced probation,RAP in other counties,Where/when,'
             'Has suspended license,Owes court fines/fees,'
             'Has been denied housing or employment,'
-            'Denied housing/employment by,Registered under PC 290,'
+            'Denied housing/employment by,Seeking job that requires LiveScan,'
+            'Registered under PC 290,'
             'Monthly income,On public benefits,Owns home,Household size,'
             'Reasons for applying,How they found out about this,'
             'Additional information,'
@@ -70,7 +71,7 @@ class TestCSVDownloadView(TestCase):
             '(415) 212-4848,(415) 212-4848,cmrtestuser@gmail.com,'
             '"6230 Shawn View\nNorth John, VA\n80973",4/19/1983,'
             'Other/I don\'t know,No,No,Yes,Not on probation,Not on probation,'
-            'No,,No,No,,,,"$3,001.00",No,Yes,3,,from work,I want help,'
+            'No,,No,No,,,,,"$3,001.00",No,Yes,3,,from work,I want help,'
             '"Yes, I understand","Yes, I give them permission to do that",'
             'False,False,Granted,01/02/2017,cmrtestuser+ebclc@gmail.com,')
         self.assertIn(expected_result_line_1, result)
