@@ -53,6 +53,7 @@ class ClearMyRecordFormToPDFTranslator(FormToPDFTranslator):
             self.oldify(data)
         return super().__call__(data)
 
+
 # Places to make this clearer
 # Structure and naming
 # in tests

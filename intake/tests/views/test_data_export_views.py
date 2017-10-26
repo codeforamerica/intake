@@ -1,9 +1,9 @@
+import csv
 import io
 from datetime import datetime
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.test import TestCase
-import pandas
 
 from intake.constants import PACIFIC_TIME
 from intake.models import StatusType
@@ -82,13 +82,16 @@ class TestCSVDownloadView(TestCase):
             username=user.username, password=settings.TEST_USER_PASSWORD)
         response = self.client.get(reverse(self.view_name))
         self.assertEqual(200, response.status_code)
-        df = pandas.read_csv(io.BytesIO(response.content))
+        reader = csv.DictReader(io.StringIO(response.content.decode('utf-8')))
+        ids = []
+        for row in reader:
+            ids.append(int(row['id']))
         for app in cfa_apps:
             with self.subTest(app=app):
-                self.assertTrue(any(df.id == app.form_submission_id))
+                self.assertIn(app.form_submission_id, ids)
         for app in ebclc_apps:
             with self.subTest(app=app):
-                self.assertFalse(any(df.id == app.form_submission_id))
+                self.assertNotIn(app.form_submission_id, ids)
 
     def test_org_user_gets_apps_from_own_org_only(self):
         user = accounts_factories.app_reviewer('ebclc').user
@@ -98,13 +101,16 @@ class TestCSVDownloadView(TestCase):
             username=user.username, password=settings.TEST_USER_PASSWORD)
         response = self.client.get(reverse(self.view_name))
         self.assertEqual(200, response.status_code)
-        df = pandas.read_csv(io.BytesIO(response.content))
+        reader = csv.DictReader(io.StringIO(response.content.decode('utf-8')))
+        ids = []
+        for row in reader:
+            ids.append(int(row['id']))
         for app in cc_apps:
             with self.subTest(app=app):
-                self.assertFalse(any(df.id == app.form_submission_id))
+                self.assertNotIn(app.form_submission_id, ids)
         for app in ebclc_apps:
             with self.subTest(app=app):
-                self.assertTrue(any(df.id == app.form_submission_id))
+                self.assertIn(app.form_submission_id, ids)
 
     def test_org_user_w_no_apps_gets_empty_csv(self):
         user = accounts_factories.app_reviewer('ebclc').user
@@ -113,5 +119,8 @@ class TestCSVDownloadView(TestCase):
             username=user.username, password=settings.TEST_USER_PASSWORD)
         response = self.client.get(reverse(self.view_name))
         self.assertEqual(200, response.status_code)
-        df = pandas.read_csv(io.BytesIO(response.content))
-        self.assertEqual(0, len(df))
+        reader = csv.DictReader(io.StringIO(response.content.decode('utf-8')))
+        rows = []
+        for row in reader:
+            rows.append(row)
+        self.assertEqual(len(rows), 0)

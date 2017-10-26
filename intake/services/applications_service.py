@@ -54,6 +54,7 @@ def get_applications_for_org(organization):
     ).select_related(*preselect_tables).prefetch_related(*prefetch_tables)
     return qset.order_by('-created').distinct()
 
+
 UNREAD_APPLICATIONS_FILTER_KWARGS = dict(
     has_been_opened=False, status_updates__isnull=True)
 
