@@ -93,7 +93,7 @@ def test_displays_basic_answers(context, applicant_name="Jane Doe"):
        And "phone_number" should say "(510) 555-5555"
        And "email" should say "testing@codeforamerica.org"
        And "dob" should say "1/1/1980"
-       And "us_citizen" should say "Yes"
+       And "us_citizen" should say "US Citizen"
        And "address" should say "111 Coaster HWY"
        And "address" should say "San Francisco"
        And "address" should say "CA"

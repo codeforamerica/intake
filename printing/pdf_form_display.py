@@ -104,6 +104,12 @@ class PDFFormDisplay:
         ['has_suspended_license'],
         ['owes_court_fees'],
         ['reasons_for_applying'],
+        [
+            'has_been_denied_housing_or_employment',
+            'who_denied_housing_or_employment'
+        ],
+        ['seeking_employment_that_requires_livescan'],
+        ['is_registered_under_pc_290'],
     ]
 
     letter_display_fields = [
