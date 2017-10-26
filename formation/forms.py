@@ -72,7 +72,7 @@ class SanFranciscoCountyFormSpec(CombinableCountyFormSpec):
         F.AddressField,
         F.DateOfBirthField,
         F.SocialSecurityNumberField,
-        F.USCitizen,
+        F.CitizenshipStatus,
         F.ServingSentence,
         F.OnProbationParole,
         F.WhereProbationParole,
@@ -121,7 +121,7 @@ class ContraCostaFormSpec(CombinableCountyFormSpec):
         F.EmailField,
         F.AddressField,
         F.DateOfBirthField,
-        F.USCitizen,
+        F.CitizenshipStatus,
         F.ServingSentence,
         F.OnProbationParole,
         F.FinancialScreeningNote,
@@ -138,7 +138,7 @@ class ContraCostaFormSpec(CombinableCountyFormSpec):
         F.FirstName,
         F.LastName,
         F.AddressField,
-        F.USCitizen,
+        F.CitizenshipStatus,
         F.CurrentlyEmployed,
         F.DateOfBirthField,
         F.MonthlyIncome,
@@ -177,7 +177,7 @@ class AlamedaCountyFormSpec(CombinableCountyFormSpec):
         F.HouseholdSize,
         F.ReasonsForApplying,
         F.DateOfBirthField,
-        F.USCitizen,
+        F.CitizenshipStatus,
         F.OnProbationParole,
         F.FinishedHalfProbation,
         F.ReducedProbation,
@@ -191,6 +191,9 @@ class AlamedaCountyFormSpec(CombinableCountyFormSpec):
         F.AdditionalInformation,
         F.UnderstandsLimits,
         F.ConsentToRepresent,
+        F.HasBeenDeniedHousingOrEmployment,
+        F.WhoWhenDeniedHousingOrEmployment,
+        F.IsRegisteredUnderPc290,
     }
     required_fields = {
         F.FirstName,
@@ -234,7 +237,7 @@ class MontereyCountyFormSpec(CombinableCountyFormSpec):
         F.OnPublicBenefits,
         F.HouseholdSize,
         F.DateOfBirthField,
-        F.USCitizen,
+        F.CitizenshipStatus,
         F.IsVeteran,
         F.IsStudent,
         F.OnProbationParole,
@@ -284,7 +287,7 @@ class SolanoCountyFormSpec(CombinableCountyFormSpec):
         F.EmailField,
         F.AddressField,
         F.DateOfBirthField,
-        F.USCitizen,
+        F.CitizenshipStatus,
         F.OnProbationParole,
         F.WhereProbationParole,
         F.WhenProbationParole,
@@ -327,7 +330,7 @@ class SanDiegoCountyFormSpec(SolanoCountyFormSpec):
         F.CaseNumber,
         F.IdentityConfirmation
     }) - {
-        F.USCitizen,
+        F.CitizenshipStatus,
     }
     required_fields = SolanoCountyFormSpec.required_fields | {
         F.IdentityConfirmation
@@ -393,7 +396,7 @@ class SantaClaraCountyFormSpec(SolanoCountyFormSpec):
         F.PFNNumber,
         F.PreferredPronouns,
     }) - {
-        F.USCitizen,
+        F.CitizenshipStatus,
     }
     required_fields = (SolanoCountyFormSpec.required_fields | {
         F.CurrentlyEmployed,
@@ -535,7 +538,7 @@ class YoloCountyFormSpec(SonomaCountyFormSpec):
         F.AlternatePhoneNumberField,
         F.OwesCourtFees,
         F.ServingSentence,
-        F.USCitizen
+        F.CitizenshipStatus
     }
     required_fields = (SonomaCountyFormSpec.required_fields | {
         F.CurrentlyEmployed,
@@ -564,7 +567,7 @@ class StanislausCountyFormSpec(FresnoCountyFormSpec):
         F.DriverLicenseOrIDNumber,
         F.LastFourOfSocial,
         F.CaseNumber,
-        F.USCitizen,
+        F.CitizenshipStatus,
         F.MonthlyIncome,
         F.IncomeSource,
         F.HowMuchSavings,

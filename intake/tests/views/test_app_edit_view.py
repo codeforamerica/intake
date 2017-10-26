@@ -101,7 +101,7 @@ class TestAppEditView(TestCase):
 
         fresno_unexpected_fields = [
             F.SocialSecurityNumberField,
-            F.USCitizen
+            F.CitizenshipStatus
         ]
 
         for field in fresno_expected_fields:

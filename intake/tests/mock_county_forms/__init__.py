@@ -3,9 +3,7 @@ from faker import Faker
 # first, import a similar Provider or use the default one
 from faker.providers import BaseProvider
 
-from intake.constants import GENDER_PRONOUN_CHOICES
-
-# create new provider class
+from intake.constants import GENDER_PRONOUN_CHOICES, CITIZENSHIP_STATUS_CHOICES
 
 
 class Provider(BaseProvider):
@@ -57,7 +55,7 @@ class Provider(BaseProvider):
             'rap_outside_sf': self.maybe_with_idk(0.1),
             'serving_sentence': self.maybe_with_idk(0.05),
             'ssn': self.numerify('#########'),
-            'us_citizen': self.maybe(0.8),
+            'us_citizen': self.some_choice(CITIZENSHIP_STATUS_CHOICES),
             'on_probation_parole': self.maybe_with_idk(0.1),
             'when_probation_or_parole': '',
             'when_where_outside_sf': '',
@@ -83,7 +81,7 @@ class Provider(BaseProvider):
             'dob.day': str(random.randint(1, 28)),
             'dob.month': str(random.randint(1, 12)),
             'dob.year': str(random.randint(1959, 2000)),
-            'us_citizen': self.maybe(0.8),
+            'us_citizen': self.some_choice(CITIZENSHIP_STATUS_CHOICES),
             'address.street': self.generator.street_address(),
             'address.city': self.generator.city(),
             'address.state': self.generator.state_abbr(),
@@ -118,7 +116,7 @@ class Provider(BaseProvider):
             'dob.day': str(random.randint(1, 28)),
             'dob.month': str(random.randint(1, 12)),
             'dob.year': str(random.randint(1959, 2000)),
-            'us_citizen': self.maybe(0.8),
+            'us_citizen': self.some_choice(CITIZENSHIP_STATUS_CHOICES),
             'address.street': self.generator.street_address(),
             'address.city': self.generator.city(),
             'address.state': self.generator.state_abbr(),
@@ -196,7 +194,7 @@ class Provider(BaseProvider):
             'rap_outside_sf': self.maybe_with_idk(0.1),
             'serving_sentence': self.maybe_with_idk(0.05),
             'ssn': self.numerify('#########'),
-            'us_citizen': self.maybe(0.8),
+            'us_citizen': self.some_choice(CITIZENSHIP_STATUS_CHOICES),
             'on_probation_parole': self.maybe_with_idk(0.1),
             'when_probation_or_parole': '',
             'when_where_outside_sf': '',

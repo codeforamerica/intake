@@ -15,8 +15,8 @@ from formation.field_types import (
 from intake.constants import (
     CONTACT_PREFERENCE_CHOICES, REASON_FOR_APPLYING_CHOICES,
     GENDER_PRONOUN_CHOICES, DECLARATION_LETTER_REVIEW_CHOICES,
-    APPLICATION_REVIEW_CHOICES
-)
+    APPLICATION_REVIEW_CHOICES,
+    CITIZENSHIP_STATUS_CHOICES)
 from project.jinja2 import namify, oxford_comma
 
 ###
@@ -470,14 +470,15 @@ class HowLongCaliforniaResident(CharField):
 # Case status and screening
 ###
 
-class USCitizen(YesNoField):
+class CitizenshipStatus(ChoiceField):
     context_key = "us_citizen"
+    choices = CITIZENSHIP_STATUS_CHOICES
     label = _("What is your citizenship status?")
     help_text = _(
         "It is important for your attorney to know if you are a U.S citizen "
         "so they can find the best ways to help you. Your citizenship status "
         "will not be shared with any law enforcement agencies.")
-    display_label = "Is a citizen"
+    display_label = "Citizenship status"
 
 
 class IsVeteran(YesNoField):
@@ -795,7 +796,7 @@ INTAKE_FIELDS = [
     CaseNumber,
     PFNNumber,
 
-    USCitizen,
+    CitizenshipStatus,
     IsVeteran,
     IsStudent,
     BeingCharged,
