@@ -29,7 +29,7 @@ class Command(BaseCommand):
                 latest_login_string = latest_login.strftime("%a %b %-d %Y")
 
                 unread_applications_count = Application.objects.filter(
-                has_been_opened=False, organization__id=org.id).count()
+                    has_been_opened=False, organization__id=org.id).count()
                 subject = "Inactive organization on {}".format(
                     settings.DEFAULT_HOST)
                 msg = "{} has not logged in since {} and has {} unopened " \
@@ -37,5 +37,4 @@ class Command(BaseCommand):
                         org.name, latest_login_string,
                         unread_applications_count)
                 if unread_applications_count > 0:
-                    send_email_to_admins(
-                        subject=subject, message=msg)
+                    send_email_to_admins(subject=subject, message=msg)
