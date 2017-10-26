@@ -51,6 +51,16 @@ REASON_FOR_APPLYING_CHOICES = (
     ('other', _('My reason is not listed')),
 )
 
+CITIZENSHIP_STATUS_CHOICES = (
+    ('yes', _("US Citizen")),
+    ('permanent_resident', _("Legal Permanent Resident")),
+    ('conditional_resident', _("Conditional Resident")),
+    ('visa', _("Visa")),
+    ('daca', _("DACA")),
+    ('undocumented', _("Undocumented")),
+    ('no', _("Other/I don't know")),
+)
+
 APPROVE_LETTER = 'approve_letter'
 EDIT_LETTER = 'edit_letter'
 

@@ -13,7 +13,7 @@ SCOPE=clips user_accounts intake formation health_check phone partnerships
 test:
 	./manage.py test $(SCOPE) \
 		--verbosity 2
-	pep8
+	pycodestyle
 
 
 test.keepdb:

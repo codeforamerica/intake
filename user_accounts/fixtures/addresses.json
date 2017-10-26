@@ -1,18 +1,6 @@
 [
 {
   "model": "user_accounts.address",
-  "pk": 1,
-  "fields": {
-    "organization": [
-      "Alameda County Public Defender's Office"
-    ],
-    "name": "Oakland Clean Slate Walk-in Clinic",
-    "text": "545 4th St\r\nOakland, CA\r\n94607",
-    "walk_in_hours": "Every Thursday, from 9am to 11am"
-  }
-},
-{
-  "model": "user_accounts.address",
   "pk": 3,
   "fields": {
     "organization": [
