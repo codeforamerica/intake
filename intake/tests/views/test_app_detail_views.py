@@ -135,43 +135,57 @@ class TestApplicationDetail(AppDetailFixturesBaseTestCase):
 
     def test_agency_user_can_only_see_latest_status_for_their_org(self):
         user = self.be_apubdef_user()
-        orgs = [
-            Organization.objects.get(slug='a_pubdef'),
-            Organization.objects.get(slug='cc_pubdef')
-            ]
+        other_org = Organization.objects.get(slug='cc_pubdef')
         submission = factories.FormSubmissionWithOrgsFactory(
-            organizations=orgs)
-        for org in orgs:
-            updated_application = models.Application.objects.filter(
-                organization=org, form_submission=submission).first()
-            factories.StatusUpdateWithNotificationFactory.create(
-                application=updated_application,
-                author=org.profiles.first().user)
-            updated_application.has_been_opened = True
-            updated_application.save()
+            organizations=[user.profile.organization, other_org])
+
+        # make a status notification for the other org
+        other_app = models.Application.objects.filter(
+                organization=other_org, form_submission=submission).first()
+        other_status_type = models.StatusType.objects.get(slug='court-date')
+        factories.StatusUpdateWithNotificationFactory.create(
+            status_type=other_status_type,
+            application=other_app,
+            author=other_org.profiles.first().user)
+        other_app.has_been_opened = True
+        other_app.save()
+
+        # make a status notification for tis org
+        this_status_type = models.StatusType.objects.get(slug='eligible')
+        this_app = models.Application.objects.filter(
+            organization__profiles__user=user,
+            form_submission=submission).first()
+        factories.StatusUpdateWithNotificationFactory.create(
+            status_type=this_status_type,
+            application=this_app,
+            author=user)
+        this_app.has_been_opened = True
+        this_app.save()
+
+        # set the other status notification date to be later than this one
         statuses = models.StatusUpdate.objects.filter(
             application__form_submission=submission)
-        latest_status = statuses.filter(
+        this_status = statuses.filter(
             application__organization=user.profile.organization,
         ).latest('updated')
-        latest_status_date = statuses.latest('updated').updated
-        even_later = latest_status_date + timedelta(days=3)
+        this_status_date = statuses.latest('updated').updated
+        even_later = this_status_date + timedelta(days=3)
         other_status = statuses.exclude(
             application__organization=user.profile.organization,
         ).first()
         other_status.updated = even_later
         other_status.save()
+
         response = self.get_page(submission)
         other_logged_by = 'logged by ' + other_status.author.profile.name
         other_status_name = other_status.status_type.display_name
         this_status_logged_by = \
-            'logged by ' + latest_status.author.profile.name
-        this_status_name = latest_status.status_type.display_name
+            'logged by ' + this_status.author.profile.name
+        this_status_name = this_status.status_type.display_name
         self.assertContains(response, escape(this_status_name))
         self.assertContains(response, escape(this_status_logged_by))
         self.assertNotContains(response, escape(other_logged_by))
-        if other_status_name not in this_status_name:
-            self.assertNotContains(response, escape(other_status_name))
+        self.assertNotContains(response, escape(other_status_name))
 
     def test_shows_new_if_no_status_updates(self):
         user = self.be_ccpubdef_user()
