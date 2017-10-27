@@ -10,8 +10,7 @@ from intake.tests.factories import FormSubmissionWithOrgsFactory
 from user_accounts.tests.factories import app_reviewer, followup_user
 from user_accounts.models import Organization
 from intake.views.app_edit_view import (
-    remove_sensitive_data_from_data_diff, get_emails_to_notify_of_edits,
-    AppEditView)
+    remove_sensitive_data_from_data_diff, get_emails_to_notify_of_edits)
 
 
 def dict_to_post_data(raw_input_data):
@@ -95,8 +94,7 @@ class TestAppEditView(TestCase):
             F.AddressField,
             F.DriverLicenseOrIDNumber,
             F.EmailField,
-            F.DateOfBirthField,
-            F.CaseNumber
+            F.DateOfBirthField
         ]
 
         fresno_unexpected_fields = [
@@ -135,7 +133,6 @@ class TestAppEditView(TestCase):
             F.SocialSecurityNumberField,
             F.Aliases,
             F.DriverLicenseOrIDNumber,
-            F.CaseNumber,
             F.MonthlyIncome
         ]
 
@@ -169,8 +166,7 @@ class TestAppEditView(TestCase):
             F.AddressField,
             F.DriverLicenseOrIDNumber,
             F.EmailField,
-            F.DateOfBirthField,
-            F.CaseNumber}
+            F.DateOfBirthField}
 
         cfa_user_profile = followup_user()
         self.client.login(
