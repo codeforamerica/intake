@@ -163,7 +163,7 @@ def coerce_possible_ids_to_apps(maybe_ids):
     return maybe_ids
 
 
-def handle_apps_opened(view, apps, send_slack_notification=True):
+def handle_apps_opened(view, apps):
     apps = coerce_possible_ids_to_apps(apps)
     EventsService.apps_opened(view, apps)
     EventsService.user_apps_opened(view, apps)
@@ -174,10 +174,6 @@ def handle_apps_opened(view, apps, send_slack_notification=True):
             app.has_been_opened = True
             app.save()
             tasks.remove_application_pdfs.delay(app.id)
-        if send_slack_notification:
-            notifications.slack_submissions_viewed.send(
-                submissions=[app.form_submission], user=view.request.user,
-                bundle_url=app.form_submission.get_external_url())
 
 
 def get_valid_application_ids_from_set(application_ids):

@@ -150,10 +150,7 @@ class TestCountyApplicationView(TestCountyApplicationNoWarningsView):
 
     @patch(
         'intake.services.submissions.send_confirmation_notifications')
-    @patch(
-        'intake.views.applicant_form_view_base.notifications'
-        '.slack_new_submission.send')
-    def test_validation_warnings(self, slack, send_confirmation):
+    def test_validation_warnings(self, send_confirmation):
         applicant = factories.ApplicantFactory.create()
         self.set_form_session_data(
             counties=['sanfrancisco'], applicant_id=applicant.id)
@@ -170,7 +167,6 @@ class TestCountyApplicationView(TestCountyApplicationNoWarningsView):
             response,
             escape(
                 fields.SocialSecurityNumberField.is_recommended_error_message))
-        slack.assert_not_called()
         send_confirmation.assert_not_called()
         assertInLogsCount(
             logs, {
