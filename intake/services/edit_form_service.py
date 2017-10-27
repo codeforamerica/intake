@@ -18,7 +18,6 @@ EDITABLE_FIELDS = {
     F.EmailField,
     F.DateOfBirthField,
     F.SocialSecurityNumberField,
-    F.CaseNumber,
 }
 
 
