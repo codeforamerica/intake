@@ -1,6 +1,6 @@
 from django.views.generic.edit import FormView
 from django.utils.translation import ugettext as _
-from intake import models, utils, notifications
+from intake import models, utils
 import intake.services.events_service as EventsService
 import intake.services.messages_service as MessagesService
 import logging
@@ -101,10 +101,6 @@ class ApplicantFormViewBase(FormView):
         EventsService.form_submitted(self, submission)
         SubmissionsService.send_to_newapps_bundle_if_needed(
             submission, organizations=organizations)
-        number = models.FormSubmission.objects.count()
-        notifications.slack_new_submission.send(
-            submission=submission, request=self.request,
-            submission_count=number)
         sent_confirmations = \
             SubmissionsService.send_confirmation_notifications(submission)
         main_success_message = _(

@@ -164,7 +164,7 @@ class TestHandleAppsOpened(TestCase):
         org_1_user = UserProfileFactory(organization=fake_org_1).user
         AppsService.handle_apps_opened(
             Mock(**{'request.user': org_1_user}),
-            sub.applications.all(), False)
+            sub.applications.all())
         org_1_apps = sub.applications.filter(organization=fake_org_1)
         org_2_apps = sub.applications.filter(organization=fake_org_2)
         self.assertTrue(all([app.has_been_opened for app in org_1_apps]))
@@ -177,7 +177,7 @@ class TestHandleAppsOpened(TestCase):
             organizations=[profile.organization], answers={})
         AppsService.handle_apps_opened(
             Mock(**{'request.user': profile.user}),
-            sub.applications.all(), False)
+            sub.applications.all())
         remove_application_pdfs.delay.assert_called_with(
             sub.applications.first().id)
 

@@ -1,34 +1,36 @@
-# Config file for automatic testing at travis-ci.org
 language: python
 python:
-  - "3.5"
+- '3.5'
 before_install:
-  - unset _JAVA_OPTIONS
-  - rvm install 2.2.1
-  - nvm install 6.5
+- unset _JAVA_OPTIONS
+- rvm install 2.2.1
+- nvm install 6.5
 cache:
   pip: true
   directories:
   - node_modules
 install:
-  - bundle install
-  - npm install
-  - pip install -r requirements/ci.txt
+- bundle install
+- npm install
+- pip install -r requirements/ci.txt
 env:
-  - DJANGO_SETTINGS_MODULE='project.settings.ci' DELUXE_TEST=1 SECRET_KEY='not so secret key'
+- DJANGO_SETTINGS_MODULE='project.settings.ci' DELUXE_TEST=1 SECRET_KEY='not so secret
+  key'
 addons:
-  postgresql: "9.4"
+  postgresql: '9.4'
 before_script:
-  - psql -c 'create database intake;' -U postgres
-  - python ./manage.py migrate
-  - python ./manage.py load_essential_data
-  - python ./manage.py new_fixtures
-  - python ./manage.py collectstatic --noinput
+- psql -c 'create database intake;' -U postgres
+- python ./manage.py migrate
+- python ./manage.py load_essential_data
+- python ./manage.py new_fixtures
+- python ./manage.py collectstatic --noinput
 script:
-  - ./manage.py new_fixtures
-  - make test.everything
+- "./manage.py new_fixtures"
+- make test.everything
 after_success:
-  - codeclimate-test-reporter
+- codeclimate-test-reporter
 notifications:
-    slack:
-      secure: "fAWM872UibAqbu5tLL7FSTETezfD8JR1qUSGYpyocJP+Hy8E+/aSgG2Vdev3EmJnfSz5lDkRe86Q7j3nYICzeEXAgoK6B+2PeE/UqUzdRr0IpdQQ5EunJ3PvVve1wlqgjWeNgKFR36d4eEXgLErw1anSNPtBE0ve49kC0URsBnlwDyq+CALNVG+5XYAEmYat/fRKHugKm9Cd/7AAwAWtbeG5gXgQJEKhRe6XuB1FsV0A67U66NRc2e5jQkBX31AHc4TgzcMuI0xgnF54XFi6ZTi9jlG+uAO3wQMzVW6xbIqqDing8VRHs6jnMSbC8nKpDGCZBaayVbaEIqhU86CgjSqsOJ2NuylnB+Xm3DLQMbD0X1hGBOBrCtwcNU1UkrqSAxgq+qjf7RUO6LMMZkHS//hHGr1eatp5Lq9XSlzAOKTjQzDRsaz50udBpaXRazuovo2SamMpKHvzqb6GWXwdgaY5hbq4xvMtLqegkiDOZlUeJaceBqoH7Hi+rO86FU9ngDGxsIm0QDJBGrcd/WcUECr1iHH6t6b8EuW2EnBcnj7h+7akKYBxpDXDfsbJpTqeB616FBYo3maauvexkIPXFScf50dFAQGcUji7znBsTz9dAS5FLXajNgWkMOU/YUZf1QtsJbF03MucmENFiNkmIpYYWMYTU8jzlttlBHK2E3s="
+  slack:
+    rooms:
+      secure: iyasTR38IRYcg+D4s/jxHsNKyqUPsuLObhKMujNAf8GZfaeRT/BsoaBgPSpTigkhc5IZR+4yAYmVHMcDIJPPR/1j/iCfr64PXOLJco60VHimwHvykg3v2Kxv81YAfCkToRuSyOTur2YCiDG6Jef64TUiX+RBkm27gBDusdgs8Nxufr3OK998OsLgahAE7XyS91Q57bii1p12h1YRAh6nnjj4bMoDYuUsxeowOmBYmK0qHaP21+zmm5qGuCnkxlF2/6AQyceq3g0wUGd8Y+jc44VDbDqK34+OhKzmBLNAJvpnC82wyXVN4/MQNm3WbcKozXtsvxBH9bd3rhLttLHfTUCUTkbkyRX2iMnP1LGAbyJ0KNL7j8bb5sss0iqUlb51rahetkkplut+MSju7mi0mRh3AFLdu72YGv0YSPIjJ1pT52EDpSB+DZ6Vsrq422Wg5xxzsf1PkF/HkwTvCrkA0wG3+KKV1ydnkRToP3yU4F+eLF2XXVIbx1DTQXnVaTxE8l1gkwTBq5KMcQP8YlZcFI1E4oonjYuydHyJQ0q3XK9g15GcoSNhA6DStLhQ6mAXnfTQXKX6YslykIU/eRKtJWZ91BVs63vj8UT6u5f38jVsYC8MTo5UOWwlh9dO5QIYlBZ9oK+7MyjXq9Ge7H0l1PYSoanDR2fKBEwajyfRQ9M=
+    on_failure: always
