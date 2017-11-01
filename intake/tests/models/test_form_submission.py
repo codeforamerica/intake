@@ -1,11 +1,10 @@
 from unittest.mock import Mock
 from django.test import TestCase
-
-from intake.tests import mock, factories
-from formation import field_types
+from datetime import datetime
+from intake.tests import factories
 import intake.services.submissions as SubmissionsService
 from user_accounts import models as auth_models
-from intake import models, constants
+from intake import models
 
 
 class TestFormSubmission(TestCase):
@@ -29,6 +28,19 @@ class TestFormSubmission(TestCase):
         counties = models.County.objects.order_by('slug').all()
         counties_from_sub = submission.get_counties().order_by('slug').all()
         self.assertListEqual(list(counties), list(counties_from_sub))
+
+    def test_set_dob_from_answers(self):
+        submission = self.get_a_sample_sub()
+        submission.answers['dob'] = {'year': 1987, 'month': 10, 'day': 23}
+        dob = datetime(1987, 10, 23, 0, 0)
+        submission.set_dob_from_answers()
+        self.assertEqual(dob, submission.dob)
+
+    def test_set_dob_from_answers_with_none_value(self):
+        submission = self.get_a_sample_sub()
+        submission.answers['dob'] = {'year': None, 'month': 10, 'day': 23}
+        submission.set_dob_from_answers()
+        self.assertEqual(None, submission.dob)
 
     def test_get_permitted_submissions_when_permitted(self):
         cc_pubdef = auth_models.Organization.objects.get(

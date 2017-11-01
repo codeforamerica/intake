@@ -4,6 +4,26 @@ from intake.services import events_service as EventsService
 from . import pagination
 
 
+def get_all_applications_for_users_org(user):
+    """Fetches all applications (unpaginated) for the organization of the given
+        user.
+        Prefetches form submissions, status updates, status types, status
+        authors for use in intake/views/data_export_views
+    """
+    preselect_tables = [
+        'form_submission'
+    ]
+    prefetch_tables = [
+        'status_updates',
+        'status_updates__status_type',
+        'status_updates__author',
+    ]
+    qset = models.Application.objects.filter(
+        organization__profiles__user=user
+    ).select_related(*preselect_tables).prefetch_related(*prefetch_tables)
+    return qset.order_by('-created').distinct()
+
+
 def get_applications_for_org(organization):
     # preselect_tables are joined using `select_related()` by following single
     # foreign keys. They are captured in one query along with the main model.
@@ -143,7 +163,7 @@ def coerce_possible_ids_to_apps(maybe_ids):
     return maybe_ids
 
 
-def handle_apps_opened(view, apps, send_slack_notification=True):
+def handle_apps_opened(view, apps):
     apps = coerce_possible_ids_to_apps(apps)
     EventsService.apps_opened(view, apps)
     EventsService.user_apps_opened(view, apps)
@@ -154,10 +174,6 @@ def handle_apps_opened(view, apps, send_slack_notification=True):
             app.has_been_opened = True
             app.save()
             tasks.remove_application_pdfs(app.id)
-        if send_slack_notification:
-            notifications.slack_submissions_viewed.send(
-                submissions=[app.form_submission], user=view.request.user,
-                bundle_url=app.form_submission.get_external_url())
 
 
 def get_valid_application_ids_from_set(application_ids):

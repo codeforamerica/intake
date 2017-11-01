@@ -45,7 +45,7 @@ li.action_menu-item > a {
 	}
 }
 
-.data_display-label {
+.data_display-label, .review_display-label {
 	color: lighten(@gray-light, 20%);
 	font-size: .9em;
 }
@@ -56,7 +56,7 @@ li.action_menu-item > a {
 .public .data_display .address-name {
 	font-weight: 600;
 }
-.data_display-value {
+.data_display-value, .review_display-value {
 	color: black;
 	font-size: 1.19em; 
 	// font-size: 1.2em causes rendering artifacts for 'z' chars on chrome :/
@@ -66,6 +66,7 @@ li.action_menu-item > a {
 	content: "EMPTY";
 	color: @gray-lighter;
 }
+
 .data_display-section {
 	max-width: 34em;
 	padding: 0.7em 0;
@@ -163,4 +164,28 @@ pre.address {
 
 .data_display.counties {
 	max-width: 20em;
+}
+
+.review_display {
+	padding: 1em;
+	border-left: 1px solid @gray-lighter;
+	border-right: 1px solid @gray-lighter;
+	border-top: 1px solid @gray-lighter;
+}
+.review_display:last-child {
+	border-bottom: 1px solid @gray-lighter;
+}
+
+.review_display-value.empty:after {
+	content: "No answer";
+	color: #aaa;
+	font-style: italic;
+}
+
+.review_display-label {
+	color: @gray-light;
+	font-size: .9em;
+}
+.review_display-value + .review_display-edit_button {
+	margin-top: .5em;
 }

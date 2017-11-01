@@ -136,6 +136,7 @@ def current_local_time(fmt):
     utc_now = timezone('GMT').localize(datetime.utcnow())
     return utc_now.astimezone(timezone('US/Pacific')).strftime(fmt)
 
+
 linkify_links = {
     "Code for America": "https://codeforamerica.org",
     "Privacy Policy": reverse_lazy("intake-privacy"),
@@ -156,6 +157,7 @@ linkify_links = {
     "Ventura County Public Defender": "/partners/ventura_pubdef/",
     "Yolo County Public Defender": "/partners/yolo_pubdef/",
     "Stanislaus County Public Defender": "/partners/stanislaus_pubdef/",
+    "Marin County Public Defender": "/partners/marin_pubdef/",
     "clearmyrecord@codeforamerica.org":
         "mailto:clearmyrecord@codeforamerica.org",
     "(415) 301-6005": "tel:14153016005"

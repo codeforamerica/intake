@@ -1,20 +1,18 @@
 import datetime
 from django.db.models import Q
 from intake import models, utils
-from intake.notifications import slack_simple
 from intake.service_objects import FollowupNotification
 import intake.services.events_service as EventsService
 
 
 def get_submissions_due_for_follow_ups(after_id=None):
     """
-    Pulls in submissions that are over a month old
+    Pulls in submissions that are over 5 weeks old
     and which have not been sent followups
     """
     today = utils.get_todays_date()
-    thirty_days = datetime.timedelta(days=30)
-    a_month_ago = today - thirty_days
-    end_date_criteria = a_month_ago
+    followup_time = datetime.timedelta(days=35)
+    end_date_criteria = today - followup_time
     date_criteria = Q(date_received__lte=end_date_criteria)
     apps_that_need_followups = models.Application.objects.filter(
         status_updates=None, organization__needs_applicant_followups=True)
@@ -51,9 +49,4 @@ def send_followup_notifications(submissions):
 
 def send_all_followups_that_are_due(*args, **kwargs):
     submissions = get_submissions_due_for_follow_ups(*args, **kwargs)
-    notifications = send_followup_notifications(submissions)
-    num_messages = sum([len(n.messages) for n in notifications])
-    report_template = str(
-        "Sent {} initial followups out of {} applications due for followups")
-    report = report_template.format(num_messages, submissions.count())
-    slack_simple.send(report)
+    send_followup_notifications(submissions)

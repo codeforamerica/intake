@@ -108,6 +108,7 @@ def pdf_fillable_models():
 
     return old_model_for_pdf, new_model_for_pdf
 
+
 # the data that should be output by the form to pdf translator
 PDF_FILLABLE_DATA = {
     'Address City': 'Oakland',

@@ -6,6 +6,7 @@ from django.contrib.postgres.fields import JSONField
 from django.utils import timezone as timezone_utils
 from django.core.urlresolvers import reverse
 from taggit.managers import TaggableManager
+from dateutil.parser import parse
 import intake
 from intake import anonymous_names
 from intake.constants import SMS, EMAIL
@@ -212,6 +213,17 @@ class FormSubmission(models.Model):
         return intake.utils.local_time(
             self.date_received, fmt, timezone_name)
 
+    def set_dob_from_answers(self):
+        dob_obj = self.answers.get('dob')
+        if dob_obj:
+            all_values_present = all([
+                dob_obj.get(key) for key in ['year', 'month', 'day']])
+            if all_values_present:
+                self.dob = parse(
+                    ("{year}-{month}-{day}").format(year=dob_obj['year'],
+                                                    month=dob_obj['month'],
+                                                    day=dob_obj['day']))
+
     def get_contact_preferences(self):
         if 'contact_preferences' in self.answers:
             return [k for k in self.answers.get('contact_preferences', [])]
@@ -307,9 +319,22 @@ class FormSubmission(models.Model):
     def get_external_url(self):
         return urljoin(settings.DEFAULT_HOST, self.get_absolute_url())
 
+    def get_external_history_url(self):
+        return urljoin(
+            settings.DEFAULT_HOST, reverse(
+                'intake-app_history', kwargs=dict(submission_id=self.id)))
+
     def get_case_printout_url(self):
         return reverse(
             'intake-case_printout', kwargs=dict(submission_id=self.id))
+
+    def get_filled_pdf_url(self):
+        return reverse(
+            'intake-filled_pdf', kwargs=dict(submission_id=self.id))
+
+    def get_edit_url(self):
+        return reverse(
+            'intake-app_edit', kwargs=dict(submission_id=self.id))
 
     def get_case_update_status_url(self):
         return reverse(

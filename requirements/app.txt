@@ -11,6 +11,7 @@ django-allauth==0.32
 sendgrid-django~=2.0
 django-jinja~=2.2
 djangorestframework~=3.5
+openpyxl==2.4.8
 reportlab~=3.3
 Pillow~=4.1
 python-Levenshtein~=0.12
@@ -26,6 +27,7 @@ ua-parser==0.7.3
 -e git+git://github.com/rossettistone/django-easy-audit.git@patched#egg=django-easy-audit
 django-url-robots==2.0
 zappa~=0.44
+requests==2.18.4
 awscli~=1.11
 
 factory-boy==2.9.2

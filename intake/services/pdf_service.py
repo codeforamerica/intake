@@ -1,4 +1,5 @@
 from django.db.models import Count
+from django.conf import settings
 from project import alerts
 from intake import models, exceptions, utils
 import intake.services.applications_service as AppsService
@@ -60,13 +61,16 @@ def fill_any_unfilled_pdfs_for_app_ids(app_ids):
         message = '{} apps did not have PDFs:\n'.format(len(apps_without_pdfs))
         message += '\n'.join([str(app) for app in apps_without_pdfs])
         alerts.send_email_to_admins(
-            subject='No FilledPDFs for Applications', message=message)
+            subject='No FilledPDFs for Applications on {}'.format(
+                settings.DEFAULT_HOST),
+            message=message)
 
 
 def get_or_create_prebuilt_pdf_for_app_ids(app_ids):
     prebuilt = get_prebuilt_pdf_bundle_for_app_id_set(app_ids)
     if not prebuilt:
-        subject = 'Missing Prebuilt PDF Bundle'
+        subject = 'Missing Prebuilt PDF Bundle on {}'.format(
+            settings.DEFAULT_HOST)
         message = \
             'Querying with ids \n{}\ndid not return a prebuilt pdf'.format(
                 app_ids)

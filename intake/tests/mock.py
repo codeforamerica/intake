@@ -93,7 +93,7 @@ def make_note(user, submission_id):
 
 
 def get_old_date():
-    return PACIFIC_TIME.localize(fake.date_time_between('-8w', '-5w'))
+    return PACIFIC_TIME.localize(fake.date_time_between('-9w', '-6w'))
 
 
 def get_newer_date():
@@ -308,9 +308,6 @@ def build_seed_submissions():
         organizations=target_orgs)
     subs.append(multi_org_sub)
     sub_ids = [sub.id for sub in subs]
-    # applications = models.Application.objects.filter(
-    #     form_submission_id__in=sub_ids)
-
     applicants = []
     for sub in subs:
         applicants.append(sub.applicant)

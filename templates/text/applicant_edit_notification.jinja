@@ -1,0 +1,9 @@
+Clear My Record update by {{org_name}}
+
+Your application has been updated with new {{ oxford_comma(changed_fields) }}.
+{%- if is_old_contact_info %}
+This is the last text message you will get from us at this phone number.
+{%- endif %}
+
+If you did not request this change or would like more info, please {{ org_contact_info }}
+to contact {{ org_name }}.

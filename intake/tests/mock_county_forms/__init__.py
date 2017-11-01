@@ -3,9 +3,7 @@ from faker import Faker
 # first, import a similar Provider or use the default one
 from faker.providers import BaseProvider
 
-from intake.constants import GENDER_PRONOUN_CHOICES
-
-# create new provider class
+from intake.constants import GENDER_PRONOUN_CHOICES, CITIZENSHIP_STATUS_CHOICES
 
 
 class Provider(BaseProvider):
@@ -49,7 +47,7 @@ class Provider(BaseProvider):
             'address.zip': self.generator.zipcode(),
             'being_charged': self.maybe(0.05),
             'currently_employed': self.maybe(0.4),
-            'dob.day': str(random.randint(1, 31)),
+            'dob.day': str(random.randint(1, 28)),
             'dob.month': str(random.randint(1, 12)),
             'dob.year': str(random.randint(1959, 2000)),
             'monthly_income': str(random.randint(100, 7000)),
@@ -57,7 +55,7 @@ class Provider(BaseProvider):
             'rap_outside_sf': self.maybe_with_idk(0.1),
             'serving_sentence': self.maybe_with_idk(0.05),
             'ssn': self.numerify('#########'),
-            'us_citizen': self.maybe(0.8),
+            'us_citizen': self.some_choice(CITIZENSHIP_STATUS_CHOICES),
             'on_probation_parole': self.maybe_with_idk(0.1),
             'when_probation_or_parole': '',
             'when_where_outside_sf': '',
@@ -80,10 +78,10 @@ class Provider(BaseProvider):
             'last_name': self.generator.last_name(),
             'phone_number': self.make_phone_number(),
             'email': 'cmrtestuser@gmail.com',
-            'dob.day': str(random.randint(1, 31)),
+            'dob.day': str(random.randint(1, 28)),
             'dob.month': str(random.randint(1, 12)),
             'dob.year': str(random.randint(1959, 2000)),
-            'us_citizen': self.maybe(0.8),
+            'us_citizen': self.some_choice(CITIZENSHIP_STATUS_CHOICES),
             'address.street': self.generator.street_address(),
             'address.city': self.generator.city(),
             'address.state': self.generator.state_abbr(),
@@ -115,10 +113,10 @@ class Provider(BaseProvider):
             'phone_number': self.make_phone_number(),
             'alternate_phone_number': self.make_phone_number(),
             'email': 'cmrtestuser@gmail.com',
-            'dob.day': str(random.randint(1, 31)),
+            'dob.day': str(random.randint(1, 28)),
             'dob.month': str(random.randint(1, 12)),
             'dob.year': str(random.randint(1959, 2000)),
-            'us_citizen': self.maybe(0.8),
+            'us_citizen': self.some_choice(CITIZENSHIP_STATUS_CHOICES),
             'address.street': self.generator.street_address(),
             'address.city': self.generator.city(),
             'address.state': self.generator.state_abbr(),
@@ -187,7 +185,7 @@ class Provider(BaseProvider):
             'being_charged': self.maybe_with_idk(0.05),
             'currently_employed': self.maybe(0.4),
             'dob': {
-                'day': str(random.randint(1, 31)),
+                'day': str(random.randint(1, 28)),
                 'month': str(random.randint(1, 12)),
                 'year': str(random.randint(1959, 2000)),
             },
@@ -196,7 +194,7 @@ class Provider(BaseProvider):
             'rap_outside_sf': self.maybe_with_idk(0.1),
             'serving_sentence': self.maybe_with_idk(0.05),
             'ssn': self.numerify('#########'),
-            'us_citizen': self.maybe(0.8),
+            'us_citizen': self.some_choice(CITIZENSHIP_STATUS_CHOICES),
             'on_probation_parole': self.maybe_with_idk(0.1),
             'when_probation_or_parole': '',
             'when_where_outside_sf': '',
@@ -356,6 +354,45 @@ class Provider(BaseProvider):
             rap_outside_sf=self.maybe_with_idk(0.5),
             when_where_outside_sf='',
             )
+        return data
+
+    def marin_pubdef_answers(self, **overrides):
+        data = {
+            'contact_preferences': self.generate_contact_preferences(),
+            'first_name': self.generator.first_name(),
+            'middle_name': self.generator.first_name(),
+            'last_name': self.generator.last_name(),
+            'phone_number': self.make_phone_number(),
+            'alternate_phone_number': self.make_phone_number(),
+            'email': 'cmrtestuser@gmail.com',
+            'dob.day': str(random.randint(1, 28)),
+            'dob.month': str(random.randint(1, 12)),
+            'dob.year': str(random.randint(1959, 2000)),
+            'address.street': self.generator.street_address(),
+            'address.city': self.generator.city(),
+            'address.state': self.generator.state_abbr(),
+            'address.zip': self.generator.zipcode(),
+            'on_probation_parole': 'yes',
+            'rap_outside_sf': self.maybe_with_idk(0.1),
+            'being_charged': self.maybe(0.05),
+            'serving_sentence': self.maybe(0.05),
+            'has_suspended_license': self.maybe(0.3),
+            'owes_court_fees': self.maybe(0.4),
+            'currently_employed': 'yes',
+            'how_much_savings': str(random.randint(100, 7000)),
+            'monthly_income': str(random.randint(100, 7000)),
+            'other_income': str(random.randint(0, 5000)),
+            'on_public_benefits': self.maybe(0.7),
+            'owns_home': self.maybe(0.1),
+            'has_children': 'no',
+            'is_married': self.maybe(0.5),
+            'dependents': str(random.randint(0, 4)),
+            'consent_to_represent': 'yes',
+            'understands_limits': 'yes',
+            'how_did_you_hear': 'from work',
+            'additional_information': 'I want help',
+        }
+        data.update(overrides)
         return data
 
     def cfa_answers(self, **overrides):

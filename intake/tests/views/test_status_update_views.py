@@ -71,7 +71,7 @@ class TestStatusUpdateWorkflow(StatusUpdateViewBaseTestCase):
         response = self.get_create_page()
         self.assertContains(response, escape("nevertheless, persist"))
 
-    @patch('intake.notifications.send_simple_front_notification')
+    @patch('intake.notifications.send_applicant_notification')
     def test_submitting_status_update_clears_session_for_new_one(self, front):
         self.be_apubdef_user()
         review_page = self.create_status_update(follow=True)
@@ -87,7 +87,7 @@ class TestStatusUpdateWorkflow(StatusUpdateViewBaseTestCase):
         self.assertFalse(form_data)
         self.assertEqual(len(front.mock_calls), 1)
 
-    @patch('intake.notifications.send_simple_front_notification')
+    @patch('intake.notifications.send_applicant_notification')
     def test_user_sees_success_flash_and_new_status_after_submission(
             self, front):
         self.be_apubdef_user()
@@ -237,7 +237,7 @@ class TestReviewStatusNotificationFormView(StatusUpdateViewBaseTestCase):
         self.assertContains(response, escape("Send message"))
         self.assertNotContains(response, escape(WARNING_MESSAGE))
 
-    @patch('intake.notifications.send_simple_front_notification')
+    @patch('intake.notifications.send_applicant_notification')
     def test_user_can_edit_message(self, front):
         self.be_apubdef_user()
         self.create_status_update(follow=True)
@@ -264,7 +264,7 @@ class TestReviewStatusNotificationFormView(StatusUpdateViewBaseTestCase):
             status_update_data['author'].profile)
         self.assertContains(response, escape(expected_intro))
 
-    @patch('intake.notifications.send_simple_front_notification')
+    @patch('intake.notifications.send_applicant_notification')
     def test_hitting_back_does_not_cause_an_error(self, front):
         self.be_apubdef_user()
         response = self.create_status_update(follow=True)

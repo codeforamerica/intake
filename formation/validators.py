@@ -1,9 +1,15 @@
+from datetime import date
 from formation.exceptions import NoChoicesGivenError
 from django.core.exceptions import ValidationError
-
 from django.utils.translation import ugettext_lazy as _
+
+from intake.exceptions import MailgunAPIError
+from intake.services.mailgun_api_service import \
+    validate_email_with_mailgun
+from project.alerts import send_email_to_admins
 from project.jinja2 import oxford_comma
 from intake.constants import CONTACT_PREFERENCE_CHECKS
+from project.services.logging_service import format_and_log
 
 
 class ValidChoiceValidator:
@@ -79,12 +85,12 @@ class GavePreferredContactMethods(CheckEmptyFieldValidator):
         - if it finds errors, it should raise a ValidationError to return them
     """
     message_template = _(
-        "You said you preferred to be contacted through {medium}, but "
+        "'{medium}' is set as the preferred contact method, but "
         "you didn't enter {datum}.")
 
     def message(self, preference):
         attributes, medium, datum = CONTACT_PREFERENCE_CHECKS[preference]
-        return self.message_template.format(medium=medium, datum=datum)
+        return self.message_template.format(medium=medium.title(), datum=datum)
 
     def __call__(self, parsed_data):
         errors = {}
@@ -107,6 +113,9 @@ class AtLeastEmailOrPhoneValidator(CheckEmptyFieldValidator):
     field_keys = ['email', 'phone_number']
 
     def __call__(self, parsed_data):
+        if self.context.prefix:
+            self.field_keys = [
+                self.context.prefix + key for key in self.field_keys]
         errors = {}
         all_fields_empty = all([
             self.field_is_empty(key) for key in self.field_keys])
@@ -123,3 +132,34 @@ at_least_email_or_phone = AtLeastEmailOrPhoneValidator()
 is_a_valid_choice = ValidChoiceValidator()
 are_valid_choices = MultipleValidChoiceValidator()
 gave_preferred_contact_methods = GavePreferredContactMethods()
+
+
+def mailgun_email_validator(value):
+    message = _('The email address you entered does not appear to exist.')
+    suggestion_template = ' Did you mean {}?'
+    try:
+        email_is_good, suggestion = validate_email_with_mailgun(value)
+        if not email_is_good:
+            if suggestion:
+                message += suggestion_template.format(suggestion)
+            raise ValidationError(message)
+    except MailgunAPIError as err:
+        send_email_to_admins(
+            subject="Unexpected MailgunAPIError",
+            message="{}".format(err))
+        format_and_log(
+            'mailgun_api_error', level='error', exception=str(err))
+
+
+def is_a_valid_date(dob_dict):
+    try:
+        date(**dob_dict)
+    except (ValueError, TypeError) as err:
+        error_message = str(err)
+        if 'day is out of range for month' in error_message:
+            message = str(
+                '{} is not a day in that month. '
+                'Please enter a valid date'.format(dob_dict['day']))
+        else:
+            message = 'Please enter a valid date'
+        raise ValidationError(message)

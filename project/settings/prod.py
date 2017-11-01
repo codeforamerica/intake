@@ -36,3 +36,8 @@ CSRF_COOKIE_SECURE = True
 DEBUG = False
 # hides counties where none of the orgs are officially live
 LIVE_COUNTY_CHOICES = True
+
+# use mailgun's REST API
+ALLOW_REQUESTS_TO_MAILGUN = True
+
+DIVERT_REMOTE_CONNECTIONS = os.environ.get('DIVERT_REMOTE_CONNECTIONS')

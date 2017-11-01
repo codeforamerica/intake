@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from django.core import mail
 from django.core.urlresolvers import reverse
 from django.utils import html as html_utils
@@ -68,7 +70,8 @@ class TestUserAccounts(AuthIntegrationTestCase):
             "You've been invited to create an account on Clear My Record",
             last_email.body)
 
-    def test_invited_person_can_signup(self):
+    @patch('user_accounts.models.user_profile.tasks')
+    def test_invited_person_can_signup(self, mock_tasks):
         self.be_superuser()
         response = self.client.fill_form(
             reverse(self.send_invite_view),
@@ -98,6 +101,8 @@ class TestUserAccounts(AuthIntegrationTestCase):
         self.assertTrue(users[0].is_authenticated)
         self.assertIn(self.example_user['email'], get_user_display(users[0]))
         self.assertIn(self.groups[0], users[0].groups.all())
+        mock_tasks.create_mailgun_route.assert_called_once_with(
+            users[0].profile.id)
 
     def test_user_can_add_info_in_profile_view(self):
         user = self.be_sfpubdef_user()

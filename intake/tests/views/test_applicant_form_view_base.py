@@ -18,14 +18,10 @@ class ApplicantFormViewBaseTestCase(AuthIntegrationTestCase):
         super().setUp()
         self.send_confirmations_patcher = patch(
             'intake.services.submissions.send_confirmation_notifications')
-        self.slack_new_submission_patcher = patch(
-            'intake.notifications.slack_new_submission.send')
         self.send_confirmations = self.send_confirmations_patcher.start()
-        self.slack_new_submission = self.slack_new_submission_patcher.start()
 
     def tearDown(self):
         self.send_confirmations_patcher.stop()
-        self.slack_new_submission_patcher.stop()
         super().tearDown()
 
     def set_form_session_data(self, create_applicant=True, **data):
@@ -111,15 +107,17 @@ class TestApplicantFormViewBase(ApplicantFormViewBaseTestCase):
                 'project.services.logging_service', logging.INFO) as logs:
             self.client.fill_form(
                 reverse('intake-county_application'), **answers)
+            self.client.fill_form(
+                reverse('intake-review'),
+                submit_action='approve_application')
         self.assertEqual(create_sub.call_count, 1)
         self.assertEqual(send_to_newapps.call_count, 1)
-        self.assertEqual(self.slack_new_submission.call_count, 1)
         self.assertEqual(self.send_confirmations.call_count, 1)
         self.assertEqual(flash_success.call_count, 1)
         assertInLogsCount(
             logs, {
                 'event_name=application_submitted': 1,
-                'event_name=application_page_complete': 1,
+                'event_name=application_page_complete': 2,
                 'event_name=application_started': 0,
                 'event_name=application_errors': 0,
             })

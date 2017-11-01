@@ -13,12 +13,7 @@ SCOPE=clips user_accounts intake formation health_check phone partnerships
 test:
 	./manage.py test $(SCOPE) \
 		--verbosity 2
-	pep8
-
-
-test.behave:
-	./manage.py behave \
-		--keepdb
+	pycodestyle
 
 
 test.keepdb:
@@ -54,8 +49,22 @@ test.deluxe:
 	./manage.py test $(SCOPE) \
 		--verbosity 2
 
+
+FEATURES=features
+
+test.behave:
+	./manage.py behave $(FEATURES) \
+		--keepdb
+
+
+test.behave.debug:
+	./manage.py behave $(FEATURES) \
+		--keepdb --verbosity 2 \
+		-D BEHAVE_DEBUG_ON_ERROR=yes
+
+
 test.everything:
-	pep8
+	pycodestyle
 	make test.coverage.keepdb
 	make test.behave
 

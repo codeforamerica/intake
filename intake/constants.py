@@ -51,14 +51,30 @@ REASON_FOR_APPLYING_CHOICES = (
     ('other', _('My reason is not listed')),
 )
 
+CITIZENSHIP_STATUS_CHOICES = (
+    ('yes', _("US Citizen")),
+    ('permanent_resident', _("Legal Permanent Resident")),
+    ('conditional_resident', _("Conditional Resident")),
+    ('visa', _("Visa")),
+    ('daca', _("DACA")),
+    ('undocumented', _("Undocumented")),
+    ('no', _("Other/I don't know")),
+)
+
 APPROVE_LETTER = 'approve_letter'
 EDIT_LETTER = 'edit_letter'
+
+APPROVE_APPLICATION = 'approve_application'
+EDIT_APPLICATION = 'edit_application'
 
 DECLARATION_LETTER_REVIEW_CHOICES = (
     (EDIT_LETTER, _('Edit letter')),
     (APPROVE_LETTER, _('Approve letter')),
 )
 
+APPLICATION_REVIEW_CHOICES = (
+    (APPROVE_APPLICATION, _('Approve application')),
+)
 
 STAFF_NAME_CHOICES = ['Jazmyn', 'Ben']
 

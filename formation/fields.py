@@ -1,8 +1,10 @@
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from django.core.validators import EmailValidator, URLValidator
-from project.jinja2 import oxford_comma
+from django.core.validators import (
+    EmailValidator, URLValidator, RegexValidator, MinValueValidator,
+    MaxValueValidator)
+from formation.validators import mailgun_email_validator, is_a_valid_date
 from intake.models import County
 from formation.field_types import (
     CharField, MultilineCharField, IntegerField, WholeDollarField, ChoiceField,
@@ -12,9 +14,10 @@ from formation.field_types import (
 )
 from intake.constants import (
     CONTACT_PREFERENCE_CHOICES, REASON_FOR_APPLYING_CHOICES,
-    GENDER_PRONOUN_CHOICES, DECLARATION_LETTER_REVIEW_CHOICES
-)
-from project.jinja2 import namify
+    GENDER_PRONOUN_CHOICES, DECLARATION_LETTER_REVIEW_CHOICES,
+    APPLICATION_REVIEW_CHOICES,
+    CITIZENSHIP_STATUS_CHOICES)
+from project.jinja2 import namify, oxford_comma
 
 ###
 # Meta fields about the application
@@ -54,13 +57,16 @@ class Counties(MultipleChoiceField):
 
     def __init__(self, *args, **kwargs):
         # prevents the choices query from being called during import
-        self.choices = County.objects.get_county_choices()
+        self.valid_choices = County.objects.get_county_choices()
+        self.possible_choices = \
+            County.objects.get_all_counties_as_choice_list()
+        self.choices = self.valid_choices
         super().__init__(*args, **kwargs)
 
     def get_ordered_selected_counties(self):
         selected_counties = self.get_current_value()
         return [
-            county for county_slug, county in self.choices
+            county for county_slug, county in self.possible_choices
             if county_slug in selected_counties]
 
     def get_display_for_county(self, county, unlisted_counties=None):
@@ -185,9 +191,14 @@ class DeclarationLetterReviewActions(ChoiceField):
     choices = DECLARATION_LETTER_REVIEW_CHOICES
 
 
+class ApplicationReviewActions(ChoiceField):
+    context_key = 'submit_action'
+    choices = APPLICATION_REVIEW_CHOICES
+
 ###
 # Identification Questions
 ###
+
 
 class NameField(CharField):
 
@@ -215,19 +226,45 @@ class Aliases(NameField):
     label = _('Any other names that might be used on your record?')
 
 
-class Month(CharField):
+number_validation_template = "Please enter a {field} between {min} and {max}"
+month_validation_message = number_validation_template.format(
+    field='month', min=1, max=12)
+day_validation_message = number_validation_template.format(
+    field='day', min=1, max=31)
+year_validation_message = number_validation_template.format(
+    field='year', min=1900, max=timezone.now().year)
+
+
+class DisplayRawIfFalsyMixin:
+    def get_display_value(self):
+        return self.get_current_value() or self.raw_input_value
+
+
+class Month(DisplayRawIfFalsyMixin, IntegerField):
     context_key = "month"
     label = _("Month")
+    validators = [
+        MinValueValidator(1, message=month_validation_message),
+        MaxValueValidator(12, message=month_validation_message)
+    ]
 
 
-class Day(CharField):
+class Day(DisplayRawIfFalsyMixin, IntegerField):
     context_key = "day"
     label = _("Day")
+    validators = [
+        MinValueValidator(1, message=day_validation_message),
+        MaxValueValidator(31, message=day_validation_message)
+    ]
 
 
-class Year(CharField):
+class Year(DisplayRawIfFalsyMixin, IntegerField):
     context_key = "year"
     label = _("Year")
+    validators = [
+        MinValueValidator(1900, message=year_validation_message),
+        MaxValueValidator(timezone.now().year, message=year_validation_message)
+    ]
 
 
 class DateOfBirthField(MultiValueField):
@@ -244,16 +281,21 @@ class DateOfBirthField(MultiValueField):
         Year
     ]
     display_label = "Date of birth"
+    validators = [is_a_valid_date]
 
     def get_display_value(self):
-        return "{month}/{day}/{year}".format(**self.get_current_value())
+        return "{month}/{day}/{year}".format(
+            month=self.month.get_display_value(),
+            day=self.day.get_display_value(),
+            year=self.year.get_display_value()
+        )
 
 
 class SocialSecurityNumberField(CharField):
     context_key = "ssn"
     label = _('What is your Social Security Number? (if you have one)')
     help_text = _("The public defender's office will use this to "
-                  "get your San Francisco record and find any "
+                  "get your record and find any "
                   "convictions that can be reduced or dismissed.")
     is_required_error_message = _("The public defender may not be able to "
                                   "check your record without a social "
@@ -310,7 +352,7 @@ class ContactPreferences(MultipleChoiceField):
     help_text = _(
         'An attorney may need to send you official documents in the mail '
         'or call you to help with your case.')
-    display_label = "Opted into Clear My Record updates via:"
+    display_label = "Preferred contact methods"
 
     def get_display_value(self):
         return super().get_display_value(use_or=True)
@@ -345,6 +387,7 @@ class EmailField(CharField):
     help_text = _('For example "yourname@example.com"')
     validators = [
         EmailValidator(_("Please enter a valid email")),
+        mailgun_email_validator
     ]
     display_template_name = "formation/email_display.jinja"
 
@@ -384,8 +427,8 @@ class Zip(CharField):
 
 class AddressField(MultiValueField):
     context_key = "address"
-    label = _("What is your mailing address?")
-    help_text = _("")
+    label = _("Where is a safe place you can receive mail?")
+    help_text = _("Enter your mailing address")
     template_name = "formation/multivalue_address.jinja"
     is_required_error_message = _("The public defender needs a mailing "
                                   "address to send you a letter with the next "
@@ -427,14 +470,15 @@ class HowLongCaliforniaResident(CharField):
 # Case status and screening
 ###
 
-class USCitizen(YesNoField):
+class CitizenshipStatus(ChoiceField):
     context_key = "us_citizen"
-    label = _("Are you a U.S. citizen?")
+    choices = CITIZENSHIP_STATUS_CHOICES
+    label = _("What is your citizenship status?")
     help_text = _(
         "It is important for your attorney to know if you are a U.S citizen "
         "so they can find the best ways to help you. Your citizenship status "
         "will not be shared with any law enforcement agencies.")
-    display_label = "Is a citizen"
+    display_label = "Citizenship status"
 
 
 class IsVeteran(YesNoField):
@@ -498,7 +542,7 @@ class ReducedProbation(FinishedHalfProbation):
     display_label = "Reduced probation"
 
 
-class RAPOutsideSF(YesNoIDontKnowField):
+class OtherCountyArrestsOrConvictions(YesNoIDontKnowField):
     context_key = "rap_outside_sf"
     label = _(
         "Have you ever been arrested or convicted in any other counties?")
@@ -506,7 +550,7 @@ class RAPOutsideSF(YesNoIDontKnowField):
     flip_display_choice_order = True
 
 
-class WhenWhereOutsideSF(CharField):
+class WhenWhereOtherCounties(CharField):
     context_key = "when_where_outside_sf"
     label = _(
         "If you were arrested or convicted in other counties, which ones and "
@@ -536,6 +580,33 @@ class BeenToPrison(YesNoIDontKnowField):
     context_key = "has_been_to_prison"
     label = _("Have you been to prison?")
     flip_display_choice_order = True
+
+
+class HasBeenDeniedHousingOrEmployment(YesNoIDontKnowField):
+    context_key = "has_been_denied_housing_or_employment"
+    label = _("Have you been denied housing or employment because of your "
+              "criminal record?")
+
+
+class WhoWhenDeniedHousingOrEmployment(CharField):
+    context_key = "who_denied_housing_or_employment"
+    label = _("If you have been denied housing or employment when and by "
+              "which organization/agency?")
+    display_label = "Denied housing/employment by"
+
+
+class SeekingEmploymentThatRequiresLiveScan(YesNoIDontKnowField):
+    context_key = "seeking_employment_that_requires_livescan"
+    label = _("Are you seeking employment that will require Live Scan "
+              "fingerprinting?")
+    display_label = "Seeking job that requires LiveScan"
+
+
+class IsRegisteredUnderPc290(YesNoIDontKnowField):
+    context_key = "is_registered_under_pc_290"
+    label = _("Are you registered under PC section 290 "
+              "(California sex offender registration)?")
+    display_label = "Registered under PC 290"
 
 
 ###
@@ -579,12 +650,21 @@ class IsReasonableMonthsWages:
 
 class MonthlyIncome(WholeDollarField):
     context_key = "monthly_income"
+    additional_classes = WholeDollarField.additional_classes + ['monthly']
     label = _("What is your monthly household income?")
     help_text = _("Include your spouse or legal partner's income. "
                   "Your best estimate is okay.")
     validators = [
         IsReasonableMonthsWages(10, 10000),
     ]
+
+
+class OtherIncome(WholeDollarField):
+    context_key = "other_income"
+    label = _("In the last 12 months, how much money have you received from "
+              "other sources such as lawsuits, a tax refund, and/or pension "
+              "fund?")
+    help_text = _("Enter a dollar amount. Your best estimate is okay.")
 
 
 class IncomeSource(CharField):
@@ -605,6 +685,7 @@ class OwnsHome(YesNoField):
 
 class MonthlyExpenses(WholeDollarField):
     context_key = "monthly_expenses"
+    additional_classes = WholeDollarField.additional_classes + ['monthly']
     help_text = _("Your best estimate is okay.")
     label = _("How much do you spend each month on things like rent, "
               "groceries, utilities, medical expenses, or childcare expenses?")
@@ -715,7 +796,7 @@ INTAKE_FIELDS = [
     CaseNumber,
     PFNNumber,
 
-    USCitizen,
+    CitizenshipStatus,
     IsVeteran,
     IsStudent,
     BeingCharged,
@@ -726,10 +807,14 @@ INTAKE_FIELDS = [
     WhenProbationParole,
     FinishedHalfProbation,
     ReducedProbation,
-    RAPOutsideSF,
-    WhenWhereOutsideSF,
+    OtherCountyArrestsOrConvictions,
+    WhenWhereOtherCounties,
     HasSuspendedLicense,
     OwesCourtFees,
+    HasBeenDeniedHousingOrEmployment,
+    WhoWhenDeniedHousingOrEmployment,
+    SeekingEmploymentThatRequiresLiveScan,
+    IsRegisteredUnderPc290,
 
     FinancialScreeningNote,
     CurrentlyEmployed,
@@ -737,6 +822,7 @@ INTAKE_FIELDS = [
     IncomeSource,
     HowMuchSavings,
     OnPublicBenefits,
+    OtherIncome,
     MonthlyExpenses,
     OwnsHome,
     HouseholdSize,

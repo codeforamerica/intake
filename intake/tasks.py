@@ -27,6 +27,8 @@ def log_to_mixpanel(distinct_id, event_name, **data):
 
 @task
 def celery_request(*args, **kwargs):
+    if 'auth' in kwargs:
+        kwargs['auth'] = tuple(kwargs['auth'])
     request(*args, **kwargs)
 
 

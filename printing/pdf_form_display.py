@@ -68,7 +68,7 @@ class PDFFormDisplay:
         ['address'],
         ['is_california_resident', 'how_long_california_resident'],
         ['currently_employed', 'income_source'],
-        ['monthly_income', 'monthly_expenses'],
+        ['monthly_income', 'monthly_expenses', 'other_income'],
         ['household_size', 'dependents', 'has_children', 'is_married'],
         ['owns_home', 'on_public_benefits'],
         ['how_did_you_hear'],
@@ -104,6 +104,12 @@ class PDFFormDisplay:
         ['has_suspended_license'],
         ['owes_court_fees'],
         ['reasons_for_applying'],
+        [
+            'has_been_denied_housing_or_employment',
+            'who_denied_housing_or_employment'
+        ],
+        ['seeking_employment_that_requires_livescan'],
+        ['is_registered_under_pc_290'],
     ]
 
     letter_display_fields = [

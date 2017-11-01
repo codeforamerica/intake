@@ -15,14 +15,9 @@ class MissingAnswersError(Exception):
     pass
 
 
-def create_submission(form, organizations, applicant_id):
-    """Save the submission data
+def copy_answers_data_to_model_fields(submission):
+    """Copies data from a form submission's answers json into it's model fields
     """
-    submission = models.FormSubmission(
-        answers=form.cleaned_data,
-        applicant_id=applicant_id)
-
-    # extract out fields from answers (searchable and other)
     keys = (
         FORMSUBMISSION_TEXT_SEARCH_FIELDS + QUERYABLE_ANSWER_FIELDS +
         DOLLAR_FIELDS)
@@ -31,14 +26,31 @@ def create_submission(form, organizations, applicant_id):
         if existing:
             setattr(submission, key, existing)
     address = submission.answers.get('address', {})
+    submission.set_dob_from_answers()
     for component in address:
         existing = address.get(component, None)
         if existing:
             setattr(submission, component, existing)
-    submission.save()
 
+
+def create_submission(form, organizations, applicant_id):
+    """Save the submission data
+    """
+    submission = models.FormSubmission(
+        answers=form.cleaned_data,
+        applicant_id=applicant_id)
+    # extract out fields from answers (searchable and other)
+    copy_answers_data_to_model_fields(submission)
+    submission.save()
     submission.organizations.add_orgs_to_sub(*organizations)
     link_with_any_duplicates(submission, applicant_id)
+    return submission
+
+
+def update_submission_answers(submission, new_answers):
+    submission.answers.update(new_answers)
+    copy_answers_data_to_model_fields(submission)
+    submission.save()
     return submission
 
 

@@ -97,6 +97,16 @@
     <div class="data_display-stack">
       {{ form.reasons_for_applying_display }}
     </div>
+    <div class="data_display-stack">
+      {{ form.has_been_denied_housing_or_employment_display }}
+      {{ form.who_denied_housing_or_employment_display }}
+    </div>
+    <div class="data_display-stack">
+      {{ form.seeking_employment_that_requires_livescan_display }}
+    </div>
+    <div class="data_display-stack">
+      {{ form.is_registered_under_pc_290_display }}
+    </div>
   </div>
 
   {%- if 'monthly_income' in form.fields %}
@@ -121,6 +131,10 @@
       {{ form.owns_home_display }}
       {{ form.on_public_benefits_display }}
       {{ form.how_much_savings_display }}
+    </div>
+
+  <div class="data_display-row other_financial">
+      {{ form.other_income_display }}
     </div>
     
   </div>

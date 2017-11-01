@@ -1,3 +1,4 @@
+from unittest.mock import patch
 from faker import Factory as FakerFactory
 
 fake = FakerFactory.create(
@@ -16,7 +17,9 @@ class AnswerGenerator:
         for mock_method_name, form_class in \
                 self.mock_method_form_class_pairs.items():
             raw_answers = getattr(fake, mock_method_name)()
-            form = form_class(raw_answers, validate=True)
+            # don't acutally validate, just parse. We are generating seed data
+            form = form_class(
+                raw_answers, validate=True, skip_validation_parse_only=True)
             cleaned_data.update(form.cleaned_data)
         return cleaned_data
 

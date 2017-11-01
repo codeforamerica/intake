@@ -50,34 +50,12 @@ class TestCountyApplicationNoWarningsView(ApplicantFormViewBaseTestCase):
         self.assertContains(response, 'Seven')
         self.assertContains(response, 'Nine')
 
-    def test_needs_letter_post_redirects_to_write_letter_page(self):
-        self.set_form_session_data(counties=['alameda'])
-        response = self.client.fill_form(
-            reverse(self.view_name),
-            **mock.fake.a_pubdef_answers())
-        self.assertRedirects(response, reverse('intake-write_letter'))
-
-    def test_successful_post_redirects_to_thanks_page(self):
-        self.set_form_session_data(counties=['contracosta'])
-        response = self.client.fill_form(
-            reverse(self.view_name),
-            **mock.fake.cc_pubdef_answers())
-        self.assertRedirects(response, reverse('intake-thanks'))
-
-    def test_needs_rap_sheet_redirects_to_rap_sheet_page(self):
-        self.set_form_session_data(counties=['alameda'])
-        response = self.client.fill_form(
-            reverse(self.view_name),
-            **mock.fake.ebclc_answers())
-        self.assertRedirects(response, reverse('intake-rap_sheet'))
-
-    @patch('intake.services.pdf_service.fill_pdf_for_application')
-    def test_validation_warnings(self, mock_fill_pdf_for_application):
+    def test_validation_warnings(self):
         self.set_form_session_data(counties=['sanfrancisco'])
         response = self.client.fill_form(
             reverse(self.view_name),
             **mock.fake.sf_pubdef_answers(ssn=''))
-        self.assertRedirects(response, reverse('intake-thanks'))
+        self.assertRedirects(response, reverse('intake-review'))
 
     def test_invalid_post_shows_errors(self):
         self.set_form_session_data(counties=['sanfrancisco'])
@@ -114,7 +92,9 @@ class TestCountyApplicationNoWarningsView(ApplicantFormViewBaseTestCase):
 
     def test_can_go_back_and_reset_counties(self):
         self.be_anonymous()
-        county_slugs = list(County.objects.values_list('slug', flat=True))
+        county_slugs = list(
+            County.objects.get_county_choices_query().values_list(
+                'slug', flat=True))
         first_choices = random.sample(county_slugs, 2)
         second_choices = [random.choice(county_slugs)]
         self.client.fill_form(
@@ -137,7 +117,7 @@ class TestCountyApplicationNoWarningsView(ApplicantFormViewBaseTestCase):
             logs, {
                 'event_name=application_page_complete': 1,
                 'event_name=application_started': 0,
-                'event_name=application_submitted': 1,
+                'event_name=application_submitted': 0,
                 'event_name=application_errors': 0,
             })
 
@@ -170,10 +150,7 @@ class TestCountyApplicationView(TestCountyApplicationNoWarningsView):
 
     @patch(
         'intake.services.submissions.send_confirmation_notifications')
-    @patch(
-        'intake.views.applicant_form_view_base.notifications'
-        '.slack_new_submission.send')
-    def test_validation_warnings(self, slack, send_confirmation):
+    def test_validation_warnings(self, send_confirmation):
         applicant = factories.ApplicantFactory.create()
         self.set_form_session_data(
             counties=['sanfrancisco'], applicant_id=applicant.id)
@@ -190,7 +167,6 @@ class TestCountyApplicationView(TestCountyApplicationNoWarningsView):
             response,
             escape(
                 fields.SocialSecurityNumberField.is_recommended_error_message))
-        slack.assert_not_called()
         send_confirmation.assert_not_called()
         assertInLogsCount(
             logs, {
@@ -198,4 +174,111 @@ class TestCountyApplicationView(TestCountyApplicationNoWarningsView):
                 'event_name=application_started': 0,
                 'event_name=application_submitted': 0,
                 'event_name=application_errors': 0,
+            })
+
+
+class TestCountyApplicationReviewView(ApplicantFormViewBaseTestCase):
+    view_name = 'intake-review'
+
+    def test_get_with_no_applicant(self):
+        self.set_form_session_data(
+            counties=['contracosta'], create_applicant=False)
+        response = self.client.get(reverse(self.view_name))
+        self.assertRedirects(response, reverse('intake-apply'))
+
+    def test_redirects_if_no_counties_in_session(self):
+        self.set_form_session_data(counties=[])
+        response = self.client.get(reverse(self.view_name))
+        self.assertRedirects(response, reverse('intake-apply'))
+
+    def test_redirects_if_form_session_data_missing(self):
+        self.set_form_session_data(
+            counties=['contracosta'])
+        with self.assertLogs(
+                'project.services.logging_service', logging.ERROR) as logs:
+            response = self.client.get(reverse(self.view_name))
+        self.assertEqual(1, len(logs.output))
+        self.assertIn('application_error', logs.output[0])
+        self.assertRedirects(response, reverse('intake-county_application'))
+
+    def test_invalid_post_doesnt_show_error_message(self):
+        self.set_form_session_data(
+            counties=['contracosta'],
+            **mock.fake.cc_pubdef_answers()
+        )
+        response = self.client.fill_form(
+            reverse(self.view_name),
+            submit_action='gobbledygook')
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(
+            response, escape(
+                fields.ApplicationReviewActions.is_required_error_message))
+
+    def test_needs_letter_post_redirects_to_write_letter_page(self):
+        self.set_form_session_data(
+            counties=['alameda'],
+            **mock.fake.a_pubdef_answers())
+        response = self.client.fill_form(
+            reverse(self.view_name),
+            submit_action='approve_application')
+        self.assertRedirects(response, reverse('intake-write_letter'))
+
+    def test_successful_post_redirects_to_thanks_page(self):
+        self.set_form_session_data(
+            counties=['contracosta'],
+            **mock.fake.cc_pubdef_answers())
+        response = self.client.fill_form(
+            reverse(self.view_name),
+            submit_action='approve_application')
+        self.assertRedirects(response, reverse('intake-thanks'))
+
+    def test_needs_rap_sheet_redirects_to_rap_sheet_page(self):
+        self.set_form_session_data(
+            counties=['alameda'],
+            **mock.fake.ebclc_answers())
+        response = self.client.fill_form(
+            reverse(self.view_name),
+            submit_action='approve_application')
+        self.assertRedirects(response, reverse('intake-rap_sheet'))
+
+    def test_shows_counties_where_applying(self):
+        self.set_form_session_data(
+            counties=['sanfrancisco'],
+            **mock.fake.sf_pubdef_answers())
+        response = self.client.get(reverse(self.view_name))
+        self.assertContains(
+            response, "You are applying for help in San Francisco.")
+
+    def test_logs_page_complete_event(self):
+        self.set_form_session_data(
+            counties=['contracosta'],
+            **mock.fake.cc_pubdef_answers())
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            self.client.fill_form(
+                reverse(self.view_name),
+                submit_action='approve_application')
+        assertInLogsCount(
+            logs, {
+                'event_name=application_page_complete': 1,
+                'event_name=application_started': 0,
+                'event_name=application_submitted': 1,
+                'event_name=application_errors': 0,
+            })
+
+    def test_logs_validation_errors_event(self):
+        self.set_form_session_data(
+            counties=['contracosta'],
+            **mock.fake.cc_pubdef_answers())
+        with self.assertLogs(
+                'project.services.logging_service', logging.INFO) as logs:
+            self.client.fill_form(
+                reverse(self.view_name),
+                submit_action='gobbledygook')
+        assertInLogsCount(
+            logs, {
+                'event_name=application_page_complete': 0,
+                'event_name=application_started': 0,
+                'event_name=application_submitted': 0,
+                'event_name=application_errors': 1,
             })

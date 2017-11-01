@@ -82,7 +82,8 @@ class IntegerField(CharField):
         elif special_zero:
             return 0
         else:
-            self.add_error(self.parse_error_message.format(raw_value))
+            if not self.skip_validation_parse_only:
+                self.add_error(self.parse_error_message.format(raw_value))
         return None
 
     def parse(self, raw_value):
@@ -102,6 +103,7 @@ class IntegerField(CharField):
 
 class WholeDollarField(IntegerField):
     empty_value = None
+    additional_classes = ['dollar_field']
     # https://regex101.com/r/dP5wX1/2
     dollars_pattern = re.compile(r"(?P<dollars>[\d,]+)(?P<cents>[\.]\d\d?)?")
     parse_error_message = _("You entered '{}', which "
@@ -198,8 +200,9 @@ class PhoneField(CharField):
                         self.parse_phone_number(digits_only).national_number)
                 except (NumberParseException,
                         exceptions.InvalidPhoneNumberException) as error:
-                    self.add_error(
-                        self.parse_error_message.format(raw_value))
+                    if not self.skip_validation_parse_only:
+                        self.add_error(
+                            self.parse_error_message.format(raw_value))
         return value
 
     def get_current_value_parsed(self):
@@ -279,6 +282,7 @@ class MultipleChoiceField(ChoiceField):
     empty_value = []
     validators = [validators.are_valid_choices]
     template_name = "formation/checkbox_select.jinja"
+    has_multiple_values = True
 
     def extract_raw_value(self, raw_data):
         """Attempts to pull a list from raw data
@@ -363,8 +367,9 @@ class MultiValueField(Field):
         """
         instance = subfield_class(
             self.raw_input_data,
-            required=False,
-            is_subfield=True
+            required=self.required,
+            is_subfield=True,
+            skip_validation_parse_only=self.skip_validation_parse_only
         )
         instance.parent = self
         # this might error if a context_key is not a valid
@@ -404,7 +409,9 @@ class MultiValueField(Field):
         for sub in self.subfields:
             # runs validators on subfields
             sub.validate()
-            self.errors.update(sub.errors)
+            for errorlist in sub.errors.values():
+                for error in errorlist:
+                    self.add_error(error)
         # runs own validators
         super().validate()
 

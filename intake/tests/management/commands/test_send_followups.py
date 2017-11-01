@@ -24,8 +24,7 @@ class TestCommand(ExternalNotificationsPatchTestCase):
         FollowupsService.assert_not_called()
 
     @patch('intake.management.commands.send_followups.is_the_weekend')
-    @patch('intake.notifications.slack_simple.send')
-    def test_expected_weekday_run(self, slack, is_the_weekend):
+    def test_expected_weekday_run(self, is_the_weekend):
         is_the_weekend.return_value = False
         org = Organization.objects.get(slug='ebclc')
         dates = sorted([mock.get_old_date() for i in range(464, 469)])
@@ -48,9 +47,5 @@ class TestCommand(ExternalNotificationsPatchTestCase):
                 'project.services.logging_service', logging.INFO) as logs:
             command.handle()
         self.assertEqual(
-            len(slack.mock_calls), 1)
-        self.assertEqual(
             len(self.notifications.email_followup.send.mock_calls), 4)
-        self.assertEqual(
-            len(self.notifications.slack_notification_sent.send.mock_calls), 4)
         assertInLogsCount(logs, {'event_name=app_followup_sent': 4})

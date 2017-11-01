@@ -166,7 +166,7 @@ class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
                 'prefers_voicemail',
                 'prefers_snailmail'],
             email='test@testing.com',
-            phone_number='5554443333'
+            phone_number='4152124848'
         )
 
     def cant_contact_answers(self):
@@ -177,7 +177,7 @@ class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
                 'prefers_voicemail',
                 'prefers_snailmail'],
             email='test@testing.com',
-            phone_number='5554443333'
+            phone_number='4152124848'
         )
 
     def test_case_when_all_have_usable_contact_info(self):

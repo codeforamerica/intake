@@ -8,9 +8,9 @@ import intake.services.bundles as BundlesService
 
 @given('it is a weekday')
 def set_weekday(context):
-    weekend_patcher = patch('intake.utils.is_the_weekend')
-    weekend_patcher.return_value = False
-    weekend_patcher.start()
+    weekend_patcher = patch('intake.services.bundles.is_the_weekend')
+    is_the_weekend = weekend_patcher.start()
+    is_the_weekend.return_value = False
     context.test.patches["weekend_patcher"] = weekend_patcher
 
 
@@ -23,7 +23,7 @@ def test_receives_unreads_email(context, send_front, org_slug):
     args, email = kall
     email['to'] = args[0]
     context.test.unreads_email = email
-    expected_to = "bgolder+demo+{}_user@codeforamerica.org".format(org_slug)
+    expected_to = "cmrtestuser+{}@gmail.com".format(org_slug)
     context.test.assertIn(expected_to, email['to'])
 
 

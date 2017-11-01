@@ -16,7 +16,8 @@ class StatusUpdateForm(forms.ModelForm):
     status_type = forms.ModelChoiceField(
         widget=forms.RadioSelect,
         queryset=models.StatusType.objects.filter(
-            is_active=True, is_a_status_update_choice=True),
+            is_active=True, is_a_status_update_choice=True
+        ).order_by('display_order'),
         empty_label=None)
     next_steps = forms.ModelMultipleChoiceField(
         widget=forms.CheckboxSelectMultiple,

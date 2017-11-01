@@ -26,7 +26,7 @@ function initializeSearchWidget(inputSelector, postURL, resultsCallback, emptySe
   function handleKeyupInSearchInput(e){
     var searchTerm = $(this).val();
 
-    if (searchTerm.length > 0){
+    if (searchTerm.length >= 3){
       sendSearchQuery(searchTerm);
     } else {
       emptySearchCallback();

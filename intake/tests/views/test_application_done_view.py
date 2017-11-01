@@ -54,10 +54,15 @@ class TestThanksView(ApplicantFormViewBaseTestCase):
             "A flying horse is called a pegasus",
             "A horse with a horn is called a unicorn"]
         self.send_confirmations.return_value = flash_messages
-        response = self.client.fill_form(
+        self.client.fill_form(
             reverse('intake-county_application'),
             follow=True,
             **mock.fake.cc_pubdef_answers())
+        response = self.client.fill_form(
+            reverse('intake-review'),
+            follow=True,
+            submit_action='approve_application'
+        )
         for message in flash_messages:
             self.assertContains(
                 response, escape(message))
@@ -109,10 +114,15 @@ class TestRAPSheetInstructionsView(ApplicantFormViewBaseTestCase):
             "A flying horse is called a pegasus",
             "A horse with a horn is called a unicorn"]
         self.send_confirmations.return_value = flash_messages
-        response = self.client.fill_form(
+        self.client.fill_form(
             reverse('intake-county_application'),
             follow=True,
             **mock.fake.ebclc_answers())
+        response = self.client.fill_form(
+            reverse('intake-review'),
+            follow=True,
+            submit_action='approve_application'
+        )
         for message in flash_messages:
             self.assertContains(
                 response, escape(message))

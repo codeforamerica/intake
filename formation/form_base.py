@@ -14,7 +14,8 @@ class Form(base.BindParseValidate):
         'optional_fields'
     ]
 
-    def __init__(self, *args, files=None, validate=False, **kwargs):
+    def __init__(self, *args, files=None, validate=False,
+                 skip_validation=False, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields = OrderedDict([
             (field_class.context_key, self.build_field(field_class))
@@ -85,14 +86,19 @@ class Form(base.BindParseValidate):
 
     def build_field(self, field_class):
         # get init args (required, optional, recommended)
-        init_kwargs = dict(form=self)
+        init_kwargs = dict(
+            form=self,
+            prefix=self.prefix)
         for attribute_name, key in self._iter_field_attribute_keys():
             init_kwargs[key] = field_class in getattr(
                 self, attribute_name, [])
         init_args = []
         if self.raw_input_data is not base.UNSET:
             init_args.append(self.raw_input_data)
-        field = field_class(*init_args, **init_kwargs)
+        field = field_class(
+            *init_args,
+            skip_validation_parse_only=self.skip_validation_parse_only,
+            **init_kwargs)
         # this might error if a context_key is not a valid
         # python variable name or if the field is named after
         # an attribute on this object

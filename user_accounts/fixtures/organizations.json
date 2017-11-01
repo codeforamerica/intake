@@ -44,8 +44,8 @@
     "requires_rap_sheet": false,
     "requires_declaration_letter": false,
     "show_pdf_only": true,
-    "short_confirmation_message": "You should get a letter in the mail from the San Francisco Public Defender in 2-4 weeks.",
-    "long_confirmation_message": "You should get a letter in the mail from the San Francisco Public Defender in 2-4 weeks.",
+    "short_confirmation_message": "You should get a letter in the mail from the San Francisco Public Defender in 4-5 weeks.",
+    "long_confirmation_message": "You should get a letter in the mail from the San Francisco Public Defender in 4-5 weeks.",
     "short_followup_message": "Did you get a letter in the mail from the SF Public Defender?",
     "long_followup_message": "Have you received your letter in the mail from the San Francisco Public Defender?",
     "address": "San Francisco Public Defender\r\nAttention: Clean Slate Unit\r\n555 7th Street, 2nd Floor\r\nSan Francisco, CA\r\n94103",
@@ -136,7 +136,7 @@
     "short_followup_message": "With the Alameda Public Defender, no news is good news. They'll contact you if they need anything. If you want to check your case, call (510) 272-6600 or email cleanslate@acgov.org",
     "long_followup_message": "With the Alameda County Public Defender's Office, no news is good news. They will definitely contact you if they need anything. If you'd like to check on your case status, you may call (510) 272-6600 or email cleanslate@acgov.org.",
     "address": "Alameda Public Defender's Office\r\nAttn: Clear My Record Unit\r\n1401 Lakeside Drive, Suite 400\r\nOakland, CA 94612",
-    "phone_number": "5102726600",
+    "phone_number": "",
     "fax_number": "(510) 272 - 6610",
     "email": "cleanslate@acgov.org",
     "notify_on_weekends": false,
@@ -513,6 +513,35 @@
     "phone_number": "(209) 525-4200",
     "fax_number": "(209) 525-4244",
     "email": "",
+    "notify_on_weekends": false,
+    "needs_applicant_followups": false
+  }
+},
+{
+  "model": "user_accounts.organization",
+  "fields": {
+    "name": "Marin County Public Defender",
+    "slug": "marin_pubdef",
+    "county": [
+      "marin"
+    ],
+    "website": "https://www.marincounty.org/depts/pd",
+    "blurb": "The Marin County Public Defender's Office helps people with arrests or convictions in Marin County. For assistance with Prop 47 & 64 call (415) 473-4085 or email dlewis@marincounty.org. For assistance with expungements call (415) 473-6267 or email lsalinas@marincounty.org.",
+    "is_receiving_agency": true,
+    "is_accepting_applications": true,
+    "is_checking_notifications": true,
+    "is_live": true,
+    "requires_rap_sheet": false,
+    "requires_declaration_letter": false,
+    "show_pdf_only": false,
+    "short_confirmation_message": "The Marin County Public Defender will contact you in 2-4 weeks with next steps.",
+    "long_confirmation_message": "The Marin County Public Defender will contact you in 2-4 weeks with your next steps.",
+    "short_followup_message": "Has the Marin County Public Defender contacted you and told you your next steps?",
+    "long_followup_message": "Has the Marin County Public Defender contacted you and told you your next steps?",
+    "address": "Office of the Public Defender\n3501 Civic Center Drive, Suite 139\nSan Rafael, CA 94903",
+    "phone_number": "",
+    "fax_number": "",
+    "email": "dlewis@marincounty.org",
     "notify_on_weekends": false,
     "needs_applicant_followups": false
   }

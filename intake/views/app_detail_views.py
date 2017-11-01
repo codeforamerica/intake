@@ -19,10 +19,6 @@ class ApplicationDetail(ViewAppDetailsMixin, TemplateView):
         "the \"Needs Status Update\" folder.")
 
     def get(self, request, submission_id):
-        if request.user.profile.should_see_pdf() and not request.user.is_staff:
-            return redirect(
-                reverse_lazy('intake-filled_pdf',
-                             kwargs=dict(submission_id=submission_id)))
         self.submissions = list(SubmissionsService.get_permitted_submissions(
             request.user, [submission_id]))
         if not self.submissions:
@@ -55,7 +51,8 @@ class ApplicationDetail(ViewAppDetailsMixin, TemplateView):
             form=display_form,
             submission=self.submission,
             declaration_form=letter_display,
-            applications=applications)
+            applications=applications,
+            should_see_pdf=self.request.user.profile.should_see_pdf())
         AppsService.handle_apps_opened(self, applications)
         return context
 
