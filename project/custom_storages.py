@@ -5,6 +5,7 @@ from django.core.files.storage import get_storage_class
 
 class MediaStorage(S3Boto3Storage):
     bucket_name = settings.MEDIA_BUCKET
+    file_overwrite = False
 
 
 class CachedS3BotoStorage(S3Boto3Storage):

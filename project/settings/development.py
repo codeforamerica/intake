@@ -57,5 +57,6 @@ STATICFILES_STORAGE = 'project.custom_storages.CachedS3BotoStorage'
 COMPRESS_ROOT = os.path.join(REPO_DIR, 'staticfiles-cache')
 COMPRESS_STORAGE = STATICFILES_STORAGE
 
+AWS_S3_FILE_OVERWRITE = True # Also in base.py
 
 AWS_QUERYSTRING_AUTH = False
