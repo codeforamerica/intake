@@ -117,9 +117,6 @@ class TestWriteDeclarationLetterView(ApplicantFormViewBaseTestCase):
 
     @patch(
         'intake.services.submissions.send_confirmation_notifications')
-    @patch(
-        'intake.notifications.slack_new_submission.send')
-    @patch('intake.notifications.slack_submissions_viewed.send')
     def test_that_declaration_letter_properly_escapes_html(self, *patches):
         # this is a regression test to ensure that html cannot be injected
         # into declaration letters, and that we don't overescape

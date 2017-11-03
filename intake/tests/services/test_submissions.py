@@ -231,7 +231,7 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
     def get_orgs(self):
         return [Organization.objects.get(slug='a_pubdef')]
 
-    def test_notifications_slacks_and_logs_for_full_contact_preferences(self):
+    def test_notifications_and_logs_for_full_contact_preferences(self):
         applicant = factories.ApplicantFactory()
         answers = get_answers_for_orgs(
             self.get_orgs(),
@@ -250,14 +250,12 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
                 'project.services.logging_service', logging.INFO) as logs:
             SubmissionsService.send_confirmation_notifications(sub)
         self.assertEqual(
-            len(self.notifications.slack_notification_sent.send.mock_calls), 1)
-        self.assertEqual(
             len(self.notifications.email_confirmation.send.mock_calls), 1)
         self.assertEqual(
             len(self.notifications.sms_confirmation.send.mock_calls), 1)
         assertInLogsCount(logs, {'event_name=app_confirmation_sent': 1})
 
-    def test_notifications_slacks_and_logs_for_no_contact_preferences(self):
+    def test_notifications_and_logs_for_no_contact_preferences(self):
         applicant = factories.ApplicantFactory()
         answers = get_answers_for_orgs(
             self.get_orgs(),
@@ -272,13 +270,11 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
         # does not log so no logs
         SubmissionsService.send_confirmation_notifications(sub)
         self.assertEqual(
-            len(self.notifications.slack_notification_sent.send.mock_calls), 0)
-        self.assertEqual(
             len(self.notifications.email_confirmation.send.mock_calls), 0)
         self.assertEqual(
             len(self.notifications.sms_confirmation.send.mock_calls), 0)
 
-    def test_notifications_slacks_and_logs_for_one_contact_preference(self):
+    def test_notifications_and_logs_for_one_contact_preference(self):
         applicant = factories.ApplicantFactory()
         answers = get_answers_for_orgs(
             self.get_orgs(),
@@ -293,8 +289,6 @@ class TestSendConfirmationNotifications(ExternalNotificationsPatchTestCase):
         with self.assertLogs(
                 'project.services.logging_service', logging.INFO) as logs:
             SubmissionsService.send_confirmation_notifications(sub)
-        self.assertEqual(
-            len(self.notifications.slack_notification_sent.send.mock_calls), 1)
         self.assertEqual(
             len(self.notifications.email_confirmation.send.mock_calls), 1)
         self.assertEqual(

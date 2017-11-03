@@ -31,13 +31,12 @@ class TestCasePrintoutPDFView(TestCase):
                 'intake-case_printout', kwargs=dict(submission_id=sub.id)))
         self.assertRedirects(response, reverse('user_accounts-profile'))
 
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_marks_apps_as_opened(self, slack):
+    def test_marks_apps_as_opened(self):
         profile = user_accounts_factories.app_reviewer('a_pubdef')
         login(self.client, profile)
         submission = intake_factories.make_apps_for(
                     'a_pubdef', count=1)[0].form_submission
-        response = self.client.get(
+        self.client.get(
             reverse(
                 'intake-case_printout', kwargs=dict(
                     submission_id=submission.id)))
@@ -45,8 +44,7 @@ class TestCasePrintoutPDFView(TestCase):
             organization=profile.organization).first()
         self.assertTrue(application.has_been_opened)
 
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_fires_expected_mixpanel_events(self, slack):
+    def test_fires_expected_mixpanel_events(self):
         profile = user_accounts_factories.app_reviewer('a_pubdef')
         login(self.client, profile)
         submission = intake_factories.make_apps_for(

@@ -122,8 +122,7 @@ class TestApplicationTransferView(IntakeDataTestCase):
         self.assertContains(response, 'to the applicant')
 
     @patch('intake.notifications.send_applicant_notification')
-    @patch('intake.notifications.slack_submissions_viewed')
-    def test_from_bundle_is_redirected_back_to_bundle(self, slack, front):
+    def test_from_bundle_is_redirected_back_to_bundle(self, front):
         self.be_apubdef_user()
         response = self.post(next_url=self.bundle_url)
         self.assertRedirects(

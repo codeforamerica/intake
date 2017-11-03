@@ -405,8 +405,7 @@ class CaseBundlePrintoutPDFView(ViewAppDetailsMixin, View):
             pk=int(bundle_id))
         if bundle.organization_id != request.user.profile.organization_id:
             return not_allowed(request)
-        BundlesService.mark_opened(
-            bundle, request.user, send_slack_notification=False)
+        BundlesService.mark_opened(bundle, request.user)
         filename, pdf_bytes = PDFService.get_concatenated_printout_for_bundle(
             request.user, bundle)
         response = HttpResponse(
