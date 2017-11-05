@@ -2,7 +2,7 @@ import io
 import string
 import collections
 
-from django.conf import settings
+from markupsafe import escape, Markup
 from reportlab.pdfgen.canvas import Canvas
 
 from reportlab.lib.pagesizes import letter
@@ -161,7 +161,8 @@ class PDFFormDisplay:
         if not isinstance(text, str):
             text = str(text)
         text = text.strip(string.whitespace)
-        text = text.replace('\n', "<br/>")
+        text = escape(text)
+        text = text.replace('\n', Markup("<br/>"))
         p = Paragraph(text, style)
         used_width, used_height = p.wrap(max_width, max_height)
         line_widths = p.getActualLineWidths0()

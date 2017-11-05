@@ -4,6 +4,7 @@ from django.core import mail
 from django.conf import settings
 from django.utils.translation import ugettext as _
 from django.template import loader
+from markupsafe import escape, Markup
 
 from intake.constants import SMS, EMAIL
 from intake.exceptions import (
@@ -135,8 +136,13 @@ class SimpleFrontNotification:
     def send(self, to, body, subject=None):
         if isinstance(to, str):
             to = [to]
+        # body comes out of jinja unescaped (for plain text)
+        # and as a Markup type. It must be recast to str to properly escape.
+        body = str(body)
+        html_body = escape(body)
+        html_body = html_body.replace('\n', Markup('<br>'))
         data = {
-            'body': body.replace('\n', '<br>'),
+            'body': html_body,
             'text': body,
             'to': to,
             'options': {

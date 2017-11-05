@@ -2,7 +2,9 @@ from unittest import TestCase as BaseTestCase
 from unittest.mock import Mock, patch
 from django.test import TestCase
 from django.test import override_settings
-from project.jinja2 import external_reverse
+from markupsafe import Markup
+
+from intake.notifications import SimpleFrontNotification
 from django.core import mail
 from django.conf import settings
 import json
@@ -20,6 +22,29 @@ notification_mock_settings = dict(
     SLACK_WEBHOOK_URL='slack',
     CELERY_TASK_ALWAYS_EAGER=True
 )
+
+
+class TestSimpleFrontNotification(TestCase):
+
+    @patch('intake.notifications.json')
+    def test_send_properly_escapes_html(self, mock_json):
+        mock_instance = Mock()
+        unescaped_body = Markup(
+            '<img src="http://malicious-tracker.gif">\n🛰 O\'Duinn')
+        SimpleFrontNotification.send(
+            mock_instance, 'someone@nowhere.org', unescaped_body,
+            subject='Test Notification')
+        kall = mock_json.dumps.mock_calls[0]
+        name, arguments, keywordargs = kall
+        data = arguments[0]
+        self.assertEqual(Markup, type(data['body']))
+        self.assertEqual(
+            '&lt;img src=&#34;http://malicious-tracker.gif&#34;&gt;'
+            '<br>🛰 O&#39;Duinn',
+            data['body'])
+        self.assertEqual(str, type(data['text']))
+        self.assertEqual('<img src="http://malicious-tracker.gif">\n'
+                         '🛰 O\'Duinn', data['text'])
 
 
 class TestNotifications(TestCase):
