@@ -40,4 +40,5 @@ LIVE_COUNTY_CHOICES = True
 # use mailgun's REST API
 ALLOW_REQUESTS_TO_MAILGUN = True
 
-DIVERT_REMOTE_CONNECTIONS = os.environ.get('DIVERT_REMOTE_CONNECTIONS')
+DIVERT_REMOTE_CONNECTIONS = os.environ.get(
+                            'DIVERT_REMOTE_CONNECTIONS', 'True') == 'True'
