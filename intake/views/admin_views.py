@@ -341,59 +341,6 @@ class FilledPDFBundle(FilledPDF, MultiSubmissionMixin):
         return redirect(bundle.get_pdf_bundle_url())
 
 
-class MarkSubmissionStepView(ViewAppDetailsMixin, View, MultiSubmissionMixin):
-
-    def modify_submissions(self):
-        pass
-
-    def get_organization_id(self):
-        """Get the organization for logging this step.
-        """
-        return self.request.user.profile.organization.id
-
-    def get_notification_context(self):
-        return dict(
-            submissions=self.submissions,
-            user=self.request.user)
-
-    def notify(self):
-        pass
-
-    def add_message(self):
-        pass
-
-    def log(self):
-        models.ApplicationLogEntry.log_multiple(
-            self.process_step,
-            self.submission_ids,
-            user=self.request.user,
-            organization_id=self.get_organization_id())
-
-    def get(self, request):
-        self.request = request
-        self.submissions = self.get_submissions_from_params(request)
-        if not self.submissions:
-            return not_allowed(request)
-
-        self.submission_ids = [sub.id for sub in self.submissions]
-        self.next_param = request.GET.get('next',
-                                          reverse_lazy(
-                                            'intake-app_index'))
-        self.log()
-        self.modify_submissions()
-        self.add_message()
-        self.notify()
-        return redirect(self.next_param)
-
-
-class MarkProcessed(MarkSubmissionStepView):
-    process_step = models.ApplicationLogEntry.PROCESSED
-
-    def notify(self):
-        notifications.slack_submissions_processed.send(
-            **self.get_notification_context())
-
-
 class CaseBundlePrintoutPDFView(ViewAppDetailsMixin, View):
     """Returns a concatenated PDF of case detail PDFs
     for an org user
@@ -405,8 +352,7 @@ class CaseBundlePrintoutPDFView(ViewAppDetailsMixin, View):
             pk=int(bundle_id))
         if bundle.organization_id != request.user.profile.organization_id:
             return not_allowed(request)
-        BundlesService.mark_opened(
-            bundle, request.user, send_slack_notification=False)
+        BundlesService.mark_opened(bundle, request.user)
         filename, pdf_bytes = PDFService.get_concatenated_printout_for_bundle(
             request.user, bundle)
         response = HttpResponse(
@@ -421,7 +367,6 @@ app_index = ApplicationIndex.as_view()
 app_unread_index = ApplicationUnreadIndex.as_view()
 app_needs_update_index = ApplicationNeedsUpdateIndex.as_view()
 app_bundle = ApplicationBundle.as_view()
-mark_processed = MarkProcessed.as_view()
 app_bundle_detail = ApplicationBundleDetail.as_view()
 app_bundle_detail_pdf = ApplicationBundleDetailPDFView.as_view()
 case_bundle_printout = CaseBundlePrintoutPDFView.as_view()

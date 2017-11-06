@@ -42,8 +42,7 @@ class TestApplicationDetail(IntakeDataTestCase):
                 escaped_value = html_utils.conditional_escape(value)
                 self.assertContains(response, escaped_value)
 
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_logged_in_user_can_get_submission_display(self, slack):
+    def test_logged_in_user_can_get_submission_display(self):
         self.be_apubdef_user()
         submission = self.a_pubdef_submissions[0]
         with self.assertLogs(
@@ -53,31 +52,26 @@ class TestApplicationDetail(IntakeDataTestCase):
         self.assertHasDisplayData(response, submission)
         assertInLogsCount(logs, {'event_name=app_opened': 1})
 
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_staff_user_can_get_submission_display(self, slack):
+    def test_staff_user_can_get_submission_display(self):
         self.be_cfa_user()
         submission = self.a_pubdef_submissions[0]
         result = self.get_detail(submission)
         self.assertEqual(result.context_data['form'].submission, submission)
         self.assertHasDisplayData(result, submission)
 
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_user_cant_see_app_detail_for_other_county(self, slack):
+    def test_user_cant_see_app_detail_for_other_county(self):
         self.be_ccpubdef_user()
         submission = self.sf_pubdef_submissions[0]
         response = self.get_detail(submission)
         self.assertRedirects(response, reverse('user_accounts-profile'))
-        slack.assert_not_called()
 
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_user_can_see_app_detail_for_multi_county(self, slack):
+    def test_user_can_see_app_detail_for_multi_county(self):
         self.be_apubdef_user()
         submission = self.combo_submissions[0]
         response = self.get_detail(submission)
         self.assertHasDisplayData(response, submission)
 
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_multicounty_app_marked_as_viewed_by_users_org_only(self, slack):
+    def test_multicounty_app_marked_as_viewed_by_users_org_only(self):
         user = self.be_apubdef_user()
         submission = self.combo_submissions[0]
         self.get_detail(submission)
@@ -88,8 +82,7 @@ class TestApplicationDetail(IntakeDataTestCase):
             organization=user.profile.organization)
         self.assertFalse(all([app.has_been_opened for app in other_apps]))
 
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_agency_user_can_see_transfer_action_link(self, slack):
+    def test_agency_user_can_see_transfer_action_link(self):
         self.be_apubdef_user()
         submission = self.a_pubdef_submissions[0]
         response = self.get_detail(submission)
@@ -97,8 +90,7 @@ class TestApplicationDetail(IntakeDataTestCase):
             submission.get_transfer_action(response.wsgi_request)['url'])
         self.assertContains(response, transfer_action_url)
 
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_agency_user_can_see_case_printout_link(self, slack):
+    def test_agency_user_can_see_case_printout_link(self):
         self.be_apubdef_user()
         submission = self.a_pubdef_submissions[0]
         response = self.get_detail(submission)
@@ -106,8 +98,7 @@ class TestApplicationDetail(IntakeDataTestCase):
             submission.get_case_printout_url())
         self.assertContains(response, printout_url)
 
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_marks_apps_as_opened(self, slack):
+    def test_marks_apps_as_opened(self):
         user = self.be_apubdef_user()
         submission = self.a_pubdef_submissions[0]
         self.get_detail(submission)
@@ -140,29 +131,25 @@ class TestApplicationBundle(IntakeDataTestCase):
                     escaped_value = html_utils.conditional_escape(value)
                     self.assertContains(response, escaped_value)
 
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_user_can_get_app_bundle_without_pdf(self, slack):
+    def test_user_can_get_app_bundle_without_pdf(self):
         self.be_apubdef_user()
         response = self.get_submissions(self.a_pubdef_submissions)
         self.assertNotContains(response, 'iframe class="pdf_inset"')
         self.assertHasDisplayData(response, self.a_pubdef_submissions)
 
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_staff_user_can_get_app_bundle_with_pdf(self, slack):
+    def test_staff_user_can_get_app_bundle_with_pdf(self):
         self.be_cfa_user()
         response = self.get_submissions(self.combo_submissions)
         self.assertContains(response, 'iframe class="pdf_inset"')
         self.assertHasDisplayData(response, self.combo_submissions)
 
     @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_user_can_get_bundle_with_pdf(self, slack):
+    def test_user_can_get_bundle_with_pdf(self):
         self.be_sfpubdef_user()
         response = self.get_submissions(self.sf_pubdef_submissions)
         self.assertContains(response, 'iframe class="pdf_inset"')
 
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_bundle_with_pdf_marks_apps_as_opened(self, slack):
+    def test_bundle_with_pdf_marks_apps_as_opened(self):
         user = self.be_sfpubdef_user()
         self.get_submissions(self.sf_pubdef_submissions)
         apps = models.Application.objects.filter(
@@ -171,22 +158,18 @@ class TestApplicationBundle(IntakeDataTestCase):
                     sub.id for sub in self.sf_pubdef_submissions])
         self.assertTrue(all([app.has_been_opened for app in apps]))
 
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_user_cant_see_app_bundle_for_other_county(self, slack):
+    def test_user_cant_see_app_bundle_for_other_county(self):
         self.be_sfpubdef_user()
         response = self.get_submissions(self.a_pubdef_submissions)
         self.assertEqual(response.status_code, 404)
-        slack.assert_not_called()
 
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_user_can_see_app_bundle_for_multi_county(self, slack):
+    def test_user_can_see_app_bundle_for_multi_county(self):
         self.be_apubdef_user()
         response = self.get_submissions(self.combo_submissions)
         self.assertNotContains(response, 'iframe class="pdf_inset"')
         self.assertHasDisplayData(response, self.combo_submissions)
 
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_marks_apps_as_opened(self, slack):
+    def test_marks_apps_as_opened(self):
         user = self.be_apubdef_user()
         self.get_submissions(self.a_pubdef_submissions)
         apps = models.Application.objects.filter(
@@ -406,9 +389,7 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
         'mock_1_bundle_to_a_pubdef'
     ]
 
-    @patch(
-        'intake.views.admin_views.notifications.slack_submissions_viewed.send')
-    def test_returns_200_on_existing_bundle_id(self, slack):
+    def test_returns_200_on_existing_bundle_id(self):
         """`ApplicationBundleDetailView` return `OK` for existing bundle
 
         create an `ApplicationBundle`,
@@ -425,9 +406,7 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
         assertInLogsCount(logs, {
             'app_bundle_opened': self.a_pubdef_bundle.submissions.count()})
 
-    @patch(
-        'intake.views.admin_views.notifications.slack_submissions_viewed.send')
-    def test_staff_user_gets_200(self, slack):
+    def test_staff_user_gets_200(self):
         self.be_cfa_user()
         result = self.client.get(reverse(
             'intake-app_bundle_detail',
@@ -462,9 +441,7 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
             result, reverse('user_accounts-profile'),
             fetch_redirect_response=False)
 
-    @patch(
-        'intake.views.admin_views.notifications.slack_submissions_viewed.send')
-    def test_has_pdf_bundle_url_if_needed(self, slack):
+    def test_has_pdf_bundle_url_if_needed(self):
         """ApplicationBundleDetailView return pdf url if needed
 
         create an `ApplicationBundle` that needs a pdf
@@ -485,9 +462,7 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
             kwargs=dict(bundle_id=bundle.id)))
         self.assertContains(result, url)
 
-    @patch(
-        'intake.notifications.slack_submissions_viewed.send')
-    def test_agency_user_can_see_transfer_action_links(self, slack):
+    def test_agency_user_can_see_transfer_action_links(self):
         self.be_apubdef_user()
         response = self.client.get(
             self.a_pubdef_bundle.get_absolute_url())
@@ -496,17 +471,14 @@ class TestApplicationBundleDetail(IntakeDataTestCase):
                 sub.get_transfer_action(response.wsgi_request)['url'])
             self.assertContains(response, transfer_action_url)
 
-    @patch(
-        'intake.notifications.slack_submissions_viewed.send')
-    def test_user_can_see_app_bundle_printout_link(self, slack):
+    def test_user_can_see_app_bundle_printout_link(self):
         self.be_apubdef_user()
         response = self.client.get(self.a_pubdef_bundle.get_absolute_url())
         printout_url = html_utils.conditional_escape(
             self.a_pubdef_bundle.get_printout_url())
         self.assertContains(response, printout_url)
 
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_marks_apps_as_opened(self, slack):
+    def test_marks_apps_as_opened(self):
         user = self.be_apubdef_user()
         self.client.get(self.a_pubdef_bundle.get_absolute_url())
         apps = models.Application.objects.filter(
@@ -558,8 +530,7 @@ class TestApplicationBundleDetailPDFView(IntakeDataTestCase):
         response = self.client.get(bundle.get_pdf_bundle_url())
         self.assertEqual(response.status_code, 404)
 
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_marks_apps_as_opened(self, slack):
+    def test_marks_apps_as_opened(self):
         user = self.be_sfpubdef_user()
         self.client.get(self.bundle.get_pdf_bundle_url())
         apps = models.Application.objects.filter(
@@ -594,8 +565,7 @@ class TestCaseBundlePrintoutPDFView(IntakeDataTestCase):
                 kwargs=dict(bundle_id=bundle.id)))
         self.assertRedirects(response, reverse('user_accounts-profile'))
 
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_marks_apps_as_opened(self, slack):
+    def test_marks_apps_as_opened(self):
         user = self.be_apubdef_user()
         bundle = models.ApplicationBundle.objects.filter(
             organization__slug__contains='a_pubdef').first()

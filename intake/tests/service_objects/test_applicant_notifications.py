@@ -6,7 +6,6 @@ from intake.tests.base_testcases import ExternalNotificationsPatchTestCase
 from intake.tests.services.test_followups import get_old_date
 from intake.service_objects import applicant_notifications
 from intake.constants import SMS, EMAIL
-from intake import utils
 
 
 class TestApplicantNotification(ExternalNotificationsPatchTestCase):
@@ -102,16 +101,6 @@ class TestFollowupNotification(TestApplicantNotification):
         notification.set_contact_methods()
         self.assertEqual(methods, notification.contact_methods)
 
-    def test_logs_to_slack_correctly(self):
-        orgs, sub, notification = self.org_notification_and_default_sub()
-        notification.send()
-        self.notifications.slack_notification_sent.send.\
-            assert_called_once_with(
-                methods=[EMAIL],
-                notification_type='followup',
-                submission=sub
-            )
-
     def test_sends_expected_notification_calls(self):
         orgs, sub, notification = self.org_notification_and_default_sub()
         notification.send()
@@ -140,27 +129,6 @@ class TestConfirmationNotification(TestApplicantNotification):
         context = notification.get_context(SMS)
 
         self.assertEqual(messages, context['next_steps'])
-
-    def test_logs_to_slack_correctly(self):
-        orgs, sub, notification = self.org_notification_and_default_sub()
-        notification.send()
-        self.notifications.slack_notification_sent.send\
-            .assert_called_once_with(
-                methods=[EMAIL, SMS],
-                notification_type='confirmation',
-                submission=sub
-            )
-
-    def test_logs_to_slack_correctly_with_one_preference(self):
-        orgs, sub, notification = self.org_notification_and_default_sub(
-            contact_preferences=['prefers_email'])
-        notification.send()
-        self.notifications.slack_notification_sent.send\
-            .assert_called_once_with(
-                methods=[EMAIL],
-                notification_type='confirmation',
-                submission=sub
-            )
 
     def test_sends_expected_notification_calls(self):
         orgs, sub, notification = self.org_notification_and_default_sub()

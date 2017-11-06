@@ -18,7 +18,7 @@ from django.db.models import Count
 logger = logging.getLogger(__name__)
 
 
-def mark_opened(bundle, user, send_slack_notification=True):
+def mark_opened(bundle, user):
     submission_ids = FormSubmission.objects.filter(
         bundles=bundle).values_list('id', flat=True)
     Application.objects.filter(
@@ -26,10 +26,6 @@ def mark_opened(bundle, user, send_slack_notification=True):
         organization_id=user.profile.organization.id
     ).distinct().update(has_been_opened=True)
     EventsService.bundle_opened(bundle, user)
-    if send_slack_notification:
-        notifications.slack_submissions_viewed.send(
-            submissions=bundle.submissions.all(), user=user,
-            bundle_url=bundle.get_external_url())
 
 
 def get_or_create_for_submissions_and_user(submissions, user):

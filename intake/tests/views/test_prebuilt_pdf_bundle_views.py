@@ -116,8 +116,7 @@ class TestPrebuiltPDFBundleWrapperView(TestCase):
             '3 applications have been marked as “Read” and moved to the '
             '“Needs Status Update” folder'))
 
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_fires_expected_mixpanel_events(self, slack):
+    def test_fires_expected_mixpanel_events(self):
         app_ids = intake_factories.make_app_ids_for('sf_pubdef')
         profile = user_accounts_factories.app_reviewer('sf_pubdef')
         login(self.client, profile)
