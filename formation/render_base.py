@@ -1,5 +1,6 @@
 from django.template import loader
 from django.utils.safestring import mark_safe
+from markupsafe import Markup
 
 
 class Renderable:
@@ -23,8 +24,8 @@ class Renderable:
         template_attr = "_display_template" if display else "_template"
         if not getattr(self, template_attr):
             self.compile_template(template_attr)
-        return mark_safe(getattr(self, template_attr).render(
-            self.get_template_context(extra_context)))
+        return getattr(self, template_attr).render(
+            self.get_template_context(extra_context))
 
     def display(self, **extra_context):
         return self.render(display=True, **extra_context)

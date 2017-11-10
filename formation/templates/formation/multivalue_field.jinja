@@ -24,7 +24,7 @@
     {%- endif %}
     <div class="subfield-row">
     {%- for subfield in field.subfields %}
-      {{ subfield.render()|indent(6) }}
+      {{ subfield }}
     {%- endfor %}
     </div>
   </fieldset>

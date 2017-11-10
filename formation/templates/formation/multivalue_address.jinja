@@ -22,11 +22,11 @@
       {%- endif %}
     </div>
     {%- endif %}
-    {{ field.street.render()|indent(4) }}
+    {{ field.street }}
     <div class="subfield-row">
-      {{ field.city.render()|indent(6) }}
-      {{ field.state.render()|indent(6) }}
-      {{ field.zip.render()|indent(6) }}
+      {{ field.city }}
+      {{ field.state }}
+      {{ field.zip }}
     </div>
   </fieldset>
 </div>
