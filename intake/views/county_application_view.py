@@ -3,13 +3,10 @@ from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse, reverse_lazy
 
-from project import alerts
 from .applicant_form_view_base import ApplicantFormViewBase
 from formation.forms import county_form_selector, \
     county_display_form_selector, ApplicationReviewForm
 import intake.services.messages_service as MessagesService
-from intake.constants import EDIT_APPLICATION
-from intake.serializers import RequestSerializer
 from project.services.logging_service import format_and_log
 
 WARNING_FLASH_MESSAGE = _(

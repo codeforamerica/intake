@@ -267,25 +267,6 @@ class SlackTemplateNotification(BasicSlackNotification, TemplateNotification):
 
 slack_simple = BasicSlackNotification()
 
-# submission, submission_count, request
-slack_new_submission = SlackTemplateNotification(
-    message_template_path="slack/new_submission.jinja")
-
-# submissions, user
-slack_submissions_viewed = SlackTemplateNotification(
-    {'action': 'opened'},
-    message_template_path="slack/bundle_action.jinja")
-
-# submissions, user
-slack_submissions_processed = SlackTemplateNotification(
-    {'action': 'processed'},
-    message_template_path="slack/bundle_action.jinja")
-
-# submissions, user
-slack_submissions_deleted = SlackTemplateNotification(
-    {'action': 'deleted'},
-    message_template_path="slack/bundle_action.jinja")
-
 # submission, user
 slack_submission_transferred = SlackTemplateNotification(
     {'action': 'transferred'},
@@ -325,13 +306,6 @@ email_followup = FrontEmailNotification(
 sms_followup = FrontSMSNotification(
     body_template_path='text/followup.jinja')
 
-
-# submission, method
-slack_notification_sent = SlackTemplateNotification(
-    message_template_path="slack/notification_sent.jinja")
-# submission, method, errors
-slack_notification_failed = SlackTemplateNotification(
-    message_template_path="slack/notification_failed.jinja")
 
 app_edited_org_email_notification = MailgunEmailNotification(
     subject_template=(
