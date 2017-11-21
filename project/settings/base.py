@@ -199,9 +199,6 @@ USE_TZ = True
 
 PDFPARSER_PATH = os.path.join(REPO_DIR, 'intake', 'pdfparser.jar')
 
-# AWS uploads
-AWS_S3_FILE_OVERWRITE = False
-
 # Static files & django-compressor settings (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATICFILES_FINDERS = [
