@@ -198,8 +198,6 @@ class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
             len(self.notifications.email_followup.send.mock_calls), 4)
         self.assertEqual(
             len(self.notifications.sms_followup.send.mock_calls), 0)
-        self.assertEqual(
-            len(self.notifications.slack_notification_sent.send.mock_calls), 4)
         assertInLogsCount(logs, {'event_name=app_followup_sent': 4})
         for sub in subs:
             assertInLogsCount(logs, {'distinct_id=' + sub.get_uuid(): 1})
@@ -230,8 +228,6 @@ class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
             len(self.notifications.email_followup.send.mock_calls), 2)
         self.assertEqual(
             len(self.notifications.sms_followup.send.mock_calls), 0)
-        self.assertEqual(
-            len(self.notifications.slack_notification_sent.send.mock_calls), 2)
         assertInLogsCount(logs, {'event_name=app_followup_sent': 2})
         for sub in contacted_subs:
             assertInLogsCount(logs, {'distinct_id=' + sub.get_uuid(): 1})

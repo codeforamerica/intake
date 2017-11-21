@@ -71,7 +71,7 @@ class ApplicantNotification:
             to=self.contact_info[contact_method],
             **context)
 
-    def send_notifications_to_applicant(self):
+    def send(self):
         """Sends one or more notifications to the applicant
         """
         for method in self.contact_methods:
@@ -80,26 +80,6 @@ class ApplicantNotification:
                 self.successes.append(method)
             except FrontAPIError as error:
                 self.errors[method] = error
-
-    def log_outcome_in_slack(self):
-        if self.successes:
-            notifications.slack_notification_sent.send(
-                methods=[
-                    method for method in self.contact_methods
-                    if method not in self.errors
-                ],
-                notification_type=self.notification_type,
-                submission=self.sub
-            )
-        if self.errors:
-            notifications.slack_notification_failed.send(
-                errors=self.errors,
-                notification_type=self.notification_type,
-                submission=self.sub)
-
-    def send(self):
-        self.send_notifications_to_applicant()
-        self.log_outcome_in_slack()
 
 
 class FollowupNotification(ApplicantNotification):

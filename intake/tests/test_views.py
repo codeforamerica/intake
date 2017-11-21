@@ -56,8 +56,7 @@ class TestViews(IntakeDataTestCase):
             fields.DateOfBirthField.is_recommended_error_message)
 
     @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
-    @patch('intake.notifications.slack_submissions_viewed.send')
-    def test_authenticated_user_can_see_filled_pdf(self, slack):
+    def test_authenticated_user_can_see_filled_pdf(self):
         self.be_sfpubdef_user()
         submission = self.sf_pubdef_submissions[0]
         filled_pdf_bytes = self.fillable.fill(submission)
@@ -77,10 +76,9 @@ class TestViews(IntakeDataTestCase):
         self.assertEqual(type(pdf.content), bytes)
 
     @skipUnless(DELUXE_TEST, "Super slow, set `DELUXE_TEST=1` to run")
-    @patch('intake.notifications.slack_submissions_viewed.send')
     @patch('intake.notifications.slack_simple.send')
     def test_authenticated_user_can_get_filled_pdf_without_building(
-            self, slack_simple, slack_viewed):
+            self, slack_simple):
         """
         test_authenticated_user_can_get_filled_pdf_without_building
 

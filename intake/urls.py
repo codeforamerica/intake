@@ -160,10 +160,6 @@ urlpatterns = [
         login_required(admin_views.pdf_bundle),
         name='intake-pdf_bundle'),
 
-    url(r'^applications/mark/processed/$',
-        login_required(admin_views.mark_processed),
-        name='intake-mark_processed'),
-
     url(r'^applications/(?P<submission_id>[0-9]+)/update-status/$',
         login_required(status_update_views.create_status_update),
         name='intake-create_status_update'),
