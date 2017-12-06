@@ -18,4 +18,4 @@ def send_followups():
 
 def debug_task():
     logger.info('Running Scheduled debug task')
-    management.call_command('debug_task')
+    management.call_command('run_debug_task')
