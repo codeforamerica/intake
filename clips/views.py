@@ -41,7 +41,7 @@ class ClipUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(ClipUpdateView, self).get_context_data(**kwargs)
-        logging.info('%s (pk=%d) ran this query %s' % (
+        logger.info('%s (pk=%d) ran this query %s' % (
             self.request.user.username,
             self.request.user.pk,
             self.object.query,
