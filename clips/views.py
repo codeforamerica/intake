@@ -36,12 +36,17 @@ class ClipUpdateView(UpdateView):
     def dispatch(self, *args, **kwargs):
         if not self.request.user.has_perm('clips.change_clip'):
             return HttpResponseForbidden()
+        return super(ClipUpdateView, self).dispatch(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(ClipUpdateView, self).get_context_data(**kwargs)
         logging.info('%s (pk=%d) ran this query %s' % (
             self.request.user.username,
             self.request.user.pk,
             self.object.query,
         ))
-        return super(ClipUpdateView, self).dispatch(*args, **kwargs)
+        return context
 
 
 class ClipDeleteView(DeleteView):
