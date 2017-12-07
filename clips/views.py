@@ -1,8 +1,12 @@
+import logging
 from django.contrib.auth.decorators import login_required
 from django.http.response import HttpResponseForbidden
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from clips.models import Clip
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class ClipCreateView(CreateView):
@@ -32,6 +36,11 @@ class ClipUpdateView(UpdateView):
     def dispatch(self, *args, **kwargs):
         if not self.request.user.has_perm('clips.change_clip'):
             return HttpResponseForbidden()
+        logging.info('%s (pk=%d) ran this query %s' % (
+            self.request.user.username,
+            self.request.user.pk,
+            self.object.query,
+        ))
         return super(ClipUpdateView, self).dispatch(*args, **kwargs)
 
 
