@@ -8,7 +8,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if not is_the_weekend():
-            FollowupsService.send_all_followups_that_are_due()
+            FollowupsService.send_all_followups_that_are_due(after_id=465)
             self.stdout.write(
                 self.style.SUCCESS("Successfully sent followups")
             )
