@@ -11,7 +11,7 @@ MAILGUN_EMAIL_VALIDATION_URL = \
     'https://api.mailgun.net/v3/address/private/validate'
 MAILGUN_ROUTES_API_URL = 'https://api.mailgun.net/v3/routes'
 MAILGUN_MESSAGES_API_URL = \
-    'https://api.mailgun.net/v3/clearmyrecord.org/messages'
+    'https://api.mailgun.net/v3/staging.clearmyrecord.org/messages'
 
 
 def is_a_valid_mailgun_post(request):
