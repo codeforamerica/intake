@@ -21,7 +21,7 @@ CLIPS_DATABASE_ALIAS = 'purged'
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('BUCKET_NAME')
-
+AWS_DEFAULT_ACL = 'private'  # Keeps things in bucket private
 SYNC_AWS_ID = os.environ.get('SYNC_AWS_ID')
 SYNC_AWS_KEY = os.environ.get('SYNC_AWS_KEY')
 SYNC_BUCKET = os.environ.get('SYNC_BUCKET')
@@ -39,6 +39,6 @@ LIVE_COUNTY_CHOICES = True
 
 
 DIVERT_REMOTE_CONNECTIONS = os.environ.get(
-                            'DIVERT_REMOTE_CONNECTIONS', 'True') == 'True'
+    'DIVERT_REMOTE_CONNECTIONS', 'True') == 'True'
 
 ALLOW_REQUESTS_TO_MAILGUN = not DIVERT_REMOTE_CONNECTIONS
