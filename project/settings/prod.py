@@ -35,7 +35,7 @@ COMPRESS_ROOT = os.path.join(REPO_DIR, 'staticfiles-cache')
 COMPRESS_STORAGE = STATICFILES_STORAGE
 AWS_S3_FILE_OVERWRITE = True
 AWS_QUERYSTRING_AUTH = False
-
+AWS_DEFAULT_ACL = 'private'  # Keeps things in bucket private
 SYNC_AWS_ID = os.environ.get('SYNC_AWS_ID')
 SYNC_AWS_KEY = os.environ.get('SYNC_AWS_KEY')
 SYNC_BUCKET = os.environ.get('SYNC_BUCKET')
