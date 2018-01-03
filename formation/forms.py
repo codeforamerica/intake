@@ -124,6 +124,8 @@ class ContraCostaFormSpec(CombinableCountyFormSpec):
         F.CitizenshipStatus,
         F.ServingSentence,
         F.OnProbationParole,
+        F.WhereProbationParole,
+        F.WhenProbationParole,
         F.FinancialScreeningNote,
         F.CurrentlyEmployed,
         F.MonthlyIncome,
