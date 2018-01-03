@@ -119,7 +119,7 @@ class TestCountyApplicationNoWarningsView(ApplicantFormViewBaseTestCase):
                 'event_name=application_started': 0,
                 'event_name=application_submitted': 0,
                 'event_name=application_errors': 0,
-                })
+            })
 
     def test_logs_validation_errors_event(self):
         self.set_form_session_data(counties=['sanfrancisco'])
@@ -134,7 +134,7 @@ class TestCountyApplicationNoWarningsView(ApplicantFormViewBaseTestCase):
                 'event_name=application_started': 0,
                 'event_name=application_submitted': 0,
                 'event_name=application_errors': 1,
-                })
+            })
 
     def test_saves_form_data_to_session(self):
         self.set_form_session_data(counties=['contracosta'])
@@ -174,7 +174,7 @@ class TestCountyApplicationView(TestCountyApplicationNoWarningsView):
                 'event_name=application_started': 0,
                 'event_name=application_submitted': 0,
                 'event_name=application_errors': 0,
-                })
+            })
 
 
 class TestCountyApplicationReviewView(ApplicantFormViewBaseTestCase):
@@ -264,7 +264,7 @@ class TestCountyApplicationReviewView(ApplicantFormViewBaseTestCase):
                 'event_name=application_started': 0,
                 'event_name=application_submitted': 1,
                 'event_name=application_errors': 0,
-                })
+            })
 
     def test_logs_validation_errors_event(self):
         self.set_form_session_data(
@@ -281,4 +281,4 @@ class TestCountyApplicationReviewView(ApplicantFormViewBaseTestCase):
                 'event_name=application_started': 0,
                 'event_name=application_submitted': 0,
                 'event_name=application_errors': 1,
-                })
+            })

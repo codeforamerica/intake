@@ -5,12 +5,6 @@ DEFAULT_HOST = os.environ.get('DEFAULT_HOST', 'http://localhost:8000')
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-# settings for static files
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
-# settings for media files
-MEDIA_ROOT = ''
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-
 # Email settings
 EMAIL_BACKEND = "sgbackend.SendGridBackend"
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")

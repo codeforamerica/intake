@@ -148,11 +148,11 @@ class SimpleFrontNotification:
         payload = json.dumps(data)
         if check_that_remote_connections_are_okay(
                 'FRONT POST:', payload):
-            celery_request.delay('POST',
-                                 url=self.build_api_url_endpoint(),
-                                 data=payload,
-                                 headers=self.build_headers()
-                                 )
+            celery_request('POST',
+                           url=self.build_api_url_endpoint(),
+                           data=payload,
+                           headers=self.build_headers()
+                           )
 
 
 class FrontNotification(TemplateNotification, SimpleFrontNotification):
@@ -239,10 +239,10 @@ class BasicSlackNotification:
         })
         if check_that_remote_connections_are_okay(
                 'SLACK POST:', payload):
-            celery_request.delay('POST',
-                                 url=self.webhook_url,
-                                 data=payload,
-                                 headers=self.headers)
+            celery_request('POST',
+                           url=self.webhook_url,
+                           data=payload,
+                           headers=self.headers)
 
 
 class SlackTemplateNotification(BasicSlackNotification, TemplateNotification):

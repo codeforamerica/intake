@@ -38,16 +38,20 @@ INSTALLED_APPS = [
     'storages',
     'formation',
     'taggit',
-    'debug_toolbar',
     'django_extensions',
     'compressor',
-    'behave_django',
     'favicons',
     'clips',
     'easyaudit',
     'access_audit',
     'helper_commands',
 ]
+
+IS_TEST_OR_RUNSERVER = (len(sys.argv) > 1 and sys.argv[1] in [
+    'runserver', 'test', 'behave'])
+
+if IS_TEST_OR_RUNSERVER:
+    INSTALLED_APPS += ['behave_django']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -194,9 +198,6 @@ USE_L10N = True
 USE_TZ = True
 
 PDFPARSER_PATH = os.path.join(REPO_DIR, 'intake', 'pdfparser.jar')
-
-# AWS uploads
-AWS_S3_FILE_OVERWRITE = False
 
 # Static files & django-compressor settings (CSS, JavaScript, Images)
 STATIC_URL = '/static/'

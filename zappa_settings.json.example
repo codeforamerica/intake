@@ -1,0 +1,19 @@
+{
+    "development": {
+        "aws_region": "us-east-1",
+        "django_settings": "project.settings.development",
+        "profile_name": "default",
+        "s3_bucket": "cmr-development2-zappa",
+	"environment_variables": {
+	    "SECRET_KEY" :"secret key",
+	    "TEST_USER_PASSWORD": "secret",
+	    "DATABASE_HOST": "",
+	    "DATABASE_PASSWORD": "",
+	    "PURGED_DATABASE_HOST": "",
+	    "PURGED_DATABASE_PASSWORD": "",
+	    "AWS_ID": "",
+	    "AWS_SECRET": "",
+	    "BUCKET_NAME": ""
+	}
+    }
+}

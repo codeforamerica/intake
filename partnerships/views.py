@@ -31,7 +31,7 @@ class Contact(GlobalTemplateContextMixin, FormView):
             'Email: "{email}"',
             'Name: "{name}"',
             'Organization: "{organization_name}"']).format(**data)
-        tasks.send_email.delay(
+        tasks.send_email(
             subject=subject,
             message='\n\n'.join(
                 [header, data.get('message', '')]

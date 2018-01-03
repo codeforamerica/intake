@@ -3,9 +3,7 @@ from project.settings.environment import *
 from project.settings.test import *
 
 DEBUG = True
-DIVERT_REMOTE_CONNECTIONS = True
 INTERNAL_IPS = ['127.0.0.1', '::1']
-CELERY_TASK_ALWAYS_EAGER = True
 LIVE_COUNTY_CHOICES = False
 
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'

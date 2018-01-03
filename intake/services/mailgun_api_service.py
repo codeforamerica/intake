@@ -41,7 +41,7 @@ def raise_error_if_not_200(status_code, parsed_response):
         msg = 'Domain: {}\n'.format(settings.DEFAULT_HOST)
         msg += 'Mailgun returned status {}\n'.format(status_code)
         msg += 'Response Body: {}\n'.format(
-                status_code, pformat(parsed_response, indent=2))
+            status_code, pformat(parsed_response, indent=2))
         raise MailgunAPIError(msg)
 
 
@@ -103,5 +103,5 @@ def send_mailgun_email(to, message, sender_profile, subject):
         "subject": subject,
         "text": message
     }
-    tasks.celery_request.delay(
+    tasks.celery_request(
         'POST', MAILGUN_MESSAGES_API_URL, auth=mailgun_auth(), data=post_data)

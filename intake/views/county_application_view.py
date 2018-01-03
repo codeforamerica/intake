@@ -102,7 +102,7 @@ class CountyApplicationReviewView(ApplicantFormViewBase):
         has_form_data = self.has_form_data_in_session()
         if not has_form_data:
             error_message = "{} with insufficient form data in session".format(
-                    self.__class__.__name__)
+                self.__class__.__name__)
             format_and_log(
                 'application_error', level='error',
                 error_message=error_message)

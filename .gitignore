@@ -23,6 +23,7 @@ pip-selfcheck.json
 db.sqlite3
 node_modules
 staticfiles
+staticfiles-cache
 project/media
 media
 local_settings.py

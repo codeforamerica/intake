@@ -192,11 +192,11 @@ class TestSendMailGunEmail(TestCase):
     @patch('intake.services.mailgun_api_service.tasks')
     @patch('intake.services.mailgun_api_service.mailgun_auth')
     def test_calls_async_and_passes_correct_args(
-                self, mock_mailgun_auth, mock_tasks):
+            self, mock_mailgun_auth, mock_tasks):
         with self.settings(ALLOW_REQUESTS_TO_MAILGUN=True):
             send_mailgun_email(
                 'foo@bar.com', 'hello foo', self.profile, 'Hello')
-        mock_tasks.celery_request.delay.assert_called_once_with(
+        mock_tasks.celery_request.assert_called_once_with(
             'POST', MAILGUN_MESSAGES_API_URL,
             auth=mock_mailgun_auth.return_value, data={
                 "from": "Jane Doe <jdoe.yolo@clearmyrecord.org>",
@@ -232,7 +232,7 @@ class TestSetRouteForUserProfile(TestCase):
     @patch('intake.services.mailgun_api_service.requests')
     @patch('intake.services.mailgun_api_service.mailgun_auth')
     def test_sends_request_to_mailgun_to_create_route_for_user(
-                self, mock_mailgun_auth, mock_requests):
+            self, mock_mailgun_auth, mock_requests):
         mock_response = Mock()
         mock_response.status_code = 200
         mock_response.json.return_value = {}
