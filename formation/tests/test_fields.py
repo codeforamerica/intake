@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.utils import timezone
 from markupsafe import escape
 from formation import fields
 from intake import models
@@ -69,11 +70,12 @@ class TestYear(TestCase):
 
     def test_incorrect_year_number_is_invalid(self):
         data = {'year': 87}
+        current_year = timezone.now().year
         field = fields.Year(data)
         field.is_valid()
         self.assertTrue(field.errors)
-        self.assertIn("Please enter a year between 1900 and 2017",
-                      field.get_errors_list())
+        self.assertIn("Please enter a year between 1900 and {}"
+                      .format(current_year), field.get_errors_list())
 
 
 class TestDateOfBirthField(TestCase):
