@@ -36,20 +36,24 @@ def email_csv(request):
 
     for sub in subs:
         number_granted = 0
-        status_updates = []
+        last_status = None
         for app in sub.applications.all():
             number_granted += app.status_updates.filter(
                 status_type__slug='granted').count()
 
-            status_updates = sub.applications.status_updates.order_by(
-                '-updated')
-            if len(status_updates) > 0 :
-                latest= status_updates[0]
-        last_status = ''
-        last_status_date = ''
-        if most_recent_status_update:
-            last_status = most_recent_status_update.status_type.display_name
-            last_status_date = most_recent_status_update.updated
+            app_status = app.status_updates.\
+                order_by('-updated').first()
+            print(app_status)
+            if (app_status and not last_status) or (
+                    app_status and last_status and
+                    app_status.updated > last_status.updated):
+                last_status = app_status
+        if last_status:
+            last_status_name = last_status.status_type.display_name,
+            last_status_date = last_status.updated,
+        else:
+            last_status_name = None
+            last_status_date = None
 
         columns = [
             sub.id,
@@ -61,7 +65,7 @@ def email_csv(request):
             sub.how_did_you_hear,
             sub.additional_information,
             last_status_date,
-            last_status,
+            last_status_name,
             number_granted
         ]
 
