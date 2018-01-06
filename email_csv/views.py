@@ -22,52 +22,53 @@ def email_csv(request):
         'Submission date',
         'Email',
         'Phone number',
-        'Contact preferences',
+        'Prefers Email',
+        'Prefers SMS',
         'Counties',
         'How did you hear',
         'Anything else we should know',
         'Last Status Update At',
         'Last Status',
-        'Number of applications granted'
+        'Is Eligible',
+        'Is Granted',
+        'Notes',
+        'Tags'
     ]
 
     writer.writerow(headers)
     subs = FormSubmission.objects.all()
 
     for sub in subs:
-        number_granted = 0
-        last_status = None
         for app in sub.applications.all():
-            number_granted += app.status_updates.filter(
-                status_type__slug='granted').count()
+            granted = app.status_updates.filter(
+                status_type__slug='granted').count() > 0
 
-            app_status = app.status_updates.\
-                order_by('-updated').first()
-            print(app_status)
-            if (app_status and not last_status) or (
-                    app_status and last_status and
-                    app_status.updated > last_status.updated):
-                last_status = app_status
-        if last_status:
-            last_status_name = last_status.status_type.display_name,
-            last_status_date = last_status.updated,
-        else:
-            last_status_name = None
-            last_status_date = None
+            eligible = app.status_updates.filter(
+                status_type__slug='eligible').count() > 0
 
-        columns = [
-            sub.id,
-            sub.date_received,
-            sub.email,
-            sub.phone_number,
-            sub.contact_preferences,
-            '\n'.join(list(sub.organizations.values_list('name', flat=True))),
-            sub.how_did_you_hear,
-            sub.additional_information,
-            last_status_date,
-            last_status_name,
-            number_granted
-        ]
+            last_status = app.status_updates.order_by('-updated').first()
+            if last_status:
+                last_status_name = last_status.status_type.display_name
+                last_status_date = last_status.updated.strftime("%Y-%m-%d")
+            else:
+                last_status_name = None
+                last_status_date = None
 
-        writer.writerow(columns)
+            columns = [
+                sub.id,
+                sub.date_received.strftime("%Y-%m-%d"),
+                sub.email,
+                sub.phone_number,
+                'prefers_email' in sub.contact_preferences,
+                'prefers_sms' in sub.contact_preferences,
+                app.organization.name,
+                sub.how_did_you_hear,
+                sub.additional_information,
+                last_status_date,
+                last_status_name,
+                eligible,
+                granted
+            ]
+
+            writer.writerow(columns)
     return response
