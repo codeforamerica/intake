@@ -36,7 +36,10 @@ def email_csv(request):
     ]
 
     writer.writerow(headers)
-    subs = FormSubmission.objects.all()
+
+    start = int(request.GET.get('start'))
+    end = int(request.GET.get('end'))
+    subs = FormSubmission.objects.order_by('-id').all()[start:end]
 
     for sub in subs:
         for app in sub.applications.all():
