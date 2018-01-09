@@ -20,6 +20,15 @@ ERROR_MESSAGE = _(
 logger = logging.getLogger(__name__)
 
 
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+
 class ApplicantFormViewBase(FormView):
     session_key = 'form_in_progress'
 
@@ -39,7 +48,13 @@ class ApplicantFormViewBase(FormView):
         errors = []
         if not self.session_data.get('counties', []):
             errors.append(
-                NoCountiesInSessionError("No counties in session data"))
+                NoCountiesInSessionError(
+                    ("No counties in session data "
+                     "on url %s for ip %s expires %s") %
+                    (self.request.get_full_path(),
+                     get_client_ip(
+                        self.request),
+                        self.request.session.get_expiry_date())))
         if not self.applicant:
             errors.append(
                 NoApplicantInSessionError("No applicant in session data"))
@@ -58,7 +73,7 @@ class ApplicantFormViewBase(FormView):
             return response
         self.county_slugs = self.session_data.getlist('counties', [])
         self.counties = models.County.objects.order_by_name_or_not_listed(
-            ).filter(slug__in=self.county_slugs)
+        ).filter(slug__in=self.county_slugs)
         self.formatted_county_names = [
             county.name for county in self.counties]
         return super().dispatch(request, *args, **kwargs)
