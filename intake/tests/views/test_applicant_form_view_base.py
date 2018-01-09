@@ -39,24 +39,6 @@ class ApplicantFormViewBaseTestCase(AuthIntegrationTestCase):
 
 class TestApplicantFormViewBase(ApplicantFormViewBaseTestCase):
 
-    def test_redirects_if_empty_counties_in_session(self):
-        mock_view_instance = Mock(session_data={'counties': []})
-        with self.assertLogs(
-                'intake.views.applicant_form_view_base', level=logging.WARN):
-            response = ApplicantFormViewBase.check_for_session_based_redirects(
-                mock_view_instance)
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, reverse('intake-apply'))
-
-    def test_redirects_if_no_counties_in_session(self):
-        mock_view_instance = Mock(session_data={})
-        with self.assertLogs(
-                'intake.views.applicant_form_view_base', level=logging.WARN):
-            response = ApplicantFormViewBase.check_for_session_based_redirects(
-                mock_view_instance)
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, reverse('intake-apply'))
-
     def test_doesnt_redirect_if_has_counties_in_session(self):
         mock_view_instance = Mock(
             session_data={'counties': ['alameda', 'contracosta']})
