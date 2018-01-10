@@ -3,14 +3,11 @@ python:
   - "3.6"
 before_install:
 - unset _JAVA_OPTIONS
-- rvm install 2.2.1
-- nvm install 6.5
 cache:
   pip: true
   directories:
   - node_modules
 install:
-- bundle install
 - npm install
 - pip install -r requirements/ci.txt
 env:
