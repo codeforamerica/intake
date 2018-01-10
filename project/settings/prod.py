@@ -33,6 +33,8 @@ STATICFILES_STORAGE = 'project.custom_storages.CachedS3BotoStorage'
 COMPRESS_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 COMPRESS_ROOT = os.path.join(REPO_DIR, 'staticfiles-cache')
 COMPRESS_STORAGE = STATICFILES_STORAGE
+COMPRESS_OFFLINE_MANIFEST = 'manifest.%s.json' % os.environ.get(
+    'MANIFEST_VERSION')
 AWS_S3_FILE_OVERWRITE = True
 AWS_QUERYSTRING_AUTH = False  # For Static only We override in MediaStorage
 AWS_DEFAULT_ACL = 'private'  # Keeps things in bucket private
