@@ -15,7 +15,6 @@ ALLOWED_HOSTS = []
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 INSTALLED_APPS = [
-    'heroku_hijack_collectstatic',
     'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
