@@ -60,14 +60,17 @@ DIVERT_REMOTE_CONNECTIONS = os.environ.get(
 ALLOW_REQUESTS_TO_MAILGUN = not DIVERT_REMOTE_CONNECTIONS
 
 RAVEN_CONFIG = {
-    'dsn': 'https://<key>:<secret>@sentry.io/<project>',
-    # If you are using git, you can also automatically configure the
-    # release based on the git info.
+    'dsn': os.environ.get('SENTRY_DSN'),
     'release': RELEASE_DATETIME,
 }
-MIDDLEWARE = (
+MIDDLEWARE = [
     'raven.contrib.django.raven_compat.middleware.Sentry404CatchMiddleware',
-) + MIDDLEWARE
+] + MIDDLEWARE
+
+
+INSTALLED_APPS = [
+    'raven.contrib.django.raven_compat',
+] + INSTALLED_APPS
 
 LOGGING = {
     'version': 1,
