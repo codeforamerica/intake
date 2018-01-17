@@ -63,6 +63,7 @@ RAVEN_CONFIG = {
     'dsn': os.environ.get('SENTRY_DSN'),
     'release': RELEASE_DATETIME,
 }
+
 MIDDLEWARE = [
     'raven.contrib.django.raven_compat.middleware.Sentry404CatchMiddleware',
 ] + MIDDLEWARE

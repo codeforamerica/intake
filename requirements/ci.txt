@@ -1,3 +1,2 @@
 # dependencies for automated testing via Travis CI
--r prod.txt
 -r dev.txt
