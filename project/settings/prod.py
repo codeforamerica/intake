@@ -1,5 +1,7 @@
 from project.settings.environment import *
 
+RELEASE_DATETIME = os.environ.get('MANIFEST_VERSION')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -33,8 +35,7 @@ STATICFILES_STORAGE = 'project.custom_storages.CachedS3BotoStorage'
 COMPRESS_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 COMPRESS_ROOT = os.path.join(REPO_DIR, 'staticfiles-cache')
 COMPRESS_STORAGE = STATICFILES_STORAGE
-COMPRESS_OFFLINE_MANIFEST = 'manifest.%s.json' % os.environ.get(
-    'MANIFEST_VERSION')
+COMPRESS_OFFLINE_MANIFEST = 'manifest.%s.json' % RELEASE_DATETIME
 AWS_S3_FILE_OVERWRITE = True
 AWS_QUERYSTRING_AUTH = False  # For Static only We override in MediaStorage
 AWS_DEFAULT_ACL = 'private'  # Keeps things in bucket private
@@ -57,3 +58,37 @@ LIVE_COUNTY_CHOICES = True
 DIVERT_REMOTE_CONNECTIONS = os.environ.get(
     'DIVERT_REMOTE_CONNECTIONS', 'True') == 'True'
 ALLOW_REQUESTS_TO_MAILGUN = not DIVERT_REMOTE_CONNECTIONS
+
+RAVEN_CONFIG = {
+    'dsn': 'https://<key>:<secret>@sentry.io/<project>',
+    # If you are using git, you can also automatically configure the
+    # release based on the git info.
+    'release': RELEASE_DATETIME,
+}
+MIDDLEWARE = (
+    'raven.contrib.django.raven_compat.middleware.Sentry404CatchMiddleware',
+) + MIDDLEWARE
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+        },
+        'sentry': {
+            'level': 'INFO',
+            'class':
+            'raven.contrib.django.raven_compat.handlers.SentryHandler',
+            'tags': {'custom-tag': 'x'},
+        },
+    },
+    'loggers': {
+        'project': {
+            'handlers': ['console', 'sentry'],
+            'level': 'INFO',
+        },
+    },
+}

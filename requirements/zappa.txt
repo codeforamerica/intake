@@ -1,4 +1,4 @@
 # Dependencies for production
 -r app.txt
 boto~=2.48.0
-
+raven~=6.4.0
