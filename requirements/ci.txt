@@ -1,2 +1,3 @@
 # dependencies for automated testing via Travis CI
 -r dev.txt
+ansible-tower-cli~=3.2.1

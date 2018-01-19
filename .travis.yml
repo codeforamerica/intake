@@ -1,7 +1,9 @@
 language: python
 python:
-  - "3.6"
+- '3.6'
 before_install:
+- openssl aes-256-cbc -K $encrypted_b3469547d87f_key -iv $encrypted_b3469547d87f_iv
+  -in .tower_cli.cfg.enc -out .tower_cli.cfg -d
 - unset _JAVA_OPTIONS
 cache:
   pip: true
@@ -26,7 +28,7 @@ script:
 - "./manage.py new_fixtures"
 - make test.everything
 after_success:
-- codeclimate-test-reporter
+- sh ./update_builds_from_travis.sh
 notifications:
   slack:
     rooms:
