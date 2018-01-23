@@ -64,6 +64,7 @@ STATIC_ROOT = None
 COMPRESS_ROOT = os.path.join(REPO_DIR, 'staticfiles')
 COMPRESS_OFFLINE = False
 
+TEST_USER_PASSWORD="my-example-password"
 
 LOGGING = {
     'version': 1,
