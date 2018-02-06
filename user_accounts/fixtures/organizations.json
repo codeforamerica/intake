@@ -303,7 +303,7 @@
     "is_checking_notifications": true,
     "is_live": true,
     "requires_rap_sheet": false,
-    "requires_declaration_letter": false,
+    "requires_declaration_letter": true,
     "show_pdf_only": false,
     "short_confirmation_message": "You'll get a letter from the Fresno County Public Defender in 2-4 weeks.",
     "long_confirmation_message": "You will get a letter in the mail with your next steps from the Fresno County Public Defender in 2-4 weeks.",

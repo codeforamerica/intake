@@ -356,7 +356,26 @@ class SanJoaquinCountyFormSpec(SolanoCountyFormSpec):
 
 class FresnoCountyFormSpec(SolanoCountyFormSpec):
     county = 'fresno'
-    fields = (SolanoCountyFormSpec.fields | {
+    fields = {
+        F.ContactPreferences,
+        F.FirstName,
+        F.MiddleName,
+        F.LastName,
+        F.PhoneNumberField,
+        F.AlternatePhoneNumberField,
+        F.EmailField,
+        F.AddressField,
+        F.DateOfBirthField,
+        F.CitizenshipStatus,
+        F.OnProbationParole,
+        F.WhereProbationParole,
+        F.WhenProbationParole,
+        F.ServingSentence,
+        F.BeingCharged,
+        F.HowDidYouHear,
+        F.AdditionalInformation,
+        F.UnderstandsLimits,
+        F.ConsentToRepresent,
         F.Aliases,
         F.CaseNumber,
         F.ReasonsForApplying,
@@ -365,16 +384,39 @@ class FresnoCountyFormSpec(SolanoCountyFormSpec):
         F.HowManyDependents,
         F.LastFourOfSocial,
         F.DriverLicenseOrIDNumber,
-    }) - {
-        F.OwesCourtFees,
-        F.OtherCountyArrestsOrConvictions,
-        F.WhenWhereOtherCounties,
+        F.CurrentlyEmployed,
+        F.IncomeSource,
+        F.HowMuchSavings,
+        F.OnPublicBenefits,
+        F.MonthlyExpenses,
+        F.OwnsHome,
+        F.IsMarried
     }
-    optional_fields = SolanoCountyFormSpec.optional_fields | {
-        F.Aliases,
+    optional_fields = {
+        F.MiddleName,
+        F.AlternatePhoneNumberField,
+        F.HowDidYouHear,
+        F.AdditionalInformation,
+        F.Aliases
     }
-    required_fields = SolanoCountyFormSpec.required_fields - {
-        F.OwesCourtFees,
+    required_fields = {
+        F.FirstName,
+        F.LastName,
+        F.DateOfBirthField,
+        F.OnProbationParole,
+        F.ServingSentence,
+        F.BeingCharged,
+        F.UnderstandsLimits,
+        F.ConsentToRepresent,
+        F.MonthlyIncome,
+        F.HowManyDependents,
+        F.CurrentlyEmployed,
+        F.IncomeSource,
+        F.HowMuchSavings,
+        F.OnPublicBenefits,
+        F.MonthlyExpenses,
+        F.OwnsHome,
+        F.IsMarried
     }
     validators = [
         gave_preferred_contact_methods
