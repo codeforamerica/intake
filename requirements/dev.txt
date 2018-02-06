@@ -8,5 +8,5 @@ codeclimate-test-reporter~=0.1
 beautifulsoup4==4.4.1
 browserstack-local~=1.2.1
 selenium~=3.3.3
-
+boto~=2.48.0
 behave-django~=0.5.0

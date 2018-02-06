@@ -17,21 +17,23 @@ class Command(BaseCommand):
                 delimiter='\t',
                 quoting=csv.QUOTE_MINIMAL)
             headers = [
-                'ID',
+                'Submission ID',
+                'Application ID',
                 'Submission date',
                 'Email',
                 'Phone number',
                 'Prefers Email',
                 'Prefers SMS',
-                'Counties',
+                'Org',
                 'How did you hear',
                 'Anything else we should know',
+                'Has Status Updates',
+                'First Status Update At',
+                'First Status',
                 'Last Status Update At',
                 'Last Status',
                 'Is Eligible',
-                'Is Granted',
-                'Notes',
-                'Tags'
+                'Is Granted'
             ]
 
             writer.writerow(headers)
@@ -45,18 +47,28 @@ class Command(BaseCommand):
                     eligible = app.status_updates.filter(
                         status_type__slug='eligible').count() > 0
 
-                    last_status = app.status_updates.order_by(
-                        '-updated').first()
-                    if last_status:
+                    status_updates = app.status_updates.order_by('-updated')
+                    last_status = status_updates.first()
+                    first_status = status_updates.last()
+
+                    has_status_updates = status_updates.count() > 0
+                    if has_status_updates:
                         last_status_name = last_status.status_type.display_name
                         last_status_date = last_status.updated.strftime(
                             "%Y-%m-%d")
+                        first_status_name = \
+                            first_status.status_type.display_name
+                        first_status_date = first_status.updated.strftime(
+                            "%Y-%m-%d")
                     else:
+                        first_status_name = None
+                        first_status_date = None
                         last_status_name = None
                         last_status_date = None
 
                     columns = [
                         sub.id,
+                        app.id,
                         sub.date_received.strftime("%Y-%m-%d"),
                         sub.email,
                         sub.phone_number,
@@ -65,6 +77,9 @@ class Command(BaseCommand):
                         app.organization.name,
                         sub.how_did_you_hear,
                         sub.additional_information,
+                        has_status_updates,
+                        first_status_date,
+                        first_status_name,
                         last_status_date,
                         last_status_name,
                         eligible,
