@@ -72,6 +72,7 @@ DOLLAR_FIELDS = [
 Some fields were not extracted from the answers blob;
 UNEXTRACTED FIELDS = [
     'consent_to_represent',
+    'consent_self_represent',
     'understands_limits',
     'address',
     'declaration_letter_note',

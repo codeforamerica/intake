@@ -129,6 +129,20 @@ class ConsentToRepresent(ConsentCheckbox):
         "Consents to record access, filing, and court representation")
 
 
+class ConsentSelfRepresent(ConsentCheckbox):
+    context_key = "consent_self_represent"
+    is_required_error_message = (
+        "We need your understanding before we can help you")
+    label = _(
+        "Do you understand that you will not be represented by the Fresno "
+        "County Public Defender’s Office or the Clean Slate Program? The "
+        "attorneys will help you prepare your paperwork, but you will have "
+        "to represent yourself in court in Fresno County.")
+    agreement_text = _("Yes, I understand")
+    display_label = str(
+        "Consents to self representation")
+
+
 class UnderstandsLimits(ConsentCheckbox):
     context_key = "understands_limits"
     is_required_error_message = (
@@ -837,6 +851,7 @@ INTAKE_FIELDS = [
     IdentityConfirmation,
     UnderstandsMaybeFee,
     ConsentToRepresent,
+    ConsentSelfRepresent,
     ConsentNote,
 
     DeclarationLetterNote,

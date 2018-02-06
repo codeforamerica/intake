@@ -74,7 +74,8 @@ class PDFFormDisplay:
         ['how_did_you_hear'],
         [
             'understands_limits',
-            'consent_to_represent'
+            'consent_to_represent',
+            'consent_self_represent'
         ],
         [
             'identity_confirmation',
