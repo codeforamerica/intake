@@ -28,4 +28,3 @@ class Command(BaseCommand):
             fields['organization_id'] = org_id
             fields['should_get_notifications'] = False
             UserProfile.objects.create(**fields)
-
