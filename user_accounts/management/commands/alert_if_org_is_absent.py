@@ -12,10 +12,13 @@ from user_accounts.models import Organization
 
 class Command(BaseCommand):
     help = str(
-        "Check if any organizations have not logged in for the past 20 days")
+        "Check if any organizations have not logged in for the past 20 days. "
+        "Only runs if today is the first of the month")
 
     def handle(self, *args, **kwargs):
         now = timezone.now()
+        if now.day != 1:
+            return
         oldest_allowed_login_date = now - timedelta(days=20)
         for org in Organization.objects.all():
             latest_login = User.objects.filter(
