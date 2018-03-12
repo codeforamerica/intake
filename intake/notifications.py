@@ -278,10 +278,6 @@ email_daily_app_bundle = EmailNotification(
         "Online applications to Clear My Record"),
     body_template_path='email/app_bundle_email.jinja')
 
-# submissions, emails
-slack_app_bundle_sent = SlackTemplateNotification(
-    message_template_path="slack/app_bundle_sent.jinja")
-
 # CONFIRMATIONS & FOLLOWUPS
 
 CONFIRMATION_SUBJECT = _("Thanks for applying - Next steps")

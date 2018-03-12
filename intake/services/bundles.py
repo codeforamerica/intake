@@ -46,12 +46,7 @@ def count_unreads_and_send_notifications_to_orgs():
     orgs = get_orgs_that_might_need_a_bundle_email_today()
     for org in orgs:
         if org.slug == 'cfa':
-            notifications.slack_simple.send(
-                """
-There are {all_count} unhandled county-not-listed (CNL)
-applications outstanding: {review_link}""".format(
-                    all_count=AppsService.get_all_unhandled_cnl_apps().count(),
-                    review_link=external_reverse('intake-app_cnl_index')))
+            pass
         else:
             emails = org.get_referral_emails()
             unread_count = AppsService.get_unread_apps_per_org_count(org)
@@ -70,13 +65,6 @@ applications outstanding: {review_link}""".format(
                         'intake-needs_update_email_redirect'),
                     all_redirect_link=external_reverse(
                         'intake-all_email_redirect'))
-            notifications.slack_app_bundle_sent.send(
-                org_name=org.name,
-                emails=emails,
-                unread_count=unread_count,
-                update_count=update_count,
-                all_count=all_count,
-            )
 
 
 def create_bundle_from_submissions(submissions, skip_pdf=False, **kwargs):

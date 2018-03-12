@@ -243,8 +243,6 @@ class TestCreateBundlesAndSendNotificationsToOrgs(TestCase):
             BundlesService.count_unreads_and_send_notifications_to_orgs()
         self.assertEqual(
             self.notifications.front_email_daily_app_bundle.send.call_count, 1)
-        self.assertEqual(
-            self.notifications.slack_app_bundle_sent.send.call_count, 1)
 
 
 class TestCountUnreadsAndSendNotificationsToOrgs(TestCase):
@@ -254,9 +252,8 @@ class TestCountUnreadsAndSendNotificationsToOrgs(TestCase):
         return profile.user.email, profile.organization
 
     @patch('intake.notifications.front_email_daily_app_bundle.send')
-    @patch('intake.notifications.slack_app_bundle_sent.send')
     @patch('intake.services.bundles.is_the_weekend', not_the_weekend)
-    def test_counts_and_notification_args_for_unreads(self, slack, send_email):
+    def test_counts_and_notification_args_for_unreads(self, send_email):
         email, org = self.email_and_org()
         make_apps_for(org.slug, count=3, answers={})
         BundlesService.count_unreads_and_send_notifications_to_orgs()
@@ -272,18 +269,10 @@ class TestCountUnreadsAndSendNotificationsToOrgs(TestCase):
                     'intake-needs_update_email_redirect'),
                 all_redirect_link=external_reverse(
                     'intake-all_email_redirect'))
-        slack.assert_called_once_with(
-            org_name=org.name,
-            emails=[email],
-            unread_count=3,
-            update_count=3,
-            all_count=3)
 
     @patch('intake.notifications.front_email_daily_app_bundle.send')
-    @patch('intake.notifications.slack_app_bundle_sent.send')
     @patch('intake.services.bundles.is_the_weekend', not_the_weekend)
-    def test_counts_and_notification_args_for_no_unreads(
-            self, slack, send_email):
+    def test_counts_and_notification_args_for_no_unreads(self, send_email):
         email, org = self.email_and_org()
         apps = make_apps_for(org.slug, count=3, answers={})
         for app in apps:
@@ -291,9 +280,3 @@ class TestCountUnreadsAndSendNotificationsToOrgs(TestCase):
             app.save()
         BundlesService.count_unreads_and_send_notifications_to_orgs()
         send_email.assert_not_called()
-        slack.assert_called_once_with(
-            org_name=org.name,
-            emails=[email],
-            unread_count=0,
-            update_count=3,
-            all_count=3)
