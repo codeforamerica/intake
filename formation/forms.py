@@ -331,7 +331,9 @@ class SanDiegoCountyFormSpec(SolanoCountyFormSpec):
     county = 'san_diego'
     fields = (SolanoCountyFormSpec.fields | {
         F.CaseNumber,
-        F.IdentityConfirmation
+        F.IdentityConfirmation,
+        F.SocialSecurityNumberField,
+        F.DriverLicenseOrIDNumber
     }) - {
         F.CitizenshipStatus,
     }
@@ -340,6 +342,10 @@ class SanDiegoCountyFormSpec(SolanoCountyFormSpec):
     }
     optional_fields = SolanoCountyFormSpec.optional_fields | {
         F.CaseNumber
+    }
+    recommended_fields = {
+        F.SocialSecurityNumberField,
+        F.DriverLicenseOrIDNumber
     }
     validators = [
         gave_preferred_contact_methods,

@@ -16,6 +16,7 @@ share
 pyvenv.cfg
 pip-selfcheck.json
 .Python
+.venv
 
 # test outputs to ignore
 .coverage
