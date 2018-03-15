@@ -52,4 +52,5 @@ class Command(BaseCommand):
                   " {}. We should contact them.".format(
                         org.name, unread_applications_count,
                         oldest_submission_date.strftime('%-m/%-d/%y'))
+            print(msg)
             send_email_to_admins(subject=subject, message=msg)
