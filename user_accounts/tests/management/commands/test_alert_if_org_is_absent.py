@@ -9,8 +9,7 @@ from user_accounts.management.commands.alert_if_org_is_absent import Command
 from user_accounts.tests.factories import UserFactory, \
     FakeOrganizationFactory, UserProfileFactory
 
-old_login_date = timezone.now() - timedelta(days=21)
-recent_login_date = timezone.now() - timedelta(days=19)
+over_1_month_ago = timezone.now() - timedelta(days=35)
 
 
 class TestCommand(TestCase):
@@ -18,68 +17,50 @@ class TestCommand(TestCase):
     def setUp(self):
         self.org = FakeOrganizationFactory(
             name="Alameda County Pubdef", is_live=True)
+        self.user = UserFactory(last_login=over_1_month_ago)
+        UserProfileFactory(user=self.user, organization=self.org)
         self.sub = FormSubmissionWithOrgsFactory(
-            organizations=[self.org], answers={})
+            organizations=[self.org], answers={},
+            date_received=over_1_month_ago)
+        FormSubmissionWithOrgsFactory(
+            organizations=[self.org], answers={},
+            date_received=timezone.now())
 
     def run_command(self):
         command = Command()
         with self.settings(DEFAULT_HOST='localhost:8000'):
             command.handle()
 
-    def test_alerts_with_old_logins_and_unopened_apps(self):
-        user1 = UserFactory(last_login=old_login_date)
-        user2 = UserFactory(last_login=old_login_date - timedelta(days=2))
-        user3 = UserFactory(last_login=None)
-        UserProfileFactory(user=user1, organization=self.org)
-        UserProfileFactory(user=user2, organization=self.org)
-        UserProfileFactory(user=user3, organization=self.org)
+    def test_unopened_application_older_than_1_month(self):
         self.run_command()
         self.assertEqual(1, len(mail.outbox))
         email = mail.outbox[0]
         expected_subject = "Inactive organization on localhost:8000"
-        expected_body = "Alameda County Pubdef has not logged in since " \
-                        "{} and has 1 unopened applications".format(
-                            old_login_date.strftime("%a %b %-d %Y"))
+        expected_body = "Alameda County Pubdef has 2 unopened applications, " \
+                        "the oldest from {}".format(
+                            over_1_month_ago.strftime("%-m/%-d/%y"))
         self.assertEqual(expected_subject, email.subject)
         self.assertIn(expected_body, email.body)
 
-    def test_no_alert_with_no_logins_and_unopened_apps(self):
-        user1 = UserFactory(last_login=None)
-        user2 = UserFactory(last_login=None)
-        UserProfileFactory(user=user1, organization=self.org)
-        UserProfileFactory(user=user2, organization=self.org)
+    def test_unopened_application_newer_than_1_month(self):
+        self.sub.date_received = timezone.now() - timedelta(days=29)
+        self.sub.save()
         self.run_command()
         self.assertEqual(0, len(mail.outbox))
 
-    def test_no_alert_with_old_logins_unopened_apps_and_org_not_live(self):
-        user1 = UserFactory(last_login=old_login_date)
-        user2 = UserFactory(last_login=old_login_date - timedelta(days=2))
-        user3 = UserFactory(last_login=None)
+    def test_no_alert_with_no_logins_and_unopened_apps(self):
+        self.user.last_login = None
+        self.user.save()
+        self.run_command()
+        self.assertEqual(0, len(mail.outbox))
+
+    def test_no_alert_with_logins_unopened_apps_and_org_not_live(self):
         self.org.is_live = False
         self.org.save()
-        UserProfileFactory(user=user1, organization=self.org)
-        UserProfileFactory(user=user2, organization=self.org)
-        UserProfileFactory(user=user3, organization=self.org)
         self.run_command()
         self.assertEqual(0, len(mail.outbox))
 
-    def test_no_alert_with_old_logins_but_no_unopened_apps(self):
-        user1 = UserFactory(last_login=old_login_date)
-        user2 = UserFactory(last_login=old_login_date - timedelta(days=2))
-        user3 = UserFactory(last_login=None)
-        UserProfileFactory(user=user1, organization=self.org)
-        UserProfileFactory(user=user2, organization=self.org)
-        UserProfileFactory(user=user3, organization=self.org)
+    def test_no_alert_with_logins_but_no_unopened_apps(self):
         self.sub.applications.update(has_been_opened=True)
-        self.run_command()
-        self.assertEqual(0, len(mail.outbox))
-
-    def test_no_alert_with_recent_logins_and_unopened_apps(self):
-        user1 = UserFactory(last_login=recent_login_date)
-        user2 = UserFactory(last_login=old_login_date)
-        user3 = UserFactory(last_login=None)
-        UserProfileFactory(user=user1, organization=self.org)
-        UserProfileFactory(user=user2, organization=self.org)
-        UserProfileFactory(user=user3, organization=self.org)
         self.run_command()
         self.assertEqual(0, len(mail.outbox))

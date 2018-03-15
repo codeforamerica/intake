@@ -12,29 +12,44 @@ from user_accounts.models import Organization
 
 class Command(BaseCommand):
     help = str(
-        "Check if any organizations have not logged in for the past 20 days")
+        "Check if any organizations have unread applications "
+        "older than 30 days")
 
     def handle(self, *args, **kwargs):
         now = timezone.now()
-        oldest_allowed_login_date = now - timedelta(days=20)
+        oldest_allowed_submission_date = now - timedelta(days=30)
         for org in Organization.objects.all():
             latest_login = User.objects.filter(
                 profile__organization__id=org.id,
                 profile__organization__is_live=True,
                 last_login__isnull=False
-            ).order_by("-last_login").values_list(
-                'last_login', flat=True).first()
+            ).values_list('last_login', flat=True).first()
 
-            if latest_login and (latest_login < oldest_allowed_login_date):
-                latest_login_string = latest_login.strftime("%a %b %-d %Y")
+            if not latest_login:
+                return
 
-                unread_applications_count = Application.objects.filter(
-                    has_been_opened=False, organization__id=org.id).count()
-                subject = "Inactive organization on {}".format(
-                    settings.DEFAULT_HOST)
-                msg = "{} has not logged in since {} and has {} unopened " \
-                      "applications. We should contact them.".format(
-                        org.name, latest_login_string,
-                        unread_applications_count)
-                if unread_applications_count > 0:
-                    send_email_to_admins(subject=subject, message=msg)
+            unread_applications = Application.objects.filter(
+                has_been_opened=False,
+                was_transferred_out=False,
+                organization__id=org.id)
+            unread_applications_count = unread_applications.count()
+
+            if unread_applications_count <= 0:
+                return
+
+            submission_dates = [
+                app.form_submission.get_local_date_received()
+                for app in unread_applications
+            ]
+            oldest_submission_date = min(submission_dates)
+
+            if oldest_submission_date >= oldest_allowed_submission_date:
+                return
+
+            subject = "Inactive organization on {}".format(
+                settings.DEFAULT_HOST)
+            msg = "{} has {} unopened applications, the oldest from" \
+                  " {}. We should contact them.".format(
+                        org.name, unread_applications_count,
+                        oldest_submission_date.strftime('%-m/%-d/%y'))
+            send_email_to_admins(subject=subject, message=msg)
