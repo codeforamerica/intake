@@ -36,7 +36,7 @@ def stop_local():
 
 
 def before_all(context):
-    start_local()
+    # start_local()
     desired_cap = {
         'browser': 'Chrome',
         'browser_version': '57.0',
@@ -47,11 +47,14 @@ def before_all(context):
     desired_capabilities = desired_cap
     desired_capabilities['browserstack.local'] = True
     desired_capabilities['browserstack.debug'] = True
-    url = 'http://%s:%s@hub.browserstack.com:80/wd/hub'
-    context.browser = webdriver.Remote(
-        desired_capabilities=desired_capabilities,
-        command_executor=url % (USERNAME, ACCESS_KEY)
-    )
+    # url = 'http://%s:%s@hub.browserstack.com:80/wd/hub'
+    # context.browser = webdriver.Remote(
+    #     desired_capabilities=desired_capabilities,
+    #     command_executor=url % (USERNAME, ACCESS_KEY)
+    # )
+    options = webdriver.ChromeOptions()
+    options.add_argument('headless')
+    context.browser = webdriver.Chrome(chrome_options=options)
     context.browser.implicitly_wait(10)
     settings.DIVERT_REMOTE_CONNECTIONS = True
     setup_debug_on_error(context.config.userdata)
@@ -59,7 +62,7 @@ def before_all(context):
 
 def after_all(context):
     context.browser.quit()
-    stop_local()
+    # stop_local()
 
 
 def before_scenario(context, scenario):
