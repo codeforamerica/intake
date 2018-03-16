@@ -64,8 +64,8 @@ test.behave.debug:
 
 
 test.everything:
-	make test.coverage.keepdb
 	make test.behave
+	make test.coverage.keepdb
 	pycodestyle
 
 
