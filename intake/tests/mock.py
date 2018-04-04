@@ -93,7 +93,7 @@ def make_note(user, submission_id):
 
 
 def get_old_date():
-    return PACIFIC_TIME.localize(fake.date_time_between('-9w', '-6w'))
+    return PACIFIC_TIME.localize(fake.date_time_between('-9w', '-7w'))
 
 
 def get_newer_date():

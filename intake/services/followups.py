@@ -11,7 +11,7 @@ def get_submissions_due_for_follow_ups(after_id=None):
     and which have not been sent followups
     """
     today = utils.get_todays_date()
-    followup_time = datetime.timedelta(days=35)
+    followup_time = datetime.timedelta(days=7*6)
     end_date_criteria = today - followup_time
     date_criteria = Q(date_received__lte=end_date_criteria)
     apps_that_need_followups = models.Application.objects.filter(
