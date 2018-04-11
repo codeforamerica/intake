@@ -28,7 +28,12 @@ ua-parser==0.7.3
 django-url-robots==2.0
 zappa~=0.44
 requests==2.18.4
-awscli~=1.11
-
+awscli==1.14.56
+PyJWT==1.6.0
 factory-boy==2.9.2
 Faker==0.8.4
+boto3==1.6.9
+botocore==1.9.9
+cfn-flip==1.0.2
+cryptography==2.1.4
+oauthlib==2.0.6
