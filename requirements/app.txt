@@ -33,4 +33,3 @@ awscli~=1.11
 factory-boy==2.9.2
 Faker==0.8.4
 cryptography==2.1.4
-oauthlib==2.0.6
