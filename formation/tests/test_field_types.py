@@ -163,10 +163,11 @@ class TestWholeDollarField(PatchTranslationTestCase):
     def test_parse_monthly_income(self):
         test_data = sample_answers.dollar_answer_pairs
         for sample_input, expected_result in test_data.items():
-            data = {'monthly_income': sample_input}
-            field = fields.MonthlyIncome(data)
-            field.is_valid()
-            self.assertEqual(field.parsed_data, expected_result)
+            with self.subTest(sample_input=sample_input, expected_result=expected_result):
+                data = {'monthly_income': sample_input}
+                field = fields.MonthlyIncome(data)
+                field.is_valid()
+                self.assertEqual(field.parsed_data, expected_result)
 
     def test_comma_display(self):
         """WholeDollarField.get_display_value() 1000 -> $1,000.00

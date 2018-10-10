@@ -23,6 +23,7 @@ number_pairs = {
 
 dollar_answer_pairs = {
     '': None,
+    ',': None,
     'public assistance  welfare': None,
     'Incarcerated at CCWF Chowchilla': None,
     'Food Stamps': None,
