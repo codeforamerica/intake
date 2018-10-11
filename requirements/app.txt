@@ -1,21 +1,27 @@
 # Core dependencies
-django~=1.11.10
+django==1.11.14
+olefile==0.45.1
+placebo==0.8.1
+pycparser==2.18
 psycopg2~=2.6
 Jinja2~=2.8
 pytz~=2016.6
 python-dateutil~=2.5
 phonenumbers==8.8.0
-django-storages~=1.5
+django-storages==1.6.6
 django-allauth==0.32
 -e git+git://github.com/bee-keeper/django-invitations@master#egg=django-invitations
 sendgrid-django~=2.0
 django-jinja~=2.2
 djangorestframework~=3.5
 openpyxl==2.4.8
-reportlab~=3.3
+reportlab==3.5.2
+toml==0.9.4
+troposphere==2.3.1
+typing==3.6.4
 Pillow~=4.1
 python-Levenshtein~=0.12
-django-taggit~=0.21
+django-taggit==0.22.2
 mixpanel~=4.3.1
 django-extensions~=1.7
 twilio==6.1.0
@@ -28,8 +34,11 @@ ua-parser==0.7.3
 django-url-robots==2.0
 zappa~=0.44
 requests==2.18.4
-awscli~=1.11
-
+awscli==1.15.66
+boto3==1.7.65
+botocore==1.10.65
+certifi==2018.4.16
+click==6.7
 factory-boy==2.9.2
 Faker==0.8.4
 cryptography==2.1.4
