@@ -32,7 +32,7 @@ user-agents==1.1.0
 ua-parser==0.7.3
 -e git+git://github.com/rossettistone/django-easy-audit.git@patched#egg=django-easy-audit
 django-url-robots==2.0
-zappa==0.44.1
+zappa==0.46.2
 requests==2.18.4
 awscli==1.15.66
 boto3==1.7.65
