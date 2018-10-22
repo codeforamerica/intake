@@ -46,7 +46,6 @@ Numbers for Clear My Record
 {% block main_script %}
 {% if stats %}
   {% compress 'js' %}
-    <!-- test comment -->
     <script type="text/browserify" src="{{ static('intake/js/stats_entry.js') }}"></script>
   {% endcompress %}
 {% endif %}
