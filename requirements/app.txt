@@ -41,4 +41,4 @@ certifi==2018.4.16
 click==6.7
 factory-boy==2.9.2
 Faker==0.8.4
-cryptography==2.3.1
+cryptography==2.1.4
