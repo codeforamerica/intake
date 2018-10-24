@@ -1,5 +1,5 @@
 # Core dependencies
-django==1.11.14
+django==1.11.15
 olefile==0.45.1
 placebo==0.8.1
 pycparser==2.18
