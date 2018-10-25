@@ -3,7 +3,7 @@ django==1.11.15
 olefile==0.45.1
 placebo==0.8.1
 pycparser==2.18
-psycopg2~=2.6
+psycopg2-binary==2.7.5
 Jinja2~=2.8
 pytz~=2016.6
 python-dateutil~=2.5
