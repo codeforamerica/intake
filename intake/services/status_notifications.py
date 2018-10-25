@@ -17,7 +17,9 @@ def build_status_notification_context(request, status_update_data):
         personal_statement_link=request.build_absolute_uri(
             reverse('intake-personal_statement')),
         letters_of_rec_link=request.build_absolute_uri(
-            reverse('intake-recommendation_letters'))
+            reverse('intake-recommendation_letters')),
+        getting_your_rap_link=request.build_absolute_uri(
+            reverse('intake-rap_sheet'))
     )
 
 
