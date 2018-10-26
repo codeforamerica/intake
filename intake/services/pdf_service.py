@@ -57,13 +57,6 @@ def fill_any_unfilled_pdfs_for_app_ids(app_ids):
     # build individual filled pdfs if necessary
     for app in apps_without_pdfs:
         fill_pdf_for_application(app.id)
-    if apps_without_pdfs:
-        message = '{} apps did not have PDFs:\n'.format(len(apps_without_pdfs))
-        message += '\n'.join([str(app) for app in apps_without_pdfs])
-        alerts.send_email_to_admins(
-            subject='No FilledPDFs for Applications on {}'.format(
-                settings.DEFAULT_HOST),
-            message=message)
 
 
 def get_or_create_prebuilt_pdf_for_app_ids(app_ids):

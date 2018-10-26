@@ -77,15 +77,12 @@ class TestSetBytesToFilledPdfs(TestCase):
 class TestFillAnyUnfilledPdfsForAppIds(TestCase):
 
     @patch('intake.services.pdf_service.fill_pdf_for_application')
-    @patch('project.alerts.send_email_to_admins')
-    def test_if_no_app_ids(self, admin_alert, fill_pdf):
+    def test_if_no_app_ids(self, fill_pdf):
         PDFService.fill_any_unfilled_pdfs_for_app_ids([])
         fill_pdf.assert_not_called()
-        admin_alert.assert_not_called()
 
     @patch('intake.services.pdf_service.fill_pdf_for_application')
-    @patch('project.alerts.send_email_to_admins')
-    def test_if_all_apps_have_pdfs(self, admin_alert, fill_pdf):
+    def test_if_all_apps_have_pdfs(self, fill_pdf):
         app_ids = []
         subs = []
         for i in range(3):
@@ -95,11 +92,9 @@ class TestFillAnyUnfilledPdfsForAppIds(TestCase):
             subs.append(sub)
             app_ids.append(sub.applications.first().id)
         fill_pdf.assert_not_called()
-        admin_alert.assert_not_called()
 
     @patch('intake.services.pdf_service.fill_pdf_for_application')
-    @patch('project.alerts.send_email_to_admins')
-    def test_if_some_apps_have_pdfs(self, admin_alert, fill_pdf):
+    def test_if_some_apps_have_pdfs(self, fill_pdf):
         app_ids = []
         subs = []
         for i in range(3):
@@ -112,10 +107,6 @@ class TestFillAnyUnfilledPdfsForAppIds(TestCase):
         with self.settings(DEFAULT_HOST='www.crazymanes.horse'):
             PDFService.fill_any_unfilled_pdfs_for_app_ids(app_ids)
         fill_pdf.assert_called_once_with(app_ids[2])
-        printed_app = str(subs[2].applications.first())
-        admin_alert.assert_called_once_with(
-            subject='No FilledPDFs for Applications on www.crazymanes.horse',
-            message='1 apps did not have PDFs:\n{}'.format(printed_app))
 
 
 class TestGetPrebuiltPdfBundleForAppIdSet(TestCase):
