@@ -51,9 +51,18 @@ class ApplicationAutocompleteSerializer(serializers.ModelSerializer):
 class ApplicationCSVDownloadSerializer(LatestStatusBase):
     status_updates = StatusUpdateCSVDownloadSerializer(many=True)
 
+    def get_display_form_for_application(self, app):
+        display_form = getattr(self, 'cached_display_form', None)
+
+        if not display_form:
+            display_form = get_display_form_for_application(app)
+            setattr(self, 'cached_display_form', display_form)
+
+        return display_form
+
     def to_representation(self, app, *args, **kwargs):
         app_fields = super().to_representation(app, *args, **kwargs)
-        display_form, letter = get_display_form_for_application(app)
+        display_form, letter = self.get_display_form_for_application(app)
         data = OrderedDict(id=app.form_submission_id)
         data['Link'] = app.form_submission.get_external_url()
         data['Application Date'] = \
