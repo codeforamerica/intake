@@ -17,6 +17,7 @@ def get_all_applications_for_users_org(user):
         'status_updates',
         'status_updates__status_type',
         'status_updates__author',
+        'organization__county'
     ]
     qset = models.Application.objects.filter(
         organization__profiles__user=user
