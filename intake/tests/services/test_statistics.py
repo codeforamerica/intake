@@ -54,8 +54,10 @@ class TestMakeYearWeeks(TestCase):
 
     def test_make_year_weeks_output(self):
         todays_date = utils.get_todays_date()
-        next_week = todays_date + datetime.timedelta(days=7)
-        last_year_week = statistics.as_year_week(todays_date)
+        weekday = todays_date.weekday()
+        first_day_of_this_week = todays_date - datetime.timedelta(days=weekday)
+        next_week = first_day_of_this_week + datetime.timedelta(days=7)
+        last_year_week = statistics.as_year_week(first_day_of_this_week)
         too_far_year_week = statistics.as_year_week(next_week)
         year_weeks = statistics.make_year_weeks()
         expected_last_yw = year_weeks[-1]
