@@ -18,7 +18,6 @@ file.
 
 
 class TestGetSubmissionsDueForFollowups(TestCase):
-
     fixtures = ESSENTIAL_DATA_FIXTURES + MOCK_USER_ACCOUNT_FIXTURES
 
     def setUp(self):
@@ -29,9 +28,9 @@ class TestGetSubmissionsDueForFollowups(TestCase):
 
     def test_filters_out_new_submissions(self):
         # NOTE: this seems to raise a warning:
-            # RuntimeWarning: DateTimeField FormSubmission.date_received
-            # received a naive datetime (2016-11-07 00:00:00) while time zone
-            # support is active.
+        # RuntimeWarning: DateTimeField FormSubmission.date_received
+        # received a naive datetime (2016-11-07 00:00:00) while time zone
+        # support is active.
         # but the datetime sent is definitely not naive, and the resulting
         # value of date_received is correct.
         # I don't know what causes the warning
@@ -146,7 +145,6 @@ class TestGetSubmissionsDueForFollowups(TestCase):
 
 
 class TestSendFollowupNotifications(ExternalNotificationsPatchTestCase):
-
     fixtures = ESSENTIAL_DATA_FIXTURES + MOCK_USER_ACCOUNT_FIXTURES
 
     def setUp(self):

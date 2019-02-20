@@ -71,7 +71,7 @@ class Counties(MultipleChoiceField):
 
     def get_display_for_county(self, county, unlisted_counties=None):
         if (county.slug == 'not_listed') and unlisted_counties:
-                return '“{}”'.format(unlisted_counties)
+            return '“{}”'.format(unlisted_counties)
         return county.name
 
     def get_display_value(self, unlisted_counties=None):
