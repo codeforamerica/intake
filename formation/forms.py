@@ -92,12 +92,21 @@ class SanFranciscoCountyFormSpec(CombinableCountyFormSpec):
     required_fields = {
         F.FirstName,
         F.LastName,
+        F.PhoneNumberField,
+        F.DateOfBirthField,
+        F.CitizenshipStatus,
+        F.AddressField,
+        F.OnProbationParole,
+        F.ServingSentence,
+        F.BeingCharged,
+        F.OtherCountyArrestsOrConvictions,
+        F.CurrentlyEmployed,
+        F.MonthlyIncome,
+        F.MonthlyExpenses,
         F.UnderstandsLimits,
         F.ConsentToRepresent,
     }
     recommended_fields = {
-        F.AddressField,
-        F.DateOfBirthField,
         F.SocialSecurityNumberField,
     }
     optional_fields = {

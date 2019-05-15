@@ -2,26 +2,54 @@ from unittest.mock import Mock
 from django.test import TestCase
 from formation.tests import mock
 
-from formation.forms import county_form_selector
 from formation import fields as F
 from formation.field_types import IntegerField
 from formation.field_base import Field
 from formation.form_base import Form
 from formation import validators
+from formation.validators import gave_preferred_contact_methods
 
 
 class ExampleForm(Form):
-    fields = [F.FirstName]
-    required_fields = [F.FirstName]
+    fields = [
+        F.ContactPreferences,
+        F.FirstName,
+        F.MiddleName,
+        F.LastName,
+        F.PhoneNumberField,
+        F.EmailField,
+        F.AddressField,
+        F.DateOfBirthField,
+        F.SocialSecurityNumberField,
+        F.CitizenshipStatus,
+        F.ServingSentence,
+        F.OnProbationParole,
+        F.WhereProbationParole,
+        F.WhenProbationParole,
+        F.BeingCharged,
+        F.OtherCountyArrestsOrConvictions,
+        F.WhenWhereOtherCounties,
+        F.FinancialScreeningNote,
+        F.CurrentlyEmployed,
+        F.MonthlyIncome,
+        F.MonthlyExpenses,
+        F.HowDidYouHear,
+        F.AdditionalInformation,
+        F.UnderstandsLimits,
+        F.ConsentToRepresent,
+    ]
+    required_fields = [
+        F.FirstName,
+        F.LastName,
+        F.UnderstandsLimits,
+        F.ConsentToRepresent,
+    ]
+    validators = [
+        gave_preferred_contact_methods
+    ]
 
 
 class TestForm(TestCase):
-
-    def get_sf_form(self, *args):
-        form_class = county_form_selector.get_combined_form_class(
-            counties=['sanfrancisco'])
-        return form_class(*args)
-
     def test_does_not_alter_class_attributes_after_instantiation(self):
         # make sure we have a class
         form = ExampleForm({})
@@ -30,13 +58,13 @@ class TestForm(TestCase):
         self.assertEqual(ExampleForm.required_fields[0], F.FirstName)
 
     def test_can_be_instantiated_with_multivalue_dict(self):
-        form = self.get_sf_form(mock.RAW_FORM_DATA)
+        form = ExampleForm(mock.RAW_FORM_DATA)
         self.assertFalse(form.is_valid())
 
     def test_application_form_with_raw_empty_post_data(self):
         # Application form should not have trouble reading raw post data from
         # a Django request. But the form should not be valid
-        form = self.get_sf_form(mock.RAW_FORM_DATA)
+        form = ExampleForm(mock.RAW_FORM_DATA)
         self.assertTrue(not form.is_valid())
         keys = form.errors.keys()
         self.assertTrue('first_name' in keys)
@@ -47,7 +75,7 @@ class TestForm(TestCase):
 
     def test_application_form_with_mock_answers(self):
         fake_answers = mock.form_answers()
-        form = self.get_sf_form(fake_answers)
+        form = ExampleForm(fake_answers)
         self.assertTrue(form.is_valid())
 
     def test_empty_value_is_as_expected(self):
@@ -86,9 +114,9 @@ class TestForm(TestCase):
             'understands_limits': '',
             'additional_information': '',
         }
-        form = self.get_sf_form()
+        form = ExampleForm()
         self.assertDictEqual(form.empty_value, expected_empty_value)
-        form = self.get_sf_form({})
+        form = ExampleForm({})
         self.assertDictEqual(form.empty_value, expected_empty_value)
 
     def test_can_be_instantiated_with_preparsed_data(self):
@@ -124,12 +152,12 @@ class TestForm(TestCase):
             'understands_limits': 'yes',
             'additional_information': 'foo bar',
         }
-        form = self.get_sf_form(preparsed)
+        form = ExampleForm(preparsed)
         self.assertTrue(form.is_valid())
         self.assertDictEqual(form.cleaned_data, preparsed)
 
     def test_can_get_fields_through_context_key_as_attr(self):
-        form = self.get_sf_form()
+        form = ExampleForm()
         self.assertTrue(isinstance(form.address, Field))
         self.assertTrue(isinstance(form.contact_preferences, Field))
         self.assertTrue(isinstance(form.dob, Field))
@@ -144,7 +172,7 @@ class TestForm(TestCase):
             "prefers_snailmail",
             "prefers_voicemail"
         ]
-        form = self.get_sf_form(dict(contact_preferences=contact_preferences))
+        form = ExampleForm(dict(contact_preferences=contact_preferences))
         self.assertFalse(form.is_valid())
         errors = form.errors
         self.assertIn(validators.gave_preferred_contact_methods.message(
@@ -156,7 +184,7 @@ class TestForm(TestCase):
         self.assertIn(validators.gave_preferred_contact_methods.message(
             'prefers_snailmail'), errors['address'])
         # case: only required errors, no contact info erros
-        form = self.get_sf_form(mock.post_data(**{
+        form = ExampleForm(mock.post_data(**{
             'contact_preferences': contact_preferences,
             'address.street': '111 Main St.',
             'address.city': 'Oakland',
@@ -172,26 +200,26 @@ class TestForm(TestCase):
 
     def test_form_display(self):
         fake_answers = mock.FILLED_SF_DATA
-        form = self.get_sf_form(fake_answers)
+        form = ExampleForm(fake_answers)
         self.assertTrue(form.is_valid())
         self.assertTrue(hasattr(form.display(), '__html__'))
 
     def test_dynamic_field_display_with_existing_field(self):
         fake_answers = mock.FILLED_SF_DATA
-        form = self.get_sf_form(fake_answers)
+        form = ExampleForm(fake_answers)
         self.assertEqual(
             form.first_name_display, form.first_name.render(display=True))
         self.assertTrue(hasattr(form.first_name_display, '__html__'))
 
     def test_dynamic_field_display_with_nonexistent_field(self):
         fake_answers = mock.FILLED_SF_DATA
-        form = self.get_sf_form(fake_answers)
+        form = ExampleForm(fake_answers)
         self.assertEqual(
             form.random_field_display, "")
 
     def test_dynamic_field_display_raises_error_for_unknown_attribute(self):
         fake_answers = mock.FILLED_SF_DATA
-        form = self.get_sf_form(fake_answers)
+        form = ExampleForm(fake_answers)
         with self.assertRaises(AttributeError):
             str(form.foobar)
 

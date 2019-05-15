@@ -140,6 +140,9 @@ def sf_fields(context):
       When the "ssn" text input is set to "123-45-6789"
        And the "monthly_expenses" text input is set to "1000"
        And "yes" is clicked on the "currently_employed" radio button
+       And "no" is clicked on the "being_charged" radio button
+       And "no" is clicked on the "rap_outside_sf" radio button
+       And "no" is clicked on the "currently_employed" radio button
       ''')
 
 
