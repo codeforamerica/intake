@@ -65,7 +65,7 @@
   "fields": {
     "label": "Outcome: granted",
     "display_name": "Granted",
-    "template": "Congrats, your request to clear some convictions on your {{county}} record was granted!\n\nIt might take a couple weeks for the court to update your record.\n\nWant an idea of what some employers might now see on your background check? You can request a free copy here: https://www.betterfuture.com.\n\nYou can also request a copy of your state criminal record by following the directions here: {{ getting_your_rap_link }}.",
+    "template": "Congrats, your request to clear some convictions on your {{county}} record was granted!\n\nIt might take a couple weeks for the court to update your record.\n\nWant an idea of what some employers might now see on your background check? You can request a free copy here: https://www.betterfuture.com/?utm_source=clearmyrecord&utm_medium=email&utm_campaign=granted.\n\nYou can also request a copy of your state criminal record by following the directions here: {{ getting_your_rap_link }}.",
     "help_text": "",
     "slug": "granted",
     "display_order": 10
