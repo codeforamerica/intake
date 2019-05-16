@@ -56,7 +56,7 @@ def before_all(context):
     options.add_argument('headless')
 
     # fixes weird chrome keychain popup, as described here:
-    #https://groups.google.com/d/msg/chromedriver-users/ktp-s_0M5NM/lFerFJSlAgAJ
+    # https://groups.google.com/d/msg/chromedriver-users/ktp-s_0M5NM/lFerFJSlAgAJ
     options.add_argument("enable-features=NetworkService,NetworkServiceInProcess")
 
     context.browser = webdriver.Chrome(chrome_options=options)
