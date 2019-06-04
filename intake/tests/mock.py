@@ -349,6 +349,7 @@ def build_seed_submissions():
         fixture_path('mock_1_submission_to_multiple_orgs.json'))
     make_two_mock_transfers()
 
+
 def build_2000_mock_submissions():
     subs = []
     orgs = Organization.objects.filter(is_receiving_agency=True, slug='a_pubdef')
@@ -377,9 +378,6 @@ def build_2000_mock_submissions():
             author=org.profiles.first().user)
         updated_application.has_been_opened = True
         updated_application.save()
-
-
-
 
 
 def fixture_path(filename):
