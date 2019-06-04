@@ -349,6 +349,38 @@ def build_seed_submissions():
         fixture_path('mock_1_submission_to_multiple_orgs.json'))
     make_two_mock_transfers()
 
+def build_2000_mock_submissions():
+    subs = []
+    orgs = Organization.objects.filter(is_receiving_agency=True, slug='a_pubdef')
+    for org in orgs:
+        # make 2 submissions to each org
+        for i in range(2000):
+            sub = factories.FormSubmissionWithOrgsFactory.create(
+                organizations=[org])
+            subs.append(sub)
+    sub_ids = [sub.id for sub in subs]
+    applicants = []
+    for sub in subs:
+        applicants.append(sub.applicant)
+
+    """
+    Creating status updates for all applications forces a mock situation
+    in which there are 0 unread applications, which limits our test range.
+    Working around that by only doing so for the first 2 applications to
+    an org.
+    """
+    for org in orgs:
+        updated_application = models.Application.objects.filter(
+            organization=org, form_submission_id__in=sub_ids).first()
+        factories.StatusUpdateWithNotificationFactory.create(
+            application=updated_application,
+            author=org.profiles.first().user)
+        updated_application.has_been_opened = True
+        updated_application.save()
+
+
+
+
 
 def fixture_path(filename):
     return os.path.join('intake', 'fixtures', filename)
