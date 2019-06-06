@@ -2,12 +2,16 @@ from formation.forms import (
     display_form_selector, DeclarationLetterDisplay)
 
 
-def instantiate_display_form_with_submission(form_class, submission):
+def instantiate_display_form_with_submission(form_class, submission, org=None):
     """Feed a submission and its associated data into a display form class
     """
-    # one query to get all related objects
-    orgs = list(submission.organizations.select_related('county'))
+    if org:
+        orgs = [org]
+    else:
+        orgs = list(submission.organizations.select_related('county'))
+
     county_slugs = [org.county.slug for org in orgs]
+
     init_data = dict(
         date_received=submission.get_local_date_received(),
         counties=county_slugs,
@@ -52,3 +56,13 @@ def get_display_form_for_application(application):
         counties=[application.organization.county.slug])
     return instantiate_display_form_with_submission(
         DisplayFormClass, application.form_submission)
+
+
+def get_display_form_for_csv_download(application):
+    """Returns a display form based on the organization an application is
+    destined for
+    """
+    DisplayFormClass = display_form_selector.get_combined_form_class(
+        counties=[application.organization.county.slug])
+    return instantiate_display_form_with_submission(
+        DisplayFormClass, application.form_submission, application.organization)

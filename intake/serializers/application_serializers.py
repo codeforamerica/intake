@@ -4,7 +4,7 @@ from rest_framework import serializers
 from .status_update_serializer import MinimalStatusUpdateSerializer, \
     StatusUpdateCSVDownloadSerializer
 from intake.services.display_form_service import \
-    get_display_form_for_application
+    get_display_form_for_csv_download
 
 
 class LatestStatusBase(serializers.ModelSerializer):
@@ -53,7 +53,7 @@ class ApplicationCSVDownloadSerializer(LatestStatusBase):
 
     def to_representation(self, app, *args, **kwargs):
         app_fields = super().to_representation(app, *args, **kwargs)
-        display_form, letter = get_display_form_for_application(app)
+        display_form, letter = get_display_form_for_csv_download(app)
         data = OrderedDict(id=app.form_submission_id)
         data['Link'] = app.form_submission.get_external_url()
         data['Application Date'] = \
