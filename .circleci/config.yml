@@ -1,0 +1,68 @@
+# Python CircleCI 2.0 configuration file
+# Check https://circleci.com/docs/2.0/language-python/ for more details
+#
+version: 2
+jobs:
+  build:
+    branches:
+        only:
+            - add-circleci
+    docker:
+      # specify the version you desire here
+      # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
+      - image: circleci/python:3.6.6-node-browsers
+        environment:
+            DJANGO_SETTINGS_MODULE: 'project.settings.circleci'
+            DELUXE_TEST: 1
+            SECRET_KEY: 'not so secret key'
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
+      - image: circleci/postgres:9.6.11
+        environment:
+            POSTGRES_USER: circleci
+            POSTGRES_DB: intake
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "requirements.txt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run:
+          name: Install Dependencies
+          command: |
+            python -m venv .venv
+            . .venv/bin/activate
+            pip install -r requirements/ci.txt
+            sudo apt-get update
+            sudo apt-get install openjdk-8-jdk
+            npm install
+
+      - save_cache:
+          paths:
+            - .venv
+          key: v1-dependencies-{{ checksum "requirements.txt" }}
+
+      - run:
+          name: Run Tests
+          command: |
+            . .venv/bin/activate
+            ./manage.py migrate
+            ./manage.py load_essential_data
+            ./manage.py new_fixtures
+            ./manage.py collectstatic --noinput
+            ./manage.py compress --engine jinja2 --extension jinja
+            make test.everything
+
+      - store_artifacts:
+          path: test-reports
+          destination: test-reports
