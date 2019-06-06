@@ -17,6 +17,8 @@ is_not_listed_county = Q(slug='not_listed')
 
 
 class CountyManager(models.Manager):
+    all_counties_cache = None
+    all_counties_choice_list_cache = None
 
     def get_by_natural_key(self, slug):
         return self.get(slug=slug)
@@ -31,12 +33,17 @@ class CountyManager(models.Manager):
                 ).exclude(is_not_listed_county)
 
     def get_county_choices(self):
-        qset = self.get_county_choices_query()
-        return tuple((obj.slug, obj) for obj in qset)
+        if self.all_counties_cache is None:
+            qset = self.get_county_choices_query()
+            self.all_counties_cache = tuple((obj.slug, obj) for obj in qset)
+        return self.all_counties_cache
 
     def get_all_counties_as_choice_list(self):
-        return tuple(
-            (obj.slug, obj) for obj in self.order_by_name_or_not_listed())
+        if self.all_counties_choice_list_cache is None:
+            self.all_counties_choice_list_cache = tuple(
+                (obj.slug, obj) for obj in self.order_by_name_or_not_listed())
+
+        return self.all_counties_choice_list_cache
 
     def annotate_is_not_listed(self):
         return self.annotate(
