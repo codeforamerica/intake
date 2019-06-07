@@ -175,7 +175,7 @@ def orgs_display_data(org_app_data_by_week, orgs, year_weeks):
         # Add the data for this org formatted for display
         org_data.append({
             'org': org,
-            'total': org_totals[org_id],
+            'total': org_totals.get(org_id, 0),
             'weekly_totals': org_weekly_totals[org_id],
             'apps_this_week': org_weekly_totals[org_id][-1]['count'] if len(
                 org_weekly_totals[org_id]) > 0 else 0,
