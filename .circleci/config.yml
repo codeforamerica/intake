@@ -76,8 +76,8 @@ jobs:
           command: |
             . .venv/bin/activate
             if [[ "${CIRCLE_BRANCH}" == "develop" ]]; then
-                tower-cli job launch -J 10 # staging
+                tower-cli job launch --job-template=10 # staging
             elif [[ "${CIRCLE_BRANCH}" == "master" ]]; then
-                tower-cli job launch -J 25 # demo
-                tower-cli job launch -J 24 # production
+                tower-cli job launch --job-template=25 # demo
+                tower-cli job launch --job-template=24 # production
             fi
