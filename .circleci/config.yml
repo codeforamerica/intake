@@ -66,3 +66,17 @@ jobs:
       - store_artifacts:
           path: test-reports
           destination: test-reports
+
+      - run:
+          name: Deploy
+          environment:
+            TOWER_HOST: https://tower.clearmyrecord.org
+            TOWER_USERNAME: circleci
+          command: |
+            . .venv/bin/activate
+            if [[ "${CIRCLE_BRANCH}" == "develop" ]]; then
+                tower-cli job launch -J 10 # staging
+            elif [[ "${CIRCLE_BRANCH}" == "master" ]]; then
+                tower-cli job launch -J 25 # demo
+                tower-cli job launch -J 24 # production
+            fi
