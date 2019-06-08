@@ -72,6 +72,7 @@ jobs:
           environment:
             TOWER_HOST: https://tower.clearmyrecord.org
             TOWER_USERNAME: circleci
+            TOWER_VERIFY_SSL: false
           command: |
             . .venv/bin/activate
             if [[ "${CIRCLE_BRANCH}" == "develop" ]]; then
