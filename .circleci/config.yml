@@ -27,13 +27,6 @@ jobs:
     steps:
       - checkout
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "requirements.txt" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-
       - run:
           name: Install Dependencies
           command: |
@@ -43,11 +36,6 @@ jobs:
             sudo apt-get update
             sudo apt-get install openjdk-8-jdk
             npm install
-
-      - save_cache:
-          paths:
-            - .venv
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
 
       - run:
           name: Run Tests
@@ -59,10 +47,6 @@ jobs:
             ./manage.py collectstatic --noinput
             ./manage.py compress --engine jinja2 --extension jinja
             make test.everything
-
-      - store_artifacts:
-          path: test-reports
-          destination: test-reports
 
       - run:
           name: Deploy
