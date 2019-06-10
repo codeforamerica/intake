@@ -4,9 +4,6 @@
 version: 2
 jobs:
   build:
-    branches:
-        only:
-            - add-circleci
     docker:
       # specify the version you desire here
       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
