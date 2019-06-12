@@ -26,7 +26,7 @@ class Command(BaseCommand):
             ).values_list('last_login', flat=True).first()
 
             if not latest_login:
-                return
+                continue
 
             unread_applications = Application.objects.filter(
                 has_been_opened=False,
@@ -35,7 +35,7 @@ class Command(BaseCommand):
             unread_applications_count = unread_applications.count()
 
             if unread_applications_count <= 0:
-                return
+                continue
 
             submission_dates = [
                 app.form_submission.get_local_date_received()
@@ -44,7 +44,7 @@ class Command(BaseCommand):
             oldest_submission_date = min(submission_dates)
 
             if oldest_submission_date >= oldest_allowed_submission_date:
-                return
+                continue
 
             subject = "Inactive organization on {}".format(
                 settings.DEFAULT_HOST)

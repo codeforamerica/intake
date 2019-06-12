@@ -42,6 +42,25 @@ class TestCommand(TestCase):
         self.assertEqual(expected_subject, email.subject)
         self.assertIn(expected_body, email.body)
 
+    def test_two_orgs_one_without_alert_followed_by_one_with_alert(self):
+        self.org_2 = FakeOrganizationFactory(
+            name="Aardvark alphabetically before Alameda", is_live=True)
+        self.user_2 = UserFactory(last_login=over_1_month_ago)
+        UserProfileFactory(user=self.user_2, organization=self.org_2)
+        FormSubmissionWithOrgsFactory(
+            organizations=[self.org_2], answers={},
+            date_received=timezone.now())
+
+        self.run_command()
+        self.assertEqual(1, len(mail.outbox))
+        email = mail.outbox[0]
+        expected_subject = "Inactive organization on localhost:8000"
+        expected_body = "Alameda County Pubdef has 2 unopened applications, " \
+                        "the oldest from {}".format(
+                            over_1_month_ago.strftime("%-m/%-d/%y"))
+        self.assertEqual(expected_subject, email.subject)
+        self.assertIn(expected_body, email.body)
+
     def test_unopened_application_newer_than_1_month(self):
         self.sub.date_received = timezone.now() - timedelta(days=29)
         self.sub.save()
