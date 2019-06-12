@@ -31,7 +31,9 @@ class Command(BaseCommand):
             unread_applications = Application.objects.filter(
                 has_been_opened=False,
                 was_transferred_out=False,
-                organization__id=org.id)
+                organization__id=org.id,
+                status_updates__isnull=True
+            )
             unread_applications_count = unread_applications.count()
 
             if unread_applications_count <= 0:

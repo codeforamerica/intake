@@ -4,7 +4,8 @@ from django.core import mail
 from django.test import TestCase
 from django.utils import timezone
 
-from intake.tests.factories import FormSubmissionWithOrgsFactory
+from intake.models import Application, StatusUpdate
+from intake.tests.factories import FormSubmissionWithOrgsFactory, StatusTypeFactory
 from user_accounts.management.commands.alert_if_org_is_absent import Command
 from user_accounts.tests.factories import UserFactory, \
     FakeOrganizationFactory, UserProfileFactory
@@ -41,6 +42,13 @@ class TestCommand(TestCase):
                             over_1_month_ago.strftime("%-m/%-d/%y"))
         self.assertEqual(expected_subject, email.subject)
         self.assertIn(expected_body, email.body)
+
+    def test_unopened_application_older_than_1_month_with_status_update(self):
+        application = Application.objects.get(organization=self.org, form_submission=self.sub)
+        status = StatusUpdate(application=application, author=self.user, status_type=StatusTypeFactory())
+        status.save()
+        self.run_command()
+        self.assertEqual(0, len(mail.outbox), "No alert should be raised if application has status update")
 
     def test_two_orgs_one_without_alert_followed_by_one_with_alert(self):
         self.org_2 = FakeOrganizationFactory(
