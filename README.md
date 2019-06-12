@@ -1,5 +1,5 @@
 # Intake
-[![Build Status](https://travis-ci.org/codeforamerica/intake.svg?branch=master)](https://travis-ci.org/codeforamerica/intake) [![Test Coverage](https://codeclimate.com/github/codeforamerica/intake/badges/coverage.svg)](https://codeclimate.com/github/codeforamerica/intake/coverage) [![Code Climate](https://codeclimate.com/github/codeforamerica/intake/badges/gpa.svg)](https://codeclimate.com/github/codeforamerica/intake) 
+[![CircleCI](https://circleci.com/gh/codeforamerica/intake.svg?style=svg)](https://circleci.com/gh/codeforamerica/intake)  [![Code Climate](https://codeclimate.com/github/codeforamerica/intake/badges/gpa.svg)](https://codeclimate.com/github/codeforamerica/intake) 
 
 
 [Tech Overview](https://github.com/codeforamerica/intake/wiki)
