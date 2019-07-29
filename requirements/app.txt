@@ -1,5 +1,5 @@
 # Core dependencies
-django==1.11.20
+django==1.11.22
 olefile==0.45.1
 placebo==0.8.1
 pycparser==2.18
@@ -27,12 +27,12 @@ django-extensions~=1.7
 twilio==6.1.0
 django-compressor==2.1.1
 # user agent parsing & middleware
-PyYAML==3.13
+PyYAML==4.2b1
 user-agents==1.1.0
 ua-parser==0.7.3
 -e git+git://github.com/rossettistone/django-easy-audit.git@patched#egg=django-easy-audit
 django-url-robots==2.0
-zappa==0.47.0
+zappa==0.48.2
 requests==2.22.0
 awscli==1.15.66
 boto3==1.7.65
