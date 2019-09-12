@@ -2,7 +2,7 @@ Hi {{ name|safe }},
 
 Thanks for applying online to Clear My Record.
 {%- if organizations %} Since you applied for help in {{ oxford_comma(county_names)|safe }}, we are sending your application to {{ oxford_comma(organizations)|safe }}.{% endif %}
-{% for step in next_steps %}{{ step|safe }}{% endfor %}
+{{ next_steps|join(' ')|safe }}
 {% if unlisted_counties %}
 Next steps for {{ unlisted_counties|safe }}:
 We will contact you in the next week with information on how to clear your record in {{ unlisted_counties|safe }}
