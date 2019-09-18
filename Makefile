@@ -122,8 +122,4 @@ db.pull.demo:
 # static.dev runs sass to convert .scss stylesheets to css
 # it will watch the scss directory and automatically regenerate css
 static.dev:
-	sass \
-        --require bourbon \
-        --require normalize-scss \
-        --require neat \
-        --watch intake/static/intake/scss:intake/static/intake/css
+	sass --watch intake/static/intake/scss:intake/static/intake/css

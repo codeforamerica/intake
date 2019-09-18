@@ -1,8 +1,7 @@
 /* Vendor */
-@import 'bourbon';
-@import 'neat';
+@import 'bourbon/bourbon';
+@import 'neat/neat';
 @import 'normalize';
-@include normalize();
 
 /* Atoms */
 @import 'atoms/variables';

@@ -1,5 +1,10 @@
 @mixin retina-bg($name, $size, $extension: png) {
-  @include retina-image($filename: $name, $extension: $extension, $background-size: $size, $retina-suffix: '@2x', $asset-pipeline: false);
+  background-image: url("#{$name}.#{$extension}");
+
+  @media only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 125dpi) {
+    background-image: url("#{$name}@2x.#{$extension}");
+    background-size: $size;
+  }
 }
 
 @mixin full-bleed() {

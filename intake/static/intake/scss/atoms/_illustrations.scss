@@ -9,10 +9,18 @@
 }
 
 .illustration--cfa-logo-black {
-  @include retina-bg(/intake/img/cfa-logo-black, 100% auto); 
+  @include retina-bg(/intake/img/cfa-logo-black, 100% auto);
   margin-left: 0;
   width: 145px;
   height: 64px;
+  background-position: center left;
+}
+
+.illustration--cmr-logo-black {
+  @include retina-bg(/intake/img/cmr_logo_black_cropped, 100% auto);
+  margin-left: 0;
+  width: 145px;
+  height: 56px;
   background-position: center left;
 }
 

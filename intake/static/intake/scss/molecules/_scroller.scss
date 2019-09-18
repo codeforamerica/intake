@@ -1,4 +1,4 @@
-@include keyframes('scroller') {
+@keyframes scroller {
     0% {
         opacity: 0;
     }
@@ -10,7 +10,7 @@
 }
 
 .scroller {
-    @include animation(scroller 2s 1);
+    animation: scroller 2s 1;
     position: absolute;
     left: 50%;
     bottom: 1em;

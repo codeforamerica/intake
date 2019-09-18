@@ -1,5 +1,5 @@
 .button {
-    @include transition($animation-fast background-color);
+    transition: $animation-fast background-color;
     display: inline-block;
     position: relative;
     cursor: pointer;

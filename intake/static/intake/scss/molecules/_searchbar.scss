@@ -17,8 +17,8 @@
 }
 
 .searchbar__button {
-  @include transition(all $animation-fast);
-  @include user-select(none);
+  transition:all $animation-fast;
+  user-select: none;
   button {
     display: none;
   }

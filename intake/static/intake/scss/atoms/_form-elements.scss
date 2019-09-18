@@ -34,14 +34,14 @@ label {
 	&:focus {
 		border-color: $color-teal;
 	}
-	@include placeholder() {
+	::placeholder {
 		color: $color-grey;
 	}
 }
 
 .radio-button {
-	@include transition($animation-fast all);
-  @include user-select(none);
+	transition: $animation-fast all;
+  user-select: none;
   position: relative;
 	display: block;
 	cursor: pointer;
@@ -70,8 +70,8 @@ label {
 }
 
 .checkbox {
-	@include transition($animation-fast all);
-  @include user-select(none);
+	transition:$animation-fast all;
+  user-select: none;
   position: relative;
 	cursor: pointer;
 	display: block;
@@ -121,7 +121,7 @@ label {
   background-color: #FFFFFF;
 
   &:before {
-    @include transition($animation-fast all);
+    transition:$animation-fast all;
     position: absolute;
     right: 0em;
     top: 0em;
@@ -154,7 +154,7 @@ label {
 }
 
 .select__element {
-  @include appearance(none);
+  appearance: none;
   position: relative;
   z-index: 1;
   border: 2px solid $color-light-grey;

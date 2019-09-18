@@ -4,7 +4,7 @@
   border-spacing: 1em;
   margin-bottom: .5em;
   .text-input {
-    @include appearance(none);
+    appearance: none;
     display: table-cell;
     text-align: center;
     margin-bottom: 0;
@@ -19,8 +19,8 @@
 }
 
 .incrementer__subtract, .incrementer__add {
-  @include transition($animation-fast background-color);
-  @include user-select(none);
+  transition:$animation-fast background-color;
+  user-select: none;
   cursor: pointer;
   color: $color-teal;
   display: table-cell;
