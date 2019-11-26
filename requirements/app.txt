@@ -19,7 +19,7 @@ reportlab==3.5.2
 toml==0.9.4
 troposphere==2.3.1
 typing==3.6.4
-Pillow~=4.1
+Pillow~=6.2
 python-Levenshtein~=0.12
 django-taggit==0.22.2
 mixpanel~=4.3.1
