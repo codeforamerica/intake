@@ -1,7 +1,7 @@
 import logging
 from datetime import timedelta
 from unittest.mock import patch
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from markupsafe import escape
 from django.contrib.auth.models import User
 from project.tests.assertions import assertInLogsCount

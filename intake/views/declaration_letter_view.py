@@ -1,6 +1,6 @@
 from .applicant_form_view_base import ApplicantFormViewBase
 from django.shortcuts import redirect
-from django.core.urlresolvers import reverse_lazy, reverse
+from django.urls import reverse_lazy, reverse
 from formation.forms import (
     DeclarationLetterFormSpec, DeclarationLetterDisplay,
     DeclarationLetterReviewForm, county_form_selector)

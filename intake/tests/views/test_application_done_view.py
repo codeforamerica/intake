@@ -1,6 +1,6 @@
 from intake.tests.views.test_applicant_form_view_base \
     import ApplicantFormViewBaseTestCase
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from intake.tests import factories, mock
 from markupsafe import escape
 from project.jinja2 import linkify

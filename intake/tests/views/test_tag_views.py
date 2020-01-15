@@ -1,5 +1,5 @@
 from intake.tests.base_testcases import APIViewTestCase
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from intake import models
 from intake.tests import mock
 from user_accounts.tests.mock import create_user

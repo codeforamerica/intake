@@ -1,5 +1,5 @@
 import logging
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from markupsafe import escape
 from intake.views.applicant_form_view_base import ApplicantFormViewBase
 from django.http.request import QueryDict

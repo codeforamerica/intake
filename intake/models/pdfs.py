@@ -5,7 +5,7 @@ from django.db import models
 from intake import pdfparser
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 
 def get_parser():

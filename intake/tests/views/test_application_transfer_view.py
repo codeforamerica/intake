@@ -8,7 +8,7 @@ from intake import models
 import intake.services.transfers_service as TransferService
 from user_accounts.models import Organization
 from intake.tests.base_testcases import IntakeDataTestCase
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from markupsafe import escape
 from intake.views.base_views import NOT_ALLOWED_MESSAGE
 

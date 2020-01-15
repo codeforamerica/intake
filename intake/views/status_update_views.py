@@ -3,7 +3,7 @@ from intake.forms import (
     NotificationContactInfoDisplayForm)
 from intake import models, utils
 from django.views.generic.edit import FormView
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.shortcuts import redirect
 from intake.views.base_views import not_allowed
 import intake.services.events_service as EventsService

@@ -5,7 +5,7 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.core.mail import send_mail
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic.edit import FormView
 from allauth.account import views as allauth_views

@@ -4,7 +4,7 @@ from unittest.mock import patch
 from random import randint
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils import html as html_utils
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase

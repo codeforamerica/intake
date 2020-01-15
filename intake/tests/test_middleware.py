@@ -1,6 +1,6 @@
 from unittest.mock import Mock, patch
 from django.test import TestCase
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from intake.middleware import GetCleanIpAddressMiddleware
 from intake import models

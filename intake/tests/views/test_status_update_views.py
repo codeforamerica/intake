@@ -1,7 +1,7 @@
 import logging
 from unittest.mock import patch
 from intake.tests.base_testcases import IntakeDataTestCase
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from markupsafe import escape
 from intake import models, services, utils
 from intake.views.base_views import NOT_ALLOWED_MESSAGE

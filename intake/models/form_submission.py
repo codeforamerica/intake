@@ -4,7 +4,7 @@ from django.conf import settings
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.utils import timezone as timezone_utils
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from taggit.managers import TaggableManager
 from dateutil.parser import parse
 import intake

@@ -1,4 +1,4 @@
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 from django.views.generic.base import RedirectView
 import intake.services.events_service as EventsService
 
