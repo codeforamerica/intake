@@ -103,7 +103,7 @@ class AuthIntegrationTestCase(TestCase):
     def assertLoggedInAs(self, user):
         client_user = auth.get_user(self.client)
         self.assertEqual(client_user, user)
-        assert client_user.is_authenticated()
+        assert client_user.is_authenticated
 
     def get_link_from_email(self, email):
         # https://regex101.com/r/kP0qH7/1

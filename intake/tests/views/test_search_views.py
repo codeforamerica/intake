@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.conf import settings
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from intake.permissions import get_all_followup_permissions
 from user_accounts.tests.factories import UserProfileFactory, UserFactory
 from intake.tests.factories import FormSubmissionWithOrgsFactory

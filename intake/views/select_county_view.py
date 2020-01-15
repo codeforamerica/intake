@@ -1,5 +1,5 @@
 from formation.forms import SelectCountyForm
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 from .applicant_form_view_base import ApplicantFormViewBase
 import intake.services.applicants as ApplicantsService
 import intake.services.events_service as EventsService

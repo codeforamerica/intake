@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from url_robots.utils import url
+from django2_url_robots.utils import url
 from intake.views import (
     public_views,
     stats_views,

@@ -2,8 +2,7 @@ from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
-from url_robots.views import robots_txt
-
+from django2_url_robots.views import robots_txt
 
 urlpatterns = [
     url(r'^robots\.txt$', robots_txt),

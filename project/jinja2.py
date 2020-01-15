@@ -1,7 +1,7 @@
 from datetime import datetime
 from urllib.parse import urljoin
 from pytz import timezone
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.html import mark_safe
 from django.conf import settings

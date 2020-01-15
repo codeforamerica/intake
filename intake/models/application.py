@@ -13,12 +13,12 @@ class PurgedApplication(models.Model):
 class Application(BaseModel):
     organization = models.ForeignKey(
         'user_accounts.Organization',
-        on_delete=models.PROTECT,
+        models.PROTECT,
         related_name='applications')
     form_submission = models.ForeignKey(
         'intake.FormSubmission',
+        models.PROTECT,
         db_column='formsubmission_id',
-        on_delete=models.PROTECT,
         related_name='applications'
     )
     was_transferred_out = models.BooleanField(default=False)

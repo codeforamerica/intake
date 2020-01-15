@@ -1,7 +1,7 @@
 import logging
 from unittest.mock import patch
 from intake.tests.base_testcases import IntakeDataTestCase
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from markupsafe import escape
 from intake import models, services, utils
 from intake.views.base_views import NOT_ALLOWED_MESSAGE
@@ -13,10 +13,10 @@ class StatusUpdateViewBaseTestCase(IntakeDataTestCase):
 
     fixtures = [
         'counties',
-        'organizations', 'groups', 'mock_profiles',
+        'organizations', 'groups', 'mock_profiles', 'template_options',
         'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
-        'mock_1_submission_to_multiple_orgs', 'template_options'
+        'mock_1_submission_to_multiple_orgs'
     ]
 
     @classmethod

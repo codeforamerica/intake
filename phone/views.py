@@ -1,6 +1,6 @@
 from twilio.twiml.voice_response import VoiceResponse
 from django.http import HttpResponse, Http404
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.views.generic.base import View
 from django.views.decorators.csrf import csrf_exempt
 from django.templatetags.static import static

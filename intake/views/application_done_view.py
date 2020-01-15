@@ -1,5 +1,5 @@
 from django.shortcuts import redirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.views.generic.base import TemplateView
 from .applicant_form_view_base import clear_form_session_data
 import intake.services.submissions as SubmissionsService

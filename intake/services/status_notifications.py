@@ -2,7 +2,7 @@ import Levenshtein
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.template import loader
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from intake import models, notifications
 
 

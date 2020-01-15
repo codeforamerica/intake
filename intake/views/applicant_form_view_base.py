@@ -5,7 +5,7 @@ import intake.services.events_service as EventsService
 import intake.services.messages_service as MessagesService
 import logging
 from django.shortcuts import redirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from intake.exceptions import (
     NoCountiesInSessionError, NoApplicantInSessionError)
 import intake.services.submissions as SubmissionsService

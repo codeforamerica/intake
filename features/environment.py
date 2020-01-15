@@ -65,6 +65,10 @@ def before_all(context):
     setup_debug_on_error(context.config.userdata)
 
 
+def django_ready(context):
+    context.test.patches = {}
+
+
 def after_all(context):
     context.browser.quit()
     # stop_local()
@@ -72,7 +76,6 @@ def after_all(context):
 
 def before_scenario(context, scenario):
     call_command('load_essential_data')
-    context.test.patches = {}
 
 
 def after_scenario(context, scenario):

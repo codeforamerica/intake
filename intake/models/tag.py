@@ -21,10 +21,14 @@ class PurgedTag(models.Model):
 class SubmissionTagLink(TaggedItemBase):
     added = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
-        'auth.User', null=True, on_delete=models.SET_NULL)
+        'auth.User',
+        models.SET_NULL,
+        null=True)
     content_object = models.ForeignKey(
-        'intake.FormSubmission', related_name='tag_links',
-        on_delete=models.CASCADE)
+        'intake.FormSubmission',
+        models.CASCADE,
+        related_name='tag_links',
+    )
 
     class Meta:
         ordering = ['added']

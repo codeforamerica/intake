@@ -11,7 +11,7 @@ class PurgedApplicant(models.Model):
 
 
 class Applicant(models.Model):
-    visitor = models.OneToOneField('intake.Visitor')
+    visitor = models.OneToOneField('intake.Visitor', models.PROTECT)
 
     class Meta:
         permissions = (

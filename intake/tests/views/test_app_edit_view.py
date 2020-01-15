@@ -19,12 +19,18 @@ def dict_to_post_data(raw_input_data):
         if isinstance(value, dict):
             for subkey, subvalue in value.items():
                 post_key = '{}.{}'.format(key, subkey)
-                post_data[post_key] = subvalue
-                post_data['existing_' + post_key] = subvalue
+                post_data[post_key] = safe_value(subvalue)
+                post_data['existing_' + post_key] = safe_value(subvalue)
         else:
-            post_data[key] = value
-            post_data['existing_' + key] = value
+            post_data[key] = safe_value(value)
+            post_data['existing_' + key] = safe_value(value)
     return post_data
+
+
+def safe_value(value):
+    if value is None:
+        return ''
+    return value
 
 
 class TestAppEditView(TestCase):
@@ -289,7 +295,9 @@ class TestAppEditView(TestCase):
         post_data.update({
             'first_name': 'Foo',
             'last_name': 'Bar',
-            'dob.day': '3', 'dob.month': '', 'dob.year': ''})
+            'dob.day': '3',
+            'dob.month': '',
+            'dob.year': ''})
         response = self.client.post(self.edit_url, post_data)
         self.assertEqual(200, response.status_code)
         self.assertTrue(response.context_data['form'].errors)

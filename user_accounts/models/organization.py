@@ -3,7 +3,7 @@ from intake import models as intake_models
 from intake.utils import coerce_to_ids
 import user_accounts
 from django.utils.safestring import mark_safe
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.html import conditional_escape
 from django.contrib.auth.models import User
 from project.jinja2 import oxford_comma, format_phone_number

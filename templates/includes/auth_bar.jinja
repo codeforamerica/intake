@@ -1,4 +1,4 @@
-        {% if request.user.is_authenticated() %}
+        {% if request.user.is_authenticated %}
         <div class="auth-notice authenticated">
           <span class="message">Signed in as</span>
           <a href="{{ url('user_accounts-profile') }}">

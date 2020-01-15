@@ -1,5 +1,5 @@
 import logging
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from formation import fields
 from markupsafe import escape
 from unittest.mock import patch

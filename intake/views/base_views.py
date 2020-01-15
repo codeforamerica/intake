@@ -1,6 +1,6 @@
 from django.shortcuts import redirect
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib import messages
 from project import alerts
 from project.services import query_params

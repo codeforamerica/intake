@@ -1,6 +1,6 @@
 import logging
 from unittest.mock import patch, Mock
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from project.fixtures_index import ESSENTIAL_DATA_FIXTURES
 from user_accounts.tests.base_testcases import AuthIntegrationTestCase
 from intake.views.applicant_form_view_base import ApplicantFormViewBase

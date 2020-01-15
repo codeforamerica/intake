@@ -26,7 +26,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'health_check',
     'intake',
-    'url_robots',
+    'django2_url_robots',
     'user_accounts',
     'phone',
     'partnerships',
@@ -61,7 +61,6 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'intake.middleware.UserAgentMiddleware',
@@ -139,9 +138,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'project.wsgi.application'
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
-
-# django-easy-audit settings
-DJANGO_EASY_AUDIT_WATCH_LOGIN_EVENTS = True
 
 # django-allauth and django-invitations
 ACCOUNT_FORMS = {
@@ -255,6 +251,9 @@ LOGGING = {
     },
 }
 
+# django-easy-audit settings
+DJANGO_EASY_AUDIT_WATCH_LOGIN_EVENTS = True
+DJANGO_EASY_AUDIT_WATCH_REQUEST_EVENTS = False
 
 DJANGO_EASY_AUDIT_CRUD_DIFFERENCE_CALLBACKS = [
     'access_audit.helpers.dont_audit_fixture_loading']

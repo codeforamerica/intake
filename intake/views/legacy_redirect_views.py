@@ -3,7 +3,7 @@ Views that redirect from old url patterns to new ones
 """
 from django.views.generic import View
 from django.shortcuts import redirect
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 
 from project.services.query_params import get_url_for_ids
 from intake import models

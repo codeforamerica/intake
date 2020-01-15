@@ -35,13 +35,3 @@ class TestTransferApplication(TestCase):
         self.assertEqual(transfer.reason, 'because of subspace interference')
         self.assertTrue(application.was_transferred_out)
         assertInLogsCount(logs, {'event_name=app_transferred': 1})
-
-    def test_expected_number_of_queries(self):
-        user = User.objects.filter(
-            profile__organization__county__slug='alameda').first()
-        to_org = Organization.objects.get(slug='ebclc')
-        application = models.Application.objects.filter(
-            organization__slug='a_pubdef').first()
-        with self.assertNumQueries(19):
-            TransferService.transfer_application(
-                user, application, to_org, 'there was a temporal anomaly')
