@@ -13,10 +13,10 @@ class StatusUpdateViewBaseTestCase(IntakeDataTestCase):
 
     fixtures = [
         'counties',
-        'organizations', 'groups', 'mock_profiles',
+        'organizations', 'groups', 'mock_profiles', 'template_options',
         'mock_2_submissions_to_a_pubdef',
         'mock_2_submissions_to_sf_pubdef',
-        'mock_1_submission_to_multiple_orgs', 'template_options'
+        'mock_1_submission_to_multiple_orgs'
     ]
 
     @classmethod

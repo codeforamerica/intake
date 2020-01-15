@@ -39,7 +39,7 @@ def save_form_data_to_session(request, session_key, query_dict):
     # this should update data, not simply overwrite it.
     data_dict = {
         key: items
-        for key, items in query_dict._iterlists()
+        for key, items in query_dict.lists()
     }
     existing_data = request.session.get(session_key, {})
     existing_data.update(data_dict)
