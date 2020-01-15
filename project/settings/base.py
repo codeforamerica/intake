@@ -137,9 +137,6 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
-# django-easy-audit settings
-DJANGO_EASY_AUDIT_WATCH_LOGIN_EVENTS = True
-
 # django-allauth and django-invitations
 ACCOUNT_FORMS = {
     'login': 'user_accounts.forms.LoginForm'
@@ -255,6 +252,9 @@ LOGGING = {
     },
 }
 
+# django-easy-audit settings
+DJANGO_EASY_AUDIT_WATCH_LOGIN_EVENTS = True
+DJANGO_EASY_AUDIT_WATCH_REQUEST_EVENTS = False
 
 DJANGO_EASY_AUDIT_CRUD_DIFFERENCE_CALLBACKS = [
     'access_audit.helpers.dont_audit_fixture_loading']
