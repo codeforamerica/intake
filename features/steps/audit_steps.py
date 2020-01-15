@@ -3,7 +3,7 @@ from behave import when, then
 from easyaudit.models import CRUDEvent
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from pprint import pprint
 from urllib.parse import urljoin
 

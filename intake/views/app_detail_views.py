@@ -1,5 +1,5 @@
 from django.shortcuts import redirect
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.contrib import messages
 import intake.services.submissions as SubmissionsService

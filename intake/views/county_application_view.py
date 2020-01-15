@@ -1,7 +1,7 @@
 import logging
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.urls import reverse, reverse_lazy
 
 from .applicant_form_view_base import ApplicantFormViewBase
 from formation.forms import county_form_selector, \

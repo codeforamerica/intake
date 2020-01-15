@@ -12,7 +12,7 @@ class PurgedStatusNotification(models.Model):
 
 class StatusNotification(models.Model):
     status_update = models.OneToOneField(
-        'intake.StatusUpdate', on_delete=models.PROTECT,
+        'intake.StatusUpdate', models.PROTECT,
         related_name="notification")
     contact_info = JSONField()
     base_message = models.TextField()

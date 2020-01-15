@@ -5,12 +5,13 @@ import intake
 
 
 class ApplicationEvent(models.Model):
-
     time = models.DateTimeField(default=timezone_utils.now)
     name = models.TextField()
-    applicant = models.ForeignKey('intake.Applicant',
-                                  on_delete=models.PROTECT, null=False,
-                                  related_name='events')
+    applicant = models.ForeignKey(
+        'intake.Applicant',
+        models.PROTECT,
+        null=False,
+        related_name='events')
     data = JSONField()
 
     APPLICATION_STARTED = 'application_started'

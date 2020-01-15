@@ -1,5 +1,5 @@
 from django.test import TestCase
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils import html as html_utils
 
 from intake import models

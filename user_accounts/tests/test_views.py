@@ -4,7 +4,7 @@ from django.core import mail
 from django.test import TestCase
 
 from user_accounts.tests.base_testcases import AuthIntegrationTestCase
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from project.fixtures_index import (
     ESSENTIAL_DATA_FIXTURES, MOCK_USER_ACCOUNT_FIXTURES
 )

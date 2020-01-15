@@ -2,7 +2,7 @@ from intake.forms import ApplicationTransferForm
 from intake import models
 from django.contrib import messages
 from django.views.generic.edit import FormView
-from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 import intake.services.transfers_service as TransferService
 from django.shortcuts import redirect
 from intake.views.base_views import not_allowed

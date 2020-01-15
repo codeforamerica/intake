@@ -1,6 +1,6 @@
 from urllib.parse import urljoin, urlparse
 from unittest.mock import patch
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from behave import given, then, when
 from project.jinja2 import external_reverse
 import intake.services.bundles as BundlesService
