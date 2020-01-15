@@ -25,7 +25,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'health_check',
     'intake',
-    'url_robots',
+    'django2_url_robots',
     'user_accounts',
     'phone',
     'partnerships',

@@ -1,5 +1,5 @@
 # Core dependencies
-django==1.11.23
+django==2.0.13
 olefile==0.45.1
 placebo==0.8.1
 pycparser==2.18
@@ -30,8 +30,8 @@ django-compressor==2.1.1
 PyYAML==4.2b1
 user-agents==1.1.0
 ua-parser==0.7.3
--e git+git://github.com/rossettistone/django-easy-audit.git@patched#egg=django-easy-audit
-django-url-robots==2.0
+django-easy-audit~=1.1.0
+django2-url-robots==3.1.0
 zappa==0.48.2
 requests==2.22.0
 awscli==1.16.208

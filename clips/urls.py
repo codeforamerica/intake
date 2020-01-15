@@ -1,4 +1,4 @@
-from url_robots.utils import url
+from django2_url_robots.utils import url
 from . import views
 
 urlpatterns = [
