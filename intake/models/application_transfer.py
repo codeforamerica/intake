@@ -7,11 +7,13 @@ class ApplicationTransfer(BaseModel):
     created from the transfer.
     """
     status_update = models.OneToOneField(
-        'intake.StatusUpdate', related_name='transfer',
-        on_delete=models.CASCADE)
+        'intake.StatusUpdate',
+        models.CASCADE,
+        related_name='transfer')
     new_application = models.ForeignKey(
-        'intake.Application', related_name='incoming_transfers',
-        on_delete=models.PROTECT)
+        'intake.Application',
+        models.PROTECT,
+        related_name='incoming_transfers')
     reason = models.TextField(blank=True)
 
     def __str__(self):

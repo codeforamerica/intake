@@ -21,7 +21,7 @@ class FillablePDF(models.Model):
     translator = models.TextField()
     organization = models.ForeignKey(
         'user_accounts.Organization',
-        on_delete=models.CASCADE,
+        models.CASCADE,
         related_name='pdfs',
         null=True
     )

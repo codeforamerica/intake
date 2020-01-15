@@ -13,8 +13,10 @@ class PrebuiltPDFBundle(BaseModel):
         related_name='prebuilt_multiapp_pdfs')
     pdf = models.FileField(upload_to='prebuilt_newapps_pdfs/')
     organization = models.ForeignKey(
-        'user_accounts.Organization', related_name='prebuilt_pdf_bundles',
-        on_delete=models.PROTECT)
+        'user_accounts.Organization',
+        models.PROTECT,
+        related_name='prebuilt_pdf_bundles',
+        )
 
     def set_bytes(self, bytes_):
         if not bytes_:

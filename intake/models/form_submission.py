@@ -122,7 +122,7 @@ class FormSubmission(models.Model):
         'Applicant', on_delete=models.PROTECT, null=True,
         related_name='form_submissions')
     duplicate_set = models.ForeignKey(
-        'intake.DuplicateSubmissionSet', null=True,
+        'intake.DuplicateSubmissionSet', models.PROTECT, null=True,
         related_name='submissions')
     answers = JSONField()
     has_been_sent_followup = models.BooleanField(default=False)

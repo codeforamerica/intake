@@ -23,14 +23,17 @@ class ApplicationLogEntry(models.Model):
 
     time = models.DateTimeField(default=timezone_utils.now)
     user = models.ForeignKey('auth.User',
-                             on_delete=models.SET_NULL, null=True,
+                             models.SET_NULL,
+                             null=True,
                              related_name='application_logs')
     organization = models.ForeignKey(
         'user_accounts.Organization',
-        on_delete=models.SET_NULL, null=True,
+        models.SET_NULL,
+        null=True,
         related_name='logs')
     submission = models.ForeignKey('intake.FormSubmission',
-                                   on_delete=models.SET_NULL, null=True,
+                                   models.SET_NULL,
+                                   null=True,
                                    related_name='logs')
     event_type = models.PositiveSmallIntegerField(
         choices=EVENT_TYPES)

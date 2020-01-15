@@ -13,10 +13,10 @@ class PurgedApplicationNote(models.Model):
 class ApplicationNote(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey('auth.User', related_name='application_notes')
+    user = models.ForeignKey('auth.User', models.PROTECT, related_name='application_notes')
     body = models.TextField()
     submission = models.ForeignKey(
-        'intake.FormSubmission', related_name='notes')
+        'intake.FormSubmission', models.CASCADE, related_name='notes')
 
     class Meta:
         ordering = ['-created']

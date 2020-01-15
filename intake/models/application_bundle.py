@@ -16,9 +16,10 @@ class ApplicationBundle(models.Model):
     submissions = models.ManyToManyField('intake.FormSubmission',
                                          related_name='bundles')
     organization = models.ForeignKey('user_accounts.Organization',
-                                     on_delete=models.PROTECT,
+                                     models.PROTECT,
                                      related_name='bundles')
-    bundled_pdf = models.FileField(upload_to='pdf_bundles/', null=True,
+    bundled_pdf = models.FileField(upload_to='pdf_bundles/',
+                                   null=True,
                                    blank=True)
 
     def should_have_a_pdf(self):

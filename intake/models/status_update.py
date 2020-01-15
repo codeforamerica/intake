@@ -5,23 +5,22 @@ from intake.constants import PACIFIC_TIME
 class PurgedStatusUpdate(models.Model):
     """Placeholder for custom VIEW see intake migration 0063
     """
+
     class Meta:
         db_table = 'purged\".\"intake_statusupdate'
         managed = False
 
 
 class StatusUpdate(models.Model):
-
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    status_type = models.ForeignKey(
-        'intake.StatusType', on_delete=models.PROTECT)
-    next_steps = models.ManyToManyField(
-        'intake.NextStep', blank=True)
+    status_type = models.ForeignKey('intake.StatusType', models.PROTECT)
+    next_steps = models.ManyToManyField('intake.NextStep', blank=True)
     additional_information = models.TextField(blank=True)
-    author = models.ForeignKey('auth.User', on_delete=models.PROTECT)
+    author = models.ForeignKey('auth.User', models.PROTECT)
     application = models.ForeignKey(
-        'intake.Application', on_delete=models.CASCADE,
+        'intake.Application',
+        models.CASCADE,
         related_name='status_updates')
     other_next_step = models.TextField(blank=True)
 
