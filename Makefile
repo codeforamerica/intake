@@ -7,8 +7,9 @@ serve:
 	./manage.py runserver
 
 
-
-SCOPE=clips user_accounts intake formation health_check phone partnerships
+ifeq ($(SCOPE),)
+SCOPE = clips user_accounts intake formation health_check phone partnerships
+endif
 
 test:
 	./manage.py test $(SCOPE) \
