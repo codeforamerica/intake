@@ -171,14 +171,14 @@ class TestUserAccounts(AuthIntegrationTestCase):
         )
         # follow the link in the email
         reset_link = self.get_link_from_email(reset_email)
-        reset_page = self.client.get(reset_link)
+        reset_page = self.client.get(reset_link, follow=True)
         # make sure it shows who it thinks we are
         self.assertContains(reset_page, user.email)
         # enter a new password
         csrf = self.client.get_csrf_token(reset_page)
         new_password = "FR35H H0T s3cr3tZ!1"
         reset_done = self.client.fill_form(
-            reset_link, csrf_token=csrf,
+            reset_page.request['PATH_INFO'], csrf_token=csrf,
             password=new_password)
         # we should be redirected to the profile
         self.assertRedirects(reset_done,
@@ -225,13 +225,13 @@ class TestUserAccounts(AuthIntegrationTestCase):
         )
         self.assertLoggedInAs(user)
 
-    def test_only_staff_users_cant_invite_people(self):
+    def test_only_staff_users_can_invite_people(self):
         self.be_apubdef_user()
         response = self.client.get(reverse(self.send_invite_view))
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 403)
         self.be_monitor_user()
         response = self.client.get(reverse(self.send_invite_view))
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 403)
         self.be_cfa_user()
         response = self.client.get(reverse(self.send_invite_view))
         self.assertEqual(response.status_code, 200)

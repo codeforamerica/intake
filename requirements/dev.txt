@@ -1,12 +1,12 @@
 # dependencies for development and testing
 -r app.txt
-xlrd==1.1.0
-autopep8~=1.2
-pep8~=1.6
-coverage~=4.0
-codeclimate-test-reporter~=0.1
-beautifulsoup4==4.4.1
-browserstack-local~=1.2.1
-selenium~=3.11.0
-boto~=2.48.0
-behave-django~=0.5.0
+xlrd==1.2.0
+autopep8~=1.5
+pep8~=1.7
+coverage~=5.0.3
+codeclimate-test-reporter~=0.2
+beautifulsoup4==4.8.2
+browserstack-local~=1.2.2
+selenium~=3.141.0
+boto~=2.49.0
+behave-django~=1.3
