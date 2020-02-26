@@ -10,6 +10,8 @@ EMAIL_BACKEND = "sgbackend.SendGridBackend"
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", "admin@localhost")
 DEFAULT_FROM_EMAIL = MAIL_DEFAULT_SENDER
+SERVER_EMAIL = os.environ.get("SERVER_EMAIL", "admin@localhost")
+
 VOICEMAIL_NOTIFICATION_EMAIL = os.environ.get(
     'VOICEMAIL_NOTIFICATION_EMAIL')
 PARTNERSHIPS_LEAD_INBOX = os.environ.get("PARTNERSHIPS_LEAD_INBOX")
@@ -38,3 +40,4 @@ USE_DEBUG_TOOLBAR = os.environ.get('USE_DEBUG_TOOLBAR', 0)
 CELERY_BROKER_URL = os.environ.get('CLOUDAMQP_URL')
 
 TEST_USER_PASSWORD = os.environ.get("TEST_USER_PASSWORD")
+SENTRY_URL = os.environ.get("SENTRY_URL")

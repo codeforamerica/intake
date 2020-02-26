@@ -43,3 +43,4 @@ factory-boy==2.9.2
 Faker==1.0.7
 cryptography==2.8
 idna==2.8
+sentry-sdk==0.14.1
