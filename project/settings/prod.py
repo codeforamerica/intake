@@ -63,7 +63,7 @@ ALLOW_REQUESTS_TO_MAILGUN = not DIVERT_REMOTE_CONNECTIONS
 
 # Initialize Sentry
 sentry_sdk.init(
-    dsn=os.environ.get("SENTRY_URL"),
+    dsn=SENTRY_URL,
     integrations=[DjangoIntegration()],
 
     # If you wish to associate users to errors (assuming you are using
