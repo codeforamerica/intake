@@ -1,4 +1,6 @@
 from project.settings.environment import *
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 RELEASE_DATETIME = os.environ.get('MANIFEST_VERSION')
 
@@ -58,3 +60,16 @@ LIVE_COUNTY_CHOICES = True
 DIVERT_REMOTE_CONNECTIONS = os.environ.get(
     'DIVERT_REMOTE_CONNECTIONS', 'True') == 'True'
 ALLOW_REQUESTS_TO_MAILGUN = not DIVERT_REMOTE_CONNECTIONS
+
+# Initialize Sentry
+sentry_sdk.init(
+    dsn=os.environ.get("SENTRY_URL"),
+    integrations=[DjangoIntegration()],
+
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    #
+    # CMR note: Our users are either staff or legal aid (not clients), so
+    # sending for noe
+    send_default_pii=True
+)
