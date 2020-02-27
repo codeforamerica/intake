@@ -1,2 +1,2 @@
-release: ./release-tasks.sh # Whatever Zappa was doing
+release: python manage.py migrate
 web: gunicorn project.heroku_wsgi --log-file=-

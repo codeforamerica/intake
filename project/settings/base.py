@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'rest_framework',
     'health_check',
@@ -54,6 +55,7 @@ if IS_TEST_OR_RUNSERVER:
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -199,11 +201,12 @@ USE_TZ = True
 PDFPARSER_PATH = os.path.join(REPO_DIR, 'intake', 'pdfparser.jar')
 
 # Static files & django-compressor settings (CSS, JavaScript, Images)
+STATIC_ROOT = os.path.join(REPO_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 STATICFILES_FINDERS = [
-    'compressor.finders.CompressorFinder',
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
 ]
 
 
@@ -232,10 +235,6 @@ COMPRESS_OFFLINE = True
 def COMPRESS_JINJA2_GET_ENVIRONMENT():
     from django.template import engines
     return engines["jinja"].env
-
-
-# static files location
-STATIC_ROOT = os.path.join(REPO_DIR, 'staticfiles')
 
 
 LOGGING = {

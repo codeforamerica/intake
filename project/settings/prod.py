@@ -26,20 +26,11 @@ CLIPS_DATABASE_ALIAS = 'purged'
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('STATIC_BUCKET')
+
 # settings for media files
 MEDIA_ROOT = ''
-DEFAULT_FILE_STORAGE = 'project.custom_storages.MediaStorage'
-MEDIA_BUCKET = os.environ.get('MEDIA_BUCKET')
-# settings for static files
-COMPRESS_URL = 'https://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
-STATIC_URL = COMPRESS_URL
-STATICFILES_STORAGE = 'project.custom_storages.CachedS3BotoStorage'
-COMPRESS_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-COMPRESS_ROOT = os.path.join(REPO_DIR, 'staticfiles-cache')
-COMPRESS_STORAGE = STATICFILES_STORAGE
-COMPRESS_OFFLINE_MANIFEST = 'manifest.%s.json' % RELEASE_DATETIME
-AWS_S3_FILE_OVERWRITE = True
-AWS_QUERYSTRING_AUTH = False  # For Static only We override in MediaStorage
+AWS_S3_FILE_OVERWRITE = False
+
 AWS_DEFAULT_ACL = 'private'  # Keeps things in bucket private
 SYNC_AWS_ID = os.environ.get('SYNC_AWS_ID')
 SYNC_AWS_KEY = os.environ.get('SYNC_AWS_KEY')
@@ -55,7 +46,6 @@ CSRF_COOKIE_SECURE = True
 DEBUG = False
 # hides counties where none of the orgs are officially live
 LIVE_COUNTY_CHOICES = True
-
 
 DIVERT_REMOTE_CONNECTIONS = os.environ.get(
     'DIVERT_REMOTE_CONNECTIONS', 'True') == 'True'
@@ -73,3 +63,6 @@ sentry_sdk.init(
     # sending for noe
     send_default_pii=True
 )
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+COMPRESS_STORAGE = 'compressor.storage.GzipCompressorFileStorage'

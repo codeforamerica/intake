@@ -387,109 +387,109 @@ textarea {
     .grid .width-one-whole {
       float: left;
       display: block;
-      margin-right: 2.3576520234%;
+      margin-right: 2.35765%;
       width: 100%; }
       .grid .width-one-whole:last-child {
         margin-right: 0; }
     .grid .width-one-half {
       float: left;
       display: block;
-      margin-right: 2.3576520234%;
-      width: 48.8211739883%; }
+      margin-right: 2.35765%;
+      width: 48.82117%; }
       .grid .width-one-half:last-child {
         margin-right: 0; }
     .grid .width-one-third {
       float: left;
       display: block;
-      margin-right: 2.3576520234%;
-      width: 31.7615653177%; }
+      margin-right: 2.35765%;
+      width: 31.76157%; }
       .grid .width-one-third:last-child {
         margin-right: 0; }
     .grid .width-two-thirds {
       float: left;
       display: block;
-      margin-right: 2.3576520234%;
-      width: 65.8807826589%; }
+      margin-right: 2.35765%;
+      width: 65.88078%; }
       .grid .width-two-thirds:last-child {
         margin-right: 0; }
     .grid .width-one-fourth {
       float: left;
       display: block;
-      margin-right: 2.3576520234%;
-      width: 23.2317609825%; }
+      margin-right: 2.35765%;
+      width: 23.23176%; }
       .grid .width-one-fourth:last-child {
         margin-right: 0; }
     .grid .width-three-fourths {
       float: left;
       display: block;
-      margin-right: 2.3576520234%;
-      width: 74.4105869942%; }
+      margin-right: 2.35765%;
+      width: 74.41059%; }
       .grid .width-three-fourths:last-child {
         margin-right: 0; }
     .grid .width-one-sixth {
       float: left;
       display: block;
-      margin-right: 2.3576520234%;
-      width: 14.7019566472%; }
+      margin-right: 2.35765%;
+      width: 14.70196%; }
       .grid .width-one-sixth:last-child {
         margin-right: 0; }
     .grid .width-five-sixths {
       float: left;
       display: block;
-      margin-right: 2.3576520234%;
-      width: 82.9403913294%; }
+      margin-right: 2.35765%;
+      width: 82.94039%; }
       .grid .width-five-sixths:last-child {
         margin-right: 0; }
     .grid .width-one-twelfth {
       float: left;
       display: block;
-      margin-right: 2.3576520234%;
-      width: 6.1721523119%; }
+      margin-right: 2.35765%;
+      width: 6.17215%; }
       .grid .width-one-twelfth:last-child {
         margin-right: 0; }
     .grid .width-five-twelfths {
       float: left;
       display: block;
-      margin-right: 2.3576520234%;
-      width: 40.291369653%; }
+      margin-right: 2.35765%;
+      width: 40.29137%; }
       .grid .width-five-twelfths:last-child {
         margin-right: 0; }
     .grid .width-seven-twelfths {
       float: left;
       display: block;
-      margin-right: 2.3576520234%;
-      width: 57.3509783236%; }
+      margin-right: 2.35765%;
+      width: 57.35098%; }
       .grid .width-seven-twelfths:last-child {
         margin-right: 0; }
     .grid .width-eleven-twelfths {
       float: left;
       display: block;
-      margin-right: 2.3576520234%;
-      width: 91.4701956647%; }
+      margin-right: 2.35765%;
+      width: 91.4702%; }
       .grid .width-eleven-twelfths:last-child {
         margin-right: 0; }
     .grid .shift-one-half {
-      margin-left: 51.1788260117%; }
+      margin-left: 51.17883%; }
     .grid .shift-one-third {
-      margin-left: 34.1192173411%; }
+      margin-left: 34.11922%; }
     .grid .shift-two-thirds {
-      margin-left: 68.2384346823%; }
+      margin-left: 68.23843%; }
     .grid .shift-one-fourth {
-      margin-left: 25.5894130058%; }
+      margin-left: 25.58941%; }
     .grid .shift-three-fourths {
-      margin-left: 76.7682390175%; }
+      margin-left: 76.76824%; }
     .grid .shift-one-sixth {
-      margin-left: 17.0596086706%; }
+      margin-left: 17.05961%; }
     .grid .shift-five-sixths {
-      margin-left: 85.2980433528%; }
+      margin-left: 85.29804%; }
     .grid .shift-one-twelfth {
-      margin-left: 8.5298043353%; }
+      margin-left: 8.5298%; }
     .grid .shift-five-twelfths {
-      margin-left: 42.6490216764%; }
+      margin-left: 42.64902%; }
     .grid .shift-seven-twelfths {
-      margin-left: 59.708630347%; }
+      margin-left: 59.70863%; }
     .grid .shift-eleven-twelfths {
-      margin-left: 93.8278476881%; }
+      margin-left: 93.82785%; }
     .grid .end-row {
       margin-right: 0; }
     .grid .end-row + .grid__item {
@@ -767,8 +767,8 @@ td {
 
 @font-face {
   font-family: 'icomoon';
-  src: url("/intake/icomoon/icomoon.eot?ia7soh");
-  src: url("/intake/icomoon/icomoon.eot?ia7soh#iefix") format("embedded-opentype"), url("/intake/icomoon/icomoon.ttf?ia7soh") format("truetype"), url("/intake/icomoon/icomoon.woff?ia7soh") format("woff"), url("/intake/icomoon/icomoon.svg?ia7soh#icomoon") format("svg");
+  src: url("/static/intake/icomoon/icomoon.eot?ia7soh");
+  src: url("/static/intake/icomoon/icomoon.eot?ia7soh#iefix") format("embedded-opentype"), url("/static/intake/icomoon/icomoon.ttf?ia7soh") format("truetype"), url("/static/intake/icomoon/icomoon.woff?ia7soh") format("woff"), url("/static/intake/icomoon/icomoon.svg?ia7soh#icomoon") format("svg");
   font-weight: normal;
   font-style: normal; }
 [class^="icon-"], [class*=" icon-"] {
@@ -1066,212 +1066,212 @@ img {
   margin-bottom: 1em; }
 
 .illustration--cfa-logo-black {
-  background-image: url("/intake/img/cfa-logo-black.png");
+  background-image: url("/static/intake/img/cfa-logo-black.png");
   margin-left: 0;
   width: 145px;
   height: 64px;
   background-position: center left; }
   @media only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 125dpi) {
     .illustration--cfa-logo-black {
-      background-image: url("/intake/img/cfa-logo-black@2x.png");
+      background-image: url("/static/intake/img/cfa-logo-black@2x.png");
       background-size: 100% auto; } }
 
 .illustration--cmr-logo-black {
-  background-image: url("/intake/img/cmr_logo_black_cropped.png");
+  background-image: url("/static/intake/img/cmr_logo_black_cropped.png");
   margin-left: 0;
   width: 145px;
   height: 56px;
   background-position: center left; }
   @media only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 125dpi) {
     .illustration--cmr-logo-black {
-      background-image: url("/intake/img/cmr_logo_black_cropped@2x.png");
+      background-image: url("/static/intake/img/cmr_logo_black_cropped@2x.png");
       background-size: 100% auto; } }
 
 .illustration--cfa-logo-color {
-  background-image: url("/intake/img/cfa_logo_color.png");
+  background-image: url("/static/intake/img/cfa_logo_color.png");
   width: 100%;
   height: 200px;
   opacity: .5; }
   @media only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 125dpi) {
     .illustration--cfa-logo-color {
-      background-image: url("/intake/img/cfa_logo_color@2x.png");
+      background-image: url("/static/intake/img/cfa_logo_color@2x.png");
       background-size: 100% auto; } }
 
 .illustration--alameda {
-  background-image: url("/intake/img/alameda_seal.png");
+  background-image: url("/static/intake/img/alameda_seal.png");
   width: 86px;
   height: 86px; }
   @media only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 125dpi) {
     .illustration--alameda {
-      background-image: url("/intake/img/alameda_seal@2x.png");
+      background-image: url("/static/intake/img/alameda_seal@2x.png");
       background-size: 100% auto; } }
 
 .illustration--contra-costa {
-  background-image: url("/intake/img/contra_costa_seal.png");
+  background-image: url("/static/intake/img/contra_costa_seal.png");
   width: 86px;
   height: 86px; }
   @media only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 125dpi) {
     .illustration--contra-costa {
-      background-image: url("/intake/img/contra_costa_seal@2x.png");
+      background-image: url("/static/intake/img/contra_costa_seal@2x.png");
       background-size: 100% auto; } }
 
 .illustration--fresno {
-  background-image: url("/intake/img/fresno_seal.png");
+  background-image: url("/static/intake/img/fresno_seal.png");
   width: 86px;
   height: 86px; }
   @media only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 125dpi) {
     .illustration--fresno {
-      background-image: url("/intake/img/fresno_seal@2x.png");
+      background-image: url("/static/intake/img/fresno_seal@2x.png");
       background-size: 100% auto; } }
 
 .illustration--san-diego {
-  background-image: url("/intake/img/san_diego_seal.png");
+  background-image: url("/static/intake/img/san_diego_seal.png");
   width: 86px;
   height: 86px; }
   @media only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 125dpi) {
     .illustration--san-diego {
-      background-image: url("/intake/img/san_diego_seal@2x.png");
+      background-image: url("/static/intake/img/san_diego_seal@2x.png");
       background-size: 100% auto; } }
 
 .illustration--san-francisco {
-  background-image: url("/intake/img/san_francisco_seal.png");
+  background-image: url("/static/intake/img/san_francisco_seal.png");
   width: 86px;
   height: 86px; }
   @media only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 125dpi) {
     .illustration--san-francisco {
-      background-image: url("/intake/img/san_francisco_seal@2x.png");
+      background-image: url("/static/intake/img/san_francisco_seal@2x.png");
       background-size: 100% auto; } }
 
 .illustration--santa-barbara {
-  background-image: url("/intake/img/santa_barbara_seal.png");
+  background-image: url("/static/intake/img/santa_barbara_seal.png");
   width: 86px;
   height: 86px; }
   @media only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 125dpi) {
     .illustration--santa-barbara {
-      background-image: url("/intake/img/santa_barbara_seal@2x.png");
+      background-image: url("/static/intake/img/santa_barbara_seal@2x.png");
       background-size: 100% auto; } }
 
 .illustration--santa-clara {
-  background-image: url("/intake/img/santa_clara_seal.png");
+  background-image: url("/static/intake/img/santa_clara_seal.png");
   width: 86px;
   height: 86px; }
   @media only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 125dpi) {
     .illustration--santa-clara {
-      background-image: url("/intake/img/santa_clara_seal@2x.png");
+      background-image: url("/static/intake/img/santa_clara_seal@2x.png");
       background-size: 100% auto; } }
 
 .illustration--santa-cruz {
-  background-image: url("/intake/img/santa_cruz_seal.png");
+  background-image: url("/static/intake/img/santa_cruz_seal.png");
   width: 86px;
   height: 86px; }
   @media only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 125dpi) {
     .illustration--santa-cruz {
-      background-image: url("/intake/img/santa_cruz_seal@2x.png");
+      background-image: url("/static/intake/img/santa_cruz_seal@2x.png");
       background-size: 100% auto; } }
 
 .illustration--solano {
-  background-image: url("/intake/img/solano_seal.png");
+  background-image: url("/static/intake/img/solano_seal.png");
   width: 86px;
   height: 86px; }
   @media only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 125dpi) {
     .illustration--solano {
-      background-image: url("/intake/img/solano_seal@2x.png");
+      background-image: url("/static/intake/img/solano_seal@2x.png");
       background-size: 100% auto; } }
 
 .illustration--ventura {
-  background-image: url("/intake/img/ventura_seal.png");
+  background-image: url("/static/intake/img/ventura_seal.png");
   width: 86px;
   height: 86px; }
   @media only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 125dpi) {
     .illustration--ventura {
-      background-image: url("/intake/img/ventura_seal@2x.png");
+      background-image: url("/static/intake/img/ventura_seal@2x.png");
       background-size: 100% auto; } }
 
 .illustration--bundle-icon {
-  background-image: url("/intake/img/bundle-icon.png");
+  background-image: url("/static/intake/img/bundle-icon.png");
   width: 102px;
   height: 67px; }
   @media only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 125dpi) {
     .illustration--bundle-icon {
-      background-image: url("/intake/img/bundle-icon@2x.png");
+      background-image: url("/static/intake/img/bundle-icon@2x.png");
       background-size: 100% auto; } }
 
 .illustration--eligibility-icon {
-  background-image: url("/intake/img/eligibility-icon.png");
+  background-image: url("/static/intake/img/eligibility-icon.png");
   width: 102px;
   height: 67px; }
   @media only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 125dpi) {
     .illustration--eligibility-icon {
-      background-image: url("/intake/img/eligibility-icon@2x.png");
+      background-image: url("/static/intake/img/eligibility-icon@2x.png");
       background-size: 100% auto; } }
 
 .illustration--notification-icon {
-  background-image: url("/intake/img/notification-icon.png");
+  background-image: url("/static/intake/img/notification-icon.png");
   width: 64px;
   height: 67px; }
   @media only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 125dpi) {
     .illustration--notification-icon {
-      background-image: url("/intake/img/notification-icon@2x.png");
+      background-image: url("/static/intake/img/notification-icon@2x.png");
       background-size: 100% auto; } }
 
 .illustration--partner-interface {
-  background-image: url("/intake/img/partner-interface.png");
+  background-image: url("/static/intake/img/partner-interface.png");
   width: 470px;
   height: 295px;
   background-position: top left; }
   @media only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 125dpi) {
     .illustration--partner-interface {
-      background-image: url("/intake/img/partner-interface@2x.png");
+      background-image: url("/static/intake/img/partner-interface@2x.png");
       background-size: 100% auto; } }
 
 .illustration--ladders {
-  background-image: url("/intake/img/ladders.png");
+  background-image: url("/static/intake/img/ladders.png");
   width: 481px;
   height: 410px;
   background-position: center center; }
   @media only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 125dpi) {
     .illustration--ladders {
-      background-image: url("/intake/img/ladders@2x.png");
+      background-image: url("/static/intake/img/ladders@2x.png");
       background-size: 100% auto; } }
 
 .illustration--ca {
-  background-image: url("/intake/img/ca.png");
+  background-image: url("/static/intake/img/ca.png");
   width: 68px;
   height: 94px;
   background-position: center center; }
   @media only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 125dpi) {
     .illustration--ca {
-      background-image: url("/intake/img/ca@2x.png");
+      background-image: url("/static/intake/img/ca@2x.png");
       background-size: 100% auto; } }
 
 .illustration--job_search {
-  background-image: url("/intake/img/job_search.png");
+  background-image: url("/static/intake/img/job_search.png");
   width: 111px;
   height: 94px;
   background-position: center center; }
   @media only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 125dpi) {
     .illustration--job_search {
-      background-image: url("/intake/img/job_search@2x.png");
+      background-image: url("/static/intake/img/job_search@2x.png");
       background-size: 100% auto; } }
 
 .illustration--10_minutes {
-  background-image: url("/intake/img/10_minutes.png");
+  background-image: url("/static/intake/img/10_minutes.png");
   width: 94px;
   height: 94px;
   background-position: center center; }
   @media only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 125dpi) {
     .illustration--10_minutes {
-      background-image: url("/intake/img/10_minutes@2x.png");
+      background-image: url("/static/intake/img/10_minutes@2x.png");
       background-size: 100% auto; } }
 
 .illustration--speech_bubbles {
-  background-image: url("/intake/img/speech_bubbles.png");
+  background-image: url("/static/intake/img/speech_bubbles.png");
   width: 107px;
   height: 94px;
   background-position: center center; }
   @media only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 125dpi) {
     .illustration--speech_bubbles {
-      background-image: url("/intake/img/speech_bubbles@2x.png");
+      background-image: url("/static/intake/img/speech_bubbles@2x.png");
       background-size: 100% auto; } }
 
 .slab {

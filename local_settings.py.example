@@ -56,13 +56,8 @@ COMPRESS_OFFLINE = False
 CELERY_TASK_ALWAYS_EAGER = True
 CELERY_BROKER_URL = 'amqp://localhost'
 
-
 BROWSER_STACK_ID = 'username'
 BROWSER_STACK_KEY = 'insert key here'
-
-STATIC_ROOT = None
-COMPRESS_ROOT = os.path.join(REPO_DIR, 'staticfiles')
-COMPRESS_OFFLINE = False
 
 TEST_USER_PASSWORD="my-example-password"
 

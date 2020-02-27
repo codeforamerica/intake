@@ -9,14 +9,10 @@ zappa_settings.json
 .DS_Store
 
 # virtualenv
-bin
-include
-lib
-share
 pyvenv.cfg
 pip-selfcheck.json
 .Python
-.venv
+.venv/
 
 # test outputs to ignore
 .coverage
@@ -42,3 +38,5 @@ user_accounts/fixtures/mock_profiles.json
 # IDE settings
 .idea
 tags
+
+.env*

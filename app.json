@@ -1,13 +1,16 @@
 {
   "name": "intake",
   "env": {
+    "DATABASE_HOST": {
+      "required": true
+    },
+    "DATABASE_PASSWORD": {
+      "required": true
+    },
     "DEFAULT_HOST": {
       "required": true
     },
     "DJANGO_SETTINGS_MODULE": {
-      "required": true
-    },
-    "TWILIO_AUTH_TOKEN": {
       "required": true
     },
     "FRONT_API_TOKEN": {
@@ -22,13 +25,22 @@
     "MAIL_DEFAULT_SENDER": {
       "required": true
     },
-    "VOICEMAIL_NOTIFICATION_EMAIL": {
+    "MAILGUN_PRIVATE_API_KEY": {
+      "required": true
+    },
+    "MIXPANEL_KEY": {
       "required": true
     },
     "PARTNERSHIPS_LEAD_INBOX": {
       "required": true
     },
-    "MIXPANEL_KEY": {
+    "PURGED_DATABASE_HOST": {
+      "required": true
+    },
+    "PURGED_DATABASE_PASSWORD": {
+      "required": true
+    },
+    "PURGED_DATABASE_USER": {
       "required": true
     },
     "SECRET_KEY": {
@@ -37,13 +49,17 @@
     "SENDGRID_API_KEY": {
       "required": true
     },
-    "MAILGUN_PRIVATE_API_KEY": {
-      "required": true
-    },
+    "SERVER_EMAIL": {},
     "SLACK_WEBHOOK_URL": {
       "required": true
     },
     "TEST_USER_PASSWORD": {
+      "required": true
+    },
+    "TWILIO_AUTH_TOKEN": {
+      "required": true
+    },
+    "VOICEMAIL_NOTIFICATION_EMAIL": {
       "required": true
     }
   },
