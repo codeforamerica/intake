@@ -26,7 +26,6 @@ mixpanel~=4.3.1
 django-extensions~=1.7
 twilio==6.1.0
 django-compressor==2.1.1
-# user agent parsing & middleware
 PyYAML==4.2b1
 user-agents==1.1.0
 ua-parser==0.7.3
@@ -45,3 +44,4 @@ Faker==1.0.7
 cryptography==2.8
 idna==2.8
 sentry-sdk==0.14.1
+whitenoise==5.0.1

@@ -1,0 +1,4 @@
+# Included because many PaaS require a requirements.txt file
+# in the project root.
+
+-r requirements/prod.txt

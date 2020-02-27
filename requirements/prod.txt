@@ -1,0 +1,5 @@
+# Requirements for production
+-r app.txt
+
+sentry-sdk==0.14.1
+gunicorn==20.0.4
