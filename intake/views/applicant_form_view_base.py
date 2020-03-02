@@ -48,13 +48,7 @@ class ApplicantFormViewBase(FormView):
         errors = []
         if not self.session_data.get('counties', []):
             errors.append(
-                NoCountiesInSessionError(
-                    ("No counties in session data "
-                     "on url %s for ip %s expires %s") %
-                    (self.request.get_full_path(),
-                     get_client_ip(
-                        self.request),
-                        self.request.session.get_expiry_date())))
+                NoCountiesInSessionError("No counties in session data"))
         if not self.applicant:
             errors.append(
                 NoApplicantInSessionError("No applicant in session data"))
