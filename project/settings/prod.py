@@ -22,14 +22,14 @@ DATABASES = {
 }
 CLIPS_DATABASE_ALIAS = 'purged'
 
-# AWS Credentials for Static Files
+# AWS Credentials for media files
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET')
-AWS_STORAGE_BUCKET_NAME = os.environ.get('STATIC_BUCKET')
-
-# settings for media files
 MEDIA_ROOT = ''
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_STORAGE_BUCKET_NAME = os.environ.get('MEDIA_BUCKET')
 AWS_S3_FILE_OVERWRITE = False
+AWS_QUERYSTRING_AUTH = True
 
 AWS_DEFAULT_ACL = 'private'  # Keeps things in bucket private
 SYNC_AWS_ID = os.environ.get('SYNC_AWS_ID')
