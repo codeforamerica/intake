@@ -105,10 +105,6 @@ db.dump_fixtures:
 	    --indent 2 \
 	    --format json
 
-db.pull.demo:
-	dropdb intake --if-exists
-	heroku pg:pull --app cmr-demo DATABASE_URL intake
-
 
 # static.dev runs sass to convert .scss stylesheets to css
 # it will watch the scss directory and automatically regenerate css
