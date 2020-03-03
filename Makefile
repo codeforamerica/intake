@@ -21,15 +21,6 @@ test.keepdb:
 		--verbosity 2 --keepdb
 
 
-test.review_app:
-	pip install -r requirements/dev.txt
-	./manage.py migrate --settings project.settings.review_app
-	coverage run ./manage.py test $(SCOPE) \
-		--settings project.settings.review_app \
-		--verbosity 2 --keepdb
-	coverage report -m
-
-
 test.coverage:
 	coverage run \
 		./manage.py test $(SCOPE) \
