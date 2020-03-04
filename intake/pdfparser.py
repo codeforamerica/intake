@@ -84,12 +84,13 @@ class PDFParser:
         pdftk's CLI
         """
         args = ['java', '-jar', self.PDFPARSER_PATH] + args
+
         process = subprocess.Popen(
             args,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
         out, err = process.communicate()
-        if err:
+        if err and "Picked up JAVA_TOOL_OPTIONS" not in str(err.decode('utf-8')):
             raise PDFParserError(err.decode('utf-8'))
         return out.decode('utf-8')
 
