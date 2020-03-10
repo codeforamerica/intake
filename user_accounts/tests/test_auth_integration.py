@@ -101,7 +101,7 @@ class TestUserAccounts(AuthIntegrationTestCase):
         self.assertTrue(users[0].is_authenticated)
         self.assertIn(self.example_user['email'], get_user_display(users[0]))
         self.assertIn(self.groups[0], users[0].groups.all())
-        mock_tasks.create_mailgun_route.assert_called_once_with(
+        mock_tasks.create_mailgun_route.delay.assert_called_once_with(
             users[0].profile.id)
 
     def test_user_can_add_info_in_profile_view(self):

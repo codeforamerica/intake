@@ -103,5 +103,5 @@ def send_mailgun_email(to, message, sender_profile, subject):
         "subject": subject,
         "text": message
     }
-    tasks.celery_request(
+    tasks.celery_request.delay(
         'POST', MAILGUN_MESSAGES_API_URL, auth=mailgun_auth(), data=post_data)

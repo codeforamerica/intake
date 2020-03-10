@@ -1,38 +1,33 @@
-from django.core import mail
+from celery import shared_task
 from django.conf import settings
+from django.core import mail
 from requests import request
-from zappa.async import task
 from project.services.mixpanel_service import get_mixpanel_client
 from project.services import logging_service
 
 
-@task
-def debug_task(string):
-    print('Request: {0!r}'.format(string))
-
-
-@task
+@shared_task
 def log_to_mixpanel(distinct_id, event_name, **data):
     client = get_mixpanel_client()
     divert = getattr(settings, 'DIVERT_REMOTE_CONNECTIONS', False)
     mixpanel_kwargs = dict(
-        distinct_id=distinct_id,
-        event_name=event_name,
-        properties=data)
+            distinct_id=distinct_id,
+            event_name=event_name,
+            properties=data)
     if client and not divert:
         client.track(**mixpanel_kwargs)
     logging_service.format_and_log(
         log_type='call_to_mixpanel', **mixpanel_kwargs)
 
 
-@task
+@shared_task
 def celery_request(*args, **kwargs):
     if 'auth' in kwargs:
         kwargs['auth'] = tuple(kwargs['auth'])
     request(*args, **kwargs)
 
 
-@task
+@shared_task
 def add_application_pdfs(application_id):
     # imports of intake services should be called inside of tasks to prevent
     # circular imports
@@ -43,7 +38,7 @@ def add_application_pdfs(application_id):
     pdf_service.update_pdf_bundle_for_san_francisco()
 
 
-@task
+@shared_task
 def remove_application_pdfs(application_id):
     # imports of intake services should be called inside of tasks to prevent
     # circular imports
@@ -51,7 +46,7 @@ def remove_application_pdfs(application_id):
     pdf_service.rebuild_pdf_bundle_for_removed_application(application_id)
 
 
-@task
+@shared_task
 def send_email(*args, **kwargs):
     # This should be fast enough to run in the request
     mail.send_mail(*args, **kwargs)

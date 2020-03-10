@@ -56,7 +56,7 @@ class UserProfile(models.Model):
         )
         profile.save()
         user.groups.add(*invitation.groups.all())
-        tasks.create_mailgun_route(profile.id)
+        tasks.create_mailgun_route.delay(profile.id)
         return profile
 
     def should_see_pdf(self):

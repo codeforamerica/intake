@@ -196,7 +196,7 @@ class TestSendMailGunEmail(TestCase):
         with self.settings(ALLOW_REQUESTS_TO_MAILGUN=True):
             send_mailgun_email(
                 'foo@bar.com', 'hello foo', self.profile, 'Hello')
-        mock_tasks.celery_request.assert_called_once_with(
+        mock_tasks.celery_request.delay.assert_called_once_with(
             'POST', MAILGUN_MESSAGES_API_URL,
             auth=mock_mailgun_auth.return_value, data={
                 "from": "Jane Doe <jdoe.yolo@clearmyrecord.org>",

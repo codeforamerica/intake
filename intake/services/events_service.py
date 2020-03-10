@@ -26,7 +26,7 @@ def form_started(view, counties):
     event_name = 'application_started'
     applicant = ApplicantsService.get_applicant_from_request_or_session(
         view.request)
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=applicant.get_uuid(),
         event_name=event_name,
         counties=counties,
@@ -40,7 +40,7 @@ def form_page_complete(view):
     event_name = 'application_page_complete'
     applicant = ApplicantsService.get_applicant_from_request_or_session(
         view.request)
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=applicant.get_uuid(),
         event_name=event_name,
         **mixpanel_applicant_data(applicant),
@@ -57,7 +57,7 @@ def form_validation_failed(view, errors):
     applicant = ApplicantsService.get_applicant_from_request_or_session(
         view.request)
     for error_key, errors in errors.items():
-        log_to_mixpanel(
+        log_to_mixpanel.delay(
             distinct_id=applicant.get_uuid(),
             event_name=event_name,
             error=error_key,
@@ -70,7 +70,7 @@ def form_validation_failed(view, errors):
 
 def form_submitted(view, submission):
     event_name = 'application_submitted'
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=submission.get_uuid(),
         event_name=event_name,
         organizations=list(
@@ -81,7 +81,7 @@ def form_submitted(view, submission):
 
 def site_entered(visitor, request):
     event_name = 'site_entered'
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=visitor.get_uuid(),
         event_name=event_name,
         **mixpanel_request_data(request))
@@ -96,12 +96,12 @@ def page_viewed(request, response):
         **mixpanel_request_data(request))
     if response.view:
         data.update(mixpanel_view_data(response.view))
-    log_to_mixpanel(**data)
+    log_to_mixpanel.delay(**data)
 
 
 def app_transferred(old_application, new_application, user):
     event_name = 'app_transferred'
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=old_application.form_submission.get_uuid(),
         event_name=event_name,
         user_email=user.email,
@@ -116,7 +116,7 @@ def app_transferred(old_application, new_application, user):
 def tags_added(tag_links):
     event_name = 'app_tag_added'
     for tag_link in tag_links:
-        log_to_mixpanel(
+        log_to_mixpanel.delay(
             distinct_id=tag_link.content_object.get_uuid(),
             event_name=event_name,
             tag_name=tag_link.tag.name,
@@ -126,7 +126,7 @@ def tags_added(tag_links):
 
 def note_added(view, submission):
     event_name = 'app_note_added'
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=submission.get_uuid(),
         event_name=event_name,
         **mixpanel_applicant_data(submission.applicant),
@@ -135,7 +135,7 @@ def note_added(view, submission):
 
 def followup_sent(submission, contact_methods):
     event_name = 'app_followup_sent'
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=submission.get_uuid(),
         event_name=event_name,
         contact_info_types=contact_methods,
@@ -144,7 +144,7 @@ def followup_sent(submission, contact_methods):
 
 def confirmation_sent(submission, contact_methods):
     event_name = 'app_confirmation_sent'
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=submission.get_uuid(),
         event_name=event_name,
         contact_info_types=contact_methods,
@@ -154,7 +154,7 @@ def confirmation_sent(submission, contact_methods):
 def apps_opened(view, applications):
     event_name = 'app_opened'
     for application in applications:
-        log_to_mixpanel(
+        log_to_mixpanel.delay(
             distinct_id=application.form_submission.get_uuid(),
             event_name=event_name,
             application_id=application.id,
@@ -168,7 +168,7 @@ def bundle_opened(bundle, user):
     """
     event_name = 'app_bundle_opened'
     for submission in bundle.submissions.all():
-        log_to_mixpanel(
+        log_to_mixpanel.delay(
             distinct_id=submission.get_uuid(),
             event_name=event_name,
             bundle_id=bundle.id,
@@ -201,12 +201,12 @@ def status_updated(view, status_update):
         event_kwargs.update(
             notification_contact_info_types=list(
                 status_update.notification.contact_info.keys()))
-    log_to_mixpanel(**event_kwargs)
+    log_to_mixpanel.delay(**event_kwargs)
 
 
 def partnership_interest_submitted(view, partnership_lead):
     event_name = 'partnership_interest_submitted'
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=partnership_lead.visitor.get_uuid(),
         event_name=event_name,
         **mixpanel_data_from_view_request_user(view))
@@ -215,7 +215,7 @@ def partnership_interest_submitted(view, partnership_lead):
 def empty_print_all_opened(request, view):
     # not currently used
     event_name = 'user_empty_print_all_opened'
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=request.user.get_uuid(),
         event_name=event_name)
 
@@ -224,12 +224,12 @@ def unread_pdf_opened(request, view):
     # not currently used
     applicant_event_name = 'app_unread_pdf_opened'
     user_event_name = 'user_unread_pdf_opened'
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=request.user.get_uuid(),
         event_name=user_event_name,
         organization_name=view.organization.name)
     for app in view.applications:
-        log_to_mixpanel(
+        log_to_mixpanel.delay(
             distinct_id=app.get_uuid(),
             event_name=applicant_event_name,
             bundle_organization_name=app.organization.name,
@@ -246,12 +246,12 @@ def user_page_viewed(request, response):
         **mixpanel_user_data(request.user))
     if response.view:
         data.update(mixpanel_view_data(response.view))
-    log_to_mixpanel(**data)
+    log_to_mixpanel.delay(**data)
 
 
 def user_login(view):
     event_name = 'user_login'
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=view.request.user.profile.get_uuid(),
         event_name=event_name,
         **mixpanel_data_from_view_request_user(view))
@@ -260,7 +260,7 @@ def user_login(view):
 def user_account_created(view):
     # this doesn't appear to be used
     event_name = 'user_account_created'
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=view.user.profile.get_uuid(),
         event_name=event_name,
         **mixpanel_data_from_view_request_user(view))
@@ -268,7 +268,7 @@ def user_account_created(view):
 
 def user_failed_login(view):
     event_name = 'user_failed_login'
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=view.request.visitor.get_uuid(),
         event_name=event_name,
         attempted_login=view.request.POST.get('login', ''),
@@ -277,7 +277,7 @@ def user_failed_login(view):
 
 def user_reset_password(view, email):
     event_name = 'user_reset_password'
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=view.request.visitor.get_uuid(),
         event_name=event_name,
         email=email,
@@ -286,7 +286,7 @@ def user_reset_password(view, email):
 
 def user_email_link_clicked(view):
     event_name = 'user_email_link_clicked'
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=view.request.user.profile.get_uuid(),
         event_name=event_name,
         target_url=view.get_redirect_url(),
@@ -318,13 +318,13 @@ def user_status_updated(view, status_update):
         event_kwargs.update(
             notification_contact_info_types=list(
                 status_update.notification.contact_info.keys()))
-    log_to_mixpanel(**event_kwargs)
+    log_to_mixpanel.delay(**event_kwargs)
 
 
 def user_apps_opened(view, applications):
     event_name = 'user_app_opened'
     for application in applications:
-        log_to_mixpanel(
+        log_to_mixpanel.delay(
             distinct_id=view.request.user.profile.get_uuid(),
             event_name=event_name,
             application_id=application.id,
@@ -337,7 +337,7 @@ def user_apps_opened(view, applications):
 
 def user_app_transferred(old_application, new_application, user):
     event_name = 'user_app_transferred'
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=user.profile.get_uuid(),
         event_name=event_name,
         applicant_uuid=old_application.form_submission.get_uuid(),
@@ -349,7 +349,7 @@ def user_app_transferred(old_application, new_application, user):
 
 def user_apps_searched(view):
     event_name = 'user_apps_searched'
-    log_to_mixpanel(
+    log_to_mixpanel.delay(
         distinct_id=view.request.user.profile.get_uuid(),
         event_name=event_name,
         **mixpanel_data_from_view_request_user(view))

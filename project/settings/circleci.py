@@ -23,6 +23,7 @@ TEST_USER_PASSWORD = 'cmr-travis'
 PARTNERSHIPS_LEAD_INBOX = "cmrtestuser@gmail.com"
 
 CLIPS_DATABASE_ALIAS = 'default'
+CELERY_TASK_ALWAYS_EAGER = True
 
 DATABASES = {
     'default': {

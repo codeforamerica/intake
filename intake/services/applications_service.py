@@ -174,7 +174,7 @@ def handle_apps_opened(view, apps):
         if should_be_marked:
             app.has_been_opened = True
             app.save()
-            tasks.remove_application_pdfs(app.id)
+            tasks.remove_application_pdfs.delay(app.id)
 
 
 def get_valid_application_ids_from_set(application_ids):
