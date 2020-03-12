@@ -1,4 +1,4 @@
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, DEFAULT
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
@@ -137,9 +137,9 @@ class TestCountUniqueVisitorsMiddleware(TestCase):
         visitor = models.Visitor.objects.get(pk=visitor_id)
         self.assertTrue(visitor)
 
-    @patch('intake.middleware.Visitor')
-    def test_visitor_is_created_only_once(self, Visitor):
-        Visitor.return_value = Mock(id=1)
+    @patch('intake.middleware.Visitor', return_value=Mock(id=1))
+    @patch.multiple('intake.services.events_service', site_entered=DEFAULT, page_viewed=DEFAULT)
+    def test_visitor_is_created_only_once(self, Visitor, site_entered, page_viewed):
         response = self.client.get(reverse('intake-home'))
         visitor_id = response.wsgi_request.session.get('visitor_id')
         response_2 = self.client.get(reverse('intake-apply'))
@@ -149,9 +149,8 @@ class TestCountUniqueVisitorsMiddleware(TestCase):
             ip_address='127.0.0.1', referrer='', source='', user_agent='',
             locale='en')
 
-    @patch('intake.middleware.Visitor')
+    @patch('intake.middleware.Visitor', return_value=Mock(id=1))
     def test_ignores_health_checks(self, Visitor):
-        Visitor.return_value = Mock(id=1)
         response = self.client.get(reverse('health_check-ok'))
         self.assertIsNone(response.wsgi_request.session.get('visitor_id'))
         Visitor.assert_not_called()

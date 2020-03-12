@@ -81,8 +81,9 @@ class TestApplicantFormViewBase(ApplicantFormViewBaseTestCase):
     @patch('intake.services.messages_service.flash_success')
     @patch('intake.services.submissions.send_to_newapps_bundle_if_needed')
     @patch('intake.services.submissions.create_submission')
+    @patch('intake.services.events_service.form_submitted')
     def test_finalize_application_actions(
-            self, create_sub, send_to_newapps, flash_success):
+            self, create_sub, send_to_newapps, flash_success, mock_form_submitted):
         self.set_form_session_data(counties=['contracosta'])
         answers = fake.contra_costa_county_form_answers()
         with self.assertLogs(
@@ -96,9 +97,10 @@ class TestApplicantFormViewBase(ApplicantFormViewBaseTestCase):
         self.assertEqual(send_to_newapps.call_count, 1)
         self.assertEqual(self.send_confirmations.call_count, 1)
         self.assertEqual(flash_success.call_count, 1)
+        self.assertEqual(mock_form_submitted.call_count, 1)
         assertInLogsCount(
             logs, {
-                'event_name=application_submitted': 1,
+                'event_name=application_submitted': 0,
                 'event_name=application_page_complete': 2,
                 'event_name=application_started': 0,
                 'event_name=application_errors': 0,

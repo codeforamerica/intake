@@ -1,5 +1,5 @@
 import random
-from unittest.mock import patch, Mock
+from unittest.mock import patch, Mock, DEFAULT
 from datetime import timedelta
 from django.utils import timezone
 from django.test import TestCase
@@ -155,8 +155,9 @@ class TestGetSerializedApplicationHistoryEvents(DeluxeTransactionTestCase):
                 application, receiving_user)
 
 
+@patch.multiple('intake.services.events_service', apps_opened=DEFAULT, user_apps_opened=DEFAULT)
 class TestHandleAppsOpened(TestCase):
-    def test_mark_only_users_app_opened(self):
+    def test_mark_only_users_app_opened(self, apps_opened, user_apps_opened):
         fake_org_1 = FakeOrganizationFactory()
         fake_org_2 = FakeOrganizationFactory()
         sub = factories.FormSubmissionWithOrgsFactory(
@@ -171,7 +172,7 @@ class TestHandleAppsOpened(TestCase):
         self.assertFalse(any([app.has_been_opened for app in org_2_apps]))
 
     @patch('intake.tasks.remove_application_pdfs')
-    def test_calls_remove_pdf_task_when_opened(self, remove_application_pdfs):
+    def test_calls_remove_pdf_task_when_opened(self, remove_application_pdfs, apps_opened, user_apps_opened):
         profile = UserProfileFactory()
         sub = factories.FormSubmissionWithOrgsFactory(
             organizations=[profile.organization], answers={})

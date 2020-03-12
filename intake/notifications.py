@@ -92,7 +92,6 @@ class TemplateNotification:
 
 
 class EmailNotification(TemplateNotification):
-
     default_from_email = settings.MAIL_DEFAULT_SENDER
 
     def __init__(self, subject_template='', body_template_path=''):
@@ -149,10 +148,10 @@ class SimpleFrontNotification:
         if check_that_remote_connections_are_okay(
                 'FRONT POST:', payload):
             celery_request.delay('POST',
-                           url=self.build_api_url_endpoint(),
-                           data=payload,
-                           headers=self.build_headers()
-                           )
+                                 url=self.build_api_url_endpoint(),
+                                 data=payload,
+                                 headers=self.build_headers()
+                                 )
 
 
 class FrontNotification(TemplateNotification, SimpleFrontNotification):
@@ -226,7 +225,6 @@ def send_applicant_notification(contact_info, message, subject=None,
 
 
 class BasicSlackNotification:
-
     headers = {'Content-type': 'application/json'}
 
     def __init__(self, webhook_url=None):
@@ -240,9 +238,9 @@ class BasicSlackNotification:
         if check_that_remote_connections_are_okay(
                 'SLACK POST:', payload):
             celery_request.delay('POST',
-                           url=self.webhook_url,
-                           data=payload,
-                           headers=self.headers)
+                                 url=self.webhook_url,
+                                 data=payload,
+                                 headers=self.headers)
 
 
 class SlackTemplateNotification(BasicSlackNotification, TemplateNotification):
@@ -295,7 +293,6 @@ email_followup = FrontEmailNotification(
     body_template_path='email/followup.jinja')
 sms_followup = FrontSMSNotification(
     body_template_path='text/followup.jinja')
-
 
 app_edited_org_email_notification = MailgunEmailNotification(
     subject_template=(
