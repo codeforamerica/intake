@@ -1,24 +1,42 @@
 {
   "name": "intake",
   "env": {
-    "AWS_ID": {},
-    "AWS_SECRET": {},
-    "DATABASE_HOST": {},
-    "DATABASE_PASSWORD": {},
+    "ALLOWED_HOSTS": {
+      "value": "*"
+    },
+    "AWS_ID": {
+      "required": false
+    },
+    "AWS_SECRET": {
+      "required": false
+    },
+    "DATABASE_HOST": {
+      "required": false
+    },
+    "DATABASE_PASSWORD": {
+      "required": false
+    },
+    "DATABASE_URL": {
+      "required": false
+    },
     "DEFAULT_HOST": {
       "required": true
+    },
+    "DIVERT_REMOTE_CONNECTIONS": {
+      "value": "True",
+      "required": false
     },
     "DJANGO_SETTINGS_MODULE": {
       "required": true
     },
     "FRONT_API_TOKEN": {
-      "required": true
+      "value": "aaaaaa"
     },
     "FRONT_EMAIL_CHANNEL_ID": {
-      "required": true
+      "value": "aaaaaa"
     },
     "FRONT_PHONE_CHANNEL_ID": {
-      "required": true
+      "value": "aaaaaa"
     },
     "MAIL_DEFAULT_SENDER": {
       "required": true
@@ -26,40 +44,48 @@
     "MAILGUN_PRIVATE_API_KEY": {
       "required": true
     },
-    "MEDIA_BUCKET": {},
+    "MEDIA_BUCKET": {
+      "required": false
+    },
     "MIXPANEL_KEY": {
-      "required": true
+      "required": false
     },
     "PARTNERSHIPS_LEAD_INBOX": {
-      "required": true
+      "required": false
     },
     "PURGED_DATABASE_HOST": {
-      "required": true
+      "required": false
     },
     "PURGED_DATABASE_PASSWORD": {
-      "required": true
+      "required": false
     },
     "PURGED_DATABASE_USER": {
-      "required": true
+      "required": false
     },
     "SECRET_KEY": {
-      "required": true
+      "generator": "secret",
+      "required": false
     },
     "SENDGRID_API_KEY": {
       "required": true
     },
-    "SERVER_EMAIL": {},
-    "SLACK_WEBHOOK_URL": {
+    "SENTRY_URL": {
       "required": true
     },
-    "TEST_USER_PASSWORD": {
+    "SERVER_EMAIL": {
       "required": true
+    },
+    "SLACK_WEBHOOK_URL": {
+      "value": "aaaaaa"
+    },
+    "TEST_USER_PASSWORD": {
+      "required": false
     },
     "TWILIO_AUTH_TOKEN": {
       "required": true
     },
     "VOICEMAIL_NOTIFICATION_EMAIL": {
-      "required": true
+      "required": false
     }
   },
   "formation": {
@@ -70,28 +96,28 @@
       "quantity": 1
     }
   },
-  "addons": [
-    "cloudamqp",
-    "bucketeer",
-    "newrelic",
-    "heroku-postgresql",
-    {
-      "plan": "heroku-postgresql",
-	    "as": "test_db"
+  "addons": ["cloudamqp"],
+  "environments": {
+    "review": {
+      "addons": [
+        "heroku-postgresql:hobby-dev",
+        "cloudamqp",
+        "bucketeer"
+      ]
     }
-  ],
+  },
   "buildpacks": [
     {
-      "url": "heroku/nodejs"
+      "url": "https://github.com/heroku/heroku-buildpack-jvm-common.git"
     },
     {
-      "url": "heroku/ruby"
+      "url": "heroku/nodejs"
     },
     {
       "url": "heroku/python"
     }
   ],
   "scripts": {
-	  "postdeploy": "./manage.py new_fixtures"
+    "postdeploy": "python manage.py prepare_review_env"
   }
 }

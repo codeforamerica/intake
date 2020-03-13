@@ -5,7 +5,7 @@ from project.fixtures_index import ESSENTIAL_DATA_FIXTURES
 
 class Command(BaseCommand):
     help = str(
-        "Sets up seeds based on what environment it runs in.")
+        "Loads 'essential' data from fixture files")
 
     def handle(self, *args, **kwargs):
         management.call_command('loaddata', *ESSENTIAL_DATA_FIXTURES)
