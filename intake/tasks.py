@@ -1,6 +1,7 @@
 from celery import shared_task
 from django.conf import settings
 from django.core import mail
+from django.core import management
 from requests import request
 from project.services.mixpanel_service import get_mixpanel_client
 from project.services import logging_service
@@ -50,3 +51,8 @@ def remove_application_pdfs(application_id):
 def send_email(*args, **kwargs):
     # This should be fast enough to run in the request
     mail.send_mail(*args, **kwargs)
+
+
+@shared_task
+def alert_admins_if_org_has_unread_applications():
+    management.call_command("alert_admins_if_org_has_unread_applications")

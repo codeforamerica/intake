@@ -4,6 +4,8 @@ from sentry_sdk.integrations.django import DjangoIntegration
 
 RELEASE_DATETIME = os.environ.get('MANIFEST_VERSION')
 
+INSTALLED_APPS += ['django_celery_beat']
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
