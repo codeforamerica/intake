@@ -47,17 +47,3 @@ jobs:
             ./manage.py collectstatic --noinput
             ./manage.py compress --engine jinja2 --extension jinja
             make test.everything
-
-      - run:
-          name: Deploy
-          environment:
-            TOWER_HOST: https://tower.clearmyrecord.org
-            TOWER_USERNAME: circleci
-            TOWER_VERIFY_SSL: false
-          command: |
-            . .venv/bin/activate
-            if [[ "${CIRCLE_BRANCH}" == "develop" ]]; then
-                tower-cli job launch --job-template=10 # staging
-            elif [[ "${CIRCLE_BRANCH}" == "master" ]]; then
-                tower-cli job launch --job-template=25 # demo
-            fi
