@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from intake.models import Application, StatusUpdate
 from intake.tests.factories import FormSubmissionWithOrgsFactory, StatusTypeFactory
-from user_accounts.management.commands.alert_if_org_is_absent import Command
+from user_accounts.management.commands.alert_admins_if_org_has_unread_applications import Command
 from user_accounts.tests.factories import UserFactory, \
     FakeOrganizationFactory, UserProfileFactory
 
