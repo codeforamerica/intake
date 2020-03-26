@@ -2,7 +2,7 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^3.4.1",
-    "browserify": "^13.1.0",
+    "browserify": "^16.5.0",
     "c3": "^0.4.23",
     "cached-path-relative": ">=1.0.2",
     "jquery": "^3.4.0",
