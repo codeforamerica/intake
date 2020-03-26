@@ -6,7 +6,7 @@
     "c3": "^0.4.23",
     "cached-path-relative": ">=1.0.2",
     "jquery": "^3.4.0",
-    "less": "^3.8.0",
+    "less": "^3.11.0",
     "moment": "~> 2.19.3",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^1.1.2"
