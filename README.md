@@ -10,6 +10,8 @@
 
 [Testing & Debugging](https://github.com/codeforamerica/intake/wiki/Testing-&-Debugging)
 
+[Logging](https://github.com/codeforamerica/intake/wiki/Logging)
+
 [Releasing & Deploying](https://github.com/codeforamerica/intake/wiki/Releasing-&-Deploying)
 
 [Administrative Access](https://github.com/codeforamerica/intake/wiki/Administrative-Access)
