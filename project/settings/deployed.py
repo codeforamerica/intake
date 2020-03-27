@@ -1,5 +1,6 @@
 from project.settings.environment import *
 import sentry_sdk
+from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.django import DjangoIntegration
 
 RELEASE_DATETIME = os.environ.get('MANIFEST_VERSION')
@@ -89,7 +90,10 @@ LOGGING = {
 # Initialize Sentry
 sentry_sdk.init(
     dsn=SENTRY_URL,
-    integrations=[DjangoIntegration()],
+    integrations=[
+        DjangoIntegration(),
+        CeleryIntegration()
+    ],
 
     # If you wish to associate users to errors (assuming you are using
     # django.contrib.auth) you may enable sending PII data.
