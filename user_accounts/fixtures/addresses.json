@@ -43,7 +43,8 @@
       "Santa Barbara County Public Defender"
     ],
     "name": "Santa Barbara Office (HQ)",
-    "text": "Court House\r\n1100 Anacapa Street\r\nSanta Barbara, CA 93101"
+    "text": "Court House\r\n1100 Anacapa Street\r\nSanta Barbara, CA 93101",
+    "walk_in_hours": ""
   }
 },
 {
@@ -54,7 +55,8 @@
       "Santa Barbara County Public Defender"
     ],
     "name": "Santa Maria Office",
-    "text": "312-P East Cook Street\r\nSanta Maria, CA 93454"
+    "text": "312-P East Cook Street\r\nSanta Maria, CA 93454",
+    "walk_in_hours": ""
   }
 },
 {
@@ -65,7 +67,8 @@
       "Santa Barbara County Public Defender"
     ],
     "name": "Santa Maria Juvenile Office",
-    "text": "Juvenile Court Facility\r\n4285 California Blvd., Suite C\r\nSanta Maria, CA 93455"
+    "text": "Juvenile Court Facility\r\n4285 California Blvd., Suite C\r\nSanta Maria, CA 93455",
+    "walk_in_hours": ""
   }
 },
 {
@@ -76,7 +79,8 @@
       "Santa Barbara County Public Defender"
     ],
     "name": "Lompoc Office",
-    "text": "115 Civic Center Plaza\r\nLompoc, CA 93436"
+    "text": "115 Civic Center Plaza\r\nLompoc, CA 93436",
+    "walk_in_hours": ""
   }
 }
 ]

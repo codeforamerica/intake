@@ -34,7 +34,7 @@
   "model": "auth.group",
   "fields": {
     "name": "followup_staff",
-    "permissions": [
+    "permissions":[
       [
         "view_app_details",
         "intake",
@@ -59,6 +59,29 @@
         "delete_applicationnote",
         "intake",
         "applicationnote"
+      ]
+    ]
+  }
+},
+{
+  "model": "auth.group",
+  "fields": {
+    "name": "clips_users",
+    "permissions": [
+      [
+        "add_clip",
+        "clips",
+        "clip"
+      ],
+      [
+        "change_clip",
+        "clips",
+        "clip"
+      ],
+      [
+        "delete_clip",
+        "clips",
+        "clip"
       ]
     ]
   }
