@@ -22,9 +22,12 @@
     "long_followup_message": "",
     "address": "",
     "phone_number": "(415) 301-6005",
+    "fax_number": "",
     "email": "clearmyrecord@codeforamerica.org",
     "notify_on_weekends": false,
-    "needs_applicant_followups": false
+    "can_transfer_applications": false,
+    "needs_applicant_followups": false,
+    "transfer_partners": []
   }
 },
 {
@@ -53,7 +56,9 @@
     "fax_number": "(415) 553-9810",
     "email": "",
     "notify_on_weekends": false,
-    "needs_applicant_followups": true
+    "can_transfer_applications": false,
+    "needs_applicant_followups": true,
+    "transfer_partners": []
   }
 },
 {
@@ -82,7 +87,9 @@
     "fax_number": "(925) 335-8010",
     "email": "cleanslate@pd.cccounty.us",
     "notify_on_weekends": false,
-    "needs_applicant_followups": false
+    "can_transfer_applications": false,
+    "needs_applicant_followups": false,
+    "transfer_partners": []
   }
 },
 {
@@ -108,10 +115,16 @@
     "long_followup_message": "For Alameda County, your next step was to send your state RAP sheet to East Bay Community Law Center, so they could check what you qualify for. How is that going? Were you able to get your RAP sheet?",
     "address": "East Bay Community Law Center\r\nAttn: Clean Slate Practice\r\n1950 University Avenue, Suite 200\r\nBerkeley, CA\r\n94704",
     "phone_number": "5105484064",
+    "fax_number": "",
     "email": "crimrecordshelp@ebclc.org",
     "notify_on_weekends": false,
+    "can_transfer_applications": true,
     "needs_applicant_followups": true,
-    "can_transfer_applications": true
+    "transfer_partners": [
+      [
+        "Alameda County Public Defender's Office"
+      ]
+    ]
   }
 },
 {
@@ -140,10 +153,12 @@
     "fax_number": "(510) 272 - 6610",
     "email": "cleanslate@acgov.org",
     "notify_on_weekends": false,
-    "needs_applicant_followups": false,
     "can_transfer_applications": true,
+    "needs_applicant_followups": false,
     "transfer_partners": [
-        ["East Bay Community Law Center"]
+      [
+        "East Bay Community Law Center"
+      ]
     ]
   }
 },
@@ -170,9 +185,12 @@
     "long_followup_message": "Has the Monterey County Public Defender contacted you and told you your next steps?",
     "address": "111 W. Alisal Street\r\nSalinas, CA 93901",
     "phone_number": "(831) 755-5058",
+    "fax_number": "",
     "email": "",
     "notify_on_weekends": false,
-    "needs_applicant_followups": false
+    "can_transfer_applications": false,
+    "needs_applicant_followups": false,
+    "transfer_partners": []
   }
 },
 {
@@ -198,9 +216,12 @@
     "long_followup_message": "Has the Solano County Public Defender contacted you and told you your next steps?",
     "address": "Solano County Public Defender's Office\r\nAttention: Clear My Record Unit\r\n675 Texas Street, Suite 3500\r\nFairfield, CA 94533",
     "phone_number": "(707) 784-6700",
+    "fax_number": "",
     "email": "publicdefender@solanocounty.com",
     "notify_on_weekends": false,
-    "needs_applicant_followups": false
+    "can_transfer_applications": false,
+    "needs_applicant_followups": false,
+    "transfer_partners": []
   }
 },
 {
@@ -220,8 +241,8 @@
     "requires_rap_sheet": false,
     "requires_declaration_letter": false,
     "show_pdf_only": false,
-    "short_confirmation_message": "The San Diego County Public Defender will contact you in 2-4 weeks with next steps.",
-    "long_confirmation_message": "The San Diego County Public Defender will contact you in 2-4 weeks with your next steps.",
+    "short_confirmation_message": "The San Diego County Public Defender will contact you in 6-8 weeks with next steps.",
+    "long_confirmation_message": "The San Diego County Public Defender will contact you in 6-8 weeks with your next steps.",
     "short_followup_message": "",
     "long_followup_message": "",
     "address": "Department of the Primary Public Defender\r\nAttn: Expungement Paralegal, Clear My Record\r\n450 \"B\" Street, Suite 900\r\nSan Diego, CA 92101",
@@ -229,7 +250,9 @@
     "fax_number": "(619) 338-4811 (Attn: Fresh Start Program)",
     "email": "Fresh.Start@sdcounty.ca.gov",
     "notify_on_weekends": false,
-    "needs_applicant_followups": false
+    "can_transfer_applications": false,
+    "needs_applicant_followups": false,
+    "transfer_partners": []
   }
 },
 {
@@ -255,9 +278,12 @@
     "long_followup_message": "",
     "address": "San Joaquin Public Defender's Office\r\nAttention: Clear My Record Unit\r\n102 South San Joaquin Street\r\nStockton, CA 95202",
     "phone_number": "(209) 468-2730",
+    "fax_number": "",
     "email": "",
     "notify_on_weekends": false,
-    "needs_applicant_followups": false
+    "can_transfer_applications": false,
+    "needs_applicant_followups": false,
+    "transfer_partners": []
   }
 },
 {
@@ -283,9 +309,12 @@
     "long_followup_message": "",
     "address": "Santa Clara Public Defender's Office\r\nAttention: Clear My Record Unit\r\n120 West Mission Street\r\nSan Jose, CA 95110",
     "phone_number": "408-535-4290",
+    "fax_number": "",
     "email": "",
     "notify_on_weekends": false,
-    "needs_applicant_followups": false
+    "can_transfer_applications": false,
+    "needs_applicant_followups": false,
+    "transfer_partners": []
   }
 },
 {
@@ -314,7 +343,9 @@
     "fax_number": "(559) 600-1570",
     "email": "cleanslate@co.fresno.ca.us",
     "notify_on_weekends": false,
-    "needs_applicant_followups": false
+    "can_transfer_applications": false,
+    "needs_applicant_followups": false,
+    "transfer_partners": []
   }
 },
 {
@@ -340,9 +371,12 @@
     "long_followup_message": "Has the Santa Cruz Public Defender contacted you and told you your next steps?",
     "address": "",
     "phone_number": "(831) 429-1311",
+    "fax_number": "",
     "email": "",
     "notify_on_weekends": false,
-    "needs_applicant_followups": false
+    "can_transfer_applications": false,
+    "needs_applicant_followups": false,
+    "transfer_partners": []
   }
 },
 {
@@ -362,15 +396,18 @@
     "requires_rap_sheet": false,
     "requires_declaration_letter": false,
     "show_pdf_only": false,
-    "short_confirmation_message": "The Sonoma County Public Defender will contact you in 2-4 weeks with next steps.",
-    "long_confirmation_message": "The Sonoma County Public Defender will contact you in 2-4 weeks with your next steps.",
+    "short_confirmation_message": "The Sonoma County Public Defender will contact you in 6-8 weeks with next steps.",
+    "long_confirmation_message": "The Sonoma County Public Defender will contact you in 6-8 weeks with your next steps.",
     "short_followup_message": "Has the Sonoma Public Defender contacted you and told you your next steps?",
     "long_followup_message": "Has the Sonoma Public Defender contacted you and told you your next steps?",
     "address": "Sonoma County Public Defender's Office\r\n600 Administration Drive\r\nFirst Floor - Room 111\r\nSanta Rosa, CA 95403",
     "phone_number": "(707) 565-2791",
+    "fax_number": "",
     "email": "expungements@sonoma-county.org",
     "notify_on_weekends": false,
-    "needs_applicant_followups": false
+    "can_transfer_applications": false,
+    "needs_applicant_followups": false,
+    "transfer_partners": []
   }
 },
 {
@@ -396,9 +433,12 @@
     "long_followup_message": "Has the Tulare Public Defender contacted you and told you your next steps?",
     "address": "Tulare County Public Defender's Office\r\nCourthouse RM G35\r\n221 S Mooney Blvd\r\nVisalia, CA 93291",
     "phone_number": "(559) 636-4500",
+    "fax_number": "",
     "email": "",
     "notify_on_weekends": false,
-    "needs_applicant_followups": false
+    "can_transfer_applications": false,
+    "needs_applicant_followups": false,
+    "transfer_partners": []
   }
 },
 {
@@ -424,10 +464,12 @@
     "long_followup_message": "Has the Ventura Public Defender contacted you and told you your next steps?",
     "address": "Ventura County Public Defender's Office\n800 S. Victoria Avenue\nRoom # 207\nVentura, CA 93009",
     "phone_number": "",
-    "email": "clear@ventura.org",
     "fax_number": "(805) 648-9220",
+    "email": "clear@ventura.org",
     "notify_on_weekends": false,
-    "needs_applicant_followups": false
+    "can_transfer_applications": false,
+    "needs_applicant_followups": false,
+    "transfer_partners": []
   }
 },
 {
@@ -456,7 +498,9 @@
     "fax_number": "(805) 568-3536",
     "email": "webmaster@publicdefendersb.org",
     "notify_on_weekends": false,
-    "needs_applicant_followups": false
+    "can_transfer_applications": false,
+    "needs_applicant_followups": false,
+    "transfer_partners": []
   }
 },
 {
@@ -485,7 +529,9 @@
     "fax_number": "(530) 666-8405",
     "email": "ClearMyRecord@yolocounty.org",
     "notify_on_weekends": false,
-    "needs_applicant_followups": false
+    "can_transfer_applications": false,
+    "needs_applicant_followups": false,
+    "transfer_partners": []
   }
 },
 {
@@ -505,16 +551,18 @@
     "requires_rap_sheet": false,
     "requires_declaration_letter": false,
     "show_pdf_only": false,
-    "short_confirmation_message": "The Stanislaus County Public Defender will contact you in 2-4 weeks with next steps.",
-    "long_confirmation_message": "The Stanislaus County Public Defender will contact you in 2-4 weeks with your next steps.",
+    "short_confirmation_message": "The Stanislaus County Public Defender will contact you in 10-12 weeks with next steps.",
+    "long_confirmation_message": "The Stanislaus County Public Defender will contact you in 10-12 weeks with your next steps.",
     "short_followup_message": "Has the Stanislaus County Public Defender contacted you and told you your next steps?",
     "long_followup_message": "Has the Stanislaus County Public Defender contacted you and told you your next steps?",
-    "address": "1021 I Street, Suite 201\nP.O. Box 3428\nModesto, CA 95353-3428",
+    "address": "1021 I Street, Suite 201\r\nP.O. Box 3428\r\nModesto, CA 95353-3428",
     "phone_number": "(209) 525-4200",
     "fax_number": "(209) 525-4244",
     "email": "",
     "notify_on_weekends": false,
-    "needs_applicant_followups": false
+    "can_transfer_applications": false,
+    "needs_applicant_followups": false,
+    "transfer_partners": []
   }
 },
 {
@@ -534,16 +582,18 @@
     "requires_rap_sheet": false,
     "requires_declaration_letter": false,
     "show_pdf_only": false,
-    "short_confirmation_message": "The Marin County Public Defender will contact you in 2-4 weeks with next steps.",
-    "long_confirmation_message": "The Marin County Public Defender will contact you in 2-4 weeks with your next steps.",
+    "short_confirmation_message": "The Marin County Public Defender will contact you in 6-8 weeks with next steps.",
+    "long_confirmation_message": "The Marin County Public Defender will contact you in 6-8 weeks with your next steps.",
     "short_followup_message": "Has the Marin County Public Defender contacted you and told you your next steps?",
     "long_followup_message": "Has the Marin County Public Defender contacted you and told you your next steps?",
-    "address": "Office of the Public Defender\n3501 Civic Center Drive, Suite 139\nSan Rafael, CA 94903",
+    "address": "Office of the Public Defender\r\n3501 Civic Center Drive, Suite 139\r\nSan Rafael, CA 94903",
     "phone_number": "",
     "fax_number": "",
     "email": "dlewis@marincounty.org",
     "notify_on_weekends": false,
-    "needs_applicant_followups": false
+    "can_transfer_applications": false,
+    "needs_applicant_followups": false,
+    "transfer_partners": []
   }
 }
 ]
