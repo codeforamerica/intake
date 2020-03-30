@@ -395,6 +395,20 @@ class Provider(BaseProvider):
         data.update(overrides)
         return data
 
+    def siskiyou_pubdef_answers(self, **overrides):
+        data = self.alameda_county_form_answers()
+        data.update(
+            is_veteran=self.maybe(0.1),
+            last_four=self.generator.numerify("####"),
+            driver_license_or_id=self.generator.numerify("D#######"),
+            is_california_resident=self.maybe(0.8),
+            how_long_california_resident='6 months',
+            case_number=self.generator.numerify("C####-###"),
+            currently_employed=self.maybe(0.3),
+        )
+        data.update(overrides)
+        return data
+
     def cfa_answers(self, **overrides):
         data = dict(
             unlisted_counties="O‘Duinn County",

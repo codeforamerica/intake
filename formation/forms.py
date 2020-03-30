@@ -706,6 +706,26 @@ class MarinCountyFormSpec(CombinableCountyFormSpec):
     ]
 
 
+class SiskiyouCountyFormSpec(AlamedaCountyFormSpec):
+    county = 'siskiyou'
+    fields = (AlamedaCountyFormSpec.fields | {
+        F.LastFourOfSocial,
+        F.DriverLicenseOrIDNumber,
+        F.IsCaliforniaResident,
+        F.HowLongCaliforniaResident,
+        F.IsVeteran,
+        F.CaseNumber,
+        F.CurrentlyEmployed
+    })
+
+    required_fields = AlamedaCountyFormSpec.required_fields
+    optional_fields = AlamedaCountyFormSpec.optional_fields
+
+    validators = [
+        gave_preferred_contact_methods
+    ]
+
+
 class DeclarationLetterFormSpec(CombinableFormSpec):
     fields = {
         F.DeclarationLetterNote,
@@ -772,7 +792,8 @@ INPUT_FORM_SPECS = [
     SantaBarbaraCountyFormSpec(),
     YoloCountyFormSpec(),
     StanislausCountyFormSpec(),
-    MarinCountyFormSpec()
+    MarinCountyFormSpec(),
+    SiskiyouCountyFormSpec()
 ]
 
 DISPLAY_FORM_SPECS = INPUT_FORM_SPECS + [

@@ -158,6 +158,7 @@ linkify_links = {
     "Yolo County Public Defender": "/partners/yolo_pubdef/",
     "Stanislaus County Public Defender": "/partners/stanislaus_pubdef/",
     "Marin County Public Defender": "/partners/marin_pubdef/",
+    "Siskiyou Public Defender": "/partners/siskiyou_pubdef/",
     "clearmyrecord@codeforamerica.org":
         "mailto:clearmyrecord@codeforamerica.org",
     "(415) 301-6005": "tel:14153016005"

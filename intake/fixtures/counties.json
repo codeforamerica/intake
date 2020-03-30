@@ -160,5 +160,14 @@
     "name": "Marin",
     "description": "Marin County (near San Rafael, Novato, Mill Valley, San Anselmo, and Larkspur)"
   }
+},
+{
+  "model": "intake.county",
+  "pk": 19,
+  "fields": {
+    "slug": "siskiyou",
+    "name": "Siskiyou",
+    "description": "Siskiyou County(near Mt Shasta, Yreka, and Weed)"
+  }
 }
 ]
