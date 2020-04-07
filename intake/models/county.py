@@ -24,7 +24,7 @@ class CountyManager(models.Manager):
         return self.get(slug=slug)
 
     def get_county_choices_query(self):
-        if settings.LIVE_COUNTY_CHOICES:
+        if settings.ONLY_SHOW_LIVE_COUNTIES:
             return self.order_by_name_or_not_listed().filter(
                     has_a_live_org
             ).exclude(is_not_listed_county).distinct()
@@ -82,6 +82,9 @@ class County(models.Model):
                 return self.organizations.get(slug='ebclc')
             # return first receiving agency
         return self.organizations.filter(is_receiving_agency=True).first()
+
+    def get_visible_organizations(self):
+        return self.organizations.get_visible_set()
 
     class Meta:
         ordering = ['name']

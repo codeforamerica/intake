@@ -2,6 +2,7 @@ from intake.tests.base_testcases import (
     IntakeDataTestCase, ALL_APPLICATION_FIXTURES)
 from user_accounts import models, exceptions
 from user_accounts.tests import mock
+from user_accounts.tests.factories import FakeOrganizationFactory
 
 
 class TestOrganization(IntakeDataTestCase):
@@ -42,3 +43,25 @@ class TestOrganization(IntakeDataTestCase):
         cc_pubdef = self.cc_pubdef
         self.assertFalse(sf_pubdef.transfer_partners.all())
         self.assertFalse(cc_pubdef.transfer_partners.all())
+
+    def test_get_visible_set_returns_only_live_orgs_when_only_show_live_counties_is_true(self):
+        live_org = FakeOrganizationFactory(is_live=True)
+        non_receiving_org = FakeOrganizationFactory(is_live=True, is_receiving_agency=False)
+        not_live_org = FakeOrganizationFactory(is_live=False)
+
+        with self.settings(ONLY_SHOW_LIVE_COUNTIES=True):
+            results = models.Organization.objects.get_visible_set()
+            self.assertIn(live_org, results)
+            self.assertNotIn(non_receiving_org, results)
+            self.assertNotIn(not_live_org, results)
+
+    def test_get_visible_set_returns_only_live_orgs_when_only_show_live_counties_is_false(self):
+        live_org = FakeOrganizationFactory(is_live=True)
+        non_receiving_org = FakeOrganizationFactory(is_live=True, is_receiving_agency=False)
+        not_live_org = FakeOrganizationFactory(is_live=False)
+
+        with self.settings(ONLY_SHOW_LIVE_COUNTIES=False):
+            results = models.Organization.objects.get_visible_set()
+            self.assertIn(live_org, results)
+            self.assertIn(non_receiving_org, results)
+            self.assertIn(not_live_org, results)

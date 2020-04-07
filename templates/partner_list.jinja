@@ -11,14 +11,12 @@
   {%- for county in counties %}
   <h2>{{ county.name }} County</h2>
   <ul class="partner_list {{ county.slug }}">
-    {%- for organization in county.organizations.all() %}
-    {%- if organization.is_receiving_agency and organization.is_live %}
+    {%- for organization in county.get_visible_organizations() %}
     <li class="partner_list-organization">
       <a href="{{ organization.get_absolute_url() }}" class="organization-link">
         {{ organization.name }}
       </a>
     </li>
-    {%- endif %}
     {%- endfor %}
   </ul>
 

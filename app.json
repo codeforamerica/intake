@@ -50,6 +50,9 @@
     "MIXPANEL_KEY": {
       "required": false
     },
+    "ONLY_SHOW_LIVE_COUNTIES": {
+      "value": "True"
+    },
     "PARTNERSHIPS_LEAD_INBOX": {
       "required": false
     },

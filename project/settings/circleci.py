@@ -4,7 +4,7 @@ from project.settings.test import *
 
 DEBUG = True
 INTERNAL_IPS = ['127.0.0.1', '::1']
-LIVE_COUNTY_CHOICES = False
+ONLY_SHOW_LIVE_COUNTIES = False
 
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'

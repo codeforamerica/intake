@@ -45,13 +45,39 @@ class TestPartnerListView(TestCase):
         )
         live_org.save()
         not_live_org.save()
-        response = self.client.get(reverse('intake-partner_list'))
-        self.assertContains(
-            response,
-            html_utils.conditional_escape(live_org.get_absolute_url()))
-        self.assertNotContains(
-            response,
-            html_utils.conditional_escape(not_live_org.get_absolute_url()))
+        with self.settings(ONLY_SHOW_LIVE_COUNTIES=True):
+            response = self.client.get(reverse('intake-partner_list'))
+            self.assertContains(
+                response,
+                html_utils.conditional_escape(live_org.get_absolute_url()))
+            self.assertNotContains(
+                response,
+                html_utils.conditional_escape(not_live_org.get_absolute_url()))
+
+    def test_shows_nonlive_partners_if_live_county_choices_is_false(self):
+        county = models.County.objects.first()
+        live_org = auth_models.Organization(
+            name='Starfleet',
+            slug='starfleet',
+            county=county,
+            is_receiving_agency=True,
+            is_live=True,
+        )
+        not_live_org = auth_models.Organization(
+            name="Jem'Hadar",
+            slug='jem-hadar',
+            county=county,
+            is_receiving_agency=True,
+            is_live=False,
+        )
+        live_org.save()
+        not_live_org.save()
+
+        with self.settings(ONLY_SHOW_LIVE_COUNTIES=False):
+            response = self.client.get(reverse('intake-partner_list'))
+            for org in [live_org, not_live_org]:
+                self.assertContains(
+                    response, html_utils.conditional_escape(org.name))
 
 
 class TestPartnerDetailView(TestCase):
