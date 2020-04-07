@@ -43,4 +43,4 @@ TEST_USER_PASSWORD = os.environ.get("TEST_USER_PASSWORD")
 SENTRY_URL = os.environ.get("SENTRY_URL")
 
 # hides counties where none of the orgs are officially live
-LIVE_COUNTY_CHOICES = os.environ.get('LIVE_COUNTY_CHOICES', 'True') == 'True'
+ONLY_SHOW_LIVE_COUNTIES = os.environ.get('ONLY_SHOW_LIVE_COUNTIES', 'True') == 'True'

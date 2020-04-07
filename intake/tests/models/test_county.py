@@ -47,6 +47,29 @@ class TestCounty(TestCase):
         ebclc = auth_models.Organization.objects.get(slug='ebclc')
         self.assertEqual(result, ebclc)
 
+    def test_get_visible_organizations_returns_only_live_orgs_when_only_show_live_counties_is_true(self):
+        county = factories.CountyFactory()
+        live_org = FakeOrganizationFactory(county=county, is_live=True)
+        not_live_org = FakeOrganizationFactory(county=county, is_live=False)
+
+        with self.settings(ONLY_SHOW_LIVE_COUNTIES=True):
+            results = county.get_visible_organizations()
+            self.assertIn(live_org, results)
+            self.assertNotIn(not_live_org, results)
+
+    def test_get_visible_organizations_returns_only_live_orgs_when_only_show_live_counties_is_false(self):
+        county = factories.CountyFactory()
+        other_county = factories.CountyFactory()
+        live_org = FakeOrganizationFactory(county=county, is_live=True)
+        not_live_org = FakeOrganizationFactory(county=county, is_live=False)
+        random_org = FakeOrganizationFactory(county=other_county, is_live=False)
+
+        with self.settings(ONLY_SHOW_LIVE_COUNTIES=False):
+            results = county.get_visible_organizations()
+            self.assertIn(live_org, results)
+            self.assertIn(not_live_org, results)
+            self.assertNotIn(random_org, results)
+
 
 class TestCountyManager(TestCase):
 
@@ -80,9 +103,10 @@ class TestCountyManager(TestCase):
         not_live_org = FakeOrganizationFactory(
             county=factories.CountyFactory(), is_live=False)
         not_listed = models.County.objects.get(slug='not_listed')
-        results = list(models.County.objects.get_county_choices_query())
+        with self.settings(ONLY_SHOW_LIVE_COUNTIES=False):
+            results = list(models.County.objects.get_county_choices_query())
         self.assertIn(live_org.county, results)
-        self.assertIn(live_org.county, results)
+        self.assertIn(not_live_org.county, results)
         self.assertNotIn(not_listed, results)
 
     def test_get_county_choices_query_live(self):
@@ -91,7 +115,7 @@ class TestCountyManager(TestCase):
         not_live_org = FakeOrganizationFactory(
             county=factories.CountyFactory(), is_live=False)
         not_listed = models.County.objects.get(slug='not_listed')
-        with self.settings(LIVE_COUNTY_CHOICES=True):
+        with self.settings(ONLY_SHOW_LIVE_COUNTIES=True):
             results = list(models.County.objects.get_county_choices_query())
         self.assertIn(live_org.county, results)
         self.assertNotIn(not_live_org.county, results)

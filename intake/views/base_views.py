@@ -6,7 +6,7 @@ from project import alerts
 from project.services import query_params
 from project.exceptions import InvalidQueryParamsError
 from intake import permissions
-import intake.services.counties as CountiesService
+from intake.models import County
 from user_accounts.models import Organization
 
 
@@ -14,11 +14,8 @@ class GlobalTemplateContextMixin:
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        counties, orgs = CountiesService.get_live_counties_and_orgs()
         context.update(
-            counties=counties,
-            all_county_names='counties throughout California',
-            organizations=orgs
+            counties=County.objects.get_county_choices_query()
         )
         return context
 

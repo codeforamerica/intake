@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.utils.html import conditional_escape
 from django.contrib.auth.models import User
 from project.jinja2 import oxford_comma, format_phone_number
+from django.conf import settings
 
 
 class OrganizationManager(models.Manager):
@@ -38,6 +39,12 @@ class OrganizationManager(models.Manager):
 
     def not_cfa(self):
         return self.exclude(slug='cfa')
+
+    def get_visible_set(self):
+        if settings.ONLY_SHOW_LIVE_COUNTIES is True:
+            return self.filter(is_live=True, is_receiving_agency=True)
+        else:
+            return self.all()
 
 
 class PurgedOrganization(models.Model):

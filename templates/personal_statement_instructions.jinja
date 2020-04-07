@@ -122,13 +122,11 @@
       </p>
       <ul class="how_to_instructions_details">
         {%- for org in organizations %}
-          {% if org.is_receiving_agency and org.is_live %}
           <li class="how_to_detail">
             <a href="{{ org.get_absolute_url() }}">
               {{ org.name }}
             </a>
           </li>
-          {% endif %}
         {%- endfor %}
       </ul>
       <p class="how_to_bg_warning bg-warning">{{ _("Your case is on hold until your attorney has received your personal statement. ") }}
