@@ -56,3 +56,13 @@ def send_email(*args, **kwargs):
 @shared_task
 def alert_admins_if_org_has_unread_applications():
     management.call_command("alert_admins_if_org_has_unread_applications")
+
+
+@shared_task
+def send_unopened_apps_notification():
+    management.call_command("send_unopened_apps_notification")
+
+
+@shared_task
+def send_followups():
+    management.call_command("send_followups")
