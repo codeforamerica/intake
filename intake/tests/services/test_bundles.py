@@ -1,12 +1,14 @@
 from unittest.mock import Mock, patch, call
 from django.test import TestCase
 
+from intake.exceptions import UnreadNotificationError
 from project.jinja2 import external_reverse
 import user_accounts.models as auth_models
 from intake import models
 import intake.services.bundles as BundlesService
 import intake.services.submissions as SubmissionsService
 from intake.tests import mock
+from user_accounts.exceptions import NoEmailsForOrgError
 from user_accounts.tests.factories import UserProfileFactory
 from intake.tests.factories import make_apps_for
 
@@ -280,3 +282,18 @@ class TestCountUnreadsAndSendNotificationsToOrgs(TestCase):
             app.save()
         BundlesService.count_unreads_and_send_notifications_to_orgs()
         send_email.assert_not_called()
+
+    @patch('intake.services.bundles.get_orgs_that_might_need_a_bundle_email_today')
+    @patch('intake.services.bundles.is_the_weekend', not_the_weekend)
+    def test_wait_to_raise_errors_until_all_orgs_processed(self, get_orgs):
+        org_one = Mock()
+        org_two = Mock()
+        org_one.get_referral_emails.side_effect = NoEmailsForOrgError
+        org_two.get_referral_emails.side_effect = NoEmailsForOrgError
+
+        get_orgs.return_value = [org_one, org_two]
+
+        with self.assertRaises(UnreadNotificationError):
+            BundlesService.count_unreads_and_send_notifications_to_orgs()
+        org_one.get_referral_emails.assert_called_once_with()
+        org_two.get_referral_emails.assert_called_once_with()

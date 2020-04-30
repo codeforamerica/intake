@@ -1,5 +1,6 @@
 import logging
 import intake
+from intake.exceptions import UnreadNotificationError
 from project.jinja2 import external_reverse
 from intake import notifications
 from intake.utils import is_the_weekend
@@ -44,11 +45,14 @@ def get_or_create_for_submissions_and_user(submissions, user):
 
 def count_unreads_and_send_notifications_to_orgs():
     orgs = get_orgs_that_might_need_a_bundle_email_today()
+    errors = []
     for org in orgs:
-        if org.slug == 'cfa':
-            pass
-        else:
-            emails = org.get_referral_emails()
+        if org.slug != 'cfa':
+            try:
+                emails = org.get_referral_emails()
+            except Exception as e:
+                errors.append(e)
+                continue
             unread_count = AppsService.get_unread_apps_per_org_count(org)
             update_count = AppsService.get_needs_update_apps_per_org_count(org)
             all_count = AppsService.get_all_apps_per_org_count(org)
@@ -65,6 +69,8 @@ def count_unreads_and_send_notifications_to_orgs():
                         'intake-needs_update_email_redirect'),
                     all_redirect_link=external_reverse(
                         'intake-all_email_redirect'))
+    if errors:
+        raise UnreadNotificationError(errors)
 
 
 def create_bundle_from_submissions(submissions, skip_pdf=False, **kwargs):
