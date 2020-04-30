@@ -38,3 +38,10 @@ class MultiplePrebuiltPDFsError(Exception):
 
 class MailgunAPIError(Exception):
     pass
+
+
+class UnreadNotificationError(Exception):
+    """A catch-all for errors resulting from generating
+    unread application notifications for organizations
+    """
+    pass
