@@ -5,7 +5,7 @@
     "browserify": "^16.5.0",
     "c3": "^0.4.23",
     "cached-path-relative": ">=1.0.2",
-    "jquery": "^3.4.0",
+    "jquery": "^3.5.0",
     "less": "^3.11.0",
     "moment": "~> 2.19.3",
     "vinyl-buffer": "^1.0.1",
