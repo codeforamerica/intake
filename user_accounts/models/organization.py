@@ -101,6 +101,7 @@ class Organization(models.Model):
         users have been prefetched in a previous query.
         """
         emails = list(User.objects.filter(
+            is_active=True,
             profile__should_get_notifications=True,
             profile__organization=self).values_list('email', flat=True))
         if not emails:

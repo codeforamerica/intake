@@ -2,7 +2,7 @@ from intake.tests.base_testcases import (
     IntakeDataTestCase, ALL_APPLICATION_FIXTURES)
 from user_accounts import models, exceptions
 from user_accounts.tests import mock
-from user_accounts.tests.factories import FakeOrganizationFactory
+from user_accounts.tests.factories import FakeOrganizationFactory, UserProfileFactory
 
 
 class TestOrganization(IntakeDataTestCase):
@@ -25,6 +25,43 @@ class TestOrganization(IntakeDataTestCase):
             inviter=user)
         emails = org.get_referral_emails()
         self.assertListEqual(emails, [expected_email])
+
+    def test_get_referral_emails_returns_active_emails_who_should_get_notifications(self):
+        user_profile = UserProfileFactory()
+
+        user_profile.should_get_notifications = True
+        user_profile.save()
+
+        user_profile.user.is_active = True
+        user_profile.user.save()
+
+        emails = user_profile.organization.get_referral_emails()
+        self.assertIn(user_profile.user.email, emails)
+
+    def test_get_referral_emails_only_returns_active_users(self):
+        inactive_user_profile = UserProfileFactory()
+        active_user_profile = UserProfileFactory()
+
+        inactive_user_profile.organization = active_user_profile.organization
+        inactive_user_profile.should_get_notifications = True
+        inactive_user_profile.save()
+
+        inactive_user_profile.user.is_active = False
+        inactive_user_profile.user.save()
+
+        emails = inactive_user_profile.organization.get_referral_emails()
+        self.assertNotIn(inactive_user_profile.user.email, emails)
+
+    def test_get_referral_emails_only_returns_users_who_should_get_notifications(self):
+        no_notifications_user_profile = UserProfileFactory()
+        notifications_user_profile = UserProfileFactory()
+
+        no_notifications_user_profile.organization = notifications_user_profile.organization
+        no_notifications_user_profile.should_get_notifications = False
+        no_notifications_user_profile.save()
+
+        emails = no_notifications_user_profile.organization.get_referral_emails()
+        self.assertNotIn(no_notifications_user_profile.user.email, emails)
 
     def test_get_referral_emails_raises_error_with_no_emails(self):
         org = models.Organization(name="Acme Nonprofit Services Inc.")
