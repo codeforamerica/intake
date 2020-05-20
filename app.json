@@ -75,6 +75,9 @@
     "SENTRY_URL": {
       "required": true
     },
+    "SENTRY_ENVIRONMENT": {
+      "value": "review"
+    },
     "SERVER_EMAIL": {
       "required": true
     },

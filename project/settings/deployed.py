@@ -90,6 +90,7 @@ LOGGING = {
 # Initialize Sentry
 sentry_sdk.init(
     dsn=SENTRY_URL,
+    environment=SENTRY_ENVIRONMENT,
     integrations=[
         DjangoIntegration(),
         CeleryIntegration()
