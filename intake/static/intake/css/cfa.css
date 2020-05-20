@@ -387,109 +387,109 @@ textarea {
     .grid .width-one-whole {
       float: left;
       display: block;
-      margin-right: 2.35765%;
+      margin-right: 2.3576520234%;
       width: 100%; }
       .grid .width-one-whole:last-child {
         margin-right: 0; }
     .grid .width-one-half {
       float: left;
       display: block;
-      margin-right: 2.35765%;
-      width: 48.82117%; }
+      margin-right: 2.3576520234%;
+      width: 48.8211739883%; }
       .grid .width-one-half:last-child {
         margin-right: 0; }
     .grid .width-one-third {
       float: left;
       display: block;
-      margin-right: 2.35765%;
-      width: 31.76157%; }
+      margin-right: 2.3576520234%;
+      width: 31.7615653177%; }
       .grid .width-one-third:last-child {
         margin-right: 0; }
     .grid .width-two-thirds {
       float: left;
       display: block;
-      margin-right: 2.35765%;
-      width: 65.88078%; }
+      margin-right: 2.3576520234%;
+      width: 65.8807826589%; }
       .grid .width-two-thirds:last-child {
         margin-right: 0; }
     .grid .width-one-fourth {
       float: left;
       display: block;
-      margin-right: 2.35765%;
-      width: 23.23176%; }
+      margin-right: 2.3576520234%;
+      width: 23.2317609825%; }
       .grid .width-one-fourth:last-child {
         margin-right: 0; }
     .grid .width-three-fourths {
       float: left;
       display: block;
-      margin-right: 2.35765%;
-      width: 74.41059%; }
+      margin-right: 2.3576520234%;
+      width: 74.4105869942%; }
       .grid .width-three-fourths:last-child {
         margin-right: 0; }
     .grid .width-one-sixth {
       float: left;
       display: block;
-      margin-right: 2.35765%;
-      width: 14.70196%; }
+      margin-right: 2.3576520234%;
+      width: 14.7019566472%; }
       .grid .width-one-sixth:last-child {
         margin-right: 0; }
     .grid .width-five-sixths {
       float: left;
       display: block;
-      margin-right: 2.35765%;
-      width: 82.94039%; }
+      margin-right: 2.3576520234%;
+      width: 82.9403913294%; }
       .grid .width-five-sixths:last-child {
         margin-right: 0; }
     .grid .width-one-twelfth {
       float: left;
       display: block;
-      margin-right: 2.35765%;
-      width: 6.17215%; }
+      margin-right: 2.3576520234%;
+      width: 6.1721523119%; }
       .grid .width-one-twelfth:last-child {
         margin-right: 0; }
     .grid .width-five-twelfths {
       float: left;
       display: block;
-      margin-right: 2.35765%;
-      width: 40.29137%; }
+      margin-right: 2.3576520234%;
+      width: 40.291369653%; }
       .grid .width-five-twelfths:last-child {
         margin-right: 0; }
     .grid .width-seven-twelfths {
       float: left;
       display: block;
-      margin-right: 2.35765%;
-      width: 57.35098%; }
+      margin-right: 2.3576520234%;
+      width: 57.3509783236%; }
       .grid .width-seven-twelfths:last-child {
         margin-right: 0; }
     .grid .width-eleven-twelfths {
       float: left;
       display: block;
-      margin-right: 2.35765%;
-      width: 91.4702%; }
+      margin-right: 2.3576520234%;
+      width: 91.4701956647%; }
       .grid .width-eleven-twelfths:last-child {
         margin-right: 0; }
     .grid .shift-one-half {
-      margin-left: 51.17883%; }
+      margin-left: 51.1788260117%; }
     .grid .shift-one-third {
-      margin-left: 34.11922%; }
+      margin-left: 34.1192173411%; }
     .grid .shift-two-thirds {
-      margin-left: 68.23843%; }
+      margin-left: 68.2384346823%; }
     .grid .shift-one-fourth {
-      margin-left: 25.58941%; }
+      margin-left: 25.5894130058%; }
     .grid .shift-three-fourths {
-      margin-left: 76.76824%; }
+      margin-left: 76.7682390175%; }
     .grid .shift-one-sixth {
-      margin-left: 17.05961%; }
+      margin-left: 17.0596086706%; }
     .grid .shift-five-sixths {
-      margin-left: 85.29804%; }
+      margin-left: 85.2980433528%; }
     .grid .shift-one-twelfth {
-      margin-left: 8.5298%; }
+      margin-left: 8.5298043353%; }
     .grid .shift-five-twelfths {
-      margin-left: 42.64902%; }
+      margin-left: 42.6490216764%; }
     .grid .shift-seven-twelfths {
-      margin-left: 59.70863%; }
+      margin-left: 59.708630347%; }
     .grid .shift-eleven-twelfths {
-      margin-left: 93.82785%; }
+      margin-left: 93.8278476881%; }
     .grid .end-row {
       margin-right: 0; }
     .grid .end-row + .grid__item {
@@ -1303,6 +1303,9 @@ img {
 
 .slab--not-padded {
   padding-top: 0;
+  padding-bottom: 0; }
+
+.slab--not-bottom-padded {
   padding-bottom: 0; }
 
 .main-header + .slab--header {
@@ -2394,9 +2397,15 @@ body {
   text-align: center; }
 
 /* Templates */
-@media screen and (min-width: 961px) {
-  .main-landing .slab--header h1 {
-    font-size: 4.8rem; } }
+.banner {
+  background-color: #E5F2FD;
+  color: #423A3E;
+  text-align: center;
+  padding: 10px;
+  margin-top: 2em;
+  margin-left: inherit;
+  margin-right: inherit;
+  margin-bottom: 0; }
 
 .partnerships-contact .slab {
   border-top: 1px solid #DEDED1; }

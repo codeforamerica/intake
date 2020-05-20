@@ -5,7 +5,7 @@
     top: 2em;
     bottom: 2em;
   }
-	border-bottom: 1px solid $color-tan;
+  border-bottom: 1px solid $color-tan;
 
 }
 
@@ -18,12 +18,12 @@
 }
 
 .slab--padded {
-    @include media($tablet-up){
-      padding: {
-          top: 4.5em;
-          bottom: 4.5em;
-      }
+  @include media($tablet-up) {
+    padding: {
+      top: 4.5em;
+      bottom: 4.5em;
     }
+  }
 }
 
 .slab--not-padded {
@@ -33,9 +33,13 @@
   }
 }
 
+.slab--not-bottom-padded {
+  padding-bottom: 0;
+}
+
 .main-header + .slab--header {
   padding-top: 0;
-  @include media($tablet-up){
+  @include media($tablet-up) {
     padding-top: 2em;
   }
 }
@@ -45,17 +49,18 @@
 }
 
 .card {
-    border: 2px solid $color-tan;
-    padding: 1.5em $site-margins/2;
-    background-color: #FFFFFF;
-    margin-bottom: 2em;
-    > *:last-child {
-        margin-bottom: 0;
-    }
+  border: 2px solid $color-tan;
+  padding: 1.5em $site-margins/2;
+  background-color: #FFFFFF;
+  margin-bottom: 2em;
 
-    @include media($tablet-up) {
-      padding: 1.5em 2em;
-    }
+  > *:last-child {
+    margin-bottom: 0;
+  }
+
+  @include media($tablet-up) {
+    padding: 1.5em 2em;
+  }
 }
 
 .textwell {
