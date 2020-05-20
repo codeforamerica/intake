@@ -41,6 +41,7 @@ CELERY_BROKER_URL = os.environ.get('CLOUDAMQP_URL')
 
 TEST_USER_PASSWORD = os.environ.get("TEST_USER_PASSWORD")
 SENTRY_URL = os.environ.get("SENTRY_URL")
+SENTRY_ENVIRONMENT = os.environ.get("SENTRY_ENVIRONMENT")
 
 # hides counties where none of the orgs are officially live
 ONLY_SHOW_LIVE_COUNTIES = os.environ.get('ONLY_SHOW_LIVE_COUNTIES', 'True') == 'True'
