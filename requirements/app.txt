@@ -43,5 +43,5 @@ Faker==1.0.7
 cryptography==2.8
 idna==2.8
 whitenoise==5.0.1
-celery~=4.4
+celery==4.4.3
 amqp==2.5.2
