@@ -123,23 +123,23 @@
   "model": "intake.statustype",
   "pk": 11,
   "fields": {
-    "label": "Can’t Proceed: victim restitution",
-    "display_name": "Can't Proceed: victim restitution",
-    "template": "I'm sorry, we can't move forward with your application. Our records show that you owe victim restitution. You have to pay your victim restitution before you can clear your record. If you think this is a mistake, please {{organization_contact_message}}.",
+    "label": "Can't Proceed: fines/fees",
+    "display_name": "Can't Proceed: fees",
+    "template": "I'm sorry, we can't move forward with your application. Our records show that you owe court fees. You have to pay your court fees before you can clear your record. If you think this is a mistake, please {{organization_contact_message}}.",
     "help_text": "",
     "slug": "cp-fees",
     "display_order": 6
   }
 },
-{
+  {
   "model": "intake.statustype",
   "pk": 12,
   "fields": {
-    "label": "Can't Proceed: need more info",
-    "display_name": "Can't Proceed: need info",
-    "template": "I'm sorry, we can't move forward with your application because we need more information from you.",
+    "label": "Can’t Proceed: victim restitution",
+    "display_name": "Can't Proceed: victim restitution",
+    "template": "I'm sorry, we can't move forward with your application. Our records show that you owe victim restitution. You have to pay your victim restitution before you can clear your record. If you think this is a mistake, please {{organization_contact_message}}.",
     "help_text": "",
-    "slug": "cp-need-info",
+    "slug": "cp-restitution",
     "display_order": 7
   }
 },
@@ -147,11 +147,11 @@
   "model": "intake.statustype",
   "pk": 13,
   "fields": {
-    "label": "Can't Proceed: no eligible convictions",
-    "display_name": "Can't Proceed: not eligible",
-    "template": "I'm sorry, we can't move forward with your application. According to the law, your {{county}} convictions are not eligible to be cleared.",
+    "label": "Can't Proceed: need more info",
+    "display_name": "Can't Proceed: need info",
+    "template": "I'm sorry, we can't move forward with your application because we need more information from you.",
     "help_text": "",
-    "slug": "cp-not-eligible",
+    "slug": "cp-need-info",
     "display_order": 8
   }
 },
@@ -159,12 +159,24 @@
   "model": "intake.statustype",
   "pk": 14,
   "fields": {
+    "label": "Can't Proceed: no eligible convictions",
+    "display_name": "Can't Proceed: not eligible",
+    "template": "I'm sorry, we can't move forward with your application. According to the law, your {{county}} convictions are not eligible to be cleared.",
+    "help_text": "",
+    "slug": "cp-not-eligible",
+    "display_order": 9
+  }
+},
+{
+  "model": "intake.statustype",
+  "pk": 15,
+  "fields": {
     "label": "Can't Proceed: other",
     "display_name": "Can't Proceed: other",
     "template": "I'm sorry, we can't move forward with your application.",
     "help_text": "",
     "slug": "cp-other",
-    "display_order": 9
+    "display_order": 10
   }
 },
 {
