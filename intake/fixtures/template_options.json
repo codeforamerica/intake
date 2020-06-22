@@ -123,9 +123,9 @@
   "model": "intake.statustype",
   "pk": 11,
   "fields": {
-    "label": "Can't Proceed: fines/fees",
-    "display_name": "Can't Proceed: fees",
-    "template": "I'm sorry, we can't move forward with your application. Our records show that you owe court fees. You have to pay your court fees before you can clear your record. If you think this is a mistake, please {{organization_contact_message}}.",
+    "label": "Can’t Proceed: victim restitution",
+    "display_name": "Can't Proceed: victim restitution",
+    "template": "I'm sorry, we can't move forward with your application. Our records show that you owe victim restitution. You have to pay your victim restitution before you can clear your record. If you think this is a mistake, please {{organization_contact_message}}.",
     "help_text": "",
     "slug": "cp-fees",
     "display_order": 6
