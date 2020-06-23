@@ -131,21 +131,9 @@
     "display_order": 6
   }
 },
-  {
-  "model": "intake.statustype",
-  "pk": 12,
-  "fields": {
-    "label": "Can’t Proceed: victim restitution",
-    "display_name": "Can't Proceed: victim restitution",
-    "template": "I'm sorry, we can't move forward with your application. Our records show that you owe victim restitution. You have to pay your victim restitution before you can clear your record. If you think this is a mistake, please {{organization_contact_message}}.",
-    "help_text": "",
-    "slug": "cp-restitution",
-    "display_order": 7
-  }
-},
 {
   "model": "intake.statustype",
-  "pk": 13,
+  "pk": 12,
   "fields": {
     "label": "Can't Proceed: need more info",
     "display_name": "Can't Proceed: need info",
@@ -157,7 +145,7 @@
 },
 {
   "model": "intake.statustype",
-  "pk": 14,
+  "pk": 13,
   "fields": {
     "label": "Can't Proceed: no eligible convictions",
     "display_name": "Can't Proceed: not eligible",
@@ -169,7 +157,7 @@
 },
 {
   "model": "intake.statustype",
-  "pk": 15,
+  "pk": 14,
   "fields": {
     "label": "Can't Proceed: other",
     "display_name": "Can't Proceed: other",
@@ -177,6 +165,18 @@
     "help_text": "",
     "slug": "cp-other",
     "display_order": 10
+  }
+},
+{
+  "model": "intake.statustype",
+  "pk": 15,
+  "fields": {
+    "label": "Can’t Proceed: victim restitution",
+    "display_name": "Can't Proceed: victim restitution",
+    "template": "I'm sorry, we can't move forward with your application. Our records show that you owe victim restitution. You have to pay your victim restitution before you can clear your record. If you think this is a mistake, please {{organization_contact_message}}.",
+    "help_text": "",
+    "slug": "cp-restitution",
+    "display_order": 7
   }
 },
 {
