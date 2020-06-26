@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
+    'safedelete',
     'rest_framework',
     'health_check',
     'intake',

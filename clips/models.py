@@ -1,5 +1,6 @@
 from django.urls import reverse
-from django.db import models, connections
+from safedelete.models import SafeDeleteModel
+from django.db import connections, models
 from django.conf import settings
 
 
@@ -24,7 +25,7 @@ def run_query(query):
     return result
 
 
-class Clip(models.Model):
+class Clip(SafeDeleteModel):
     title = models.CharField(max_length=64, null=False, blank=False)
     query = models.TextField(null=False, blank=False)
 

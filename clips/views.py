@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http.response import HttpResponseForbidden
+from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from clips.models import Clip
@@ -37,6 +38,7 @@ class ClipUpdateView(UpdateView):
 
 class ClipDeleteView(DeleteView):
     model = Clip
+    success_url = reverse_lazy('clips-create')
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
