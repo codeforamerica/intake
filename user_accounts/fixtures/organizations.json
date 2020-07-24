@@ -76,7 +76,7 @@
     "is_checking_notifications": true,
     "is_live": true,
     "requires_rap_sheet": false,
-    "requires_declaration_letter": false,
+    "requires_declaration_letter": true,
     "show_pdf_only": false,
     "short_confirmation_message": "The Contra Costa Public Defender will follow up with you if they need any other information.",
     "long_confirmation_message": "The Contra Costa Public Defender will follow up with you if they need any other information.",
