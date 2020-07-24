@@ -24,6 +24,11 @@ DATABASES = {
     }
 }
 
+CELERY_BROKER_URL = [
+    os.environ.get('CLOUDAMQP_URL'),
+    os.environ.get('CLOUDAMQP_WHITE_URL'),
+]
+
 # AWS Credentials for media files
 MEDIA_ROOT = ''
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
