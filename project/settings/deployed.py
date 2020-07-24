@@ -103,3 +103,5 @@ sentry_sdk.init(
     # sending for now
     send_default_pii=True
 )
+
+BROKER_CONNECTION_MAX_RETRIES = None
