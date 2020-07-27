@@ -44,6 +44,6 @@ cryptography==2.8
 idna==2.8
 whitenoise==5.0.1
 celery==4.4.3
-amqp==2.5.2
+amqp==2.6.0
 newrelic==5.14.0.142
 django-safedelete==0.5.5
