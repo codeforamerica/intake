@@ -84,8 +84,8 @@ class TestApplicantFormViewBase(ApplicantFormViewBaseTestCase):
     @patch('intake.services.events_service.form_submitted')
     def test_finalize_application_actions(
             self, create_sub, send_to_newapps, flash_success, mock_form_submitted):
-        self.set_form_session_data(counties=['contracosta'])
-        answers = fake.contra_costa_county_form_answers()
+        self.set_form_session_data(counties=['solano'])
+        answers = fake.solano_county_form_answers()
         with self.assertLogs(
                 'project.services.logging_service', logging.INFO) as logs:
             self.client.fill_form(

@@ -225,7 +225,7 @@ class TestCountyApplicationReviewView(ApplicantFormViewBaseTestCase):
 
     def test_successful_post_redirects_to_thanks_page(self):
         self.set_form_session_data(
-            counties=['contracosta'],
+            counties=['solano'],
             **mock.fake.cc_pubdef_answers())
         response = self.client.fill_form(
             reverse(self.view_name),
@@ -251,7 +251,7 @@ class TestCountyApplicationReviewView(ApplicantFormViewBaseTestCase):
 
     def test_logs_page_complete_event(self):
         self.set_form_session_data(
-            counties=['contracosta'],
+            counties=['solano'],
             **mock.fake.cc_pubdef_answers())
         with self.assertLogs(
                 'project.services.logging_service', logging.INFO) as logs:

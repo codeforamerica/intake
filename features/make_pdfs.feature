@@ -6,7 +6,7 @@ Feature: SF gets premade PDFs
     Given a fillable PDF for "sf_pubdef"
 
   Scenario: Application for SF prebuilds PDFs
-     When "Bartholomew Simpson" applies to "San Francisco and Contra Costa"
+     When "Bartholomew Simpson" applies to "San Francisco and Solano"
      Then there should be a pre-filled PDF for "Bartholomew Simpson"
       And there should be a prebuilt PDF bundle for "Bartholomew Simpson" to "sf_pubdef"
-      And there should not be a prebuilt PDF for "cc_pubdef"
+      And there should not be a prebuilt PDF for "solano_pubdef"
