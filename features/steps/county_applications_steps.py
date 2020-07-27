@@ -61,7 +61,6 @@ def input_basic_answers(context, applicant_name="Jane Doe"):
        And the "address.zip" text input is set to "91011"
        And "yes" is clicked on the "on_probation_parole" radio button
        And "yes" is clicked on the "serving_sentence" radio button
-       And the "monthly_income" text input is set to "1000"
        And "yes" is clicked on the "consent_to_represent" radio button
        And "yes" is clicked on the "understands_limits" radio button
        And the "how_did_you_hear" text input is set to "Listening"
@@ -100,7 +99,6 @@ def test_displays_basic_answers(context, applicant_name="Jane Doe"):
        And "address" should say "91011"
        And "on_probation_parole" should say "Yes"
        And "serving_sentence" should say "Yes"
-       And "monthly_income" should say "$1,000.00"
        And "consent_to_represent" should say "Yes, I give them permission to'''
                           ''' do that"
        And "understands_limits" should say "Yes, I understand"
@@ -109,12 +107,11 @@ def test_displays_basic_answers(context, applicant_name="Jane Doe"):
     '''.format(first_name=first_name, last_name=last_name))
 
 
-@when('applicant fills out additional fields for Contra Costa')
-def coco_fields(context):
+@when('applicant fills out additional fields for Solano')
+def solano_fields(context):
     context.execute_steps('''
-      When the "income_source" text input is set to "a job"
-       And "yes" is clicked on the "currently_employed" radio button
-       And the "monthly_expenses" text input is set to "1000"
+      When "no" is clicked on the "being_charged" radio button
+       And "no" is clicked on the "owes_court_fees" radio button
       ''')
 
 
@@ -138,6 +135,7 @@ When the "monthly_income" text input is set to "1000"
 def sf_fields(context):
     context.execute_steps('''
       When the "ssn" text input is set to "123-45-6789"
+       And the "monthly_income" text input is set to "1000"
        And the "monthly_expenses" text input is set to "1000"
        And "yes" is clicked on the "currently_employed" radio button
        And "no" is clicked on the "being_charged" radio button
@@ -150,6 +148,7 @@ def sf_fields(context):
 def yolo_fields(context):
     context.execute_steps('''
 When the "how_much_savings" text input is set to "1000"
+ And the "monthly_income" text input is set to "1000"
  And the "income_source" text input is set to "a job"
  And "yes" is clicked on the "owns_home" radio button
  And the "how_many_dependents" text input is set to "2"

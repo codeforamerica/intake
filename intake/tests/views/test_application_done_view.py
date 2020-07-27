@@ -49,7 +49,7 @@ class TestThanksView(ApplicantFormViewBaseTestCase):
         self.assertEqual(visitor_id, None)
 
     def test_shows_flash_messages(self):
-        self.set_form_session_data(counties=['contracosta'])
+        self.set_form_session_data(counties=['solano'])
         flash_messages = [
             "A flying horse is called a pegasus",
             "A horse with a horn is called a unicorn"]
@@ -57,7 +57,7 @@ class TestThanksView(ApplicantFormViewBaseTestCase):
         self.client.fill_form(
             reverse('intake-county_application'),
             follow=True,
-            **mock.fake.cc_pubdef_answers())
+            **mock.fake.solano_pubdef_answers())
         response = self.client.fill_form(
             reverse('intake-review'),
             follow=True,
@@ -84,7 +84,7 @@ class TestRAPSheetInstructionsView(ApplicantFormViewBaseTestCase):
         submission = factories.FormSubmissionWithOrgsFactory.create()
         self.set_session(visitor_id=submission.applicant.visitor.id)
         self.set_form_session_data(
-            counties=['alameda', 'contracosta'],
+            counties=['alameda', 'solano'],
             applicant=submission.applicant,
             **mock.fake.a_pubdef_answers(
                 **mock.fake.declaration_letter_answers())

@@ -43,7 +43,7 @@ def create_searchable_applicant(context, org_slug=None):
     global SEARCHABLE_APPLICANT_ID
     if org_slug:
         org = Organization.objects.get(slug=org_slug)
-    answers = mock.fake.contra_costa_county_form_answers(
+    answers = mock.fake.solano_county_form_answers(
         first_name='Waldo',
         last_name='Waldini',
         phone_number='5555555555',
@@ -67,7 +67,7 @@ def create_searchable_applicant_with_bad_data(context, org_slug=None):
     global SEARCHABLE_APPLICANT_ID
     if org_slug:
         org = Organization.objects.get(slug=org_slug)
-    answers = mock.fake.contra_costa_county_form_answers(**{
+    answers = mock.fake.solano_county_form_answers(**{
         'first_name': 'Waldo',
         'last_name': 'Waldini',
         'phone_number': '5555555555',
