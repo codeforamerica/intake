@@ -51,6 +51,7 @@ COMPRESS_STORAGE = 'compressor.storage.GzipCompressorFileStorage'
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_AGE = 2419200  # 4 weeks, twice the default
 CSRF_COOKIE_SECURE = True
 DEBUG = False
 
