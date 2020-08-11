@@ -14,4 +14,6 @@
 
 [Releasing & Deploying](https://github.com/codeforamerica/intake/wiki/Releasing-&-Deploying)
 
+[Infrastructure](https://github.com/codeforamerica/intake/wiki/Infrastructure)
+
 [Administrative Access](https://github.com/codeforamerica/intake/wiki/Administrative-Access)
