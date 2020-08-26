@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'safedelete',
     'rest_framework',
+    'maintenance_mode',
     'health_check',
     'intake',
     'django2_url_robots',
@@ -71,6 +72,7 @@ MIDDLEWARE = [
     'intake.middleware.CountUniqueVisitorsMiddleware',
     'access_audit.middleware.ClearRequestMiddleware',
     'easyaudit.middleware.easyaudit.EasyAuditMiddleware',
+    'maintenance_mode.middleware.MaintenanceModeMiddleware',
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -96,6 +98,7 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
                 'django.template.context_processors.request',
+                'maintenance_mode.context_processors.maintenance_mode',
             ],
             "globals":{
                 "content": "project.content.constants",

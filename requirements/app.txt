@@ -47,3 +47,4 @@ celery==4.4.3
 amqp==2.6.0
 newrelic==5.14.0.142
 django-safedelete==0.5.5
+django-maintenance-mode~=0.14.0
