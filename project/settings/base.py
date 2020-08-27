@@ -206,6 +206,7 @@ STATICFILES_FINDERS = [
     'compressor.finders.CompressorFinder',
 ]
 
+MAINTENANCE_MODE = False
 
 def build_precompilers(node_path):
     less_command = os.path.join(node_path, '.bin/lessc')
