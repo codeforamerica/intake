@@ -62,6 +62,7 @@ def before_all(context):
     context.browser = webdriver.Chrome(chrome_options=options)
     context.browser.implicitly_wait(10)
     settings.DIVERT_REMOTE_CONNECTIONS = True
+    settings.MAINTENANCE_MODE = False
     setup_debug_on_error(context.config.userdata)
 
 

@@ -1,8 +1,13 @@
 from behave import given, then, when
 from urllib.parse import urljoin, urlparse
+from django.conf import settings
 
 from selenium.common.exceptions import NoSuchElementException
 
+
+@given('that MAINTENANCE_MODE is true')
+def turn_on_maintenance_mode(context):
+    settings.MAINTENANCE_MODE = True
 
 @when('I open "{url}"')
 @given('that "{url}" loads')
