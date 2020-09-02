@@ -294,7 +294,7 @@
     "county": [
       "santa_clara"
     ],
-    "website": "https://www.sccgov.org/sites/pdo/Pages/pdo.aspx",
+    "website": "https://www.sccgov.org/sites/pdo/Pages/Home.aspx",
     "blurb": "The Santa Clara County Public Defender's Office helps people with arrests or convictions in Santa Clara County.",
     "is_receiving_agency": true,
     "is_accepting_applications": true,
@@ -325,7 +325,7 @@
     "county": [
       "fresno"
     ],
-    "website": "http://www.co.fresno.ca.us/Departments.aspx?id=404",
+    "website": "https://www.co.fresno.ca.us/departments/public-defender",
     "blurb": "The Fresno County Public Defender's Office helps people with arrests or convictions in Fresno County.",
     "is_receiving_agency": true,
     "is_accepting_applications": true,
@@ -449,7 +449,7 @@
     "county": [
       "ventura"
     ],
-    "website": "https://www.pubdef.countyofventura.org",
+    "website": "https://vcpublicdefender.org/",
     "blurb": "The Ventura County Public Defender's Office helps people with arrests or convictions in Ventura County.",
     "is_receiving_agency": true,
     "is_accepting_applications": true,
