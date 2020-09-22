@@ -1,0 +1,23 @@
+version: '3'
+services:
+  db:
+    image: postgres:alpine
+    container_name: postgres_db
+    environment:
+        - POSTGRES_DB=intake
+        - POSTGRES_USER=postgres_user
+        - POSTGRES_PASSWORD=postgres_pwd
+  web:
+    build: .
+    image: app
+    container_name: web_server
+    command: bash -c "make install && npm install -g sass && make db.setup && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+        - .:/usr/src/app
+        - /usr/src/app/node_modules
+    ports:
+        - "8000:8000"
+    depends_on:
+        - db        
+
+        
