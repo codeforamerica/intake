@@ -44,10 +44,12 @@ class TestAppEditView(TestCase):
             slug='fresno_pubdef')
         self.sf_pubdef = Organization.objects.get(
             slug='sf_pubdef')
+        self.alameda_pubdef = Organization.objects.get(
+            slug='a_pubdef')
         self.sub = FormSubmissionWithOrgsFactory(
             organizations=[
                 self.santa_clara_pubdef, self.fresno_pubdef,
-                self.sf_pubdef])
+                self.sf_pubdef, self.alameda_pubdef])
         self.edit_url = self.sub.get_edit_url()
 
     # access control
@@ -58,7 +60,7 @@ class TestAppEditView(TestCase):
             reverse('user_accounts-login'), response.url)
 
     def test_incorrect_org_user_gets_404(self):
-        different_org_user_profile = app_reviewer('a_pubdef')
+        different_org_user_profile = app_reviewer('cc_pubdef')
         self.client.login(
             username=different_org_user_profile.user.username,
             password=settings.TEST_USER_PASSWORD)
@@ -421,6 +423,42 @@ class TestAppEditView(TestCase):
             changed_fields=expected_changed_fields,
             is_old_contact_info=False)
         self.assertEqual(2, len(sms_notification_patch.send.mock_calls))
+
+    @patch(
+        'intake.views.app_edit_view.app_edited_applicant_email_notification')
+    @patch(
+        'intake.views.app_edit_view.app_edited_applicant_sms_notification')
+    def test_notifies_applicant_of_changed_data_with_org_name_encoding(
+            self, sms_notification_patch, email_notification_patch):
+        alameda_profile = app_reviewer('a_pubdef')
+        self.client.login(
+            username=alameda_profile.user.username,
+            password=settings.TEST_USER_PASSWORD)
+        response = self.client.get(self.edit_url)
+        post_data = dict_to_post_data(
+            response.context_data['form'].raw_input_data)
+        post_data.update({
+            'first_name': 'Foo',
+            'last_name': 'Bar',
+            'email': 'something@example.horse',
+            'phone_number': '4153016005'})
+        self.client.post(self.edit_url, post_data)
+        organization = alameda_profile.organization
+        expected_changed_fields = ['Email', 'First name', 'Last name', 'Phone number']
+        email_notification_patch.send.assert_any_call(
+            to=['something@example.horse'],
+            sender_profile=alameda_profile,
+            org_contact_info=organization.get_contact_info_message(),
+            org_name="the Alameda County Public Defender&#x27;s Office",
+            changed_fields=expected_changed_fields,
+            is_old_contact_info=False)
+
+        sms_notification_patch.send.assert_any_call(
+            to=['4153016005'],
+            org_contact_info=organization.get_contact_info_message(),
+            org_name="the Alameda County Public Defender&#x27;s Office",
+            changed_fields=expected_changed_fields,
+            is_old_contact_info=False)
 
     @patch(
         'intake.views.app_edit_view.app_edited_applicant_email_notification')
