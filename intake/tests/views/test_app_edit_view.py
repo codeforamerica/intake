@@ -428,7 +428,7 @@ class TestAppEditView(TestCase):
         'intake.views.app_edit_view.app_edited_applicant_email_notification')
     @patch(
         'intake.views.app_edit_view.app_edited_applicant_sms_notification')
-    def test_notifies_applicant_of_changed_data_with_org_name_encoding(
+    def test_notifies_applicant_of_changed_data_with_correct_org_name_encoding(
             self, sms_notification_patch, email_notification_patch):
         alameda_profile = app_reviewer('a_pubdef')
         self.client.login(
@@ -449,14 +449,14 @@ class TestAppEditView(TestCase):
             to=['something@example.horse'],
             sender_profile=alameda_profile,
             org_contact_info=organization.get_contact_info_message(),
-            org_name="the Alameda County Public Defender&#x27;s Office",
+            org_name="the Alameda County Public Defender's Office",
             changed_fields=expected_changed_fields,
             is_old_contact_info=False)
 
         sms_notification_patch.send.assert_any_call(
             to=['4153016005'],
             org_contact_info=organization.get_contact_info_message(),
-            org_name="the Alameda County Public Defender&#x27;s Office",
+            org_name="the Alameda County Public Defender's Office",
             changed_fields=expected_changed_fields,
             is_old_contact_info=False)
 

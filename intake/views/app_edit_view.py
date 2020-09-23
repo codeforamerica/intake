@@ -2,7 +2,7 @@ from django.views.generic.edit import UpdateView
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from intake.models import FormSubmission
-import html
+from django.utils import safestring
 from intake.services.edit_form_service import (
     get_edit_form_class_for_user_and_submission,
     SENSITIVE_FIELD_LABELS,
@@ -102,7 +102,7 @@ class AppEditView(UpdateView):
                 to=[to_email],
                 sender_profile=self.request.user.profile,
                 editor_email=self.request.user.email,
-                editor_org_name=html.escape(org_name),
+                editor_org_name=safestring.mark_safe(org_name),
                 app_detail_url=self.submission.get_external_url(),
                 submission_id=self.submission.id,
                 applicant_name=self.submission.get_full_name(),
@@ -112,8 +112,8 @@ class AppEditView(UpdateView):
     def notify_applicant(self, unsafe_data_diff):
         profile = self.request.user.profile
         org = profile.organization
-        name = html.escape('the ' + org.name if org.slug != 'cfa' else org.name)
-        contact_info = html.escape(org.get_contact_info_message())
+        name = safestring.mark_safe('the ' + org.name if org.slug != 'cfa' else org.name)
+        contact_info = safestring.mark_safe(org.get_contact_info_message())
         changed_fields = sorted(list(unsafe_data_diff.keys()))
 
         if self.submission.email:
