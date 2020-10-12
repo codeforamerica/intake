@@ -20,8 +20,12 @@ class Command(BaseCommand):
                 'Submission ID',
                 'Application ID',
                 'Submission date',
+                'First name',
+                'Last name',
+                'Date of birth',
                 'Email',
                 'Phone number',
+                'Alternate phone number',
                 'Prefers Email',
                 'Prefers SMS',
                 'Org',
@@ -70,8 +74,12 @@ class Command(BaseCommand):
                         sub.id,
                         app.id,
                         sub.date_received.strftime("%Y-%m-%d"),
+                        sub.first_name,
+                        sub.last_name,
+                        sub.dob,
                         sub.email,
                         sub.phone_number,
+                        sub.alternate_phone_number,
                         'prefers_email' in sub.contact_preferences,
                         'prefers_sms' in sub.contact_preferences,
                         app.organization.name,
@@ -89,7 +97,7 @@ class Command(BaseCommand):
                     writer.writerow(columns)
             conn = S3Connection(settings.AWS_ACCESS_KEY_ID,
                                 settings.AWS_SECRET_ACCESS_KEY)
-            media_bucket = conn.get_bucket(settings.MEDIA_BUCKET)
+            media_bucket = conn.get_bucket(settings.AWS_STORAGE_BUCKET_NAME)
             key = Key(media_bucket)
             key.key = 'database_export.csv'
             key.set_contents_from_filename(filename)
