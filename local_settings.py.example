@@ -51,13 +51,9 @@ MIXPANEL_KEY = '12345'
 
 TWILIO_AUTH_TOKEN = '12345'
 
-
 COMPRESS_OFFLINE = False
 CELERY_TASK_ALWAYS_EAGER = True
 CELERY_BROKER_URL = 'amqp://localhost'
-
-BROWSER_STACK_ID = 'username'
-BROWSER_STACK_KEY = 'insert key here'
 
 TEST_USER_PASSWORD="my-example-password"
 

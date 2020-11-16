@@ -7,6 +7,5 @@ pep8~=1.7
 coverage~=5.0.3
 codeclimate-test-reporter~=0.2
 beautifulsoup4==4.8.2
-browserstack-local~=1.2.2
 selenium~=3.141.0
 behave-django~=1.3
