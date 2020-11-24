@@ -48,7 +48,7 @@
     "requires_declaration_letter": false,
     "show_pdf_only": true,
     "short_confirmation_message": "You should get a letter in the mail from the San Francisco Public Defender in 6 weeks.",
-    "long_confirmation_message": "You should get a letter in the mail from the San Francisco Public Defender in 6 weeks.",
+    "long_confirmation_message": "Thank you for your application. It is being forwarded to the San Francisco Public Defender’s Clean Slate Unit for processing.\n\nHere is what you can expect\n\n1. On the date your application is received:\n\ta. (weekends & holidays are excluded) it will be opened & read;\n\tb. A paralegal will forward it to a supervisor for initial review;\n\tc. A paralegal will add your name to a Rap Sheet Request spreadsheet that goes to the District Attorney;\n\td. A paralegal will send you an email acknowledging your application has been processed and that we are awaiting receipt of your rap sheet from the District Attorney.\n2. All the above steps in #1 take place on the first day we receive your application.\n3. After that the process takes anywhere from 2-4 weeks for the attorney to review and make a determination.\n4. If you do not hear from the attorney in 4 weeks, please email the paralegal and request an update. There are many steps to the process. We appreciate your patience.\nThe Clean Slate Team",
     "short_followup_message": "Did you get a letter in the mail from the SF Public Defender?",
     "long_followup_message": "Have you received your letter in the mail from the San Francisco Public Defender?",
     "address": "San Francisco Public Defender\r\nAttention: Clean Slate Unit\r\n555 7th Street, 2nd Floor\r\nSan Francisco, CA\r\n94103",
