@@ -27,7 +27,7 @@ class ThanksView(TemplateView):
             organizations=self.submission.organizations.not_cfa(),
             unlisted_counties=self.submission.answers.get(
                 'unlisted_counties', ''))
-        clear_form_session_data(self.request)
+        # clear_form_session_data(self.request)
         return context
 
 
