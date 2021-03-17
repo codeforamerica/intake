@@ -10,6 +10,7 @@
     "moment": "~> 2.19.3",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^1.1.2",
-    "bl": "^1.2.3"
+    "bl": "^1.2.3",
+    "elliptic": ">=6.5.4"
   }
 }
