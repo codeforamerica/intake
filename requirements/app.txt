@@ -1,5 +1,5 @@
 # Core dependencies
-django==2.2.13
+django==2.2.18
 olefile==0.46
 placebo==0.9.0
 pycparser==2.19
@@ -19,7 +19,7 @@ reportlab==3.5.34
 toml==0.10.0
 troposphere==2.5.3
 typing==3.7.4.1
-Pillow~=7.2
+Pillow~=8.1.1
 python-Levenshtein~=0.12
 django-taggit==1.2.0
 mixpanel~=4.5.0
