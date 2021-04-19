@@ -114,7 +114,7 @@ class CountyApplicationReviewView(ApplicantFormViewBase):
         # declaration, we'll want to display some different copy in the form,
         # so add it to the context.
         context_data = super().get_context_data(*args, **kwargs)
-        orgs = self.get_receiving_organizations(self.get_county_form())
+        orgs = self.get_receiving_organizations()
         needs_declaration_letter = any([
             org.requires_declaration_letter for org in orgs])
         context_data.update(needs_declaration_letter=needs_declaration_letter)
@@ -124,7 +124,7 @@ class CountyApplicationReviewView(ApplicantFormViewBase):
         # Check if any of the receiving organizations require a letter of
         # declaration and redirect before saving if so.
         county_form = self.get_county_form()
-        orgs = self.get_receiving_organizations(county_form)
+        orgs = self.get_receiving_organizations()
         needs_declaration_letter = any([
             org.requires_declaration_letter for org in orgs])
         if needs_declaration_letter:

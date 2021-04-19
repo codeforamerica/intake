@@ -254,7 +254,7 @@ def create_for_organizations(organizations, **kwargs):
 
 def create_for_counties(counties, **kwargs):
     organizations = [
-        county.get_receiving_agency(kwargs['answers'])
+        county.get_receiving_agency()
         for county in counties
     ]
     return create_for_organizations(
