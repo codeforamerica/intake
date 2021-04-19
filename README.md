@@ -17,3 +17,9 @@
 [Infrastructure](https://github.com/codeforamerica/intake/wiki/Infrastructure)
 
 [Administrative Access](https://github.com/codeforamerica/intake/wiki/Administrative-Access)
+
+## Contributing
+
+We are not currently seeking contributions from the public.
+
+If you have questions about the project, please contact clearmyrecord@codeforamerica.org.
