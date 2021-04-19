@@ -63,24 +63,12 @@ class County(models.Model):
     name = models.TextField()
     description = models.TextField()
 
-    def get_receiving_agency(self, answers):
+    def get_receiving_agency(self):
         """Returns the appropriate receiving agency
         for this county. Currently there is only one per county,
         but in the future this can be used to make eligibility
         determinations
         """
-        # if alameda
-        if self.slug == 'alameda':
-            # if under 3000 and not owns home
-            income = answers.get('monthly_income', None)
-            owns_home = answers.get('owns_home')
-            if income < 3000 and owns_home == field_types.NO:
-                # return alameda pub def
-                return self.organizations.get(slug='a_pubdef')
-            else:
-                # return ebclc
-                return self.organizations.get(slug='ebclc')
-            # return first receiving agency
         return self.organizations.filter(is_receiving_agency=True).first()
 
     def get_visible_organizations(self):

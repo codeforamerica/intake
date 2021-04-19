@@ -1,9 +1,7 @@
 from django.test import TestCase
-from user_accounts import models as auth_models
 from intake import models
 from intake.tests import factories
 from user_accounts.tests.factories import FakeOrganizationFactory
-from formation import field_types
 
 
 class TestCounty(TestCase):
@@ -20,32 +18,10 @@ class TestCounty(TestCase):
             ('sanfrancisco', "San Francisco Public Defender"),
             ('contracosta', "Contra Costa Public Defender"))
         counties = models.County.objects.all()
-        answers = {}
         for county_slug, agency_name in expected_matches:
             county = counties.filter(slug=county_slug).first()
-            organization = county.get_receiving_agency(answers)
+            organization = county.get_receiving_agency()
             self.assertEqual(organization.name, agency_name)
-
-    def test_get_receiving_agency_alameda_eligible_for_apd(self):
-        alameda = models.County.objects.get(slug='alameda')
-        eligible_for_apd = dict(monthly_income=2999, owns_home=field_types.NO)
-        result = alameda.get_receiving_agency(eligible_for_apd)
-        alameda_pubdef = auth_models.Organization.objects.get(slug='a_pubdef')
-        self.assertEqual(result, alameda_pubdef)
-
-    def test_get_receiving_agency_high_income_alameda_gets_ebclc(self):
-        alameda = models.County.objects.get(slug='alameda')
-        ebclc_high_income = dict(monthly_income=3000, owns_home=field_types.NO)
-        result = alameda.get_receiving_agency(ebclc_high_income)
-        ebclc = auth_models.Organization.objects.get(slug='ebclc')
-        self.assertEqual(result, ebclc)
-
-    def test_get_receiving_agency_owns_home_alameda_gets_ebclc(self):
-        alameda = models.County.objects.get(slug='alameda')
-        ebclc_owns_home = dict(monthly_income=2999, owns_home=field_types.YES)
-        result = alameda.get_receiving_agency(ebclc_owns_home)
-        ebclc = auth_models.Organization.objects.get(slug='ebclc')
-        self.assertEqual(result, ebclc)
 
     def test_get_visible_organizations_returns_only_live_orgs_when_only_show_live_counties_is_true(self):
         county = factories.CountyFactory()
