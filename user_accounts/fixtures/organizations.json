@@ -103,7 +103,7 @@
     "website": "http://ebclc.org/need-services/clean-slate-services/",
     "blurb": "The East Bay Community Law Center offers legal services to low-income communities in the East Bay. EBCLC's Clean Slate Program helps people with arrests or convictions in Alameda County.",
     "is_receiving_agency": true,
-    "is_accepting_applications": true,
+    "is_accepting_applications": false,
     "is_checking_notifications": true,
     "is_live": true,
     "requires_rap_sheet": true,
