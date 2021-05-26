@@ -96,15 +96,15 @@ class ApplicantFormViewBase(FormView):
 
         return super().form_invalid(form)
 
-    def get_receiving_organizations(self):
+    def get_receiving_organizations(self, form):
         if not getattr(self, 'receiving_organizations', None):
             self.receiving_organizations = [
-                county.get_receiving_agency()
+                county.get_receiving_agency(form.cleaned_data)
                 for county in self.counties]
         return self.receiving_organizations
 
     def finalize_application(self, form):
-        organizations = self.get_receiving_organizations()
+        organizations = self.get_receiving_organizations(form)
         submission = SubmissionsService.create_submission(
             form, organizations, self.applicant.id)
         EventsService.form_submitted(self, submission)
