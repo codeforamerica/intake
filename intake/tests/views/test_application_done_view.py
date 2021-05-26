@@ -109,7 +109,7 @@ class TestRAPSheetInstructionsView(ApplicantFormViewBaseTestCase):
                 response, linkify(org.long_confirmation_message))
 
     def test_shows_flash_messages(self):
-        self.set_form_session_data(counties=['solano'])
+        self.set_form_session_data(counties=['alameda'])
         flash_messages = [
             "A flying horse is called a pegasus",
             "A horse with a horn is called a unicorn"]

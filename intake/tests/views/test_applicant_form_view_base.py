@@ -56,7 +56,7 @@ class TestApplicantFormViewBase(ApplicantFormViewBaseTestCase):
         mock_view_instance = Mock(
             receiving_organizations=None, counties=counties)
         results = ApplicantFormViewBase.get_receiving_organizations(
-            mock_view_instance)
+            mock_view_instance, Mock())
         self.assertEqual(get_agency.call_count, 2)
         self.assertListEqual(orgs, results)
         self.assertListEqual(
@@ -72,7 +72,7 @@ class TestApplicantFormViewBase(ApplicantFormViewBaseTestCase):
         mock_view_instance = Mock(
             receiving_organizations=orgs, counties=counties)
         results = ApplicantFormViewBase.get_receiving_organizations(
-            mock_view_instance)
+            mock_view_instance, Mock())
         self.assertEqual(get_agency.call_count, 0)
         self.assertListEqual(orgs, results)
         self.assertListEqual(

@@ -19,6 +19,32 @@ Feature: User can Apply to CMR
       And it should load css
       And "next_step" should say "Solano"
 
+  Scenario: User Successfully applies to Alameda Public Defender
+    Given that "/apply/" loads
+      And it loads css
+     When the "counties" checkbox option "alameda" is clicked
+      And submit button in form "county_form" is clicked
+     Then it should load "/application/"
+      And it should load css
+      And "application_county_list" should say "You are applying for help in Alameda."
+     When applicant fills out a county application form with basic answers
+      And applicant fills out additional fields for Alameda Public Defender
+      And submit button in form "county_form" is clicked
+     Then it should load "/review/"
+      And it should load css
+      And it displays basic answers
+      And "action-forward" should say "Next"
+     When I click "button.action-forward"
+     Then it should load "/application/letter/"
+     When applicant fills out declaration letter
+      And submit button in form "county_form" is clicked
+     Then it should load "/application/letter/review/"
+      And it displays the declaration letter
+     When I click "button.action-forward"
+     Then it should load "/thanks/"
+      And it should load css
+      And "next_step" should say "Alameda"
+
   Scenario: User Successfully applies to San Francisco
     Given a fillable PDF for "sf_pubdef"
       And that "/apply/" loads
