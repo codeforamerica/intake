@@ -15,7 +15,7 @@ sendgrid-django~=2.0
 django-jinja~=2.5.0
 djangorestframework~=3.11.0
 openpyxl==3.0.3
-reportlab==3.5.34
+reportlab==3.5.68
 toml==0.10.0
 troposphere==2.5.3
 typing==3.7.4.1

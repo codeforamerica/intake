@@ -16,6 +16,12 @@ class PrivacyPolicy(GlobalTemplateContextMixin, TemplateView):
     template_name = "privacy_policy.jinja"
 
 
+class SunsetNotice(GlobalTemplateContextMixin, TemplateView):
+    """Sunsetting information page with links to help others
+    """
+    template_name = "sunset_notice.jinja"
+
+
 class PartnerListView(GlobalTemplateContextMixin, TemplateView):
     template_name = "partner_list.jinja"
 
@@ -55,6 +61,7 @@ class PersonalStatementView(GlobalTemplateContextMixin, TemplateView):
 home = Home.as_view()
 partner_list = PartnerListView.as_view()
 partner_detail = PartnerDetailView.as_view()
+sunset_notice = SunsetNotice.as_view()
 privacy = PrivacyPolicy.as_view()
 recommendation_letters = RecommendationLettersView.as_view()
 personal_statement = PersonalStatementView.as_view()
