@@ -1638,11 +1638,6 @@ img {
 .main-header + .slab--header {
   padding-top: 0;
 }
-@media screen and (min-width: 961px) {
-  .main-header + .slab--header {
-    padding-top: 2em;
-  }
-}
 
 .slab--bleed {
   overflow: hidden;
@@ -2999,10 +2994,21 @@ body {
   position: absolute;
   color: #1380D0;
   font-size: 32px;
+  display: none;
+}
+@media screen and (min-width: 961px) {
+  .sunset-notice-alert__icon {
+    display: block;
+  }
 }
 .sunset-notice-alert__details {
-  margin-left: 45px;
   margin-bottom: 0;
+  margin-left: 0;
+}
+@media screen and (min-width: 961px) {
+  .sunset-notice-alert__details {
+    margin-left: 45px;
+  }
 }
 
 /* Templates */

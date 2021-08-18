@@ -5,10 +5,18 @@
     position: absolute;
     color: #1380D0;
     font-size: 32px;
+    display: none;
+    @include media($tablet-up) {
+      display: block;
+    }
   }
 
   &__details {
-    margin-left: 45px;
     margin-bottom: 0;
+    margin-left: 0;
+
+    @include media($tablet-up) {
+      margin-left: 45px;
+    }
   }
 }
