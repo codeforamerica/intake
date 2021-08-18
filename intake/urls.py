@@ -36,6 +36,8 @@ urlpatterns = [
 
     # PUBLIC VIEWS
     url(r'^$', public_views.home, name='intake-home', robots_allow=True),
+    url(r'^sunset-notice/$', public_views.sunset_notice,
+        name='intake-sunset_notice', robots_allow=True),
     url(r'^privacy/$', public_views.privacy,
         name='intake-privacy', robots_allow=True),
     url(r'^partners/$', public_views.partner_list,

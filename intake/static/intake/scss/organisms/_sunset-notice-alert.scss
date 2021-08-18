@@ -1,0 +1,14 @@
+.sunset-notice-alert {
+  background-color: #E5F2FD;
+  padding: 15px 10px;
+  &__icon {
+    position: absolute;
+    color: #1380D0;
+    font-size: 32px;
+  }
+
+  &__details {
+    margin-left: 45px;
+    margin-bottom: 0;
+  }
+}
