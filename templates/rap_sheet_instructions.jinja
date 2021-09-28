@@ -47,81 +47,20 @@
 <section class="rap_fee_waiver">
   <div class="row">
     <div class="col-xs-12">
-      <h2>{{ _(" You might qualify to get $25 off your RAP") }}</h2>
+      <h4>
+        <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
+        {{ _(" You might qualify to get $25 off your RAP") }}
+      </h4>
       <p>{{ _("You might qualify for a fee waiver. This means that the California Department of Justice "
             "will cover $25 of your RAP sheet fees. Even though you will get $25 off your RAP "
             "sheet fees, you will still have to pay the rest. The fee you will have to pay is "
             "usually between $20 and $50. ") }}
       </p>
-      <p>
-      {{ _(" Applying for a fee waiver could add 2-4 weeks to the process of clearing "
-        "your record and is optional. If you would not like to wait 2-4 weeks to get $25 off "
-        "of your RAP sheet, you can skip to the next section on how to get your RAP sheet.") }}
-      </p>
+      <p><a href="https://oag.ca.gov/fingerprints/record-review/fee-waiver" target="_blank">Visit the DOJ website to apply for a fee waiver</a></p>
     </div>
   </div>
 </section>
 
-<section class="how_to_instructions">
-  <div class="row">
-    <div class="col-xs-12">
-      <h4>
-        <span class="glyphicon glyphicon-circle-arrow-right" aria-hidden="true"></span>
-        {{ _(" Follow these steps to get $25 off of your RAP sheet fees:") }}
-      </h4>
-      <ol class="how_to_instructions">
-        <li>
-          {{ _('Print and fill out this form with your information: '
-          '<a href="https://drive.google.com/open?id=0B3BLnlbsdQ_hQUlELWJKT1hKRVE">Fee Waiver Application Form</a> ') }}
-        </li>
-        <li>
-          {{ _("If you are receiving any government benefits, make a copy of those documents. "
-            "Here are some government benefits that will work: ") }}
-            <ul class="how_to_instructions_details">
-              <li class="how_to_detail">
-                {{ _("Supplemental Security Income (SSI) ") }}
-              </li>
-              <li class="how_to_detail">
-                {{ _("California Work Opportunity and Responsibility to Kids (CalWORKs)  ") }}
-              </li>
-              <li class="how_to_detail">
-                {{ _("Unemployment benefits ") }}
-              </li>
-              <li class="how_to_detail">
-                {{ _("Disability insurance ") }}
-              </li>
-              <li class="how_to_detail">
-                {{ _("EBT benefits card  ") }}
-              </li>
-            </ul>
-        </li>
-        <li>
-          {{ _("Mail your completed Fee Waiver Application form and copies of your government "
-            "benefits (if you are receiving benefits) to this address: ") }}
-            <ul class="address">
-              <li>California Department of Justice</li>
-              <li>Bureau of Criminal Information and Analysis</li>
-              <li>Record Review Unit</li>
-              <li>P.O Box 903417</li>
-              <li>Sacramento, CA 94203-4170</li>
-            </ul>
-        </li>
-        <li>
-          {{ _("Wait 2-4 weeks for a letter in the mail from the Department of Justice "
-            "containing a 'Request for Live Scan Service' form. ") }}
-        </li>
-        <li>
-          {{ _("If you received the 'Request for Live Scan Service' form in the mail, you "
-            "are approved to get $25 off of your RAP sheet fees. ") }}
-        </li>
-        <li>
-          {{ _("Follow instructions in the next section to get your RAP sheet. ") }}
-        </li>
-      </ol>
-    </div>
-  </div>
-</section>
-<!-- end the section about fee waiver -->
 {% endif %}
 
 <section class="rap_ca_instructions">
@@ -145,7 +84,8 @@
         </li>
         <li>
           {{ _('Print and fill out this '
-          '<a href="https://oag.ca.gov/sites/all/files/agweb/pdfs/fingerprints/forms/bcia_8016RR.pdf">Request for Live Scan Service form</a> with your information.') }}
+          '<a href="https://oag.ca.gov/sites/all/files/agweb/pdfs/fingerprints/forms/bcia_8016RR.pdf">Request for Live Scan Service form</a> with your information.'
+          ' (If you obtained a fee waiver in the section above, use the form you got from the fee waiver website insead.)') }}
         </li>
         <li>
           {{ _("Go to the Live Scan location and give them your filled Request for "
