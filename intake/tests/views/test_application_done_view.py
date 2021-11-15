@@ -6,6 +6,7 @@ from markupsafe import escape
 from project.jinja2 import linkify
 from unittest import skip
 
+
 @skip('deprecated')
 class TestThanksView(ApplicantFormViewBaseTestCase):
     view_name = 'intake-thanks'
@@ -67,6 +68,7 @@ class TestThanksView(ApplicantFormViewBaseTestCase):
         for message in flash_messages:
             self.assertContains(
                 response, escape(message))
+
 
 @skip('deprecated')
 class TestRAPSheetInstructionsView(ApplicantFormViewBaseTestCase):

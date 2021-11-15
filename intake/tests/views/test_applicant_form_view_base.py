@@ -11,6 +11,7 @@ from intake.tests import factories
 from project.tests.assertions import assertInLogsCount
 from unittest import skip
 
+
 @skip('deprecated')
 class ApplicantFormViewBaseTestCase(AuthIntegrationTestCase):
     fixtures = ESSENTIAL_DATA_FIXTURES
@@ -36,6 +37,7 @@ class ApplicantFormViewBaseTestCase(AuthIntegrationTestCase):
 
     def get_form_session_data(self):
         return self.client.session.get(ApplicantFormViewBase.session_key)
+
 
 @skip('deprecated')
 class TestApplicantFormViewBase(ApplicantFormViewBaseTestCase):

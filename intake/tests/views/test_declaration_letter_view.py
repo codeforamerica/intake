@@ -152,6 +152,7 @@ class TestWriteDeclarationLetterView(ApplicantFormViewBaseTestCase):
         self.assertNotContains(response, html_string)
         self.assertContains(response, escaped_name)
 
+
 @skip('deprecated')
 class TestReviewDeclarationLetterView(ApplicantFormViewBaseTestCase):
     view_name = 'intake-review_letter'

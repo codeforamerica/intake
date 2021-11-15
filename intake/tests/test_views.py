@@ -13,6 +13,7 @@ from project.jinja2 import url_with_ids
 from unittest import skip
 import intake.services.bundles as BundlesService
 
+
 @skip('deprecated')
 class TestViews(IntakeDataTestCase):
 

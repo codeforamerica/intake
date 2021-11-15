@@ -7,10 +7,12 @@ from intake import models
 from django.http import HttpResponseServerError
 from unittest import skip
 
+
 def respond_with(response):
     def wrapped(*args, **kwargs):
         return response('Test exception')
     return wrapped
+
 
 @skip('deprecated')
 class TestUserAgentMiddleware(TestCase):
@@ -39,6 +41,7 @@ class TestUserAgentMiddleware(TestCase):
         self.assertEqual(True, request.user_agent.is_mobile)
         self.assertEqual(False, request.user_agent.is_tablet)
 
+
 @skip('deprecated')
 class TestPersistReferrerMiddleware(TestCase):
 
@@ -62,6 +65,7 @@ class TestPersistReferrerMiddleware(TestCase):
             reverse('health_check-ok'),
             **{'HTTP_REFERER': 'https://wonderful.horse'})
         self.assertIsNone(self.client.session.get('referrer'))
+
 
 @skip('deprecated')
 class TestPersistSourceMiddleware(TestCase):
@@ -89,6 +93,7 @@ class TestPersistSourceMiddleware(TestCase):
     def test_ignores_health_checks(self):
         self.client.get(reverse('health_check-ok'), {'source': 'odo'})
         self.assertIsNone(self.client.session.get('source'))
+
 
 @skip('deprecated')
 class TestGetCleanIpAddressMiddleware(TestCase):
@@ -126,6 +131,7 @@ class TestGetCleanIpAddressMiddleware(TestCase):
             reverse('health_check-ok'),
             **{'HTTP_X_FORWARDED_FOR': 'https://wonderful.horse'})
         self.assertFalse(hasattr(response.wsgi_request, 'ip_address'))
+
 
 @skip('deprecated')
 class TestCountUniqueVisitorsMiddleware(TestCase):

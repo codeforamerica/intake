@@ -12,6 +12,7 @@ from intake.models import County
 from project.tests.assertions import assertInLogsCount, assertInLogs
 from unittest import skip
 
+
 @skip('deprecated')
 class TestSelectCountyView(ApplicantFormViewBaseTestCase):
 
