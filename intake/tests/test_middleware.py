@@ -5,14 +5,14 @@ from django.urls import reverse
 from intake.middleware import GetCleanIpAddressMiddleware
 from intake import models
 from django.http import HttpResponseServerError
-
+from unittest import skip
 
 def respond_with(response):
     def wrapped(*args, **kwargs):
         return response('Test exception')
     return wrapped
 
-
+@skip('deprecated')
 class TestUserAgentMiddleware(TestCase):
 
     def test_empty_user_agent_header(self):
@@ -39,7 +39,7 @@ class TestUserAgentMiddleware(TestCase):
         self.assertEqual(True, request.user_agent.is_mobile)
         self.assertEqual(False, request.user_agent.is_tablet)
 
-
+@skip('deprecated')
 class TestPersistReferrerMiddleware(TestCase):
 
     def test_persist_external_referrer(self):
@@ -63,7 +63,7 @@ class TestPersistReferrerMiddleware(TestCase):
             **{'HTTP_REFERER': 'https://wonderful.horse'})
         self.assertIsNone(self.client.session.get('referrer'))
 
-
+@skip('deprecated')
 class TestPersistSourceMiddleware(TestCase):
 
     def test_records_source_if_sent_as_query_param(self):
@@ -90,7 +90,7 @@ class TestPersistSourceMiddleware(TestCase):
         self.client.get(reverse('health_check-ok'), {'source': 'odo'})
         self.assertIsNone(self.client.session.get('source'))
 
-
+@skip('deprecated')
 class TestGetCleanIpAddressMiddleware(TestCase):
 
     def test_attribute_is_populated_on_ip(self):
@@ -127,7 +127,7 @@ class TestGetCleanIpAddressMiddleware(TestCase):
             **{'HTTP_X_FORWARDED_FOR': 'https://wonderful.horse'})
         self.assertFalse(hasattr(response.wsgi_request, 'ip_address'))
 
-
+@skip('deprecated')
 class TestCountUniqueVisitorsMiddleware(TestCase):
 
     def test_new_visitor_is_created_on_pageview(self):

@@ -8,13 +8,14 @@ from intake.tests import mock
 from intake.tests.views.test_applicant_form_view_base \
     import ApplicantFormViewBaseTestCase
 from project.tests.assertions import assertInLogsCount
+from unittest import skip
 
 
 # these actually probably work independent of the existing county application
 # form answers in session
 # but all of these tests ensure the session has expected answers
 
-
+@skip('deprecated')
 class TestWriteDeclarationLetterView(ApplicantFormViewBaseTestCase):
     view_name = 'intake-write_letter'
     fixtures = ['counties', 'organizations', 'groups', 'mock_profiles']
@@ -151,7 +152,7 @@ class TestWriteDeclarationLetterView(ApplicantFormViewBaseTestCase):
         self.assertNotContains(response, html_string)
         self.assertContains(response, escaped_name)
 
-
+@skip('deprecated')
 class TestReviewDeclarationLetterView(ApplicantFormViewBaseTestCase):
     view_name = 'intake-review_letter'
 

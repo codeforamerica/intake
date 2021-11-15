@@ -53,8 +53,6 @@ urlpatterns = [
         name='intake-stats', robots_allow=True),
 
     # PUBLIC FORM PROCESSING VIEWS
-    url(r'^apply/$', select_county_view.select_county,
-        name='intake-apply', robots_allow=True),
     url(r'^application/$', county_application_view.county_application,
         name='intake-county_application'),
     url(r'^application/letter/$',

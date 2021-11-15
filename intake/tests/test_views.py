@@ -10,10 +10,10 @@ from intake import models, constants
 from formation import fields
 from formation.field_types import YES
 from project.jinja2 import url_with_ids
-
+from unittest import skip
 import intake.services.bundles as BundlesService
 
-
+@skip('deprecated')
 class TestViews(IntakeDataTestCase):
 
     fixtures = [

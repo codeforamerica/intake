@@ -4,8 +4,9 @@ from django.urls import reverse
 from intake.tests import factories, mock
 from markupsafe import escape
 from project.jinja2 import linkify
+from unittest import skip
 
-
+@skip('deprecated')
 class TestThanksView(ApplicantFormViewBaseTestCase):
     view_name = 'intake-thanks'
 
@@ -67,7 +68,7 @@ class TestThanksView(ApplicantFormViewBaseTestCase):
             self.assertContains(
                 response, escape(message))
 
-
+@skip('deprecated')
 class TestRAPSheetInstructionsView(ApplicantFormViewBaseTestCase):
     view_name = 'intake-rap_sheet'
 

@@ -10,8 +10,9 @@ from intake.views.county_application_view import WARNING_FLASH_MESSAGE
 from intake.tests import mock, factories
 from intake.models import County
 from project.tests.assertions import assertInLogsCount
+from unittest import skip
 
-
+@skip('deprecated')
 class TestCountyApplicationNoWarningsView(ApplicantFormViewBaseTestCase):
     view_name = 'intake-confirm'
 
@@ -144,7 +145,7 @@ class TestCountyApplicationNoWarningsView(ApplicantFormViewBaseTestCase):
         form_data = self.get_form_session_data()
         self.assertEqual(form_data.get('first_name'), ["Marzipan"])
 
-
+@skip('deprecated')
 class TestCountyApplicationView(TestCountyApplicationNoWarningsView):
     view_name = 'intake-county_application'
 
@@ -176,7 +177,7 @@ class TestCountyApplicationView(TestCountyApplicationNoWarningsView):
                 'event_name=application_errors': 0,
             })
 
-
+@skip('deprecated')
 class TestCountyApplicationReviewView(ApplicantFormViewBaseTestCase):
     view_name = 'intake-review'
 
